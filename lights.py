@@ -9,7 +9,7 @@ import neopixel
 class Lights:
     board.num_pixels = 30
 
-    pixels = neopixel.NeoPixel(board.GP0, board.num_pixels )
+    pixels = neopixel.NeoPixel(board.D18, board.num_pixels )
     pixels.brightness = 0.5
 
     # F Turns the NeoPixels red, green, and blue in sequence.
