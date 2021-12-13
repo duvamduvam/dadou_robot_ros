@@ -1,0 +1,106 @@
+2021-12-13 00:40:44,309 - playsound - DEBUG - playsound : 74 - Returning
+2021-12-13 00:45:26,714 - root - INFO - main : 22 - Starting didier
+2021-12-13 00:45:26,714 - root - INFO - audio : 11 - play C:/Users/David/Nextcloud/rosita/audios/robot/lunettes.wav
+2021-12-13 00:45:26,714 - playsound - DEBUG - playsound : 71 - Starting
+2021-12-13 00:45:26,714 - root - ERROR - mapping : 16 - no audio for keyA5
+2021-12-13 00:45:28,810 - playsound - DEBUG - playsound : 74 - Returning
+2021-12-13 00:45:57,906 - root - INFO - main : 22 - Starting didier
+2021-12-13 00:45:57,906 - root - INFO - audio : 11 - play C:/Users/David/Nextcloud/rosita/audios/robot/lunettes.wav
+2021-12-13 00:45:57,906 - root - INFO - mapping : 14 - getting audio :C:\Users\David\Nextcloud\rosita\audios\robot\lunettes.wav
+2021-12-13 00:45:57,906 - playsound - DEBUG - playsound : 71 - Starting
+2021-12-13 00:45:59,992 - playsound - DEBUG - playsound : 74 - Returning
+2021-12-13 00:46:51,797 - root - INFO - main : 22 - Starting didier
+2021-12-13 00:46:51,797 - root - INFO - mapping : 14 - getting audio :C:\Users\David\Nextcloud\rosita\audios\robot\manteau.wav
+2021-12-13 00:46:51,797 - root - INFO - audio : 11 - play C:\Users\David\Nextcloud\rosita\audios\robot\manteau.wav
+2021-12-13 00:46:51,797 - playsound - DEBUG - playsound : 71 - Starting
+2021-12-13 00:46:51,797 - playsound - ERROR - playsound : 63 - 
+    Error 305 for command:
+        open "C:\Users\David\Nextcloud\rosita\audios\robot\manteau.wav"
+    Impossible de spécifier des caractères supplémentaires après une chaîne entre guillemets.
+2021-12-13 00:46:51,797 - playsound - ERROR - playsound : 63 - 
+    Error 263 for command:
+        close "C:\Users\David\Nextcloud\rosita\audios\robot\manteau.wav"
+    Le périphérique spécifié n’est pas ouvert ou n’est pas reconnu par MCI.
+2021-12-13 00:46:51,797 - playsound - WARNING - playsound : 79 - Failed to close the file: "C:\Users\David\Nextcloud\rosita\audios\robot\manteau.wav"
+2021-12-13 00:47:25,484 - root - INFO - main : 22 - Starting didier
+2021-12-13 00:47:25,484 - root - INFO - mapping : 14 - getting audio :C:/Users/David/Nextcloud/rosita/audios/robot/manteau.wav
+2021-12-13 00:47:25,484 - root - INFO - audio : 11 - play C:/Users/David/Nextcloud/rosita/audios/robot/manteau.wav
+2021-12-13 00:47:25,484 - playsound - DEBUG - playsound : 71 - Starting
+2021-12-13 00:47:27,281 - playsound - DEBUG - playsound : 74 - Returning
+2021-12-13 00:49:25,295 - root - INFO - main : 22 - Starting didier
+2021-12-13 00:49:25,295 - root - INFO - mapping : 14 - getting audio :C:/Users/David/Nextcloud/rosita/audios/robot/manteau.wav
+2021-12-13 00:49:25,295 - root - INFO - audio : 11 - play C:/Users/David/Nextcloud/rosita/audios/robot/manteau.wav
+2021-12-13 00:49:25,295 - playsound - DEBUG - playsound : 71 - Starting
+2021-12-13 00:49:27,093 - playsound - DEBUG - playsound : 74 - Returning
+2021-12-13 00:49:52,009 - root - INFO - main : 22 - Starting didier
+2021-12-13 00:49:52,009 - root - INFO - mapping : 14 - getting audio :C:/Users/David/Nextcloud/rosita/audios/robot/manteau.wav
+2021-12-13 00:49:52,009 - root - INFO - audio : 11 - play C:/Users/David/Nextcloud/rosita/audios/robot/manteau.wav
+2021-12-13 00:49:52,009 - playsound - DEBUG - playsound : 71 - Starting
+2021-12-13 00:49:53,791 - playsound - DEBUG - playsound : 74 - Returning
+2021-12-13 00:50:01,432 - root - INFO - main : 22 - Starting didier
+2021-12-13 00:50:01,432 - root - INFO - mapping : 14 - getting audio :C:/Users/David/Nextcloud/rosita/audios/robot/manteau.wav
+2021-12-13 00:50:01,432 - root - INFO - audio : 11 - play C:/Users/David/Nextcloud/rosita/audios/robot/manteau.wav
+2021-12-13 00:50:01,432 - root - INFO - main : 35 - test
+2021-12-13 00:50:01,432 - playsound - DEBUG - playsound : 71 - Starting
+2021-12-13 00:50:03,219 - playsound - DEBUG - playsound : 74 - Returning
+2021-12-13 00:50:06,271 - root - INFO - main : 22 - Starting didier
+2021-12-13 00:50:06,271 - root - INFO - mapping : 14 - getting audio :C:/Users/David/Nextcloud/rosita/audios/robot/manteau.wav
+2021-12-13 00:50:06,271 - root - INFO - audio : 11 - play C:/Users/David/Nextcloud/rosita/audios/robot/manteau.wav
+2021-12-13 00:50:06,271 - root - INFO - main : 35 - test
+2021-12-13 00:50:06,271 - playsound - DEBUG - playsound : 71 - Starting
+2021-12-13 00:50:08,083 - playsound - DEBUG - playsound : 74 - Returning
+2021-12-13 00:51:34,072 - root - INFO - main : 22 - Starting didier
+2021-12-13 00:51:34,072 - root - ERROR - mapping : 16 - no audio for keyA3
+2021-12-13 00:51:49,518 - root - INFO - main : 22 - Starting didier
+2021-12-13 00:51:49,518 - root - INFO - mapping : 14 - getting audio :C:/Users/David/Nextcloud/rosita/audios/robot/lunettes.wav
+2021-12-13 00:51:49,518 - root - INFO - audio : 11 - play C:/Users/David/Nextcloud/rosita/audios/robot/lunettes.wav
+2021-12-13 00:51:49,518 - playsound - DEBUG - playsound : 71 - Starting
+2021-12-13 00:51:51,624 - playsound - DEBUG - playsound : 74 - Returning
+2021-12-13 00:51:55,490 - root - INFO - main : 22 - Starting didier
+2021-12-13 00:51:55,490 - root - ERROR - mapping : 16 - no audio for keyA3
+2021-12-13 00:52:53,673 - root - INFO - main : 22 - Starting didier
+2021-12-13 00:52:53,673 - root - ERROR - mapping : 16 - no audio for keyA3
+2021-12-13 00:53:10,486 - root - INFO - main : 22 - Starting didier
+2021-12-13 00:53:10,486 - root - ERROR - mapping : 16 - no audio for key : A3
+2021-12-13 00:53:52,549 - root - INFO - main : 22 - Starting didier
+2021-12-13 00:53:52,549 - root - ERROR - mapping : 15 - no audio for key : A3
+2021-12-13 00:54:07,242 - root - INFO - main : 22 - Starting didier
+2021-12-13 00:54:07,242 - root - INFO - mapping : 13 - getting audio :C:/Users/David/Nextcloud/rosita/audios/robot/manteau.wav
+2021-12-13 00:54:07,242 - root - INFO - audio : 11 - play C:/Users/David/Nextcloud/rosita/audios/robot/manteau.wav
+2021-12-13 00:54:07,242 - playsound - DEBUG - playsound : 71 - Starting
+2021-12-13 00:54:09,014 - playsound - DEBUG - playsound : 74 - Returning
+2021-12-13 00:54:24,662 - root - INFO - main : 22 - Starting didier
+2021-12-13 00:55:27,923 - root - INFO - main : 22 - Starting didier
+2021-12-13 00:55:27,930 - root - DEBUG - mapping : 13 - getting audio :C:/Users/David/Nextcloud/rosita/audios/robot/manteau.wav
+2021-12-13 00:55:27,930 - root - INFO - audio : 11 - play C:/Users/David/Nextcloud/rosita/audios/robot/manteau.wav
+2021-12-13 00:55:27,930 - playsound - DEBUG - playsound : 71 - Starting
+2021-12-13 00:55:29,701 - playsound - DEBUG - playsound : 74 - Returning
+2021-12-13 00:56:07,978 - root - INFO - main : 22 - Starting didier
+2021-12-13 00:56:07,978 - root - DEBUG - mapping : 13 - getting audio :C:/Users/David/Nextcloud/rosita/audios/robot/manteau.wav
+2021-12-13 00:56:07,978 - root - INFO - audio : 11 - play C:/Users/David/Nextcloud/rosita/audios/robot/manteau.wav
+2021-12-13 00:56:07,978 - playsound - DEBUG - playsound : 71 - Starting
+2021-12-13 00:56:09,783 - playsound - DEBUG - playsound : 74 - Returning
+2021-12-13 00:56:25,451 - root - INFO - main : 22 - Starting didier
+2021-12-13 00:56:25,451 - root - DEBUG - mapping : 13 - getting audio mapping :C:/Users/David/Nextcloud/rosita/audios/robot/manteau.wav
+2021-12-13 00:56:25,451 - root - INFO - audio : 11 - play C:/Users/David/Nextcloud/rosita/audios/robot/manteau.wav
+2021-12-13 00:56:25,451 - playsound - DEBUG - playsound : 71 - Starting
+2021-12-13 00:56:27,242 - playsound - DEBUG - playsound : 74 - Returning
+2021-12-13 01:00:39,594 - root - INFO - main : 22 - Starting didier
+2021-12-13 01:02:29,978 - root - INFO - main : 20 - Starting didier
+2021-12-13 01:02:29,979 - root - DEBUG - mapping : 13 - getting audio mapping :C:/Users/David/Nextcloud/rosita/audios/robot/manteau.wav
+2021-12-13 01:02:29,980 - root - INFO - audio : 11 - play C:/Users/David/Nextcloud/rosita/audios/robot/manteau.wav
+2021-12-13 01:02:29,980 - playsound - DEBUG - playsound : 71 - Starting
+2021-12-13 01:02:31,730 - playsound - DEBUG - playsound : 74 - Returning
+2021-12-13 01:16:03,808 - root - INFO - main : 20 - Starting didier
+2021-12-13 01:16:03,809 - root - DEBUG - mapping : 13 - getting audio mapping :C:/Users/David/Nextcloud/rosita/audios/robot/manteau.wav
+2021-12-13 01:16:03,811 - root - INFO - audio : 11 - play C:/Users/David/Nextcloud/rosita/audios/robot/manteau.wav
+2021-12-13 01:16:03,812 - playsound - DEBUG - playsound : 71 - Starting
+2021-12-13 01:16:03,902 - playsound - ERROR - playsound : 63 - 
+    Error 259 for command:
+        play C:/Users/David/Nextcloud/rosita/audios/robot/manteau.wav wait
+    Le pilote ne peut pas reconnaître le paramètre de commande spécifié.
+2021-12-13 01:18:22,307 - root - INFO - main : 20 - Starting didier
+2021-12-13 01:18:22,307 - root - DEBUG - mapping : 13 - getting audio mapping :C:/Users/David/Nextcloud/rosita/audios/robot/manteau.wav
+2021-12-13 01:18:22,322 - root - INFO - audio : 11 - play C:/Users/David/Nextcloud/rosita/audios/robot/manteau.wav
+2021-12-13 01:18:22,322 - playsound - DEBUG - playsound : 71 - Starting
+2021-12-13 01:18:24,138 - playsound - DEBUG - playsound : 74 - Returning

@@ -1,0 +1,14 @@
+{
+  "audios": [
+    {
+      "name": "lunettes",
+      "key": "A1",
+      "path": "audios/lunettes.wav"
+    },
+    {
+      "name": "manteau",
+      "key": "A2",
+      "path": "C:/Users/David/Nextcloud/rosita/audios/robot/manteau.wav"
+    }
+  ]
+}
