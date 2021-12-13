@@ -14,10 +14,10 @@ class Lights:
 
     # F Turns the NeoPixels red, green, and blue in sequence.
     def fade_red(self):
-        pixels.fill((255, 0, 0))
+        self.pixels.fill((255, 0, 0))
         time.sleep(0.5)
-        pixels.fill((0, 255, 0))
+        self.pixels.fill((0, 255, 0))
         time.sleep(0.5)
-        pixels.fill((0, 0, 255))
+        self.pixels.fill((0, 0, 255))
         time.sleep(0.5)
 
