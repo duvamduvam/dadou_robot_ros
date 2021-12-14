@@ -8,14 +8,14 @@ from sound_player import Sound, Playlist, SoundPlayer
 
 
 class Audio:
-    pl = Playlist(concurency=2)
 
     @staticmethod
-    def play_sound(self, file):
-        self.pl.stop()
+    def play_sound(file):
+        pl = Playlist(concurency=2)
+        pl.stop()
         logging.info("play sound : " + file)
-        self.pl.enqueue(Sound(file))
-        self.pl.play()
+        pl.enqueue(Sound(file))
+        pl.play()
 
     @staticmethod
     def play(file):
