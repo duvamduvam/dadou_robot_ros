@@ -8,6 +8,7 @@ class Audio2:
 
     @staticmethod
     def play_sound(file):
+        logging.info("play sound"+file)
         mixer.mixer.init(44100, -16, 2, 2048)
         sound = mixer.Sound(file)
         sound.play()
