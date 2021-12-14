@@ -1,3 +1,4 @@
+#pip3 install sound-player
 import logging
 import time
 import pygame
@@ -13,6 +14,7 @@ class Audio2:
         logging.info("play sound : " + file)
         sound = Sound(file)
         sound.play()
+        time.sleep(3)
 
     @staticmethod
     def play(file):
