@@ -12,8 +12,12 @@ class Audio2:
     @staticmethod
     def play_sound(file):
         logging.info("play sound : " + file)
-        sound = Sound(file)
-        sound.play()
+        #sound = Sound(file)
+        #sound.play()
+        pl = Playlist(concurency=2)
+        pl.enqueue(Sound(file))
+        pl.play()
+        time.sleep(10)
         time.sleep(3)
 
     @staticmethod
