@@ -19,7 +19,6 @@ class Audio:
         pl.enqueue(Sound(file))
         pl.play()
 
-    @staticmethod
     def play(self, file):
         if self.music_thread:
             logging.info("play sound : " + file)
