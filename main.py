@@ -1,13 +1,15 @@
 # Press Maj+F10 to execute it or replace it with your code.
 # Press Double Shift to search everywhere for classes, files, tool windows, actions, and settings.
-import logging, sys, logging.config
+import logging
+import sys
+import logging.config
+import time
 #logging.basicConfig(filename='didier.log', encoding='utf-8', level=logging.DEBUG, format='%(asctime)s %(levelname)s %(message)s')
 logging.config.fileConfig(fname='logging.conf', disable_existing_loggers=False)
 
 sys.path.append('classes')
 from com import Com
 from audio import Audio
-from audio2 import Audio2
 from mapping import Mapping
 #from lights import Lights
 
@@ -23,14 +25,18 @@ if __name__ == '__main__':
     print_hi('Start didier')
 
 com = Com()
-audio = Audio2()
+audio = Audio()
 mapping = Mapping()
 #lights = Lights()
 
 audioPath = mapping.get_audio_file("A5")
 #lights.fade_red()
+if audioPath:
+    audio.play(audioPath)
 
-
+time.sleep(10)
+audioPath = mapping.get_audio_file("A1")
+#lights.fade_red()
 if audioPath:
     audio.play(audioPath)
 
