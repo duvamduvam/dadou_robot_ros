@@ -1,4 +1,5 @@
 #pip3 install sound-player
+#https://github.com/Krozark/sound-player/blob/master/example.py
 import logging
 import time
 import pygame
@@ -11,6 +12,7 @@ class Audio:
 
     music_thread = {}
     pl = Playlist(concurency=2)
+    player = SoundPlayer()
 
     def play_sound(self, file):
         logging.info("play sound : " + file)
@@ -18,6 +20,14 @@ class Audio:
         self.pl.stop()
         self.pl.enqueue(Sound(file))
         self.pl.play()
+
+    def play_sound2(self, file):
+        logging.info("play sound : " + file)
+        self.player.stop()
+        self.player = SoundPlayer()
+        # first player
+        self.player.enqueue(Sound(file), 1)
+        self.player.play()
 
     def stop_sound(self):
         self.pl.stop()
