@@ -43,7 +43,8 @@ audioPath = mapping.get_audio_file("A5")
 if audioPath:
     audio.play_sound(audioPath)
 
-time.sleep(10)
+time.sleep(30)
+audio.stop_sound()
 logging.info("test")
 
 #while True:

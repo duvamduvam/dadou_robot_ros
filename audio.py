@@ -15,8 +15,6 @@ class Audio:
     def play_sound(self, file):
         logging.info("play sound : " + file)
         self.player.stop()
-        self.player = SoundPlayer()
-        # first player
         self.player.enqueue(Sound(file), 1)
         self.player.play()
 
