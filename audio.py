@@ -13,6 +13,7 @@ class Audio:
     music_thread = {}
     pl = Playlist(concurency=2)
     player = SoundPlayer()
+    sound = {}
 
     def play_sound(self, file):
         logging.info("play sound : " + file)
@@ -28,6 +29,12 @@ class Audio:
         # first player
         self.player.enqueue(Sound(file), 1)
         self.player.play()
+
+    def play_sound3(self, file):
+        if self.sound:
+            self.sound.stop()
+        self.sound = Sound(file)
+        self.sound.play()
 
     def stop_sound(self):
         self.pl.stop()
