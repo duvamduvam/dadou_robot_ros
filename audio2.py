@@ -14,12 +14,8 @@ class Audio2:
     def play_sound(self, file):
         self.pl.stop()
         logging.info("play sound : " + file)
-        #sound = Sound(file)
-        #sound.play()
         self.pl.enqueue(Sound(file))
         self.pl.play()
-        time.sleep(10)
-        time.sleep(3)
 
     @staticmethod
     def play(file):
