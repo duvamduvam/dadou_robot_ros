@@ -18,6 +18,6 @@ class Audio:
         self.pl.play()
 
     @staticmethod
-    def play(file):
-        music_thread = Thread(target=Audio.play_sound, args=[file])
+    def play(self, file):
+        music_thread = Thread(target=Audio.play_sound, args=[self, file])
         music_thread.start()
