@@ -10,19 +10,9 @@ from sound_player import Sound, Playlist, SoundPlayer
 
 class Audio:
 
-    music_thread = {}
-    pl = Playlist(concurency=2)
     player = SoundPlayer()
-    sound = {}
 
     def play_sound(self, file):
-        logging.info("play sound : " + file)
-        self.pl = Playlist(concurency=2)
-        self.pl.stop()
-        self.pl.enqueue(Sound(file))
-        self.pl.play()
-
-    def play_sound2(self, file):
         logging.info("play sound : " + file)
         self.player.stop()
         self.player = SoundPlayer()
@@ -30,20 +20,5 @@ class Audio:
         self.player.enqueue(Sound(file), 1)
         self.player.play()
 
-    def play_sound3(self, file):
-        if self.sound:
-            self.sound.stop()
-        self.sound = Sound(file)
-        self.sound.play()
-
     def stop_sound(self):
-        self.sound.stop()
-
-    def stop_sound2(self):
         self.player.stop()
-
-    def play(self, file):
-        if self.music_thread:
-            self.music_thread.join()
-        self.music_thread = Thread(target=Audio.play_sound, args=(self, file))
-        self.music_thread.start()
