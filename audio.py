@@ -17,7 +17,11 @@ class Audio:
         self.pl.enqueue(Sound(file))
         self.pl.play()
 
-    def play(self, file):
+    def stop_sound(self):
         self.pl.stop()
+
+    def play(self, file):
+        if self.music_thread:
+            self.music_thread.join()
         self.music_thread = Thread(target=Audio.play_sound, args=(self, file))
         self.music_thread.start()
