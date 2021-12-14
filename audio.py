@@ -22,7 +22,8 @@ class Audio:
     @staticmethod
     def play(self, file):
         if self.music_thread:
+            logging.info("play sound : " + file)
             self.music_thread.join()
         else:
-            music_thread = Thread(target=Audio.play_sound, args=[file])
-            music_thread.start()
+            self.music_thread = Thread(target=Audio.play_sound, args=[file])
+            self.music_thread.start()
