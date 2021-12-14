@@ -43,6 +43,7 @@ audio.stop_sound()
 if audioPath:
     audio.play_sound3(audioPath)
 
+time.sleep(10)
 logging.info("test")
 
 #while True:
