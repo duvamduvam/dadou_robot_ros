@@ -3,7 +3,7 @@ import time
 import pygame
 
 from threading import Thread
-from soundplayer import SoundPlayer
+from sound_player import Sound, Playlist, SoundPlayer
 
 class Audio2:
 
@@ -19,8 +19,9 @@ class Audio2:
     @staticmethod
     def play(file):
         logging.info("play sound : "+file)
-        p = SoundPlayer("file", 1)
-        p.play(0.5)  # non-blocking, volume = 0.5
+        sound = Sound(file)
+        sound.play()
+        time.sleep(3)
         #while mixer.music.get_busy():
         #    time.delay(100)
         #music_thread = Thread(target=Audio2.play_sound,  args=[file])
