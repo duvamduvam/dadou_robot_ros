@@ -2,3 +2,14 @@
 2021-12-14 19:57:11,758 - root - DEBUG - mapping : 13 - getting audio mapping :audios/lunettes2.wav
 2021-12-14 19:57:11,758 - root - INFO - audio2 : 12 - play sound : audios/lunettes2.wav
 2021-12-14 19:57:11,759 - sound_player.linux - WARNING - linux : 29 - Couldn't find ffplay or avplay - defaulting to ffplay, but may not work
+2021-12-14 20:21:54,503 - root - INFO - main : 20 - Starting didier
+2021-12-14 20:21:54,503 - root - DEBUG - mapping : 13 - getting audio mapping :audios/gig.wav
+2021-12-14 20:21:54,504 - root - INFO - audio2 : 15 - play sound : audios/gig.wav
+2021-12-14 20:21:54,504 - root - INFO - main : 37 - test
+2021-12-14 20:21:54,504 - sound_player.player - DEBUG - player : 33 - enqueue <sound_player.linux.FFMpegSound object at 0x7f72b8cda3d0>
+2021-12-14 20:21:54,504 - sound_player.player - DEBUG - player : 61 - Create playlist Thread
+2021-12-14 20:21:54,504 - sound_player.player - DEBUG - player : 63 - Start playlist Thread
+2021-12-14 20:21:54,505 - sound_player.player - DEBUG - player : 71 - In playlist Thread
+2021-12-14 20:21:54,505 - sound_player.player - DEBUG - player : 73 - Thread loop
+2021-12-14 20:21:54,505 - sound_player.player - DEBUG - player : 95 - Add sound <sound_player.linux.FFMpegSound object at 0x7f72b8cda3d0>
+2021-12-14 20:21:54,505 - sound_player.linux - WARNING - linux : 29 - Couldn't find ffplay or avplay - defaulting to ffplay, but may not work
