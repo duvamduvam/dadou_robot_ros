@@ -7,8 +7,8 @@ from soundplayer import SoundPlayer
 
 class Audio2:
 
-    @staticmethod
-    def play_sound(file):
+    #@staticmethod
+    #def play_sound(file):
         #logging.info("play sound : "+file)
         #mixer.init(44100, -16, 2, 2048)
         #sound = mixer.Sound(file)
