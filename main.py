@@ -36,7 +36,7 @@ if audioPath:
 
 time.sleep(10)
 #audio.stop_sound()
-audioPath = mapping.get_audio_file("A5")
+audioPath = mapping.get_audio_file("A3")
 #lights.fade_red()
 
 #audio.stop_sound2()
@@ -44,7 +44,7 @@ if audioPath:
     audio.play_sound(audioPath)
 
 logging.info("test")
-time.sleep(30)
+#time.sleep(30)
 audio.stop_sound()
 logging.info("test2")
 
