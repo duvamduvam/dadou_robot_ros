@@ -27,7 +27,7 @@ audio = Audio2()
 mapping = Mapping()
 #lights = Lights()
 
-audioPath = mapping.get_audio_file("A1")
+audioPath = mapping.get_audio_file("A5")
 #lights.fade_red()
 
 
