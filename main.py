@@ -34,7 +34,7 @@ audioPath = mapping.get_audio_file("A5")
 if audioPath:
     audio.play(audioPath)
 
-#logging.info("test")
+logging.info("test")
 
 #while True:
 #    //msg = com.getMsg()
