@@ -44,7 +44,7 @@ if audioPath:
     audio.play_sound(audioPath)
 
 logging.info("test")
-#time.sleep(30)
+time.sleep(30)
 audio.stop_sound()
 logging.info("test2")
 
