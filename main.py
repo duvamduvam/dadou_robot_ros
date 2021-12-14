@@ -7,8 +7,9 @@ logging.config.fileConfig(fname='logging.conf', disable_existing_loggers=False)
 sys.path.append('classes')
 from com import Com
 from audio import Audio
+from audio2 import Audio2
 from mapping import Mapping
-from lights import Lights
+#from lights import Lights
 
 
 def print_hi(name):
@@ -22,12 +23,12 @@ if __name__ == '__main__':
     print_hi('Start didier')
 
 com = Com()
-audio = Audio()
+audio = Audio2()
 mapping = Mapping()
-lights = Lights()
+#lights = Lights()
 
 audioPath = mapping.get_audio_file("A1")
-lights.fade_red()
+#lights.fade_red()
 
 
 if audioPath:
