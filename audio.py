@@ -39,6 +39,9 @@ class Audio:
     def stop_sound(self):
         self.sound.stop()
 
+    def stop_sound(self):
+        self.player.stop()
+
     def play(self, file):
         if self.music_thread:
             self.music_thread.join()
