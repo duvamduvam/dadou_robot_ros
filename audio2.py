@@ -21,10 +21,10 @@ class Audio2:
     def play(file):
         logging.info("play sound : "+file)
         pygame.init()
-        mixer.init(44100, -16, 2, 2048)
+        mixer.init()
         sound = mixer.Sound(file)
         sound.play()
-        while mixer.music.get_busy():
-            time.delay(100)
+        #while mixer.music.get_busy():
+        #    time.delay(100)
         #music_thread = Thread(target=Audio2.play_sound,  args=[file])
         #music_thread.start()
