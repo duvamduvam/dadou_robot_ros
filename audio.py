@@ -10,19 +10,14 @@ from sound_player import Sound, Playlist, SoundPlayer
 class Audio:
 
     music_thread = {}
+    pl = Playlist(concurency=2)
 
-    @staticmethod
-    def play_sound(file):
-        pl = Playlist(concurency=2)
-        pl.stop()
+    def play_sound(self, file):
+        self.pl.stop()
         logging.info("play sound : " + file)
-        pl.enqueue(Sound(file))
-        pl.play()
+        self.pl.enqueue(Sound(file))
+        self.pl.play()
 
     def play(self, file):
-        if self.music_thread:
-            logging.info("stop sound")
-            self.music_thread.join()
-        else:
-            self.music_thread = Thread(target=Audio.play_sound, args=[file])
-            self.music_thread.start()
+        self.music_thread = Thread(target=Audio.play_sound, args=(self, file))
+        self.music_thread.start()

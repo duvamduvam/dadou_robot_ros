@@ -13,3 +13,26 @@
 2021-12-14 20:21:54,505 - sound_player.player - DEBUG - player : 73 - Thread loop
 2021-12-14 20:21:54,505 - sound_player.player - DEBUG - player : 95 - Add sound <sound_player.linux.FFMpegSound object at 0x7f72b8cda3d0>
 2021-12-14 20:21:54,505 - sound_player.linux - WARNING - linux : 29 - Couldn't find ffplay or avplay - defaulting to ffplay, but may not work
+2021-12-14 21:17:04,787 - root - INFO - main : 22 - Starting didier
+2021-12-14 21:17:04,787 - root - DEBUG - mapping : 13 - getting audio mapping :audios/gig.wav
+2021-12-14 21:17:04,788 - root - INFO - audio : 19 - play sound : audios/gig.wav
+2021-12-14 21:17:04,788 - sound_player.player - DEBUG - player : 33 - enqueue <sound_player.linux.FFMpegSound object at 0x7ff094f831f0>
+2021-12-14 21:17:04,788 - sound_player.player - DEBUG - player : 61 - Create playlist Thread
+2021-12-14 21:17:04,788 - sound_player.player - DEBUG - player : 63 - Start playlist Thread
+2021-12-14 21:17:04,788 - sound_player.player - DEBUG - player : 71 - In playlist Thread
+2021-12-14 21:17:04,788 - sound_player.player - DEBUG - player : 73 - Thread loop
+2021-12-14 21:17:04,788 - sound_player.player - DEBUG - player : 95 - Add sound <sound_player.linux.FFMpegSound object at 0x7ff094f831f0>
+2021-12-14 21:17:04,789 - sound_player.linux - WARNING - linux : 29 - Couldn't find ffplay or avplay - defaulting to ffplay, but may not work
+2021-12-14 21:17:14,796 - root - DEBUG - mapping : 13 - getting audio mapping :audios/lunettes2.wav
+2021-12-14 21:17:14,796 - root - INFO - audio : 25 - stop sound
+2021-12-14 21:17:14,796 - root - INFO - main : 43 - test
+2021-12-14 21:18:41,961 - root - INFO - main : 22 - Starting didier
+2021-12-14 21:18:41,961 - root - DEBUG - mapping : 13 - getting audio mapping :audios/gig.wav
+2021-12-14 21:18:41,962 - root - INFO - audio : 17 - play sound : audios/gig.wav
+2021-12-14 21:18:41,962 - sound_player.player - DEBUG - player : 33 - enqueue <sound_player.linux.FFMpegSound object at 0x7f23db03d100>
+2021-12-14 21:18:41,962 - sound_player.player - DEBUG - player : 61 - Create playlist Thread
+2021-12-14 21:18:41,963 - sound_player.player - DEBUG - player : 63 - Start playlist Thread
+2021-12-14 21:18:41,963 - sound_player.player - DEBUG - player : 71 - In playlist Thread
+2021-12-14 21:18:41,963 - sound_player.player - DEBUG - player : 73 - Thread loop
+2021-12-14 21:18:41,964 - sound_player.player - DEBUG - player : 95 - Add sound <sound_player.linux.FFMpegSound object at 0x7f23db03d100>
+2021-12-14 21:18:41,965 - sound_player.linux - WARNING - linux : 29 - Couldn't find ffplay or avplay - defaulting to ffplay, but may not work
