@@ -37,7 +37,7 @@ class Audio:
         self.sound.play()
 
     def stop_sound(self):
-        self.pl.stop()
+        self.sound.stop()
 
     def play(self, file):
         if self.music_thread:

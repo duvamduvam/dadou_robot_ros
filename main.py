@@ -38,6 +38,8 @@ time.sleep(10)
 #audio.stop_sound()
 audioPath = mapping.get_audio_file("A5")
 #lights.fade_red()
+
+audio.stop()
 if audioPath:
     audio.play_sound3(audioPath)
 
