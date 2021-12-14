@@ -1,13 +1,24 @@
-2021-12-13 19:24:26,562 - root - INFO - main : 20 - Starting didier
-2021-12-13 19:24:26,562 - root - DEBUG - mapping : 13 - getting audio mapping :C:/Users/David/Nextcloud/rosita/audios/robot/manteau.wav
-2021-12-13 19:24:26,563 - root - INFO - audio : 11 - play C:/Users/David/Nextcloud/rosita/audios/robot/manteau.wav
-2021-12-13 19:26:19,841 - root - INFO - main : 20 - Starting didier
-2021-12-13 19:26:19,841 - root - DEBUG - mapping : 13 - getting audio mapping :audios/lunettes.wav
-2021-12-13 19:26:19,842 - root - INFO - audio : 11 - play audios/lunettes.wav
-2021-12-13 19:26:19,888 - playsound - DEBUG - playsound : 185 - Starting play
-2021-12-13 19:26:21,920 - playsound - DEBUG - playsound : 193 - Finishing play
-2021-12-13 19:32:23,484 - root - INFO - main : 20 - Starting didier
-2021-12-13 19:32:23,484 - root - DEBUG - mapping : 13 - getting audio mapping :audios/lunettes.wav
-2021-12-13 19:32:23,485 - root - INFO - audio : 11 - play audios/lunettes.wav
-2021-12-13 19:32:23,532 - playsound - DEBUG - playsound : 185 - Starting play
-2021-12-13 19:32:25,557 - playsound - DEBUG - playsound : 193 - Finishing play
+2021-12-14 10:02:58,329 - root - INFO - main : 20 - Starting didier
+2021-12-14 10:02:58,332 - root - DEBUG - mapping : 13 - getting audio mapping :audios/lunettes.wav
+2021-12-14 10:08:58,469 - root - INFO - main : 20 - Starting didier
+2021-12-14 10:08:58,469 - root - DEBUG - mapping : 13 - getting audio mapping :audios/lunettes.wav
+2021-12-14 10:11:13,972 - root - INFO - main : 20 - Starting didier
+2021-12-14 10:11:13,972 - root - DEBUG - mapping : 13 - getting audio mapping :audios/lunettes.wav
+2021-12-14 10:15:01,721 - root - INFO - main : 20 - Starting didier
+2021-12-14 10:15:01,721 - root - DEBUG - mapping : 13 - getting audio mapping :audios/lunettes2.wav
+2021-12-14 10:15:11,281 - root - INFO - main : 20 - Starting didier
+2021-12-14 10:15:11,281 - root - DEBUG - mapping : 13 - getting audio mapping :audios/lunettes2.wav
+2021-12-14 10:15:17,084 - root - INFO - main : 20 - Starting didier
+2021-12-14 10:15:17,084 - root - DEBUG - mapping : 13 - getting audio mapping :audios/lunettes2.wav
+2021-12-14 10:15:20,019 - root - INFO - main : 20 - Starting didier
+2021-12-14 10:15:20,019 - root - DEBUG - mapping : 13 - getting audio mapping :audios/lunettes2.wav
+2021-12-14 10:16:15,581 - root - INFO - main : 20 - Starting didier
+2021-12-14 10:16:15,581 - root - DEBUG - mapping : 13 - getting audio mapping :audios/lunettes2.wav
+2021-12-14 10:16:19,821 - root - INFO - main : 20 - Starting didier
+2021-12-14 10:16:19,821 - root - DEBUG - mapping : 13 - getting audio mapping :audios/lunettes2.wav
+2021-12-14 10:16:27,364 - root - INFO - main : 20 - Starting didier
+2021-12-14 10:16:27,364 - root - DEBUG - mapping : 13 - getting audio mapping :audios/lunettes2.wav
+2021-12-14 10:16:27,952 - root - INFO - main : 20 - Starting didier
+2021-12-14 10:16:27,953 - root - DEBUG - mapping : 13 - getting audio mapping :audios/lunettes2.wav
+2021-12-14 10:16:48,319 - root - INFO - main : 20 - Starting didier
+2021-12-14 10:16:48,319 - root - DEBUG - mapping : 13 - getting audio mapping :audios/lunettes2.wav

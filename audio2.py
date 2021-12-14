@@ -1,6 +1,6 @@
 import logging
 
-import pygame
+from pygame import mixer
 from threading import Thread
 
 
@@ -8,10 +8,11 @@ class Audio2:
 
     @staticmethod
     def play_sound(file):
-        pygame.mixer.init()
-        pygame.mixer.music.load(file)
-        pygame.mixer.music.play()
-        while pygame.mixer.music.get_busy() == True:
+        #mixer.pre_init(44100, 16, 2, 4096)
+        mixer.init()
+        sound = mixer.Sound(file)
+        sound.play()
+        while mixer.music.get_busy():
             continue
 
     @staticmethod
