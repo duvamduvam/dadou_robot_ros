@@ -21,7 +21,7 @@ class Audio:
 
     def play(self, file):
         if self.music_thread:
-            logging.info("play sound : " + file)
+            logging.info("stop sound : " + file)
             self.music_thread.join()
         else:
             self.music_thread = Thread(target=Audio.play_sound, args=[file])
