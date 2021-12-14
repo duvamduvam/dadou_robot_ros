@@ -39,7 +39,7 @@ class Audio:
     def stop_sound(self):
         self.sound.stop()
 
-    def stop_sound(self):
+    def stop_sound2(self):
         self.player.stop()
 
     def play(self, file):
