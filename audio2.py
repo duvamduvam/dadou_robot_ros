@@ -1,5 +1,6 @@
 import logging
 import time
+import pygame
 
 from pygame import mixer
 from threading import Thread
@@ -19,6 +20,7 @@ class Audio2:
     @staticmethod
     def play(file):
         logging.info("play sound : "+file)
+        pygame.init()
         mixer.init(44100, -16, 2, 2048)
         sound = mixer.Sound(file)
         sound.play()
