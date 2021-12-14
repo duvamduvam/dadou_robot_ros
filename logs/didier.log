@@ -36,3 +36,7 @@
 2021-12-14 21:18:41,963 - sound_player.player - DEBUG - player : 73 - Thread loop
 2021-12-14 21:18:41,964 - sound_player.player - DEBUG - player : 95 - Add sound <sound_player.linux.FFMpegSound object at 0x7f23db03d100>
 2021-12-14 21:18:41,965 - sound_player.linux - WARNING - linux : 29 - Couldn't find ffplay or avplay - defaulting to ffplay, but may not work
+2021-12-14 21:18:51,972 - root - DEBUG - mapping : 13 - getting audio mapping :audios/lunettes2.wav
+2021-12-14 21:18:51,972 - root - INFO - audio : 17 - play sound : audios/lunettes2.wav
+2021-12-14 21:18:51,972 - root - INFO - main : 43 - test
+2021-12-14 21:18:51,973 - sound_player.player - DEBUG - player : 33 - enqueue <sound_player.linux.FFMpegSound object at 0x7f23db0bb6d0>
