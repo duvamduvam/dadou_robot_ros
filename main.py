@@ -32,7 +32,7 @@ mapping = Mapping()
 audioPath = mapping.get_audio_file("A5")
 #lights.fade_red()
 if audioPath:
-    audio.play_sound2(audioPath)
+    audio.play_sound(audioPath)
 
 time.sleep(10)
 #audio.stop_sound()
@@ -41,7 +41,7 @@ audioPath = mapping.get_audio_file("A5")
 
 #audio.stop_sound2()
 if audioPath:
-    audio.play_sound2(audioPath)
+    audio.play_sound(audioPath)
 
 time.sleep(10)
 logging.info("test")
