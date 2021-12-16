@@ -11,6 +11,7 @@ sys.path.append('classes')
 from com import Com
 from audio import Audio
 from mapping import Mapping
+from visual import Image
 #from lights import Lights
 
 
@@ -27,26 +28,27 @@ if __name__ == '__main__':
 com = Com()
 audio = Audio()
 mapping = Mapping()
+image = Image()
+
+image.load_images()
+
 #lights = Lights()
 
-audioPath = mapping.get_audio_file("A5")
+#audioPath = mapping.get_audio_file("A5")
 #lights.fade_red()
-if audioPath:
-    audio.play_sound(audioPath)
+#if audioPath:
+#    audio.play_sound(audioPath)
 
-time.sleep(10)
+#time.sleep(10)
 #audio.stop_sound()
-audioPath = mapping.get_audio_file("A3")
+#audioPath = mapping.get_audio_file("A3")
 #lights.fade_red()
 
 #audio.stop_sound2()
-if audioPath:
-    audio.play_sound(audioPath)
+#if audioPath:
+#    audio.play_sound(audioPath)
 
-logging.info("test")
-time.sleep(30)
-audio.stop_sound()
-logging.info("test2")
+
 
 #while True:
 #    //msg = com.getMsg()
