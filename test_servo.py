@@ -11,6 +11,7 @@ class Servo(unittest.TestCase):
     head = Head()
 
     def test_move_key(self):
+        logging.debug("start test servo")
         for i in range(10):
             key = '!'
             logging.debug("test key ! for servo")
