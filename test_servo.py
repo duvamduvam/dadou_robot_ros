@@ -10,7 +10,7 @@ class Servo(unittest.TestCase):
 
     head = Head()
 
-    def move_key(self):
+    def test_move_key(self):
         for i in range(10):
             key = '!'
             self.head.update(key)
