@@ -24,3 +24,7 @@ class Servo(unittest.TestCase):
             self.head.process()
             time.sleep(500)
 
+
+
+if __name__ == '__main__':
+    unittest.main()
