@@ -2,7 +2,7 @@ import time
 import unittest
 import logging
 
-from head import Head
+from ..head import Head
 
 
 class Servo(unittest.TestCase):
