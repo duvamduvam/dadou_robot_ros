@@ -14,8 +14,10 @@ class Servo(unittest.TestCase):
         for i in range(10):
             key = '!'
             self.head.update(key)
+            self.head.process()
             time.sleep(5)
             key = '~'
             self.head.update(key)
+            self.head.process()
             time.sleep(5)
 
