@@ -10,27 +10,32 @@ logging.config.fileConfig(fname='logging.conf', disable_existing_loggers=False)
 sys.path.append('classes')
 from com import Com
 from audio import Audio
+from head import Head
 from mapping import Mapping
 from visual import Image
+from wheel import Wheel
 #from lights import Lights
-
-
-def print_hi(name):
-    # Use a breakpoint in the code line below to debug your script.
-    print(f'Hi, {name}')  # Press Ctrl+F8 to toggle the breakpoint.
-
 
 logging.info('Starting didier')
 
-if __name__ == '__main__':
-    print_hi('Start didier')
-
 com = Com()
-audio = Audio()
 mapping = Mapping()
+audio = Audio(mapping)
+head = Head()
 image = Image()
+wheel = Wheel()
 
 image.load_images()
+
+while True:
+    key = com.get_msg()
+    if key:
+        audio.execute(key)
+        head.update(key)
+        wheel.update_dir(key)
+
+    head.process()
+    wheel.process()
 
 #lights = Lights()
 
