@@ -30,3 +30,8 @@ class Utils:
 
     def is_positive(self, value):
         value > (self.last_char - self.first_char)
+
+    @staticmethod
+    def is_time(last_time, time_out) -> bool:
+        current = round(time.time() * 1000)
+        return (current - last_time) + time_out
