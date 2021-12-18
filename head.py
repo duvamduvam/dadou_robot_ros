@@ -15,6 +15,8 @@ class Head:
     last_time = Utils.current_milli_time()
     time_step = 200
 
+    utils = Utils()
+
     head_pwm = pwmio.PWMOut(board.D5, duty_cycle=2 ** 15, frequency=50)
         #pwmio.PWMOut(board.LED, frequency=5000, duty_cycle=0)
 
