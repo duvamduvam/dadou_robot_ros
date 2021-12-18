@@ -5,7 +5,11 @@ import logging
 
 
 class Head:
-    target_pos, current_pos, target, servo_min = 0
+    target_pos = 0
+    current_pos = 0
+    target = 0
+    servo_min = 0
+
     servo_max = 180
     margin = 5
     last_time = Utils.current_milli_time()
