@@ -15,12 +15,12 @@ class Servo(unittest.TestCase):
         for i in range(10):
             key = '!'
             logging.debug("test key ! for servo")
-            self.head.update(key)
+            self.head.update(chr(key))
             self.head.process()
             time.sleep(500)
             key = '~'
             logging.debug("test key ~ for servo")
-            self.head.update(key)
+            self.head.update(chr(key))
             self.head.process()
             time.sleep(500)
 
