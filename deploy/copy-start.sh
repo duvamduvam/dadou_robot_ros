@@ -1,6 +1,11 @@
 #/bin/bash
 
-rm -rf /home/pi/deploy/didier-python
-rsync -r home:/home/david/Nextcloud/rosita/python/didier-python /home/pi/deploy
-cd /home/pi/deploy/didier-python
-python3 $1
+deploy_path='/home/pi/deploy'
+project_name='didier-python'
+home_path='home:/home/david/Nextcloud/rosita/python/'$project_name
+
+rm -rf $deploy_path/$project_name
+rsync -rtvu --delete $home_path $deploy_path
+cd $deploy_path
+echo "exec : "$deloy_path/$project_name/$1
+python3 $deploy_path/$project_name/$1
