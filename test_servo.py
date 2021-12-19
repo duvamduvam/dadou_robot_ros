@@ -11,17 +11,18 @@ class Servo(unittest.TestCase):
     head = Head()
 
     def test_move_key(self):
+        head = Head()
         logging.debug("start test servo")
         for i in range(10):
             key = '!'
             logging.debug("test key 60 for servo")
-            self.head.update(40)
-            self.head.process()
+            head.update(40)
+            head.process()
             time.sleep(5)
             key = '~'
             logging.debug("test key 130 for servo")
-            self.head.update(100)
-            self.head.process()
+            head.update(100)
+            head.process()
             time.sleep(5)
 
 
