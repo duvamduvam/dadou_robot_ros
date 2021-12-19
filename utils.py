@@ -1,4 +1,5 @@
 import time
+import logging
 from numpy import interp
 
 
@@ -37,4 +38,6 @@ class Utils:
     @staticmethod
     def is_time(last_time, time_out) -> bool:
         current = round(time.time() * 1000)
+        logging.info("last time: " + str(last_time)+" current time : " + str(current) + "time out :" + str(time_out));
+
         return (current - last_time) + time_out
