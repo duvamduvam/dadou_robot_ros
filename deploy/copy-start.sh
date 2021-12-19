@@ -1,4 +1,4 @@
-#/bin/bash
+#!/bin/bash
 
 deploy_path='/home/pi/deploy'
 project_name='didier-python'
