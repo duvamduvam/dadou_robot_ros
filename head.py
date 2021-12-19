@@ -29,6 +29,8 @@ class Head:
     def process(self):
         if Utils.is_time(self.last_time, self.time_step):
             diff = abs(self.target_pos - self.current_pos);
+            logging.debug("servo target : " + str(self.target_pos) + " current : " + str(self.current_pos) +
+                          " margin :" + str(self.margin));
             if diff > self.margin and self.target_pos != self.current_pos:
                 if self.target_pos > self.current_pos:
                     self.next_step(1)
@@ -40,3 +42,5 @@ class Head:
             logging.info ("position "+self.current_pos+" next step "+step);
             self.current_pos += step;
             self.head_pwm.angle(self.current_pos)
+        else:
+            logging.error("servo step : " + str(step) + " out of range")
