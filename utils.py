@@ -13,6 +13,7 @@ class Utils:
     def translate(self, value, left_min, left_max,):
         return Utils.translate(value, left_min, left_max, self.pwm_min, self.pwm_man)
 
+    @staticmethod
     def translate(value, left_min, left_max, right_min, right_max):
         # Figure out how 'wide' each range is
         left_span = left_max - left_min
