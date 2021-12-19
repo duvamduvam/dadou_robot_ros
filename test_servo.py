@@ -17,12 +17,12 @@ class Servo(unittest.TestCase):
             logging.debug("test key ! for servo")
             self.head.update(ord(key))
             self.head.process()
-            time.sleep(500)
+            time.sleep(5)
             key = '~'
             logging.debug("test key ~ for servo")
             self.head.update(ord(key))
             self.head.process()
-            time.sleep(500)
+            time.sleep(5)
 
 
 
