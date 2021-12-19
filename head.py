@@ -23,7 +23,7 @@ class Head:
     def update(self, key):
 
         self.target = self.utils.translate(key)
-        logging.info("update servo key : " + str(key)+" target :" + str(self.target));
+        logging.debug("update servo key : " + str(key)+" target :" + str(self.target));
         self.last_time = Utils.current_milli_time()
 
     def process(self):
