@@ -5,7 +5,7 @@ class Utils:
     first_char_nb = 33
     last_char_nb = 126
     pwm_min = 0
-    pwm_max = 65535
+    pwm_max = 180
 
     def translate(self, value):
         return Utils.translate5(value, self.first_char_nb, self.first_char_nb, self.pwm_min, self.pwm_max)
