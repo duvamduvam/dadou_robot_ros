@@ -23,7 +23,7 @@ class Head:
     def update(self, key: chr):
         logging.info("update servo to : " + str(key));
         self.target = self.utils.translate(key)
-        last_time = Utils.current_milli_time()
+        self.last_time = Utils.current_milli_time()
 
     def process(self):
         if Utils.is_time(self.last_time, self.time_step):
