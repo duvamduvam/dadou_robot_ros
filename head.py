@@ -21,7 +21,7 @@ class Head:
         #pwmio.PWMOut(board.LED, frequency=5000, duty_cycle=0)
 
     def update(self, key: chr):
-        logging.info("update servo to : " + key);
+        logging.info("update servo to : " + str(key));
         self.target = self.utils.translate(key)
         last_time = Utils.current_milli_time()
 
