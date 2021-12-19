@@ -9,7 +9,7 @@ class Utils:
     pwm_max = 180
 
     def translate(self, value):
-        return Utils.translate5(value, self.first_char_nb, self.first_char_nb, self.pwm_min, self.pwm_max)
+        return Utils.translate5(value, self.first_char_nb, self.last_char_nb, self.pwm_min, self.pwm_max)
 
     def translate3(self, value, left_min, left_max, ):
         return Utils.translate5(value, left_min, left_max, self.pwm_min, self.pwm_man)
