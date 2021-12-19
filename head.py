@@ -20,7 +20,7 @@ class Head:
     head_pwm = pwmio.PWMOut(board.D5, duty_cycle=2 ** 15, frequency=50)
         #pwmio.PWMOut(board.LED, frequency=5000, duty_cycle=0)
 
-    def update(self, key: chr):
+    def update(self, key):
 
         self.target = self.utils.translate(key)
         logging.info("update servo key : " + str(key)+" target :" + str(self.target));
@@ -30,7 +30,7 @@ class Head:
         if Utils.is_time(self.last_time, self.time_step):
             diff = abs(self.target_pos - self.current_pos);
             logging.debug("servo target : " + str(self.target_pos) + " current : " + str(self.current_pos) +
-                          " margin :" + str(self.margin));
+                          " margin : " + str(self.margin));
             if diff > self.margin and self.target_pos != self.current_pos:
                 if self.target_pos > self.current_pos:
                     self.next_step(1)
