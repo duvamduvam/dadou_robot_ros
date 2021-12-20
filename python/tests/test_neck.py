@@ -28,14 +28,14 @@ class NeckTests(unittest.TestCase):
             time.sleep(5)
             key = '~'
             logging.debug("test key 130 for servo")
-            self.head.update(100)
-            self.head.process()
+            self.neck.update(100)
+            self.neck.process()
             time.sleep(1)
-            self.head.process()
+            self.neck.process()
             time.sleep(1)
-            self.head.process()
+            self.neck.process()
             time.sleep(1)
-            self.head.process()
+            self.neck.process()
             time.sleep(5)
 
 
