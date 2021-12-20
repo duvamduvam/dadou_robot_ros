@@ -25,4 +25,4 @@ class Audio:
 
     def execute(self, key):
         audio_path = self.mapping.get_audio_file("A3")
-        self.audio.play_sound(audio_path)
+        self.play_sound(audio_path)
