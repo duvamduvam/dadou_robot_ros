@@ -5,6 +5,7 @@ import random
 import time
 import board
 import neopixel
+import logging
 from rainbowio import colorwheel
 
 
@@ -41,6 +42,7 @@ class Lights:
         self.strip[i] = red
 
     def fill(self, color):
+        logging.info("fill strip with "+str(color))
         self.strip.fill(color)
 
     def clean(self):
