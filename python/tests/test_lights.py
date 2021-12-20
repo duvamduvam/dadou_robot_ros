@@ -14,10 +14,10 @@ class LightsTest(unittest.TestCase):
 
     lights = Lights()
 
-    def test_random(self):
-        for i in range(100):
-            self.lights.random()
-            time.sleep(1)
+    #def test_random(self):
+    #    for i in range(100):
+    #        self.lights.random()
+    #        time.sleep(1)
 
     def test_full_color(self):
         self.lights.fill(self.BLUE)
