@@ -22,7 +22,7 @@ class Lights:
     BLACK = (0, 0, 0)
 
     # LED strip configuration:
-    LED_COUNT = 64  # Number of LED pixels.
+    LED_COUNT = 250  # Number of LED pixels.
     LED_PIN = 18  # GPIO pin connected to the pixels (18 uses PWM!).
     # LED_PIN        = 10      # GPIO pin connected to the pixels (10 uses SPI /dev/spidev0.0).
     LED_FREQ_HZ = 800000  # LED signal frequency in hertz (usually 800khz)
@@ -50,7 +50,10 @@ class Lights:
     def random(self):
         red = 0x100000
         i = random.randint(0, self.LED_COUNT)
-        self.strip[i] = red
+        blue = (random.randint(0, 255), 0, 0)
+        red = (0, random.randint(0, 255), 0)
+        green = (0, 0, random.randint(0, 255))
+        self.strip[i] = (blue, red, green)
 
     def fill(self, color):
         logging.info("fill strip with "+str(color))
