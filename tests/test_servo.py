@@ -3,7 +3,7 @@ import unittest
 import logging
 import logging.config
 
-from head import Head
+from .. import Head
 
 
 class Servo(unittest.TestCase):
