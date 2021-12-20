@@ -7,7 +7,7 @@ import logging.config
 from python.head import Head
 
 
-class Servo(unittest.TestCase):
+class ServoTests(unittest.TestCase):
     logging.config.fileConfig(fname='logging.conf', disable_existing_loggers=False)
 
     head = Head()
