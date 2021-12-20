@@ -56,7 +56,7 @@ class Lights:
         #red = (0, random.randint(0, 255), 0)
         green = (0, 0, random.randint(0, 255))
         #color1 = rs.CreateColor(128, 128, 128)
-        self.strip[i] = fancy.CRGB(1.0, 0.3, 0.0)
+        self.strip[i] = fancy.CRGB(1.0, 0.3, 0.0).pack()
 
     def fill(self, color):
         logging.info("fill strip with "+str(color))
