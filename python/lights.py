@@ -50,13 +50,13 @@ class Lights:
 
     def random(self):
         #red = 0x100000
-        red = "0x" + str(random.randint(0, 100000))
+        #red = "0x" + str(random.randint(0, 100000))
         i = random.randint(0, self.LED_COUNT)
-        blue = (random.randint(0, 255), 0, 0)
-        #red = (0, random.randint(0, 255), 0)
-        green = (0, 0, random.randint(0, 255))
+        blue = (random.uniform(0, 1), 0, 0)
+        red = (0, random.uniform(0, 1), 0)
+        green = (0, 0, random.uniform(0, 1))
         #color1 = rs.CreateColor(128, 128, 128)
-        self.strip[i] = fancy.CRGB(1.0, 0.3, 0.0).pack()
+        self.strip[i] = fancy.CRGB(red, blue, green).pack()
 
     def fill(self, color):
         logging.info("fill strip with "+str(color))
