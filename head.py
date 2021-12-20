@@ -19,7 +19,7 @@ class Head:
     utils = Utils()
 
     head_pwm = pwmio.PWMOut(board.D5, duty_cycle=2 ** 15, frequency=50)
-    servo = servo.Servo(pwm)
+    servo = servo.Servo(head_pwm)
         #pwmio.PWMOut(board.LED, frequency=5000, duty_cycle=0)
 
     def update(self, key):
