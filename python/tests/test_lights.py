@@ -31,6 +31,7 @@ class LightsTest(unittest.TestCase):
         self.lights.fill(self.PURPLE)
         time.sleep(2)
         self.lights.fill(self.BLACK)
+        time.sleep(2)
 
 if __name__ == '__main__':
     unittest.main()
