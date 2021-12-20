@@ -24,10 +24,11 @@ class Wheel:
     utils = Utils()
 
     def update(self, key: str):
-        self.update_dir(int(key[0]), self.dir_left)
-        self.update_dir(int(key[0]), self.dir_right)
+
         left = self.utils.translate(key[0])
         right = self.utils.translate(key[1])
+        self.update_dir(left, self.dir_left)
+        self.update_dir(right, self.dir_right)
         logging.debug("update wheel with key : " + key)
 
     def stop(self):
