@@ -12,7 +12,7 @@ class AudioTests(unittest.TestCase):
     audio = Audio(mapping)
 
     def test_play(self):
-        audio.execute("A5")
+        self.audio.execute("A5")
         time.sleep(20)
 
 if __name__ == '__main__':
