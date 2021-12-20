@@ -2,6 +2,7 @@ from utils import Utils
 import pwmio
 import board
 import logging
+from adafruit_motor import servo
 
 
 class Head:
@@ -18,6 +19,7 @@ class Head:
     utils = Utils()
 
     head_pwm = pwmio.PWMOut(board.D5, duty_cycle=2 ** 15, frequency=50)
+    servo = servo.Servo(pwm)
         #pwmio.PWMOut(board.LED, frequency=5000, duty_cycle=0)
 
     def update(self, key):
@@ -40,6 +42,6 @@ class Head:
         if self.servo_min <= self.current_pos <= self.servo_max:
             logging.info ("position "+str(self.current_pos)+" next step "+str(step));
             self.current_pos += step;
-            self.head_pwm.angle(self.current_pos)
+            self.servo.angle(self.current_pos)
         else:
             logging.error("servo step : " + str(step) + " out of range")
