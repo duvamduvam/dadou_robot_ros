@@ -20,7 +20,15 @@ class LightsTest(unittest.TestCase):
 
     def test_full_color(self):
         self.lights.fill(self.BLUE)
-        time.sleep(10)
+        time.sleep(2)
+        self.lights.fill(self.YELLOW)
+        time.sleep(2)
+        self.lights.fill(self.CYAN)
+        time.sleep(2)
+        self.lights.fill(self.RED)
+        time.sleep(2)
+        self.lights.fill(self.PURPLE)
+        time.sleep(2)
 
 if __name__ == '__main__':
     unittest.main()
