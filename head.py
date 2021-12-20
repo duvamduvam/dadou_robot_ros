@@ -42,6 +42,6 @@ class Head:
         if self.servo_min <= self.current_pos <= self.servo_max:
             logging.info ("position "+str(self.current_pos)+" next step "+str(step));
             self.current_pos += step;
-            self.servo.angle(self.current_pos)
+            self.servo.angle(abs(self.current_pos))
         else:
             logging.error("servo step : " + str(step) + " out of range")
