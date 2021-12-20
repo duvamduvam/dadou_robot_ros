@@ -4,7 +4,7 @@ import unittest
 import logging
 import logging.config
 
-from python.head import Head
+from python.neck import Head
 
 
 class ServoTests(unittest.TestCase):

@@ -3,25 +3,23 @@
 import logging
 import sys
 import logging.config
-import time
-#logging.basicConfig(filename='didier.log', encoding='utf-8', level=logging.DEBUG, format='%(asctime)s %(levelname)s %(message)s')
-logging.config.fileConfig(fname='logging.conf', disable_existing_loggers=False)
 
-sys.path.append('classes')
 from com import Com
 from audio import Audio
-from head import Head
+from neck import Neck
 from mapping import Mapping
 from visual import Image
 from wheel import Wheel
+
 #from lights import Lights
 
 logging.info('Starting didier')
+logging.config.fileConfig(fname='logging.conf', disable_existing_loggers=False)
 
 com = Com()
 mapping = Mapping()
 audio = Audio(mapping)
-head = Head()
+neck = Neck()
 image = Image()
 wheel = Wheel()
 
@@ -31,10 +29,10 @@ while True:
     key = com.get_msg()
     if key:
         audio.process(key)
-        head.update(key)
+        neck.update(key)
         wheel.update_dir(key)
 
-    head.process()
+    neck.process()
     wheel.process()
 
 #lights = Lights()

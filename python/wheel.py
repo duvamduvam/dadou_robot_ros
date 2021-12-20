@@ -1,12 +1,15 @@
 import logging
-import pwmio
+
 import board
-from digitalio import DigitalInOut, Direction, Pull
+import pwmio
+from digitalio import DigitalInOut
+
 from utils import Utils
 
 
 class Wheel:
-    left, right = 0
+    left = 0
+    right = 0
 
     # TODO check steps
     pwm_step = 50

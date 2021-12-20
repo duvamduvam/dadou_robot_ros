@@ -1,4 +1,4 @@
-_import glob
+import glob
 import logging.config
 import imageio
 

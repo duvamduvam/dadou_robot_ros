@@ -5,7 +5,7 @@ import logging
 from adafruit_motor import servo
 
 
-class Head:
+class Neck:
     target_pos = 0
     current_pos = 0
     target = 0
@@ -25,7 +25,7 @@ class Head:
 
     def update(self, key):
         self.target_pos = abs(self.utils.translate(key))
-        logging.debug("update servo key : " + str(key) + " target :" + str(self.target));
+        logging.debug("update servo key : " + str(key) + " target :" + str(self.target))
         self.last_time = Utils.current_milli_time()
 
     def process(self):

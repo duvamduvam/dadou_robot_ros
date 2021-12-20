@@ -4,16 +4,16 @@ from numpy import interp
 
 
 class Utils:
-    first_char_nb = 33
-    last_char_nb = 126
+    first_char = 33
+    last_char = 126
     pwm_min = 0
     pwm_max = 180
 
     def translate(self, value):
-        return Utils.translate5(value, self.first_char_nb, self.last_char_nb, self.pwm_min, self.pwm_max)
+        return Utils.translate5(value, self.first_char, self.last_char, self.pwm_min, self.pwm_max)
 
     def translate3(self, value, left_min, left_max, ):
-        return Utils.translate5(value, left_min, left_max, self.pwm_min, self.pwm_man)
+        return Utils.translate5(value, left_min, left_max, self.pwm_min, self.pwm_max)
 
     @staticmethod
     def translate5(value, left_min, left_max, right_min, right_max) -> int:
@@ -33,7 +33,7 @@ class Utils:
         return round(time.time() * 1000)
 
     def is_positive(self, value):
-        value > (self.last_char - self.first_char)
+        return value > (self.last_char - self.first_char)
 
     @staticmethod
     def is_time(last_time, time_out) -> bool:
