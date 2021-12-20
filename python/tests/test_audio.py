@@ -1,4 +1,5 @@
 import logging
+import logging.config
 import time
 import unittest
 from python.mapping import Mapping
