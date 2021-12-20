@@ -1,0 +1,4657 @@
+2021-12-15 00:14:15,627 - root - INFO - main : 23 - Starting didier
+2021-12-15 00:14:55,320 - root - INFO - main : 23 - Starting didier
+2021-12-15 00:15:24,347 - root - INFO - main : 23 - Starting didier
+2021-12-15 00:15:54,383 - root - INFO - main : 23 - Starting didier
+2021-12-15 00:15:54,383 - root - INFO - visual : 19 - load visuals
+2021-12-15 00:15:54,383 - root - INFO - visual : 20 - ['visuals/bouche-ouvert1.png', 'visuals/oeil-gauche.png', 'visuals/heart.png', 'visuals/oeil-droit.png', 'visuals/bouche-ouvert2.png', 'visuals/oeil-fixe.png']
+2021-12-15 00:30:37,699 - root - INFO - main : 23 - Starting didier
+2021-12-15 00:30:54,804 - root - INFO - main : 23 - Starting didier
+2021-12-15 00:30:54,804 - root - INFO - visual : 27 - load visuals
+2021-12-15 00:32:32,404 - root - INFO - main : 23 - Starting didier
+2021-12-15 00:32:32,404 - root - INFO - visual : 27 - load visuals
+2021-12-15 00:33:27,158 - root - INFO - main : 23 - Starting didier
+2021-12-15 00:33:27,158 - root - INFO - visual : 27 - load visuals
+2021-12-15 00:33:27,158 - root - INFO - visual : 29 - visuals/ content : 
+2021-12-15 00:33:27,158 - root - INFO - visual : 30 - ['visuals/bouche-ouvert1.png', 'visuals/oeil-gauche.png', 'visuals/heart.png', 'visuals/oeil-droit.png', 'visuals/bouche-ouvert2.png', 'visuals/oeil-fixe.png']
+2021-12-15 00:36:56,768 - root - INFO - main : 23 - Starting didier
+2021-12-15 00:36:56,769 - root - INFO - visual : 27 - load visuals
+2021-12-15 00:36:56,769 - root - INFO - visual : 29 - visuals/ content : 
+2021-12-15 00:36:56,769 - root - INFO - visual : 30 - ['visuals/bouche-ouvert1.png', 'visuals/oeil-gauche.png', 'visuals/heart.png', 'visuals/oeil-droit.png', 'visuals/bouche-ouvert2.png', 'visuals/oeil-fixe.png']
+2021-12-15 00:36:56,769 - root - INFO - visual : 35 - visuals/bouche-ouvert1.png
+2021-12-15 00:36:56,769 - root - INFO - visual : 35 - visuals/oeil-gauche.png
+2021-12-15 00:36:56,769 - root - INFO - visual : 35 - visuals/heart.png
+2021-12-15 00:36:56,769 - root - INFO - visual : 35 - visuals/oeil-droit.png
+2021-12-15 00:36:56,769 - root - INFO - visual : 35 - visuals/bouche-ouvert2.png
+2021-12-15 00:36:56,769 - root - INFO - visual : 35 - visuals/oeil-fixe.png
+2021-12-15 00:37:21,191 - root - INFO - main : 23 - Starting didier
+2021-12-15 00:37:21,191 - root - INFO - visual : 27 - load visuals
+2021-12-15 00:37:21,192 - root - INFO - visual : 29 - visuals/ content : 
+2021-12-15 00:37:21,192 - root - INFO - visual : 30 - ['visuals/bouche-ouvert1.png', 'visuals/oeil-gauche.png', 'visuals/heart.png', 'visuals/oeil-droit.png', 'visuals/bouche-ouvert2.png', 'visuals/oeil-fixe.png']
+2021-12-15 00:37:21,192 - root - INFO - visual : 35 - bouche-ouvert1
+2021-12-15 00:37:21,192 - root - INFO - visual : 35 - oeil-gauche
+2021-12-15 00:37:21,192 - root - INFO - visual : 35 - heart
+2021-12-15 00:37:21,192 - root - INFO - visual : 35 - oeil-droit
+2021-12-15 00:37:21,192 - root - INFO - visual : 35 - bouche-ouvert2
+2021-12-15 00:37:21,192 - root - INFO - visual : 35 - oeil-fixe
+2021-12-15 00:42:22,245 - root - INFO - main : 23 - Starting didier
+2021-12-15 00:42:22,245 - root - INFO - visual : 26 - load visuals
+2021-12-15 00:42:22,246 - root - INFO - visual : 28 - visuals/ content : 
+2021-12-15 00:42:22,246 - root - INFO - visual : 29 - ['visuals/bouche-ouvert1.png', 'visuals/oeil-gauche.png', 'visuals/heart.png', 'visuals/oeil-droit.png', 'visuals/bouche-ouvert2.png', 'visuals/oeil-fixe.png']
+2021-12-15 00:42:22,246 - root - INFO - visual : 35 - bouche-ouvert1
+2021-12-15 00:44:47,213 - root - INFO - main : 23 - Starting didier
+2021-12-15 00:44:47,213 - root - INFO - visual : 26 - load visuals
+2021-12-15 00:44:47,213 - root - INFO - visual : 28 - visuals/ content : 
+2021-12-15 00:44:47,213 - root - INFO - visual : 29 - ['visuals/bouche-ouvert1.png', 'visuals/oeil-gauche.png', 'visuals/heart.png', 'visuals/oeil-droit.png', 'visuals/bouche-ouvert2.png', 'visuals/oeil-fixe.png']
+2021-12-15 00:44:47,214 - root - INFO - visual : 35 - bouche-ouvert1
+2021-12-15 00:44:47,226 - PIL.PngImagePlugin - DEBUG - PngImagePlugin : 186 - STREAM b'IHDR' 16 13
+2021-12-15 00:44:47,227 - PIL.PngImagePlugin - DEBUG - PngImagePlugin : 186 - STREAM b'pHYs' 41 9
+2021-12-15 00:44:47,227 - PIL.PngImagePlugin - DEBUG - PngImagePlugin : 186 - STREAM b'tIME' 62 7
+2021-12-15 00:44:47,227 - PIL.PngImagePlugin - DEBUG - PngImagePlugin : 698 - b'tIME' 62 7 (unknown)
+2021-12-15 00:44:47,227 - PIL.PngImagePlugin - DEBUG - PngImagePlugin : 186 - STREAM b'iTXt' 81 29
+2021-12-15 00:44:47,227 - PIL.PngImagePlugin - DEBUG - PngImagePlugin : 186 - STREAM b'IDAT' 122 66
+2021-12-15 00:44:47,227 - root - INFO - visual : 41 - [[[0 0 0]
+  [0 0 0]
+  [0 0 0]
+  ...
+  [0 0 0]
+  [0 0 0]
+  [0 0 0]]
+
+ [[0 0 0]
+  [0 0 0]
+  [0 0 0]
+  ...
+  [0 0 0]
+  [0 0 0]
+  [0 0 0]]
+
+ [[0 0 0]
+  [0 0 0]
+  [0 0 0]
+  ...
+  [0 0 0]
+  [0 0 0]
+  [0 0 0]]
+
+ ...
+
+ [[0 0 0]
+  [0 0 0]
+  [0 0 0]
+  ...
+  [0 0 0]
+  [0 0 0]
+  [0 0 0]]
+
+ [[0 0 0]
+  [0 0 0]
+  [0 0 0]
+  ...
+  [0 0 0]
+  [0 0 0]
+  [0 0 0]]
+
+ [[0 0 0]
+  [0 0 0]
+  [0 0 0]
+  ...
+  [0 0 0]
+  [0 0 0]
+  [0 0 0]]]
+2021-12-15 00:46:22,759 - root - INFO - main : 23 - Starting didier
+2021-12-15 00:46:22,759 - root - INFO - visual : 26 - load visuals
+2021-12-15 00:46:22,760 - root - INFO - visual : 28 - visuals/ content : 
+2021-12-15 00:46:22,760 - root - INFO - visual : 29 - ['visuals/bouche-ouvert1.png', 'visuals/oeil-gauche.png', 'visuals/heart.png', 'visuals/oeil-droit.png', 'visuals/bouche-ouvert2.png', 'visuals/oeil-fixe.png']
+2021-12-15 00:46:22,760 - root - INFO - visual : 35 - bouche-ouvert1
+2021-12-15 00:46:22,772 - PIL.PngImagePlugin - DEBUG - PngImagePlugin : 186 - STREAM b'IHDR' 16 13
+2021-12-15 00:46:22,772 - PIL.PngImagePlugin - DEBUG - PngImagePlugin : 186 - STREAM b'pHYs' 41 9
+2021-12-15 00:46:22,772 - PIL.PngImagePlugin - DEBUG - PngImagePlugin : 186 - STREAM b'tIME' 62 7
+2021-12-15 00:46:22,772 - PIL.PngImagePlugin - DEBUG - PngImagePlugin : 698 - b'tIME' 62 7 (unknown)
+2021-12-15 00:46:22,772 - PIL.PngImagePlugin - DEBUG - PngImagePlugin : 186 - STREAM b'iTXt' 81 29
+2021-12-15 00:46:22,773 - PIL.PngImagePlugin - DEBUG - PngImagePlugin : 186 - STREAM b'IDAT' 122 66
+2021-12-15 00:46:22,773 - root - INFO - visual : 41 - [[[0 0 0]
+  [0 0 0]
+  [0 0 0]
+  ...
+  [0 0 0]
+  [0 0 0]
+  [0 0 0]]
+
+ [[0 0 0]
+  [0 0 0]
+  [0 0 0]
+  ...
+  [0 0 0]
+  [0 0 0]
+  [0 0 0]]
+
+ [[0 0 0]
+  [0 0 0]
+  [0 0 0]
+  ...
+  [0 0 0]
+  [0 0 0]
+  [0 0 0]]
+
+ ...
+
+ [[0 0 0]
+  [0 0 0]
+  [0 0 0]
+  ...
+  [0 0 0]
+  [0 0 0]
+  [0 0 0]]
+
+ [[0 0 0]
+  [0 0 0]
+  [0 0 0]
+  ...
+  [0 0 0]
+  [0 0 0]
+  [0 0 0]]
+
+ [[0 0 0]
+  [0 0 0]
+  [0 0 0]
+  ...
+  [0 0 0]
+  [0 0 0]
+  [0 0 0]]]
+2021-12-15 00:46:22,774 - root - INFO - visual : 35 - oeil-gauche
+2021-12-15 00:46:22,774 - PIL.PngImagePlugin - DEBUG - PngImagePlugin : 186 - STREAM b'IHDR' 16 13
+2021-12-15 00:46:22,774 - PIL.PngImagePlugin - DEBUG - PngImagePlugin : 186 - STREAM b'pHYs' 41 9
+2021-12-15 00:46:22,774 - PIL.PngImagePlugin - DEBUG - PngImagePlugin : 186 - STREAM b'tIME' 62 7
+2021-12-15 00:46:22,774 - PIL.PngImagePlugin - DEBUG - PngImagePlugin : 698 - b'tIME' 62 7 (unknown)
+2021-12-15 00:46:22,774 - PIL.PngImagePlugin - DEBUG - PngImagePlugin : 186 - STREAM b'iTXt' 81 29
+2021-12-15 00:46:22,775 - PIL.PngImagePlugin - DEBUG - PngImagePlugin : 186 - STREAM b'IDAT' 122 45
+2021-12-15 00:46:22,775 - root - INFO - visual : 41 - [[[  0   0   0]
+  [  0   0   0]
+  [  0   0   0]
+  [  0   0   0]
+  [  0   0   0]
+  [  0   0   0]
+  [  0   0   0]
+  [  0   0   0]]
+
+ [[  0   0   0]
+  [  0   0   0]
+  [241 185  15]
+  [241 185  15]
+  [241 185  15]
+  [241 185  15]
+  [  0   0   0]
+  [  0   0   0]]
+
+ [[  0   0   0]
+  [241 185  15]
+  [241 185  15]
+  [241 185  15]
+  [241 185  15]
+  [241 185  15]
+  [241 185  15]
+  [  0   0   0]]
+
+ [[  0   0   0]
+  [241 185  15]
+  [  0   0   0]
+  [  0   0   0]
+  [241 185  15]
+  [241 185  15]
+  [241 185  15]
+  [  0   0   0]]
+
+ [[  0   0   0]
+  [241 185  15]
+  [  0   0   0]
+  [  0   0   0]
+  [241 185  15]
+  [241 185  15]
+  [241 185  15]
+  [  0   0   0]]
+
+ [[  0   0   0]
+  [241 185  15]
+  [241 185  15]
+  [241 185  15]
+  [241 185  15]
+  [241 185  15]
+  [241 185  15]
+  [  0   0   0]]
+
+ [[  0   0   0]
+  [  0   0   0]
+  [241 185  15]
+  [241 185  15]
+  [241 185  15]
+  [241 185  15]
+  [  0   0   0]
+  [  0   0   0]]
+
+ [[  0   0   0]
+  [  0   0   0]
+  [  0   0   0]
+  [  0   0   0]
+  [  0   0   0]
+  [  0   0   0]
+  [  0   0   0]
+  [  0   0   0]]]
+2021-12-15 00:46:22,776 - root - INFO - visual : 35 - heart
+2021-12-15 00:46:22,777 - PIL.PngImagePlugin - DEBUG - PngImagePlugin : 186 - STREAM b'IHDR' 16 13
+2021-12-15 00:46:22,777 - PIL.PngImagePlugin - DEBUG - PngImagePlugin : 186 - STREAM b'pHYs' 41 9
+2021-12-15 00:46:22,777 - PIL.PngImagePlugin - DEBUG - PngImagePlugin : 186 - STREAM b'tIME' 62 7
+2021-12-15 00:46:22,777 - PIL.PngImagePlugin - DEBUG - PngImagePlugin : 698 - b'tIME' 62 7 (unknown)
+2021-12-15 00:46:22,777 - PIL.PngImagePlugin - DEBUG - PngImagePlugin : 186 - STREAM b'iTXt' 81 29
+2021-12-15 00:46:22,777 - PIL.PngImagePlugin - DEBUG - PngImagePlugin : 186 - STREAM b'IDAT' 122 65
+2021-12-15 00:46:22,777 - root - INFO - visual : 41 - [[[255 255 255]
+  [249   6  23]
+  [249   6  23]
+  [255 255 255]
+  [249   6  23]
+  [249   6  23]
+  [255 255 255]
+  [255 255 255]]
+
+ [[249   6  23]
+  [249   6  23]
+  [249   6  23]
+  [249   6  23]
+  [249   6  23]
+  [249   6  23]
+  [249   6  23]
+  [255 255 255]]
+
+ [[249   6  23]
+  [249   6  23]
+  [249   6  23]
+  [249   6  23]
+  [249   6  23]
+  [249   6  23]
+  [249   6  23]
+  [255 255 255]]
+
+ [[249   6  23]
+  [249   6  23]
+  [249   6  23]
+  [249   6  23]
+  [249   6  23]
+  [249   6  23]
+  [249   6  23]
+  [255 255 255]]
+
+ [[255 255 255]
+  [249   6  23]
+  [249   6  23]
+  [249   6  23]
+  [249   6  23]
+  [249   6  23]
+  [255 255 255]
+  [255 255 255]]
+
+ [[255 255 255]
+  [255 255 255]
+  [249   6  23]
+  [249   6  23]
+  [249   6  23]
+  [255 255 255]
+  [255 255 255]
+  [255 255 255]]
+
+ [[255 255 255]
+  [255 255 255]
+  [255 255 255]
+  [249   6  23]
+  [255 255 255]
+  [255 255 255]
+  [255 255 255]
+  [255 255 255]]
+
+ [[255 255 255]
+  [255 255 255]
+  [255 255 255]
+  [255 255 255]
+  [255 255 255]
+  [255 255 255]
+  [255 255 255]
+  [255 255 255]]]
+2021-12-15 00:46:22,779 - root - INFO - visual : 35 - oeil-droit
+2021-12-15 00:46:22,779 - PIL.PngImagePlugin - DEBUG - PngImagePlugin : 186 - STREAM b'IHDR' 16 13
+2021-12-15 00:46:22,779 - PIL.PngImagePlugin - DEBUG - PngImagePlugin : 186 - STREAM b'pHYs' 41 9
+2021-12-15 00:46:22,779 - PIL.PngImagePlugin - DEBUG - PngImagePlugin : 186 - STREAM b'tIME' 62 7
+2021-12-15 00:46:22,779 - PIL.PngImagePlugin - DEBUG - PngImagePlugin : 698 - b'tIME' 62 7 (unknown)
+2021-12-15 00:46:22,779 - PIL.PngImagePlugin - DEBUG - PngImagePlugin : 186 - STREAM b'iTXt' 81 29
+2021-12-15 00:46:22,779 - PIL.PngImagePlugin - DEBUG - PngImagePlugin : 186 - STREAM b'IDAT' 122 49
+2021-12-15 00:46:22,780 - root - INFO - visual : 41 - [[[  0   0   0]
+  [  0   0   0]
+  [  0   0   0]
+  [  0   0   0]
+  [  0   0   0]
+  [  0   0   0]
+  [  0   0   0]
+  [  0   0   0]]
+
+ [[  0   0   0]
+  [  0   0   0]
+  [241 185  15]
+  [241 185  15]
+  [241 185  15]
+  [241 185  15]
+  [  0   0   0]
+  [  0   0   0]]
+
+ [[  0   0   0]
+  [241 185  15]
+  [241 185  15]
+  [241 185  15]
+  [241 185  15]
+  [241 185  15]
+  [241 185  15]
+  [  0   0   0]]
+
+ [[  0   0   0]
+  [241 185  15]
+  [241 185  15]
+  [241 185  15]
+  [  0   0   0]
+  [  0   0   0]
+  [241 185  15]
+  [  0   0   0]]
+
+ [[  0   0   0]
+  [241 185  15]
+  [241 185  15]
+  [241 185  15]
+  [  0   0   0]
+  [  0   0   0]
+  [241 185  15]
+  [  0   0   0]]
+
+ [[  0   0   0]
+  [241 185  15]
+  [241 185  15]
+  [241 185  15]
+  [241 185  15]
+  [241 185  15]
+  [241 185  15]
+  [  0   0   0]]
+
+ [[  0   0   0]
+  [  0   0   0]
+  [241 185  15]
+  [241 185  15]
+  [241 185  15]
+  [241 185  15]
+  [  0   0   0]
+  [  0   0   0]]
+
+ [[  0   0   0]
+  [  0   0   0]
+  [  0   0   0]
+  [  0   0   0]
+  [  0   0   0]
+  [  0   0   0]
+  [  0   0   0]
+  [  0   0   0]]]
+2021-12-15 00:46:22,782 - root - INFO - visual : 35 - bouche-ouvert2
+2021-12-15 00:46:22,783 - PIL.PngImagePlugin - DEBUG - PngImagePlugin : 186 - STREAM b'IHDR' 16 13
+2021-12-15 00:46:22,783 - PIL.PngImagePlugin - DEBUG - PngImagePlugin : 186 - STREAM b'pHYs' 41 9
+2021-12-15 00:46:22,783 - PIL.PngImagePlugin - DEBUG - PngImagePlugin : 186 - STREAM b'tIME' 62 7
+2021-12-15 00:46:22,783 - PIL.PngImagePlugin - DEBUG - PngImagePlugin : 698 - b'tIME' 62 7 (unknown)
+2021-12-15 00:46:22,783 - PIL.PngImagePlugin - DEBUG - PngImagePlugin : 186 - STREAM b'iTXt' 81 29
+2021-12-15 00:46:22,783 - PIL.PngImagePlugin - DEBUG - PngImagePlugin : 186 - STREAM b'IDAT' 122 65
+2021-12-15 00:46:22,783 - root - INFO - visual : 41 - [[[0 0 0]
+  [0 0 0]
+  [0 0 0]
+  ...
+  [0 0 0]
+  [0 0 0]
+  [0 0 0]]
+
+ [[0 0 0]
+  [0 0 0]
+  [0 0 0]
+  ...
+  [0 0 0]
+  [0 0 0]
+  [0 0 0]]
+
+ [[0 0 0]
+  [0 0 0]
+  [0 0 0]
+  ...
+  [0 0 0]
+  [0 0 0]
+  [0 0 0]]
+
+ ...
+
+ [[0 0 0]
+  [0 0 0]
+  [0 0 0]
+  ...
+  [0 0 0]
+  [0 0 0]
+  [0 0 0]]
+
+ [[0 0 0]
+  [0 0 0]
+  [0 0 0]
+  ...
+  [0 0 0]
+  [0 0 0]
+  [0 0 0]]
+
+ [[0 0 0]
+  [0 0 0]
+  [0 0 0]
+  ...
+  [0 0 0]
+  [0 0 0]
+  [0 0 0]]]
+2021-12-15 00:46:22,785 - root - INFO - visual : 35 - oeil-fixe
+2021-12-15 00:46:22,785 - PIL.PngImagePlugin - DEBUG - PngImagePlugin : 186 - STREAM b'IHDR' 16 13
+2021-12-15 00:46:22,785 - PIL.PngImagePlugin - DEBUG - PngImagePlugin : 186 - STREAM b'pHYs' 41 9
+2021-12-15 00:46:22,785 - PIL.PngImagePlugin - DEBUG - PngImagePlugin : 186 - STREAM b'tIME' 62 7
+2021-12-15 00:46:22,785 - PIL.PngImagePlugin - DEBUG - PngImagePlugin : 698 - b'tIME' 62 7 (unknown)
+2021-12-15 00:46:22,785 - PIL.PngImagePlugin - DEBUG - PngImagePlugin : 186 - STREAM b'iTXt' 81 29
+2021-12-15 00:46:22,785 - PIL.PngImagePlugin - DEBUG - PngImagePlugin : 186 - STREAM b'IDAT' 122 47
+2021-12-15 00:46:22,786 - root - INFO - visual : 41 - [[[  0   0   0]
+  [  0   0   0]
+  [  0   0   0]
+  [  0   0   0]
+  [  0   0   0]
+  [  0   0   0]
+  [  0   0   0]
+  [  0   0   0]]
+
+ [[  0   0   0]
+  [  0   0   0]
+  [241 185  15]
+  [241 185  15]
+  [241 185  15]
+  [241 185  15]
+  [  0   0   0]
+  [  0   0   0]]
+
+ [[  0   0   0]
+  [241 185  15]
+  [241 185  15]
+  [241 185  15]
+  [241 185  15]
+  [241 185  15]
+  [241 185  15]
+  [  0   0   0]]
+
+ [[  0   0   0]
+  [241 185  15]
+  [241 185  15]
+  [  0   0   0]
+  [  0   0   0]
+  [241 185  15]
+  [241 185  15]
+  [  0   0   0]]
+
+ [[  0   0   0]
+  [241 185  15]
+  [241 185  15]
+  [  0   0   0]
+  [  0   0   0]
+  [241 185  15]
+  [241 185  15]
+  [  0   0   0]]
+
+ [[  0   0   0]
+  [241 185  15]
+  [241 185  15]
+  [241 185  15]
+  [241 185  15]
+  [241 185  15]
+  [241 185  15]
+  [  0   0   0]]
+
+ [[  0   0   0]
+  [  0   0   0]
+  [241 185  15]
+  [241 185  15]
+  [241 185  15]
+  [241 185  15]
+  [  0   0   0]
+  [  0   0   0]]
+
+ [[  0   0   0]
+  [  0   0   0]
+  [  0   0   0]
+  [  0   0   0]
+  [  0   0   0]
+  [  0   0   0]
+  [  0   0   0]
+  [  0   0   0]]]
+2021-12-15 00:48:00,191 - root - INFO - main : 23 - Starting didier
+2021-12-15 00:48:00,191 - root - INFO - visual : 26 - load visuals
+2021-12-15 00:48:00,191 - root - INFO - visual : 28 - visuals/ content : 
+2021-12-15 00:48:00,191 - root - INFO - visual : 29 - ['visuals/bouche-ouvert1.png', 'visuals/oeil-gauche.png', 'visuals/heart.png', 'visuals/oeil-droit.png', 'visuals/bouche-ouvert2.png', 'visuals/oeil-fixe.png']
+2021-12-15 00:48:00,191 - root - INFO - visual : 35 - bouche-ouvert1
+2021-12-15 00:48:00,202 - PIL.PngImagePlugin - DEBUG - PngImagePlugin : 186 - STREAM b'IHDR' 16 13
+2021-12-15 00:48:00,202 - PIL.PngImagePlugin - DEBUG - PngImagePlugin : 186 - STREAM b'pHYs' 41 9
+2021-12-15 00:48:00,202 - PIL.PngImagePlugin - DEBUG - PngImagePlugin : 186 - STREAM b'tIME' 62 7
+2021-12-15 00:48:00,202 - PIL.PngImagePlugin - DEBUG - PngImagePlugin : 698 - b'tIME' 62 7 (unknown)
+2021-12-15 00:48:00,203 - PIL.PngImagePlugin - DEBUG - PngImagePlugin : 186 - STREAM b'iTXt' 81 29
+2021-12-15 00:48:00,203 - PIL.PngImagePlugin - DEBUG - PngImagePlugin : 186 - STREAM b'IDAT' 122 66
+2021-12-15 00:48:00,203 - root - INFO - visual : 41 - (16, 24, 3)
+2021-12-15 00:48:00,203 - root - INFO - visual : 42 - [[[0 0 0]
+  [0 0 0]
+  [0 0 0]
+  ...
+  [0 0 0]
+  [0 0 0]
+  [0 0 0]]
+
+ [[0 0 0]
+  [0 0 0]
+  [0 0 0]
+  ...
+  [0 0 0]
+  [0 0 0]
+  [0 0 0]]
+
+ [[0 0 0]
+  [0 0 0]
+  [0 0 0]
+  ...
+  [0 0 0]
+  [0 0 0]
+  [0 0 0]]
+
+ ...
+
+ [[0 0 0]
+  [0 0 0]
+  [0 0 0]
+  ...
+  [0 0 0]
+  [0 0 0]
+  [0 0 0]]
+
+ [[0 0 0]
+  [0 0 0]
+  [0 0 0]
+  ...
+  [0 0 0]
+  [0 0 0]
+  [0 0 0]]
+
+ [[0 0 0]
+  [0 0 0]
+  [0 0 0]
+  ...
+  [0 0 0]
+  [0 0 0]
+  [0 0 0]]]
+2021-12-15 00:48:00,204 - root - INFO - visual : 35 - oeil-gauche
+2021-12-15 00:48:00,204 - PIL.PngImagePlugin - DEBUG - PngImagePlugin : 186 - STREAM b'IHDR' 16 13
+2021-12-15 00:48:00,205 - PIL.PngImagePlugin - DEBUG - PngImagePlugin : 186 - STREAM b'pHYs' 41 9
+2021-12-15 00:48:00,205 - PIL.PngImagePlugin - DEBUG - PngImagePlugin : 186 - STREAM b'tIME' 62 7
+2021-12-15 00:48:00,205 - PIL.PngImagePlugin - DEBUG - PngImagePlugin : 698 - b'tIME' 62 7 (unknown)
+2021-12-15 00:48:00,205 - PIL.PngImagePlugin - DEBUG - PngImagePlugin : 186 - STREAM b'iTXt' 81 29
+2021-12-15 00:48:00,205 - PIL.PngImagePlugin - DEBUG - PngImagePlugin : 186 - STREAM b'IDAT' 122 45
+2021-12-15 00:48:00,205 - root - INFO - visual : 41 - (8, 8, 3)
+2021-12-15 00:48:00,205 - root - INFO - visual : 42 - [[[  0   0   0]
+  [  0   0   0]
+  [  0   0   0]
+  [  0   0   0]
+  [  0   0   0]
+  [  0   0   0]
+  [  0   0   0]
+  [  0   0   0]]
+
+ [[  0   0   0]
+  [  0   0   0]
+  [241 185  15]
+  [241 185  15]
+  [241 185  15]
+  [241 185  15]
+  [  0   0   0]
+  [  0   0   0]]
+
+ [[  0   0   0]
+  [241 185  15]
+  [241 185  15]
+  [241 185  15]
+  [241 185  15]
+  [241 185  15]
+  [241 185  15]
+  [  0   0   0]]
+
+ [[  0   0   0]
+  [241 185  15]
+  [  0   0   0]
+  [  0   0   0]
+  [241 185  15]
+  [241 185  15]
+  [241 185  15]
+  [  0   0   0]]
+
+ [[  0   0   0]
+  [241 185  15]
+  [  0   0   0]
+  [  0   0   0]
+  [241 185  15]
+  [241 185  15]
+  [241 185  15]
+  [  0   0   0]]
+
+ [[  0   0   0]
+  [241 185  15]
+  [241 185  15]
+  [241 185  15]
+  [241 185  15]
+  [241 185  15]
+  [241 185  15]
+  [  0   0   0]]
+
+ [[  0   0   0]
+  [  0   0   0]
+  [241 185  15]
+  [241 185  15]
+  [241 185  15]
+  [241 185  15]
+  [  0   0   0]
+  [  0   0   0]]
+
+ [[  0   0   0]
+  [  0   0   0]
+  [  0   0   0]
+  [  0   0   0]
+  [  0   0   0]
+  [  0   0   0]
+  [  0   0   0]
+  [  0   0   0]]]
+2021-12-15 00:48:00,207 - root - INFO - visual : 35 - heart
+2021-12-15 00:48:00,207 - PIL.PngImagePlugin - DEBUG - PngImagePlugin : 186 - STREAM b'IHDR' 16 13
+2021-12-15 00:48:00,207 - PIL.PngImagePlugin - DEBUG - PngImagePlugin : 186 - STREAM b'pHYs' 41 9
+2021-12-15 00:48:00,207 - PIL.PngImagePlugin - DEBUG - PngImagePlugin : 186 - STREAM b'tIME' 62 7
+2021-12-15 00:48:00,207 - PIL.PngImagePlugin - DEBUG - PngImagePlugin : 698 - b'tIME' 62 7 (unknown)
+2021-12-15 00:48:00,208 - PIL.PngImagePlugin - DEBUG - PngImagePlugin : 186 - STREAM b'iTXt' 81 29
+2021-12-15 00:48:00,208 - PIL.PngImagePlugin - DEBUG - PngImagePlugin : 186 - STREAM b'IDAT' 122 65
+2021-12-15 00:48:00,208 - root - INFO - visual : 41 - (8, 8, 3)
+2021-12-15 00:48:00,208 - root - INFO - visual : 42 - [[[255 255 255]
+  [249   6  23]
+  [249   6  23]
+  [255 255 255]
+  [249   6  23]
+  [249   6  23]
+  [255 255 255]
+  [255 255 255]]
+
+ [[249   6  23]
+  [249   6  23]
+  [249   6  23]
+  [249   6  23]
+  [249   6  23]
+  [249   6  23]
+  [249   6  23]
+  [255 255 255]]
+
+ [[249   6  23]
+  [249   6  23]
+  [249   6  23]
+  [249   6  23]
+  [249   6  23]
+  [249   6  23]
+  [249   6  23]
+  [255 255 255]]
+
+ [[249   6  23]
+  [249   6  23]
+  [249   6  23]
+  [249   6  23]
+  [249   6  23]
+  [249   6  23]
+  [249   6  23]
+  [255 255 255]]
+
+ [[255 255 255]
+  [249   6  23]
+  [249   6  23]
+  [249   6  23]
+  [249   6  23]
+  [249   6  23]
+  [255 255 255]
+  [255 255 255]]
+
+ [[255 255 255]
+  [255 255 255]
+  [249   6  23]
+  [249   6  23]
+  [249   6  23]
+  [255 255 255]
+  [255 255 255]
+  [255 255 255]]
+
+ [[255 255 255]
+  [255 255 255]
+  [255 255 255]
+  [249   6  23]
+  [255 255 255]
+  [255 255 255]
+  [255 255 255]
+  [255 255 255]]
+
+ [[255 255 255]
+  [255 255 255]
+  [255 255 255]
+  [255 255 255]
+  [255 255 255]
+  [255 255 255]
+  [255 255 255]
+  [255 255 255]]]
+2021-12-15 00:48:00,209 - root - INFO - visual : 35 - oeil-droit
+2021-12-15 00:48:00,210 - PIL.PngImagePlugin - DEBUG - PngImagePlugin : 186 - STREAM b'IHDR' 16 13
+2021-12-15 00:48:00,210 - PIL.PngImagePlugin - DEBUG - PngImagePlugin : 186 - STREAM b'pHYs' 41 9
+2021-12-15 00:48:00,210 - PIL.PngImagePlugin - DEBUG - PngImagePlugin : 186 - STREAM b'tIME' 62 7
+2021-12-15 00:48:00,210 - PIL.PngImagePlugin - DEBUG - PngImagePlugin : 698 - b'tIME' 62 7 (unknown)
+2021-12-15 00:48:00,210 - PIL.PngImagePlugin - DEBUG - PngImagePlugin : 186 - STREAM b'iTXt' 81 29
+2021-12-15 00:48:00,210 - PIL.PngImagePlugin - DEBUG - PngImagePlugin : 186 - STREAM b'IDAT' 122 49
+2021-12-15 00:48:00,210 - root - INFO - visual : 41 - (8, 8, 3)
+2021-12-15 00:48:00,210 - root - INFO - visual : 42 - [[[  0   0   0]
+  [  0   0   0]
+  [  0   0   0]
+  [  0   0   0]
+  [  0   0   0]
+  [  0   0   0]
+  [  0   0   0]
+  [  0   0   0]]
+
+ [[  0   0   0]
+  [  0   0   0]
+  [241 185  15]
+  [241 185  15]
+  [241 185  15]
+  [241 185  15]
+  [  0   0   0]
+  [  0   0   0]]
+
+ [[  0   0   0]
+  [241 185  15]
+  [241 185  15]
+  [241 185  15]
+  [241 185  15]
+  [241 185  15]
+  [241 185  15]
+  [  0   0   0]]
+
+ [[  0   0   0]
+  [241 185  15]
+  [241 185  15]
+  [241 185  15]
+  [  0   0   0]
+  [  0   0   0]
+  [241 185  15]
+  [  0   0   0]]
+
+ [[  0   0   0]
+  [241 185  15]
+  [241 185  15]
+  [241 185  15]
+  [  0   0   0]
+  [  0   0   0]
+  [241 185  15]
+  [  0   0   0]]
+
+ [[  0   0   0]
+  [241 185  15]
+  [241 185  15]
+  [241 185  15]
+  [241 185  15]
+  [241 185  15]
+  [241 185  15]
+  [  0   0   0]]
+
+ [[  0   0   0]
+  [  0   0   0]
+  [241 185  15]
+  [241 185  15]
+  [241 185  15]
+  [241 185  15]
+  [  0   0   0]
+  [  0   0   0]]
+
+ [[  0   0   0]
+  [  0   0   0]
+  [  0   0   0]
+  [  0   0   0]
+  [  0   0   0]
+  [  0   0   0]
+  [  0   0   0]
+  [  0   0   0]]]
+2021-12-15 00:48:00,212 - root - INFO - visual : 35 - bouche-ouvert2
+2021-12-15 00:48:00,212 - PIL.PngImagePlugin - DEBUG - PngImagePlugin : 186 - STREAM b'IHDR' 16 13
+2021-12-15 00:48:00,212 - PIL.PngImagePlugin - DEBUG - PngImagePlugin : 186 - STREAM b'pHYs' 41 9
+2021-12-15 00:48:00,212 - PIL.PngImagePlugin - DEBUG - PngImagePlugin : 186 - STREAM b'tIME' 62 7
+2021-12-15 00:48:00,213 - PIL.PngImagePlugin - DEBUG - PngImagePlugin : 698 - b'tIME' 62 7 (unknown)
+2021-12-15 00:48:00,213 - PIL.PngImagePlugin - DEBUG - PngImagePlugin : 186 - STREAM b'iTXt' 81 29
+2021-12-15 00:48:00,213 - PIL.PngImagePlugin - DEBUG - PngImagePlugin : 186 - STREAM b'IDAT' 122 65
+2021-12-15 00:48:00,213 - root - INFO - visual : 41 - (16, 24, 3)
+2021-12-15 00:48:00,213 - root - INFO - visual : 42 - [[[0 0 0]
+  [0 0 0]
+  [0 0 0]
+  ...
+  [0 0 0]
+  [0 0 0]
+  [0 0 0]]
+
+ [[0 0 0]
+  [0 0 0]
+  [0 0 0]
+  ...
+  [0 0 0]
+  [0 0 0]
+  [0 0 0]]
+
+ [[0 0 0]
+  [0 0 0]
+  [0 0 0]
+  ...
+  [0 0 0]
+  [0 0 0]
+  [0 0 0]]
+
+ ...
+
+ [[0 0 0]
+  [0 0 0]
+  [0 0 0]
+  ...
+  [0 0 0]
+  [0 0 0]
+  [0 0 0]]
+
+ [[0 0 0]
+  [0 0 0]
+  [0 0 0]
+  ...
+  [0 0 0]
+  [0 0 0]
+  [0 0 0]]
+
+ [[0 0 0]
+  [0 0 0]
+  [0 0 0]
+  ...
+  [0 0 0]
+  [0 0 0]
+  [0 0 0]]]
+2021-12-15 00:48:00,214 - root - INFO - visual : 35 - oeil-fixe
+2021-12-15 00:48:00,214 - PIL.PngImagePlugin - DEBUG - PngImagePlugin : 186 - STREAM b'IHDR' 16 13
+2021-12-15 00:48:00,214 - PIL.PngImagePlugin - DEBUG - PngImagePlugin : 186 - STREAM b'pHYs' 41 9
+2021-12-15 00:48:00,214 - PIL.PngImagePlugin - DEBUG - PngImagePlugin : 186 - STREAM b'tIME' 62 7
+2021-12-15 00:48:00,214 - PIL.PngImagePlugin - DEBUG - PngImagePlugin : 698 - b'tIME' 62 7 (unknown)
+2021-12-15 00:48:00,214 - PIL.PngImagePlugin - DEBUG - PngImagePlugin : 186 - STREAM b'iTXt' 81 29
+2021-12-15 00:48:00,215 - PIL.PngImagePlugin - DEBUG - PngImagePlugin : 186 - STREAM b'IDAT' 122 47
+2021-12-15 00:48:00,215 - root - INFO - visual : 41 - (8, 8, 3)
+2021-12-15 00:48:00,215 - root - INFO - visual : 42 - [[[  0   0   0]
+  [  0   0   0]
+  [  0   0   0]
+  [  0   0   0]
+  [  0   0   0]
+  [  0   0   0]
+  [  0   0   0]
+  [  0   0   0]]
+
+ [[  0   0   0]
+  [  0   0   0]
+  [241 185  15]
+  [241 185  15]
+  [241 185  15]
+  [241 185  15]
+  [  0   0   0]
+  [  0   0   0]]
+
+ [[  0   0   0]
+  [241 185  15]
+  [241 185  15]
+  [241 185  15]
+  [241 185  15]
+  [241 185  15]
+  [241 185  15]
+  [  0   0   0]]
+
+ [[  0   0   0]
+  [241 185  15]
+  [241 185  15]
+  [  0   0   0]
+  [  0   0   0]
+  [241 185  15]
+  [241 185  15]
+  [  0   0   0]]
+
+ [[  0   0   0]
+  [241 185  15]
+  [241 185  15]
+  [  0   0   0]
+  [  0   0   0]
+  [241 185  15]
+  [241 185  15]
+  [  0   0   0]]
+
+ [[  0   0   0]
+  [241 185  15]
+  [241 185  15]
+  [241 185  15]
+  [241 185  15]
+  [241 185  15]
+  [241 185  15]
+  [  0   0   0]]
+
+ [[  0   0   0]
+  [  0   0   0]
+  [241 185  15]
+  [241 185  15]
+  [241 185  15]
+  [241 185  15]
+  [  0   0   0]
+  [  0   0   0]]
+
+ [[  0   0   0]
+  [  0   0   0]
+  [  0   0   0]
+  [  0   0   0]
+  [  0   0   0]
+  [  0   0   0]
+  [  0   0   0]
+  [  0   0   0]]]
+2021-12-15 00:48:12,898 - root - INFO - main : 23 - Starting didier
+2021-12-15 00:48:12,899 - root - INFO - visual : 26 - load visuals
+2021-12-15 00:48:12,899 - root - INFO - visual : 28 - visuals/ content : 
+2021-12-15 00:48:12,899 - root - INFO - visual : 29 - ['visuals/bouche-ouvert1.png', 'visuals/oeil-gauche.png', 'visuals/heart.png', 'visuals/oeil-droit.png', 'visuals/bouche-ouvert2.png', 'visuals/oeil-fixe.png']
+2021-12-15 00:48:12,899 - root - INFO - visual : 35 - bouche-ouvert1
+2021-12-15 00:48:12,909 - PIL.PngImagePlugin - DEBUG - PngImagePlugin : 186 - STREAM b'IHDR' 16 13
+2021-12-15 00:48:12,909 - PIL.PngImagePlugin - DEBUG - PngImagePlugin : 186 - STREAM b'pHYs' 41 9
+2021-12-15 00:48:12,909 - PIL.PngImagePlugin - DEBUG - PngImagePlugin : 186 - STREAM b'tIME' 62 7
+2021-12-15 00:48:12,909 - PIL.PngImagePlugin - DEBUG - PngImagePlugin : 698 - b'tIME' 62 7 (unknown)
+2021-12-15 00:48:12,910 - PIL.PngImagePlugin - DEBUG - PngImagePlugin : 186 - STREAM b'iTXt' 81 29
+2021-12-15 00:48:12,910 - PIL.PngImagePlugin - DEBUG - PngImagePlugin : 186 - STREAM b'IDAT' 122 66
+2021-12-15 00:48:12,910 - root - INFO - visual : 41 - [[[0 0 0]
+  [0 0 0]
+  [0 0 0]
+  ...
+  [0 0 0]
+  [0 0 0]
+  [0 0 0]]
+
+ [[0 0 0]
+  [0 0 0]
+  [0 0 0]
+  ...
+  [0 0 0]
+  [0 0 0]
+  [0 0 0]]
+
+ [[0 0 0]
+  [0 0 0]
+  [0 0 0]
+  ...
+  [0 0 0]
+  [0 0 0]
+  [0 0 0]]
+
+ ...
+
+ [[0 0 0]
+  [0 0 0]
+  [0 0 0]
+  ...
+  [0 0 0]
+  [0 0 0]
+  [0 0 0]]
+
+ [[0 0 0]
+  [0 0 0]
+  [0 0 0]
+  ...
+  [0 0 0]
+  [0 0 0]
+  [0 0 0]]
+
+ [[0 0 0]
+  [0 0 0]
+  [0 0 0]
+  ...
+  [0 0 0]
+  [0 0 0]
+  [0 0 0]]]
+2021-12-15 00:48:12,911 - root - INFO - visual : 42 - (16, 24, 3)
+2021-12-15 00:48:12,911 - root - INFO - visual : 35 - oeil-gauche
+2021-12-15 00:48:12,911 - PIL.PngImagePlugin - DEBUG - PngImagePlugin : 186 - STREAM b'IHDR' 16 13
+2021-12-15 00:48:12,911 - PIL.PngImagePlugin - DEBUG - PngImagePlugin : 186 - STREAM b'pHYs' 41 9
+2021-12-15 00:48:12,911 - PIL.PngImagePlugin - DEBUG - PngImagePlugin : 186 - STREAM b'tIME' 62 7
+2021-12-15 00:48:12,912 - PIL.PngImagePlugin - DEBUG - PngImagePlugin : 698 - b'tIME' 62 7 (unknown)
+2021-12-15 00:48:12,912 - PIL.PngImagePlugin - DEBUG - PngImagePlugin : 186 - STREAM b'iTXt' 81 29
+2021-12-15 00:48:12,912 - PIL.PngImagePlugin - DEBUG - PngImagePlugin : 186 - STREAM b'IDAT' 122 45
+2021-12-15 00:48:12,913 - root - INFO - visual : 41 - [[[  0   0   0]
+  [  0   0   0]
+  [  0   0   0]
+  [  0   0   0]
+  [  0   0   0]
+  [  0   0   0]
+  [  0   0   0]
+  [  0   0   0]]
+
+ [[  0   0   0]
+  [  0   0   0]
+  [241 185  15]
+  [241 185  15]
+  [241 185  15]
+  [241 185  15]
+  [  0   0   0]
+  [  0   0   0]]
+
+ [[  0   0   0]
+  [241 185  15]
+  [241 185  15]
+  [241 185  15]
+  [241 185  15]
+  [241 185  15]
+  [241 185  15]
+  [  0   0   0]]
+
+ [[  0   0   0]
+  [241 185  15]
+  [  0   0   0]
+  [  0   0   0]
+  [241 185  15]
+  [241 185  15]
+  [241 185  15]
+  [  0   0   0]]
+
+ [[  0   0   0]
+  [241 185  15]
+  [  0   0   0]
+  [  0   0   0]
+  [241 185  15]
+  [241 185  15]
+  [241 185  15]
+  [  0   0   0]]
+
+ [[  0   0   0]
+  [241 185  15]
+  [241 185  15]
+  [241 185  15]
+  [241 185  15]
+  [241 185  15]
+  [241 185  15]
+  [  0   0   0]]
+
+ [[  0   0   0]
+  [  0   0   0]
+  [241 185  15]
+  [241 185  15]
+  [241 185  15]
+  [241 185  15]
+  [  0   0   0]
+  [  0   0   0]]
+
+ [[  0   0   0]
+  [  0   0   0]
+  [  0   0   0]
+  [  0   0   0]
+  [  0   0   0]
+  [  0   0   0]
+  [  0   0   0]
+  [  0   0   0]]]
+2021-12-15 00:48:12,917 - root - INFO - visual : 42 - (8, 8, 3)
+2021-12-15 00:48:12,917 - root - INFO - visual : 35 - heart
+2021-12-15 00:48:12,917 - PIL.PngImagePlugin - DEBUG - PngImagePlugin : 186 - STREAM b'IHDR' 16 13
+2021-12-15 00:48:12,918 - PIL.PngImagePlugin - DEBUG - PngImagePlugin : 186 - STREAM b'pHYs' 41 9
+2021-12-15 00:48:12,918 - PIL.PngImagePlugin - DEBUG - PngImagePlugin : 186 - STREAM b'tIME' 62 7
+2021-12-15 00:48:12,918 - PIL.PngImagePlugin - DEBUG - PngImagePlugin : 698 - b'tIME' 62 7 (unknown)
+2021-12-15 00:48:12,918 - PIL.PngImagePlugin - DEBUG - PngImagePlugin : 186 - STREAM b'iTXt' 81 29
+2021-12-15 00:48:12,918 - PIL.PngImagePlugin - DEBUG - PngImagePlugin : 186 - STREAM b'IDAT' 122 65
+2021-12-15 00:48:12,919 - root - INFO - visual : 41 - [[[255 255 255]
+  [249   6  23]
+  [249   6  23]
+  [255 255 255]
+  [249   6  23]
+  [249   6  23]
+  [255 255 255]
+  [255 255 255]]
+
+ [[249   6  23]
+  [249   6  23]
+  [249   6  23]
+  [249   6  23]
+  [249   6  23]
+  [249   6  23]
+  [249   6  23]
+  [255 255 255]]
+
+ [[249   6  23]
+  [249   6  23]
+  [249   6  23]
+  [249   6  23]
+  [249   6  23]
+  [249   6  23]
+  [249   6  23]
+  [255 255 255]]
+
+ [[249   6  23]
+  [249   6  23]
+  [249   6  23]
+  [249   6  23]
+  [249   6  23]
+  [249   6  23]
+  [249   6  23]
+  [255 255 255]]
+
+ [[255 255 255]
+  [249   6  23]
+  [249   6  23]
+  [249   6  23]
+  [249   6  23]
+  [249   6  23]
+  [255 255 255]
+  [255 255 255]]
+
+ [[255 255 255]
+  [255 255 255]
+  [249   6  23]
+  [249   6  23]
+  [249   6  23]
+  [255 255 255]
+  [255 255 255]
+  [255 255 255]]
+
+ [[255 255 255]
+  [255 255 255]
+  [255 255 255]
+  [249   6  23]
+  [255 255 255]
+  [255 255 255]
+  [255 255 255]
+  [255 255 255]]
+
+ [[255 255 255]
+  [255 255 255]
+  [255 255 255]
+  [255 255 255]
+  [255 255 255]
+  [255 255 255]
+  [255 255 255]
+  [255 255 255]]]
+2021-12-15 00:48:12,922 - root - INFO - visual : 42 - (8, 8, 3)
+2021-12-15 00:48:12,922 - root - INFO - visual : 35 - oeil-droit
+2021-12-15 00:48:12,923 - PIL.PngImagePlugin - DEBUG - PngImagePlugin : 186 - STREAM b'IHDR' 16 13
+2021-12-15 00:48:12,923 - PIL.PngImagePlugin - DEBUG - PngImagePlugin : 186 - STREAM b'pHYs' 41 9
+2021-12-15 00:48:12,923 - PIL.PngImagePlugin - DEBUG - PngImagePlugin : 186 - STREAM b'tIME' 62 7
+2021-12-15 00:48:12,924 - PIL.PngImagePlugin - DEBUG - PngImagePlugin : 698 - b'tIME' 62 7 (unknown)
+2021-12-15 00:48:12,924 - PIL.PngImagePlugin - DEBUG - PngImagePlugin : 186 - STREAM b'iTXt' 81 29
+2021-12-15 00:48:12,924 - PIL.PngImagePlugin - DEBUG - PngImagePlugin : 186 - STREAM b'IDAT' 122 49
+2021-12-15 00:48:12,924 - root - INFO - visual : 41 - [[[  0   0   0]
+  [  0   0   0]
+  [  0   0   0]
+  [  0   0   0]
+  [  0   0   0]
+  [  0   0   0]
+  [  0   0   0]
+  [  0   0   0]]
+
+ [[  0   0   0]
+  [  0   0   0]
+  [241 185  15]
+  [241 185  15]
+  [241 185  15]
+  [241 185  15]
+  [  0   0   0]
+  [  0   0   0]]
+
+ [[  0   0   0]
+  [241 185  15]
+  [241 185  15]
+  [241 185  15]
+  [241 185  15]
+  [241 185  15]
+  [241 185  15]
+  [  0   0   0]]
+
+ [[  0   0   0]
+  [241 185  15]
+  [241 185  15]
+  [241 185  15]
+  [  0   0   0]
+  [  0   0   0]
+  [241 185  15]
+  [  0   0   0]]
+
+ [[  0   0   0]
+  [241 185  15]
+  [241 185  15]
+  [241 185  15]
+  [  0   0   0]
+  [  0   0   0]
+  [241 185  15]
+  [  0   0   0]]
+
+ [[  0   0   0]
+  [241 185  15]
+  [241 185  15]
+  [241 185  15]
+  [241 185  15]
+  [241 185  15]
+  [241 185  15]
+  [  0   0   0]]
+
+ [[  0   0   0]
+  [  0   0   0]
+  [241 185  15]
+  [241 185  15]
+  [241 185  15]
+  [241 185  15]
+  [  0   0   0]
+  [  0   0   0]]
+
+ [[  0   0   0]
+  [  0   0   0]
+  [  0   0   0]
+  [  0   0   0]
+  [  0   0   0]
+  [  0   0   0]
+  [  0   0   0]
+  [  0   0   0]]]
+2021-12-15 00:48:12,926 - root - INFO - visual : 42 - (8, 8, 3)
+2021-12-15 00:48:12,927 - root - INFO - visual : 35 - bouche-ouvert2
+2021-12-15 00:48:12,927 - PIL.PngImagePlugin - DEBUG - PngImagePlugin : 186 - STREAM b'IHDR' 16 13
+2021-12-15 00:48:12,927 - PIL.PngImagePlugin - DEBUG - PngImagePlugin : 186 - STREAM b'pHYs' 41 9
+2021-12-15 00:48:12,928 - PIL.PngImagePlugin - DEBUG - PngImagePlugin : 186 - STREAM b'tIME' 62 7
+2021-12-15 00:48:12,928 - PIL.PngImagePlugin - DEBUG - PngImagePlugin : 698 - b'tIME' 62 7 (unknown)
+2021-12-15 00:48:12,928 - PIL.PngImagePlugin - DEBUG - PngImagePlugin : 186 - STREAM b'iTXt' 81 29
+2021-12-15 00:48:12,928 - PIL.PngImagePlugin - DEBUG - PngImagePlugin : 186 - STREAM b'IDAT' 122 65
+2021-12-15 00:48:12,928 - root - INFO - visual : 41 - [[[0 0 0]
+  [0 0 0]
+  [0 0 0]
+  ...
+  [0 0 0]
+  [0 0 0]
+  [0 0 0]]
+
+ [[0 0 0]
+  [0 0 0]
+  [0 0 0]
+  ...
+  [0 0 0]
+  [0 0 0]
+  [0 0 0]]
+
+ [[0 0 0]
+  [0 0 0]
+  [0 0 0]
+  ...
+  [0 0 0]
+  [0 0 0]
+  [0 0 0]]
+
+ ...
+
+ [[0 0 0]
+  [0 0 0]
+  [0 0 0]
+  ...
+  [0 0 0]
+  [0 0 0]
+  [0 0 0]]
+
+ [[0 0 0]
+  [0 0 0]
+  [0 0 0]
+  ...
+  [0 0 0]
+  [0 0 0]
+  [0 0 0]]
+
+ [[0 0 0]
+  [0 0 0]
+  [0 0 0]
+  ...
+  [0 0 0]
+  [0 0 0]
+  [0 0 0]]]
+2021-12-15 00:48:12,929 - root - INFO - visual : 42 - (16, 24, 3)
+2021-12-15 00:48:12,929 - root - INFO - visual : 35 - oeil-fixe
+2021-12-15 00:48:12,929 - PIL.PngImagePlugin - DEBUG - PngImagePlugin : 186 - STREAM b'IHDR' 16 13
+2021-12-15 00:48:12,929 - PIL.PngImagePlugin - DEBUG - PngImagePlugin : 186 - STREAM b'pHYs' 41 9
+2021-12-15 00:48:12,930 - PIL.PngImagePlugin - DEBUG - PngImagePlugin : 186 - STREAM b'tIME' 62 7
+2021-12-15 00:48:12,930 - PIL.PngImagePlugin - DEBUG - PngImagePlugin : 698 - b'tIME' 62 7 (unknown)
+2021-12-15 00:48:12,930 - PIL.PngImagePlugin - DEBUG - PngImagePlugin : 186 - STREAM b'iTXt' 81 29
+2021-12-15 00:48:12,930 - PIL.PngImagePlugin - DEBUG - PngImagePlugin : 186 - STREAM b'IDAT' 122 47
+2021-12-15 00:48:12,930 - root - INFO - visual : 41 - [[[  0   0   0]
+  [  0   0   0]
+  [  0   0   0]
+  [  0   0   0]
+  [  0   0   0]
+  [  0   0   0]
+  [  0   0   0]
+  [  0   0   0]]
+
+ [[  0   0   0]
+  [  0   0   0]
+  [241 185  15]
+  [241 185  15]
+  [241 185  15]
+  [241 185  15]
+  [  0   0   0]
+  [  0   0   0]]
+
+ [[  0   0   0]
+  [241 185  15]
+  [241 185  15]
+  [241 185  15]
+  [241 185  15]
+  [241 185  15]
+  [241 185  15]
+  [  0   0   0]]
+
+ [[  0   0   0]
+  [241 185  15]
+  [241 185  15]
+  [  0   0   0]
+  [  0   0   0]
+  [241 185  15]
+  [241 185  15]
+  [  0   0   0]]
+
+ [[  0   0   0]
+  [241 185  15]
+  [241 185  15]
+  [  0   0   0]
+  [  0   0   0]
+  [241 185  15]
+  [241 185  15]
+  [  0   0   0]]
+
+ [[  0   0   0]
+  [241 185  15]
+  [241 185  15]
+  [241 185  15]
+  [241 185  15]
+  [241 185  15]
+  [241 185  15]
+  [  0   0   0]]
+
+ [[  0   0   0]
+  [  0   0   0]
+  [241 185  15]
+  [241 185  15]
+  [241 185  15]
+  [241 185  15]
+  [  0   0   0]
+  [  0   0   0]]
+
+ [[  0   0   0]
+  [  0   0   0]
+  [  0   0   0]
+  [  0   0   0]
+  [  0   0   0]
+  [  0   0   0]
+  [  0   0   0]
+  [  0   0   0]]]
+2021-12-15 00:48:12,931 - root - INFO - visual : 42 - (8, 8, 3)
+2021-12-15 00:50:11,345 - root - INFO - main : 23 - Starting didier
+2021-12-15 00:50:11,345 - root - INFO - visual : 28 - load visuals
+2021-12-15 00:50:11,345 - root - INFO - visual : 30 - visuals/ content : 
+2021-12-15 00:50:11,345 - root - INFO - visual : 31 - ['visuals/bouche-ouvert1.png', 'visuals/oeil-gauche.png', 'visuals/heart.png', 'visuals/oeil-droit.png', 'visuals/bouche-ouvert2.png', 'visuals/oeil-fixe.png']
+2021-12-15 00:50:32,363 - root - INFO - main : 23 - Starting didier
+2021-12-15 00:50:32,363 - root - INFO - visual : 28 - load visuals
+2021-12-15 00:50:32,363 - root - INFO - visual : 30 - visuals/ content : 
+2021-12-15 00:50:32,363 - root - INFO - visual : 31 - ['visuals/bouche-ouvert1.png', 'visuals/oeil-gauche.png', 'visuals/heart.png', 'visuals/oeil-droit.png', 'visuals/bouche-ouvert2.png', 'visuals/oeil-fixe.png']
+2021-12-15 00:50:32,373 - PIL.PngImagePlugin - DEBUG - PngImagePlugin : 186 - STREAM b'IHDR' 16 13
+2021-12-15 00:50:32,374 - PIL.PngImagePlugin - DEBUG - PngImagePlugin : 186 - STREAM b'pHYs' 41 9
+2021-12-15 00:50:32,374 - PIL.PngImagePlugin - DEBUG - PngImagePlugin : 186 - STREAM b'tIME' 62 7
+2021-12-15 00:50:32,374 - PIL.PngImagePlugin - DEBUG - PngImagePlugin : 698 - b'tIME' 62 7 (unknown)
+2021-12-15 00:50:32,374 - PIL.PngImagePlugin - DEBUG - PngImagePlugin : 186 - STREAM b'iTXt' 81 29
+2021-12-15 00:50:32,374 - PIL.PngImagePlugin - DEBUG - PngImagePlugin : 186 - STREAM b'IDAT' 122 66
+2021-12-15 00:50:32,374 - root - INFO - visual : 41 - [[[0 0 0]
+  [0 0 0]
+  [0 0 0]
+  ...
+  [0 0 0]
+  [0 0 0]
+  [0 0 0]]
+
+ [[0 0 0]
+  [0 0 0]
+  [0 0 0]
+  ...
+  [0 0 0]
+  [0 0 0]
+  [0 0 0]]
+
+ [[0 0 0]
+  [0 0 0]
+  [0 0 0]
+  ...
+  [0 0 0]
+  [0 0 0]
+  [0 0 0]]
+
+ ...
+
+ [[0 0 0]
+  [0 0 0]
+  [0 0 0]
+  ...
+  [0 0 0]
+  [0 0 0]
+  [0 0 0]]
+
+ [[0 0 0]
+  [0 0 0]
+  [0 0 0]
+  ...
+  [0 0 0]
+  [0 0 0]
+  [0 0 0]]
+
+ [[0 0 0]
+  [0 0 0]
+  [0 0 0]
+  ...
+  [0 0 0]
+  [0 0 0]
+  [0 0 0]]]
+2021-12-15 00:50:32,375 - root - INFO - visual : 42 - (16, 24, 3)
+2021-12-15 00:51:39,967 - root - INFO - main : 23 - Starting didier
+2021-12-15 00:51:39,968 - root - INFO - visual : 28 - load visuals
+2021-12-15 00:51:39,968 - root - INFO - visual : 30 - visuals/ content : 
+2021-12-15 00:51:39,968 - root - INFO - visual : 31 - ['visuals/bouche-ouvert1.png', 'visuals/oeil-gauche.png', 'visuals/heart.png', 'visuals/oeil-droit.png', 'visuals/bouche-ouvert2.png', 'visuals/oeil-fixe.png']
+2021-12-15 00:51:39,978 - PIL.PngImagePlugin - DEBUG - PngImagePlugin : 186 - STREAM b'IHDR' 16 13
+2021-12-15 00:51:39,978 - PIL.PngImagePlugin - DEBUG - PngImagePlugin : 186 - STREAM b'pHYs' 41 9
+2021-12-15 00:51:39,978 - PIL.PngImagePlugin - DEBUG - PngImagePlugin : 186 - STREAM b'tIME' 62 7
+2021-12-15 00:51:39,979 - PIL.PngImagePlugin - DEBUG - PngImagePlugin : 698 - b'tIME' 62 7 (unknown)
+2021-12-15 00:51:39,979 - PIL.PngImagePlugin - DEBUG - PngImagePlugin : 186 - STREAM b'iTXt' 81 29
+2021-12-15 00:51:39,979 - PIL.PngImagePlugin - DEBUG - PngImagePlugin : 186 - STREAM b'IDAT' 122 66
+2021-12-15 00:51:39,979 - root - INFO - visual : 41 - [[[0 0 0]
+  [0 0 0]
+  [0 0 0]
+  ...
+  [0 0 0]
+  [0 0 0]
+  [0 0 0]]
+
+ [[0 0 0]
+  [0 0 0]
+  [0 0 0]
+  ...
+  [0 0 0]
+  [0 0 0]
+  [0 0 0]]
+
+ [[0 0 0]
+  [0 0 0]
+  [0 0 0]
+  ...
+  [0 0 0]
+  [0 0 0]
+  [0 0 0]]
+
+ ...
+
+ [[0 0 0]
+  [0 0 0]
+  [0 0 0]
+  ...
+  [0 0 0]
+  [0 0 0]
+  [0 0 0]]
+
+ [[0 0 0]
+  [0 0 0]
+  [0 0 0]
+  ...
+  [0 0 0]
+  [0 0 0]
+  [0 0 0]]
+
+ [[0 0 0]
+  [0 0 0]
+  [0 0 0]
+  ...
+  [0 0 0]
+  [0 0 0]
+  [0 0 0]]]
+2021-12-15 00:51:39,980 - root - INFO - visual : 42 - (16, 24, 3)
+2021-12-15 00:51:39,981 - PIL.PngImagePlugin - DEBUG - PngImagePlugin : 186 - STREAM b'IHDR' 16 13
+2021-12-15 00:51:39,981 - PIL.PngImagePlugin - DEBUG - PngImagePlugin : 186 - STREAM b'pHYs' 41 9
+2021-12-15 00:51:39,981 - PIL.PngImagePlugin - DEBUG - PngImagePlugin : 186 - STREAM b'tIME' 62 7
+2021-12-15 00:51:39,981 - PIL.PngImagePlugin - DEBUG - PngImagePlugin : 698 - b'tIME' 62 7 (unknown)
+2021-12-15 00:51:39,981 - PIL.PngImagePlugin - DEBUG - PngImagePlugin : 186 - STREAM b'iTXt' 81 29
+2021-12-15 00:51:39,981 - PIL.PngImagePlugin - DEBUG - PngImagePlugin : 186 - STREAM b'IDAT' 122 45
+2021-12-15 00:51:39,981 - root - INFO - visual : 41 - [[[  0   0   0]
+  [  0   0   0]
+  [  0   0   0]
+  [  0   0   0]
+  [  0   0   0]
+  [  0   0   0]
+  [  0   0   0]
+  [  0   0   0]]
+
+ [[  0   0   0]
+  [  0   0   0]
+  [241 185  15]
+  [241 185  15]
+  [241 185  15]
+  [241 185  15]
+  [  0   0   0]
+  [  0   0   0]]
+
+ [[  0   0   0]
+  [241 185  15]
+  [241 185  15]
+  [241 185  15]
+  [241 185  15]
+  [241 185  15]
+  [241 185  15]
+  [  0   0   0]]
+
+ [[  0   0   0]
+  [241 185  15]
+  [  0   0   0]
+  [  0   0   0]
+  [241 185  15]
+  [241 185  15]
+  [241 185  15]
+  [  0   0   0]]
+
+ [[  0   0   0]
+  [241 185  15]
+  [  0   0   0]
+  [  0   0   0]
+  [241 185  15]
+  [241 185  15]
+  [241 185  15]
+  [  0   0   0]]
+
+ [[  0   0   0]
+  [241 185  15]
+  [241 185  15]
+  [241 185  15]
+  [241 185  15]
+  [241 185  15]
+  [241 185  15]
+  [  0   0   0]]
+
+ [[  0   0   0]
+  [  0   0   0]
+  [241 185  15]
+  [241 185  15]
+  [241 185  15]
+  [241 185  15]
+  [  0   0   0]
+  [  0   0   0]]
+
+ [[  0   0   0]
+  [  0   0   0]
+  [  0   0   0]
+  [  0   0   0]
+  [  0   0   0]
+  [  0   0   0]
+  [  0   0   0]
+  [  0   0   0]]]
+2021-12-15 00:51:39,983 - root - INFO - visual : 42 - (8, 8, 3)
+2021-12-15 00:51:39,983 - PIL.PngImagePlugin - DEBUG - PngImagePlugin : 186 - STREAM b'IHDR' 16 13
+2021-12-15 00:51:39,983 - PIL.PngImagePlugin - DEBUG - PngImagePlugin : 186 - STREAM b'pHYs' 41 9
+2021-12-15 00:51:39,983 - PIL.PngImagePlugin - DEBUG - PngImagePlugin : 186 - STREAM b'tIME' 62 7
+2021-12-15 00:51:39,983 - PIL.PngImagePlugin - DEBUG - PngImagePlugin : 698 - b'tIME' 62 7 (unknown)
+2021-12-15 00:51:39,984 - PIL.PngImagePlugin - DEBUG - PngImagePlugin : 186 - STREAM b'iTXt' 81 29
+2021-12-15 00:51:39,984 - PIL.PngImagePlugin - DEBUG - PngImagePlugin : 186 - STREAM b'IDAT' 122 65
+2021-12-15 00:51:39,984 - root - INFO - visual : 41 - [[[255 255 255]
+  [249   6  23]
+  [249   6  23]
+  [255 255 255]
+  [249   6  23]
+  [249   6  23]
+  [255 255 255]
+  [255 255 255]]
+
+ [[249   6  23]
+  [249   6  23]
+  [249   6  23]
+  [249   6  23]
+  [249   6  23]
+  [249   6  23]
+  [249   6  23]
+  [255 255 255]]
+
+ [[249   6  23]
+  [249   6  23]
+  [249   6  23]
+  [249   6  23]
+  [249   6  23]
+  [249   6  23]
+  [249   6  23]
+  [255 255 255]]
+
+ [[249   6  23]
+  [249   6  23]
+  [249   6  23]
+  [249   6  23]
+  [249   6  23]
+  [249   6  23]
+  [249   6  23]
+  [255 255 255]]
+
+ [[255 255 255]
+  [249   6  23]
+  [249   6  23]
+  [249   6  23]
+  [249   6  23]
+  [249   6  23]
+  [255 255 255]
+  [255 255 255]]
+
+ [[255 255 255]
+  [255 255 255]
+  [249   6  23]
+  [249   6  23]
+  [249   6  23]
+  [255 255 255]
+  [255 255 255]
+  [255 255 255]]
+
+ [[255 255 255]
+  [255 255 255]
+  [255 255 255]
+  [249   6  23]
+  [255 255 255]
+  [255 255 255]
+  [255 255 255]
+  [255 255 255]]
+
+ [[255 255 255]
+  [255 255 255]
+  [255 255 255]
+  [255 255 255]
+  [255 255 255]
+  [255 255 255]
+  [255 255 255]
+  [255 255 255]]]
+2021-12-15 00:51:39,985 - root - INFO - visual : 42 - (8, 8, 3)
+2021-12-15 00:51:39,986 - PIL.PngImagePlugin - DEBUG - PngImagePlugin : 186 - STREAM b'IHDR' 16 13
+2021-12-15 00:51:39,986 - PIL.PngImagePlugin - DEBUG - PngImagePlugin : 186 - STREAM b'pHYs' 41 9
+2021-12-15 00:51:39,986 - PIL.PngImagePlugin - DEBUG - PngImagePlugin : 186 - STREAM b'tIME' 62 7
+2021-12-15 00:51:39,986 - PIL.PngImagePlugin - DEBUG - PngImagePlugin : 698 - b'tIME' 62 7 (unknown)
+2021-12-15 00:51:39,986 - PIL.PngImagePlugin - DEBUG - PngImagePlugin : 186 - STREAM b'iTXt' 81 29
+2021-12-15 00:51:39,986 - PIL.PngImagePlugin - DEBUG - PngImagePlugin : 186 - STREAM b'IDAT' 122 49
+2021-12-15 00:51:39,986 - root - INFO - visual : 41 - [[[  0   0   0]
+  [  0   0   0]
+  [  0   0   0]
+  [  0   0   0]
+  [  0   0   0]
+  [  0   0   0]
+  [  0   0   0]
+  [  0   0   0]]
+
+ [[  0   0   0]
+  [  0   0   0]
+  [241 185  15]
+  [241 185  15]
+  [241 185  15]
+  [241 185  15]
+  [  0   0   0]
+  [  0   0   0]]
+
+ [[  0   0   0]
+  [241 185  15]
+  [241 185  15]
+  [241 185  15]
+  [241 185  15]
+  [241 185  15]
+  [241 185  15]
+  [  0   0   0]]
+
+ [[  0   0   0]
+  [241 185  15]
+  [241 185  15]
+  [241 185  15]
+  [  0   0   0]
+  [  0   0   0]
+  [241 185  15]
+  [  0   0   0]]
+
+ [[  0   0   0]
+  [241 185  15]
+  [241 185  15]
+  [241 185  15]
+  [  0   0   0]
+  [  0   0   0]
+  [241 185  15]
+  [  0   0   0]]
+
+ [[  0   0   0]
+  [241 185  15]
+  [241 185  15]
+  [241 185  15]
+  [241 185  15]
+  [241 185  15]
+  [241 185  15]
+  [  0   0   0]]
+
+ [[  0   0   0]
+  [  0   0   0]
+  [241 185  15]
+  [241 185  15]
+  [241 185  15]
+  [241 185  15]
+  [  0   0   0]
+  [  0   0   0]]
+
+ [[  0   0   0]
+  [  0   0   0]
+  [  0   0   0]
+  [  0   0   0]
+  [  0   0   0]
+  [  0   0   0]
+  [  0   0   0]
+  [  0   0   0]]]
+2021-12-15 00:51:39,988 - root - INFO - visual : 42 - (8, 8, 3)
+2021-12-15 00:51:39,988 - PIL.PngImagePlugin - DEBUG - PngImagePlugin : 186 - STREAM b'IHDR' 16 13
+2021-12-15 00:51:39,988 - PIL.PngImagePlugin - DEBUG - PngImagePlugin : 186 - STREAM b'pHYs' 41 9
+2021-12-15 00:51:39,988 - PIL.PngImagePlugin - DEBUG - PngImagePlugin : 186 - STREAM b'tIME' 62 7
+2021-12-15 00:51:39,988 - PIL.PngImagePlugin - DEBUG - PngImagePlugin : 698 - b'tIME' 62 7 (unknown)
+2021-12-15 00:51:39,988 - PIL.PngImagePlugin - DEBUG - PngImagePlugin : 186 - STREAM b'iTXt' 81 29
+2021-12-15 00:51:39,988 - PIL.PngImagePlugin - DEBUG - PngImagePlugin : 186 - STREAM b'IDAT' 122 65
+2021-12-15 00:51:39,989 - root - INFO - visual : 41 - [[[0 0 0]
+  [0 0 0]
+  [0 0 0]
+  ...
+  [0 0 0]
+  [0 0 0]
+  [0 0 0]]
+
+ [[0 0 0]
+  [0 0 0]
+  [0 0 0]
+  ...
+  [0 0 0]
+  [0 0 0]
+  [0 0 0]]
+
+ [[0 0 0]
+  [0 0 0]
+  [0 0 0]
+  ...
+  [0 0 0]
+  [0 0 0]
+  [0 0 0]]
+
+ ...
+
+ [[0 0 0]
+  [0 0 0]
+  [0 0 0]
+  ...
+  [0 0 0]
+  [0 0 0]
+  [0 0 0]]
+
+ [[0 0 0]
+  [0 0 0]
+  [0 0 0]
+  ...
+  [0 0 0]
+  [0 0 0]
+  [0 0 0]]
+
+ [[0 0 0]
+  [0 0 0]
+  [0 0 0]
+  ...
+  [0 0 0]
+  [0 0 0]
+  [0 0 0]]]
+2021-12-15 00:51:39,990 - root - INFO - visual : 42 - (16, 24, 3)
+2021-12-15 00:51:39,990 - PIL.PngImagePlugin - DEBUG - PngImagePlugin : 186 - STREAM b'IHDR' 16 13
+2021-12-15 00:51:39,990 - PIL.PngImagePlugin - DEBUG - PngImagePlugin : 186 - STREAM b'pHYs' 41 9
+2021-12-15 00:51:39,990 - PIL.PngImagePlugin - DEBUG - PngImagePlugin : 186 - STREAM b'tIME' 62 7
+2021-12-15 00:51:39,990 - PIL.PngImagePlugin - DEBUG - PngImagePlugin : 698 - b'tIME' 62 7 (unknown)
+2021-12-15 00:51:39,990 - PIL.PngImagePlugin - DEBUG - PngImagePlugin : 186 - STREAM b'iTXt' 81 29
+2021-12-15 00:51:39,990 - PIL.PngImagePlugin - DEBUG - PngImagePlugin : 186 - STREAM b'IDAT' 122 47
+2021-12-15 00:51:39,991 - root - INFO - visual : 41 - [[[  0   0   0]
+  [  0   0   0]
+  [  0   0   0]
+  [  0   0   0]
+  [  0   0   0]
+  [  0   0   0]
+  [  0   0   0]
+  [  0   0   0]]
+
+ [[  0   0   0]
+  [  0   0   0]
+  [241 185  15]
+  [241 185  15]
+  [241 185  15]
+  [241 185  15]
+  [  0   0   0]
+  [  0   0   0]]
+
+ [[  0   0   0]
+  [241 185  15]
+  [241 185  15]
+  [241 185  15]
+  [241 185  15]
+  [241 185  15]
+  [241 185  15]
+  [  0   0   0]]
+
+ [[  0   0   0]
+  [241 185  15]
+  [241 185  15]
+  [  0   0   0]
+  [  0   0   0]
+  [241 185  15]
+  [241 185  15]
+  [  0   0   0]]
+
+ [[  0   0   0]
+  [241 185  15]
+  [241 185  15]
+  [  0   0   0]
+  [  0   0   0]
+  [241 185  15]
+  [241 185  15]
+  [  0   0   0]]
+
+ [[  0   0   0]
+  [241 185  15]
+  [241 185  15]
+  [241 185  15]
+  [241 185  15]
+  [241 185  15]
+  [241 185  15]
+  [  0   0   0]]
+
+ [[  0   0   0]
+  [  0   0   0]
+  [241 185  15]
+  [241 185  15]
+  [241 185  15]
+  [241 185  15]
+  [  0   0   0]
+  [  0   0   0]]
+
+ [[  0   0   0]
+  [  0   0   0]
+  [  0   0   0]
+  [  0   0   0]
+  [  0   0   0]
+  [  0   0   0]
+  [  0   0   0]
+  [  0   0   0]]]
+2021-12-15 00:51:39,992 - root - INFO - visual : 42 - (8, 8, 3)
+2021-12-15 00:52:35,352 - root - INFO - main : 23 - Starting didier
+2021-12-15 00:52:35,352 - root - INFO - visual : 28 - load visuals
+2021-12-15 00:52:35,353 - root - INFO - visual : 30 - visuals/ content : 
+2021-12-15 00:52:35,353 - root - INFO - visual : 31 - ['visuals/bouche-ouvert1.png', 'visuals/oeil-gauche.png', 'visuals/heart.png', 'visuals/oeil-droit.png', 'visuals/bouche-ouvert2.png', 'visuals/oeil-fixe.png']
+2021-12-15 00:52:35,370 - PIL.PngImagePlugin - DEBUG - PngImagePlugin : 186 - STREAM b'IHDR' 16 13
+2021-12-15 00:52:35,370 - PIL.PngImagePlugin - DEBUG - PngImagePlugin : 186 - STREAM b'pHYs' 41 9
+2021-12-15 00:52:35,370 - PIL.PngImagePlugin - DEBUG - PngImagePlugin : 186 - STREAM b'tIME' 62 7
+2021-12-15 00:52:35,370 - PIL.PngImagePlugin - DEBUG - PngImagePlugin : 698 - b'tIME' 62 7 (unknown)
+2021-12-15 00:52:35,370 - PIL.PngImagePlugin - DEBUG - PngImagePlugin : 186 - STREAM b'iTXt' 81 29
+2021-12-15 00:52:35,371 - PIL.PngImagePlugin - DEBUG - PngImagePlugin : 186 - STREAM b'IDAT' 122 66
+2021-12-15 00:52:35,371 - root - INFO - visual : 44 - [[[0 0 0]
+  [0 0 0]
+  [0 0 0]
+  ...
+  [0 0 0]
+  [0 0 0]
+  [0 0 0]]
+
+ [[0 0 0]
+  [0 0 0]
+  [0 0 0]
+  ...
+  [0 0 0]
+  [0 0 0]
+  [0 0 0]]
+
+ [[0 0 0]
+  [0 0 0]
+  [0 0 0]
+  ...
+  [0 0 0]
+  [0 0 0]
+  [0 0 0]]
+
+ ...
+
+ [[0 0 0]
+  [0 0 0]
+  [0 0 0]
+  ...
+  [0 0 0]
+  [0 0 0]
+  [0 0 0]]
+
+ [[0 0 0]
+  [0 0 0]
+  [0 0 0]
+  ...
+  [0 0 0]
+  [0 0 0]
+  [0 0 0]]
+
+ [[0 0 0]
+  [0 0 0]
+  [0 0 0]
+  ...
+  [0 0 0]
+  [0 0 0]
+  [0 0 0]]]
+2021-12-15 00:52:35,372 - root - INFO - visual : 45 - (16, 24, 3)
+2021-12-15 00:52:35,372 - PIL.PngImagePlugin - DEBUG - PngImagePlugin : 186 - STREAM b'IHDR' 16 13
+2021-12-15 00:52:35,372 - PIL.PngImagePlugin - DEBUG - PngImagePlugin : 186 - STREAM b'pHYs' 41 9
+2021-12-15 00:52:35,372 - PIL.PngImagePlugin - DEBUG - PngImagePlugin : 186 - STREAM b'tIME' 62 7
+2021-12-15 00:52:35,372 - PIL.PngImagePlugin - DEBUG - PngImagePlugin : 698 - b'tIME' 62 7 (unknown)
+2021-12-15 00:52:35,372 - PIL.PngImagePlugin - DEBUG - PngImagePlugin : 186 - STREAM b'iTXt' 81 29
+2021-12-15 00:52:35,373 - PIL.PngImagePlugin - DEBUG - PngImagePlugin : 186 - STREAM b'IDAT' 122 45
+2021-12-15 00:52:35,373 - root - INFO - visual : 44 - [[[  0   0   0]
+  [  0   0   0]
+  [  0   0   0]
+  [  0   0   0]
+  [  0   0   0]
+  [  0   0   0]
+  [  0   0   0]
+  [  0   0   0]]
+
+ [[  0   0   0]
+  [  0   0   0]
+  [241 185  15]
+  [241 185  15]
+  [241 185  15]
+  [241 185  15]
+  [  0   0   0]
+  [  0   0   0]]
+
+ [[  0   0   0]
+  [241 185  15]
+  [241 185  15]
+  [241 185  15]
+  [241 185  15]
+  [241 185  15]
+  [241 185  15]
+  [  0   0   0]]
+
+ [[  0   0   0]
+  [241 185  15]
+  [  0   0   0]
+  [  0   0   0]
+  [241 185  15]
+  [241 185  15]
+  [241 185  15]
+  [  0   0   0]]
+
+ [[  0   0   0]
+  [241 185  15]
+  [  0   0   0]
+  [  0   0   0]
+  [241 185  15]
+  [241 185  15]
+  [241 185  15]
+  [  0   0   0]]
+
+ [[  0   0   0]
+  [241 185  15]
+  [241 185  15]
+  [241 185  15]
+  [241 185  15]
+  [241 185  15]
+  [241 185  15]
+  [  0   0   0]]
+
+ [[  0   0   0]
+  [  0   0   0]
+  [241 185  15]
+  [241 185  15]
+  [241 185  15]
+  [241 185  15]
+  [  0   0   0]
+  [  0   0   0]]
+
+ [[  0   0   0]
+  [  0   0   0]
+  [  0   0   0]
+  [  0   0   0]
+  [  0   0   0]
+  [  0   0   0]
+  [  0   0   0]
+  [  0   0   0]]]
+2021-12-15 00:52:35,375 - root - INFO - visual : 45 - (8, 8, 3)
+2021-12-15 00:52:35,375 - PIL.PngImagePlugin - DEBUG - PngImagePlugin : 186 - STREAM b'IHDR' 16 13
+2021-12-15 00:52:35,375 - PIL.PngImagePlugin - DEBUG - PngImagePlugin : 186 - STREAM b'pHYs' 41 9
+2021-12-15 00:52:35,375 - PIL.PngImagePlugin - DEBUG - PngImagePlugin : 186 - STREAM b'tIME' 62 7
+2021-12-15 00:52:35,375 - PIL.PngImagePlugin - DEBUG - PngImagePlugin : 698 - b'tIME' 62 7 (unknown)
+2021-12-15 00:52:35,375 - PIL.PngImagePlugin - DEBUG - PngImagePlugin : 186 - STREAM b'iTXt' 81 29
+2021-12-15 00:52:35,375 - PIL.PngImagePlugin - DEBUG - PngImagePlugin : 186 - STREAM b'IDAT' 122 65
+2021-12-15 00:52:35,376 - root - INFO - visual : 44 - [[[255 255 255]
+  [249   6  23]
+  [249   6  23]
+  [255 255 255]
+  [249   6  23]
+  [249   6  23]
+  [255 255 255]
+  [255 255 255]]
+
+ [[249   6  23]
+  [249   6  23]
+  [249   6  23]
+  [249   6  23]
+  [249   6  23]
+  [249   6  23]
+  [249   6  23]
+  [255 255 255]]
+
+ [[249   6  23]
+  [249   6  23]
+  [249   6  23]
+  [249   6  23]
+  [249   6  23]
+  [249   6  23]
+  [249   6  23]
+  [255 255 255]]
+
+ [[249   6  23]
+  [249   6  23]
+  [249   6  23]
+  [249   6  23]
+  [249   6  23]
+  [249   6  23]
+  [249   6  23]
+  [255 255 255]]
+
+ [[255 255 255]
+  [249   6  23]
+  [249   6  23]
+  [249   6  23]
+  [249   6  23]
+  [249   6  23]
+  [255 255 255]
+  [255 255 255]]
+
+ [[255 255 255]
+  [255 255 255]
+  [249   6  23]
+  [249   6  23]
+  [249   6  23]
+  [255 255 255]
+  [255 255 255]
+  [255 255 255]]
+
+ [[255 255 255]
+  [255 255 255]
+  [255 255 255]
+  [249   6  23]
+  [255 255 255]
+  [255 255 255]
+  [255 255 255]
+  [255 255 255]]
+
+ [[255 255 255]
+  [255 255 255]
+  [255 255 255]
+  [255 255 255]
+  [255 255 255]
+  [255 255 255]
+  [255 255 255]
+  [255 255 255]]]
+2021-12-15 00:52:35,377 - root - INFO - visual : 45 - (8, 8, 3)
+2021-12-15 00:52:35,378 - PIL.PngImagePlugin - DEBUG - PngImagePlugin : 186 - STREAM b'IHDR' 16 13
+2021-12-15 00:52:35,378 - PIL.PngImagePlugin - DEBUG - PngImagePlugin : 186 - STREAM b'pHYs' 41 9
+2021-12-15 00:52:35,378 - PIL.PngImagePlugin - DEBUG - PngImagePlugin : 186 - STREAM b'tIME' 62 7
+2021-12-15 00:52:35,378 - PIL.PngImagePlugin - DEBUG - PngImagePlugin : 698 - b'tIME' 62 7 (unknown)
+2021-12-15 00:52:35,378 - PIL.PngImagePlugin - DEBUG - PngImagePlugin : 186 - STREAM b'iTXt' 81 29
+2021-12-15 00:52:35,378 - PIL.PngImagePlugin - DEBUG - PngImagePlugin : 186 - STREAM b'IDAT' 122 49
+2021-12-15 00:52:35,378 - root - INFO - visual : 44 - [[[  0   0   0]
+  [  0   0   0]
+  [  0   0   0]
+  [  0   0   0]
+  [  0   0   0]
+  [  0   0   0]
+  [  0   0   0]
+  [  0   0   0]]
+
+ [[  0   0   0]
+  [  0   0   0]
+  [241 185  15]
+  [241 185  15]
+  [241 185  15]
+  [241 185  15]
+  [  0   0   0]
+  [  0   0   0]]
+
+ [[  0   0   0]
+  [241 185  15]
+  [241 185  15]
+  [241 185  15]
+  [241 185  15]
+  [241 185  15]
+  [241 185  15]
+  [  0   0   0]]
+
+ [[  0   0   0]
+  [241 185  15]
+  [241 185  15]
+  [241 185  15]
+  [  0   0   0]
+  [  0   0   0]
+  [241 185  15]
+  [  0   0   0]]
+
+ [[  0   0   0]
+  [241 185  15]
+  [241 185  15]
+  [241 185  15]
+  [  0   0   0]
+  [  0   0   0]
+  [241 185  15]
+  [  0   0   0]]
+
+ [[  0   0   0]
+  [241 185  15]
+  [241 185  15]
+  [241 185  15]
+  [241 185  15]
+  [241 185  15]
+  [241 185  15]
+  [  0   0   0]]
+
+ [[  0   0   0]
+  [  0   0   0]
+  [241 185  15]
+  [241 185  15]
+  [241 185  15]
+  [241 185  15]
+  [  0   0   0]
+  [  0   0   0]]
+
+ [[  0   0   0]
+  [  0   0   0]
+  [  0   0   0]
+  [  0   0   0]
+  [  0   0   0]
+  [  0   0   0]
+  [  0   0   0]
+  [  0   0   0]]]
+2021-12-15 00:52:35,380 - root - INFO - visual : 45 - (8, 8, 3)
+2021-12-15 00:52:35,380 - PIL.PngImagePlugin - DEBUG - PngImagePlugin : 186 - STREAM b'IHDR' 16 13
+2021-12-15 00:52:35,380 - PIL.PngImagePlugin - DEBUG - PngImagePlugin : 186 - STREAM b'pHYs' 41 9
+2021-12-15 00:52:35,381 - PIL.PngImagePlugin - DEBUG - PngImagePlugin : 186 - STREAM b'tIME' 62 7
+2021-12-15 00:52:35,381 - PIL.PngImagePlugin - DEBUG - PngImagePlugin : 698 - b'tIME' 62 7 (unknown)
+2021-12-15 00:52:35,381 - PIL.PngImagePlugin - DEBUG - PngImagePlugin : 186 - STREAM b'iTXt' 81 29
+2021-12-15 00:52:35,381 - PIL.PngImagePlugin - DEBUG - PngImagePlugin : 186 - STREAM b'IDAT' 122 65
+2021-12-15 00:52:35,381 - root - INFO - visual : 44 - [[[0 0 0]
+  [0 0 0]
+  [0 0 0]
+  ...
+  [0 0 0]
+  [0 0 0]
+  [0 0 0]]
+
+ [[0 0 0]
+  [0 0 0]
+  [0 0 0]
+  ...
+  [0 0 0]
+  [0 0 0]
+  [0 0 0]]
+
+ [[0 0 0]
+  [0 0 0]
+  [0 0 0]
+  ...
+  [0 0 0]
+  [0 0 0]
+  [0 0 0]]
+
+ ...
+
+ [[0 0 0]
+  [0 0 0]
+  [0 0 0]
+  ...
+  [0 0 0]
+  [0 0 0]
+  [0 0 0]]
+
+ [[0 0 0]
+  [0 0 0]
+  [0 0 0]
+  ...
+  [0 0 0]
+  [0 0 0]
+  [0 0 0]]
+
+ [[0 0 0]
+  [0 0 0]
+  [0 0 0]
+  ...
+  [0 0 0]
+  [0 0 0]
+  [0 0 0]]]
+2021-12-15 00:52:35,382 - root - INFO - visual : 45 - (16, 24, 3)
+2021-12-15 00:52:35,382 - PIL.PngImagePlugin - DEBUG - PngImagePlugin : 186 - STREAM b'IHDR' 16 13
+2021-12-15 00:52:35,382 - PIL.PngImagePlugin - DEBUG - PngImagePlugin : 186 - STREAM b'pHYs' 41 9
+2021-12-15 00:52:35,382 - PIL.PngImagePlugin - DEBUG - PngImagePlugin : 186 - STREAM b'tIME' 62 7
+2021-12-15 00:52:35,382 - PIL.PngImagePlugin - DEBUG - PngImagePlugin : 698 - b'tIME' 62 7 (unknown)
+2021-12-15 00:52:35,383 - PIL.PngImagePlugin - DEBUG - PngImagePlugin : 186 - STREAM b'iTXt' 81 29
+2021-12-15 00:52:35,383 - PIL.PngImagePlugin - DEBUG - PngImagePlugin : 186 - STREAM b'IDAT' 122 47
+2021-12-15 00:52:35,383 - root - INFO - visual : 44 - [[[  0   0   0]
+  [  0   0   0]
+  [  0   0   0]
+  [  0   0   0]
+  [  0   0   0]
+  [  0   0   0]
+  [  0   0   0]
+  [  0   0   0]]
+
+ [[  0   0   0]
+  [  0   0   0]
+  [241 185  15]
+  [241 185  15]
+  [241 185  15]
+  [241 185  15]
+  [  0   0   0]
+  [  0   0   0]]
+
+ [[  0   0   0]
+  [241 185  15]
+  [241 185  15]
+  [241 185  15]
+  [241 185  15]
+  [241 185  15]
+  [241 185  15]
+  [  0   0   0]]
+
+ [[  0   0   0]
+  [241 185  15]
+  [241 185  15]
+  [  0   0   0]
+  [  0   0   0]
+  [241 185  15]
+  [241 185  15]
+  [  0   0   0]]
+
+ [[  0   0   0]
+  [241 185  15]
+  [241 185  15]
+  [  0   0   0]
+  [  0   0   0]
+  [241 185  15]
+  [241 185  15]
+  [  0   0   0]]
+
+ [[  0   0   0]
+  [241 185  15]
+  [241 185  15]
+  [241 185  15]
+  [241 185  15]
+  [241 185  15]
+  [241 185  15]
+  [  0   0   0]]
+
+ [[  0   0   0]
+  [  0   0   0]
+  [241 185  15]
+  [241 185  15]
+  [241 185  15]
+  [241 185  15]
+  [  0   0   0]
+  [  0   0   0]]
+
+ [[  0   0   0]
+  [  0   0   0]
+  [  0   0   0]
+  [  0   0   0]
+  [  0   0   0]
+  [  0   0   0]
+  [  0   0   0]
+  [  0   0   0]]]
+2021-12-15 00:52:35,384 - root - INFO - visual : 45 - (8, 8, 3)
+2021-12-15 00:52:35,384 - root - INFO - visual : 40 - oeil-fixe
+2021-12-15 00:54:48,069 - root - INFO - main : 23 - Starting didier
+2021-12-15 00:54:48,069 - root - INFO - visual : 32 - load visuals
+2021-12-15 00:54:48,069 - root - INFO - visual : 34 - visuals/ content : 
+2021-12-15 00:54:48,069 - root - INFO - visual : 35 - ['visuals/bouche-ouvert1.png', 'visuals/oeil-gauche.png', 'visuals/heart.png', 'visuals/oeil-droit.png', 'visuals/bouche-ouvert2.png', 'visuals/oeil-fixe.png']
+2021-12-15 00:55:18,144 - root - INFO - main : 23 - Starting didier
+2021-12-15 00:55:18,144 - root - INFO - visual : 32 - load visuals
+2021-12-15 00:55:18,144 - root - INFO - visual : 34 - visuals/ content : 
+2021-12-15 00:55:18,145 - root - INFO - visual : 35 - ['visuals/bouche-ouvert1.png', 'visuals/oeil-gauche.png', 'visuals/heart.png', 'visuals/oeil-droit.png', 'visuals/bouche-ouvert2.png', 'visuals/oeil-fixe.png']
+2021-12-15 00:55:18,154 - PIL.PngImagePlugin - DEBUG - PngImagePlugin : 186 - STREAM b'IHDR' 16 13
+2021-12-15 00:55:18,155 - PIL.PngImagePlugin - DEBUG - PngImagePlugin : 186 - STREAM b'pHYs' 41 9
+2021-12-15 00:55:18,155 - PIL.PngImagePlugin - DEBUG - PngImagePlugin : 186 - STREAM b'tIME' 62 7
+2021-12-15 00:55:18,155 - PIL.PngImagePlugin - DEBUG - PngImagePlugin : 698 - b'tIME' 62 7 (unknown)
+2021-12-15 00:55:18,155 - PIL.PngImagePlugin - DEBUG - PngImagePlugin : 186 - STREAM b'iTXt' 81 29
+2021-12-15 00:55:18,155 - PIL.PngImagePlugin - DEBUG - PngImagePlugin : 186 - STREAM b'IDAT' 122 66
+2021-12-15 00:55:18,155 - root - INFO - visual : 49 - [[[0 0 0]
+  [0 0 0]
+  [0 0 0]
+  ...
+  [0 0 0]
+  [0 0 0]
+  [0 0 0]]
+
+ [[0 0 0]
+  [0 0 0]
+  [0 0 0]
+  ...
+  [0 0 0]
+  [0 0 0]
+  [0 0 0]]
+
+ [[0 0 0]
+  [0 0 0]
+  [0 0 0]
+  ...
+  [0 0 0]
+  [0 0 0]
+  [0 0 0]]
+
+ ...
+
+ [[0 0 0]
+  [0 0 0]
+  [0 0 0]
+  ...
+  [0 0 0]
+  [0 0 0]
+  [0 0 0]]
+
+ [[0 0 0]
+  [0 0 0]
+  [0 0 0]
+  ...
+  [0 0 0]
+  [0 0 0]
+  [0 0 0]]
+
+ [[0 0 0]
+  [0 0 0]
+  [0 0 0]
+  ...
+  [0 0 0]
+  [0 0 0]
+  [0 0 0]]]
+2021-12-15 00:55:18,156 - root - INFO - visual : 50 - (16, 24, 3)
+2021-12-15 00:56:31,042 - root - INFO - main : 23 - Starting didier
+2021-12-15 00:56:31,042 - root - INFO - visual : 32 - load visuals
+2021-12-15 00:56:31,042 - root - INFO - visual : 34 - visuals/ content : 
+2021-12-15 00:56:31,042 - root - INFO - visual : 35 - ['visuals/bouche-ouvert1.png', 'visuals/oeil-gauche.png', 'visuals/heart.png', 'visuals/oeil-droit.png', 'visuals/bouche-ouvert2.png', 'visuals/oeil-fixe.png']
+2021-12-15 00:56:31,053 - PIL.PngImagePlugin - DEBUG - PngImagePlugin : 186 - STREAM b'IHDR' 16 13
+2021-12-15 00:56:31,053 - PIL.PngImagePlugin - DEBUG - PngImagePlugin : 186 - STREAM b'pHYs' 41 9
+2021-12-15 00:56:31,053 - PIL.PngImagePlugin - DEBUG - PngImagePlugin : 186 - STREAM b'tIME' 62 7
+2021-12-15 00:56:31,053 - PIL.PngImagePlugin - DEBUG - PngImagePlugin : 698 - b'tIME' 62 7 (unknown)
+2021-12-15 00:56:31,053 - PIL.PngImagePlugin - DEBUG - PngImagePlugin : 186 - STREAM b'iTXt' 81 29
+2021-12-15 00:56:31,053 - PIL.PngImagePlugin - DEBUG - PngImagePlugin : 186 - STREAM b'IDAT' 122 66
+2021-12-15 00:56:31,053 - root - INFO - visual : 49 - [[[0 0 0]
+  [0 0 0]
+  [0 0 0]
+  ...
+  [0 0 0]
+  [0 0 0]
+  [0 0 0]]
+
+ [[0 0 0]
+  [0 0 0]
+  [0 0 0]
+  ...
+  [0 0 0]
+  [0 0 0]
+  [0 0 0]]
+
+ [[0 0 0]
+  [0 0 0]
+  [0 0 0]
+  ...
+  [0 0 0]
+  [0 0 0]
+  [0 0 0]]
+
+ ...
+
+ [[0 0 0]
+  [0 0 0]
+  [0 0 0]
+  ...
+  [0 0 0]
+  [0 0 0]
+  [0 0 0]]
+
+ [[0 0 0]
+  [0 0 0]
+  [0 0 0]
+  ...
+  [0 0 0]
+  [0 0 0]
+  [0 0 0]]
+
+ [[0 0 0]
+  [0 0 0]
+  [0 0 0]
+  ...
+  [0 0 0]
+  [0 0 0]
+  [0 0 0]]]
+2021-12-15 00:56:31,054 - root - INFO - visual : 50 - (16, 24, 3)
+2021-12-15 00:57:46,090 - root - INFO - main : 23 - Starting didier
+2021-12-15 00:57:46,091 - root - INFO - visual : 33 - load visuals
+2021-12-15 00:57:46,091 - root - INFO - visual : 35 - visuals/ content : 
+2021-12-15 00:57:46,091 - root - INFO - visual : 36 - ['visuals/bouche-ouvert1.png', 'visuals/oeil-gauche.png', 'visuals/heart.png', 'visuals/oeil-droit.png', 'visuals/bouche-ouvert2.png', 'visuals/oeil-fixe.png']
+2021-12-15 00:57:46,101 - PIL.PngImagePlugin - DEBUG - PngImagePlugin : 186 - STREAM b'IHDR' 16 13
+2021-12-15 00:57:46,101 - PIL.PngImagePlugin - DEBUG - PngImagePlugin : 186 - STREAM b'pHYs' 41 9
+2021-12-15 00:57:46,101 - PIL.PngImagePlugin - DEBUG - PngImagePlugin : 186 - STREAM b'tIME' 62 7
+2021-12-15 00:57:46,101 - PIL.PngImagePlugin - DEBUG - PngImagePlugin : 698 - b'tIME' 62 7 (unknown)
+2021-12-15 00:57:46,101 - PIL.PngImagePlugin - DEBUG - PngImagePlugin : 186 - STREAM b'iTXt' 81 29
+2021-12-15 00:57:46,101 - PIL.PngImagePlugin - DEBUG - PngImagePlugin : 186 - STREAM b'IDAT' 122 66
+2021-12-15 00:57:46,102 - root - INFO - visual : 50 - [[[0 0 0]
+  [0 0 0]
+  [0 0 0]
+  ...
+  [0 0 0]
+  [0 0 0]
+  [0 0 0]]
+
+ [[0 0 0]
+  [0 0 0]
+  [0 0 0]
+  ...
+  [0 0 0]
+  [0 0 0]
+  [0 0 0]]
+
+ [[0 0 0]
+  [0 0 0]
+  [0 0 0]
+  ...
+  [0 0 0]
+  [0 0 0]
+  [0 0 0]]
+
+ ...
+
+ [[0 0 0]
+  [0 0 0]
+  [0 0 0]
+  ...
+  [0 0 0]
+  [0 0 0]
+  [0 0 0]]
+
+ [[0 0 0]
+  [0 0 0]
+  [0 0 0]
+  ...
+  [0 0 0]
+  [0 0 0]
+  [0 0 0]]
+
+ [[0 0 0]
+  [0 0 0]
+  [0 0 0]
+  ...
+  [0 0 0]
+  [0 0 0]
+  [0 0 0]]]
+2021-12-15 00:57:46,103 - root - INFO - visual : 51 - (16, 24, 3)
+2021-12-15 00:57:46,103 - root - INFO - visual : 12 - <class 'str'>
+2021-12-15 00:58:29,821 - root - INFO - main : 23 - Starting didier
+2021-12-15 00:58:29,822 - root - INFO - visual : 33 - load visuals
+2021-12-15 00:58:29,822 - root - INFO - visual : 35 - visuals/ content : 
+2021-12-15 00:58:29,822 - root - INFO - visual : 36 - ['visuals/bouche-ouvert1.png', 'visuals/oeil-gauche.png', 'visuals/heart.png', 'visuals/oeil-droit.png', 'visuals/bouche-ouvert2.png', 'visuals/oeil-fixe.png']
+2021-12-15 00:58:29,833 - PIL.PngImagePlugin - DEBUG - PngImagePlugin : 186 - STREAM b'IHDR' 16 13
+2021-12-15 00:58:29,833 - PIL.PngImagePlugin - DEBUG - PngImagePlugin : 186 - STREAM b'pHYs' 41 9
+2021-12-15 00:58:29,833 - PIL.PngImagePlugin - DEBUG - PngImagePlugin : 186 - STREAM b'tIME' 62 7
+2021-12-15 00:58:29,833 - PIL.PngImagePlugin - DEBUG - PngImagePlugin : 698 - b'tIME' 62 7 (unknown)
+2021-12-15 00:58:29,833 - PIL.PngImagePlugin - DEBUG - PngImagePlugin : 186 - STREAM b'iTXt' 81 29
+2021-12-15 00:58:29,834 - PIL.PngImagePlugin - DEBUG - PngImagePlugin : 186 - STREAM b'IDAT' 122 66
+2021-12-15 00:58:29,834 - root - INFO - visual : 50 - [[[0 0 0]
+  [0 0 0]
+  [0 0 0]
+  ...
+  [0 0 0]
+  [0 0 0]
+  [0 0 0]]
+
+ [[0 0 0]
+  [0 0 0]
+  [0 0 0]
+  ...
+  [0 0 0]
+  [0 0 0]
+  [0 0 0]]
+
+ [[0 0 0]
+  [0 0 0]
+  [0 0 0]
+  ...
+  [0 0 0]
+  [0 0 0]
+  [0 0 0]]
+
+ ...
+
+ [[0 0 0]
+  [0 0 0]
+  [0 0 0]
+  ...
+  [0 0 0]
+  [0 0 0]
+  [0 0 0]]
+
+ [[0 0 0]
+  [0 0 0]
+  [0 0 0]
+  ...
+  [0 0 0]
+  [0 0 0]
+  [0 0 0]]
+
+ [[0 0 0]
+  [0 0 0]
+  [0 0 0]
+  ...
+  [0 0 0]
+  [0 0 0]
+  [0 0 0]]]
+2021-12-15 00:58:29,835 - root - INFO - visual : 51 - (16, 24, 3)
+2021-12-15 00:58:29,835 - root - INFO - visual : 12 - <class 'str'>
+2021-12-15 00:58:29,835 - PIL.PngImagePlugin - DEBUG - PngImagePlugin : 186 - STREAM b'IHDR' 16 13
+2021-12-15 00:58:29,836 - PIL.PngImagePlugin - DEBUG - PngImagePlugin : 186 - STREAM b'pHYs' 41 9
+2021-12-15 00:58:29,836 - PIL.PngImagePlugin - DEBUG - PngImagePlugin : 186 - STREAM b'tIME' 62 7
+2021-12-15 00:58:29,836 - PIL.PngImagePlugin - DEBUG - PngImagePlugin : 698 - b'tIME' 62 7 (unknown)
+2021-12-15 00:58:29,836 - PIL.PngImagePlugin - DEBUG - PngImagePlugin : 186 - STREAM b'iTXt' 81 29
+2021-12-15 00:58:29,836 - PIL.PngImagePlugin - DEBUG - PngImagePlugin : 186 - STREAM b'IDAT' 122 45
+2021-12-15 00:58:29,836 - root - INFO - visual : 50 - [[[  0   0   0]
+  [  0   0   0]
+  [  0   0   0]
+  [  0   0   0]
+  [  0   0   0]
+  [  0   0   0]
+  [  0   0   0]
+  [  0   0   0]]
+
+ [[  0   0   0]
+  [  0   0   0]
+  [241 185  15]
+  [241 185  15]
+  [241 185  15]
+  [241 185  15]
+  [  0   0   0]
+  [  0   0   0]]
+
+ [[  0   0   0]
+  [241 185  15]
+  [241 185  15]
+  [241 185  15]
+  [241 185  15]
+  [241 185  15]
+  [241 185  15]
+  [  0   0   0]]
+
+ [[  0   0   0]
+  [241 185  15]
+  [  0   0   0]
+  [  0   0   0]
+  [241 185  15]
+  [241 185  15]
+  [241 185  15]
+  [  0   0   0]]
+
+ [[  0   0   0]
+  [241 185  15]
+  [  0   0   0]
+  [  0   0   0]
+  [241 185  15]
+  [241 185  15]
+  [241 185  15]
+  [  0   0   0]]
+
+ [[  0   0   0]
+  [241 185  15]
+  [241 185  15]
+  [241 185  15]
+  [241 185  15]
+  [241 185  15]
+  [241 185  15]
+  [  0   0   0]]
+
+ [[  0   0   0]
+  [  0   0   0]
+  [241 185  15]
+  [241 185  15]
+  [241 185  15]
+  [241 185  15]
+  [  0   0   0]
+  [  0   0   0]]
+
+ [[  0   0   0]
+  [  0   0   0]
+  [  0   0   0]
+  [  0   0   0]
+  [  0   0   0]
+  [  0   0   0]
+  [  0   0   0]
+  [  0   0   0]]]
+2021-12-15 00:58:29,838 - root - INFO - visual : 51 - (8, 8, 3)
+2021-12-15 00:58:29,838 - root - INFO - visual : 12 - <class 'str'>
+2021-12-15 00:58:29,838 - PIL.PngImagePlugin - DEBUG - PngImagePlugin : 186 - STREAM b'IHDR' 16 13
+2021-12-15 00:58:29,838 - PIL.PngImagePlugin - DEBUG - PngImagePlugin : 186 - STREAM b'pHYs' 41 9
+2021-12-15 00:58:29,838 - PIL.PngImagePlugin - DEBUG - PngImagePlugin : 186 - STREAM b'tIME' 62 7
+2021-12-15 00:58:29,838 - PIL.PngImagePlugin - DEBUG - PngImagePlugin : 698 - b'tIME' 62 7 (unknown)
+2021-12-15 00:58:29,839 - PIL.PngImagePlugin - DEBUG - PngImagePlugin : 186 - STREAM b'iTXt' 81 29
+2021-12-15 00:58:29,839 - PIL.PngImagePlugin - DEBUG - PngImagePlugin : 186 - STREAM b'IDAT' 122 65
+2021-12-15 00:58:29,839 - root - INFO - visual : 50 - [[[255 255 255]
+  [249   6  23]
+  [249   6  23]
+  [255 255 255]
+  [249   6  23]
+  [249   6  23]
+  [255 255 255]
+  [255 255 255]]
+
+ [[249   6  23]
+  [249   6  23]
+  [249   6  23]
+  [249   6  23]
+  [249   6  23]
+  [249   6  23]
+  [249   6  23]
+  [255 255 255]]
+
+ [[249   6  23]
+  [249   6  23]
+  [249   6  23]
+  [249   6  23]
+  [249   6  23]
+  [249   6  23]
+  [249   6  23]
+  [255 255 255]]
+
+ [[249   6  23]
+  [249   6  23]
+  [249   6  23]
+  [249   6  23]
+  [249   6  23]
+  [249   6  23]
+  [249   6  23]
+  [255 255 255]]
+
+ [[255 255 255]
+  [249   6  23]
+  [249   6  23]
+  [249   6  23]
+  [249   6  23]
+  [249   6  23]
+  [255 255 255]
+  [255 255 255]]
+
+ [[255 255 255]
+  [255 255 255]
+  [249   6  23]
+  [249   6  23]
+  [249   6  23]
+  [255 255 255]
+  [255 255 255]
+  [255 255 255]]
+
+ [[255 255 255]
+  [255 255 255]
+  [255 255 255]
+  [249   6  23]
+  [255 255 255]
+  [255 255 255]
+  [255 255 255]
+  [255 255 255]]
+
+ [[255 255 255]
+  [255 255 255]
+  [255 255 255]
+  [255 255 255]
+  [255 255 255]
+  [255 255 255]
+  [255 255 255]
+  [255 255 255]]]
+2021-12-15 00:58:29,840 - root - INFO - visual : 51 - (8, 8, 3)
+2021-12-15 00:58:29,841 - root - INFO - visual : 12 - <class 'str'>
+2021-12-15 00:58:29,841 - PIL.PngImagePlugin - DEBUG - PngImagePlugin : 186 - STREAM b'IHDR' 16 13
+2021-12-15 00:58:29,841 - PIL.PngImagePlugin - DEBUG - PngImagePlugin : 186 - STREAM b'pHYs' 41 9
+2021-12-15 00:58:29,841 - PIL.PngImagePlugin - DEBUG - PngImagePlugin : 186 - STREAM b'tIME' 62 7
+2021-12-15 00:58:29,841 - PIL.PngImagePlugin - DEBUG - PngImagePlugin : 698 - b'tIME' 62 7 (unknown)
+2021-12-15 00:58:29,841 - PIL.PngImagePlugin - DEBUG - PngImagePlugin : 186 - STREAM b'iTXt' 81 29
+2021-12-15 00:58:29,841 - PIL.PngImagePlugin - DEBUG - PngImagePlugin : 186 - STREAM b'IDAT' 122 49
+2021-12-15 00:58:29,842 - root - INFO - visual : 50 - [[[  0   0   0]
+  [  0   0   0]
+  [  0   0   0]
+  [  0   0   0]
+  [  0   0   0]
+  [  0   0   0]
+  [  0   0   0]
+  [  0   0   0]]
+
+ [[  0   0   0]
+  [  0   0   0]
+  [241 185  15]
+  [241 185  15]
+  [241 185  15]
+  [241 185  15]
+  [  0   0   0]
+  [  0   0   0]]
+
+ [[  0   0   0]
+  [241 185  15]
+  [241 185  15]
+  [241 185  15]
+  [241 185  15]
+  [241 185  15]
+  [241 185  15]
+  [  0   0   0]]
+
+ [[  0   0   0]
+  [241 185  15]
+  [241 185  15]
+  [241 185  15]
+  [  0   0   0]
+  [  0   0   0]
+  [241 185  15]
+  [  0   0   0]]
+
+ [[  0   0   0]
+  [241 185  15]
+  [241 185  15]
+  [241 185  15]
+  [  0   0   0]
+  [  0   0   0]
+  [241 185  15]
+  [  0   0   0]]
+
+ [[  0   0   0]
+  [241 185  15]
+  [241 185  15]
+  [241 185  15]
+  [241 185  15]
+  [241 185  15]
+  [241 185  15]
+  [  0   0   0]]
+
+ [[  0   0   0]
+  [  0   0   0]
+  [241 185  15]
+  [241 185  15]
+  [241 185  15]
+  [241 185  15]
+  [  0   0   0]
+  [  0   0   0]]
+
+ [[  0   0   0]
+  [  0   0   0]
+  [  0   0   0]
+  [  0   0   0]
+  [  0   0   0]
+  [  0   0   0]
+  [  0   0   0]
+  [  0   0   0]]]
+2021-12-15 00:58:29,843 - root - INFO - visual : 51 - (8, 8, 3)
+2021-12-15 00:58:29,843 - root - INFO - visual : 12 - <class 'str'>
+2021-12-15 00:58:29,843 - PIL.PngImagePlugin - DEBUG - PngImagePlugin : 186 - STREAM b'IHDR' 16 13
+2021-12-15 00:58:29,843 - PIL.PngImagePlugin - DEBUG - PngImagePlugin : 186 - STREAM b'pHYs' 41 9
+2021-12-15 00:58:29,843 - PIL.PngImagePlugin - DEBUG - PngImagePlugin : 186 - STREAM b'tIME' 62 7
+2021-12-15 00:58:29,843 - PIL.PngImagePlugin - DEBUG - PngImagePlugin : 698 - b'tIME' 62 7 (unknown)
+2021-12-15 00:58:29,844 - PIL.PngImagePlugin - DEBUG - PngImagePlugin : 186 - STREAM b'iTXt' 81 29
+2021-12-15 00:58:29,844 - PIL.PngImagePlugin - DEBUG - PngImagePlugin : 186 - STREAM b'IDAT' 122 65
+2021-12-15 00:58:29,844 - root - INFO - visual : 50 - [[[0 0 0]
+  [0 0 0]
+  [0 0 0]
+  ...
+  [0 0 0]
+  [0 0 0]
+  [0 0 0]]
+
+ [[0 0 0]
+  [0 0 0]
+  [0 0 0]
+  ...
+  [0 0 0]
+  [0 0 0]
+  [0 0 0]]
+
+ [[0 0 0]
+  [0 0 0]
+  [0 0 0]
+  ...
+  [0 0 0]
+  [0 0 0]
+  [0 0 0]]
+
+ ...
+
+ [[0 0 0]
+  [0 0 0]
+  [0 0 0]
+  ...
+  [0 0 0]
+  [0 0 0]
+  [0 0 0]]
+
+ [[0 0 0]
+  [0 0 0]
+  [0 0 0]
+  ...
+  [0 0 0]
+  [0 0 0]
+  [0 0 0]]
+
+ [[0 0 0]
+  [0 0 0]
+  [0 0 0]
+  ...
+  [0 0 0]
+  [0 0 0]
+  [0 0 0]]]
+2021-12-15 00:58:29,845 - root - INFO - visual : 51 - (16, 24, 3)
+2021-12-15 00:58:29,845 - root - INFO - visual : 12 - <class 'str'>
+2021-12-15 00:58:29,845 - PIL.PngImagePlugin - DEBUG - PngImagePlugin : 186 - STREAM b'IHDR' 16 13
+2021-12-15 00:58:29,845 - PIL.PngImagePlugin - DEBUG - PngImagePlugin : 186 - STREAM b'pHYs' 41 9
+2021-12-15 00:58:29,845 - PIL.PngImagePlugin - DEBUG - PngImagePlugin : 186 - STREAM b'tIME' 62 7
+2021-12-15 00:58:29,845 - PIL.PngImagePlugin - DEBUG - PngImagePlugin : 698 - b'tIME' 62 7 (unknown)
+2021-12-15 00:58:29,845 - PIL.PngImagePlugin - DEBUG - PngImagePlugin : 186 - STREAM b'iTXt' 81 29
+2021-12-15 00:58:29,845 - PIL.PngImagePlugin - DEBUG - PngImagePlugin : 186 - STREAM b'IDAT' 122 47
+2021-12-15 00:58:29,846 - root - INFO - visual : 50 - [[[  0   0   0]
+  [  0   0   0]
+  [  0   0   0]
+  [  0   0   0]
+  [  0   0   0]
+  [  0   0   0]
+  [  0   0   0]
+  [  0   0   0]]
+
+ [[  0   0   0]
+  [  0   0   0]
+  [241 185  15]
+  [241 185  15]
+  [241 185  15]
+  [241 185  15]
+  [  0   0   0]
+  [  0   0   0]]
+
+ [[  0   0   0]
+  [241 185  15]
+  [241 185  15]
+  [241 185  15]
+  [241 185  15]
+  [241 185  15]
+  [241 185  15]
+  [  0   0   0]]
+
+ [[  0   0   0]
+  [241 185  15]
+  [241 185  15]
+  [  0   0   0]
+  [  0   0   0]
+  [241 185  15]
+  [241 185  15]
+  [  0   0   0]]
+
+ [[  0   0   0]
+  [241 185  15]
+  [241 185  15]
+  [  0   0   0]
+  [  0   0   0]
+  [241 185  15]
+  [241 185  15]
+  [  0   0   0]]
+
+ [[  0   0   0]
+  [241 185  15]
+  [241 185  15]
+  [241 185  15]
+  [241 185  15]
+  [241 185  15]
+  [241 185  15]
+  [  0   0   0]]
+
+ [[  0   0   0]
+  [  0   0   0]
+  [241 185  15]
+  [241 185  15]
+  [241 185  15]
+  [241 185  15]
+  [  0   0   0]
+  [  0   0   0]]
+
+ [[  0   0   0]
+  [  0   0   0]
+  [  0   0   0]
+  [  0   0   0]
+  [  0   0   0]
+  [  0   0   0]
+  [  0   0   0]
+  [  0   0   0]]]
+2021-12-15 00:58:29,847 - root - INFO - visual : 51 - (8, 8, 3)
+2021-12-15 00:58:29,847 - root - INFO - visual : 12 - <class 'str'>
+2021-12-15 00:58:29,847 - root - INFO - visual : 45 - visuals/oeil-fixe
+2021-12-15 00:59:51,139 - root - INFO - main : 23 - Starting didier
+2021-12-15 00:59:51,139 - root - INFO - visual : 32 - load visuals
+2021-12-15 00:59:51,140 - root - INFO - visual : 34 - visuals/ content : 
+2021-12-15 00:59:51,140 - root - INFO - visual : 35 - ['visuals/bouche-ouvert1.png', 'visuals/oeil-gauche.png', 'visuals/heart.png', 'visuals/oeil-droit.png', 'visuals/bouche-ouvert2.png', 'visuals/oeil-fixe.png']
+2021-12-15 00:59:51,150 - PIL.PngImagePlugin - DEBUG - PngImagePlugin : 186 - STREAM b'IHDR' 16 13
+2021-12-15 00:59:51,150 - PIL.PngImagePlugin - DEBUG - PngImagePlugin : 186 - STREAM b'pHYs' 41 9
+2021-12-15 00:59:51,150 - PIL.PngImagePlugin - DEBUG - PngImagePlugin : 186 - STREAM b'tIME' 62 7
+2021-12-15 00:59:51,150 - PIL.PngImagePlugin - DEBUG - PngImagePlugin : 698 - b'tIME' 62 7 (unknown)
+2021-12-15 00:59:51,150 - PIL.PngImagePlugin - DEBUG - PngImagePlugin : 186 - STREAM b'iTXt' 81 29
+2021-12-15 00:59:51,150 - PIL.PngImagePlugin - DEBUG - PngImagePlugin : 186 - STREAM b'IDAT' 122 66
+2021-12-15 00:59:51,151 - root - INFO - visual : 49 - [[[0 0 0]
+  [0 0 0]
+  [0 0 0]
+  ...
+  [0 0 0]
+  [0 0 0]
+  [0 0 0]]
+
+ [[0 0 0]
+  [0 0 0]
+  [0 0 0]
+  ...
+  [0 0 0]
+  [0 0 0]
+  [0 0 0]]
+
+ [[0 0 0]
+  [0 0 0]
+  [0 0 0]
+  ...
+  [0 0 0]
+  [0 0 0]
+  [0 0 0]]
+
+ ...
+
+ [[0 0 0]
+  [0 0 0]
+  [0 0 0]
+  ...
+  [0 0 0]
+  [0 0 0]
+  [0 0 0]]
+
+ [[0 0 0]
+  [0 0 0]
+  [0 0 0]
+  ...
+  [0 0 0]
+  [0 0 0]
+  [0 0 0]]
+
+ [[0 0 0]
+  [0 0 0]
+  [0 0 0]
+  ...
+  [0 0 0]
+  [0 0 0]
+  [0 0 0]]]
+2021-12-15 00:59:51,152 - root - INFO - visual : 50 - (16, 24, 3)
+2021-12-15 00:59:51,152 - PIL.PngImagePlugin - DEBUG - PngImagePlugin : 186 - STREAM b'IHDR' 16 13
+2021-12-15 00:59:51,152 - PIL.PngImagePlugin - DEBUG - PngImagePlugin : 186 - STREAM b'pHYs' 41 9
+2021-12-15 00:59:51,152 - PIL.PngImagePlugin - DEBUG - PngImagePlugin : 186 - STREAM b'tIME' 62 7
+2021-12-15 00:59:51,152 - PIL.PngImagePlugin - DEBUG - PngImagePlugin : 698 - b'tIME' 62 7 (unknown)
+2021-12-15 00:59:51,152 - PIL.PngImagePlugin - DEBUG - PngImagePlugin : 186 - STREAM b'iTXt' 81 29
+2021-12-15 00:59:51,152 - PIL.PngImagePlugin - DEBUG - PngImagePlugin : 186 - STREAM b'IDAT' 122 45
+2021-12-15 00:59:51,153 - root - INFO - visual : 49 - [[[  0   0   0]
+  [  0   0   0]
+  [  0   0   0]
+  [  0   0   0]
+  [  0   0   0]
+  [  0   0   0]
+  [  0   0   0]
+  [  0   0   0]]
+
+ [[  0   0   0]
+  [  0   0   0]
+  [241 185  15]
+  [241 185  15]
+  [241 185  15]
+  [241 185  15]
+  [  0   0   0]
+  [  0   0   0]]
+
+ [[  0   0   0]
+  [241 185  15]
+  [241 185  15]
+  [241 185  15]
+  [241 185  15]
+  [241 185  15]
+  [241 185  15]
+  [  0   0   0]]
+
+ [[  0   0   0]
+  [241 185  15]
+  [  0   0   0]
+  [  0   0   0]
+  [241 185  15]
+  [241 185  15]
+  [241 185  15]
+  [  0   0   0]]
+
+ [[  0   0   0]
+  [241 185  15]
+  [  0   0   0]
+  [  0   0   0]
+  [241 185  15]
+  [241 185  15]
+  [241 185  15]
+  [  0   0   0]]
+
+ [[  0   0   0]
+  [241 185  15]
+  [241 185  15]
+  [241 185  15]
+  [241 185  15]
+  [241 185  15]
+  [241 185  15]
+  [  0   0   0]]
+
+ [[  0   0   0]
+  [  0   0   0]
+  [241 185  15]
+  [241 185  15]
+  [241 185  15]
+  [241 185  15]
+  [  0   0   0]
+  [  0   0   0]]
+
+ [[  0   0   0]
+  [  0   0   0]
+  [  0   0   0]
+  [  0   0   0]
+  [  0   0   0]
+  [  0   0   0]
+  [  0   0   0]
+  [  0   0   0]]]
+2021-12-15 00:59:51,154 - root - INFO - visual : 50 - (8, 8, 3)
+2021-12-15 00:59:51,155 - PIL.PngImagePlugin - DEBUG - PngImagePlugin : 186 - STREAM b'IHDR' 16 13
+2021-12-15 00:59:51,155 - PIL.PngImagePlugin - DEBUG - PngImagePlugin : 186 - STREAM b'pHYs' 41 9
+2021-12-15 00:59:51,155 - PIL.PngImagePlugin - DEBUG - PngImagePlugin : 186 - STREAM b'tIME' 62 7
+2021-12-15 00:59:51,155 - PIL.PngImagePlugin - DEBUG - PngImagePlugin : 698 - b'tIME' 62 7 (unknown)
+2021-12-15 00:59:51,155 - PIL.PngImagePlugin - DEBUG - PngImagePlugin : 186 - STREAM b'iTXt' 81 29
+2021-12-15 00:59:51,155 - PIL.PngImagePlugin - DEBUG - PngImagePlugin : 186 - STREAM b'IDAT' 122 65
+2021-12-15 00:59:51,155 - root - INFO - visual : 49 - [[[255 255 255]
+  [249   6  23]
+  [249   6  23]
+  [255 255 255]
+  [249   6  23]
+  [249   6  23]
+  [255 255 255]
+  [255 255 255]]
+
+ [[249   6  23]
+  [249   6  23]
+  [249   6  23]
+  [249   6  23]
+  [249   6  23]
+  [249   6  23]
+  [249   6  23]
+  [255 255 255]]
+
+ [[249   6  23]
+  [249   6  23]
+  [249   6  23]
+  [249   6  23]
+  [249   6  23]
+  [249   6  23]
+  [249   6  23]
+  [255 255 255]]
+
+ [[249   6  23]
+  [249   6  23]
+  [249   6  23]
+  [249   6  23]
+  [249   6  23]
+  [249   6  23]
+  [249   6  23]
+  [255 255 255]]
+
+ [[255 255 255]
+  [249   6  23]
+  [249   6  23]
+  [249   6  23]
+  [249   6  23]
+  [249   6  23]
+  [255 255 255]
+  [255 255 255]]
+
+ [[255 255 255]
+  [255 255 255]
+  [249   6  23]
+  [249   6  23]
+  [249   6  23]
+  [255 255 255]
+  [255 255 255]
+  [255 255 255]]
+
+ [[255 255 255]
+  [255 255 255]
+  [255 255 255]
+  [249   6  23]
+  [255 255 255]
+  [255 255 255]
+  [255 255 255]
+  [255 255 255]]
+
+ [[255 255 255]
+  [255 255 255]
+  [255 255 255]
+  [255 255 255]
+  [255 255 255]
+  [255 255 255]
+  [255 255 255]
+  [255 255 255]]]
+2021-12-15 00:59:51,157 - root - INFO - visual : 50 - (8, 8, 3)
+2021-12-15 00:59:51,157 - PIL.PngImagePlugin - DEBUG - PngImagePlugin : 186 - STREAM b'IHDR' 16 13
+2021-12-15 00:59:51,157 - PIL.PngImagePlugin - DEBUG - PngImagePlugin : 186 - STREAM b'pHYs' 41 9
+2021-12-15 00:59:51,157 - PIL.PngImagePlugin - DEBUG - PngImagePlugin : 186 - STREAM b'tIME' 62 7
+2021-12-15 00:59:51,157 - PIL.PngImagePlugin - DEBUG - PngImagePlugin : 698 - b'tIME' 62 7 (unknown)
+2021-12-15 00:59:51,157 - PIL.PngImagePlugin - DEBUG - PngImagePlugin : 186 - STREAM b'iTXt' 81 29
+2021-12-15 00:59:51,157 - PIL.PngImagePlugin - DEBUG - PngImagePlugin : 186 - STREAM b'IDAT' 122 49
+2021-12-15 00:59:51,158 - root - INFO - visual : 49 - [[[  0   0   0]
+  [  0   0   0]
+  [  0   0   0]
+  [  0   0   0]
+  [  0   0   0]
+  [  0   0   0]
+  [  0   0   0]
+  [  0   0   0]]
+
+ [[  0   0   0]
+  [  0   0   0]
+  [241 185  15]
+  [241 185  15]
+  [241 185  15]
+  [241 185  15]
+  [  0   0   0]
+  [  0   0   0]]
+
+ [[  0   0   0]
+  [241 185  15]
+  [241 185  15]
+  [241 185  15]
+  [241 185  15]
+  [241 185  15]
+  [241 185  15]
+  [  0   0   0]]
+
+ [[  0   0   0]
+  [241 185  15]
+  [241 185  15]
+  [241 185  15]
+  [  0   0   0]
+  [  0   0   0]
+  [241 185  15]
+  [  0   0   0]]
+
+ [[  0   0   0]
+  [241 185  15]
+  [241 185  15]
+  [241 185  15]
+  [  0   0   0]
+  [  0   0   0]
+  [241 185  15]
+  [  0   0   0]]
+
+ [[  0   0   0]
+  [241 185  15]
+  [241 185  15]
+  [241 185  15]
+  [241 185  15]
+  [241 185  15]
+  [241 185  15]
+  [  0   0   0]]
+
+ [[  0   0   0]
+  [  0   0   0]
+  [241 185  15]
+  [241 185  15]
+  [241 185  15]
+  [241 185  15]
+  [  0   0   0]
+  [  0   0   0]]
+
+ [[  0   0   0]
+  [  0   0   0]
+  [  0   0   0]
+  [  0   0   0]
+  [  0   0   0]
+  [  0   0   0]
+  [  0   0   0]
+  [  0   0   0]]]
+2021-12-15 00:59:51,159 - root - INFO - visual : 50 - (8, 8, 3)
+2021-12-15 00:59:51,159 - PIL.PngImagePlugin - DEBUG - PngImagePlugin : 186 - STREAM b'IHDR' 16 13
+2021-12-15 00:59:51,159 - PIL.PngImagePlugin - DEBUG - PngImagePlugin : 186 - STREAM b'pHYs' 41 9
+2021-12-15 00:59:51,159 - PIL.PngImagePlugin - DEBUG - PngImagePlugin : 186 - STREAM b'tIME' 62 7
+2021-12-15 00:59:51,160 - PIL.PngImagePlugin - DEBUG - PngImagePlugin : 698 - b'tIME' 62 7 (unknown)
+2021-12-15 00:59:51,160 - PIL.PngImagePlugin - DEBUG - PngImagePlugin : 186 - STREAM b'iTXt' 81 29
+2021-12-15 00:59:51,160 - PIL.PngImagePlugin - DEBUG - PngImagePlugin : 186 - STREAM b'IDAT' 122 65
+2021-12-15 00:59:51,160 - root - INFO - visual : 49 - [[[0 0 0]
+  [0 0 0]
+  [0 0 0]
+  ...
+  [0 0 0]
+  [0 0 0]
+  [0 0 0]]
+
+ [[0 0 0]
+  [0 0 0]
+  [0 0 0]
+  ...
+  [0 0 0]
+  [0 0 0]
+  [0 0 0]]
+
+ [[0 0 0]
+  [0 0 0]
+  [0 0 0]
+  ...
+  [0 0 0]
+  [0 0 0]
+  [0 0 0]]
+
+ ...
+
+ [[0 0 0]
+  [0 0 0]
+  [0 0 0]
+  ...
+  [0 0 0]
+  [0 0 0]
+  [0 0 0]]
+
+ [[0 0 0]
+  [0 0 0]
+  [0 0 0]
+  ...
+  [0 0 0]
+  [0 0 0]
+  [0 0 0]]
+
+ [[0 0 0]
+  [0 0 0]
+  [0 0 0]
+  ...
+  [0 0 0]
+  [0 0 0]
+  [0 0 0]]]
+2021-12-15 00:59:51,161 - root - INFO - visual : 50 - (16, 24, 3)
+2021-12-15 00:59:51,161 - PIL.PngImagePlugin - DEBUG - PngImagePlugin : 186 - STREAM b'IHDR' 16 13
+2021-12-15 00:59:51,161 - PIL.PngImagePlugin - DEBUG - PngImagePlugin : 186 - STREAM b'pHYs' 41 9
+2021-12-15 00:59:51,161 - PIL.PngImagePlugin - DEBUG - PngImagePlugin : 186 - STREAM b'tIME' 62 7
+2021-12-15 00:59:51,161 - PIL.PngImagePlugin - DEBUG - PngImagePlugin : 698 - b'tIME' 62 7 (unknown)
+2021-12-15 00:59:51,162 - PIL.PngImagePlugin - DEBUG - PngImagePlugin : 186 - STREAM b'iTXt' 81 29
+2021-12-15 00:59:51,162 - PIL.PngImagePlugin - DEBUG - PngImagePlugin : 186 - STREAM b'IDAT' 122 47
+2021-12-15 00:59:51,162 - root - INFO - visual : 49 - [[[  0   0   0]
+  [  0   0   0]
+  [  0   0   0]
+  [  0   0   0]
+  [  0   0   0]
+  [  0   0   0]
+  [  0   0   0]
+  [  0   0   0]]
+
+ [[  0   0   0]
+  [  0   0   0]
+  [241 185  15]
+  [241 185  15]
+  [241 185  15]
+  [241 185  15]
+  [  0   0   0]
+  [  0   0   0]]
+
+ [[  0   0   0]
+  [241 185  15]
+  [241 185  15]
+  [241 185  15]
+  [241 185  15]
+  [241 185  15]
+  [241 185  15]
+  [  0   0   0]]
+
+ [[  0   0   0]
+  [241 185  15]
+  [241 185  15]
+  [  0   0   0]
+  [  0   0   0]
+  [241 185  15]
+  [241 185  15]
+  [  0   0   0]]
+
+ [[  0   0   0]
+  [241 185  15]
+  [241 185  15]
+  [  0   0   0]
+  [  0   0   0]
+  [241 185  15]
+  [241 185  15]
+  [  0   0   0]]
+
+ [[  0   0   0]
+  [241 185  15]
+  [241 185  15]
+  [241 185  15]
+  [241 185  15]
+  [241 185  15]
+  [241 185  15]
+  [  0   0   0]]
+
+ [[  0   0   0]
+  [  0   0   0]
+  [241 185  15]
+  [241 185  15]
+  [241 185  15]
+  [241 185  15]
+  [  0   0   0]
+  [  0   0   0]]
+
+ [[  0   0   0]
+  [  0   0   0]
+  [  0   0   0]
+  [  0   0   0]
+  [  0   0   0]
+  [  0   0   0]
+  [  0   0   0]
+  [  0   0   0]]]
+2021-12-15 00:59:51,163 - root - INFO - visual : 50 - (8, 8, 3)
+2021-12-15 01:00:46,453 - root - INFO - main : 23 - Starting didier
+2021-12-15 01:00:46,454 - root - INFO - visual : 32 - load visuals
+2021-12-15 01:00:46,454 - root - INFO - visual : 34 - visuals/ content : 
+2021-12-15 01:00:46,454 - root - INFO - visual : 35 - ['visuals/bouche-ouvert1.png', 'visuals/oeil-gauche.png', 'visuals/heart.png', 'visuals/oeil-droit.png', 'visuals/bouche-ouvert2.png', 'visuals/oeil-fixe.png']
+2021-12-15 01:00:46,473 - PIL.PngImagePlugin - DEBUG - PngImagePlugin : 186 - STREAM b'IHDR' 16 13
+2021-12-15 01:00:46,473 - PIL.PngImagePlugin - DEBUG - PngImagePlugin : 186 - STREAM b'pHYs' 41 9
+2021-12-15 01:00:46,473 - PIL.PngImagePlugin - DEBUG - PngImagePlugin : 186 - STREAM b'tIME' 62 7
+2021-12-15 01:00:46,473 - PIL.PngImagePlugin - DEBUG - PngImagePlugin : 698 - b'tIME' 62 7 (unknown)
+2021-12-15 01:00:46,473 - PIL.PngImagePlugin - DEBUG - PngImagePlugin : 186 - STREAM b'iTXt' 81 29
+2021-12-15 01:00:46,473 - PIL.PngImagePlugin - DEBUG - PngImagePlugin : 186 - STREAM b'IDAT' 122 66
+2021-12-15 01:00:46,473 - root - INFO - visual : 49 - [[[0 0 0]
+  [0 0 0]
+  [0 0 0]
+  ...
+  [0 0 0]
+  [0 0 0]
+  [0 0 0]]
+
+ [[0 0 0]
+  [0 0 0]
+  [0 0 0]
+  ...
+  [0 0 0]
+  [0 0 0]
+  [0 0 0]]
+
+ [[0 0 0]
+  [0 0 0]
+  [0 0 0]
+  ...
+  [0 0 0]
+  [0 0 0]
+  [0 0 0]]
+
+ ...
+
+ [[0 0 0]
+  [0 0 0]
+  [0 0 0]
+  ...
+  [0 0 0]
+  [0 0 0]
+  [0 0 0]]
+
+ [[0 0 0]
+  [0 0 0]
+  [0 0 0]
+  ...
+  [0 0 0]
+  [0 0 0]
+  [0 0 0]]
+
+ [[0 0 0]
+  [0 0 0]
+  [0 0 0]
+  ...
+  [0 0 0]
+  [0 0 0]
+  [0 0 0]]]
+2021-12-15 01:00:46,474 - root - INFO - visual : 50 - (16, 24, 3)
+2021-12-15 01:00:46,475 - PIL.PngImagePlugin - DEBUG - PngImagePlugin : 186 - STREAM b'IHDR' 16 13
+2021-12-15 01:00:46,475 - PIL.PngImagePlugin - DEBUG - PngImagePlugin : 186 - STREAM b'pHYs' 41 9
+2021-12-15 01:00:46,475 - PIL.PngImagePlugin - DEBUG - PngImagePlugin : 186 - STREAM b'tIME' 62 7
+2021-12-15 01:00:46,475 - PIL.PngImagePlugin - DEBUG - PngImagePlugin : 698 - b'tIME' 62 7 (unknown)
+2021-12-15 01:00:46,475 - PIL.PngImagePlugin - DEBUG - PngImagePlugin : 186 - STREAM b'iTXt' 81 29
+2021-12-15 01:00:46,475 - PIL.PngImagePlugin - DEBUG - PngImagePlugin : 186 - STREAM b'IDAT' 122 45
+2021-12-15 01:00:46,475 - root - INFO - visual : 49 - [[[  0   0   0]
+  [  0   0   0]
+  [  0   0   0]
+  [  0   0   0]
+  [  0   0   0]
+  [  0   0   0]
+  [  0   0   0]
+  [  0   0   0]]
+
+ [[  0   0   0]
+  [  0   0   0]
+  [241 185  15]
+  [241 185  15]
+  [241 185  15]
+  [241 185  15]
+  [  0   0   0]
+  [  0   0   0]]
+
+ [[  0   0   0]
+  [241 185  15]
+  [241 185  15]
+  [241 185  15]
+  [241 185  15]
+  [241 185  15]
+  [241 185  15]
+  [  0   0   0]]
+
+ [[  0   0   0]
+  [241 185  15]
+  [  0   0   0]
+  [  0   0   0]
+  [241 185  15]
+  [241 185  15]
+  [241 185  15]
+  [  0   0   0]]
+
+ [[  0   0   0]
+  [241 185  15]
+  [  0   0   0]
+  [  0   0   0]
+  [241 185  15]
+  [241 185  15]
+  [241 185  15]
+  [  0   0   0]]
+
+ [[  0   0   0]
+  [241 185  15]
+  [241 185  15]
+  [241 185  15]
+  [241 185  15]
+  [241 185  15]
+  [241 185  15]
+  [  0   0   0]]
+
+ [[  0   0   0]
+  [  0   0   0]
+  [241 185  15]
+  [241 185  15]
+  [241 185  15]
+  [241 185  15]
+  [  0   0   0]
+  [  0   0   0]]
+
+ [[  0   0   0]
+  [  0   0   0]
+  [  0   0   0]
+  [  0   0   0]
+  [  0   0   0]
+  [  0   0   0]
+  [  0   0   0]
+  [  0   0   0]]]
+2021-12-15 01:00:46,477 - root - INFO - visual : 50 - (8, 8, 3)
+2021-12-15 01:00:46,477 - PIL.PngImagePlugin - DEBUG - PngImagePlugin : 186 - STREAM b'IHDR' 16 13
+2021-12-15 01:00:46,477 - PIL.PngImagePlugin - DEBUG - PngImagePlugin : 186 - STREAM b'pHYs' 41 9
+2021-12-15 01:00:46,477 - PIL.PngImagePlugin - DEBUG - PngImagePlugin : 186 - STREAM b'tIME' 62 7
+2021-12-15 01:00:46,477 - PIL.PngImagePlugin - DEBUG - PngImagePlugin : 698 - b'tIME' 62 7 (unknown)
+2021-12-15 01:00:46,478 - PIL.PngImagePlugin - DEBUG - PngImagePlugin : 186 - STREAM b'iTXt' 81 29
+2021-12-15 01:00:46,478 - PIL.PngImagePlugin - DEBUG - PngImagePlugin : 186 - STREAM b'IDAT' 122 65
+2021-12-15 01:00:46,478 - root - INFO - visual : 49 - [[[255 255 255]
+  [249   6  23]
+  [249   6  23]
+  [255 255 255]
+  [249   6  23]
+  [249   6  23]
+  [255 255 255]
+  [255 255 255]]
+
+ [[249   6  23]
+  [249   6  23]
+  [249   6  23]
+  [249   6  23]
+  [249   6  23]
+  [249   6  23]
+  [249   6  23]
+  [255 255 255]]
+
+ [[249   6  23]
+  [249   6  23]
+  [249   6  23]
+  [249   6  23]
+  [249   6  23]
+  [249   6  23]
+  [249   6  23]
+  [255 255 255]]
+
+ [[249   6  23]
+  [249   6  23]
+  [249   6  23]
+  [249   6  23]
+  [249   6  23]
+  [249   6  23]
+  [249   6  23]
+  [255 255 255]]
+
+ [[255 255 255]
+  [249   6  23]
+  [249   6  23]
+  [249   6  23]
+  [249   6  23]
+  [249   6  23]
+  [255 255 255]
+  [255 255 255]]
+
+ [[255 255 255]
+  [255 255 255]
+  [249   6  23]
+  [249   6  23]
+  [249   6  23]
+  [255 255 255]
+  [255 255 255]
+  [255 255 255]]
+
+ [[255 255 255]
+  [255 255 255]
+  [255 255 255]
+  [249   6  23]
+  [255 255 255]
+  [255 255 255]
+  [255 255 255]
+  [255 255 255]]
+
+ [[255 255 255]
+  [255 255 255]
+  [255 255 255]
+  [255 255 255]
+  [255 255 255]
+  [255 255 255]
+  [255 255 255]
+  [255 255 255]]]
+2021-12-15 01:00:46,479 - root - INFO - visual : 50 - (8, 8, 3)
+2021-12-15 01:00:46,480 - PIL.PngImagePlugin - DEBUG - PngImagePlugin : 186 - STREAM b'IHDR' 16 13
+2021-12-15 01:00:46,480 - PIL.PngImagePlugin - DEBUG - PngImagePlugin : 186 - STREAM b'pHYs' 41 9
+2021-12-15 01:00:46,480 - PIL.PngImagePlugin - DEBUG - PngImagePlugin : 186 - STREAM b'tIME' 62 7
+2021-12-15 01:00:46,480 - PIL.PngImagePlugin - DEBUG - PngImagePlugin : 698 - b'tIME' 62 7 (unknown)
+2021-12-15 01:00:46,480 - PIL.PngImagePlugin - DEBUG - PngImagePlugin : 186 - STREAM b'iTXt' 81 29
+2021-12-15 01:00:46,480 - PIL.PngImagePlugin - DEBUG - PngImagePlugin : 186 - STREAM b'IDAT' 122 49
+2021-12-15 01:00:46,480 - root - INFO - visual : 49 - [[[  0   0   0]
+  [  0   0   0]
+  [  0   0   0]
+  [  0   0   0]
+  [  0   0   0]
+  [  0   0   0]
+  [  0   0   0]
+  [  0   0   0]]
+
+ [[  0   0   0]
+  [  0   0   0]
+  [241 185  15]
+  [241 185  15]
+  [241 185  15]
+  [241 185  15]
+  [  0   0   0]
+  [  0   0   0]]
+
+ [[  0   0   0]
+  [241 185  15]
+  [241 185  15]
+  [241 185  15]
+  [241 185  15]
+  [241 185  15]
+  [241 185  15]
+  [  0   0   0]]
+
+ [[  0   0   0]
+  [241 185  15]
+  [241 185  15]
+  [241 185  15]
+  [  0   0   0]
+  [  0   0   0]
+  [241 185  15]
+  [  0   0   0]]
+
+ [[  0   0   0]
+  [241 185  15]
+  [241 185  15]
+  [241 185  15]
+  [  0   0   0]
+  [  0   0   0]
+  [241 185  15]
+  [  0   0   0]]
+
+ [[  0   0   0]
+  [241 185  15]
+  [241 185  15]
+  [241 185  15]
+  [241 185  15]
+  [241 185  15]
+  [241 185  15]
+  [  0   0   0]]
+
+ [[  0   0   0]
+  [  0   0   0]
+  [241 185  15]
+  [241 185  15]
+  [241 185  15]
+  [241 185  15]
+  [  0   0   0]
+  [  0   0   0]]
+
+ [[  0   0   0]
+  [  0   0   0]
+  [  0   0   0]
+  [  0   0   0]
+  [  0   0   0]
+  [  0   0   0]
+  [  0   0   0]
+  [  0   0   0]]]
+2021-12-15 01:00:46,482 - root - INFO - visual : 50 - (8, 8, 3)
+2021-12-15 01:00:46,482 - PIL.PngImagePlugin - DEBUG - PngImagePlugin : 186 - STREAM b'IHDR' 16 13
+2021-12-15 01:00:46,482 - PIL.PngImagePlugin - DEBUG - PngImagePlugin : 186 - STREAM b'pHYs' 41 9
+2021-12-15 01:00:46,482 - PIL.PngImagePlugin - DEBUG - PngImagePlugin : 186 - STREAM b'tIME' 62 7
+2021-12-15 01:00:46,482 - PIL.PngImagePlugin - DEBUG - PngImagePlugin : 698 - b'tIME' 62 7 (unknown)
+2021-12-15 01:00:46,482 - PIL.PngImagePlugin - DEBUG - PngImagePlugin : 186 - STREAM b'iTXt' 81 29
+2021-12-15 01:00:46,482 - PIL.PngImagePlugin - DEBUG - PngImagePlugin : 186 - STREAM b'IDAT' 122 65
+2021-12-15 01:00:46,482 - root - INFO - visual : 49 - [[[0 0 0]
+  [0 0 0]
+  [0 0 0]
+  ...
+  [0 0 0]
+  [0 0 0]
+  [0 0 0]]
+
+ [[0 0 0]
+  [0 0 0]
+  [0 0 0]
+  ...
+  [0 0 0]
+  [0 0 0]
+  [0 0 0]]
+
+ [[0 0 0]
+  [0 0 0]
+  [0 0 0]
+  ...
+  [0 0 0]
+  [0 0 0]
+  [0 0 0]]
+
+ ...
+
+ [[0 0 0]
+  [0 0 0]
+  [0 0 0]
+  ...
+  [0 0 0]
+  [0 0 0]
+  [0 0 0]]
+
+ [[0 0 0]
+  [0 0 0]
+  [0 0 0]
+  ...
+  [0 0 0]
+  [0 0 0]
+  [0 0 0]]
+
+ [[0 0 0]
+  [0 0 0]
+  [0 0 0]
+  ...
+  [0 0 0]
+  [0 0 0]
+  [0 0 0]]]
+2021-12-15 01:00:46,483 - root - INFO - visual : 50 - (16, 24, 3)
+2021-12-15 01:00:46,484 - PIL.PngImagePlugin - DEBUG - PngImagePlugin : 186 - STREAM b'IHDR' 16 13
+2021-12-15 01:00:46,484 - PIL.PngImagePlugin - DEBUG - PngImagePlugin : 186 - STREAM b'pHYs' 41 9
+2021-12-15 01:00:46,484 - PIL.PngImagePlugin - DEBUG - PngImagePlugin : 186 - STREAM b'tIME' 62 7
+2021-12-15 01:00:46,484 - PIL.PngImagePlugin - DEBUG - PngImagePlugin : 698 - b'tIME' 62 7 (unknown)
+2021-12-15 01:00:46,484 - PIL.PngImagePlugin - DEBUG - PngImagePlugin : 186 - STREAM b'iTXt' 81 29
+2021-12-15 01:00:46,485 - PIL.PngImagePlugin - DEBUG - PngImagePlugin : 186 - STREAM b'IDAT' 122 47
+2021-12-15 01:00:46,485 - root - INFO - visual : 49 - [[[  0   0   0]
+  [  0   0   0]
+  [  0   0   0]
+  [  0   0   0]
+  [  0   0   0]
+  [  0   0   0]
+  [  0   0   0]
+  [  0   0   0]]
+
+ [[  0   0   0]
+  [  0   0   0]
+  [241 185  15]
+  [241 185  15]
+  [241 185  15]
+  [241 185  15]
+  [  0   0   0]
+  [  0   0   0]]
+
+ [[  0   0   0]
+  [241 185  15]
+  [241 185  15]
+  [241 185  15]
+  [241 185  15]
+  [241 185  15]
+  [241 185  15]
+  [  0   0   0]]
+
+ [[  0   0   0]
+  [241 185  15]
+  [241 185  15]
+  [  0   0   0]
+  [  0   0   0]
+  [241 185  15]
+  [241 185  15]
+  [  0   0   0]]
+
+ [[  0   0   0]
+  [241 185  15]
+  [241 185  15]
+  [  0   0   0]
+  [  0   0   0]
+  [241 185  15]
+  [241 185  15]
+  [  0   0   0]]
+
+ [[  0   0   0]
+  [241 185  15]
+  [241 185  15]
+  [241 185  15]
+  [241 185  15]
+  [241 185  15]
+  [241 185  15]
+  [  0   0   0]]
+
+ [[  0   0   0]
+  [  0   0   0]
+  [241 185  15]
+  [241 185  15]
+  [241 185  15]
+  [241 185  15]
+  [  0   0   0]
+  [  0   0   0]]
+
+ [[  0   0   0]
+  [  0   0   0]
+  [  0   0   0]
+  [  0   0   0]
+  [  0   0   0]
+  [  0   0   0]
+  [  0   0   0]
+  [  0   0   0]]]
+2021-12-15 01:00:46,488 - root - INFO - visual : 50 - (8, 8, 3)
+2021-12-15 01:00:46,489 - root - INFO - visual : 44 - visuals/oeil-fixe
+2021-12-15 01:02:09,373 - root - INFO - main : 23 - Starting didier
+2021-12-15 01:02:09,373 - root - INFO - visual : 32 - load visuals
+2021-12-15 01:02:09,373 - root - INFO - visual : 34 - visuals/ content : 
+2021-12-15 01:02:09,373 - root - INFO - visual : 35 - ['visuals/bouche-ouvert1.png', 'visuals/oeil-gauche.png', 'visuals/heart.png', 'visuals/oeil-droit.png', 'visuals/bouche-ouvert2.png', 'visuals/oeil-fixe.png']
+2021-12-15 01:02:09,384 - PIL.PngImagePlugin - DEBUG - PngImagePlugin : 186 - STREAM b'IHDR' 16 13
+2021-12-15 01:02:09,384 - PIL.PngImagePlugin - DEBUG - PngImagePlugin : 186 - STREAM b'pHYs' 41 9
+2021-12-15 01:02:09,384 - PIL.PngImagePlugin - DEBUG - PngImagePlugin : 186 - STREAM b'tIME' 62 7
+2021-12-15 01:02:09,384 - PIL.PngImagePlugin - DEBUG - PngImagePlugin : 698 - b'tIME' 62 7 (unknown)
+2021-12-15 01:02:09,384 - PIL.PngImagePlugin - DEBUG - PngImagePlugin : 186 - STREAM b'iTXt' 81 29
+2021-12-15 01:02:09,384 - PIL.PngImagePlugin - DEBUG - PngImagePlugin : 186 - STREAM b'IDAT' 122 66
+2021-12-15 01:02:09,385 - root - INFO - visual : 49 - [[[0 0 0]
+  [0 0 0]
+  [0 0 0]
+  ...
+  [0 0 0]
+  [0 0 0]
+  [0 0 0]]
+
+ [[0 0 0]
+  [0 0 0]
+  [0 0 0]
+  ...
+  [0 0 0]
+  [0 0 0]
+  [0 0 0]]
+
+ [[0 0 0]
+  [0 0 0]
+  [0 0 0]
+  ...
+  [0 0 0]
+  [0 0 0]
+  [0 0 0]]
+
+ ...
+
+ [[0 0 0]
+  [0 0 0]
+  [0 0 0]
+  ...
+  [0 0 0]
+  [0 0 0]
+  [0 0 0]]
+
+ [[0 0 0]
+  [0 0 0]
+  [0 0 0]
+  ...
+  [0 0 0]
+  [0 0 0]
+  [0 0 0]]
+
+ [[0 0 0]
+  [0 0 0]
+  [0 0 0]
+  ...
+  [0 0 0]
+  [0 0 0]
+  [0 0 0]]]
+2021-12-15 01:02:09,386 - root - INFO - visual : 50 - (16, 24, 3)
+2021-12-15 01:02:09,386 - PIL.PngImagePlugin - DEBUG - PngImagePlugin : 186 - STREAM b'IHDR' 16 13
+2021-12-15 01:02:09,386 - PIL.PngImagePlugin - DEBUG - PngImagePlugin : 186 - STREAM b'pHYs' 41 9
+2021-12-15 01:02:09,386 - PIL.PngImagePlugin - DEBUG - PngImagePlugin : 186 - STREAM b'tIME' 62 7
+2021-12-15 01:02:09,386 - PIL.PngImagePlugin - DEBUG - PngImagePlugin : 698 - b'tIME' 62 7 (unknown)
+2021-12-15 01:02:09,386 - PIL.PngImagePlugin - DEBUG - PngImagePlugin : 186 - STREAM b'iTXt' 81 29
+2021-12-15 01:02:09,386 - PIL.PngImagePlugin - DEBUG - PngImagePlugin : 186 - STREAM b'IDAT' 122 45
+2021-12-15 01:02:09,387 - root - INFO - visual : 49 - [[[  0   0   0]
+  [  0   0   0]
+  [  0   0   0]
+  [  0   0   0]
+  [  0   0   0]
+  [  0   0   0]
+  [  0   0   0]
+  [  0   0   0]]
+
+ [[  0   0   0]
+  [  0   0   0]
+  [241 185  15]
+  [241 185  15]
+  [241 185  15]
+  [241 185  15]
+  [  0   0   0]
+  [  0   0   0]]
+
+ [[  0   0   0]
+  [241 185  15]
+  [241 185  15]
+  [241 185  15]
+  [241 185  15]
+  [241 185  15]
+  [241 185  15]
+  [  0   0   0]]
+
+ [[  0   0   0]
+  [241 185  15]
+  [  0   0   0]
+  [  0   0   0]
+  [241 185  15]
+  [241 185  15]
+  [241 185  15]
+  [  0   0   0]]
+
+ [[  0   0   0]
+  [241 185  15]
+  [  0   0   0]
+  [  0   0   0]
+  [241 185  15]
+  [241 185  15]
+  [241 185  15]
+  [  0   0   0]]
+
+ [[  0   0   0]
+  [241 185  15]
+  [241 185  15]
+  [241 185  15]
+  [241 185  15]
+  [241 185  15]
+  [241 185  15]
+  [  0   0   0]]
+
+ [[  0   0   0]
+  [  0   0   0]
+  [241 185  15]
+  [241 185  15]
+  [241 185  15]
+  [241 185  15]
+  [  0   0   0]
+  [  0   0   0]]
+
+ [[  0   0   0]
+  [  0   0   0]
+  [  0   0   0]
+  [  0   0   0]
+  [  0   0   0]
+  [  0   0   0]
+  [  0   0   0]
+  [  0   0   0]]]
+2021-12-15 01:02:09,388 - root - INFO - visual : 50 - (8, 8, 3)
+2021-12-15 01:02:09,388 - PIL.PngImagePlugin - DEBUG - PngImagePlugin : 186 - STREAM b'IHDR' 16 13
+2021-12-15 01:02:09,389 - PIL.PngImagePlugin - DEBUG - PngImagePlugin : 186 - STREAM b'pHYs' 41 9
+2021-12-15 01:02:09,389 - PIL.PngImagePlugin - DEBUG - PngImagePlugin : 186 - STREAM b'tIME' 62 7
+2021-12-15 01:02:09,389 - PIL.PngImagePlugin - DEBUG - PngImagePlugin : 698 - b'tIME' 62 7 (unknown)
+2021-12-15 01:02:09,389 - PIL.PngImagePlugin - DEBUG - PngImagePlugin : 186 - STREAM b'iTXt' 81 29
+2021-12-15 01:02:09,389 - PIL.PngImagePlugin - DEBUG - PngImagePlugin : 186 - STREAM b'IDAT' 122 65
+2021-12-15 01:02:09,389 - root - INFO - visual : 49 - [[[255 255 255]
+  [249   6  23]
+  [249   6  23]
+  [255 255 255]
+  [249   6  23]
+  [249   6  23]
+  [255 255 255]
+  [255 255 255]]
+
+ [[249   6  23]
+  [249   6  23]
+  [249   6  23]
+  [249   6  23]
+  [249   6  23]
+  [249   6  23]
+  [249   6  23]
+  [255 255 255]]
+
+ [[249   6  23]
+  [249   6  23]
+  [249   6  23]
+  [249   6  23]
+  [249   6  23]
+  [249   6  23]
+  [249   6  23]
+  [255 255 255]]
+
+ [[249   6  23]
+  [249   6  23]
+  [249   6  23]
+  [249   6  23]
+  [249   6  23]
+  [249   6  23]
+  [249   6  23]
+  [255 255 255]]
+
+ [[255 255 255]
+  [249   6  23]
+  [249   6  23]
+  [249   6  23]
+  [249   6  23]
+  [249   6  23]
+  [255 255 255]
+  [255 255 255]]
+
+ [[255 255 255]
+  [255 255 255]
+  [249   6  23]
+  [249   6  23]
+  [249   6  23]
+  [255 255 255]
+  [255 255 255]
+  [255 255 255]]
+
+ [[255 255 255]
+  [255 255 255]
+  [255 255 255]
+  [249   6  23]
+  [255 255 255]
+  [255 255 255]
+  [255 255 255]
+  [255 255 255]]
+
+ [[255 255 255]
+  [255 255 255]
+  [255 255 255]
+  [255 255 255]
+  [255 255 255]
+  [255 255 255]
+  [255 255 255]
+  [255 255 255]]]
+2021-12-15 01:02:09,391 - root - INFO - visual : 50 - (8, 8, 3)
+2021-12-15 01:02:09,391 - PIL.PngImagePlugin - DEBUG - PngImagePlugin : 186 - STREAM b'IHDR' 16 13
+2021-12-15 01:02:09,391 - PIL.PngImagePlugin - DEBUG - PngImagePlugin : 186 - STREAM b'pHYs' 41 9
+2021-12-15 01:02:09,391 - PIL.PngImagePlugin - DEBUG - PngImagePlugin : 186 - STREAM b'tIME' 62 7
+2021-12-15 01:02:09,391 - PIL.PngImagePlugin - DEBUG - PngImagePlugin : 698 - b'tIME' 62 7 (unknown)
+2021-12-15 01:02:09,391 - PIL.PngImagePlugin - DEBUG - PngImagePlugin : 186 - STREAM b'iTXt' 81 29
+2021-12-15 01:02:09,391 - PIL.PngImagePlugin - DEBUG - PngImagePlugin : 186 - STREAM b'IDAT' 122 49
+2021-12-15 01:02:09,391 - root - INFO - visual : 49 - [[[  0   0   0]
+  [  0   0   0]
+  [  0   0   0]
+  [  0   0   0]
+  [  0   0   0]
+  [  0   0   0]
+  [  0   0   0]
+  [  0   0   0]]
+
+ [[  0   0   0]
+  [  0   0   0]
+  [241 185  15]
+  [241 185  15]
+  [241 185  15]
+  [241 185  15]
+  [  0   0   0]
+  [  0   0   0]]
+
+ [[  0   0   0]
+  [241 185  15]
+  [241 185  15]
+  [241 185  15]
+  [241 185  15]
+  [241 185  15]
+  [241 185  15]
+  [  0   0   0]]
+
+ [[  0   0   0]
+  [241 185  15]
+  [241 185  15]
+  [241 185  15]
+  [  0   0   0]
+  [  0   0   0]
+  [241 185  15]
+  [  0   0   0]]
+
+ [[  0   0   0]
+  [241 185  15]
+  [241 185  15]
+  [241 185  15]
+  [  0   0   0]
+  [  0   0   0]
+  [241 185  15]
+  [  0   0   0]]
+
+ [[  0   0   0]
+  [241 185  15]
+  [241 185  15]
+  [241 185  15]
+  [241 185  15]
+  [241 185  15]
+  [241 185  15]
+  [  0   0   0]]
+
+ [[  0   0   0]
+  [  0   0   0]
+  [241 185  15]
+  [241 185  15]
+  [241 185  15]
+  [241 185  15]
+  [  0   0   0]
+  [  0   0   0]]
+
+ [[  0   0   0]
+  [  0   0   0]
+  [  0   0   0]
+  [  0   0   0]
+  [  0   0   0]
+  [  0   0   0]
+  [  0   0   0]
+  [  0   0   0]]]
+2021-12-15 01:02:09,393 - root - INFO - visual : 50 - (8, 8, 3)
+2021-12-15 01:02:09,393 - PIL.PngImagePlugin - DEBUG - PngImagePlugin : 186 - STREAM b'IHDR' 16 13
+2021-12-15 01:02:09,393 - PIL.PngImagePlugin - DEBUG - PngImagePlugin : 186 - STREAM b'pHYs' 41 9
+2021-12-15 01:02:09,393 - PIL.PngImagePlugin - DEBUG - PngImagePlugin : 186 - STREAM b'tIME' 62 7
+2021-12-15 01:02:09,393 - PIL.PngImagePlugin - DEBUG - PngImagePlugin : 698 - b'tIME' 62 7 (unknown)
+2021-12-15 01:02:09,393 - PIL.PngImagePlugin - DEBUG - PngImagePlugin : 186 - STREAM b'iTXt' 81 29
+2021-12-15 01:02:09,394 - PIL.PngImagePlugin - DEBUG - PngImagePlugin : 186 - STREAM b'IDAT' 122 65
+2021-12-15 01:02:09,394 - root - INFO - visual : 49 - [[[0 0 0]
+  [0 0 0]
+  [0 0 0]
+  ...
+  [0 0 0]
+  [0 0 0]
+  [0 0 0]]
+
+ [[0 0 0]
+  [0 0 0]
+  [0 0 0]
+  ...
+  [0 0 0]
+  [0 0 0]
+  [0 0 0]]
+
+ [[0 0 0]
+  [0 0 0]
+  [0 0 0]
+  ...
+  [0 0 0]
+  [0 0 0]
+  [0 0 0]]
+
+ ...
+
+ [[0 0 0]
+  [0 0 0]
+  [0 0 0]
+  ...
+  [0 0 0]
+  [0 0 0]
+  [0 0 0]]
+
+ [[0 0 0]
+  [0 0 0]
+  [0 0 0]
+  ...
+  [0 0 0]
+  [0 0 0]
+  [0 0 0]]
+
+ [[0 0 0]
+  [0 0 0]
+  [0 0 0]
+  ...
+  [0 0 0]
+  [0 0 0]
+  [0 0 0]]]
+2021-12-15 01:02:09,395 - root - INFO - visual : 50 - (16, 24, 3)
+2021-12-15 01:02:09,395 - PIL.PngImagePlugin - DEBUG - PngImagePlugin : 186 - STREAM b'IHDR' 16 13
+2021-12-15 01:02:09,395 - PIL.PngImagePlugin - DEBUG - PngImagePlugin : 186 - STREAM b'pHYs' 41 9
+2021-12-15 01:02:09,395 - PIL.PngImagePlugin - DEBUG - PngImagePlugin : 186 - STREAM b'tIME' 62 7
+2021-12-15 01:02:09,395 - PIL.PngImagePlugin - DEBUG - PngImagePlugin : 698 - b'tIME' 62 7 (unknown)
+2021-12-15 01:02:09,395 - PIL.PngImagePlugin - DEBUG - PngImagePlugin : 186 - STREAM b'iTXt' 81 29
+2021-12-15 01:02:09,395 - PIL.PngImagePlugin - DEBUG - PngImagePlugin : 186 - STREAM b'IDAT' 122 47
+2021-12-15 01:02:09,395 - root - INFO - visual : 49 - [[[  0   0   0]
+  [  0   0   0]
+  [  0   0   0]
+  [  0   0   0]
+  [  0   0   0]
+  [  0   0   0]
+  [  0   0   0]
+  [  0   0   0]]
+
+ [[  0   0   0]
+  [  0   0   0]
+  [241 185  15]
+  [241 185  15]
+  [241 185  15]
+  [241 185  15]
+  [  0   0   0]
+  [  0   0   0]]
+
+ [[  0   0   0]
+  [241 185  15]
+  [241 185  15]
+  [241 185  15]
+  [241 185  15]
+  [241 185  15]
+  [241 185  15]
+  [  0   0   0]]
+
+ [[  0   0   0]
+  [241 185  15]
+  [241 185  15]
+  [  0   0   0]
+  [  0   0   0]
+  [241 185  15]
+  [241 185  15]
+  [  0   0   0]]
+
+ [[  0   0   0]
+  [241 185  15]
+  [241 185  15]
+  [  0   0   0]
+  [  0   0   0]
+  [241 185  15]
+  [241 185  15]
+  [  0   0   0]]
+
+ [[  0   0   0]
+  [241 185  15]
+  [241 185  15]
+  [241 185  15]
+  [241 185  15]
+  [241 185  15]
+  [241 185  15]
+  [  0   0   0]]
+
+ [[  0   0   0]
+  [  0   0   0]
+  [241 185  15]
+  [241 185  15]
+  [241 185  15]
+  [241 185  15]
+  [  0   0   0]
+  [  0   0   0]]
+
+ [[  0   0   0]
+  [  0   0   0]
+  [  0   0   0]
+  [  0   0   0]
+  [  0   0   0]
+  [  0   0   0]
+  [  0   0   0]
+  [  0   0   0]]]
+2021-12-15 01:02:09,397 - root - INFO - visual : 50 - (8, 8, 3)
+2021-12-15 01:02:09,397 - root - INFO - visual : 44 - visuals/oeil-fixe
+2021-12-15 01:03:49,552 - root - INFO - main : 23 - Starting didier
+2021-12-15 01:03:49,553 - root - INFO - visual : 32 - load visuals
+2021-12-15 01:03:49,553 - root - INFO - visual : 34 - visuals/ content : 
+2021-12-15 01:03:49,553 - root - INFO - visual : 35 - ['visuals/bouche-ouvert1.png', 'visuals/oeil-gauche.png', 'visuals/heart.png', 'visuals/oeil-droit.png', 'visuals/bouche-ouvert2.png', 'visuals/oeil-fixe.png']
+2021-12-15 01:03:49,563 - PIL.PngImagePlugin - DEBUG - PngImagePlugin : 186 - STREAM b'IHDR' 16 13
+2021-12-15 01:03:49,563 - PIL.PngImagePlugin - DEBUG - PngImagePlugin : 186 - STREAM b'pHYs' 41 9
+2021-12-15 01:03:49,563 - PIL.PngImagePlugin - DEBUG - PngImagePlugin : 186 - STREAM b'tIME' 62 7
+2021-12-15 01:03:49,564 - PIL.PngImagePlugin - DEBUG - PngImagePlugin : 698 - b'tIME' 62 7 (unknown)
+2021-12-15 01:03:49,564 - PIL.PngImagePlugin - DEBUG - PngImagePlugin : 186 - STREAM b'iTXt' 81 29
+2021-12-15 01:03:49,564 - PIL.PngImagePlugin - DEBUG - PngImagePlugin : 186 - STREAM b'IDAT' 122 66
+2021-12-15 01:03:49,564 - root - INFO - visual : 52 - [[[0 0 0]
+  [0 0 0]
+  [0 0 0]
+  ...
+  [0 0 0]
+  [0 0 0]
+  [0 0 0]]
+
+ [[0 0 0]
+  [0 0 0]
+  [0 0 0]
+  ...
+  [0 0 0]
+  [0 0 0]
+  [0 0 0]]
+
+ [[0 0 0]
+  [0 0 0]
+  [0 0 0]
+  ...
+  [0 0 0]
+  [0 0 0]
+  [0 0 0]]
+
+ ...
+
+ [[0 0 0]
+  [0 0 0]
+  [0 0 0]
+  ...
+  [0 0 0]
+  [0 0 0]
+  [0 0 0]]
+
+ [[0 0 0]
+  [0 0 0]
+  [0 0 0]
+  ...
+  [0 0 0]
+  [0 0 0]
+  [0 0 0]]
+
+ [[0 0 0]
+  [0 0 0]
+  [0 0 0]
+  ...
+  [0 0 0]
+  [0 0 0]
+  [0 0 0]]]
+2021-12-15 01:03:49,565 - root - INFO - visual : 53 - (16, 24, 3)
+2021-12-15 01:03:49,565 - PIL.PngImagePlugin - DEBUG - PngImagePlugin : 186 - STREAM b'IHDR' 16 13
+2021-12-15 01:03:49,565 - PIL.PngImagePlugin - DEBUG - PngImagePlugin : 186 - STREAM b'pHYs' 41 9
+2021-12-15 01:03:49,566 - PIL.PngImagePlugin - DEBUG - PngImagePlugin : 186 - STREAM b'tIME' 62 7
+2021-12-15 01:03:49,566 - PIL.PngImagePlugin - DEBUG - PngImagePlugin : 698 - b'tIME' 62 7 (unknown)
+2021-12-15 01:03:49,566 - PIL.PngImagePlugin - DEBUG - PngImagePlugin : 186 - STREAM b'iTXt' 81 29
+2021-12-15 01:03:49,566 - PIL.PngImagePlugin - DEBUG - PngImagePlugin : 186 - STREAM b'IDAT' 122 45
+2021-12-15 01:03:49,566 - root - INFO - visual : 52 - [[[  0   0   0]
+  [  0   0   0]
+  [  0   0   0]
+  [  0   0   0]
+  [  0   0   0]
+  [  0   0   0]
+  [  0   0   0]
+  [  0   0   0]]
+
+ [[  0   0   0]
+  [  0   0   0]
+  [241 185  15]
+  [241 185  15]
+  [241 185  15]
+  [241 185  15]
+  [  0   0   0]
+  [  0   0   0]]
+
+ [[  0   0   0]
+  [241 185  15]
+  [241 185  15]
+  [241 185  15]
+  [241 185  15]
+  [241 185  15]
+  [241 185  15]
+  [  0   0   0]]
+
+ [[  0   0   0]
+  [241 185  15]
+  [  0   0   0]
+  [  0   0   0]
+  [241 185  15]
+  [241 185  15]
+  [241 185  15]
+  [  0   0   0]]
+
+ [[  0   0   0]
+  [241 185  15]
+  [  0   0   0]
+  [  0   0   0]
+  [241 185  15]
+  [241 185  15]
+  [241 185  15]
+  [  0   0   0]]
+
+ [[  0   0   0]
+  [241 185  15]
+  [241 185  15]
+  [241 185  15]
+  [241 185  15]
+  [241 185  15]
+  [241 185  15]
+  [  0   0   0]]
+
+ [[  0   0   0]
+  [  0   0   0]
+  [241 185  15]
+  [241 185  15]
+  [241 185  15]
+  [241 185  15]
+  [  0   0   0]
+  [  0   0   0]]
+
+ [[  0   0   0]
+  [  0   0   0]
+  [  0   0   0]
+  [  0   0   0]
+  [  0   0   0]
+  [  0   0   0]
+  [  0   0   0]
+  [  0   0   0]]]
+2021-12-15 01:03:49,567 - root - INFO - visual : 53 - (8, 8, 3)
+2021-12-15 01:03:49,568 - PIL.PngImagePlugin - DEBUG - PngImagePlugin : 186 - STREAM b'IHDR' 16 13
+2021-12-15 01:03:49,568 - PIL.PngImagePlugin - DEBUG - PngImagePlugin : 186 - STREAM b'pHYs' 41 9
+2021-12-15 01:03:49,568 - PIL.PngImagePlugin - DEBUG - PngImagePlugin : 186 - STREAM b'tIME' 62 7
+2021-12-15 01:03:49,568 - PIL.PngImagePlugin - DEBUG - PngImagePlugin : 698 - b'tIME' 62 7 (unknown)
+2021-12-15 01:03:49,568 - PIL.PngImagePlugin - DEBUG - PngImagePlugin : 186 - STREAM b'iTXt' 81 29
+2021-12-15 01:03:49,568 - PIL.PngImagePlugin - DEBUG - PngImagePlugin : 186 - STREAM b'IDAT' 122 65
+2021-12-15 01:03:49,568 - root - INFO - visual : 52 - [[[255 255 255]
+  [249   6  23]
+  [249   6  23]
+  [255 255 255]
+  [249   6  23]
+  [249   6  23]
+  [255 255 255]
+  [255 255 255]]
+
+ [[249   6  23]
+  [249   6  23]
+  [249   6  23]
+  [249   6  23]
+  [249   6  23]
+  [249   6  23]
+  [249   6  23]
+  [255 255 255]]
+
+ [[249   6  23]
+  [249   6  23]
+  [249   6  23]
+  [249   6  23]
+  [249   6  23]
+  [249   6  23]
+  [249   6  23]
+  [255 255 255]]
+
+ [[249   6  23]
+  [249   6  23]
+  [249   6  23]
+  [249   6  23]
+  [249   6  23]
+  [249   6  23]
+  [249   6  23]
+  [255 255 255]]
+
+ [[255 255 255]
+  [249   6  23]
+  [249   6  23]
+  [249   6  23]
+  [249   6  23]
+  [249   6  23]
+  [255 255 255]
+  [255 255 255]]
+
+ [[255 255 255]
+  [255 255 255]
+  [249   6  23]
+  [249   6  23]
+  [249   6  23]
+  [255 255 255]
+  [255 255 255]
+  [255 255 255]]
+
+ [[255 255 255]
+  [255 255 255]
+  [255 255 255]
+  [249   6  23]
+  [255 255 255]
+  [255 255 255]
+  [255 255 255]
+  [255 255 255]]
+
+ [[255 255 255]
+  [255 255 255]
+  [255 255 255]
+  [255 255 255]
+  [255 255 255]
+  [255 255 255]
+  [255 255 255]
+  [255 255 255]]]
+2021-12-15 01:03:49,570 - root - INFO - visual : 53 - (8, 8, 3)
+2021-12-15 01:03:49,570 - PIL.PngImagePlugin - DEBUG - PngImagePlugin : 186 - STREAM b'IHDR' 16 13
+2021-12-15 01:03:49,570 - PIL.PngImagePlugin - DEBUG - PngImagePlugin : 186 - STREAM b'pHYs' 41 9
+2021-12-15 01:03:49,570 - PIL.PngImagePlugin - DEBUG - PngImagePlugin : 186 - STREAM b'tIME' 62 7
+2021-12-15 01:03:49,570 - PIL.PngImagePlugin - DEBUG - PngImagePlugin : 698 - b'tIME' 62 7 (unknown)
+2021-12-15 01:03:49,570 - PIL.PngImagePlugin - DEBUG - PngImagePlugin : 186 - STREAM b'iTXt' 81 29
+2021-12-15 01:03:49,570 - PIL.PngImagePlugin - DEBUG - PngImagePlugin : 186 - STREAM b'IDAT' 122 49
+2021-12-15 01:03:49,570 - root - INFO - visual : 52 - [[[  0   0   0]
+  [  0   0   0]
+  [  0   0   0]
+  [  0   0   0]
+  [  0   0   0]
+  [  0   0   0]
+  [  0   0   0]
+  [  0   0   0]]
+
+ [[  0   0   0]
+  [  0   0   0]
+  [241 185  15]
+  [241 185  15]
+  [241 185  15]
+  [241 185  15]
+  [  0   0   0]
+  [  0   0   0]]
+
+ [[  0   0   0]
+  [241 185  15]
+  [241 185  15]
+  [241 185  15]
+  [241 185  15]
+  [241 185  15]
+  [241 185  15]
+  [  0   0   0]]
+
+ [[  0   0   0]
+  [241 185  15]
+  [241 185  15]
+  [241 185  15]
+  [  0   0   0]
+  [  0   0   0]
+  [241 185  15]
+  [  0   0   0]]
+
+ [[  0   0   0]
+  [241 185  15]
+  [241 185  15]
+  [241 185  15]
+  [  0   0   0]
+  [  0   0   0]
+  [241 185  15]
+  [  0   0   0]]
+
+ [[  0   0   0]
+  [241 185  15]
+  [241 185  15]
+  [241 185  15]
+  [241 185  15]
+  [241 185  15]
+  [241 185  15]
+  [  0   0   0]]
+
+ [[  0   0   0]
+  [  0   0   0]
+  [241 185  15]
+  [241 185  15]
+  [241 185  15]
+  [241 185  15]
+  [  0   0   0]
+  [  0   0   0]]
+
+ [[  0   0   0]
+  [  0   0   0]
+  [  0   0   0]
+  [  0   0   0]
+  [  0   0   0]
+  [  0   0   0]
+  [  0   0   0]
+  [  0   0   0]]]
+2021-12-15 01:03:49,572 - root - INFO - visual : 53 - (8, 8, 3)
+2021-12-15 01:03:49,572 - PIL.PngImagePlugin - DEBUG - PngImagePlugin : 186 - STREAM b'IHDR' 16 13
+2021-12-15 01:03:49,572 - PIL.PngImagePlugin - DEBUG - PngImagePlugin : 186 - STREAM b'pHYs' 41 9
+2021-12-15 01:03:49,572 - PIL.PngImagePlugin - DEBUG - PngImagePlugin : 186 - STREAM b'tIME' 62 7
+2021-12-15 01:03:49,572 - PIL.PngImagePlugin - DEBUG - PngImagePlugin : 698 - b'tIME' 62 7 (unknown)
+2021-12-15 01:03:49,572 - PIL.PngImagePlugin - DEBUG - PngImagePlugin : 186 - STREAM b'iTXt' 81 29
+2021-12-15 01:03:49,572 - PIL.PngImagePlugin - DEBUG - PngImagePlugin : 186 - STREAM b'IDAT' 122 65
+2021-12-15 01:03:49,573 - root - INFO - visual : 52 - [[[0 0 0]
+  [0 0 0]
+  [0 0 0]
+  ...
+  [0 0 0]
+  [0 0 0]
+  [0 0 0]]
+
+ [[0 0 0]
+  [0 0 0]
+  [0 0 0]
+  ...
+  [0 0 0]
+  [0 0 0]
+  [0 0 0]]
+
+ [[0 0 0]
+  [0 0 0]
+  [0 0 0]
+  ...
+  [0 0 0]
+  [0 0 0]
+  [0 0 0]]
+
+ ...
+
+ [[0 0 0]
+  [0 0 0]
+  [0 0 0]
+  ...
+  [0 0 0]
+  [0 0 0]
+  [0 0 0]]
+
+ [[0 0 0]
+  [0 0 0]
+  [0 0 0]
+  ...
+  [0 0 0]
+  [0 0 0]
+  [0 0 0]]
+
+ [[0 0 0]
+  [0 0 0]
+  [0 0 0]
+  ...
+  [0 0 0]
+  [0 0 0]
+  [0 0 0]]]
+2021-12-15 01:03:49,574 - root - INFO - visual : 53 - (16, 24, 3)
+2021-12-15 01:03:49,574 - PIL.PngImagePlugin - DEBUG - PngImagePlugin : 186 - STREAM b'IHDR' 16 13
+2021-12-15 01:03:49,574 - PIL.PngImagePlugin - DEBUG - PngImagePlugin : 186 - STREAM b'pHYs' 41 9
+2021-12-15 01:03:49,574 - PIL.PngImagePlugin - DEBUG - PngImagePlugin : 186 - STREAM b'tIME' 62 7
+2021-12-15 01:03:49,574 - PIL.PngImagePlugin - DEBUG - PngImagePlugin : 698 - b'tIME' 62 7 (unknown)
+2021-12-15 01:03:49,574 - PIL.PngImagePlugin - DEBUG - PngImagePlugin : 186 - STREAM b'iTXt' 81 29
+2021-12-15 01:03:49,574 - PIL.PngImagePlugin - DEBUG - PngImagePlugin : 186 - STREAM b'IDAT' 122 47
+2021-12-15 01:03:49,575 - root - INFO - visual : 52 - [[[  0   0   0]
+  [  0   0   0]
+  [  0   0   0]
+  [  0   0   0]
+  [  0   0   0]
+  [  0   0   0]
+  [  0   0   0]
+  [  0   0   0]]
+
+ [[  0   0   0]
+  [  0   0   0]
+  [241 185  15]
+  [241 185  15]
+  [241 185  15]
+  [241 185  15]
+  [  0   0   0]
+  [  0   0   0]]
+
+ [[  0   0   0]
+  [241 185  15]
+  [241 185  15]
+  [241 185  15]
+  [241 185  15]
+  [241 185  15]
+  [241 185  15]
+  [  0   0   0]]
+
+ [[  0   0   0]
+  [241 185  15]
+  [241 185  15]
+  [  0   0   0]
+  [  0   0   0]
+  [241 185  15]
+  [241 185  15]
+  [  0   0   0]]
+
+ [[  0   0   0]
+  [241 185  15]
+  [241 185  15]
+  [  0   0   0]
+  [  0   0   0]
+  [241 185  15]
+  [241 185  15]
+  [  0   0   0]]
+
+ [[  0   0   0]
+  [241 185  15]
+  [241 185  15]
+  [241 185  15]
+  [241 185  15]
+  [241 185  15]
+  [241 185  15]
+  [  0   0   0]]
+
+ [[  0   0   0]
+  [  0   0   0]
+  [241 185  15]
+  [241 185  15]
+  [241 185  15]
+  [241 185  15]
+  [  0   0   0]
+  [  0   0   0]]
+
+ [[  0   0   0]
+  [  0   0   0]
+  [  0   0   0]
+  [  0   0   0]
+  [  0   0   0]
+  [  0   0   0]
+  [  0   0   0]
+  [  0   0   0]]]
+2021-12-15 01:03:49,576 - root - INFO - visual : 53 - (8, 8, 3)
+2021-12-15 01:03:49,576 - root - INFO - visual : 46 - visuals/bouche-ouvert1
+2021-12-15 01:03:49,576 - root - INFO - visual : 46 - visuals/oeil-gauche
+2021-12-15 01:03:49,576 - root - INFO - visual : 46 - visuals/heart
+2021-12-15 01:03:49,576 - root - INFO - visual : 46 - visuals/oeil-droit
+2021-12-15 01:03:49,576 - root - INFO - visual : 46 - visuals/bouche-ouvert2
+2021-12-15 01:03:49,576 - root - INFO - visual : 46 - visuals/oeil-fixe
