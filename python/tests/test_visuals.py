@@ -1,6 +1,6 @@
 import unittest
 import logging
-from visual import Image
+from python.visual import Image
 
 
 class MyTestCase(unittest.TestCase):

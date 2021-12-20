@@ -1,9 +1,12 @@
+import logging
 import time
 import unittest
 from python.wheel import Wheel
 
 
 class WheelTest(unittest.TestCase):
+
+    logging.config.fileConfig(fname='logging.conf', disable_existing_loggers=False)
 
     wheel = Wheel()
 
