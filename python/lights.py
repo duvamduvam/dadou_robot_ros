@@ -5,6 +5,7 @@ import random
 import time
 import board
 import neopixel
+from rainbowio import colorwheel
 
 
 class Lights:
@@ -39,7 +40,25 @@ class Lights:
         i = random.randint(0, self.LED_COUNT)
         self.strip[i] = red
 
+    def fill(self, color):
+        self.strip.fill(color)
+
     def clean(self):
         self.strip
+
+    def color_chase(self, color, wait):
+        for i in range(self.LED_COUNT):
+            self.strip[i] = color
+            time.sleep(wait)
+            self.strip.show()
+        time.sleep(0.5)
+
+    def rainbow_cycle(self, wait):
+        for j in range(255):
+            for i in range(self.LED_COUNT):
+                rc_index = (i * 256 // self.LED_COUNT) + j
+                self.strip[i] = colorwheel(rc_index & 255)
+            self.strip.show()
+            time.sleep(wait)
 
 
