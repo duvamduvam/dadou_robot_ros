@@ -32,7 +32,7 @@ class Utils:
     def current_milli_time():
         return round(time.time() * 1000)
 
-    def is_positive(self, value):
+    def is_positive(self, value: int) -> bool:
         return value > (self.last_char - self.first_char)
 
     @staticmethod
