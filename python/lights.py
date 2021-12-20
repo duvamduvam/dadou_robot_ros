@@ -9,6 +9,7 @@ import neopixel
 
 class Lights:
 
+    pixel_nb = 250
     board.num_pixels = 250
 
     pixels = neopixel.NeoPixel(board.D18, board.num_pixels)
@@ -25,7 +26,7 @@ class Lights:
 
     def random(self):
         red = 0x100000
-        i = self.board.num_pixels
+        i = random.randint(0, self.pixel_nb)
         self.pixels[i] = red
 
 
