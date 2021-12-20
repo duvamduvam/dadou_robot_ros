@@ -49,7 +49,7 @@ class Lights:
 
     def random(self):
         #red = 0x100000
-        red = "0x" + str(random.randint(0, 255))
+        red = "0x" + str(random.randint(0, 100000))
         i = random.randint(0, self.LED_COUNT)
         blue = (random.randint(0, 255), 0, 0)
         #red = (0, random.randint(0, 255), 0)
