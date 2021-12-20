@@ -10,7 +10,7 @@ import neopixel
 class Lights:
 
     pixel_nb = 250
-    board.num_pixels = 250
+    board.num_pixels = pixel_nb
 
     pixels = neopixel.NeoPixel(board.D18, board.num_pixels)
     pixels.brightness = 0.5
