@@ -7,7 +7,7 @@ import logging.config
 from python.neck import Neck
 
 
-class ServoTests(unittest.TestCase):
+class NeckTests(unittest.TestCase):
     logging.config.fileConfig(fname='logging.conf', disable_existing_loggers=False)
 
     neck = Neck()
