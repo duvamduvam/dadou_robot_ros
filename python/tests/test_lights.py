@@ -19,11 +19,11 @@ class LightsTest(unittest.TestCase):
         self.lights.clean()
         self.lights.color_chase(self.BLUE)
 
+    @unittest.skip
     def test_rainbow_cycle(self):
         self.lights.clean()
         self.lights.rainbow_cycle(0.1)
 
-    @unittest.skip
     def test_random(self):
         for i in range(100):
             self.lights.random()
