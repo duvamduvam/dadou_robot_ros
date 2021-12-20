@@ -39,4 +39,7 @@ class Lights:
         i = random.randint(0, self.LED_COUNT)
         self.strip[i] = red
 
+    def clean(self):
+        self.strip
+
 
