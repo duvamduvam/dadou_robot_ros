@@ -1,3 +1,4 @@
+import time
 import unittest
 from python.mapping import Mapping
 from python.audio import Audio
@@ -9,7 +10,7 @@ class AudioTests(unittest.TestCase):
 
     def play(self):
         self.execute("A5")
-
+        time.sleep(20)
 
 if __name__ == '__main__':
     unittest.main()
