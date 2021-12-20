@@ -10,6 +10,7 @@ class LightsTest(unittest.TestCase):
     CYAN = (0, 255, 255)
     BLUE = (0, 0, 255)
     PURPLE = (180, 0, 255)
+    BACK = (0, 0, 0)
 
     lights = Lights()
 
@@ -29,6 +30,7 @@ class LightsTest(unittest.TestCase):
         time.sleep(2)
         self.lights.fill(self.PURPLE)
         time.sleep(2)
+        self.lights.fill(self.BLACK)
 
 if __name__ == '__main__':
     unittest.main()
