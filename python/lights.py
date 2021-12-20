@@ -51,9 +51,9 @@ class Lights:
         red = 0x100000
         i = random.randint(0, self.LED_COUNT)
         blue = (random.randint(0, 255), 0, 0)
-        red = (0, random.randint(0, 255), 0)
+        #red = (0, random.randint(0, 255), 0)
         green = (0, 0, random.randint(0, 255))
-        self.strip[i] = (blue, red, green)
+        self.strip[i] = red
 
     def fill(self, color):
         logging.info("fill strip with "+str(color))
