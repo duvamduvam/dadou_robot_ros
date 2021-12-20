@@ -38,7 +38,7 @@ class Head:
 
     def next_step(self, step):
         if self.servo_min <= self.current_pos <= self.servo_max:
-            logging.info ("position "+self.current_pos+" next step "+str(step));
+            logging.info ("position "+str(self.current_pos)+" next step "+str(step));
             self.current_pos += step;
             self.head_pwm.angle(self.current_pos)
         else:
