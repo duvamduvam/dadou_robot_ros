@@ -10,6 +10,7 @@ class Head:
     current_pos = 0
     target = 0
     servo_min = 0
+    step = 10
 
     servo_max = 180
     margin = 5
@@ -34,13 +35,13 @@ class Head:
                           " margin : " + str(self.margin));
             if diff > self.margin and self.target_pos != self.current_pos:
                 if self.target_pos > self.current_pos:
-                    self.next_step(1)
+                    self.next_step(self.step)
                 else:
-                    self.next_step(-1)
+                    self.next_step(-self.step)
 
     def next_step(self, step):
         if self.servo_min <= self.current_pos <= self.servo_max:
-            self.current_pos += step;
+            self.current_pos += step
             logging.info("next_step current position "+str(self.current_pos)+" next step "+str(step));
             self.servo.angle = self.current_pos
         else:
