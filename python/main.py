@@ -30,7 +30,7 @@ image.load_images()
 while True:
     key = com.get_msg()
     if key:
-        audio.execute(key)
+        audio.process(key)
         head.update(key)
         wheel.update_dir(key)
 

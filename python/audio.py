@@ -23,6 +23,6 @@ class Audio:
     def stop_sound(self):
         self.player.stop()
 
-    def execute(self, key):
+    def process(self, key):
         audio_path = self.mapping.get_audio_file("A3")
         self.play_sound(audio_path)
