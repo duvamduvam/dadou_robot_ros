@@ -1,6 +1,7 @@
 import time
 import unittest
 import logging
+import logging.config
 
 from head import Head
 
