@@ -56,7 +56,7 @@ class Lights:
         red = (0, random.uniform(0, 1), 0)
         green = (0, 0, random.uniform(0, 1))
         #color1 = rs.CreateColor(128, 128, 128)
-        self.strip[i] = (30, 0, 20, 10)
+        self.strip[i] = (30, 0, 20)
 
     def fill(self, color):
         logging.info("fill strip with "+str(color))
