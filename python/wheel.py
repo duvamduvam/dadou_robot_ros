@@ -25,8 +25,8 @@ class Wheel:
 
     def update(self, key: str):
 
-        left = self.utils.translate(chr(key[0]))
-        right = self.utils.translate(chr(key[1]))
+        left = self.utils.translate(ord(key[0]))
+        right = self.utils.translate(ord(key[1]))
         self.update_dir(left, self.dir_left)
         self.update_dir(right, self.dir_right)
         logging.debug("update wheel with key : " + key)
