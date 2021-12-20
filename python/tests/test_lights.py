@@ -17,7 +17,7 @@ class LightsTest(unittest.TestCase):
     def test_random(self):
         for i in range(100):
             self.lights.random()
-            time.sleep(1)
+            time.sleep(0.05)
             self.lights.clean()
 
     @unittest.skip
