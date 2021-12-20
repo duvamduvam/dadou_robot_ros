@@ -4,6 +4,7 @@ import logging
 from adafruit_motor import servo
 from python.utils import Utils
 
+
 class Neck:
     target_pos = 0
     current_pos = 0
