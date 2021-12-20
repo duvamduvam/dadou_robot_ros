@@ -5,14 +5,14 @@ import random
 import time
 import board
 import neopixel
-import logging
+import logging.config
 from rainbowio import colorwheel
 
 
 class Lights:
 
     logging.config.fileConfig(fname='logging.conf', disable_existing_loggers=False)
-    
+
     # LED strip configuration:
     LED_COUNT = 250  # Number of LED pixels.
     LED_PIN = 18  # GPIO pin connected to the pixels (18 uses PWM!).
