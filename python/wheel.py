@@ -17,8 +17,8 @@ class Wheel:
     last_time = Utils.current_milli_time()
 
     # TODO update board pin
-    left_pwm = pwmio.PWMOut(board.LED, frequency=5000, duty_cycle=0)
-    right_pwm = pwmio.PWMOut(board.LED, frequency=5000, duty_cycle=0)
+    left_pwm = pwmio.PWMOut(board.D23, frequency=5000, duty_cycle=0)
+    right_pwm = pwmio.PWMOut(board.D24, frequency=5000, duty_cycle=0)
     dir_lef = DigitalInOut(board.LED)
     dir_right = DigitalInOut(board.LED)
     utils = Utils()

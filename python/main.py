@@ -4,12 +4,12 @@ import logging
 import sys
 import logging.config
 
-from com import Com
-from audio import Audio
-from neck import Neck
-from mapping import Mapping
-from visual import Image
-from wheel import Wheel
+from python.com import Com
+from python.audio import Audio
+from python.neck import Neck
+from python.mapping import Mapping
+from python.visual import Image
+from python.wheel import Wheel
 
 #from lights import Lights
 
