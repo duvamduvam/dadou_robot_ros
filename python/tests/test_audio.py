@@ -1,13 +1,13 @@
 import unittest
-from mapping import Mapping
+from python.mapping import Mapping
 from python.audio import Audio
 
+
 class AudioTests(unittest.TestCase):
-    audio = Audio()
     mapping = Mapping()
+    audio = Audio()
 
     def play(self):
-
         #self.assertEqual(True, False)  # add assertion here
         audio_path = self.mapping.get_audio_file("A5")
         if audio_path:
