@@ -7,7 +7,7 @@ class MyTestCase(unittest.TestCase):
     logging.basicConfig(level=logging.DEBUG)
 
     def test_load(self):
-        image = Image("../visuals/")
+        image = Image("../../visuals/")
         image.load_images()
         self.assertEqual(True, False)  # add assertion here
 
