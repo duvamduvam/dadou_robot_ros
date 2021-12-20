@@ -1,4 +1,4 @@
-import logging
+import logging.config
 import time
 import unittest
 from python.wheel import Wheel
