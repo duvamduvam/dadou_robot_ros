@@ -4,7 +4,7 @@ from python.lights import Lights
 
 class LightsTest(unittest.TestCase):
 
-    lights = Lights
+    lights = Lights()
 
     def test_random(self):
         self.lights.random()
