@@ -26,7 +26,7 @@ class Head:
         self.last_time = Utils.current_milli_time()
 
     def process(self):
-        if Utils.is_time(self.last_time, self.time_step):
+        if Utils.is_time(self.last_time, self.time_step) == True:
             diff = abs(self.target_pos - self.current_pos);
             logging.debug("servo target : " + str(self.target_pos) + " current : " + str(self.current_pos) +
                           " margin : " + str(self.margin));
