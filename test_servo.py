@@ -6,7 +6,7 @@ from head import Head
 
 
 class Servo(unittest.TestCase):
-    logging.basicConfig(level=logging.DEBUG)
+    logging.config.fileConfig(fname='logging.conf', disable_existing_loggers=False)
 
     head = Head()
 
