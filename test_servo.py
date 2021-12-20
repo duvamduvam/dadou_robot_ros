@@ -13,7 +13,7 @@ class Servo(unittest.TestCase):
     def test_move_key(self):
         head = Head()
         logging.debug("start test servo")
-        for i in range(10):
+        for i in range(3):
             key = '!'
             logging.debug("test key 60 for servo")
             head.update(40)
