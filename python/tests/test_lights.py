@@ -14,10 +14,10 @@ class LightsTest(unittest.TestCase):
 
     lights = Lights()
 
-    def color_chase(self):
+    def test_color_chase(self):
         self.lights.color_chase(self.BLUE)
 
-    def rainbow_cycle(self):
+    def test_rainbow_cycle(self):
         self.lights.rainbow_cycle(0.1)
 
     @unittest.skip
