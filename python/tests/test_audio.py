@@ -11,7 +11,7 @@ class AudioTests(unittest.TestCase):
     mapping = Mapping()
     audio = Audio(mapping)
 
-    def play(self):
+    def test_play(self):
         self.execute("A5")
         time.sleep(20)
 
