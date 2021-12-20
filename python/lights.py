@@ -7,6 +7,7 @@ import board
 import neopixel
 import logging.config
 from rainbowio import colorwheel
+import adafruit_fancyled.adafruit_fancyled as fancy
 
 
 class Lights:
@@ -54,7 +55,8 @@ class Lights:
         blue = (random.randint(0, 255), 0, 0)
         #red = (0, random.randint(0, 255), 0)
         green = (0, 0, random.randint(0, 255))
-        self.strip[i] = (0, 255, 0)
+        #color1 = rs.CreateColor(128, 128, 128)
+        self.strip[i] = fancy.CRGB(1.0, 0.3, 0.0)
 
     def fill(self, color):
         logging.info("fill strip with "+str(color))
