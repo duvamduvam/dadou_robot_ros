@@ -4,7 +4,7 @@ import board
 import pwmio
 from digitalio import DigitalInOut
 
-from utils import Utils
+from python.utils import Utils
 
 
 class Wheel:
