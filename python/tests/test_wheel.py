@@ -22,5 +22,3 @@ class WheelTest(unittest.TestCase):
         time.sleep(1)
         self.wheel.process()
 
-if __name__ == '__main__':
-    unittest.main()
