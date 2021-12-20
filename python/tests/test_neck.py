@@ -17,14 +17,14 @@ class NeckTests(unittest.TestCase):
         for i in range(3):
             key = '!'
             logging.debug("test key 60 for servo")
-            self.head.update(40)
-            self.head.process()
+            self.neck.update(40)
+            self.neck.process()
             time.sleep(1)
-            self.head.process()
+            self.neck.process()
             time.sleep(1)
-            self.head.process()
+            self.neck.process()
             time.sleep(1)
-            self.head.process()
+            self.neck.process()
             time.sleep(5)
             key = '~'
             logging.debug("test key 130 for servo")

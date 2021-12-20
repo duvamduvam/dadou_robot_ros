@@ -1,3 +1,4 @@
+# pip3 install adafruit-circuitpython-servokit
 import pwmio
 import board
 import logging
