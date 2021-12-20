@@ -3,9 +3,8 @@ import time
 import unittest
 import logging
 import logging.config
-import python
 
-from python.head import Head
+from head import Head
 
 
 class Servo(unittest.TestCase):
