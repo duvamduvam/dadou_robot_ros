@@ -18,7 +18,7 @@ class Lights:
     LED_INVERT = False  # True to invert the signal (when using NPN transistor level shift)
     LED_CHANNEL = 0  # set to '1' for GPIOs 13, 19, 41, 45 or 53
 
-    strip = neopixel.NeoPixel(LED_PIN, LED_COUNT)
+    strip = neopixel.NeoPixel(board.D18, LED_COUNT)
     strip.brightness = 0.5
 
     #strip = neopixel.NeoPixel(LED_COUNT, LED_PIN, LED_FREQ_HZ, LED_DMA, LED_INVERT, LED_BRIGHTNESS, LED_CHANNEL)
