@@ -1,9 +1,8 @@
-from python.utils import Utils
 import pwmio
 import board
 import logging
 from adafruit_motor import servo
-
+from python.utils import Utils
 
 class Neck:
     target_pos = 0
