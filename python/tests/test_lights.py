@@ -18,7 +18,9 @@ class LightsTest(unittest.TestCase):
         for i in range(100):
             self.lights.random()
             time.sleep(1)
+            self.lights.clean()
 
+    @unittest.skip
     def test_full_color(self):
         self.lights.fill(self.BLUE)
         time.sleep(2)
