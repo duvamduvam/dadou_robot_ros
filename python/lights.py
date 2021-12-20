@@ -13,6 +13,14 @@ class Lights:
 
     logging.config.fileConfig(fname='logging.conf', disable_existing_loggers=False)
 
+    RED = (255, 0, 0)
+    YELLOW = (255, 150, 0)
+    GREEN = (0, 255, 0)
+    CYAN = (0, 255, 255)
+    BLUE = (0, 0, 255)
+    PURPLE = (180, 0, 255)
+    BLACK = (0, 0, 0)
+
     # LED strip configuration:
     LED_COUNT = 250  # Number of LED pixels.
     LED_PIN = 18  # GPIO pin connected to the pixels (18 uses PWM!).
@@ -49,7 +57,7 @@ class Lights:
         self.strip.fill(color)
 
     def clean(self):
-        self.strip
+        self.strip.fill(self.BLACK)
 
     def color_chase(self, color, wait):
         for i in range(self.LED_COUNT):
