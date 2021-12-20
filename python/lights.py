@@ -52,9 +52,9 @@ class Lights:
         #red = 0x100000
         #red = "0x" + str(random.randint(0, 100000))
         i = random.randint(0, self.LED_COUNT)
-        blue = random.unidint(0, 255)
-        red = random.unidint(0, 255)
-        green = random.unidint(0, 255)
+        blue = random.randint(0, 255)
+        red = random.randint(0, 255)
+        green = random.randint(0, 255)
         #color1 = rs.CreateColor(128, 128, 128)
         self.strip[i] = (blue, red, green)
 
