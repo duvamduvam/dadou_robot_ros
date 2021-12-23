@@ -2,7 +2,7 @@
 # Press Double Shift to search everywhere for classes, files, tool windows, actions, and settings.
 import logging.config
 
-from python.com import Com
+from com import Com
 from python.audio import Audio
 from python.actions.neck import Neck
 from python.mapping import Mapping
