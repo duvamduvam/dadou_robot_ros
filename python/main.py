@@ -22,7 +22,7 @@ com = Com()
 mapping = Mapping()
 audio = Audio(mapping)
 neck = Neck()
-image = Image()
+#image = Image()
 wheel = Wheel()
 lights = Lights()
 
