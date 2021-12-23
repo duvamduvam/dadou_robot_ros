@@ -59,61 +59,42 @@ class Lights:
     #TODO check examples : https://www.digikey.fr/en/maker/projects/circuitpython-led-animations/d15c769c6f6d411297657c35f0166958
 
     current_animation = {}
+    
+    def __init__(self):
+        self.rainbow_sparkle()
 
     def chase(self):
-        chase = Chase(self.strip, speed=0.1, color=WHITE, size=3, spacing=6)
-        while True:
-            chase.animate()
+        self.current_animation = Chase(self.strip, speed=0.1, color=WHITE, size=3, spacing=6)
 
     def blink(self):
-        blink = Blink(self.strip, speed=0.5, color=JADE)
-        while True:
-            blink.animate()
+        self.current_animation = Blink(self.strip, speed=0.5, color=JADE)
 
     def color_cycle(self):
-        colorcycle = ColorCycle(self.strip, 0.5, colors=[MAGENTA, ORANGE, TEAL])
-        while True:
-            colorcycle.animate()
+        self.current_animation = ColorCycle(self.strip, 0.5, colors=[MAGENTA, ORANGE, TEAL])
 
     def comet(self):
-        comet = Comet(self.pixels, speed=0.01, color=PURPLE, tail_length=10, bounce=True)
-        while True:
-            comet.animate()
+        self.current_animation = Comet(self.pixels, speed=0.01, color=PURPLE, tail_length=10, bounce=True)
 
     def pulse(self):
-        pulse = Pulse(self.strip, speed=0.1, color=AMBER, period=3)
-        while True:
-            pulse.animate()
+        self.current_animation = Pulse(self.strip, speed=0.1, color=AMBER, period=3)
 
     def rainbow(self):
-        rainbow = Rainbow(self.strip, speed=0.1, period=2)
-        while True:
-            rainbow.animate()
+        self.current_animation = Rainbow(self.strip, speed=0.1, period=2)
 
     def rainbow_chase(self):
-        rainbow_chase = RainbowChase(self.strip, speed=0.1, size=5, spacing=3)
-        while True:
-            rainbow_chase.animate()
+        self.current_animation = RainbowChase(self.strip, speed=0.1, size=5, spacing=3)
 
     def rainbow_comet(self):
-        rainbow_comet = RainbowComet(self.strip, speed=0.1, tail_length=7, bounce=True)
-        while True:
-            rainbow_comet.animate()
+        self.current_animation = RainbowComet(self.strip, speed=0.1, tail_length=7, bounce=True)
 
     def rainbow_sparkle(self):
-        rainbow_sparkle = RainbowSparkle(self.strip, speed=0.1, num_sparkles=15)
-        while True:
-            rainbow_sparkle.animate()
+        self.current_animation = RainbowSparkle(self.strip, speed=0.1, num_sparkles=15)
 
     def sparkle(self):
-        sparkle = Sparkle(self.strip, speed=0.05, color=AMBER, num_sparkles=10)
-        while True:
-            sparkle.animate()
+        self.current_animation = Sparkle(self.strip, speed=0.05, color=AMBER, num_sparkles=10)
 
     def sparkle_pulse(self):
-        sparkle_pulse = SparklePulse(self.strip, speed=0.05, period=3, color=JADE)
-        while True:
-            sparkle_pulse.animate()
+        self.current_animation = SparklePulse(self.strip, speed=0.05, period=3, color=JADE)
 
     def fade_red(self):
         self.strip.fill((255, 0, 0))
