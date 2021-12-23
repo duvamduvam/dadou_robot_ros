@@ -36,7 +36,7 @@ class Wheel:
         self.right_pwm.duty_cycle = 0
 
     def process(self):
-        logging.debug("process wheel")
+        #logging.debug("process wheel")
         if (self.left_pwm.duty_cycle != self.left and self.right_pwm.duty_cycle != self.right) \
                 and Utils.current_milli_time() - self.last_time > self.time_step:
             self.update_pwm(self.left, self.left_pwm.duty_cycle)

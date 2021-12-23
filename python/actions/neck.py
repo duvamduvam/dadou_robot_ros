@@ -32,8 +32,8 @@ class Neck:
     def animate(self):
         if Utils.is_time(self.last_time, self.time_step):
             diff = abs(self.target_pos - self.current_pos);
-            logging.debug("servo target : " + str(self.target_pos) + " current : " + str(self.current_pos) +
-                          " margin : " + str(self.margin));
+            #logging.debug("servo target : " + str(self.target_pos) + " current : " + str(self.current_pos) +
+            #              " margin : " + str(self.margin));
             if diff > self.margin and self.target_pos != self.current_pos:
                 if self.target_pos > self.current_pos:
                     self.next_step(self.step)

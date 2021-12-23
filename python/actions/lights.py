@@ -59,7 +59,7 @@ class Lights:
     #TODO check examples : https://www.digikey.fr/en/maker/projects/circuitpython-led-animations/d15c769c6f6d411297657c35f0166958
 
     current_animation = {}
-    
+
     def __init__(self):
         self.rainbow_sparkle()
 
