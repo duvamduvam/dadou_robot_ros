@@ -2,6 +2,9 @@
 # Press Double Shift to search everywhere for classes, files, tool windows, actions, and settings.
 import logging.config
 
+import sys
+sys.path.append('.')
+
 from python.com import Com
 from python.audio import Audio
 from python.actions.neck import Neck
