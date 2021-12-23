@@ -1,6 +1,6 @@
 import time
 import unittest
-from python.lights import Lights
+from python.actions.lights import Lights
 
 
 class LightsTest(unittest.TestCase):

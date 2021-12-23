@@ -4,7 +4,7 @@ import unittest
 import logging
 import logging.config
 
-from python.neck import Neck
+from python.actions.neck import Neck
 
 
 class NeckTests(unittest.TestCase):

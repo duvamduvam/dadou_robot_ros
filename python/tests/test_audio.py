@@ -7,6 +7,7 @@ from python.audio import Audio
 
 
 class AudioTests(unittest.TestCase):
+
     logging.config.fileConfig(fname='logging.conf', disable_existing_loggers=False)
     mapping = Mapping()
     audio = Audio(mapping)
@@ -14,6 +15,3 @@ class AudioTests(unittest.TestCase):
     def test_play(self):
         self.audio.process("A5")
         time.sleep(20)
-
-if __name__ == '__main__':
-    unittest.main()

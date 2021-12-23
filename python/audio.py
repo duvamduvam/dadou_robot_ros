@@ -2,11 +2,14 @@
 #https://github.com/Krozark/sound-player/blob/master/example.py
 import logging
 
-from mapping import Mapping
+from python.mapping import Mapping
 from sound_player import Sound, Playlist, SoundPlayer
 
 
 class Audio:
+
+    #TODO load
+    sequences = []
 
     mapping = {}
     player = SoundPlayer()
@@ -14,15 +17,31 @@ class Audio:
     def __init__(self, mapping: Mapping):
         self.mapping = mapping
 
-    def play_sound(self, file):
-        logging.info("play sound : " + file)
+    def play_sounds(self, audios):
         self.player.stop()
-        self.player.enqueue(Sound(file), 1)
+        for audio in audios:
+            logging.info("enqueue: " + audio.path)
+            #todo check second parameter
+            #todo enqueue 1 second sample
+            self.player.enqueue(Sound(audio.path), 1)
+            self.player.enqueue(Sound("1 sec silence"), audio.time)
         self.player.play()
 
     def stop_sound(self):
         self.player.stop()
 
-    def process(self, key):
-        audio_path = self.mapping.get_audio_file("A3")
-        self.play_sound(audio_path)
+    def update(self):
+        logging.info("update")
+
+
+
+class PathTime:
+
+    path = {}
+    time = 0
+
+    def path(self) -> str:
+        return self.path
+
+    def time(self) -> int:
+        return self.time

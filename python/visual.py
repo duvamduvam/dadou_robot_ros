@@ -31,6 +31,7 @@ class Image:
 
     def __init__(self):
         logging.info("create new image")
+        self.load_images()
 
     def __init__(self, visuals_path):
         logging.info("create new image")

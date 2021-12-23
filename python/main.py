@@ -1,20 +1,19 @@
 # Press Maj+F10 to execute it or replace it with your code.
 # Press Double Shift to search everywhere for classes, files, tool windows, actions, and settings.
-import logging
-import sys
 import logging.config
 
 from python.com import Com
 from python.audio import Audio
-from python.neck import Neck
+from python.actions.neck import Neck
 from python.mapping import Mapping
 from python.visual import Image
-from python.wheel import Wheel
+from python.actions.lights import Lights
+from python.actions.wheel import Wheel
 
 #from lights import Lights
-
-logging.info('Starting didier')
 logging.config.fileConfig(fname='logging.conf', disable_existing_loggers=False)
+logging.info('Starting didier')
+
 
 com = Com()
 mapping = Mapping()
@@ -22,18 +21,19 @@ audio = Audio(mapping)
 neck = Neck()
 image = Image()
 wheel = Wheel()
-
-image.load_images()
+lights = Lights()
 
 while True:
     key = com.get_msg()
     if key:
-        audio.process(key)
+        audio.update(key)
         neck.update(key)
-        wheel.update_dir(key)
+        wheel.update(key)
+        lights.update(key)
 
-    neck.process()
+    neck.animate()
     wheel.process()
+    lights.animate()
 
 #lights = Lights()
 

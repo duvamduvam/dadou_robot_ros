@@ -2,22 +2,19 @@ import serial
 import time
 import logging
 
+from python.file_watcher import FileWatcher
+
 
 class Com:
     """A simple example class"""
     i = 12345
 
-    @staticmethod
-    def f():
-        return 'hello world'
+    watcher = FileWatcher()
 
-    # !/usr/bin/env python
-    # -*- coding: utf-8 -*-
-    # lsusb to check device name
-    # dmesg | grep "tty" to find port name
+    def get_msg(self):
 
-    @staticmethod
-    def get_msg():
+        if self.watcher.changed():
+            return self.watcher.get_last_key()
 
         print('Running. Press CTRL-C to exit.')
         with serial.Serial("/dev/ttyACM0", 9600, timeout=1) as arduino:

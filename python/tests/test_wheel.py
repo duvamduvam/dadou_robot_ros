@@ -1,7 +1,7 @@
 import logging.config
 import time
 import unittest
-from python.wheel import Wheel
+from python.actions.wheel import Wheel
 
 
 class WheelTest(unittest.TestCase):

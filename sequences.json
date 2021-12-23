@@ -1,0 +1,125 @@
+{
+  "root": [
+    {
+      "mouth": [
+        {
+          "name": "base",
+          "sequence": [
+            {
+              "name": "mouth-close",
+              "time": "1"
+            }
+          ]
+        },
+        {
+          "name": "speak",
+          "sequence": [
+            {
+              "name": "mouth-close",
+              "time": "0.2"
+            },
+            {
+              "name": "mouth-open1",
+              "time": "0.1"
+            },
+            {
+              "name": "mouth-open2",
+              "time": "0.2"
+            },
+            {
+              "name": "mouth-open3",
+              "time": "0.3"
+            },
+            {
+              "name": "mouth-open2",
+              "time": "0.2"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "eyes": [
+        {
+          "name": "base",
+          "sequence": [
+            {
+              "name": "eye-center",
+              "time": "1"
+            },
+            {
+              "name": "eye-left",
+              "time": "0.2"
+            },
+            {
+              "name": "eye-black",
+              "time": "0.1"
+            },
+            {
+              "name": "eye-right",
+              "time": "0.3"
+            }
+          ]
+        },
+        {
+          "name": "love",
+          "sequence": [
+            {
+              "name": "eye-love1",
+              "time": "0.2"
+            },
+            {
+              "name": "eye-close",
+              "time": "0.1"
+            },
+            {
+              "name": "eye-love2",
+              "time": "0.2"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "audio": [
+        {
+          "name": "example1",
+          "sequence": [
+            {
+              "name": "boujour",
+              "wait": "1"
+            },
+            {
+              "name": "ca-va",
+              "wait": "0.2"
+            },
+            {
+              "name": "je-mappel-didier",
+              "wait": "0.1"
+            }
+          ]
+        },
+        {
+          "name": "example2",
+          "sequence": [
+            {
+              "name": "boujour",
+              "wait": "1"
+            },
+            {
+              "name": "tu-veux-acheter",
+              "time": "0.2"
+            },
+            {
+              "name": "pas-chere",
+              "time": "0.1"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
+
+
+
