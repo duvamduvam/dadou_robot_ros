@@ -81,7 +81,7 @@ class Lights:
 
     def comet(self):
         self.current_animation = Comet(
-            self.pixel_wing_horizontal, speed=0.1, color=PURPLE, tail_length=20, bounce=True
+            self.pixel_wing_vertical, speed=0.1, color=PURPLE, tail_length=20, bounce=True
         )
 
     def pulse(self):
