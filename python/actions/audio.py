@@ -26,7 +26,7 @@ class Audio:
             #todo enqueue 1 second sample
             self.player.enqueue(Sound(audio.get_path()), 1)
             if(int(audio.get_time())>0):
-                self.player.enqueue(Sound(self.silence, int(audio.get_time())))
+                self.player.enqueue(Sound(self.silence), int(audio.get_time()))
             #self.player.enqueue(Sound("1 sec silence"), audio.get_time())
         self.player.play()
 
