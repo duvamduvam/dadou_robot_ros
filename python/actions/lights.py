@@ -80,9 +80,7 @@ class Lights:
         self.current_animation = ColorCycle(self.strip, 0.5, colors=[MAGENTA, ORANGE, TEAL])
 
     def comet(self):
-        self.current_animation = Comet(
-            self.pixel_wing_vertical, speed=0.1, color=PURPLE, tail_length=20, bounce=True
-        )
+        self.current_animation = Rainbow(self.pixel_wing_vertical, speed=0.1, period=2)
 
     def pulse(self):
         self.current_animation = Pulse(self.strip, speed=0.1, color=AMBER, period=3)
