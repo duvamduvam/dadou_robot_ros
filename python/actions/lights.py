@@ -110,7 +110,7 @@ class Lights:
         red = random.randint(0, 255)
         green = random.randint(0, 255)
         blue = random.randint(0, 255)
-        logging.debug("random blue " + str(blue) + " red " + str(red) + " green " + str(green))
+        logging.debug("random strip[" + str(i) + " blue " + str(blue) + " red " + str(red) + " green " + str(green))
         self.strip[i] = (red, green, blue)
         self.strip.show()
 
