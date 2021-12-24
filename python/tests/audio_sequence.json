@@ -1,0 +1,40 @@
+[
+  {
+    "key": "A1",
+    "name": "example1",
+    "sequence": [
+      {
+        "name": "lunettes",
+        "time": "1"
+      },
+      {
+        "name": "manteau",
+        "time": "2"
+      },
+      {
+        "name": "gig",
+        "time": "1"
+      }
+    ]
+  },
+  {
+    "key": "A2",
+    "name": "example2",
+    "sequence": [
+      {
+        "name": "boujour",
+        "time": "1"
+      },
+      {
+        "name": "tu-veux-acheter",
+        "time": "0.2"
+      },
+      {
+        "name": "pas-chere",
+        "time": "0.1"
+      }
+    ]
+  }
+]
+
+

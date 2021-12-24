@@ -6,10 +6,9 @@ import sys
 sys.path.append('.')
 
 from python.com import Com
-from python.audio import Audio
+from python.actions.audio import Audio
 from python.actions.neck import Neck
 from python.mapping import Mapping
-from python.visual import Image
 from python.actions.lights import Lights
 from python.actions.wheel import Wheel
 

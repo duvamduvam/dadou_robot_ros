@@ -1,9 +1,8 @@
-import logging
 import logging.config
 import time
 import unittest
 from python.mapping import Mapping
-from python.audio import Audio
+from python.actions.audio import Audio
 
 
 class AudioTests(unittest.TestCase):
@@ -13,5 +12,5 @@ class AudioTests(unittest.TestCase):
     audio = Audio(mapping)
 
     def test_play(self):
-        self.audio.process("A5")
+        self.audio.process("A1")
         time.sleep(20)

@@ -2,27 +2,45 @@ import logging
 import json
 from jsonpath_ng import jsonpath, parse
 
+from python.path_time import PathTime
+
+
 class Mapping:
 
     def __init__(self):
         f = open('audio.json')
-        audio_data = json.load(f)
+        self.audio_data = json.load(f)
 
-        f = open('sequences.json')
-        audio_sequence = json.load(f)
+        f = open('audio_sequence.json')
+        self.audio_sequence = json.load(f)
 
-    def get_audio_file(self, key: str) -> str:
-
-        #jsonpath_expression = parse('audios.[*].id')
-        with open("db.json", 'r') as json_file:
-            json_data = json.load(json_file)
-
-
-        for audio in self.audio_data['audios']:
-            if audio['key'] == key:
-                logging.debug("getting audio mapping :" + audio['path'])
+    def get_audio_path_by_name(self, name) -> str:
+        for audio in self.audio_data:
+            if audio['name'] == name:
                 return audio['path']
-        logging.error("no audio for key : " + key)
+        raise Exception("no path for audio name : "+name)
 
-    #def get_audio_sequence(self, key: str) :
+    def get_audios(self, key: str) -> str:
 
+        audios = []
+        for seq in self.audio_sequence:
+            logging.debug("iterate key : " + seq['key'])
+            if seq['key'] == key:
+                logging.debug("found key : " + key)
+                for audio_seq in seq['sequence']:
+                    audio_path = self.get_audio_path_by_name(audio_seq['name'])
+                    logging.debug("audios name : " + audio_seq['name'] + " path : " + audio_path)
+                    audios.append(PathTime(audio_path, audio_seq['time']))
+
+        return audios
+        # if seq['key'] == key:
+        #    for audio_seq in seq['sequence']:
+        #        logging.debug("audio path :" + audio_seq['name'])
+
+        # for audio in self.audio_data['audios']:
+        #    if audio['key'] == key:
+        #        logging.debug("getting audio mapping :" + audio['path'])
+        #        return audio['path']
+        # logging.error("no audio for key : " + key)
+
+    # def get_audio_sequence(self, key: str) :
