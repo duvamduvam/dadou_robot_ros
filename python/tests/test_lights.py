@@ -16,7 +16,7 @@ class LightsTest(unittest.TestCase):
 
     def test_color_chase(self):
         self.lights.clean()
-        self.lights.color_cycle()
+        self.lights.comet()
         for i in range(10000):
             time.sleep(0.05)
             self.lights.animate()
