@@ -14,6 +14,8 @@ class AudioTests(unittest.TestCase):
     def test_play(self):
         path_time = []
         path_time.append(PathTime("audios/lunettes.wav", 1))
+        path_time.append(PathTime("audios/manteau.wav", 1))
+        path_time.append(PathTime("audios/neverDie.wav", 1))
         self.audio.play_sounds(path_time)
         time.sleep(20)
 
