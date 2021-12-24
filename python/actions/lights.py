@@ -112,6 +112,7 @@ class Lights:
         blue = random.randint(0, 255)
         logging.debug("random blue " + str(blue) + " red " + str(red) + " green " + str(green))
         self.strip[i] = (red, green, blue)
+        self.strip.show()
 
     def fill(self, color):
         logging.info("fill strip with " + str(color))

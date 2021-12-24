@@ -25,7 +25,7 @@ class LightsTest(unittest.TestCase):
         self.lights.rainbow_cycle(0.1)
 
     def test_random(self):
-        for i in range(100):
+        for i in range(1000):
             self.lights.random()
             time.sleep(0.05)
             self.lights.clean()
