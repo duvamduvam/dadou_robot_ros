@@ -18,7 +18,7 @@ class Mapping:
         for audio in self.audio_data:
             if audio['name'] == name:
                 return audio['path']
-        raise Exception("no path for audio name : "+name)
+        logging.error("no path for audio name : " + name)
 
     def get_audios(self, key: str) -> str:
 
