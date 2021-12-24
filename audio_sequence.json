@@ -5,11 +5,11 @@
     "sequence": [
       {
         "name": "lunettes",
-        "time": "1"
+        "time": "3"
       },
       {
         "name": "manteau",
-        "time": "2"
+        "time": "0"
       },
       {
         "name": "gig",
