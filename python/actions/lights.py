@@ -8,6 +8,7 @@ import board
 import neopixel
 import logging.config
 from rainbowio import colorwheel
+from adafruit_led_animation import helper
 from adafruit_led_animation.animation.chase import Chase
 from adafruit_led_animation.animation.blink import Blink
 from adafruit_led_animation.animation.colorcycle import ColorCycle
@@ -50,6 +51,13 @@ class Lights:
     strip = neopixel.NeoPixel(board.D18, LED_COUNT)
     strip.brightness = 0.1
 
+    pixel_wing_vertical = helper.PixelMap.vertical_lines(
+        strip, 24, 16, helper.horizontal_strip_gridmap(8, alternating=False)
+    )
+    pixel_wing_horizontal = helper.PixelMap.horizontal_lines(
+        strip, 24, 16, helper.horizontal_strip_gridmap(8, alternating=False)
+    )
+
     # strip = neopixel.NeoPixel(LED_COUNT, LED_PIN, LED_FREQ_HZ, LED_DMA, LED_INVERT, LED_BRIGHTNESS, LED_CHANNEL)
     # Intialize the library (must be called once before other functions).
     # strip.begin()
@@ -72,7 +80,9 @@ class Lights:
         self.current_animation = ColorCycle(self.strip, 0.5, colors=[MAGENTA, ORANGE, TEAL])
 
     def comet(self):
-        self.current_animation = Comet(self.strip, speed=0.01, color=PURPLE, tail_length=10, bounce=True)
+        self.current_animation = Comet(
+            self.pixel_wing_horizontal, speed=0.1, color=PURPLE, tail_length=3, bounce=True
+        )
 
     def pulse(self):
         self.current_animation = Pulse(self.strip, speed=0.1, color=AMBER, period=3)
