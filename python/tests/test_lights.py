@@ -1,5 +1,10 @@
 import time
 import unittest
+
+import board
+import neopixel
+from adafruit_led_animation.helper import PixelMap
+
 from python.actions.lights import Lights
 
 
@@ -16,11 +21,12 @@ class LightsTest(unittest.TestCase):
 
 
     def test_color_chase(self):
-        self.lights.clean()
-        self.lights.comet()
-        for i in range(10000):
-            time.sleep(0.05)
-            self.lights.animate()
+        pixels = neopixel.NeoPixel(board.D6, 32, auto_write=False)
+
+        pixel_wing_horizontal = PixelMap(pixels, [(0, 8), (8, 16), (16, 24), (24, 32)])
+
+        pixel_wing_horizontal[0] = (255, 255, 0)
+        pixel_wing_horizontal.show()
 
     @unittest.skip
     def test_rainbow_cycle(self):
