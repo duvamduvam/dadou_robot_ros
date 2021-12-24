@@ -5,15 +5,15 @@
     "sequence": [
       {
         "name": "lunettes",
-        "time": "3"
+        "wait": "3"
       },
       {
         "name": "manteau",
-        "time": "0"
+        "wait": "0"
       },
       {
         "name": "gig",
-        "time": "1"
+        "wait": "1"
       }
     ]
   },

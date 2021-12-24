@@ -22,12 +22,9 @@ class Audio:
         self.player.stop()
         for audio in audios:
             logging.info("enqueue: " + audio.get_path())
-            #todo check second parameter
-            #todo enqueue 1 second sample
             self.player.enqueue(Sound(audio.get_path()), 1)
             for s in range(int(audio.get_time())):
                 self.player.enqueue(Sound(self.silence), 1)
-            #self.player.enqueue(Sound("1 sec silence"), audio.get_time())
         self.player.play()
 
     def stop_sound(self):

@@ -30,17 +30,6 @@ class Mapping:
                 for audio_seq in seq['sequence']:
                     audio_path = self.get_audio_path_by_name(audio_seq['name'])
                     logging.debug("audios name : " + audio_seq['name'] + " path : " + audio_path)
-                    audios.append(PathTime(audio_path, audio_seq['time']))
-
+                    audios.append(PathTime(audio_path, audio_seq['wait']))
         return audios
-        # if seq['key'] == key:
-        #    for audio_seq in seq['sequence']:
-        #        logging.debug("audio path :" + audio_seq['name'])
 
-        # for audio in self.audio_data['audios']:
-        #    if audio['key'] == key:
-        #        logging.debug("getting audio mapping :" + audio['path'])
-        #        return audio['path']
-        # logging.error("no audio for key : " + key)
-
-    # def get_audio_sequence(self, key: str) :
