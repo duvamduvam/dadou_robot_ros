@@ -55,7 +55,7 @@ class Lights:
         strip, 24, 16, helper.horizontal_strip_gridmap(8, alternating=False)
     )
     pixel_wing_horizontal = helper.PixelMap.horizontal_lines(
-        strip, 64, 64, helper.horizontal_strip_gridmap(16, alternating=False)
+        strip, 24, 16, helper.horizontal_strip_gridmap(8, alternating=False)
     )
 
     # strip = neopixel.NeoPixel(LED_COUNT, LED_PIN, LED_FREQ_HZ, LED_DMA, LED_INVERT, LED_BRIGHTNESS, LED_CHANNEL)

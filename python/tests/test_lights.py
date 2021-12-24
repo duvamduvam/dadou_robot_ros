@@ -13,7 +13,7 @@ class LightsTest(unittest.TestCase):
     BLACK = (0, 0, 0)
 
     lights = Lights()
-    
+
     @unittest.skip
     def test_color_chase(self):
         self.lights.clean()
