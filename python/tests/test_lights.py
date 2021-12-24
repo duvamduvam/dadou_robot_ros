@@ -22,8 +22,17 @@ class LightsTest(unittest.TestCase):
 
     def test_color_chase(self):
         pixels = neopixel.NeoPixel(board.D18, 32, auto_write=False)
-
-        pixel_wing_horizontal = PixelMap(pixels, [(0, 8), (8, 16), (16, 24), (24, 32)])
+        pixels.brightness = 0.1
+        pixel_wing_horizontal = PixelMap(pixels, [
+            (0, 8, 16, 24),
+            (1, 9, 17, 25),
+            (2, 10, 18, 26),
+            (3, 11, 19, 27),
+            (4, 12, 20, 28),
+            (5, 13, 21, 29),
+            (6, 14, 22, 30),
+            (7, 15, 23, 31),
+        ], individual_pixels=True)
 
         pixel_wing_horizontal[0] = (255, 255, 0)
         pixel_wing_horizontal.show()
