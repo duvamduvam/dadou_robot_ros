@@ -1,5 +1,5 @@
-#linux rpi install : sudo pip3 install Adafruit-Blinka
-#sudo pip3 install rpi_ws281x adafruit-circuitpython-neopixel
+# linux rpi install : sudo pip3 install Adafruit-Blinka
+# sudo pip3 install rpi_ws281x adafruit-circuitpython-neopixel
 # sudo python3 -m pip install --force-reinstall adafruit-blinka
 # sudo pip3 install adafruit-circuitpython-led-animation
 import random
@@ -23,11 +23,10 @@ from adafruit_led_animation.color import WHITE, MAGENTA, ORANGE, TEAL, JADE, PUR
 import adafruit_fancyled.adafruit_fancyled as fancy
 
 
-#todo check thread : https://www.geeksforgeeks.org/python-communicating-between-threads-set-1/
-#todo check thread2 : https://riptutorial.com/python/example/4691/communicating-between-threads
+# todo check thread : https://www.geeksforgeeks.org/python-communicating-between-threads-set-1/
+# todo check thread2 : https://riptutorial.com/python/example/4691/communicating-between-threads
 
 class Lights:
-
     logging.config.fileConfig(fname='logging.conf', disable_existing_loggers=False)
 
     RED = (255, 0, 0)
@@ -51,12 +50,12 @@ class Lights:
     strip = neopixel.NeoPixel(board.D18, LED_COUNT)
     strip.brightness = 0.1
 
-    #strip = neopixel.NeoPixel(LED_COUNT, LED_PIN, LED_FREQ_HZ, LED_DMA, LED_INVERT, LED_BRIGHTNESS, LED_CHANNEL)
+    # strip = neopixel.NeoPixel(LED_COUNT, LED_PIN, LED_FREQ_HZ, LED_DMA, LED_INVERT, LED_BRIGHTNESS, LED_CHANNEL)
     # Intialize the library (must be called once before other functions).
     # strip.begin()
 
     # F Turns the NeoPixels red, green, and blue in sequence.
-    #TODO check examples : https://www.digikey.fr/en/maker/projects/circuitpython-led-animations/d15c769c6f6d411297657c35f0166958
+    # TODO check examples : https://www.digikey.fr/en/maker/projects/circuitpython-led-animations/d15c769c6f6d411297657c35f0166958
 
     current_animation = {}
 
@@ -105,15 +104,17 @@ class Lights:
         time.sleep(0.5)
 
     def random(self):
-        #red = 0x100000
+        # red = 0x100000
         i = random.randint(0, self.LED_COUNT)
-        blue = random.randint(0, 255)
+
         red = random.randint(0, 255)
         green = random.randint(0, 255)
-        self.strip[i] = (blue, red, green)
+        blue = random.randint(0, 255)
+        logging.debug("random blue : " + str(blue) + " red " + str(red) + " green" + str(green))
+        self.strip[i] = (red, green, blue)
 
     def fill(self, color):
-        logging.info("fill strip with "+str(color))
+        logging.info("fill strip with " + str(color))
         self.strip.fill(color)
 
     def clean(self):
@@ -138,5 +139,5 @@ class Lights:
         self.current_animation.animate()
 
     def animate_loop(self, time):
-        #todo animate with time
+        # todo animate with time
         self.current_animation.animate()
