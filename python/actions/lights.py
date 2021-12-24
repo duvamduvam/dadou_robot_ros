@@ -72,7 +72,7 @@ class Lights:
         self.current_animation = ColorCycle(self.strip, 0.5, colors=[MAGENTA, ORANGE, TEAL])
 
     def comet(self):
-        self.current_animation = Comet(self.pixels, speed=0.01, color=PURPLE, tail_length=10, bounce=True)
+        self.current_animation = Comet(self.strip, speed=0.01, color=PURPLE, tail_length=10, bounce=True)
 
     def pulse(self):
         self.current_animation = Pulse(self.strip, speed=0.1, color=AMBER, period=3)
