@@ -18,6 +18,7 @@ class LightsTest(unittest.TestCase):
         self.lights.clean()
         self.lights.comet()
         for i in range(10000):
+            time.sleep(0.05)
             self.lights.animate()
 
     @unittest.skip
