@@ -27,6 +27,7 @@ class LightsTest(unittest.TestCase):
 
         pixel_wing_horizontal[0] = (255, 255, 0)
         pixel_wing_horizontal.show()
+        time.sleep(20)
 
     @unittest.skip
     def test_rainbow_cycle(self):
