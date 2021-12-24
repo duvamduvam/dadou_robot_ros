@@ -13,7 +13,8 @@ class LightsTest(unittest.TestCase):
     BLACK = (0, 0, 0)
 
     lights = Lights()
-
+    
+    @unittest.skip
     def test_color_chase(self):
         self.lights.clean()
         self.lights.comet()
@@ -26,7 +27,7 @@ class LightsTest(unittest.TestCase):
         self.lights.clean()
         self.lights.rainbow_cycle(0.1)
 
-    @unittest.skip
+
     def test_random(self):
         for i in range(10000):
             self.lights.random()
