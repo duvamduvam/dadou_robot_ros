@@ -105,12 +105,12 @@ class Lights:
 
     def random(self):
         # red = 0x100000
-        i = random.randint(0, self.LED_COUNT)
+        i = random.randint(0, --self.LED_COUNT)
 
         red = random.randint(0, 255)
         green = random.randint(0, 255)
         blue = random.randint(0, 255)
-        logging.debug("random strip[" + str(i) + " blue " + str(blue) + " red " + str(red) + " green " + str(green))
+        logging.debug("random strip[" + str(i) + "] blue " + str(blue) + " red " + str(red) + " green " + str(green))
         self.strip[i] = (red, green, blue)
         self.strip.show()
 
