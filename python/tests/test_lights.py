@@ -32,7 +32,7 @@ class LightsTest(unittest.TestCase):
 
         #comet_v = Comet(pixel_wing_vertical, speed=0.1, color=AMBER, tail_length=6, bounce=True)
 
-        pixel_wing_horizontal = PixelMap(pixels, [(8, 16), (16, 24), (24, 32)])
+        pixel_wing_horizontal = PixelMap(pixels, [(0, 64)])
 
         pixel_wing_horizontal[0] = (255, 255, 0)
         pixel_wing_horizontal.show()
