@@ -69,8 +69,8 @@ class LightsTest(unittest.TestCase):
                 Comet(m6, 0.05, color.TEAL, tail_length=15),
             ),
             # Sequential animations on the built-in NeoPixels then the NeoPixel strip
-            Chase(m1, 0.05, size=2, spacing=3, color=color.PURPLE),
-            Chase(m2, 0.05, size=2, spacing=3, color=color.PURPLE),
+            #Chase(m1, 0.05, size=2, spacing=3, color=color.PURPLE),
+            #Chase(m2, 0.05, size=2, spacing=3, color=color.PURPLE),
             advance_interval=3.0,
             auto_clear=True,
             auto_reset=True,
