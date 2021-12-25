@@ -52,7 +52,7 @@ class Lights:
     strip.brightness = 0.1
 
     pixel_wing_vertical = helper.PixelMap.vertical_lines(
-        strip, 24, 16, helper.horizontal_strip_gridmap(8, alternating=False)
+        strip, 8*6, 8, helper.horizontal_strip_gridmap(8, alternating=False)
     )
     pixel_wing_horizontal = helper.PixelMap.horizontal_lines(
         strip, 8, 4, helper.horizontal_strip_gridmap(24, alternating=False)
