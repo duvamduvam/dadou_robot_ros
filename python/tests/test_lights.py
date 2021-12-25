@@ -32,10 +32,27 @@ class LightsTest(unittest.TestCase):
 
         #comet_v = Comet(pixel_wing_vertical, speed=0.1, color=AMBER, tail_length=6, bounce=True)
 
-        pixel_wing_horizontal = PixelMap(pixels, [(0, 64)])
+        m1 = PixelMap(pixels, [(0, 64)])
+        m2 = PixelMap(pixels, [(64, 128)])
+        m3 = PixelMap(pixels, [(129, 192)])
+        m4 = PixelMap(pixels, [(193, 256)])
+        m5 = PixelMap(pixels, [(257, 320)])
+        m6 = PixelMap(pixels, [(321, 384)])
 
-        pixel_wing_horizontal[0] = (255, 255, 0)
-        pixel_wing_horizontal.show()
+        m1[0] = (255, 255, 0)
+        m2[0] = (255, 255, 0)
+        m3[0] = (255, 255, 0)
+        m4[0] = (255, 0, 255)
+        m5[0] = (255, 0, 255)
+        m6[0] = (255, 0, 255)
+
+        m1.show()
+        m2.show()
+        m3.show()
+        m4.show()
+        m5.show()
+        m6.show()
+
 
         #while True:
         #    comet_v.animate()
