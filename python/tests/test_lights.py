@@ -7,11 +7,13 @@ from adafruit_led_animation import helper
 from adafruit_led_animation.animation.blink import Blink
 from adafruit_led_animation.animation.chase import Chase
 from adafruit_led_animation.animation.comet import Comet
+from adafruit_led_animation.animation.rainbowcomet import RainbowComet
 from adafruit_led_animation.color import AMBER
 from adafruit_led_animation.group import AnimationGroup
 from adafruit_led_animation.helper import PixelMap
 from adafruit_led_animation.sequence import AnimationSequence
 from adafruit_led_animation import color
+
 from python.actions.lights import Lights
 
 
@@ -52,7 +54,7 @@ class LightsTest(unittest.TestCase):
         animations = AnimationSequence(
             # Synchronized to 0.5 seconds. Ignores the second animation setting of 3 seconds.
             AnimationGroup(
-                Blink(m1, 0.5, color.CYAN),
+                RainbowComet(self.strip, speed=0.1, tail_length=7, bounce=True),
                 Blink(m2, 3.0, color.AMBER),
                 sync=True,
             ),
