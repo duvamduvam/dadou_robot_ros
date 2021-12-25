@@ -54,7 +54,7 @@ class LightsTest(unittest.TestCase):
         animations = AnimationSequence(
             # Synchronized to 0.5 seconds. Ignores the second animation setting of 3 seconds.
             AnimationGroup(
-                RainbowComet(self.strip, speed=0.1, tail_length=7, bounce=True),
+                RainbowComet(m1, speed=0.1, tail_length=7, bounce=True),
                 Blink(m2, 3.0, color.AMBER),
                 sync=True,
             ),
