@@ -4,6 +4,8 @@ import unittest
 import board
 import neopixel
 from adafruit_led_animation import helper
+from adafruit_led_animation.animation.comet import Comet
+from adafruit_led_animation.color import AMBER
 from adafruit_led_animation.helper import PixelMap
 
 from python.actions.lights import Lights
@@ -28,9 +30,10 @@ class LightsTest(unittest.TestCase):
             pixels, 8*6, 8, helper.horizontal_strip_gridmap(8, alternating=False)
         )
 
-        pixel_wing_horizontal[0] = (255, 255, 0)
-        pixel_wing_horizontal.show()
-        time.sleep(20)
+        comet_v = Comet(pixel_wing_horizontal, speed=0.1, color=AMBER, tail_length=6, bounce=True)
+
+        while True:
+            comet_v.animate()
 
     @unittest.skip
     def test_rainbow_cycle(self):
