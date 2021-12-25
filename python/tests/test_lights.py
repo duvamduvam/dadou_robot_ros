@@ -44,6 +44,8 @@ class LightsTest(unittest.TestCase):
         m5 = PixelMap(pixels, [(257, 320)])
         m6 = PixelMap(pixels, [(321, 384)])
 
+        mf = PixelMap(pixels, [(0, 384)])
+
         m1[0] = (255, 255, 0)
         m2[0] = (255, 255, 0)
         m3[0] = (255, 255, 0)
@@ -54,7 +56,7 @@ class LightsTest(unittest.TestCase):
         animations = AnimationSequence(
             # Synchronized to 0.5 seconds. Ignores the second animation setting of 3 seconds.
             AnimationGroup(
-                RainbowComet(m1, speed=0.1, tail_length=7, bounce=True),
+                RainbowComet(mf, speed=0.1, tail_length=7, bounce=True),
                 Blink(m2, 3.0, color.AMBER),
                 sync=True,
             ),
