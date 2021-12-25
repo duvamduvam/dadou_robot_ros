@@ -22,30 +22,22 @@ class LightsTest(unittest.TestCase):
 
     lights = Lights()
 
+
     def test_color_chase(self):
-        pixels = neopixel.NeoPixel(board.D18, 8 * 6 * 8, auto_write=False)
+        pixels = neopixel.NeoPixel(board.D18, 8*6*8, auto_write=False)
         pixels.brightness = 0.1
-        # pixel_wing_vertical = helper.PixelMap.vertical_lines(
+        #pixel_wing_vertical = helper.PixelMap.vertical_lines(
         #    pixels, 8, 8, helper.horizontal_strip_gridmap(8, alternating=False)
-        # )
+        #)
 
-        # comet_v = Comet(pixel_wing_vertical, speed=0.1, color=AMBER, tail_length=6, bounce=True)
+        #comet_v = Comet(pixel_wing_vertical, speed=0.1, color=AMBER, tail_length=6, bounce=True)
 
-        pixel_wing_horizontal = PixelMap(pixels, [
-            (0, 8, 16, 24),
-            (1, 9, 17, 25),
-            (2, 10, 18, 26),
-            (3, 11, 19, 27),
-            (4, 12, 20, 28),
-            (5, 13, 21, 29),
-            (6, 14, 22, 30),
-            (7, 15, 23, 31),
-        ], individual_pixels=True)
+        pixel_wing_horizontal = PixelMap(pixels, [(8, 16), (16, 24), (24, 32)])
 
         pixel_wing_horizontal[0] = (255, 255, 0)
         pixel_wing_horizontal.show()
 
-        # while True:
+        #while True:
         #    comet_v.animate()
 
     @unittest.skip
