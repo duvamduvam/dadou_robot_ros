@@ -31,7 +31,7 @@ class Face:
                 logging.debug(
                     "fill_matrix self.pixels[" + str(i) + "] = visual.rgb[" + str(x) + "][" + str(y) + "]")
                 self.pixels[i] = visual.rgb[x][y]
-                ++i
+                i += 1
 
 
 def fill_mouth(self, visual):
