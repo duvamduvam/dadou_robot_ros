@@ -1,9 +1,12 @@
 import logging
+import time
+from operator import mod
 
 import board
 import neopixel
 
 from python.json_manager import JsonManager
+from python.utils import Utils
 from python.visual import Visual
 
 
@@ -12,9 +15,20 @@ class Face:
     json_manager = JsonManager()
 
     mouth_start = 0
-    mouth_end = 382
+    mouth_end = 384
+    reye_start = 385
+    reye_end = 448
+    leye_start = 449
+    leye_end = 512
+
     pixels = neopixel.NeoPixel(board.D18, 8 * 6 * 8, auto_write=False)
     pixels.brightness = 0.1
+
+    mouth_seq = []
+    leye_seq = []
+    reye_seq = []
+    loop = False
+    time = 0
 
     def __init__(self):
         self.load_visual()
@@ -33,10 +47,55 @@ class Face:
                 self.pixels[i] = visual.rgb[x][y]
                 i += 1
 
-
     def fill_mouth(self, visual):
         self.fill_matrix(self.mouth_start, self.mouth_end, visual)
 
+    def load_seq_part(self, name):
+        json_seq = self.json_manager.get_part_seq(name)
+
+        target = []
+        frames = []
+        for s in json_seq['sequence']:
+            frames.append(Frame(s['time'], s['name']))
+
+        return Sequence(json_seq['time'], json_seq['loop'], frames)
 
     def update(self, key):
-        toto = 45
+        json_seq = self.json_manager.get_face_seq(key)
+        self.loop = json_seq['loop']
+        self.time = json_seq['time']
+        self.mouth_seq = self.load_seq_part(json_seq['mouth'])
+        self.leye_seq = self.load_seq_part(json_seq['reye'])
+        self.reye_seq = self.load_seq_part(json_seq['leye'])
+
+    def animate_part(self, seq, start, end):
+        frame = seq.frames[seq.current_frame]
+        if Utils.is_time(seq.current_time, frame.time):
+            visual = Visual.get_visual(frame.name, self.visuals)
+            self.fill_matrix(start, end, visual)
+            seq.current_frame = seq.current_frame % len(seq.frames)
+
+    def animate(self):
+        self.animate_part(self.mouth_seq, self.mouth_start, self.mouth_end)
+        self.animate_part(self.reye_seq, self.reye_start, self.reye_end)
+        self.animate_part(self.leye_seq, self.leye_start, self.leye_end)
+
+
+class Sequence:
+    duration = 0
+    current_time = time.ctime()
+    loop = False
+    frames = []
+    current_frame = 0
+
+    def __init__(self, duration, loop, frames):
+        self.duration = duration
+        self.loop = loop
+        self.frames = frames
+
+
+class Frame:
+
+    def __init__(self, time, name):
+        self.time = time
+        self.name = name

@@ -36,3 +36,8 @@ class JsonManager:
         result = jsonpath_rw_ext.match('$.main_seq[?keys~' + key + ']', self.face_seq)
         logging.debug(result)
         return result
+
+    def get_part_seq(self, name):
+        result = jsonpath_rw_ext.match('$.part_seq[?name==' + name + ']', self.face_seq)
+        logging.debug(result)
+        return result

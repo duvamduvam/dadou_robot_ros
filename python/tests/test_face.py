@@ -19,6 +19,11 @@ class MyTestCase(unittest.TestCase):
     json_manager = JsonManager()
     face = Face()
 
+    def test_img_eye(self):
+        self.face.update("A1")
+        while True:
+            self.face.animate()
+
     @unittest.skip
     def test_basic(self):
         pixels = neopixel.NeoPixel(board.D18, 8 * 6 * 8, auto_write=False)
@@ -33,7 +38,7 @@ class MyTestCase(unittest.TestCase):
             pixels.show()
             time.sleep(1)
 
-
+    @unittest.skip
     def test_img_eye(self):
         path = self.json_manager.get_visual_path("eye-still")
         visual = Visual("eye-still", path)
