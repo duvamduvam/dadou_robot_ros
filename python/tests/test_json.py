@@ -1,5 +1,7 @@
 import logging.config
 from python.tests.conf_test import TestSetup
+from python.visual import Visual
+
 TestSetup()
 
 import json
