@@ -23,7 +23,9 @@ class MyTestCase(unittest.TestCase):
         logging.info(self.face.visuals[0].rgb)
         path = self.json_manager.get_visual_path("eye-still")
         visual = Visual("eye-still", path)
-        self.face.fill_matrix(0, 64, visual)
-        self.face.pixels.show()
+        logging.info(visual.rgb)
+        self.face.pixels[0] = visual.rgb[0]
+        #self.face.fill_matrix(0, 64, visual)
+        #self.face.pixels.show()
         time.sleep(100)
         #logging.info(visual.rgb)
