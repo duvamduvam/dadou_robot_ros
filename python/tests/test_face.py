@@ -25,6 +25,7 @@ class MyTestCase(unittest.TestCase):
         visual = Visual("eye-still", path)
         logging.info(visual.rgb)
         self.face.pixels[10] = visual.rgb[2][2]
+        self.face.pixels.fill((255, 0, 0))
         logging.info("test 1 pixel")
         logging.info(visual.rgb[2][2])
         #self.face.fill_matrix(0, 64, visual)
