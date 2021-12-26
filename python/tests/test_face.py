@@ -1,14 +1,12 @@
 import logging.config
-import time
+from python.tests.conf_test import TestSetup
+TestSetup()
 
+import time
 import neopixel
 import board
 from python.json_manager import JsonManager
-from python.tests.conf_test import TestSetup
 from python.visual import Visual
-
-TestSetup()
-
 from python.actions.face import Face
 from python.tests.conf_test import TestSetup
 

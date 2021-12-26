@@ -1,4 +1,5 @@
-import logging
+import logging.config
+from python.tests.conf_test import TestSetup
 import time
 from operator import mod
 
