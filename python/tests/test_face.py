@@ -18,10 +18,10 @@ class MyTestCase(unittest.TestCase):
     face = Face()
 
     def test_img_eye(self):
-        logging.info("animate face A1")
+        print("animate face A1")
         self.face.update("A1")
         while True:
-            logging.info("animate")
+            print("animate")
             self.face.animate()
 
     @unittest.skip
