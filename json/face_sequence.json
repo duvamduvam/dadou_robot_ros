@@ -7,14 +7,7 @@
       "mouth": "mspeak",
       "reye": "ebase",
       "leye": "ebase",
-      "keys": [
-        {
-          "key": "A1"
-        },
-        {
-          "key": "A1"
-        }
-      ]
+      "keys": "A1 Z1"
     }
   ],
   "part_seq": [
