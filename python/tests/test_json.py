@@ -36,5 +36,6 @@ class TestJson(unittest.TestCase):
         print(result)
 
     def test_get_all_visual(self):
+        print("load all visual")
         result = self.json_manager.get_all_visual()
         print(result)
