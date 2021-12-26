@@ -1,6 +1,8 @@
 import logging.config
 import time
 
+import neopixel
+import board
 from python.json_manager import JsonManager
 from python.tests.conf_test import TestSetup
 from python.visual import Visual
@@ -14,10 +16,22 @@ import unittest
 
 
 class MyTestCase(unittest.TestCase):
-
     json_manager = JsonManager()
     face = Face()
 
+    def test_basic(self):
+        pixels = neopixel.NeoPixel(board.D18, 8 * 6 * 8, auto_write=False)
+        pixels.brightness = 0.1
+
+        while True:
+            # Comment this line out if you have RGBW/GRBW NeoPixels
+            pixels.fill((255, 0, 0))
+            # Uncomment this line if you have RGBW/GRBW NeoPixels
+            # pixels.fill((255, 0, 0, 0))
+            pixels.show()
+            time.sleep(1)
+
+    @unittest.skip
     def test_img_mouth(self):
         logging.info("test face")
         logging.info(self.face.visuals[0].rgb)
@@ -28,7 +42,7 @@ class MyTestCase(unittest.TestCase):
         self.face.pixels.fill((255, 0, 0))
         logging.info("test 1 pixel")
         logging.info(visual.rgb[2][2])
-        #self.face.fill_matrix(0, 64, visual)
-        #self.face.pixels.show()
+        # self.face.fill_matrix(0, 64, visual)
+        # self.face.pixels.show()
         time.sleep(100)
-        #logging.info(visual.rgb)
+        # logging.info(visual.rgb)
