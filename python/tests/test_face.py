@@ -44,9 +44,7 @@ class MyTestCase(unittest.TestCase):
         self.face.pixels.fill((0, 0, 0))
         self.face.pixels.show()
 
-        self.face.pixels[5] = visual.rgb[2][3]
-        self.face.pixels[6] = visual.rgb[2][3]
-        self.face.pixels[7] = visual.rgb[2][3]
+        self.face.fill_matrix(0, 64, visual)
 
         self.face.pixels.show()
         #logging.info("test 1 pixel")

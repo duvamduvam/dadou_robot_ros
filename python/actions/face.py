@@ -24,10 +24,11 @@ class Face:
             self.visuals.append(Visual(visual_path['name'], visual_path['path']))
 
     def fill_matrix(self, start, end, visual):
-        i = start
-        for rgb in visual.rgb:
-            self.pixels[i] = rgb
-            ++i
+        for i in range(start, end):
+            for x in range(0, len(visual.rgb)):
+                for y in range(0, len(visual.rgb[x])):
+                    self.pixels[i] = visual.rgb[x][y]
+
 
     def fill_mouth(self, visual):
         self.fill_matrix(self.mouth_start, self.mouth_end, visual)
