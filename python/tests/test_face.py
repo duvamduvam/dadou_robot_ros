@@ -11,4 +11,4 @@ class MyTestCase(unittest.TestCase):
     face = Face()
 
     def test_img_mouth(self):
-        logging.infor(self.face.visuals[0])
+        logging.info(self.face.visuals[0])
