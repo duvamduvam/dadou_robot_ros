@@ -11,6 +11,10 @@
     {
       "name": "mopen3",
       "path": "visuals/mopen3.png"
+    },
+    {
+      "name": "eye-still",
+      "path": "visuals/eye-still.png"
     }
   ]
 }

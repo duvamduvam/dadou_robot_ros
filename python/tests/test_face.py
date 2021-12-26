@@ -20,6 +20,6 @@ class MyTestCase(unittest.TestCase):
     def test_img_mouth(self):
         logging.info("test face")
         logging.info(self.face.visuals[0].rgb)
-        path = self.json_manager.get_visual_path("mopen1")
-        visual = Visual("mopen1", path)
+        path = self.json_manager.get_visual_path("eye-still")
+        visual = Visual("eye-still", path)
         logging.info(visual.rgb)
