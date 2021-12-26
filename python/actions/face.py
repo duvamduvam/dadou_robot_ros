@@ -21,7 +21,7 @@ class Face:
     def load_visual(self):
         visuals_path = self.json_manager.get_all_visual()
         for visual_path in visuals_path:
-            self.visuals.append(Visual(visual_path.name, visual_path.path))
+            self.visuals.append(Visual(visual_path.name, visual_path.rgb))
 
     def fill_matrix(self, start, end, visual):
         i = start
