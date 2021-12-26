@@ -7,9 +7,9 @@ class Visual:
     name: {}
     rgb: []
 
-    def __init__(self, path, rgb):
-        self.name = self.get_file_name(path)
-        self.rgb = rgb
+    def __init__(self, name, path):
+        self.name = name
+        self.rgb = Image.get_rgb_from_image(path)
 
     @staticmethod
     def get_file_name(path: str) -> str:
