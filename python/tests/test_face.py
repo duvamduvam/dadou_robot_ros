@@ -1,7 +1,7 @@
 import logging.config
 
 from python.actions.face import Face
-from python.tests.test_setup import TestSetup
+from python.tests.conf_test import TestSetup
 
 import unittest
 

@@ -1,11 +1,11 @@
 import logging.config
-from python.tests.test_setup import TestSetup
+from python.tests.conf_test import TestSetup
 TestSetup()
 
 import unittest
 import logging
 
-from python.tests.test_setup import TestSetup
+from python.tests.conf_test import TestSetup
 from python.visual import Image
 
 

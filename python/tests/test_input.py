@@ -1,12 +1,12 @@
 import logging.config
-from python.tests.test_setup import TestSetup
+from python.tests.conf_test import TestSetup
 TestSetup()
 import random
 import sys
 import unittest
 
 from python.file_watcher import FileWatcher
-from python.tests.test_setup import TestSetup
+from python.tests.conf_test import TestSetup
 
 
 class InputTest(unittest.TestCase):
