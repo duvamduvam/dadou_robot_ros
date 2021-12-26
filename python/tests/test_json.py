@@ -37,5 +37,9 @@ class TestJson(unittest.TestCase):
 
     def test_get_all_visual(self):
         print("load all visual")
+        visuals_path = self.json_manager.get_all_visual()
+        for visual_path in visuals_path:
+            self.visuals.append(Visual(visual_path['name'], visual_path['path']))
+
         result = self.json_manager.get_all_visual()
         print(result)
