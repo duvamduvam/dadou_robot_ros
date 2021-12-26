@@ -12,6 +12,3 @@ class MyTestCase(unittest.TestCase):
     def test_load_visual(self):
         Face()
 
-
-if __name__ == '__main__':
-    unittest.main()
