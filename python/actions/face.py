@@ -1,3 +1,5 @@
+import logging
+
 import board
 import neopixel
 
@@ -6,7 +8,6 @@ from python.visual import Visual
 
 
 class Face:
-
     visuals = []
     json_manager = JsonManager()
 
@@ -27,8 +28,9 @@ class Face:
         for i in range(start, end):
             for x in range(0, len(visual.rgb)):
                 for y in range(0, len(visual.rgb[x])):
+                    logging.debug(
+                        "fill_matrix self.pixels[" + str(i) + ")] = visual.rgb[" + str(x) + "][" + str(y) + "]")
                     self.pixels[i] = visual.rgb[x][y]
-
 
     def fill_mouth(self, visual):
         self.fill_matrix(self.mouth_start, self.mouth_end, visual)
