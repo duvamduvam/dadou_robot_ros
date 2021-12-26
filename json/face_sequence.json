@@ -7,9 +7,13 @@
       "mouth": "mspeak",
       "reye": "ebase",
       "leye": "ebase",
-      "key": [
-        "A1",
-        "Z1"
+      "keys": [
+        {
+          "key": "A1"
+        },
+        {
+          "key": "A1"
+        }
       ]
     }
   ],
