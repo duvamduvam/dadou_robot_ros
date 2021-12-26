@@ -18,10 +18,6 @@ class Visual:
         path = path.replace(Image.up, "")
         return path
 
-    def get_name(self) -> str:
-        return self.name
-
-
 class Image:
     visual_rep = "visuals/"
     visual_ext = ".png"
@@ -48,7 +44,7 @@ class Image:
         for p in images_path:
             rgb = self.get_rgb_from_image(p)
             self.visuals[i] = Visual(p, rgb)
-            logging.info("load image : "+self.visuals[i].get_name())
+            logging.info("load image : "+self.visuals[i].name)
             i = i + 1
 
     @staticmethod
