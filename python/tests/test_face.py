@@ -26,7 +26,7 @@ class MyTestCase(unittest.TestCase):
         logging.info(visual.rgb)
         #self.face.pixels[0] = visual.rgb[0]
         logging.info("test 1 pixel")
-        logging.info(visual.rgb[2])
+        logging.info(visual.rgb[2][2])
         #self.face.fill_matrix(0, 64, visual)
         #self.face.pixels.show()
         time.sleep(100)
