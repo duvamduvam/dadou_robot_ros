@@ -8,7 +8,9 @@ import unittest
 
 class MyTestCase(unittest.TestCase):
 
+    face = Face()
 
-    def test_load_visual(self):
-        Face()
 
+
+    def test_img_mouth(self):
+        print(self.face.visuals[0])
