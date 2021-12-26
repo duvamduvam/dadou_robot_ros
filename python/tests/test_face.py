@@ -25,7 +25,9 @@ class MyTestCase(unittest.TestCase):
 
         while True:
             # Comment this line out if you have RGBW/GRBW NeoPixels
-            pixels.fill((255, 0, 0))
+            pixels[5] = (255, 0, 0)
+            pixels[6] = (0, 255, 0)
+            pixels[7] = (0, 0, 255)
             # Uncomment this line if you have RGBW/GRBW NeoPixels
             # pixels.fill((255, 0, 0, 0))
             pixels.show()
