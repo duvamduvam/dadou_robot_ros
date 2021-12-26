@@ -1,4 +1,6 @@
 import logging.config
+from python.tests.conf_test import TestSetup
+TestSetup()
 
 from python.actions.face import Face
 from python.tests.conf_test import TestSetup
