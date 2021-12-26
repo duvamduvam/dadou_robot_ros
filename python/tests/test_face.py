@@ -1,5 +1,9 @@
 import logging.config
+
+from python.json_manager import JsonManager
 from python.tests.conf_test import TestSetup
+from python.visual import Visual
+
 TestSetup()
 
 from python.actions.face import Face
@@ -10,9 +14,12 @@ import unittest
 
 class MyTestCase(unittest.TestCase):
 
+    json_manager = JsonManager()
     face = Face()
 
     def test_img_mouth(self):
-        print("test face")
         logging.info("test face")
         logging.info(self.face.visuals[0].rgb)
+        path = JsonManager.get_visual_path("mopen1")
+        visual = Visual("mopen1", path)
+        logging.info(visual.rgb)
