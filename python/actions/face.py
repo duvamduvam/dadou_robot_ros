@@ -25,15 +25,18 @@ class Face:
             self.visuals.append(Visual(visual_path['name'], visual_path['path']))
 
     def fill_matrix(self, start, end, visual):
-        for i in range(start, end):
-            for x in range(0, len(visual.rgb)):
-                for y in range(0, len(visual.rgb[x])):
-                    logging.debug(
-                        "fill_matrix self.pixels[" + str(i) + ")] = visual.rgb[" + str(x) + "][" + str(y) + "]")
-                    self.pixels[i] = visual.rgb[x][y]
+        i = start
+        for x in range(0, len(visual.rgb)):
+            for y in range(0, len(visual.rgb[x])):
+                logging.debug(
+                    "fill_matrix self.pixels[" + str(i) + "] = visual.rgb[" + str(x) + "][" + str(y) + "]")
+                self.pixels[i] = visual.rgb[x][y]
+                ++i
 
-    def fill_mouth(self, visual):
-        self.fill_matrix(self.mouth_start, self.mouth_end, visual)
 
-    def update(self, key):
-        toto = 45
+def fill_mouth(self, visual):
+    self.fill_matrix(self.mouth_start, self.mouth_end, visual)
+
+
+def update(self, key):
+    toto = 45
