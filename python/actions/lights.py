@@ -21,14 +21,11 @@ from adafruit_led_animation.animation.rainbowchase import RainbowChase
 from adafruit_led_animation.animation.rainbowcomet import RainbowComet
 from adafruit_led_animation.animation.rainbowsparkle import RainbowSparkle
 from adafruit_led_animation.color import WHITE, MAGENTA, ORANGE, TEAL, JADE, PURPLE, AMBER
-import adafruit_fancyled.adafruit_fancyled as fancy
-
 
 # todo check thread : https://www.geeksforgeeks.org/python-communicating-between-threads-set-1/
 # todo check thread2 : https://riptutorial.com/python/example/4691/communicating-between-threads
 
 class Lights:
-    logging.config.fileConfig(fname='logging.conf', disable_existing_loggers=False)
 
     RED = (255, 0, 0)
     YELLOW = (255, 150, 0)
