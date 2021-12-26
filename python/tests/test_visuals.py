@@ -1,10 +1,16 @@
+import logging.config
+from python.tests.test_setup import TestSetup
+TestSetup()
+
 import unittest
 import logging
+
+from python.tests.test_setup import TestSetup
 from python.visual import Image
 
 
 class MyTestCase(unittest.TestCase):
-    logging.basicConfig(level=logging.DEBUG)
+    TestSetup()
 
     def test_load(self):
         image = Image("../../visuals/")

@@ -1,0 +1,31 @@
+{
+  "face_seq": [
+    {
+      "name": "speak",
+      "time": 100,
+      "loop": true,
+      "sequence": [
+        {
+          "name": "mopen1",
+          "time": 2
+        },
+        {
+          "name": "mopen2",
+          "time": 1
+        },
+        {
+          "name": "mopen3",
+          "time": 3
+        },
+        {
+          "name": "mopen2",
+          "time": 2
+        },
+        {
+          "name": "mopen1",
+          "time": 1
+        }
+      ]
+    }
+  ]
+}

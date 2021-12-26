@@ -1,4 +1,7 @@
 import logging.config
+from python.tests.test_setup import TestSetup
+TestSetup()
+import logging.config
 import time
 import unittest
 from python.mapping import Mapping
@@ -6,8 +9,9 @@ from python.actions.audio import Audio
 from python.path_time import PathTime
 
 
+
 class AudioTests(unittest.TestCase):
-    logging.config.fileConfig(fname='logging.conf', disable_existing_loggers=False)
+
     mapping = Mapping()
     audio = Audio(mapping)
 

@@ -1,3 +1,6 @@
+import logging.config
+from python.tests.test_setup import TestSetup
+TestSetup()
 
 import time
 import unittest
@@ -8,7 +11,7 @@ from python.actions.neck import Neck
 
 
 class NeckTests(unittest.TestCase):
-    logging.config.fileConfig(fname='logging.conf', disable_existing_loggers=False)
+    TestSetup()
 
     neck = Neck()
 

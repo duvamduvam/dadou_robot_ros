@@ -1,3 +1,7 @@
+import logging.config
+from python.tests.test_setup import TestSetup
+TestSetup()
+
 import time
 import unittest
 
@@ -18,6 +22,9 @@ from python.actions.lights import Lights
 
 
 class LightsTest(unittest.TestCase):
+
+    TestSetup()
+
     RED = (255, 0, 0)
     YELLOW = (255, 150, 0)
     GREEN = (0, 255, 0)

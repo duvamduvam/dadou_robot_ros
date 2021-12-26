@@ -1,4 +1,7 @@
 import logging.config
+from python.tests.test_setup import TestSetup
+TestSetup()
+
 import time
 import unittest
 from python.actions.wheel import Wheel
@@ -6,7 +9,7 @@ from python.actions.wheel import Wheel
 
 class WheelTest(unittest.TestCase):
 
-    logging.config.fileConfig(fname='logging.conf', disable_existing_loggers=False)
+    TestSetup()
 
     wheel = Wheel()
 

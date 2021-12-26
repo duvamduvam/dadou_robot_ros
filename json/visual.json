@@ -1,0 +1,16 @@
+{
+  "visual": [
+    {
+      "name": "mopen1",
+      "path": "visuals/mopen1.png"
+    },
+    {
+      "name": "mopen2",
+      "path": "visuals/mopen2.png"
+    },
+    {
+      "name": "mopen3",
+      "path": "visuals/mopen3.png"
+    }
+  ]
+}

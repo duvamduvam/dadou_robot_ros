@@ -1,13 +1,15 @@
 import logging.config
+from python.tests.test_setup import TestSetup
+TestSetup()
 import random
+import sys
 import unittest
 
 from python.file_watcher import FileWatcher
+from python.tests.test_setup import TestSetup
 
 
 class InputTest(unittest.TestCase):
-
-    logging.config.fileConfig(fname='logging.conf', disable_existing_loggers=False)
 
     def test_key_file_watch(self):
         #file_path = '/home/david/Nextcloud/rosita/python/didier-python/conf/test_key.txt'
