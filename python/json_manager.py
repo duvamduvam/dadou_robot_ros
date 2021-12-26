@@ -19,15 +19,20 @@ class JsonManager:
         logging.debug(result)
         return result[0]['path']
 
-    def get_face_seq(self, key) -> str:
-        result = jsonpath_rw_ext.match('$.face_seq[?name==' + key + ']', self.face_seq)
+    def get_face_part(self, name) -> str:
+        result = jsonpath_rw_ext.match('$.part_seq[?name==' + name + ']', self.face_seq)
         if len(result) == 0:
-            logging.error("no visual path for " + key)
+            logging.error("no visual path for " + name)
             return
         logging.debug(result)
         return result[0]
 
     def get_all_visual(self):
         result = jsonpath_rw_ext.match('$.visual[*]', self.visual)
+        logging.debug(result)
+        return result
+
+    def get_face_seq(self, key):
+        result = jsonpath_rw_ext.match('$.part_seq[?key==' + key + ']', self.face_seq)
         logging.debug(result)
         return result

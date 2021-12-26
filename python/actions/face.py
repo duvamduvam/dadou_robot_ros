@@ -34,9 +34,9 @@ class Face:
                 i += 1
 
 
-def fill_mouth(self, visual):
-    self.fill_matrix(self.mouth_start, self.mouth_end, visual)
+    def fill_mouth(self, visual):
+        self.fill_matrix(self.mouth_start, self.mouth_end, visual)
 
 
-def update(self, key):
-    toto = 45
+    def update(self, key):
+        toto = 45

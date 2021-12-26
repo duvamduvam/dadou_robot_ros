@@ -22,6 +22,11 @@ class TestJson(unittest.TestCase):
 
     json_manager = JsonManager()
 
+    def test_get_main_seq(self):
+        result = self.json_manager.get_face_seq("A1")
+        logging.info(result)
+
+    @unittest.skip
     def test_json_path(self):
         with open("json/face_sequence.json", 'r') as json_file:
             json_data = json.load(json_file)
@@ -29,14 +34,17 @@ class TestJson(unittest.TestCase):
         print(list_val[0]['sequence'])
         #logging.error("test45")
 
+    @unittest.skip
     def test_get_visual_path(self):
         result = self.json_manager.get_visual_path("mopen1")
         print(result)
 
+    @unittest.skip
     def test_get_face_seq(self):
         result = self.json_manager.get_face_seq("speak")
         print(result)
 
+    @unittest.skip
     def test_get_all_visual(self):
         print("load all visual")
         visuals_path = self.json_manager.get_all_visual()

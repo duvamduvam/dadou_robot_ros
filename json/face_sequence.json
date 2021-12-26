@@ -1,7 +1,21 @@
 {
-  "face_seq": [
+  "main_seq": [
     {
       "name": "speak",
+      "time": 100,
+      "loop": true,
+      "mouth": "mspeak",
+      "reye": "ebase",
+      "leye": "ebase",
+      "key": [
+        "A1",
+        "Z1"
+      ]
+    }
+  ],
+  "part_seq": [
+    {
+      "name": "mspeak",
       "time": 100,
       "loop": true,
       "sequence": [
@@ -24,6 +38,25 @@
         {
           "name": "mopen1",
           "time": 1
+        }
+      ]
+    },
+    {
+      "name": "ebase",
+      "time": 100,
+      "loop": true,
+      "sequence": [
+        {
+          "name": "eye-still",
+          "time": 2
+        },
+        {
+          "name": "eye-right",
+          "time": 1
+        },
+        {
+          "name": "eye-left",
+          "time": 3
         }
       ]
     }
