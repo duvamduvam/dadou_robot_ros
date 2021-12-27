@@ -43,13 +43,10 @@ class Face:
         i = start
         for x in range(0, len(visual.rgb)):
             for y in range(0, len(visual.rgb[x])):
-                logging.debug(
-                    "fill_matrix self.pixels[" + str(i) + "] = visual.rgb[" + str(x) + "][" + str(y) + "]")
+                #logging.debug(
+                #    "fill_matrix self.pixels[" + str(i) + "] = visual.rgb[" + str(x) + "][" + str(y) + "]")
                 self.pixels[i] = visual.rgb[x][y]
                 i += 1
-
-    def fill_mouth(self, visual):
-        self.fill_matrix(self.mouth_start, self.mouth_end, visual)
 
     def load_seq_part(self, name):
         json_seq = self.json_manager.get_part_seq(name)
