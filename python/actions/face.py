@@ -75,6 +75,8 @@ class Face:
             visual = Visual.get_visual(frame.name, self.visuals)
             self.fill_matrix(start, end, visual)
             seq.current_frame = seq.current_frame % len(seq.frames)
+            seq.current_time = time.ctime()
+            self.pixels.show()
 
     def animate(self):
         self.animate_part(self.mouth_seq, self.mouth_start, self.mouth_end)
@@ -97,6 +99,6 @@ class Sequence:
 
 class Frame:
 
-    def __init__(self, time, name):
-        self.time = time
+    def __init__(self, t, name):
+        self.time = t
         self.name = name
