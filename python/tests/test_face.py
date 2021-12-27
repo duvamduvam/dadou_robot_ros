@@ -13,7 +13,7 @@ from python.tests.conf_test import TestSetup
 import unittest
 
 
-class MyTestCase(unittest.TestCase):
+class TestFace(unittest.TestCase):
     json_manager = JsonManager()
     face = Face()
 
@@ -23,6 +23,7 @@ class MyTestCase(unittest.TestCase):
         while True:
             logging.info("animate")
             self.face.animate()
+        time.wait(10)
 
     @unittest.skip
     def test_basic(self):
