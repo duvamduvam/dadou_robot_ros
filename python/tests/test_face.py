@@ -19,10 +19,10 @@ class TestFace(unittest.TestCase):
 
     def test_img_eye(self):
         logging.info("animate face A1")
-        self.face.update("A1")
-        while True:
-            logging.info("animate")
-            self.face.animate()
+        #self.face.update("A1")
+        #while True:
+        #    logging.info("animate")
+        #    self.face.animate()
         time.wait(10)
 
     @unittest.skip
@@ -49,4 +49,3 @@ class TestFace(unittest.TestCase):
         self.face.fill_matrix(0, 64, visual)
         self.face.pixels.show()
         time.sleep(1)
-
