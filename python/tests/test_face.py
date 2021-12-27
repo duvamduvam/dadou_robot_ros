@@ -26,13 +26,6 @@ class TestFace(unittest.TestCase):
             logging.info("animate")
             self.face.animate()
 
-    def test_img_eye(self):
-        logging.info("animate face A1")
-        #self.face.update("A1")
-        #while True:
-        #    logging.info("animate")
-        #    self.face.animate()
-        time.wait(10)
 
     @unittest.skip
     def test_basic(self):
