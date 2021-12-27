@@ -15,7 +15,7 @@ import unittest
 
 class TestFace(unittest.TestCase):
     json_manager = JsonManager()
-    face = {} #Face()
+    face = Face()
 
     logging.info("start face test")
 
