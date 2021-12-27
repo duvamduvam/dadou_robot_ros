@@ -22,7 +22,7 @@ class Face:
     leye_start = 449
     leye_end = 512
 
-    pixels = neopixel.NeoPixel(board.D18, 8 * 8 * 8, auto_write=False)
+    pixels = neopixel.NeoPixel(board.D18, (8 * 8 * 8)+1, auto_write=False)
     pixels.brightness = 0.1
 
     mouth_seq = []
