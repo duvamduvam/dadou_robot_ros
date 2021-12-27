@@ -37,7 +37,7 @@ class Utils:
 
     @staticmethod
     def is_time(last_time, time_out) -> bool:
-        logging.debug(" last_time type : " + type(last_time) + " time_out type : " + type(time_out))
+        logging.debug(" last_time type : " + str(type(last_time)) + " time_out type : " + str(type(time_out)))
         current = round(time.time() * 1000)
         is_time = ((current - last_time) + time_out) > 0
         logging.debug("last time: " + str(last_time) + " current time : " + str(current) +
