@@ -19,6 +19,7 @@ class TestFace(unittest.TestCase):
 
     logging.info("start face test")
 
+    @unittest.skip
     def test_face(self):
         logging.info("animate face A1")
         self.face.update("A1")
@@ -27,7 +28,7 @@ class TestFace(unittest.TestCase):
             self.face.animate()
 
 
-    @unittest.skip
+
     def test_basic(self):
         pixels = neopixel.NeoPixel(board.D18, 8 * 6 * 8, auto_write=False)
         pixels.brightness = 0.1
