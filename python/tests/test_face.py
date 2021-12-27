@@ -19,6 +19,9 @@ class TestFace(unittest.TestCase):
 
     logging.info("start face test")
 
+    def test_face(self):
+        logging.info("animate face A1")
+
     def test_img_eye(self):
         logging.info("animate face A1")
         #self.face.update("A1")
