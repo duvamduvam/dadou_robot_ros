@@ -17,6 +17,8 @@ class TestFace(unittest.TestCase):
     json_manager = JsonManager()
     face = {} #Face()
 
+    logging.info("start face test")
+
     def test_img_eye(self):
         logging.info("animate face A1")
         #self.face.update("A1")
