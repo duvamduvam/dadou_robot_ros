@@ -23,7 +23,7 @@ class TestFace(unittest.TestCase):
         logging.info("animate face A1")
         self.face.update("A1")
         while True:
-            logging.info("animate")
+            #logging.info("animate")
             self.face.animate()
 
     @unittest.skip

@@ -43,8 +43,8 @@ class Face:
         i = start
         for x in range(0, len(visual.rgb)):
             for y in range(0, len(visual.rgb[x])):
-                #logging.debug(
-                #    "fill_matrix self.pixels[" + str(i) + "] = visual.rgb[" + str(x) + "][" + str(y) + "]")
+                logging.debug(
+                    "fill_matrix self.pixels[" + str(i) + "] = visual.rgb[" + str(x) + "][" + str(y) + "]")
                 self.pixels[i] = visual.rgb[x][y]
                 i += 1
 
