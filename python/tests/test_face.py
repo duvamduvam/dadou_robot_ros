@@ -19,6 +19,12 @@ class TestFace(unittest.TestCase):
 
     logging.info("start face test")
 
+    def test_img_mouth(self):
+        visual = Visual.get_visual("mopen1", face .visuals)
+        face.fill_matrix(0, face.mouth_end)
+        face.pixels.show()
+
+    @unittest.skip
     def test_face(self):
         logging.info("animate face A1")
         self.face.update("A1")
