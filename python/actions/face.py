@@ -73,13 +73,12 @@ class Face:
             self.fill_matrix(start, end, visual)
             seq.current_frame = seq.current_frame % len(seq.frames)
             seq.current_time = time.time()
-            self.pixels.show()
 
     def animate(self):
         self.animate_part(self.mouth_seq, self.mouth_start, self.mouth_end)
         self.animate_part(self.reye_seq, self.reye_start, self.reye_end)
         self.animate_part(self.leye_seq, self.leye_start, self.leye_end)
-
+        self.pixels.show()
 
 class Sequence:
     duration = 0
