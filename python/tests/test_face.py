@@ -27,6 +27,7 @@ class TestFace(unittest.TestCase):
         self.load_visual()
         visual = Visual.get_visual("mopen1", self.visuals)
         self.image_mapping.mapping(self.face.pixels, visual.rgb)
+        time.sleep(10)
 
     @unittest.skip
     def test_img_mouth(self):
