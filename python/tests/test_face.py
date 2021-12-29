@@ -11,7 +11,7 @@ from python.json_manager import JsonManager
 from python.visual import Visual
 from python.actions.face import Face
 from python.tests.conf_test import TestSetup
-from adafruit_led_animation.color import AMBER, RED
+from adafruit_led_animation.color import AMBER, RED, BLACK
 
 import unittest
 
@@ -23,8 +23,10 @@ class TestFace(unittest.TestCase):
     image_mapping = ImageMapping(8, 8, 3, 2)
 
     def test_something(self):
+        self.face.pixels.fill(BLACK)
         visual = Visual.get_visual("mopen1", self.face.visuals)
         self.image_mapping.mapping(self.face.pixels, visual.rgb)
+        self.face.pixels.show()
         time.sleep(10)
 
     @unittest.skip
