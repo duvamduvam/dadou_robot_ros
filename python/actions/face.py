@@ -1,4 +1,6 @@
 import logging.config
+
+from image_mapping import ImageMapping
 from python.tests.conf_test import TestSetup
 import time
 from operator import mod
@@ -14,6 +16,7 @@ from python.visual import Visual
 class Face:
     visuals = []
     json_manager = JsonManager()
+    image_mapping = ImageMapping(8, 8, 3, 2)
 
     mouth_start = 0
     mouth_end = 384
@@ -70,7 +73,11 @@ class Face:
         frame = seq.frames[seq.current_frame]
         if Utils.is_time(seq.current_time, frame.time):
             visual = Visual.get_visual(frame.name, self.visuals)
-            self.fill_matrix(start, end, visual)
+
+            #visual = Visual.get_visual("mopen1", self.face.visuals)
+            self.image_mapping.mapping(self.face.pixels, visual.rgb)
+
+            #self.fill_matrix(start, end, visual)
             seq.current_frame = seq.current_frame % len(seq.frames)
             seq.current_time = time.time()
 
