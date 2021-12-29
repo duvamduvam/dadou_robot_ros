@@ -21,7 +21,7 @@ class TestFace(unittest.TestCase):
     def test_img_mouth(self):
         logging.info("test_img_mouth")
         visual = Visual.get_visual("mopen1", self.face.visuals)
-        self.face.fill_matrix(0, face.mouth_end)
+        self.face.fill_matrix(0, self.face.mouth_end)
         self.face.pixels.show()
         time.sleep(10)
 
