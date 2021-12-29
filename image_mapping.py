@@ -19,7 +19,7 @@ class ImageMapping:
                     matrix += self.matrix_width * self.matrix_height * self.matrix_width_nb
 
                 ypos = (y * self.matrix_width)  # % (self.matrix_height * self.matrix_width)
-                if (ypos > (self.matrix_height * self.matrix_width)):
+                if ypos > (self.matrix_height * self.matrix_width):
                     ypos -= self.matrix_height * self.matrix_width
 
                 index = xpos + matrix + ypos
