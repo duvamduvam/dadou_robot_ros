@@ -23,7 +23,6 @@ class TestFace(unittest.TestCase):
     image_mapping = ImageMapping(8, 8, 3, 2)
 
     def test_something(self):
-        self.load_visual()
         visual = Visual.get_visual("mopen1", self.visuals)
         self.image_mapping.mapping(self.face.pixels, visual.rgb)
         time.sleep(10)
