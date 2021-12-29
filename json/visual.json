@@ -16,9 +16,13 @@
       "name": "eye-still",
       "path": "visuals/eye-still.png"
     },
-        {
+    {
       "name": "test",
       "path": "visuals/test.png"
+    },
+    {
+      "name": "test2",
+      "path": "visuals/test2.png"
     }
   ]
 }
