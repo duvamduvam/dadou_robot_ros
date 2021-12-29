@@ -20,7 +20,6 @@ class TestFace(unittest.TestCase):
     json_manager = JsonManager()
     face = Face()
     logging.info("start face test")
-    image_mapping = ImageMapping()
     image_mapping = ImageMapping(8, 8, 3, 2)
 
     def test_something(self):
