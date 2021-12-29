@@ -23,6 +23,7 @@ class TestFace(unittest.TestCase):
         visual = Visual.get_visual("mopen1", face .visuals)
         face.fill_matrix(0, face.mouth_end)
         face.pixels.show()
+        time.sleep(10)
 
     @unittest.skip
     def test_face2(self):
