@@ -75,7 +75,7 @@ class Face:
             visual = Visual.get_visual(frame.name, self.visuals)
 
             #visual = Visual.get_visual("mopen1", self.face.visuals)
-            self.image_mapping.mapping(self.face.pixels, visual.rgb)
+            self.image_mapping.mapping(self.pixels, visual.rgb)
 
             #self.fill_matrix(start, end, visual)
             seq.current_frame = seq.current_frame % len(seq.frames)
