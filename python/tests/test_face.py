@@ -39,7 +39,7 @@ class TestFace(unittest.TestCase):
         #self.face.fill_matrix(0, self.face.mouth_end, visual)
         self.face.pixels[(8*8*3)+64] = AMBER
         self.face.pixels[(8*8*3)+65] = AMBER
-        self.face.pixels[(8*8*8*3)+66] = AMBER
+        self.face.pixels[(8*8*3)+66] = AMBER
         self.face.pixels[(8*8*3)+67] = AMBER
         self.face.pixels[(8*8*3)+68] = AMBER
         self.face.pixels[(8*8*3)+69] = AMBER
