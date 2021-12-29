@@ -14,7 +14,7 @@ class ImageMapping:
             for x in range(len(image[y])):
                 xpos = x % self.matrix_width
 
-                matrix = ((x // self.matrix_width) * (
+                matrix = ((x * y // (self.matrix_width * self.matrix_height)) * (
                         self.matrix_width * self.matrix_height))
 
                 ypos = y * self.matrix_width
