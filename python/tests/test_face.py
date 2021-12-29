@@ -22,6 +22,7 @@ class TestFace(unittest.TestCase):
     logging.info("start face test")
     image_mapping = ImageMapping(8, 8, 3, 2)
 
+    @unittest.skip
     def test_something(self):
         self.face.pixels.fill(BLACK)
         visual = Visual.get_visual("mopen1", self.face.visuals)
@@ -29,13 +30,18 @@ class TestFace(unittest.TestCase):
         self.face.pixels.show()
         time.sleep(10)
 
-    @unittest.skip
     def test_img_mouth(self):
         logging.info("test_img_mouth")
         visual = Visual.get_visual("mopen1", self.face.visuals)
         #self.face.fill_matrix(0, self.face.mouth_end, visual)
         self.face.pixels[0] = AMBER
-        self.face.pixels[23] = AMBER
+        self.face.pixels[1] = AMBER
+        self.face.pixels[2] = AMBER
+        self.face.pixels[3] = AMBER
+        self.face.pixels[4] = AMBER
+        self.face.pixels[5] = AMBER
+        self.face.pixels[6] = AMBER
+        self.face.pixels[7] = AMBER
         self.face.pixels[220] = RED
 
         self.face.pixels.show()
