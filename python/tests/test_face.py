@@ -22,14 +22,16 @@ class TestFace(unittest.TestCase):
     logging.info("start face test")
     image_mapping = ImageMapping(8, 8, 3, 2)
 
-    @unittest.skip
+
     def test_something(self):
         self.face.pixels.fill(BLACK)
-        visual = Visual.get_visual("mopen1", self.face.visuals)
+        visual = Visual.get_visual("test", self.face.visuals)
         self.image_mapping.mapping(self.face.pixels, visual.rgb)
         self.face.pixels.show()
         time.sleep(10)
 
+
+    @unittest.skip
     def test_img_mouth(self):
         logging.info("test_img_mouth")
         visual = Visual.get_visual("mopen1", self.face.visuals)
