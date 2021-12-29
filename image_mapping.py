@@ -12,8 +12,8 @@ class ImageMapping:
     def mapping(self, pixels, image):
         for y in range(len(image)):
             for x in range(len(image[y])):
-                index = x + ((x // self.matrix_width) * (
-                            self.matrix_width * self.matrix_height)) + (
+                index = (x % self.matrix_width) + ((x // self.matrix_width) * (
+                        self.matrix_width * self.matrix_height)) + (
                                 y * self.matrix_width)
                 logging.debug("pixel[" + str(index) + "] = image[" + str(y) + "][" + str(x) + "]")
                 pixels[index] = image[y][x]
