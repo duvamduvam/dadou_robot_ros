@@ -76,8 +76,8 @@ class Face:
 
     def animate(self):
         self.animate_part(self.mouth_seq, self.mouth_start, self.mouth_end)
-        self.animate_part(self.reye_seq, self.reye_start, self.reye_end)
-        self.animate_part(self.leye_seq, self.leye_start, self.leye_end)
+        #self.animate_part(self.reye_seq, self.reye_start, self.reye_end)
+        #self.animate_part(self.leye_seq, self.leye_start, self.leye_end)
         self.pixels.show()
 
 
