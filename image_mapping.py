@@ -13,16 +13,14 @@ class ImageMapping:
         for y in range(len(image)):
             for x in range(len(image[y])):
                 xpos = x % self.matrix_width
-                logging.debug(" xpos  -> " + str(xpos))
 
                 matrix = ((x // self.matrix_width) * (
                         self.matrix_width * self.matrix_height))
-                logging.debug(" matrix  -> " + str(matrix))
 
                 ypos = y * self.matrix_width
-                logging.debug(" ypos  -> " + str(ypos))
 
                 index = xpos + matrix + ypos
 
-                logging.debug("pixel[" + str(index) + "] = image[" + str(y) + "][" + str(x) + "]")
+                logging.debug("pixel[" + str(index) + "] = image[" + str(y) + "][" + str(x) + "] xpos  -> " + str(
+                    xpos) + " matrix  -> " + str(matrix) + " ypos  -> " + str(ypos))
                 pixels[index] = image[y][x]
