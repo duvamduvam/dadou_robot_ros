@@ -25,7 +25,7 @@ class TestFace(unittest.TestCase):
         #self.face.fill_matrix(0, self.face.mouth_end, visual)
         self.face.pixels[0] = AMBER
         self.face.pixels[23] = AMBER
-        self.face.pixels[150] = RED
+        self.face.pixels[220] = RED
 
         self.face.pixels.show()
         time.sleep(10)
