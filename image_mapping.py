@@ -15,10 +15,10 @@ class ImageMapping:
                 xpos = x % self.matrix_width
 
                 matrix = (x // self.matrix_width) * (self.matrix_width * self.matrix_height)
-                #if y > self.matrix_height - 1:
-                #    matrix += self.matrix_width * self.matrix_height * self.matrix_width_nb
+                if y > self.matrix_height - 1:
+                    matrix += self.matrix_width * self.matrix_height * self.matrix_width_nb
 
-                ypos = (y * self.matrix_width) % (self.matrix_height * self.matrix_width)
+                ypos = (y * self.matrix_width) #% (self.matrix_height * self.matrix_width)
 
                 index = xpos + matrix + ypos
 
