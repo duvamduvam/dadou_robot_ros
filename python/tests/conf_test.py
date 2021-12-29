@@ -8,7 +8,7 @@ class TestSetup:
     def __init__(self):
         #check rapsberry
         if platform.machine() not in ('armv7l', 'armv6l'):
-            path = "/home/david/Nextcloud/rosita/python/didier-python"
+            path = "/home/dadou/Nextcloud/rosita/python/didier-python"
             os.chdir(path)
             print(os.path.join(path))
 

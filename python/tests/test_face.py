@@ -1,4 +1,6 @@
 import logging.config
+
+from image_mapping import ImageMapping
 from python.tests.conf_test import TestSetup
 TestSetup()
 
@@ -18,7 +20,15 @@ class TestFace(unittest.TestCase):
     json_manager = JsonManager()
     face = Face()
     logging.info("start face test")
+    image_mapping = ImageMapping()
+    image_mapping = ImageMapping(8, 8, 3, 2)
 
+    def test_something(self):
+        self.load_visual()
+        visual = Visual.get_visual("mopen1", self.visuals)
+        self.image_mapping.mapping(self.face.pixels, visual.rgb)
+
+    @unittest.skip
     def test_img_mouth(self):
         logging.info("test_img_mouth")
         visual = Visual.get_visual("mopen1", self.face.visuals)
