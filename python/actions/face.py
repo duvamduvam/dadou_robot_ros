@@ -22,7 +22,7 @@ class Face:
     leye_start = 449
     leye_end = 512
 
-    pixels = neopixel.NeoPixel(board.D18, (1000)+1, auto_write=False)
+    pixels = neopixel.NeoPixel(board.D18, (leye_end) + 1, auto_write=False)
     pixels.brightness = 0.1
 
     mouth_seq = []
@@ -79,6 +79,7 @@ class Face:
         self.animate_part(self.reye_seq, self.reye_start, self.reye_end)
         self.animate_part(self.leye_seq, self.leye_start, self.leye_end)
         self.pixels.show()
+
 
 class Sequence:
     duration = 0
