@@ -9,6 +9,7 @@ from python.json_manager import JsonManager
 from python.visual import Visual
 from python.actions.face import Face
 from python.tests.conf_test import TestSetup
+from adafruit_led_animation.color import AMBER, RED
 
 import unittest
 
@@ -21,7 +22,11 @@ class TestFace(unittest.TestCase):
     def test_img_mouth(self):
         logging.info("test_img_mouth")
         visual = Visual.get_visual("mopen1", self.face.visuals)
-        self.face.fill_matrix(0, self.face.mouth_end, visual)
+        #self.face.fill_matrix(0, self.face.mouth_end, visual)
+        self.face.pixels[0] = AMBER
+        self.face.pixels[23] = AMBER
+        self.face.pixels[24] = RED
+
         self.face.pixels.show()
         time.sleep(10)
 
