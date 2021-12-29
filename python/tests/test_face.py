@@ -37,14 +37,14 @@ class TestFace(unittest.TestCase):
         self.face.pixels.fill(BLACK)
         visual = Visual.get_visual("mopen1", self.face.visuals)
         #self.face.fill_matrix(0, self.face.mouth_end, visual)
-        self.face.pixels[(8*8*3)] = AMBER
-        self.face.pixels[(8*8*3)+1] = AMBER
-        self.face.pixels[(8*8*3)+2] = AMBER
-        self.face.pixels[(8*8*3)+3] = AMBER
-        self.face.pixels[(8*8*3)+4] = AMBER
-        self.face.pixels[(8*8*3)+5] = AMBER
-        self.face.pixels[(8*8*3)+6] = AMBER
-        self.face.pixels[(8*8*3)+7] = AMBER
+        self.face.pixels[(8*8*2)] = AMBER
+        self.face.pixels[(8*8*2)+1] = AMBER
+        self.face.pixels[(8*8*2)+2] = AMBER
+        self.face.pixels[(8*8*2)+3] = AMBER
+        self.face.pixels[(8*8*2)+4] = AMBER
+        self.face.pixels[(8*8*2)+5] = AMBER
+        self.face.pixels[(8*8*2)+6] = AMBER
+        self.face.pixels[(8*8*2)+7] = AMBER
         self.face.pixels[220] = RED
 
         self.face.pixels.show()
