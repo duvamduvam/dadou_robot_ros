@@ -24,6 +24,6 @@ class ImageMapping:
 
                 index = xpos + matrix + ypos
 
-                logging.debug("pixel[" + str(index) + "] = image[" + str(y) + "][" + str(x) + "] xpos  -> " + str(
-                    xpos) + " matrix  -> " + str(matrix) + " ypos  -> " + str(ypos))
+                #logging.debug("pixel[" + str(index) + "] = image[" + str(y) + "][" + str(x) + "] xpos  -> " + str(
+                #    xpos) + " matrix  -> " + str(matrix) + " ypos  -> " + str(ypos))
                 pixels[index] = image[y][x]
