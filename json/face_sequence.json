@@ -29,12 +29,12 @@
           "time": 3
         },
         {
-          "name": "mopen2",
-          "time": 2
+          "name": "test",
+          "time": 8
         },
         {
-          "name": "mopen1",
-          "time": 1
+          "name": "test2",
+          "time": 10
         }
       ]
     },
