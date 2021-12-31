@@ -79,9 +79,10 @@ class Face:
             self.image_mapping.mapping(self.pixels, visual.rgb)
 
             # self.fill_matrix(start, end, visual)
-            logging.debug("sequence[" + str(seq.current_frame) + "] total : " + str(len(seq.frames)))
+
             seq.current_frame = seq.current_frame + 1 % (len(seq.frames)-1)
             seq.current_time = Utils.current_milli_time()
+            logging.debug("next sequence[" + str(seq.current_frame) + "] total : " + str(len(seq.frames)))
 
     def animate(self):
         self.animate_part(self.mouth_seq, self.mouth_start, self.mouth_end)
