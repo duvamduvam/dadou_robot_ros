@@ -31,7 +31,7 @@ class ImageMapping:
     def inverse_bottom_image(image):
         new_image = image
 
-        for y in range(int(len(image) / 2), len(image)):
+        for y in range(int(len(image) / 2), len(image) - 1):
             for x in range(0, len(image[0]) - 1):
                 ypos = (int(len(image) / 2) + (y - int(len(image) / 2)))
                 xpos = len(image[0]) - x
