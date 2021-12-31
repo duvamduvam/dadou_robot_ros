@@ -41,6 +41,7 @@ class ImageMapping:
                         image[ypos][xpos]))
 
                 new_image[y][x] = image[ypos][xpos]
+                new_image = image
                 #new_image[y][x] = ORANGE
 
         return new_image
