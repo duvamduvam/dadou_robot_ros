@@ -34,5 +34,5 @@ class ImageMapping:
         for y in range(int(len(image) / 2)):
             for x in range(len(image[0])):
                 xpos = x % len(image[0])
-                new_image[int(len(image) / 2) + (int(len(image) / 2) - y)][len(image[0]) - x] = image[y][x]
+                new_image[int(len(image) / 2) + (int(len(image) / 2) - (y + 1))][len(image[0]) - (x + 1)] = image[y][x]
         return new_image
