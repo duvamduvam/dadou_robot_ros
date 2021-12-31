@@ -72,6 +72,7 @@ class Face:
     def animate_part(self, seq, start, end):
         frame = seq.frames[seq.current_frame]
         if Utils.is_time(seq.current_time, frame.time):
+            logging.debug("seq.current_time : "+str(seq.current_time)+" frame.time "+str(frame.time))
             visual = Visual.get_visual(frame.name, self.visuals)
             logging.debug("update part : " + visual.name)
             # visual = Visual.get_visual("mopen1", self.face.visuals)
