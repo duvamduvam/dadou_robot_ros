@@ -31,14 +31,14 @@ class ImageMapping:
 
     def inverse_bottom_image(image):
         new_image = image
-
+        logging.debug("inverse image")
         for y in range(int(len(image) / 2), len(image)):
             for x in range(0, len(image[0])):
                 ypos = len(image) + (int(len(image) / 2) - (y + 1))
                 xpos = (len(image[0]) - 1) - x
-                logging.debug(
-                    "new_image[" + str(y) + "][" + str(x) + "] = image[" + str(ypos) + "][" + str(xpos) + "] => " + str(
-                        image[ypos][xpos]))
+                #logging.debug(
+                #    "new_image[" + str(y) + "][" + str(x) + "] = image[" + str(ypos) + "][" + str(xpos) + "] => " + str(
+                #        image[ypos][xpos]))
 
                 new_image[y][x] = image[ypos][xpos]
                 #new_image[y][x] = ORANGE
