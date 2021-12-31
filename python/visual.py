@@ -11,7 +11,7 @@ class Visual:
 
     def __init__(self, name, path):
         self.name = name
-        #self.rgb = ImageMapping.inverse_bottom_image(Image.get_rgb_from_image(path))
+        self.rgb = ImageMapping.inverse_bottom_image(Image.get_rgb_from_image(path))
 
 
     @staticmethod

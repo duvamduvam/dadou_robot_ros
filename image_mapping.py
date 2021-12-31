@@ -33,6 +33,9 @@ class ImageMapping:
 
         for y in range(int(len(image) / 2)):
             for x in range(len(image[0])):
-                new_image[y][x] = image[int(len(image) / 2) + (int(len(image) / 2) - (y + 1))][
-                    len(image[0]) - (x + 1)]
+                ypos = int(len(image) / 2) + (int(len(image) / 2) - (y + 1))
+                xpos = len(image[0]) - (x + 1)
+                logging.debug(
+                    "new_image[" + str(y) + "][" + +str(x) + "] = image[+" + str(ypos) + "][" + +str(xpos) + "]")
+                new_image[y][x] = image[ypos][xpos]
         return new_image
