@@ -2,6 +2,8 @@ import glob
 import logging.config
 import imageio
 
+from image_mapping import ImageMapping
+
 
 class Visual:
     name: {}
@@ -9,7 +11,8 @@ class Visual:
 
     def __init__(self, name, path):
         self.name = name
-        self.rgb = Image.get_rgb_from_image(path)
+        self.rgb = ImageMapping.inverse_bottom_image(Image.get_rgb_from_image(path))
+
 
     @staticmethod
     def get_file_name(path: str) -> str:

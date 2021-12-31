@@ -24,6 +24,15 @@ class ImageMapping:
 
                 index = xpos + matrix + ypos
 
-                #logging.debug("pixel[" + str(index) + "] = image[" + str(y) + "][" + str(x) + "] xpos  -> " + str(
+                # logging.debug("pixel[" + str(index) + "] = image[" + str(y) + "][" + str(x) + "] xpos  -> " + str(
                 #    xpos) + " matrix  -> " + str(matrix) + " ypos  -> " + str(ypos))
                 pixels[index] = image[y][x]
+
+    def inverse_bottom_image(image):
+        new_image = image
+
+        for y in range(abs(len(image) / 2)):
+            for x in range(len(image[0])):
+                xpos = x % len(image[0])
+                new_image[abs(len(image) / 2) + (abs(len(image) / 2) - y)][len(image[0]) - x] = image[y][x]
+        return new_image
