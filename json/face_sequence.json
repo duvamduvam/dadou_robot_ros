@@ -33,6 +33,10 @@
           "time": 20
         },
         {
+          "name": "mopen3",
+          "time": 90
+        },
+        {
           "name": "test",
           "time": 40
         },
