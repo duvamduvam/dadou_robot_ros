@@ -36,7 +36,8 @@ class ImageMapping:
                 ypos = len(image) + (int(len(image) / 2) - (y + 1))
                 xpos = (len(image[0]) - 1) - x
                 logging.debug(
-                    "new_image[" + str(y) + "][" + str(x) + "] = image[" + str(ypos) + "][" + str(xpos) + "]")
+                    "new_image[" + str(y) + "][" + str(x) + "] = image[" + str(ypos) + "][" + str(xpos) + "] => " + str(
+                        image[ypos][xpos]))
                 new_image[y][x] = image[ypos][xpos]
 
         return new_image
