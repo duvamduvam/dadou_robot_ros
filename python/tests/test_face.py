@@ -25,7 +25,7 @@ class TestFace(unittest.TestCase):
 
     def test_something(self):
         self.face.pixels.fill(BLACK)
-        visual = Visual.get_visual("open3", self.face.visuals)
+        visual = Visual.get_visual("test", self.face.visuals)
         self.image_mapping.mapping(self.face.pixels, visual.rgb)
         self.face.pixels.show()
         time.sleep(10)
