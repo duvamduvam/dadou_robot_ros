@@ -18,7 +18,7 @@
       "sequence": [
         {
           "name": "mopen1",
-          "time": 200
+          "time": 20000
         },
         {
           "name": "mopen2",
