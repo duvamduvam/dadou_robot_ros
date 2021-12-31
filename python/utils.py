@@ -41,7 +41,7 @@ class Utils:
         #    last_time) + "time_out is int : " + str(
         #    isinstance(time_out, int)) + " -> " + str(
         #    time_out))
-        current = round(time.time() * 1000)
+        current = Utils.current_milli_time()
         is_time = ((current - last_time) + time_out) > 0
         #logging.debug("last time: " + str(last_time) + " current time : " + str(current) +
         #              " time step : " + str(time_out) + " is time : " + str(is_time))

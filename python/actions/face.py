@@ -80,7 +80,7 @@ class Face:
 
             # self.fill_matrix(start, end, visual)
             logging.debug("sequence[" + str(seq.current_frame) + "] total : " + str(len(seq.frames)))
-            seq.current_frame = seq.current_frame + 1 % len(seq.frames)
+            seq.current_frame = seq.current_frame + 1 % (len(seq.frames)-1)
             seq.current_time = time.time()
 
     def animate(self):
