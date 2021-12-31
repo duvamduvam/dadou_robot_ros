@@ -72,14 +72,14 @@ class Face:
     def animate_part(self, seq, start, end):
         frame = seq.frames[seq.current_frame]
         if Utils.is_time(seq.current_time, frame.time):
-            #logging.debug("seq.current_time : " + str(seq.current_time) + " frame.time " + str(frame.time))
+            # logging.debug("seq.current_time : " + str(seq.current_time) + " frame.time " + str(frame.time))
             visual = Visual.get_visual(frame.name, self.visuals)
-            #logging.debug("update part : " + visual.name)
+            # logging.debug("update part : " + visual.name)
             self.image_mapping.mapping(self.pixels, visual.rgb)
 
-            seq.current_frame = (seq.current_frame + 1) % (len(seq.frames) - 1)
+            seq.current_frame = (seq.current_frame + 1) % len(seq.frames)
             seq.current_time = Utils.current_milli_time()
-            #logging.debug("next sequence[" + str(seq.current_frame) + "] total : " + str(len(seq.frames)))
+            # logging.debug("next sequence[" + str(seq.current_frame) + "] total : " + str(len(seq.frames)))
 
     def animate(self):
         self.animate_part(self.mouth_seq, self.mouth_start, self.mouth_end)
