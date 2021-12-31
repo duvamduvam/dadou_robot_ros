@@ -18,23 +18,23 @@
       "sequence": [
         {
           "name": "mopen1",
-          "time": 200
+          "time": 2000
         },
         {
           "name": "mopen2",
-          "time": 100
+          "time": 1000
         },
         {
           "name": "mopen3",
-          "time": 300
+          "time": 3000
         },
         {
           "name": "test",
-          "time": 800
+          "time": 8000
         },
         {
           "name": "test2",
-          "time": 1000
+          "time": 10000
         }
       ]
     },
