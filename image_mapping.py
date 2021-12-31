@@ -39,4 +39,4 @@ class ImageMapping:
                 "new_image[" + str(y) + "][" + str(x) + "] = image[" + str(ypos) + "][" + str(xpos) + "]")
             new_image[y][x] = image[ypos][xpos]
 
-    return new_image
+        return new_image
