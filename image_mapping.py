@@ -30,7 +30,7 @@ class ImageMapping:
                 pixels[index] = image[y][x]
 
     def inverse_bottom_image(image):
-        new_image = image
+        new_image = []
 
         for y in range(int(len(image) / 2), len(image) - 1):
             for x in range(0, len(image[0]) - 1):
