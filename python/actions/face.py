@@ -80,7 +80,7 @@ class Face:
 
             # self.fill_matrix(start, end, visual)
 
-            seq.current_frame = seq.current_frame + 1 % (len(seq.frames)-1)
+            seq.current_frame = ++seq.current_frame % (len(seq.frames)-1)
             seq.current_time = Utils.current_milli_time()
             logging.debug("next sequence[" + str(seq.current_frame) + "] total : " + str(len(seq.frames)))
 
