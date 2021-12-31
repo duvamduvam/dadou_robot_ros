@@ -72,7 +72,7 @@ class Face:
     def animate_part(self, seq, start, end):
         frame = seq.frames[seq.current_frame]
         if Utils.is_time(seq.current_time, frame.time):
-            logging.debug("seq.current_time : "+str(seq.current_time)+" frame.time "+str(frame.time))
+            logging.debug("seq.current_time : " + str(seq.current_time) + " frame.time " + str(frame.time))
             visual = Visual.get_visual(frame.name, self.visuals)
             logging.debug("update part : " + visual.name)
             # visual = Visual.get_visual("mopen1", self.face.visuals)
@@ -80,7 +80,7 @@ class Face:
 
             # self.fill_matrix(start, end, visual)
 
-            seq.current_frame = ++seq.current_frame % (len(seq.frames)-1)
+            seq.current_frame = (seq.current_frame + 1) % (len(seq.frames) - 1)
             seq.current_time = Utils.current_milli_time()
             logging.debug("next sequence[" + str(seq.current_frame) + "] total : " + str(len(seq.frames)))
 
