@@ -1,5 +1,6 @@
 import logging
 
+from adafruit_led_animation.color import WHITE, MAGENTA, ORANGE, TEAL, JADE, PURPLE, AMBER
 
 class ImageMapping:
 
@@ -38,6 +39,8 @@ class ImageMapping:
                 logging.debug(
                     "new_image[" + str(y) + "][" + str(x) + "] = image[" + str(ypos) + "][" + str(xpos) + "] => " + str(
                         image[ypos][xpos]))
-                new_image[y][x] = image[ypos][xpos]
+
+                #new_image[y][x] = image[ypos][xpos]
+                new_image[y][x] = ORANGE
 
         return new_image
