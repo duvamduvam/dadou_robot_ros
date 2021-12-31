@@ -40,7 +40,7 @@ class ImageMapping:
                 #    "new_image[" + str(y) + "][" + str(x) + "] = image[" + str(ypos) + "][" + str(xpos) + "] => " + str(
                 #        image[ypos][xpos]))
 
-                new_image[y][x] = image[ypos][xpos]
+                #new_image[y][x] = image[ypos][xpos]
                 #new_image[y][x] = ORANGE
 
         return image
