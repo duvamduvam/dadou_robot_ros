@@ -92,7 +92,7 @@ class Face:
 
 class Sequence:
     duration = 0
-    current_time = time.time()
+    current_time = Utils.current_milli_time()
     loop = False
     frames = []
     current_frame = 0
