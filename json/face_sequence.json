@@ -29,6 +29,10 @@
           "time": 90
         },
         {
+          "name": "mopen1",
+          "time": 20
+        },
+        {
           "name": "test",
           "time": 40
         },
