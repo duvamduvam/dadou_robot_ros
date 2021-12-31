@@ -34,7 +34,11 @@
         },
         {
           "name": "test2",
-          "time": 50
+          "time": 100
+        },
+        {
+          "name": "mopen3",
+          "time": 90
         }
       ]
     },
