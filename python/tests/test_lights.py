@@ -39,13 +39,18 @@ class LightsTest(unittest.TestCase):
     lights = Lights(json_manager)
 
 
-    def test_lights(self):
+
+    def test_lights_default(self):
+        self.lights.update("B1")
+        while True:
+            self.lights.animate()
+
+    @unittest.skip
+    def test_lights_default(self):
         #self.lights.update("B1")
         while True:
             self.lights.animate()
 
-
-    @unittest.skip
     def test_color_chase(self):
         pixels = neopixel.NeoPixel(board.D18, 8 * 6 * 8, auto_write=False)
         pixels.brightness = 0.1
