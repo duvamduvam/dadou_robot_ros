@@ -18,7 +18,7 @@ import unittest
 
 class TestFace(unittest.TestCase):
     json_manager = JsonManager()
-    face = Face()
+    face = Face(json_manager)
     logging.info("start face test")
     image_mapping = ImageMapping(8, 8, 3, 2)
 
