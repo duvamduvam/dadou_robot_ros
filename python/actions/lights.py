@@ -78,8 +78,8 @@ class Lights:
     def chase(self, parameters, color):
         self.current_animation = Chase(self.strip, speed=0.1, color=color, size=3, spacing=6)
 
-    def blink(self, parameters):
-        self.current_animation = Blink(self.strip, speed=0.5, color=JADE)
+    def blink(self, parameters, color):
+        self.current_animation = Blink(self.strip, speed=0.5, color=color)
 
     def color_cycle(self, parameters):
         self.current_animation = ColorCycle(self.strip, 0.5, colors=[MAGENTA, ORANGE, TEAL])

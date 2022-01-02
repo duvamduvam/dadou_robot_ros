@@ -13,6 +13,11 @@
     {
       "keys": "B3",
       "method": "color_cycle"
+    },
+    {
+      "keys": "B5",
+      "method": "pulse",
+      "color": "BLUE"
     }
   ]
 }
