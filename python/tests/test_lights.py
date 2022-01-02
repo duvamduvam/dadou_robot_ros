@@ -40,7 +40,7 @@ class LightsTest(unittest.TestCase):
 
 
     def test_lights(self):
-        self.lights.update("B1")
+        #self.lights.update("B1")
         while True:
             self.lights.animate()
 
