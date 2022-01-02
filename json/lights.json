@@ -1,0 +1,17 @@
+{
+  "lights": [
+    {
+      "keys": "B1 B10",
+      "method": "chase",
+      "color" : "RED"
+    },
+    {
+      "keys": "B2",
+      "method": "blink"
+    },
+    {
+      "keys": "B3",
+      "method": "color_cycle"
+    }
+  ]
+}

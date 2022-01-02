@@ -15,7 +15,6 @@ from python.visual import Visual
 
 class Face:
     visuals = []
-    json_manager = JsonManager()
     image_mapping = ImageMapping(8, 8, 3, 2)
 
     mouth_start = 0
@@ -34,8 +33,9 @@ class Face:
     loop = False
     time = 0
 
-    def __init__(self):
+    def __init__(self, json_manager):
         self.load_visual()
+        self.json_manager = json_manager
 
     def load_visual(self):
         visuals_path = self.json_manager.get_all_visual()

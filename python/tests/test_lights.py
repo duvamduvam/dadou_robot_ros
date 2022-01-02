@@ -35,6 +35,13 @@ class LightsTest(unittest.TestCase):
 
     lights = Lights()
 
+
+    def test_lights(self):
+        self.lights.update("B1")
+        while True:
+            self.lights.animate()
+
+
     @unittest.skip
     def test_color_chase(self):
         pixels = neopixel.NeoPixel(board.D18, 8 * 6 * 8, auto_write=False)

@@ -1,0 +1,28 @@
+{
+  "colors": [
+    {
+      "name": "RED",
+      "color": {
+        "red": "255",
+        "green": "O",
+        "blue": "0"
+      }
+    },
+    {
+      "name": "GREEN",
+      "color": {
+        "red": "0",
+        "green": "255",
+        "blue": "0"
+      }
+    },
+    {
+      "name": "BLUE",
+      "color": {
+        "red": "0",
+        "green": "O",
+        "blue": "255"
+      }
+    }
+  ]
+}

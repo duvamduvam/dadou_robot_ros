@@ -5,8 +5,14 @@ import jsonpath_rw_ext
 
 
 class JsonManager:
+    with open("json/colors.json", 'r') as json_file:
+        colors = json.load(json_file)
+
     with open("json/face_sequence.json", 'r') as json_file:
         face_seq = json.load(json_file)
+
+    with open("json/lights.json", 'r') as json_file:
+        lights = json.load(json_file)
 
     with open("json/visual.json", 'r') as json_file:
         visual = json.load(json_file)
@@ -41,3 +47,14 @@ class JsonManager:
         result = jsonpath_rw_ext.match('$.part_seq[?name==' + name + ']', self.face_seq)
         logging.debug(result)
         return result[0]
+
+    def get_lights(self, key):
+        result = jsonpath_rw_ext.match('$.lights[?keys~' + key + ']', self.lights)
+        logging.debug(result)
+        return result[0]
+
+    def get_color(self, key):
+        result = jsonpath_rw_ext.match('$.colors[?name~' + key + ']', self.colors)
+        logging.debug(result)
+        color = (int(result['red']), int(result['green']), int(result['blue']))
+        return color

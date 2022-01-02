@@ -6,11 +6,10 @@ from python.file_watcher import FileWatcher
 
 
 class Com:
-    """A simple example class"""
-    i = 12345
 
     arduino_enable = False
     arduino = serial.Serial("/dev/ttyAMA0", 9600, timeout=1)
+    #time.sleep(0.1)  # wait for serial to open
     watcher = FileWatcher()
 
     def get_msg(self):
@@ -18,10 +17,13 @@ class Com:
         if self.watcher.changed():
             return self.watcher.get_last_key()
 
-        time.sleep(0.1)  # wait for serial to open
         if self.arduino_enable & self.arduino.isOpen():
-            print("{} connected!".format(self.arduino.port))
+            logging.info("{} connected!".format(self.arduino.port))
             if self.arduino.inWaiting() > 0:
-                answer = self.arduino.readline()
+                msg = self.arduino.readline().decode('utf-8').rstrip()
                 self.arduino.flushInput()  # remove data after reading
-                logging.info('received from arduino' + answer)
+                logging.info('received from arduino' + msg)
+
+    def send_msg(self, msg):
+        if self.arduino.isOpen():
+            self.arduino.write(msg)
