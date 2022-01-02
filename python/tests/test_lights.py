@@ -1,8 +1,10 @@
 import logging.config
 
-from python.json_manager import JsonManager
+
 from python.tests.conf_test import TestSetup
 TestSetup()
+
+from python.json_manager import JsonManager
 
 import time
 import unittest
@@ -25,8 +27,6 @@ from python.actions.lights import Lights
 
 class LightsTest(unittest.TestCase):
 
-    TestSetup()
-
     RED = (255, 0, 0)
     YELLOW = (255, 150, 0)
     GREEN = (0, 255, 0)
@@ -41,6 +41,7 @@ class LightsTest(unittest.TestCase):
 
 
     def test_lights_default(self):
+        logging.info("test lights")
         self.lights.update("B5")
         while True:
             self.lights.animate()
