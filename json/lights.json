@@ -3,11 +3,12 @@
     {
       "keys": "B1 B10",
       "method": "chase",
-      "color" : "RED"
+      "color": "RED"
     },
     {
       "keys": "B2",
-      "method": "blink"
+      "method": "blink",
+      "color": "BLUE"
     },
     {
       "keys": "B3",
