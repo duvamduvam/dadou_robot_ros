@@ -65,6 +65,8 @@ class Lights:
     def update(self, key):
         json_light = self.json_manager.get_lights(key)
         if 'color' in json_light:
+            logging.debug(
+                "update lights with key : {key} method : {json_light['method']}, color : {json_light['color']}")
             json_color = json_light['color']
             color = self.json_manager.get_color(key)
             getattr(self, json_light['method'])(json_light, color)
