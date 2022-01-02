@@ -72,7 +72,7 @@ class Lights:
         else:
             getattr(self, json_light['method'])(json_light)
 
-    def default(self, parameters, color):
+    def default(self):
         self.current_animation = Chase(self.strip, speed=0.1, color=RED, size=3, spacing=6)
 
     def chase(self, parameters, color):
