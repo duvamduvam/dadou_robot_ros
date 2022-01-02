@@ -1,4 +1,6 @@
 import logging.config
+
+from python.json_manager import JsonManager
 from python.tests.conf_test import TestSetup
 TestSetup()
 
@@ -33,7 +35,8 @@ class LightsTest(unittest.TestCase):
     PURPLE = (180, 0, 255)
     BLACK = (0, 0, 0)
 
-    lights = Lights()
+    json_manager = JsonManager()
+    lights = Lights(json_manager)
 
 
     def test_lights(self):
