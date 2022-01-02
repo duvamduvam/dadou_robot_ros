@@ -1,4 +1,4 @@
-import logging.config
+import logging
 
 
 from python.tests.conf_test import TestSetup
