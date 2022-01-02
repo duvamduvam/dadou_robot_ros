@@ -13,3 +13,4 @@ class TestSetup:
             print(os.path.join(path))
 
         logging.config.fileConfig(fname='/home/pi/deploy/didier-python/conf/logging.conf', disable_existing_loggers=False)
+        logging.info("start logging")
