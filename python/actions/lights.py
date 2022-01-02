@@ -59,7 +59,7 @@ class Lights:
     current_animation = {}
 
     def __init__(self, json_manager: JsonManager):
-        self.rainbow_sparkle()
+        self.default()
         self.json_manager = json_manager
 
     def update(self, key):
@@ -71,6 +71,9 @@ class Lights:
 
         else:
             getattr(self, json_light['method'])(json_light)
+
+    def default(self, parameters, color):
+        self.current_animation = Chase(self.strip, speed=0.1, color=RED, size=3, spacing=6)
 
     def chase(self, parameters, color):
         self.current_animation = Chase(self.strip, speed=0.1, color=color, size=3, spacing=6)
