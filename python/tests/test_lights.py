@@ -42,9 +42,9 @@ class LightsTest(unittest.TestCase):
         key = "B1"
         logging.info("test lights with key " + key)
         self.lights.update(key)
-        #while True:
+        # while True:
         current_time = Utils.current_milli_time()
-        while Utils.is_time(current_time, 500):
+        while Utils.is_time(current_time, 500) == False:
             self.lights.animate()
 
     @unittest.skip
