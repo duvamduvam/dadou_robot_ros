@@ -90,8 +90,8 @@ class Lights:
     def comet(self, parameters):
         self.current_animation = Rainbow(self.pixel_wing_vertical, speed=0.1, period=2)
 
-    def pulse(self, parameters):
-        self.current_animation = Pulse(self.strip, speed=0.1, color=AMBER, period=3)
+    def pulse(self, parameters, color):
+        self.current_animation = Pulse(self.strip, speed=0.1, color=color, period=3)
 
     def rainbow(self, parameters):
         self.current_animation = Rainbow(self.strip, speed=0.1, period=2)
