@@ -39,10 +39,10 @@ class LightsTest(unittest.TestCase):
     lights = Lights(json_manager)
 
 
-
     def test_lights_key(self):
-        logging.info("test lights")
-        self.lights.update("B5")
+        key = "B5"
+        logging.info("test lights with key {key}")
+        self.lights.update(key)
         while True:
             self.lights.animate()
 
@@ -52,6 +52,7 @@ class LightsTest(unittest.TestCase):
         while True:
             self.lights.animate()
 
+    @unittest.skip
     def test_color_chase(self):
         pixels = neopixel.NeoPixel(board.D18, 8 * 6 * 8, auto_write=False)
         pixels.brightness = 0.1
@@ -110,6 +111,7 @@ class LightsTest(unittest.TestCase):
         self.lights.clean()
         self.lights.rainbow_cycle(0.1)
 
+    @unittest.skip
     def test_random(self):
         for i in range(10000):
             self.lights.random()
