@@ -26,6 +26,8 @@ from adafruit_led_animation.color import \
 # todo check thread : https://www.geeksforgeeks.org/python-communicating-between-threads-set-1/
 # todo check thread2 : https://riptutorial.com/python/example/4691/communicating-between-threads
 from python.json_manager import JsonManager
+from python.sequence import Sequence
+from python.utils import Utils
 
 
 class Lights:
@@ -56,60 +58,75 @@ class Lights:
     # F Turns the NeoPixels red, green, and blue in sequence.
     # TODO check examples : https://www.digikey.fr/en/maker/projects/circuitpython-led-animations/d15c769c6f6d411297657c35f0166958
 
+    sequences = []
+    current_sequence = {}
     current_animation = {}
+    seq_pos = 0
+    time = 0
 
     def __init__(self, json_manager: JsonManager):
         self.default()
         self.json_manager = json_manager
 
     def update(self, key):
-        logging.info("update lights : "+key)
-        json_light = self.json_manager.get_lights(key)
-        if 'color' in json_light:
-            logging.debug(
-                "update lights with key : "+key+" method : "+json_light['method']+", color : "+json_light['color'])
-            json_color = json_light['color']
-            color = self.json_manager.get_color(json_color)
-            getattr(self, json_light['method'])(json_light, color)
+        self.load_seq(key)
+        self.animate()
 
-        else:
-            getattr(self, json_light['method'])(json_light)
+    def load_seq(self, key):
+        json_seq = self.json_manager.get_lights(key)
+        self.sequences = []
+        for s in json_seq['sequence']:
+            animation = Animation(s['time'], s['method'])
+            animation.color = self.json_manager.get_attribut(s, 'color')
+            self.sequences.append(animation)
+        self.seq_pos = 0
+        self.current_sequence = self.sequences[self.seq_pos]
+        self.time = Utils.current_milli_time()
+
+    def animate(self):
+        if Utils.is_time(self.time, self.current_sequence.time):
+            self.seq_pos = (self.seq_pos + 1) % len(self.sequences)
+            self.current_sequence = self.sequences[self.seq_pos]
+            getattr(self, self.current_sequence.name)()
+            self.time = Utils.current_milli_time()
+        self.current_animation.animate()
 
     def default(self):
         self.current_animation = Chase(self.strip, speed=0.1, color=RED, size=3, spacing=6)
 
-    def chase(self, parameters, color):
-        self.current_animation = Chase(self.strip, speed=0.1, color=color, size=3, spacing=6)
+    def chase(self):
 
-    def blink(self, parameters, color):
-        self.current_animation = Blink(self.strip, speed=0.5, color=color)
+        self.current_animation = Chase(self.strip, speed=0.1, color=self.current_sequence.color, size=3, spacing=6)
 
-    def color_cycle(self, parameters):
+    def blink(self):
+        self.current_animation = Blink(self.strip, speed=0.5, color=self.current_sequence.color)
+
+    def color_cycle(self):
         self.current_animation = ColorCycle(self.strip, 0.5, colors=[MAGENTA, ORANGE, TEAL])
 
-    def comet(self, parameters):
+    def comet(self):
         self.current_animation = Rainbow(self.pixel_wing_vertical, speed=0.1, period=2)
 
-    def pulse(self, parameters, color):
-        self.current_animation = Pulse(self.strip, speed=0.1, color=color, period=3)
+    def pulse(self):
+        self.current_animation = Pulse(self.strip, speed=0.1, color=self.current_sequence.color, period=3)
 
-    def rainbow(self, parameters):
+    def rainbow(self):
         self.current_animation = Rainbow(self.strip, speed=0.1, period=2)
 
-    def rainbow_chase(self, parameters):
+    def rainbow_chase(self):
         self.current_animation = RainbowChase(self.strip, speed=0.1, size=5, spacing=3)
 
-    def rainbow_comet(self, parameters):
+    def rainbow_comet(self):
         self.current_animation = RainbowComet(self.strip, speed=0.1, tail_length=7, bounce=True)
 
-    def rainbow_sparkle(self, parameters):
+    def rainbow_sparkle(self):
         self.current_animation = RainbowSparkle(self.strip, speed=0.1, num_sparkles=15)
 
-    def sparkle(self, parameters, color):
-        self.current_animation = Sparkle(self.strip, speed=0.05, color=color, num_sparkles=10)
+    def sparkle(self):
+        self.current_animation = Sparkle(self.strip, speed=0.05, color=self.current_sequence.color, num_sparkles=10)
 
-    def sparkle_pulse(self, parameters, color):
-        self.current_animation = SparklePulse(self.strip, speed=0.05, period=3, color=color)
+    def sparkle_pulse(self):
+        self.current_animation = SparklePulse(self.strip, speed=0.05, period=3, color=self.current_sequence.color)
 
     def fade_red(self):
         self.strip.fill((255, 0, 0))
@@ -152,9 +169,11 @@ class Lights:
             self.strip.show()
             time.sleep(wait)
 
-    def animate(self):
-        self.current_animation.animate()
 
-    # def animate_loop(self, time):
-    # todo animate with time
-    #    self.current_animation.animate()
+class Animation:
+    color = ()
+
+    def __init__(self, name, t, color):
+        self.name = name
+        self.color = color
+        self.time = t

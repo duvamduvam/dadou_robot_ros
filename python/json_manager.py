@@ -11,7 +11,7 @@ class JsonManager:
     with open("json/face_sequence.json", 'r') as json_file:
         face_seq = json.load(json_file)
 
-    with open("json/lights.json", 'r') as json_file:
+    with open("json/face_lights.json", 'r') as json_file:
         lights = json.load(json_file)
 
     with open("json/visual.json", 'r') as json_file:
@@ -49,7 +49,7 @@ class JsonManager:
         return result[0]
 
     def get_lights(self, key):
-        result = jsonpath_rw_ext.match('$.lights[?keys~' + key + ']', self.lights)
+        result = jsonpath_rw_ext.match('$.lights_seq[?keys~' + key + ']', self.lights)
         logging.debug(result)
         return result[0]
 
@@ -59,3 +59,10 @@ class JsonManager:
         json_color = result[0]['color']
         color = (int(json_color['red']), int(json_color['green']), int(json_color['blue']))
         return color
+
+    @staticmethod
+    def get_attribut(self, json_object, key):
+        if key in json_object:
+            return json_object[key]
+        else:
+            return {}

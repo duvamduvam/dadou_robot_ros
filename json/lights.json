@@ -1,43 +1,34 @@
 {
   "lights": [
     {
-      "keys": "B8 B10",
       "method": "sparkle_pulse",
       "color": "AMBER"
     },
     {
-      "keys": "B1 B10",
       "method": "chase",
       "color": "RED"
     },
     {
-      "keys": "B2",
       "method": "blink",
       "color": "BLUE"
     },
     {
-      "keys": "B3",
       "method": "color_cycle"
     },
     {
-      "keys": "B5",
       "method": "pulse",
       "color": "BLUE"
     },
     {
-      "keys": "B4",
       "method": "rainbow_chase"
     },
     {
-      "keys": "B6",
       "method": "rainbow_comet"
     },
     {
-      "keys": "B7",
       "method": "color_cycle"
     },
     {
-      "keys": "B9",
       "method": "comet"
     }
   ]

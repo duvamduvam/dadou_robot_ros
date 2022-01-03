@@ -1,0 +1,53 @@
+{
+  "lights_seq": [
+    {
+      "name": "default",
+      "keys": "C1",
+      "loop": true,
+      "sequence": [
+        {
+          "method": "sparkle_pulse",
+          "time": "300",
+          "color": "AMBER"
+        },
+        {
+          "method": "chase",
+          "time": "200",
+          "color": "GREEN"
+        },
+        {
+          "method": "blink",
+          "time": "450",
+          "color": "BLUE"
+        }
+      ]
+    },
+    {
+      "name": "love",
+      "keys": "C2",
+      "loop": false,
+      "sequence": [
+        {
+          "method": "sparkle",
+          "time": "300",
+          "color": "RED"
+        },
+        {
+          "method": "pulse",
+          "time": "200",
+          "color": "RED"
+        }
+      ]
+    },
+    {
+      "name": "heidi",
+      "keys": "C3",
+      "loop": false,
+      "sequence": [
+        {
+          "method": "rainbow_chase"
+        }
+      ]
+    }
+  ]
+}
