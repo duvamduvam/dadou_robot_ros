@@ -41,11 +41,14 @@ class LightsTest(unittest.TestCase):
     def test_lights_key(self):
         key = "B1"
         logging.info("test lights with key " + key)
-        self.lights.update(key)
-        # while True:
-        current_time = Utils.current_milli_time()
-        while Utils.is_time(current_time, 500) == False:
-            self.lights.animate()
+
+        keys = {"B1", "B2", "B3", "B4", "B5", "B6", "B7", "B8"}
+        for k in keys:
+            self.lights.update(k)
+            current_time = Utils.current_milli_time()
+            while Utils.is_time(current_time, 1000) == False:
+                self.lights.animate()
+
 
     @unittest.skip
     def test_lights_default(self):
