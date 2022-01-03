@@ -46,7 +46,7 @@ class LightsTest(unittest.TestCase):
         for k in keys:
             self.lights.update(k)
             current_time = Utils.current_milli_time()
-            while Utils.is_time(current_time, 1000) == False:
+            while Utils.is_time(current_time, 10000) == False:
                 self.lights.animate()
 
 
