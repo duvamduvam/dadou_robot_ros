@@ -1,6 +1,7 @@
 import logging
 
 from python.tests.conf_test import TestSetup
+from python.utils import Utils
 
 TestSetup()
 
@@ -41,7 +42,9 @@ class LightsTest(unittest.TestCase):
         key = "B1"
         logging.info("test lights with key " + key)
         self.lights.update(key)
-        while True:
+        #while True:
+        current_time = Utils.current_milli_time()
+        while Utils.is_time(current_time, 500):
             self.lights.animate()
 
     @unittest.skip
