@@ -67,13 +67,12 @@ class Lights:
     def __init__(self, json_manager: JsonManager):
         self.default()
         self.json_manager = json_manager
+        self.update('default')
 
     def update(self, key):
-        self.load_seq(key)
-        self.animate()
-
-    def load_seq(self, key):
         json_seq = self.json_manager.get_lights(key)
+        if json_seq == 0:
+            return
         self.sequences = []
         for s in json_seq['sequence']:
             animation = Animation(s['time'], s['method'])
