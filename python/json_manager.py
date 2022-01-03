@@ -56,5 +56,6 @@ class JsonManager:
     def get_color(self, key):
         result = jsonpath_rw_ext.match('$.colors[?name~' + key + ']', self.colors)
         logging.debug(result)
-        color = (int(result[0]['red']), int(result[0]['green']), int(result[0]['blue']))
+        json_color = result[0]['color']
+        color = (int(json_color['red']), int(json_color['green']), int(json_color['blue']))
         return color
