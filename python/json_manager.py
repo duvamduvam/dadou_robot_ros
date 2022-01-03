@@ -1,5 +1,6 @@
 import json
 import logging
+import traceback
 
 import jsonpath_rw_ext
 
@@ -17,8 +18,8 @@ class JsonManager:
 
         with open("json/visual.json", 'r') as json_file:
             visual = json.load(json_file)
-    except:
-        logging.error("can't load json file")
+    except FileNotFoundError:
+        logging.error(traceback.format_exc())
 
     def get_visual_path(self, key) -> str:
         result = jsonpath_rw_ext.match('$.visual[?name==' + key + ']', self.visual)
