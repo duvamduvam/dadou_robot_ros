@@ -52,7 +52,7 @@ class JsonManager:
     def get_lights(self, key):
         result = jsonpath_rw_ext.match('$.lights_seq[?keys~' + key + ']', self.lights)
         logging.debug(result)
-        return result[0]
+        return result
 
     def get_color(self, key):
         result = jsonpath_rw_ext.match('$.colors[?name~' + key + ']', self.colors)
