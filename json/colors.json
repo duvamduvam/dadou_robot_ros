@@ -1,6 +1,14 @@
 {
   "colors": [
     {
+      "name": "AMBER",
+      "color": {
+        "red": "255",
+        "green": "100",
+        "blue": "0"
+      }
+    },
+    {
       "name": "RED",
       "color": {
         "red": "255",

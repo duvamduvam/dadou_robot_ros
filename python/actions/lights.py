@@ -105,11 +105,11 @@ class Lights:
     def rainbow_sparkle(self, parameters):
         self.current_animation = RainbowSparkle(self.strip, speed=0.1, num_sparkles=15)
 
-    def sparkle(self, parameters):
-        self.current_animation = Sparkle(self.strip, speed=0.05, color=AMBER, num_sparkles=10)
+    def sparkle(self, parameters, color):
+        self.current_animation = Sparkle(self.strip, speed=0.05, color=color, num_sparkles=10)
 
-    def sparkle_pulse(self, parameters):
-        self.current_animation = SparklePulse(self.strip, speed=0.05, period=3, color=JADE)
+    def sparkle_pulse(self, parameters, color):
+        self.current_animation = SparklePulse(self.strip, speed=0.05, period=3, color=color)
 
     def fade_red(self):
         self.strip.fill((255, 0, 0))

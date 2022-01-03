@@ -1,6 +1,11 @@
 {
   "lights": [
     {
+      "keys": "B8 B10",
+      "method": "sparkle_pulse",
+      "color": "AMBER"
+    },
+    {
       "keys": "B1 B10",
       "method": "chase",
       "color": "RED"
