@@ -1,7 +1,7 @@
 import logging
 
-
 from python.tests.conf_test import TestSetup
+
 TestSetup()
 
 from python.json_manager import JsonManager
@@ -26,7 +26,6 @@ from python.actions.lights import Lights
 
 
 class LightsTest(unittest.TestCase):
-
     RED = (255, 0, 0)
     YELLOW = (255, 150, 0)
     GREEN = (0, 255, 0)
@@ -38,17 +37,16 @@ class LightsTest(unittest.TestCase):
     json_manager = JsonManager()
     lights = Lights(json_manager)
 
-
     def test_lights_key(self):
         key = "B5"
-        logging.info("test lights with key {key}".key)
+        logging.info("test lights with key " + key)
         self.lights.update(key)
         while True:
             self.lights.animate()
 
     @unittest.skip
     def test_lights_default(self):
-        #self.lights.update("B1")
+        # self.lights.update("B1")
         while True:
             self.lights.animate()
 
@@ -96,8 +94,8 @@ class LightsTest(unittest.TestCase):
                 Comet(m6, 0.05, color.TEAL, tail_length=15),
             ),
             # Sequential animations on the built-in NeoPixels then the NeoPixel strip
-            #Chase(m1, 0.05, size=2, spacing=3, color=color.PURPLE),
-            #Chase(m2, 0.05, size=2, spacing=3, color=color.PURPLE),
+            # Chase(m1, 0.05, size=2, spacing=3, color=color.PURPLE),
+            # Chase(m2, 0.05, size=2, spacing=3, color=color.PURPLE),
             advance_interval=3.0,
             auto_clear=True,
             auto_reset=True,
