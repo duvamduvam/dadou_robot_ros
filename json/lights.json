@@ -23,6 +23,10 @@
       "keys": "B5",
       "method": "pulse",
       "color": "BLUE"
+    },
+    {
+      "keys": "B4",
+      "method": "rainbow_chase"
     }
   ]
 }
