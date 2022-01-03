@@ -4,7 +4,7 @@
       "name": "RED",
       "color": {
         "red": "255",
-        "green": "O",
+        "green": "0",
         "blue": "0"
       }
     },
@@ -20,7 +20,7 @@
       "name": "BLUE",
       "color": {
         "red": "0",
-        "green": "O",
+        "green": "0",
         "blue": "255"
       }
     }
