@@ -1,4 +1,5 @@
 import logging.config
+import colorlog
 import platform
 import os
 
