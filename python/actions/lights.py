@@ -69,7 +69,7 @@ class Lights:
             logging.debug(
                 "update lights with key : "+key+" method : "+json_light['method']+", color : "+json_light['color'])
             json_color = json_light['color']
-            color = self.json_manager.get_color(key)
+            color = self.json_manager.get_color(json_color)
             getattr(self, json_light['method'])(json_light, color)
 
         else:
