@@ -40,7 +40,7 @@ class LightsTest(unittest.TestCase):
 
 
 
-    def test_lights_default(self):
+    def test_lights_key(self):
         logging.info("test lights")
         self.lights.update("B5")
         while True:
