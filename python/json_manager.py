@@ -6,20 +6,17 @@ import jsonpath_rw_ext
 
 
 class JsonManager:
-    try:
-        with open("json/colors.json", 'r') as json_file:
-            colors = json.load(json_file)
+    with open("json/colors.json", 'r') as json_file:
+        colors = json.load(json_file)
 
-        with open("json/face_sequence.json", 'r') as json_file:
-            face_seq = json.load(json_file)
+    with open("json/face_sequence.json", 'r') as json_file:
+        face_seq = json.load(json_file)
 
-        with open("json/lights_sequenc.json", 'r') as json_file:
-            lights = json.load(json_file)
+    with open("json/lights_sequence.json", 'r') as json_file:
+        lights = json.load(json_file)
 
-        with open("json/visual.json", 'r') as json_file:
-            visual = json.load(json_file)
-    except FileNotFoundError:
-        logging.error(traceback.format_exc())
+    with open("json/visual.json", 'r') as json_file:
+        visual = json.load(json_file)
 
     def get_visual_path(self, key) -> str:
         result = jsonpath_rw_ext.match('$.visual[?name==' + key + ']', self.visual)
