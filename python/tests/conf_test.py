@@ -1,5 +1,5 @@
 import logging.config
-#import colorlog
+import colorlog
 import platform
 import os
 
