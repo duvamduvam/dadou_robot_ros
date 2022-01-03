@@ -27,6 +27,10 @@
     {
       "keys": "B4",
       "method": "rainbow_chase"
+    },
+    {
+      "keys": "B6",
+      "method": "rainbow_comet"
     }
   ]
 }
