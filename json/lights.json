@@ -31,6 +31,10 @@
     {
       "keys": "B6",
       "method": "rainbow_comet"
+    },
+    {
+      "keys": "B7",
+      "method": "color_cycle"
     }
   ]
 }
