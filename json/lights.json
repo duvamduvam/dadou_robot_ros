@@ -35,6 +35,10 @@
     {
       "keys": "B7",
       "method": "color_cycle"
+    },
+    {
+      "keys": "B9",
+      "method": "color_cycle"
     }
   ]
 }

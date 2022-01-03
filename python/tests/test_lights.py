@@ -38,7 +38,7 @@ class LightsTest(unittest.TestCase):
     lights = Lights(json_manager)
 
     def test_lights_key(self):
-        key = "B7"
+        key = "B9"
         logging.info("test lights with key " + key)
         self.lights.update(key)
         while True:
