@@ -41,7 +41,7 @@ class LightsTest(unittest.TestCase):
 
     def test_lights_key(self):
         key = "B5"
-        logging.info("test lights with key {key}")
+        logging.info("test lights with key {key}".key)
         self.lights.update(key)
         while True:
             self.lights.animate()
