@@ -4,8 +4,8 @@ class PathTime:
         self.path = path
         self.time = time
 
-    def get_path(self, params) -> str:
+    def get_path(self) -> str:
         return self.path
 
-    def get_time(self, params) -> int:
+    def get_time(self) -> int:
         return self.time

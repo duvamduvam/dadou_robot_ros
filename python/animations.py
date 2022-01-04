@@ -25,7 +25,7 @@ class Animations:
         self.LED_COUNT = led_count
         self.strip = strip
 
-    def default(self, params):
+    def default(self,parmas):
         return  Chase(self.strip, speed=0.1, color=RED, size=3, spacing=6)
 
     def chase(self, params):
@@ -84,7 +84,7 @@ class Animations:
         logging.info("fill strip with " + str(color))
         self.strip.fill(color)
 
-    def clean(self, params):
+    def clean(self):
         self.strip.fill(BLACK)
 
     def color_chase(self, color, wait):

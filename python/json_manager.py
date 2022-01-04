@@ -34,7 +34,7 @@ class JsonManager:
         logging.debug(result)
         return result[0]
 
-    def get_all_visual(self, params):
+    def get_all_visual(self):
         result = jsonpath_rw_ext.match('$.visual[*]', self.visual)
         logging.debug(result)
         return result

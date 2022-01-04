@@ -15,7 +15,7 @@ class AudioTests(unittest.TestCase):
     mapping = Mapping()
     audio = Audio(mapping)
 
-    def play(self, params):
+    def play(self):
         path_time = []
         path_time.append(PathTime("audios/lunettes.wav", 0))
         path_time.append(PathTime("audios/manteau.wav", 5))
@@ -23,6 +23,6 @@ class AudioTests(unittest.TestCase):
         self.audio.play_sounds(path_time)
         time.sleep(20)
 
-    def test_key_seq(self, params):
+    def test_key_seq(self):
         self.audio.process("A1")
         time.sleep(20)

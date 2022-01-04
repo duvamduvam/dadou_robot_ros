@@ -24,7 +24,7 @@ class TestFace(unittest.TestCase):
     image_mapping = ImageMapping(8, 8, 3, 2)
 
     @unittest.skip
-    def test_something(self, params):
+    def test_something(self):
         self.face.pixels.fill(BLACK)
         visual = Visual.get_visual("test", self.face.visuals)
         self.image_mapping.mapping(self.face.pixels, visual.rgb)
@@ -32,7 +32,7 @@ class TestFace(unittest.TestCase):
         # time.sleep(10)
 
     @unittest.skip
-    def test_img_mouth(self, params):
+    def test_img_mouth(self):
         logging.info("test_img_mouth")
         self.face.pixels.fill(BLACK)
         visual = Visual.get_visual("mopen1", self.face.visuals)
@@ -50,7 +50,7 @@ class TestFace(unittest.TestCase):
         self.face.pixels.show()
         time.sleep(10)
 
-    def test_face2(self, params):
+    def test_face2(self):
         logging.info("animate face A1")
         self.face.update("A1")
         while True:
@@ -58,7 +58,7 @@ class TestFace(unittest.TestCase):
             self.face.animate()
 
     @unittest.skip
-    def test_basic(self, params):
+    def test_basic(self):
         pixels = neopixel.NeoPixel(board.D18, 8 * 6 * 8, auto_write=False)
         pixels.brightness = 0.1
         while True:
@@ -72,7 +72,7 @@ class TestFace(unittest.TestCase):
             time.sleep(1)
 
     @unittest.skip
-    def test_img_eye(self, params):
+    def test_img_eye(self):
         path = self.json_manager.get_visual_path("eye-still")
         visual = Visual("eye-still", path)
         # self.face.pixels[10] = visual.rgb[2][2]

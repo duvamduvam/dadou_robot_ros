@@ -70,7 +70,7 @@ class Lights:
             self.sequence.current_element)
         logging.info("update lights sequence to " + json_seq['name'])
 
-    def animate(self, params):
+    def animate(self):
         if not self.sequence.loop and Utils.is_time(self.sequence.start_time, self.sequence.duration):
             self.update('default')
             return

@@ -15,7 +15,7 @@ class NeckTests(unittest.TestCase):
 
     neck = Neck()
 
-    def test_move_key(self, params):
+    def test_move_key(self):
         logging.debug("start test servo")
         for i in range(3):
             logging.debug("test key 60 for servo")

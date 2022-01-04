@@ -12,7 +12,7 @@ class Com:
     #time.sleep(0.1)  # wait for serial to open
     watcher = FileWatcher()
 
-    def get_msg(self, params):
+    def get_msg(self):
 
         if self.watcher.changed():
             return self.watcher.get_last_key()

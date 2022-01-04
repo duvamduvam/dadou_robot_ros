@@ -38,7 +38,7 @@ class Face:
         self.load_visual()
         self.json_manager = json_manager
 
-    def load_visual(self, params):
+    def load_visual(self):
         visuals_path = self.json_manager.get_all_visual()
         for visual_path in visuals_path:
             self.visuals.append(Visual(visual_path['name'], visual_path['path']))
@@ -82,7 +82,7 @@ class Face:
             seq.current_time = Utils.current_milli_time()
             # logging.debug("next sequence[" + str(seq.current_frame) + "] total : " + str(len(seq.frames)))
 
-    def animate(self, params):
+    def animate(self):
         self.animate_part(self.mouth_seq, self.mouth_start, self.mouth_end)
         # self.animate_part(self.reye_seq, self.reye_start, self.reye_end)
         # self.animate_part(self.leye_seq, self.leye_start, self.leye_end)

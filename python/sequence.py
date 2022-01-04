@@ -15,6 +15,6 @@ class Sequence:
         self.elements = elements
         self.current_element = elements[self.pos]
 
-    def next(self, params):
+    def next(self):
         self.pos = (self.pos + 1) % len(self.elements)
         self.current_element = self.elements[self.pos]
