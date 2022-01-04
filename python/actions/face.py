@@ -1,15 +1,10 @@
 import logging.config
-
-from image_mapping import ImageMapping
-from python.sequence import Sequence
-from python.tests.conf_test import TestSetup
-import time
-from operator import mod
-
 import board
 import neopixel
 
+from image_mapping import ImageMapping
 from python.json_manager import JsonManager
+from python.sequence import Sequence
 from python.utils import Utils
 from python.visual import Visual
 
@@ -34,7 +29,7 @@ class Face:
     loop = False
     time = 0
 
-    def __init__(self, json_manager):
+    def __init__(self, json_manager: JsonManager):
         self.load_visuals()
         self.json_manager = json_manager
 

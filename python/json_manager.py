@@ -1,6 +1,5 @@
 import json
 import logging
-import traceback
 
 import jsonpath_rw_ext
 
