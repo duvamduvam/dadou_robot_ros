@@ -13,7 +13,7 @@ class Com:
     watcher = FileWatcher()
 
     def get_msg(self):
-
+        logging.info("get_msg")
         if self.watcher.changed():
             return self.watcher.get_last_key()
 
