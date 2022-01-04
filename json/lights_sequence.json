@@ -8,17 +8,17 @@
       "sequence": [
         {
           "method": "sparkle_pulse",
-          "time": 300,
+          "duration": 300,
           "color": "AMBER"
         },
         {
           "method": "chase",
-          "time": 200,
+          "duration": 200,
           "color": "GREEN"
         },
         {
           "method": "blink",
-          "time": 450,
+          "duration": 450,
           "color": "BLUE"
         }
       ]
@@ -31,12 +31,12 @@
       "sequence": [
         {
           "method": "sparkle",
-          "time": 300,
+          "duration": 300,
           "color": "RED"
         },
         {
           "method": "pulse",
-          "time": 200,
+          "duration": 200,
           "color": "RED"
         }
       ]
@@ -48,7 +48,8 @@
       "duration": 5000,
       "sequence": [
         {
-          "method": "rainbow_chase"
+          "method": "rainbow_chase",
+          "duration": 200
         }
       ]
     }
