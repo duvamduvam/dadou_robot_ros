@@ -18,21 +18,22 @@ from adafruit_led_animation.animation.rainbowsparkle import RainbowSparkle
 from adafruit_led_animation.color import \
     AMBER, BLACK, BLUE, CYAN, GREEN, JADE, ORANGE, PURPLE, RED, MAGENTA, TEAL, WHITE, YELLOW
 
+
 class Animations:
 
-    def __init__(self, led_count, strip, current_sequence):
+    def __init__(self, led_count, strip, sequence):
         self.LED_COUNT = led_count
         self.strip = strip
-        self.current_sequence = current_sequence
+        self.sequence = sequence
 
     def default(self):
         return  Chase(self.strip, speed=0.1, color=RED, size=3, spacing=6)
 
     def chase(self):
-        return  Chase(self.strip, speed=0.1, color=self.current_sequence.color, size=3, spacing=6)
+        return  Chase(self.strip, speed=0.1, color=self.sequence.current_element.color, size=3, spacing=6)
 
     def blink(self):
-        return Blink(self.strip, speed=0.5, color=self.current_sequence.color)
+        return Blink(self.strip, speed=0.5, color=self.sequence.current_element.color)
 
     def color_cycle(self):
         return ColorCycle(self.strip, 0.5, colors=[MAGENTA, ORANGE, TEAL])
@@ -41,7 +42,7 @@ class Animations:
         return Rainbow(self.strip, speed=0.1, period=2)
 
     def pulse(self):
-        return Pulse(self.strip, speed=0.1, color=self.current_sequence.color, period=3)
+        return Pulse(self.strip, speed=0.1, color=self.sequence.current_element.color, period=3)
 
     def rainbow(self):
         return Rainbow(self.strip, speed=0.1, period=2)
@@ -56,10 +57,10 @@ class Animations:
         return RainbowSparkle(self.strip, speed=0.1, num_sparkles=15)
 
     def sparkle(self):
-        return Sparkle(self.strip, speed=0.05, color=self.current_sequence.color, num_sparkles=10)
+        return Sparkle(self.strip, speed=0.05, color=self.sequence.current_element.color, num_sparkles=10)
 
     def sparkle_pulse(self):
-        return SparklePulse(self.strip, speed=0.05, period=3, color=self.current_sequence.color)
+        return SparklePulse(self.strip, speed=0.05, period=3, color=self.sequence.current_element.color)
 
     def fade_red(self):
         self.strip.fill((255, 0, 0))

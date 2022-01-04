@@ -48,7 +48,7 @@ class Lights:
 
     sequence = {}
     current_animation = {}
-    animations = Animations(LED_COUNT, strip, current_animation)
+    animations = Animations(LED_COUNT, strip, sequence)
 
     def __init__(self, json_manager: JsonManager):
         self.json_manager = json_manager
@@ -66,7 +66,7 @@ class Lights:
             animation.color = self.json_manager.get_color(color_name)
             sequences.append(animation)
         self.sequence = Sequence(json_seq['duration'], json_seq['loop'], sequences)
-        self.current_animation = getattr(self.animations, self.sequence.current_frame.method)()
+        self.current_animation = getattr(self.animations, self.sequence.current_element.method)()
         logging.info("update lights sequence to " + json_seq['name'])
 
     def animate(self):
@@ -74,12 +74,12 @@ class Lights:
             self.update('default')
             return
 
-        if Utils.is_time(self.sequence.current_frame.start_time, self.sequence.current_frame.timeout):
+        if Utils.is_time(self.sequence.current_element.start_time, self.sequence.current_element.timeout):
             self.sequence.next()
-            self.current_animation = getattr(Animations, self.sequence.current_frame.method)()
+            self.current_animation = getattr(Animations, self.sequence.current_element.method)()
             logging.debug(
-                "change sequence to " + self.sequence.current_frame.method + " with time " + str(
-                    self.sequence.current_frame.timeout))
+                "change sequence to " + self.sequence.current_element.method + " with time " + str(
+                    self.sequence.current_element.timeout))
         self.current_animation.animate()
 
 
