@@ -76,9 +76,9 @@ class Lights:
             return
         self.sequences = []
         for s in json_seq['sequence']:
-            animation = Animation(s['time'], s['method'])
-            animation.color = self.json_manager.get_attribut(s, 'color')
-            self.sequences.append(animation)
+            sequence = Animation(s['time'], s['method'])
+            sequence.color = self.json_manager.get_attribut(s, 'color')
+            self.sequences.append(sequence)
         self.seq_pos = 0
         self.current_sequence = self.sequences[self.seq_pos]
         self.time = Utils.current_milli_time()
