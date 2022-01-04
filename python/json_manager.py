@@ -24,6 +24,9 @@ class JsonManager:
     with open(JSON_PATH + LIGHTS, 'r') as json_file:
         lights = json.load(json_file)
 
+    with open(JSON_PATH + LIGHTS_SEQUENCE, 'r') as json_file:
+        lights_seq = json.load(json_file)
+
     with open(JSON_PATH + VISUALS, 'r') as json_file:
         visual = json.load(json_file)
 
@@ -79,7 +82,7 @@ class JsonManager:
         return self.standard_return(result, True, name, False, self.FACE_SEQUENCE)
 
     def get_lights(self, key):
-        result = jsonpath_rw_ext.match('$.lights_seq[?keys~' + key + ']', self.lights)
+        result = jsonpath_rw_ext.match('$.lights_seq[?keys~' + key + ']', self.lights_seq)
         logging.debug(result)
         return self.standard_return(result, True, key, False, self.LIGHTS_SEQUENCE)
 
