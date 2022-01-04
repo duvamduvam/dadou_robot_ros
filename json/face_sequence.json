@@ -16,7 +16,8 @@
       "mouth": "mspeak",
       "reye": "ebase",
       "leye": "ebase",
-      "keys": "defaultZ3"
+      "keys": "default",
+      "keys": "Z3"
     }
   ],
   "part_seq": [

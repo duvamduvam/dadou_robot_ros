@@ -83,6 +83,7 @@ class JsonManager:
         return self.standard_return(result, False, False, False, self.VISUALS)
 
     def get_face_seq(self, key):
+        #todo check https://jmespath.org/tutorial.html to implements contains search
         result = jsonpath_rw_ext.match('$.main_seq[?keys ~ ' + key + ']', self.face_seq, debug=True)
         logging.debug(result)
         return self.standard_return(result, True, key, False, self.FACE_SEQUENCE)
