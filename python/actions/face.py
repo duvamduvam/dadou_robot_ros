@@ -57,6 +57,7 @@ class Face:
         return Sequence(json_seq['duration'], json_seq[JsonManager.LOOP], frames)
 
     def update(self, key):
+        logging.info("update face sequence : " + key)
         json_seq = self.json_manager.get_face_seq(key)
         self.loop = json_seq[JsonManager.LOOP]
         self.duration = json_seq['duration']
