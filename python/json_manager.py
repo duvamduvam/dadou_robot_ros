@@ -9,7 +9,7 @@ class JsonManager:
 
     COLOR = 'color'
     DURATION = 'duration'
-    METHOD = 'meethod'
+    METHOD = 'method'
     NAME = 'name'
     KEYS = 'keys'
     LOOP = 'loop'
