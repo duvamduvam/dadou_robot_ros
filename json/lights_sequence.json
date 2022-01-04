@@ -2,7 +2,7 @@
   "lights_seq": [
     {
       "name": "default",
-      "keys": "C1 default",
+      "keys": "default",
       "loop": true,
       "sequence": [
         {
