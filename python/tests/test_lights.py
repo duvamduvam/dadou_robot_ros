@@ -39,6 +39,10 @@ class LightsTest(unittest.TestCase):
     lights = Lights(json_manager)
 
     def test_lights_key(self):
+        current_time = Utils.current_milli_time()
+        while not Utils.is_time(current_time, 2000):
+            self.lights.animate()
+
         key = "B1"
         logging.info("test lights with key " + key)
 
@@ -46,7 +50,7 @@ class LightsTest(unittest.TestCase):
         for k in keys:
             self.lights.update(k)
             current_time = Utils.current_milli_time()
-            while Utils.is_time(current_time, 10000) == False:
+            while not Utils.is_time(current_time, 10000):
                 self.lights.animate()
 
 
