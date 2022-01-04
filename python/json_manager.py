@@ -71,4 +71,4 @@ class JsonManager:
         if key in json_object:
             return json_object[key]
         else:
-            return {}
+            return 0
