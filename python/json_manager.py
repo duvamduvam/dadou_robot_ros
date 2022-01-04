@@ -5,6 +5,8 @@ import jsonpath_rw_ext
 
 
 class JsonManager:
+    logging.info("start json manager")
+
     JSON_PATH = "json/"
     AUDIOS = "audios.json"
     AUDIO_SEQUENCE = "audio_sequence.json"
