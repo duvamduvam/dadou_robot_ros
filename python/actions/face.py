@@ -30,8 +30,8 @@ class Face:
     time = 0
 
     def __init__(self, json_manager: JsonManager):
-        self.load_visuals()
         self.json_manager = json_manager
+        self.load_visuals()
 
     def load_visuals(self):
         visuals_path = self.json_manager.get_all_visual()
