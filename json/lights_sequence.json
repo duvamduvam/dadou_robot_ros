@@ -4,6 +4,7 @@
       "name": "default",
       "keys": "default",
       "loop": true,
+      "duration": 7000,
       "sequence": [
         {
           "method": "sparkle_pulse",
@@ -26,6 +27,7 @@
       "name": "love",
       "keys": "C2",
       "loop": false,
+      "duration": 6000,
       "sequence": [
         {
           "method": "sparkle",
@@ -43,6 +45,7 @@
       "name": "heidi",
       "keys": "C3",
       "loop": false,
+      "duration": 5000,
       "sequence": [
         {
           "method": "rainbow_chase"
