@@ -177,6 +177,6 @@ class Animation:
     timeout = 0
 
     def __init__(self, method, timeout: int):
-        logging.debug("add animation method : " + method + " timeout : " + timeout)
+        logging.debug("add animation method : " + method + " timeout : " + str(timeout))
         self.method = method
         self.timeout = timeout
