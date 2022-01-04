@@ -17,4 +17,4 @@ class MyTestCase(unittest.TestCase):
         while Utils.is_time(start_time, 200000):
             msg = self.com.get_msg()
             if msg:
-                logging.info("new msg : ".msg)
+                logging.info("new msg : "+msg)
