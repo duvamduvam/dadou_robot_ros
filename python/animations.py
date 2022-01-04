@@ -24,45 +24,44 @@ class Animations:
     def __init__(self, led_count, strip, sequence):
         self.LED_COUNT = led_count
         self.strip = strip
-        self.sequence = sequence
 
-    def default(self):
+    def default(self, params):
         return  Chase(self.strip, speed=0.1, color=RED, size=3, spacing=6)
 
-    def chase(self):
-        return  Chase(self.strip, speed=0.1, color=self.sequence.current_element.color, size=3, spacing=6)
+    def chase(self, params):
+        return  Chase(self.strip, speed=0.1, color=params.color, size=3, spacing=6)
 
-    def blink(self):
-        return Blink(self.strip, speed=0.5, color=self.sequence.current_element.color)
+    def blink(self, params):
+        return Blink(self.strip, speed=0.5, color=params.color)
 
-    def color_cycle(self):
+    def color_cycle(self, params):
         return ColorCycle(self.strip, 0.5, colors=[MAGENTA, ORANGE, TEAL])
 
-    def comet(self):
+    def comet(self, params):
         return Rainbow(self.strip, speed=0.1, period=2)
 
-    def pulse(self):
-        return Pulse(self.strip, speed=0.1, color=self.sequence.current_element.color, period=3)
+    def pulse(self, params):
+        return Pulse(self.strip, speed=0.1, color=params.color, period=3)
 
-    def rainbow(self):
+    def rainbow(self, params):
         return Rainbow(self.strip, speed=0.1, period=2)
 
-    def rainbow_chase(self):
+    def rainbow_chase(self, params):
         return RainbowChase(self.strip, speed=0.1, size=5, spacing=3)
 
-    def rainbow_comet(self):
+    def rainbow_comet(self, params):
         return RainbowComet(self.strip, speed=0.1, tail_length=7, bounce=True)
 
-    def rainbow_sparkle(self):
+    def rainbow_sparkle(self, params):
         return RainbowSparkle(self.strip, speed=0.1, num_sparkles=15)
 
-    def sparkle(self):
-        return Sparkle(self.strip, speed=0.05, color=self.sequence.current_element.color, num_sparkles=10)
+    def sparkle(self, params):
+        return Sparkle(self.strip, speed=0.05, color=params.color, num_sparkles=10)
 
-    def sparkle_pulse(self):
-        return SparklePulse(self.strip, speed=0.05, period=3, color=self.sequence.current_element.color)
+    def sparkle_pulse(self, params):
+        return SparklePulse(self.strip, speed=0.05, period=3, color=params.color)
 
-    def fade_red(self):
+    def fade_red(self, params):
         self.strip.fill((255, 0, 0))
         time.sleep(0.5)
         self.strip.fill((0, 255, 0))
@@ -70,7 +69,7 @@ class Animations:
         self.strip.fill((0, 0, 255))
         time.sleep(0.5)
 
-    def random(self):
+    def random(self, params):
         # red = 0x100000
         i = random.randint(0, self.LED_COUNT - 1)
 
@@ -85,7 +84,7 @@ class Animations:
         logging.info("fill strip with " + str(color))
         self.strip.fill(color)
 
-    def clean(self):
+    def clean(self, params):
         self.strip.fill(BLACK)
 
     def color_chase(self, color, wait):

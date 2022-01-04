@@ -13,7 +13,7 @@ class WheelTest(unittest.TestCase):
 
     wheel = Wheel()
 
-    def test_run(self):
+    def test_run(self, params):
         self.wheel.update("AA")
         self.wheel.process()
         time.sleep(1)

@@ -27,7 +27,7 @@ class Audio:
                 self.player.enqueue(Sound(self.silence), 1)
         self.player.play()
 
-    def stop_sound(self):
+    def stop_sound(self, params):
         self.player.stop()
 
     def process(self, key):

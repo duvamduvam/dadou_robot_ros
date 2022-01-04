@@ -12,7 +12,7 @@ from python.visual import Image
 class MyTestCase(unittest.TestCase):
     TestSetup()
 
-    def test_load(self):
+    def test_load(self, params):
         image = Image("../../visuals/")
         image.load_images()
         self.assertEqual(True, False)  # add assertion here

@@ -10,7 +10,7 @@ class FileWatcher:
     file = 'conf/test_key.txt'
     last_modified = os.path.getctime(file)
 
-    def changed(self) -> bool:
+    def changed(self, params) -> bool:
         current_time = os.path.getctime(self.file)
         if current_time != self.last_modified:
             key = Utils.last_line(self.file)
@@ -25,7 +25,7 @@ class FileWatcher:
         file.write(key)
         file.close()
 
-    def get_last_key(self) -> str:
+    def get_last_key(self, params) -> str:
         if len(self.keys) == 0:
             raise (IndexError, "keys list empty")
             return

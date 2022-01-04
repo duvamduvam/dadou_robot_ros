@@ -66,20 +66,22 @@ class Lights:
             animation.color = self.json_manager.get_color(color_name)
             sequences.append(animation)
         self.sequence = Sequence(json_seq['duration'], json_seq['loop'], sequences)
-        self.current_animation = getattr(self.animations, self.sequence.current_element.method)()
+        self.current_animation = getattr(self.animations, self.sequence.current_element.method)(
+            self.sequence.current_element)
         logging.info("update lights sequence to " + json_seq['name'])
 
-    def animate(self):
+    def animate(self, params):
         if not self.sequence.loop and Utils.is_time(self.sequence.start_time, self.sequence.duration):
             self.update('default')
             return
 
-        if Utils.is_time(self.sequence.current_element.start_time, self.sequence.current_element.timeout):
+        if Utils.is_time(params.start_time, params.timeout):
             self.sequence.next()
-            self.current_animation = getattr(Animations, self.sequence.current_element.method)()
+            self.current_animation = getattr(Animations, params.method)(
+                params)
             logging.debug(
-                "change sequence to " + self.sequence.current_element.method + " with time " + str(
-                    self.sequence.current_element.timeout))
+                "change sequence to " + params.method + " with time " + str(
+                    params.timeout))
         self.current_animation.animate()
 
 
@@ -92,3 +94,6 @@ class Animation:
         logging.debug("add animation method : " + method + " timeout : " + str(timeout))
         self.method = method
         self.timeout = timeout
+
+    def set_color(self, color):
+        self.color = color

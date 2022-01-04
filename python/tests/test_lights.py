@@ -38,7 +38,7 @@ class LightsTest(unittest.TestCase):
     json_manager = JsonManager()
     lights = Lights(json_manager)
 
-    def test_lights_key(self):
+    def test_lights_key(self, params):
         current_time = Utils.current_milli_time()
         while not Utils.is_time(current_time, 2000):
             self.lights.animate()
@@ -52,13 +52,13 @@ class LightsTest(unittest.TestCase):
                 self.lights.animate()
 
     @unittest.skip
-    def test_lights_default(self):
+    def test_lights_default(self, params):
         # self.lights.update("B1")
         while True:
             self.lights.animate()
 
     @unittest.skip
-    def test_color_chase(self):
+    def test_color_chase(self, params):
         pixels = neopixel.NeoPixel(board.D18, 8 * 6 * 8, auto_write=False)
         pixels.brightness = 0.1
         # pixel_wing_vertical = helper.PixelMap.vertical_lines(
@@ -112,19 +112,19 @@ class LightsTest(unittest.TestCase):
             animations.animate()
 
     @unittest.skip
-    def test_rainbow_cycle(self):
+    def test_rainbow_cycle(self, params):
         self.lights.clean()
         self.lights.rainbow_cycle(0.1)
 
     @unittest.skip
-    def test_random(self):
+    def test_random(self, params):
         for i in range(10000):
             self.lights.random()
             time.sleep(0.05)
             self.lights.clean()
 
     @unittest.skip
-    def test_full_color(self):
+    def test_full_color(self, params):
         self.lights.fill(self.BLUE)
         time.sleep(2)
         self.lights.fill(self.YELLOW)

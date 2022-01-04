@@ -29,7 +29,7 @@ class Neck:
         logging.debug("update servo key : " + str(key) + " target :" + str(self.target))
         self.last_time = Utils.current_milli_time()
 
-    def animate(self):
+    def animate(self, params):
         if Utils.is_time(self.last_time, self.time_step):
             diff = abs(self.target_pos - self.current_pos);
             #logging.debug("servo target : " + str(self.target_pos) + " current : " + str(self.current_pos) +

@@ -11,7 +11,7 @@ from python.tests.conf_test import TestSetup
 
 class InputTest(unittest.TestCase):
 
-    def test_key_file_watch(self):
+    def test_key_file_watch(self, params):
         #file_path = '/home/david/Nextcloud/rosita/python/didier-python/conf/test_key.txt'
         #file_path = 'conf/test_key.txt'
 

@@ -6,7 +6,7 @@ import os
 
 class TestSetup:
 
-    def __init__(self):
+    def __init__(self, params):
         #check rapsberry
         if platform.machine() not in ('armv7l', 'armv6l'):
             path = "/home/dadou/Nextcloud/rosita/python/didier-python"

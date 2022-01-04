@@ -7,7 +7,7 @@ from python.path_time import PathTime
 
 class Mapping:
 
-    def __init__(self):
+    def __init__(self, params):
         f = open('audio.json')
         self.audio_data = json.load(f)
 

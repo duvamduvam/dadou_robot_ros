@@ -36,7 +36,7 @@ class Image:
     up = "../"
     visuals = []
 
-    def __init__(self):
+    def __init__(self, params):
         logging.info("create new image")
         self.load_images()
 
@@ -44,7 +44,7 @@ class Image:
         logging.info("create new image")
         self.visual_rep = visuals_path
 
-    def load_images(self):
+    def load_images(self, params):
         logging.info("load visuals")
         images_path = glob.glob(self.visual_rep + "*")
         logging.info(self.visual_rep + " content : ")
