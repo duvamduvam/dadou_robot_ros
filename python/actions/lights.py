@@ -86,7 +86,7 @@ class Lights:
     def animate(self):
         if Utils.is_time(self.time, self.current_sequence.timeout):
             logging.debug(
-                "change sequence to " + self.current_sequence.method + " with time " + self.current_sequence.timeout)
+                "change sequence to " + self.current_sequence.method + " with time " + str(self.current_sequence.timeout))
             self.seq_pos = (self.seq_pos + 1) % len(self.sequences)
             self.current_sequence = self.sequences[self.seq_pos]
             getattr(self, self.current_sequence.method)()
