@@ -67,11 +67,11 @@ class JsonManager:
 
     def get_face_part(self, name) -> str:
         result = jsonpath_rw_ext.match('$.part_seq[?name==' + name + ']', self.face_seq)
-        return self.standard_return(result, False, key, 'path', self.FACE_SEQUENCE)
+        return self.standard_return(result, False, name, 'path', self.FACE_SEQUENCE)
 
     def get_all_visual(self):
         result = jsonpath_rw_ext.match('$.visual[*]', self.visual)
-        return self.standard_return(result, False, "", False, self.VISUALS)
+        return self.standard_return(result, False, False, False, self.VISUALS)
 
     def get_face_seq(self, key):
         result = jsonpath_rw_ext.match('$.main_seq[?keys~' + key + ']', self.face_seq)
