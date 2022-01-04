@@ -7,17 +7,17 @@
       "sequence": [
         {
           "method": "sparkle_pulse",
-          "time": "300",
+          "time": 300,
           "color": "AMBER"
         },
         {
           "method": "chase",
-          "time": "200",
+          "time": 200,
           "color": "GREEN"
         },
         {
           "method": "blink",
-          "time": "450",
+          "time": 450,
           "color": "BLUE"
         }
       ]
@@ -29,12 +29,12 @@
       "sequence": [
         {
           "method": "sparkle",
-          "time": "300",
+          "time": 300,
           "color": "RED"
         },
         {
           "method": "pulse",
-          "time": "200",
+          "time": 200,
           "color": "RED"
         }
       ]
