@@ -1,0 +1,19 @@
+{
+  "audios": [
+    {
+      "name": "lunettes",
+      "key": "A1",
+      "path": "audios/lunettes.wav"
+    },
+    {
+      "name": "manteau",
+      "key": "A3",
+      "path": "audios/manteau.wav"
+    },
+    {
+      "name": "gig",
+      "key": "A5",
+      "path": "audios/gig.wav"
+    }
+  ]
+}
