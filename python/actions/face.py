@@ -66,7 +66,7 @@ class Face:
         self.reye_seq = self.load_seq_part(json_seq['leye'])
 
     def animate_part(self, seq):
-        frame = seq.frames[seq.current_frame]
+        frame = seq.current_element
         if Utils.is_time(seq.current_time, frame.time):
             # logging.debug("seq.current_time : " + str(seq.current_time) + " frame.time " + str(frame.time))
             visual = Visual.get_visual(frame.name, self.visuals)
