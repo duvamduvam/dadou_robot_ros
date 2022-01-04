@@ -2,7 +2,7 @@ import logging.config
 import board
 import neopixel
 
-from image_mapping import ImageMapping
+from python.image_mapping import ImageMapping
 from python.json_manager import JsonManager
 from python.sequence import Sequence
 from python.utils import Utils

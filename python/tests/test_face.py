@@ -1,6 +1,6 @@
 import logging.config
 
-from image_mapping import ImageMapping
+from python.image_mapping import ImageMapping
 from python.tests.conf_test import TestSetup
 
 TestSetup()
@@ -11,7 +11,6 @@ import board
 from python.json_manager import JsonManager
 from python.visual import Visual
 from python.actions.face import Face
-from python.tests.conf_test import TestSetup
 from adafruit_led_animation.color import AMBER, RED, BLACK
 
 import unittest

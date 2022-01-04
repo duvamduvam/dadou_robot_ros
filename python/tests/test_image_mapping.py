@@ -3,9 +3,8 @@ from python.tests.conf_test import TestSetup
 TestSetup()
 
 from python.json_manager import JsonManager
-from image_mapping import ImageMapping
+from python.image_mapping import ImageMapping
 from python.visual import Visual
-from adafruit_led_animation.color import AMBER, RED
 
 import unittest
 

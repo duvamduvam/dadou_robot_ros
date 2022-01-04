@@ -2,7 +2,7 @@ import glob
 import logging.config
 import imageio
 
-from image_mapping import ImageMapping
+from python.image_mapping import ImageMapping
 
 
 class Visual:
