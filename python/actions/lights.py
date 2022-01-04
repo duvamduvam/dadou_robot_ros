@@ -81,7 +81,7 @@ class Lights:
                 self.sequence.current_element)
             logging.debug(
                 "change sequence to " + self.sequence.current_element.method + " with time " + str(
-                    self.sequence.current_element..timeout))
+                    self.sequence.current_element.timeout))
         self.current_animation.animate()
 
 
