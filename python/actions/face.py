@@ -70,7 +70,7 @@ class Face:
         self.leye_seq = self.load_seq_part(json_seq['reye'])
         self.reye_seq = self.load_seq_part(json_seq['leye'])
 
-    def animate_part(self, seq, start, end):
+    def animate_part(self, seq):
         frame = seq.frames[seq.current_frame]
         if Utils.is_time(seq.current_time, frame.time):
             # logging.debug("seq.current_time : " + str(seq.current_time) + " frame.time " + str(frame.time))
@@ -83,7 +83,7 @@ class Face:
             # logging.debug("next sequence[" + str(seq.current_frame) + "] total : " + str(len(seq.frames)))
 
     def animate(self):
-        self.animate_part(self.mouth_seq, self.mouth_start, self.mouth_end)
+        self.animate_part(self.mouth_seq)
         # self.animate_part(self.reye_seq, self.reye_start, self.reye_end)
         # self.animate_part(self.leye_seq, self.leye_start, self.leye_end)
         self.pixels.show()
