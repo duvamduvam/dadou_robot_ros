@@ -173,7 +173,6 @@ class Lights:
 class Animation:
     color = ()
 
-    def __init__(self, name, t, color):
+    def __init__(self, name, t):
         self.name = name
-        self.color = color
         self.time = t
