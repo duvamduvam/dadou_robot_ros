@@ -38,7 +38,7 @@ class Utils:
     @staticmethod
     def is_time(last_time, time_out) -> bool:
         logging.debug(" last_time is int : " + str(isinstance(last_time, int)) + " -> " + str(
-            last_time) + "time_out is int : " + str(
+            last_time) + " timeout is int : " + str(
             isinstance(time_out, int)) + " -> " + str(
             time_out))
         current = Utils.current_milli_time()
