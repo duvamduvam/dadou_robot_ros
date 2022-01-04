@@ -25,11 +25,11 @@ class Animations:
         self.LED_COUNT = led_count
         self.strip = strip
 
-    def default(self,parmas):
-        return  Chase(self.strip, speed=0.1, color=RED, size=3, spacing=6)
+    def default(self, params):
+        return Chase(self.strip, speed=0.1, color=params.color, size=3, spacing=6)
 
     def chase(self, params):
-        return  Chase(self.strip, speed=0.1, color=params.color, size=3, spacing=6)
+        return Chase(self.strip, speed=0.1, color=params.color, size=3, spacing=6)
 
     def blink(self, params):
         return Blink(self.strip, speed=0.5, color=params.color)
@@ -92,7 +92,7 @@ class Animations:
             self.strip[i] = color
             time.sleep(wait)
             self.strip.show()
-            #todo delete time.sleep
+            # todo delete time.sleep
         time.sleep(0.5)
 
     def rainbow_cycle(self, wait):
@@ -101,5 +101,5 @@ class Animations:
                 rc_index = (i * 256 // self.LED_COUNT) + j
                 self.strip[i] = colorwheel(rc_index & 255)
             self.strip.show()
-            #todo delete time.sleep
+            # todo delete time.sleep
             time.sleep(wait)
