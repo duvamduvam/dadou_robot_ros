@@ -7,6 +7,14 @@ import jsonpath_rw_ext
 class JsonManager:
     logging.info("start json manager")
 
+    COLOR = 'color'
+    DURATION = 'duration'
+    METHOD = 'meethod'
+    NAME = 'name'
+    KEYS = 'keys'
+    LOOP = 'loop'
+
+
     JSON_PATH = "json/"
     AUDIOS = "audios.json"
     AUDIO_SEQUENCE = "audio_sequence.json"
@@ -38,7 +46,7 @@ class JsonManager:
         audio_seq = json.load(json_file)
 
     @staticmethod
-    def standard_return(result, first, key, element, json_file):
+    def standard_return(result, return_first, input_key, attribut, json_file):
         logging.debug(result)
         to_return = {}
         error = False
@@ -46,20 +54,20 @@ class JsonManager:
         if not bool(result):
             error = True
         else:
-            if first:
+            if return_first:
                 if len(result) > 0:
                     to_return = result[0]
                 else:
                     error = True
             else:
                 to_return = result
-            if element:
-                to_return = to_return[element]
+            if attribut:
+                to_return = to_return[attribut]
 
         if not error:
             return to_return
         else:
-            logging.error("no data for " + key + " in " + json_file)
+            logging.error("no data for " + input_key + " in " + json_file)
         return 0
 
     def get_visual_path(self, key) -> str:
@@ -91,7 +99,7 @@ class JsonManager:
         result = jsonpath_rw_ext.match('$.colors[?name~' + key + ']', self.colors)
         logging.debug(result)
         if len(result) > 0:
-            json_color = result[0]['color']
+            json_color = result[0][JsonManager.COLOR]
             return (int(json_color['red']), int(json_color['green']), int(json_color['blue']))
         else:
             logging.error("no color" + key)

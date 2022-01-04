@@ -27,7 +27,8 @@ class Face:
     leye_seq = []
     reye_seq = []
     loop = False
-    time = 0
+    duration = 0
+    start_time = 0
 
     def __init__(self, json_manager: JsonManager):
         self.json_manager = json_manager
@@ -49,38 +50,40 @@ class Face:
 
     def load_seq_part(self, name):
         json_seq = self.json_manager.get_part_seq(name)
-
-        target = []
         frames = []
         for s in json_seq['sequence']:
-            frames.append(Frame(s['time'], s['name']))
+            frames.append(Frame(s['duration'], s['name']))
 
-        return Sequence(json_seq['time'], json_seq['loop'], frames)
+        return Sequence(json_seq['duration'], json_seq[JsonManager.LOOP], frames)
 
     def update(self, key):
         json_seq = self.json_manager.get_face_seq(key)
-        self.loop = json_seq['loop']
-        self.time = json_seq['time']
+        self.loop = json_seq[JsonManager.LOOP]
+        self.duration = json_seq['duration']
         self.mouth_seq = self.load_seq_part(json_seq['mouth'])
         self.leye_seq = self.load_seq_part(json_seq['reye'])
         self.reye_seq = self.load_seq_part(json_seq['leye'])
+        self.start_time = Utils.current_milli_time()
 
     def animate_part(self, seq):
-        frame = seq.current_element
-        if Utils.is_time(seq.start_time, frame.duration):
+
+        if Utils.is_time(seq.start_time, seq.duration):
+            seq.next()
+            frame = seq.current_element
             # logging.debug("seq.current_time : " + str(seq.current_time) + " frame.time " + str(frame.time))
             visual = Visual.get_visual(frame.name, self.visuals)
             # logging.debug("update part : " + visual.name)
-            #todo move this
             self.image_mapping.mapping(self.pixels, visual.rgb)
-            seq.next()
             # logging.debug("next sequence[" + str(seq.current_frame) + "] total : " + str(len(seq.frames)))
 
     def animate(self):
+        if not self.loop and Utils.is_time(self.start_time, self.duration):
+            self.update('default')
         self.animate_part(self.mouth_seq)
         # self.animate_part(self.reye_seq, self.reye_start, self.reye_end)
         # self.animate_part(self.leye_seq, self.leye_start, self.leye_end)
         self.pixels.show()
+
 
 class Frame:
 
