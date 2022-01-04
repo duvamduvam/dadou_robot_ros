@@ -89,7 +89,7 @@ class Lights:
                 "change sequence to " + self.current_sequence.name + " with time " + self.current_sequence.time)
             self.seq_pos = (self.seq_pos + 1) % len(self.sequences)
             self.current_sequence = self.sequences[self.seq_pos]
-            getattr(self, self.current_sequence.name)()
+            getattr(self, self.current_sequence.method)()
             self.time = Utils.current_milli_time()
         self.current_animation.animate()
 
