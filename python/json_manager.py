@@ -69,6 +69,14 @@ class JsonManager:
             logging.error("no data for " + input_key + " in " + json_file)
         return 0
 
+    @staticmethod
+    def find(self, json_data, iterate_key, expression):
+        result = 0
+        for seq in json_data[iterate_key]:
+            if len(jsonpath_rw_ext.match(expression, seq)) > 0:
+                result = seq
+        return result
+
     def get_visual_path(self, key) -> str:
         result = jsonpath_rw_ext.match('$.visual[?name==' + key + ']', self.visual)
         return self.standard_return(result, True, key, 'path', self.VISUALS)
@@ -82,12 +90,7 @@ class JsonManager:
         return self.standard_return(result, False, False, False, self.VISUALS)
 
     def get_face_seq(self, key):
-        # todo check https://jmespath.org/tutorial.html to implements contains search
-        result = {}
-        for seq in self.face_seq['main_seq']:
-            if len(jsonpath_rw_ext.match('$.keys[?key ~ ' + key + ']', seq)) > 0:
-                result = seq
-        # logging.debug(result)
+        result = self.find(self.face_seq, 'main_seq', '$.keys[?key ~ ' + key + ']')
         return self.standard_return(result, False, key, False, self.FACE_SEQUENCE)
 
     def get_part_seq(self, name):
