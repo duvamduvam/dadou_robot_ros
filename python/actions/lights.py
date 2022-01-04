@@ -77,7 +77,8 @@ class Lights:
         self.sequences = []
         for s in json_seq['sequence']:
             sequence = Animation(s['method'], s['time'])
-            sequence.color = self.json_manager.get_attribut(s, 'color')
+            color_name = self.json_manager.get_attribut(s, 'color')
+            sequence.color = self.json_manager.get_color(s, color_name)
             self.sequences.append(sequence)
         self.seq_pos = 0
         self.current_sequence = self.sequences[self.seq_pos]
@@ -97,7 +98,6 @@ class Lights:
         self.current_animation = Chase(self.strip, speed=0.1, color=RED, size=3, spacing=6)
 
     def chase(self):
-
         self.current_animation = Chase(self.strip, speed=0.1, color=self.current_sequence.color, size=3, spacing=6)
 
     def blink(self):
