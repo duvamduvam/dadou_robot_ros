@@ -88,7 +88,7 @@ class JsonManager:
             if len(jsonpath_rw_ext.match('$.keys[?key ~ ' + key + ']', seq)) > 0:
                 result = seq
         # logging.debug(result)
-        return self.standard_return(result, True, key, False, self.FACE_SEQUENCE)
+        return self.standard_return(result, False, key, False, self.FACE_SEQUENCE)
 
     def get_part_seq(self, name):
         result = jsonpath_rw_ext.match('$.part_seq[?name==' + name + ']', self.face_seq)
