@@ -13,7 +13,7 @@ class Sequence:
         self.duration = duration
         self.loop = loop
         self.frames = frames
-        current_frame = frames[self.pos]
+        self.current_frame = frames[self.pos]
 
     def next(self):
         self.pos = (self.pos + 1) % len(self.frames)
