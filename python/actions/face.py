@@ -73,7 +73,7 @@ class Face:
             # logging.debug("update part : " + visual.name)
             self.image_mapping.mapping(self.pixels, visual.rgb)
 
-            seq.current_frame = (seq.current_frame + 1) % len(seq.frames)
+            seq.current_frame = (seq.pos + 1) % len(seq.elements)
             seq.current_time = Utils.current_milli_time()
             # logging.debug("next sequence[" + str(seq.current_frame) + "] total : " + str(len(seq.frames)))
 
