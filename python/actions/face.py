@@ -67,7 +67,7 @@ class Face:
 
     def animate_part(self, seq):
         frame = seq.current_element
-        if Utils.is_time(seq.current_time, frame.time):
+        if Utils.is_time(seq.start_time, frame.duration):
             # logging.debug("seq.current_time : " + str(seq.current_time) + " frame.time " + str(frame.time))
             visual = Visual.get_visual(frame.name, self.visuals)
             # logging.debug("update part : " + visual.name)
@@ -86,5 +86,5 @@ class Face:
 class Frame:
 
     def __init__(self, t, name):
-        self.time = t
+        self.duration = t
         self.name = name
