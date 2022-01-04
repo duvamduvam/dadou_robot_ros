@@ -61,7 +61,7 @@ class Lights:
             return
         sequences = []
         for s in json_seq['sequence']:
-            animation = Animation(s['method'], s['time'])
+            animation = Animation(s['method'], s['duration'])
             color_name = self.json_manager.get_attribut(s, 'color')
             animation.color = self.json_manager.get_color(color_name)
             sequences.append(animation)
