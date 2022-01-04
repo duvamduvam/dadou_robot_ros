@@ -83,11 +83,13 @@ class Lights:
         self.seq_pos = 0
         self.current_sequence = self.sequences[self.seq_pos]
         self.time = Utils.current_milli_time()
+        logging.info("update lights sequence to " + self.current_sequence.name)
 
     def animate(self):
         if Utils.is_time(self.time, self.current_sequence.timeout):
             logging.debug(
-                "change sequence to " + self.current_sequence.method + " with time " + str(self.current_sequence.timeout))
+                "change sequence to " + self.current_sequence.method + " with time " + str(
+                    self.current_sequence.timeout))
             if (self.seq_pos + 1) == len(self.sequences):
                 self.update('default')
                 return
