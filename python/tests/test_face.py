@@ -52,7 +52,7 @@ class TestFace(unittest.TestCase):
 
     def test_face2(self):
         logging.info("animate face A1")
-        self.face.update("Z3")
+        self.face.update("default")
         start_time = Utils.current_milli_time()
         while not Utils.is_time(start_time, 10000):
             # logging.info("animate")
