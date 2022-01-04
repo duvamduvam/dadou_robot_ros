@@ -63,11 +63,11 @@ class Lights:
         for s in json_seq['sequence']:
             animation = Animation(s[JsonManager.METHOD], s[JsonManager.DURATION])
             color_name = self.json_manager.get_attribut(s, JsonManager.COLOR)
-            if color_name != 0:
+            if color_name:
                 animation.color = self.json_manager.get_color(color_name)
             sequences.append(animation)
         self.sequence = Sequence(json_seq[JsonManager.DURATION], json_seq[JsonManager.LOOP], sequences)
-        #
+
         self.current_animation = getattr(self.animations, self.sequence.current_element.method)(
             self.sequence.current_element)
         logging.info("update lights sequence to " + json_seq[JsonManager.NAME])

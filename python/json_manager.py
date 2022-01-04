@@ -67,7 +67,7 @@ class JsonManager:
             return to_return
         else:
             logging.error("no data for " + input_key + " in " + json_file)
-        return 0
+        return None
 
     @staticmethod
     def find(json_data, iterate_key, expression):
@@ -117,8 +117,7 @@ class JsonManager:
         if key in json_object:
             return json_object[key]
         else:
-            logging.error("no attribut" + key)
-            return 0
+            return None
 
     def get_audio_path_by_name(self, name) -> str:
         result = jsonpath_rw_ext.match('$.audios[?name~' + name + ']', self.audios)
