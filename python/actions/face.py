@@ -33,6 +33,7 @@ class Face:
     reye_seq = []
     loop = False
     time = 0
+    json_manager = {}
 
     def __init__(self, json_manager):
         self.load_visual()
