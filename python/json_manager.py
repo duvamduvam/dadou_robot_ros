@@ -87,8 +87,7 @@ class JsonManager:
         logging.debug(result)
         if len(result) > 0:
             json_color = result[0]['color']
-            color = (int(json_color['red']), int(json_color['green']), int(json_color['blue']))
-            return color
+            return (int(json_color['red']), int(json_color['green']), int(json_color['blue']))
         else:
             logging.error("no color" + key)
             return 0
