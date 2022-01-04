@@ -64,7 +64,7 @@ class JsonManager:
         return color
 
     @staticmethod
-    def get_attribut(self, json_object, key):
+    def get_attribut(json_object, key):
         if key in json_object:
             return json_object[key]
         else:
