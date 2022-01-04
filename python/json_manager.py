@@ -80,6 +80,7 @@ class JsonManager:
 
     def get_lights(self, key):
         result = jsonpath_rw_ext.match('$.lights_seq[?keys~' + key + ']', self.lights)
+        logging.debug(result)
         return self.standard_return(result, True, key, False, self.LIGHTS_SEQUENCE)
 
     def get_color(self, key):
