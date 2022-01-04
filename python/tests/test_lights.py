@@ -43,7 +43,7 @@ class LightsTest(unittest.TestCase):
         while not Utils.is_time(current_time, 2000):
             self.lights.animate()
 
-        keys = {"C2", "C3", "C10"}
+        keys = {"C2", "C2", "C10"}
         for k in keys:
             logging.info("test lights key " + k)
             self.lights.update(k)
