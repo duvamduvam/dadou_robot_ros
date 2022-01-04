@@ -88,6 +88,9 @@ class Lights:
         if Utils.is_time(self.time, self.current_sequence.timeout):
             logging.debug(
                 "change sequence to " + self.current_sequence.method + " with time " + str(self.current_sequence.timeout))
+            if (self.seq_pos + 1) == len(self.sequences):
+                self.update('default')
+                return
             self.seq_pos = (self.seq_pos + 1) % len(self.sequences)
             self.current_sequence = self.sequences[self.seq_pos]
             getattr(self, self.current_sequence.method)()
