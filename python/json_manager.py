@@ -34,7 +34,7 @@ class JsonManager:
         audio_seq = json.load(json_file)
 
     @staticmethod
-    def standard_return(result, first, key, json_file):
+    def standard_return(result, first, key, element, json_file):
         logging.debug(result)
         to_return = {}
         error = False
@@ -50,7 +50,7 @@ class JsonManager:
             else:
                 to_return = result
             if key:
-                to_return = to_return[key]
+                to_return = to_return[element]
 
         if not error:
             return to_return
@@ -60,27 +60,27 @@ class JsonManager:
 
     def get_visual_path(self, key) -> str:
         result = jsonpath_rw_ext.match('$.visual[?name==' + key + ']', self.visual)
-        return self.standard_return(result, True, 'path', self.VISUALS)
+        return self.standard_return(result, True, key, 'path', self.VISUALS)
 
     def get_face_part(self, name) -> str:
         result = jsonpath_rw_ext.match('$.part_seq[?name==' + name + ']', self.face_seq)
-        return self.standard_return(result, False, 'path', self.FACE_SEQUENCE)
+        return self.standard_return(result, False, key, 'path', self.FACE_SEQUENCE)
 
     def get_all_visual(self):
         result = jsonpath_rw_ext.match('$.visual[*]', self.visual)
-        return self.standard_return(result, False, False, self.VISUALS)
+        return self.standard_return(result, False, "", False, self.VISUALS)
 
     def get_face_seq(self, key):
         result = jsonpath_rw_ext.match('$.main_seq[?keys~' + key + ']', self.face_seq)
-        return self.standard_return(result, True, False, self.FACE_SEQUENCE)
+        return self.standard_return(result, True, key, False, self.FACE_SEQUENCE)
 
     def get_part_seq(self, name):
         result = jsonpath_rw_ext.match('$.part_seq[?name==' + name + ']', self.face_seq)
-        return self.standard_return(result, True, False, self.FACE_SEQUENCE)
+        return self.standard_return(result, True, name, False, self.FACE_SEQUENCE)
 
     def get_lights(self, key):
         result = jsonpath_rw_ext.match('$.lights_seq[?keys~' + key + ']', self.lights)
-        return self.standard_return(result, True, False, self.LIGHTS_SEQUENCE)
+        return self.standard_return(result, True, key, False, self.LIGHTS_SEQUENCE)
 
     def get_color(self, key):
         result = jsonpath_rw_ext.match('$.colors[?name~' + key + ']', self.colors)
@@ -108,8 +108,6 @@ class JsonManager:
     def get_audios(self, key: str) -> str:
         result = jsonpath_rw_ext.match('$.audios_seq[?name~' + key + ']', self.audios)
         return self.standard_return(result, True, False, self.AUDIO_SEQUENCE)
-
-
 
         """
         audios = []
