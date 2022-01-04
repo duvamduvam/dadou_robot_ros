@@ -66,7 +66,7 @@ class Lights:
             animation.color = self.json_manager.get_color(color_name)
             sequences.append(animation)
         self.sequence = Sequence(json_seq['duration'], json_seq['loop'], sequences)
-        self.current_animation = getattr(animations, self.sequence.current_frame.method)()
+        self.current_animation = getattr(self.animations, self.sequence.current_frame.method)()
         logging.info("update lights sequence to " + json_seq['name'])
 
     def animate(self):
