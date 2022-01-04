@@ -45,11 +45,11 @@ class LightsTest(unittest.TestCase):
 
         keys = {"C2", "C3", "C10"}
         for k in keys:
+            logging.info("test lights key " + k)
             self.lights.update(k)
             current_time = Utils.current_milli_time()
             while not Utils.is_time(current_time, 10000):
                 self.lights.animate()
-
 
     @unittest.skip
     def test_lights_default(self):
