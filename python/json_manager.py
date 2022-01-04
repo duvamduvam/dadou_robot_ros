@@ -70,7 +70,7 @@ class JsonManager:
         return 0
 
     @staticmethod
-    def find(self, json_data, iterate_key, expression):
+    def find(json_data, iterate_key, expression):
         result = 0
         for seq in json_data[iterate_key]:
             if len(jsonpath_rw_ext.match(expression, seq)) > 0:
