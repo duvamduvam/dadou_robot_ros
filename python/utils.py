@@ -40,7 +40,7 @@ class Utils:
         #logging.debug(" last_time is int : " + str(isinstance(last_time, int)) + " -> " + str(
         #    last_time) + " timeout is int : " + str(
         #    isinstance(time_out, int)) + " -> " + str(
-        ""    time_out))
+        #    time_out))
         current = Utils.current_milli_time()
         is_time = ((current - last_time) - time_out) > 0
         #logging.debug("last time: " + str(last_time) + " current time : " + str(current) +
