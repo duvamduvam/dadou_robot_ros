@@ -52,7 +52,7 @@ class JsonManager:
                     error = True
             else:
                 to_return = result
-            if key:
+            if element:
                 to_return = to_return[element]
 
         if not error:
