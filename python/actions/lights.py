@@ -72,7 +72,7 @@ class Lights:
     def update(self, key):
         json_seq = self.json_manager.get_lights(key)
         if json_seq == 0:
-            logging.error("key : "+key+" not found for lights sequences")
+            logging.error("key : " + key + " not found for lights sequences")
             return
         self.sequences = []
         for s in json_seq['sequence']:
@@ -85,6 +85,8 @@ class Lights:
 
     def animate(self):
         if Utils.is_time(self.time, self.current_sequence.time):
+            logging.debug(
+                "change sequence to " + self.current_sequence.name + " with time " + self.current_sequence.time)
             self.seq_pos = (self.seq_pos + 1) % len(self.sequences)
             self.current_sequence = self.sequences[self.seq_pos]
             getattr(self, self.current_sequence.name)()
