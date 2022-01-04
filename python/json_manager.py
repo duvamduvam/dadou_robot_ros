@@ -83,7 +83,7 @@ class JsonManager:
         return self.standard_return(result, False, False, False, self.VISUALS)
 
     def get_face_seq(self, key):
-        result = jsonpath_rw_ext.match('$.main_seq[?keys~\"' + key + '\"]', self.face_seq)
+        result = jsonpath_rw_ext.match('$.main_seq[?keys~\"/' + key + '/\"]', self.face_seq)
         return self.standard_return(result, True, key, False, self.FACE_SEQUENCE)
 
     def get_part_seq(self, name):
