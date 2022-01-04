@@ -84,9 +84,9 @@ class Lights:
         self.time = Utils.current_milli_time()
 
     def animate(self):
-        if Utils.is_time(self.time, self.current_sequence.time):
+        if Utils.is_time(self.time, self.current_sequence.timeout):
             logging.debug(
-                "change sequence to " + self.current_sequence.name + " with time " + self.current_sequence.time)
+                "change sequence to " + self.current_sequence.method + " with time " + self.current_sequence.timeout)
             self.seq_pos = (self.seq_pos + 1) % len(self.sequences)
             self.current_sequence = self.sequences[self.seq_pos]
             getattr(self, self.current_sequence.method)()
@@ -174,8 +174,9 @@ class Lights:
 
 class Animation:
     color = ()
-    time = 0
+    timeout = 0
 
-    def __init__(self, name, t: int):
-        self.name = name
-        self.time = t
+    def __init__(self, method, timeout: int):
+        logging.debug("add animation method : " + method + " timeout : " + timeout)
+        self.method = method
+        self.timeout = timeout
