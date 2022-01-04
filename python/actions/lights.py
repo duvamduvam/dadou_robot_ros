@@ -77,7 +77,7 @@ class Lights:
 
         if Utils.is_time(self.sequence.current_element.start_time, self.sequence.current_element.timeout):
             self.sequence.next()
-            self.current_animation = getattr(Animations, self.sequence.current_element.method)(
+            self.current_animation = getattr(self.animations, self.sequence.current_element.method)(
                 self.sequence.current_element)
             logging.debug(
                 "change sequence to " + self.sequence.current_element.method + " with time " + str(
