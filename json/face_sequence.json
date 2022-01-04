@@ -16,7 +16,7 @@
       "mouth": "mspeak",
       "reye": "ebase",
       "leye": "ebase",
-      "keys": "A2 Z1"
+      "keys": "default Z1"
     }
   ],
   "part_seq": [

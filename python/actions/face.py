@@ -66,7 +66,6 @@ class Face:
         self.start_time = Utils.current_milli_time()
 
     def animate_part(self, seq):
-
         if Utils.is_time(seq.start_time, seq.duration):
             seq.next()
             frame = seq.current_element
