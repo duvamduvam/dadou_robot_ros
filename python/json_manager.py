@@ -14,7 +14,6 @@ class JsonManager:
     KEYS = 'keys'
     LOOP = 'loop'
 
-
     JSON_PATH = "json/"
     AUDIOS = "audios.json"
     AUDIO_SEQUENCE = "audio_sequence.json"
@@ -83,9 +82,12 @@ class JsonManager:
         return self.standard_return(result, False, False, False, self.VISUALS)
 
     def get_face_seq(self, key):
-        #todo check https://jmespath.org/tutorial.html to implements contains search
-        result = jsonpath_rw_ext.match('$.main_seq[*]+$.main_seq[*].keys[?key ~ ' + key + ']', self.face_seq)
-        logging.debug(result)
+        # todo check https://jmespath.org/tutorial.html to implements contains search
+        result = {}
+        for seq in self.face_seq['main_seq']:
+            if len(jsonpath_rw_ext.match('$.keys[?key ~ ' + key + ']', seq)) > 0:
+                logging.debug("trouvé" + seq)
+        # logging.debug(result)
         return self.standard_return(result, True, key, False, self.FACE_SEQUENCE)
 
     def get_part_seq(self, name):
