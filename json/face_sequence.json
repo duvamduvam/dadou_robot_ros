@@ -3,14 +3,14 @@
     {
       "name": "speak",
       "duration": 1000,
-      "loop": true,
+      "loop": false,
       "mouth": "mspeak",
       "reye": "ebase",
       "leye": "ebase",
       "keys": "A1 Z1"
     },
     {
-      "name": "speak",
+      "name": "default",
       "duration": 100,
       "loop": true,
       "mouth": "mspeak",
