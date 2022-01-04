@@ -176,6 +176,6 @@ class Animation:
     color = ()
     time = 0
 
-    def __init__(self, name, t):
+    def __init__(self, name, t: int):
         self.name = name
         self.time = t
