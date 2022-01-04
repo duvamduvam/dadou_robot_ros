@@ -2,7 +2,9 @@ import logging
 
 from python.tests.conf_test import TestSetup
 from python.utils import Utils
+
 TestSetup()
+
 from python.json_manager import JsonManager
 
 import time
