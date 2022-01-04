@@ -76,8 +76,7 @@ class Face:
             # logging.debug("next sequence[" + str(seq.current_frame) + "] total : " + str(len(seq.frames)))
 
     def animate(self):
-        logging.debug("face animate")
-        if not self.loop and Utils.is_time(self.start_time, self.duration):
+       if not self.loop and Utils.is_time(self.start_time, self.duration):
             self.update('default')
         self.animate_part(self.mouth_seq)
         # self.animate_part(self.reye_seq, self.reye_start, self.reye_end)
