@@ -75,13 +75,13 @@ class Lights:
             self.update('default')
             return
 
-        if Utils.is_time(params.start_time, params.timeout):
+        if Utils.is_time(self.sequence.current_element.start_time, self.sequence.current_element.timeout):
             self.sequence.next()
-            self.current_animation = getattr(Animations, params.method)(
-                params)
+            self.current_animation = getattr(Animations, self.sequence.current_element.method)(
+                self.sequence.current_element)
             logging.debug(
-                "change sequence to " + params.method + " with time " + str(
-                    params.timeout))
+                "change sequence to " + self.sequence.current_element.method + " with time " + str(
+                    self.sequence.current_element..timeout))
         self.current_animation.animate()
 
 
