@@ -33,13 +33,12 @@ class Face:
     reye_seq = []
     loop = False
     time = 0
-    json_manager = {}
 
     def __init__(self, json_manager):
-        self.load_visual()
+        self.load_visuals()
         self.json_manager = json_manager
 
-    def load_visual(self):
+    def load_visuals(self):
         visuals_path = self.json_manager.get_all_visual()
         for visual_path in visuals_path:
             self.visuals.append(Visual(visual_path['name'], visual_path['path']))
