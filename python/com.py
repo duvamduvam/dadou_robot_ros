@@ -17,7 +17,7 @@ class Com:
             return self.watcher.get_last_key()
 
         if self.arduino_enable & self.arduino.isOpen():
-            logging.info("{} connected!".format(self.arduino.port))
+            #logging.info("{} connected!".format(self.arduino.port))
             if self.arduino.inWaiting() > 0:
                 msg = self.arduino.readline().decode('utf-8').rstrip()
                 self.arduino.flushInput()  # remove data after reading
