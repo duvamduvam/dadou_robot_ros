@@ -7,8 +7,8 @@ from python.file_watcher import FileWatcher
 
 class Com:
     arduino_enable = True
-    #arduino = serial.Serial("/dev/serial0", 115200, timeout=1)
-    arduino = serial.Serial("/dev/ttyAMA0", 115200, timeout=1)
+    arduino = serial.Serial("/dev/serial0", 115200, timeout=1)
+    #arduino = serial.Serial("/dev/ttyAMA0", 115200, timeout=1)
     #arduino = serial.Serial("/dev/ttyUSB0", 115200, timeout=1)
     # time.sleep(0.1)  # wait for serial to open
     watcher = FileWatcher()
