@@ -18,6 +18,7 @@ class JsonManager:
     AUDIOS = "audios.json"
     AUDIO_SEQUENCE = "audio_sequence.json"
     COLORS = "colors.json"
+    CONFIG = "config.json"
     FACE_SEQUENCE = "face_sequence.json"
     LIGHTS = "lights.json"
     LIGHTS_SEQUENCE = "lights_sequence.json"
@@ -25,22 +26,18 @@ class JsonManager:
 
     with open(JSON_PATH + COLORS, 'r') as json_file:
         colors = json.load(json_file)
-
     with open(JSON_PATH + FACE_SEQUENCE, 'r') as json_file:
         face_seq = json.load(json_file)
-
     with open(JSON_PATH + LIGHTS, 'r') as json_file:
         lights = json.load(json_file)
-
+    with open(JSON_PATH + CONFIG, 'r') as json_file:
+        config = json.load(json_file)
     with open(JSON_PATH + LIGHTS_SEQUENCE, 'r') as json_file:
         lights_seq = json.load(json_file)
-
     with open(JSON_PATH + VISUALS, 'r') as json_file:
         visual = json.load(json_file)
-
     with open(JSON_PATH + AUDIOS) as json_file:
         audios = json.load(json_file)
-
     with open(JSON_PATH + AUDIO_SEQUENCE) as json_file:
         audio_seq = json.load(json_file)
 
@@ -126,6 +123,10 @@ class JsonManager:
     def get_audios(self, key: str) -> str:
         result = jsonpath_rw_ext.match('$.audios_seq[?name~' + key + ']', self.audios)
         return self.standard_return(result, True, False, self.AUDIO_SEQUENCE)
+
+    def get_config(self) -> []:
+        return self.config
+
 
         """
         audios = []

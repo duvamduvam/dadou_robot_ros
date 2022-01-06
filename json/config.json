@@ -1,0 +1,11 @@
+{
+  "pins": {
+    "lights": 18,
+    "face": 18,
+    "right_pwm": 20,
+    "right_dir": 18,
+    "left_pwm": 18,
+    "left_dir": 18,
+    "neck": 18
+  }
+}

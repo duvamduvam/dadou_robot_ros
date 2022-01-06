@@ -14,7 +14,8 @@ class Wheel:
     # TODO check steps
     pwm_step = 50
     time_step = 50
-    last_time = Utils.current_milli_time()
+    move_time = 0
+    move_timeout = 500
 
     # TODO update board pin
     left_pwm = pwmio.PWMOut(board.D12, frequency=5000, duty_cycle=0)
@@ -24,40 +25,36 @@ class Wheel:
     utils = Utils()
 
     def update(self, key: str):
-
-        left = self.utils.translate(ord(key[0]))
-        right = self.utils.translate(ord(key[1]))
-        self.update_dir(left, self.dir_left)
-        self.update_dir(right, self.dir_right)
-        logging.debug("update wheel with key : " + key)
+        if key:
+            logging.debug("update wheel with key : " + key)
+            left = self.utils.translate(ord(key[0]))
+            right = self.utils.translate(ord(key[1]))
+            self.dir_left = self.utils.is_positive(left)
+            self.dir_right = self.utils.is_positive(right)
+            self.move_time = Utils.current_milli_time()
+        else:
+            if Utils.is_time(self.move_time, self.move_timeout):
+                self.stop()
 
     def stop(self):
         self.left_pwm.duty_cycle = 0
         self.right_pwm.duty_cycle = 0
 
     def process(self):
-        #logging.debug("process wheel")
+        # logging.debug("process wheel")
         if (self.left_pwm.duty_cycle != self.left and self.right_pwm.duty_cycle != self.right) \
-                and Utils.current_milli_time() - self.last_time > self.time_step:
+                and Utils.current_milli_time() - self.move_time > self.time_step:
             self.update_pwm(self.left, self.left_pwm.duty_cycle)
             self.update_pwm(self.right, self.right_pwm.duty_cycle)
-        else:
-            self.last_time = Utils.current_milli_time()
 
     def update_pwm(self, target, pwm: pwmio.PWMOut):
         if pwm.duty_cycle < target:
             if (target - pwm.duty_cycle) < self.pwm_step:
                 pwm.duty_cycle = target
             else:
-                pwm.duty_cycle += self.setp
+                pwm.duty_cycle += self.pwm_step
         else:
             if (pwm.duty_cycle - target) < self.pwm_step:
                 pwm.duty_cycle = target
             else:
-                pwm.duty_cycle -= self.setp
-
-    def update_dir(self, key, digital):
-        if self.utils.is_positive(key):
-            digital = True
-        else:
-            digital = False
+                pwm.duty_cycle -= self.pwm_step
