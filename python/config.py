@@ -11,12 +11,21 @@ class Config:
     NECK_PIN = 0
 
     def __init__(self, json_manager: JsonManager):
-        json_config = json_manager.get_config()
+        self.json_config = json_manager.get_config()
 
-        self.LIGHTS_PIN = json_config['pins']['lights']
-        self.FACE_PIN = json_config['pins']['face']
-        self.LEFT_PWM_PIN = json_config['pins']['left_pwm']
-        self.LEFT_DIR_PIN = json_config['pins']['left_dir']
-        self.RIGHT_PWM_PIN = json_config['pins']['right_pwm']
-        self.RIGHT_DIR_PIN = json_config['pins']['right_dir']
-        self.NECK_PIN = json_config['pins']['neck']
+    def load(self):
+        self.load_pins()
+
+    def reload(self):
+        json_manager = JsonManager()
+        self.json_config = json_manager.get_config()
+        self.load()
+
+    def load_pins(self):
+        self.LIGHTS_PIN = self.json_config['pins']['lights']
+        self.FACE_PIN = self.json_config['pins']['face']
+        self.LEFT_PWM_PIN = self.json_config['pins']['left_pwm']
+        self.LEFT_DIR_PIN = self.json_config['pins']['left_dir']
+        self.RIGHT_PWM_PIN = self.json_config['pins']['right_pwm']
+        self.RIGHT_DIR_PIN = self.json_config['pins']['right_dir']
+        self.NECK_PIN = self.json_config['pins']['neck']

@@ -4,6 +4,7 @@ import board
 import pwmio
 from digitalio import DigitalInOut
 
+from python.config import Config
 from python.utils import Utils
 
 
@@ -17,12 +18,13 @@ class Wheel:
     move_time = 0
     move_timeout = 500
 
-    # TODO update board pin
-    left_pwm = pwmio.PWMOut(board.D12, frequency=5000, duty_cycle=0)
-    right_pwm = pwmio.PWMOut(board.D18, frequency=5000, duty_cycle=0)
-    dir_left = DigitalInOut(board.D23)
-    dir_right = DigitalInOut(board.D24)
     utils = Utils()
+
+    def __init__(self, config:Config):
+        self.left_pwm = pwmio.PWMOut(config.LEFT_PWM_PIN, frequency=5000, duty_cycle=0)
+        self.right_pwm = pwmio.PWMOut(config.RIGHT_PWM_PIN, frequency=5000, duty_cycle=0)
+        self.dir_left = DigitalInOut(config.LEFT_DIR_PIN)
+        self.dir_right = DigitalInOut(config.RIGHT_DIR_PIN)
 
     def update(self, key: str):
         if key:

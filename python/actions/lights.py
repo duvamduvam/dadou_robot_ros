@@ -11,6 +11,7 @@ from adafruit_led_animation import helper
 # todo check thread : https://www.geeksforgeeks.org/python-communicating-between-threads-set-1/
 # todo check thread2 : https://riptutorial.com/python/example/4691/communicating-between-threads
 from python.animations import Animations
+from python.config import Config
 from python.json_manager import JsonManager
 from python.sequence import Sequence
 from python.utils import Utils
@@ -27,8 +28,7 @@ class Lights:
     LED_INVERT = False  # True to invert the signal (when using NPN transistor level shift)
     LED_CHANNEL = 0  # set to '1' for GPIOs 13, 19, 41, 45 or 53
 
-    strip = neopixel.NeoPixel(board.D18, LED_COUNT)
-    strip.brightness = 0.1
+    strip = {}
 
     """
     pixel_wing_vertical = helper.PixelMap.vertical_lines(
@@ -50,7 +50,9 @@ class Lights:
     current_animation = {}
     animations = Animations(LED_COUNT, strip, sequence)
 
-    def __init__(self, json_manager: JsonManager):
+    def __init__(self, json_manager: JsonManager, config: Config):
+        self.strip = neopixel.NeoPixel(config.LIGHTS_PIN, self.LED_COUNT)
+        self.strip.brightness = 0.1
         self.json_manager = json_manager
         self.update('default')
 

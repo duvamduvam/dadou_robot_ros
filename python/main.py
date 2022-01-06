@@ -21,10 +21,10 @@ json_manager = JsonManager()
 config = MConfig(json_manager)
 audio = Audio(json_manager)
 com = Com()
-face = Face(json_manager)
-lights = Lights(json_manager)
-neck = Neck()
-wheel = Wheel()
+face = Face(json_manager, confg)
+lights = Lights(json_manager, config)
+neck = Neck(config)
+wheel = Wheel(config)
 
 
 while True:

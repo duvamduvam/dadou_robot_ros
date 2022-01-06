@@ -2,6 +2,7 @@ import logging.config
 import board
 import neopixel
 
+from python.config import Config
 from python.image_mapping import ImageMapping
 from python.json_manager import JsonManager
 from python.sequence import Sequence
@@ -20,9 +21,6 @@ class Face:
     leye_start = 449
     leye_end = 512
 
-    pixels = neopixel.NeoPixel(board.D18, leye_end + 1, auto_write=False)
-    pixels.brightness = 0.1
-
     mouth_seq = []
     leye_seq = []
     reye_seq = []
@@ -30,7 +28,9 @@ class Face:
     duration = 0
     start_time = 0
 
-    def __init__(self, json_manager: JsonManager):
+    def __init__(self, json_manager: JsonManager, config: Config):
+        self.pixels = neopixel.NeoPixel(config.FACE_PIN, self.leye_end + 1, auto_write=False)
+        self.pixels.brightness = 0.1
         self.json_manager = json_manager
         self.load_visuals()
 
@@ -72,7 +72,7 @@ class Face:
             frame = seq.current_element
             # logging.debug("seq.current_time : " + str(seq.current_time) + " frame.time " + str(frame.time))
             visual = Visual.get_visual(frame.name, self.visuals)
-            #logging.debug("update part : " + visual.name)
+            # logging.debug("update part : " + visual.name)
             self.image_mapping.mapping(self.pixels, visual.rgb)
             # logging.debug("next sequence[" + str(seq.current_frame) + "] total : " + str(len(seq.frames)))
 
