@@ -1,7 +1,7 @@
 from python.json_manager import JsonManager
 
 
-class MConfig:
+class Config:
     LIGHTS_PIN = 0
     FACE_PIN = 0
     LEFT_PWM_PIN = 0
@@ -10,7 +10,7 @@ class MConfig:
     RIGHT_DIR_PIN = 0
     NECK_PIN = 0
 
-    def __int__(self, json_manager: JsonManager):
+    def __init__(self, json_manager: JsonManager):
         json_config = json_manager.get_config()
 
         self.LIGHTS_PIN = json_config['pins']['lights']
