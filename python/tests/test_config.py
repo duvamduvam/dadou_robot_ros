@@ -3,15 +3,16 @@ import logging.config
 import board
 
 from python.config import Config
+from python.json_manager import JsonManager
 from python.tests.conf_test import TestSetup
-from python.utils import Utils
 
 TestSetup()
 
 
 class TestConfig(unittest.TestCase):
 
-    config = Config()
+    json_manager = JsonManager()
+    config = Config(json_manager)
 
     def test_get_rpi_pins(self):
         logging.info(board.__dict__)
