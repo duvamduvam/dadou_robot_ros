@@ -2,7 +2,13 @@ from python.json_manager import JsonManager
 
 
 class Config:
-    LIGHTS_PIN, FACE_PIN, LEFT_PWM_PIN, LEFT_DIR_PIN, RIGHT_PWM_PIN, RIGHT_DIR_PIN, NECK_PIN = 0
+    LIGHTS_PIN = 0
+    FACE_PIN = 0
+    LEFT_PWM_PIN = 0
+    LEFT_DIR_PIN = 0
+    RIGHT_PWM_PIN = 0
+    RIGHT_DIR_PIN = 0
+    NECK_PIN = 0
 
     def __int__(self, json_manager: JsonManager):
         json_config = json_manager.get_config()
