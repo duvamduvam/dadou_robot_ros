@@ -1,7 +1,7 @@
 from python.json_manager import JsonManager
 
 
-class Config:
+class MConfig:
     LIGHTS_PIN = 0
     FACE_PIN = 0
     LEFT_PWM_PIN = 0
