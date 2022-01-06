@@ -16,4 +16,4 @@ class TestConfig(unittest.TestCase):
 
     def test_get_rpi_pins(self):
         print(board.__dict__)
-        print(self.config.lights_pin)
+        print(self.config.LIGHTS_PIN)
