@@ -15,7 +15,7 @@ class Config:
 
         self.LIGHTS_PIN = json_config['pins']['lights']
         self.FACE_PIN = json_config['pins']['face']
-        self.LEFT_PWM_PIN = json_config['pins']['left_pwm_']
+        self.LEFT_PWM_PIN = json_config['pins']['left_pwm']
         self.LEFT_DIR_PIN = json_config['pins']['left_dir']
         self.RIGHT_PWM_PIN = json_config['pins']['right_pwm']
         self.RIGHT_DIR_PIN = json_config['pins']['right_dir']
