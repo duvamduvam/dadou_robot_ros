@@ -1,7 +1,6 @@
 import unittest
-
+import logging.config
 import board
-from adafruit_blinka.board.raspberrypi import raspi_4b
 
 from python.config import Config
 from python.tests.conf_test import TestSetup
@@ -15,5 +14,5 @@ class TestConfig(unittest.TestCase):
     config = Config()
 
     def test_get_rpi_pins(self):
-        print(board.__dict__)
-        print(self.config.LIGHTS_PIN)
+        logging.info(board.__dict__)
+        logging.info(self.config.LIGHTS_PIN)
