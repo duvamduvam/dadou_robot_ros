@@ -12,7 +12,7 @@ class Message:
 
     def __self__(self, left_wheel, right_wheel, head, key):
         logging.info(
-            "new message left wheel : " + left_wheel + " right_wheel : " + right_wheel + " head : " + head + " key : "+key)
+            "new message left wheel : " + left_wheel + " right_wheel : " + right_wheel + " head : " + head + " key : " + key)
         self.left_wheel = left_wheel
         self.right_wheel = right_wheel
         self.head = head
@@ -23,5 +23,5 @@ class Message:
         if msg.startswith(Message.PREFIX) and msg.endswith(Message.POSTFIX):
             return Message(msg[1], msg[2], msg[3], msg[4] + msg[5])
         else:
-            logging.error("wrong message : " + msg)
+            logging.error("wrong message : \"" + msg + "\"")
             return None
