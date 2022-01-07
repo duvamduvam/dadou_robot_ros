@@ -17,8 +17,7 @@ class Config:
         self.load_pins()
 
     def reload(self):
-        json_manager = JsonManager()
-        self.json_config = json_manager.get_config()
+        self.json_config = JsonManager().get_config()
         self.load()
 
     def load_pins(self):
