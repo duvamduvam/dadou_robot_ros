@@ -7,7 +7,7 @@ from python.json_manager import JsonManager
 
 sys.path.append('.')
 
-from python.com import Com
+from python.input.com import Com
 from python.actions.audio import Audio
 from python.actions.face import Face
 from python.actions.neck import Neck

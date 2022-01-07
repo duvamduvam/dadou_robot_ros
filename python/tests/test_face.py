@@ -1,6 +1,6 @@
 import logging.config
 
-from python.image_mapping import ImageMapping
+from python.visual.image_mapping import ImageMapping
 from python.tests.conf_test import TestSetup
 from python.utils import Utils
 
@@ -10,7 +10,7 @@ import time
 import neopixel
 import board
 from python.json_manager import JsonManager
-from python.visual import Visual
+from python.visual.visual import Visual
 from python.actions.face import Face
 from adafruit_led_animation.color import AMBER, RED, BLACK
 

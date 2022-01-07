@@ -1,7 +1,7 @@
 import logging
 import unittest
 
-from python.com import Com
+from python.input.com import Com
 from python.tests.conf_test import TestSetup
 from python.utils import Utils
 

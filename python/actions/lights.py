@@ -3,14 +3,12 @@
 # sudo python3 -m pip install --force-reinstall adafruit-blinka
 # sudo pip3 install adafruit-circuitpython-led-animation
 
-import board
 import neopixel
 import logging.config
-from adafruit_led_animation import helper
 
 # todo check thread : https://www.geeksforgeeks.org/python-communicating-between-threads-set-1/
 # todo check thread2 : https://riptutorial.com/python/example/4691/communicating-between-threads
-from python.animations import Animations
+from python.visual.animations import Animations
 from python.config import Config
 from python.json_manager import JsonManager
 from python.sequence import Sequence

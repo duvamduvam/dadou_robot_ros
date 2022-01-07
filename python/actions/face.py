@@ -1,13 +1,12 @@
 import logging.config
-import board
 import neopixel
 
 from python.config import Config
-from python.image_mapping import ImageMapping
+from python.visual.image_mapping import ImageMapping
 from python.json_manager import JsonManager
 from python.sequence import Sequence
 from python.utils import Utils
-from python.visual import Visual
+from python.visual.visual import Visual
 
 
 class Face:

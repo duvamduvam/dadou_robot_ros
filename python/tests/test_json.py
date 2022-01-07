@@ -1,20 +1,13 @@
 import logging.config
 from python.tests.conf_test import TestSetup
-from python.visual import Visual
+from python.visual.visual import Visual
 
 TestSetup()
 
 import json
 
-import os
-import pathlib
-import sys
-import time
 import unittest
 import jsonpath_rw_ext
-from jsonpath_ng.ext import parse
-import jsonpath_ng
-
 
 from python.json_manager import JsonManager
 

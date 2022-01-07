@@ -2,11 +2,9 @@ import logging.config
 from python.tests.conf_test import TestSetup
 TestSetup()
 import random
-import sys
 import unittest
 
-from python.file_watcher import FileWatcher
-from python.tests.conf_test import TestSetup
+from python.input.file_watcher import FileWatcher
 
 
 class InputTest(unittest.TestCase):
