@@ -13,7 +13,7 @@ class Com:
     # time.sleep(0.1)  # wait for serial to open
     watcher = FileWatcher()
 
-    def get_msg(self)->Message:
+    def get_msg(self) -> Message:
         if self.watcher.changed():
             return self.watcher.get_last_key()
 
@@ -23,11 +23,9 @@ class Com:
                 msg = self.arduino.readline().decode('utf-8').rstrip()
                 self.arduino.flushInput()  # remove data after reading
                 logging.info('received from arduino' + msg)
-                return self.decode(msg)
+                return Message.decode(msg)
         return None
 
     def send_msg(self, msg):
         if self.arduino.isOpen():
             self.arduino.write(msg)
-
-
