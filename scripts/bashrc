@@ -112,7 +112,8 @@ if ! shopt -oq posix; then
   fi
 fi
 
-alias clone='/home/pi/deploy/didier-python/scripts/clone.sh'
+alias clone='git clone https://github.com/duvamduvam/didier-python.git'
+alias clone='git clone https://github.com/duvamduvam/update_git.sh'
 alias pull='/home/pi/deploy/didier-python/scripts/push_from_home.sh'
 alias copy='/home/pi/deploy/didier-python/scripts/deploy-start.sh'
 alias d='cd ~/deploy/didier-python'
