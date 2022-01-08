@@ -112,6 +112,7 @@ class JsonManager:
             return None
 
     def get_audio_seq(self, key):
+        logging.debug("key " + key)
         result = self.find(self.audio_seq, 'audios_seq', '$.keys[?key ~ ' + key + ']')
         return self.standard_return(result, False, key, False, self.AUDIO_SEQUENCE)
 
@@ -126,14 +127,12 @@ class JsonManager:
         result = jsonpath_rw_ext.match('$.audios[?name~' + name + ']', self.audios)
         return self.standard_return(result, True, False, self.AUDIOS)
 
-
     def get_audios(self, key: str) -> str:
         result = jsonpath_rw_ext.match('$.audios_seq[?name~' + key + ']', self.audios)
         return self.standard_return(result, True, False, self.AUDIO_SEQUENCE)
 
     def get_config(self) -> []:
         return self.config
-
 
         """
         audios = []
