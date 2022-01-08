@@ -21,7 +21,7 @@ from adafruit_led_animation.color import \
 
 class Animations:
 
-    def __init__(self, led_count, strip, sequence):
+    def __init__(self, led_count, strip):
         self.LED_COUNT = led_count
         self.strip = strip
 

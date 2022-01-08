@@ -20,8 +20,6 @@ from python.utils import Utils
 class Lights:
     # LED strip configuration:
     LED_COUNT = 64 * 6  # Number of LED pixels.
-    LED_PIN = 18  # GPIO pin connected to the pixels (18 uses PWM!).
-    # LED_PIN        = 10      # GPIO pin connected to the pixels (10 uses SPI /dev/spidev0.0).
     LED_FREQ_HZ = 800000  # LED signal frequency in hertz (usually 800khz)
     LED_DMA = 10  # DMA channel to use for generating signal (try 10)
     LED_BRIGHTNESS = 0  # Set to 0 for darkest and 255 for brightest
@@ -48,11 +46,11 @@ class Lights:
 
     sequence = {}
     current_animation = {}
-    animations = Animations(LED_COUNT, strip, sequence)
 
     def __init__(self, json_manager: JsonManager, config: Config):
         self.strip = neopixel.NeoPixel(Pin(config.LIGHTS_PIN), self.LED_COUNT)
         self.strip.brightness = 0.1
+        animations = Animations(self.LED_COUNT, self.strip)
         self.json_manager = json_manager
         self.update('default')
 
