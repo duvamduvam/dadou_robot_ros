@@ -1,10 +1,10 @@
 import logging.config
 import sys
+
 sys.path.append('.')
 
 from python.config import Config
 from python.json_manager import JsonManager
-
 
 from python.input.com import Com
 from python.actions.audio import Audio
@@ -24,7 +24,6 @@ face = Face(json_manager, config)
 lights = Lights(json_manager, config)
 neck = Neck(config)
 wheel = Wheel(config)
-
 
 while True:
     msg = com.get_msg()
