@@ -61,7 +61,7 @@ class Lights:
             logging.error("key : " + key + " not found for lights sequences")
             return
         sequences = []
-        for s in json_seq['sequence']:
+        for s in json_seq[JsonManager.SEQUENCE]:
             animation = Animation(s[JsonManager.METHOD], s[JsonManager.DURATION])
             color_name = self.json_manager.get_attribut(s, JsonManager.COLOR)
             if color_name:

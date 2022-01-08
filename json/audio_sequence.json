@@ -1,7 +1,14 @@
 {
   "audios_seq": [
     {
-      "keys": "A1",
+      "keys": [
+        {
+          "key": "C1"
+        },
+        {
+          "key": "C10"
+        }
+      ],
       "name": "example1",
       "sequence": [
         {
@@ -19,7 +26,11 @@
       ]
     },
     {
-      "keys": "A2",
+      "keys": [
+        {
+          "key": "C2"
+        }
+      ],
       "name": "example2",
       "sequence": [
         {

@@ -16,10 +16,10 @@ from python.actions.wheel import Wheel
 logging.config.fileConfig(fname='conf/logging.conf', disable_existing_loggers=False)
 logging.info('Starting didier')
 
+com = Com()
 json_manager = JsonManager()
 config = Config(json_manager)
 audio = Audio(json_manager)
-com = Com()
 face = Face(json_manager, config)
 lights = Lights(json_manager, config)
 neck = Neck(config)

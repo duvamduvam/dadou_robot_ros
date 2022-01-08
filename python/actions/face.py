@@ -52,7 +52,7 @@ class Face:
     def load_seq_part(self, name):
         json_seq = self.json_manager.get_part_seq(name)
         frames = []
-        for s in json_seq['sequence']:
+        for s in json_seq[JsonManager.SEQUENCE]:
             frames.append(Frame(s['duration'], s['name']))
 
         return Sequence(json_seq['duration'], json_seq[JsonManager.LOOP], frames)

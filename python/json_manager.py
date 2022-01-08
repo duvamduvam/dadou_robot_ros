@@ -8,11 +8,13 @@ class JsonManager:
     logging.info("start json manager")
 
     COLOR = 'color'
+    DELAY = 'delay'
     DURATION = 'duration'
     METHOD = 'method'
     NAME = 'name'
     KEYS = 'keys'
     LOOP = 'loop'
+    SEQUENCE = 'sequence'
 
     JSON_PATH = "json/"
     AUDIOS = "audios.json"
@@ -107,7 +109,11 @@ class JsonManager:
             return (int(json_color['red']), int(json_color['green']), int(json_color['blue']))
         else:
             logging.error("no color" + key)
-            return 0
+            return None
+
+    def get_audio_seq(self, key):
+        result = self.find(self.audio_seq, 'audios_seq', '$.keys[?key ~ ' + key + ']')
+        return self.standard_return(result, False, key, False, self.AUDIO_SEQUENCE)
 
     @staticmethod
     def get_attribut(json_object, key):
@@ -119,6 +125,7 @@ class JsonManager:
     def get_audio_path_by_name(self, name) -> str:
         result = jsonpath_rw_ext.match('$.audios[?name~' + name + ']', self.audios)
         return self.standard_return(result, True, False, self.AUDIOS)
+
 
     def get_audios(self, key: str) -> str:
         result = jsonpath_rw_ext.match('$.audios_seq[?name~' + key + ']', self.audios)
@@ -134,9 +141,9 @@ class JsonManager:
             logging.debug("iterate key : " + seq['key'])
             if seq['key'] == key:
                 logging.debug("found key : " + key)
-                for audio_seq in seq['sequence']:
+                for audio_seq in seq[JsonManager.SEQUENCE]:
                     audio_path = self.get_audio_path_by_name(audio_seq['name'])
                     logging.debug("audios name : " + audio_seq['name'] + " path : " + audio_path)
-                    audios.append(PathTime(audio_path, audio_seq['wait']))
+                    audios.append(PathTime(audio_path, audio_seq[JsonManager.DELAY]))
         return audios
         """

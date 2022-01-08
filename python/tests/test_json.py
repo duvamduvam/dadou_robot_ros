@@ -24,7 +24,7 @@ class TestJson(unittest.TestCase):
         with open("json/face_sequence.json", 'r') as json_file:
             json_data = json.load(json_file)
         list_val = jsonpath_rw_ext.match('$.face_seq[?name==speak]', json_data)
-        print(list_val[0]['sequence'])
+        print(list_val[0][JsonManager.SEQUENCE])
         #logging.error("test45")
 
     @unittest.skip
