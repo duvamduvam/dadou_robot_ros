@@ -7,7 +7,7 @@ from python.input.file_watcher import FileWatcher
 
 class Com:
     arduino_enable = True
-    arduino = serial.Serial("/dev/serial0", 9600, timeout=1)
+    arduino = serial.Serial("/dev/serial0", 115200, timeout=1)
     # arduino = serial.Serial("/dev/ttyAMA0", 115200, timeout=1)
     # arduino = serial.Serial("/dev/ttyUSB0", 9600, timeout=1)
     # time.sleep(0.1)  # wait for serial to open
@@ -20,7 +20,8 @@ class Com:
         if self.arduino_enable & self.arduino.isOpen():
             # logging.info("{} connected!".format(self.arduino.port))
             if self.arduino.inWaiting() > 0:
-                msg = self.arduino.readline().decode('utf-8').rstrip()
+
+                msg = self.arduino.read(7).decode('utf-8').rstrip()
                 self.arduino.flushInput()  # remove data after reading
                 logging.info('received from arduino' + msg)
                 return self.decode(msg)
