@@ -13,7 +13,7 @@ from python.actions.neck import Neck
 from python.actions.lights import Lights
 from python.actions.wheel import Wheel
 
-logging.config.fileConfig(fname='logging.conf', disable_existing_loggers=False)
+logging.config.fileConfig(fname='conf/logging.conf', disable_existing_loggers=False)
 logging.info('Starting didier')
 
 json_manager = JsonManager()
