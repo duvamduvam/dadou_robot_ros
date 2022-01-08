@@ -14,8 +14,8 @@ class Config:
     RIGHT_DIR_PIN = 0
 
     def __init__(self, json_manager: JsonManager):
-        logging.info("init config")
         self.json_config = json_manager.get_config()
+        self.load()
 
     def load(self):
         self.load_pins()
