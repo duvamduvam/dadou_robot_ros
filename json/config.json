@@ -1,11 +1,12 @@
 {
+  "__pin map__": "http://www.andycbruce.com/p02_PWM.html",
   "pins": {
-    "lights": 18,
-    "face": 18,
-    "right_pwm": 20,
-    "right_dir": 18,
-    "left_pwm": 18,
-    "left_dir": 18,
-    "neck": 18
+    "lights": 12,
+    "face": 13,
+    "right_pwm": 17,
+    "right_dir": 27,
+    "left_pwm": 22,
+    "left_dir": 23,
+    "neck": 24
   }
 }

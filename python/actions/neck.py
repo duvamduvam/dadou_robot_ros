@@ -3,6 +3,8 @@ import pwmio
 import board
 import logging
 from adafruit_motor import servo
+
+from python.config import Config
 from python.utils import Utils
 
 
@@ -20,9 +22,11 @@ class Neck:
 
     utils = Utils()
 
-    head_pwm = pwmio.PWMOut(board.D5, duty_cycle=2 ** 15, frequency=50)
-    servo = servo.Servo(head_pwm)
-        #pwmio.PWMOut(board.LED, frequency=5000, duty_cycle=0)
+    # pwmio.PWMOut(board.LED, frequency=5000, duty_cycle=0)
+
+    def __init__(self, config: Config):
+        self.head_pwm = pwmio.PWMOut(config.NECK_PIN, duty_cycle=2 ** 15, frequency=50)
+        self.servo = servo.Servo(self.head_pwm)
 
     def update(self, key):
         self.target_pos = abs(self.utils.translate(key))
@@ -32,7 +36,7 @@ class Neck:
     def animate(self):
         if Utils.is_time(self.last_time, self.time_step):
             diff = abs(self.target_pos - self.current_pos);
-            #logging.debug("servo target : " + str(self.target_pos) + " current : " + str(self.current_pos) +
+            # logging.debug("servo target : " + str(self.target_pos) + " current : " + str(self.current_pos) +
             #              " margin : " + str(self.margin));
             if diff > self.margin and self.target_pos != self.current_pos:
                 if self.target_pos > self.current_pos:
@@ -43,7 +47,7 @@ class Neck:
     def next_step(self, step):
         if self.servo_min <= self.current_pos <= self.servo_max:
             self.current_pos += step
-            logging.info("next_step current position "+str(self.current_pos)+" next step "+str(step));
+            logging.info("next_step current position " + str(self.current_pos) + " next step " + str(step));
             self.servo.angle = self.current_pos
         else:
             logging.error("servo step : " + str(step) + " out of range")
