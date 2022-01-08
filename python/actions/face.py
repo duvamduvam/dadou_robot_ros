@@ -28,6 +28,7 @@ class Face:
     start_time = 0
 
     def __init__(self, json_manager: JsonManager, config: Config):
+        logging.debug("start face with pin " + str(config.FACE_PIN))
         self.pixels = neopixel.NeoPixel(config.FACE_PIN, self.leye_end + 1, auto_write=False)
         self.pixels.brightness = 0.1
         self.json_manager = json_manager
