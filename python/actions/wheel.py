@@ -3,6 +3,7 @@ import logging
 import board
 import pwmio
 from digitalio import DigitalInOut
+from microcontroller import Pin
 
 from python.config import Config
 from python.input.message import Message
@@ -22,10 +23,10 @@ class Wheel:
     utils = Utils()
 
     def __init__(self, config: Config):
-        self.left_pwm = pwmio.PWMOut(config.LEFT_PWM_PIN, frequency=5000, duty_cycle=0)
-        self.right_pwm = pwmio.PWMOut(config.RIGHT_PWM_PIN, frequency=5000, duty_cycle=0)
-        self.dir_left = DigitalInOut(config.LEFT_DIR_PIN)
-        self.dir_right = DigitalInOut(config.RIGHT_DIR_PIN)
+        self.left_pwm = pwmio.PWMOut(Pin(config.LEFT_PWM_PIN), frequency=5000, duty_cycle=0)
+        self.right_pwm = pwmio.PWMOut(Pin(config.RIGHT_PWM_PIN), frequency=5000, duty_cycle=0)
+        self.dir_left = DigitalInOut(Pin(config.LEFT_DIR_PIN))
+        self.dir_right = DigitalInOut(Pin(config.RIGHT_DIR_PIN))
 
     def update(self, msg: Message):
         if msg:
