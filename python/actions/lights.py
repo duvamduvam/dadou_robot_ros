@@ -46,6 +46,7 @@ class Lights:
 
     sequence = {}
     current_animation = {}
+    animations = {}
 
     def __init__(self, json_manager: JsonManager, config: Config):
         self.strip = neopixel.NeoPixel(Pin(config.LIGHTS_PIN), self.LED_COUNT)
