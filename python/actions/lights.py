@@ -51,7 +51,7 @@ class Lights:
     def __init__(self, json_manager: JsonManager, config: Config):
         self.strip = neopixel.NeoPixel(Pin(config.LIGHTS_PIN), self.LED_COUNT)
         self.strip.brightness = 0.1
-        animations = Animations(self.LED_COUNT, self.strip)
+        self.animations = Animations(self.LED_COUNT, self.strip)
         self.json_manager = json_manager
         self.update('default')
 
