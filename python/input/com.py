@@ -12,6 +12,7 @@ class Com:
     # arduino = serial.Serial("/dev/ttyUSB0", 9600, timeout=1)
     # time.sleep(0.1)  # wait for serial to open
     watcher = FileWatcher()
+    INPUT_SIZE = 7
 
     def get_msg(self) -> Message:
         if self.watcher.changed():
@@ -21,7 +22,7 @@ class Com:
             # logging.info("{} connected!".format(self.arduino.port))
             if self.arduino.inWaiting() > 0:
 
-                msg = self.arduino.read(7).decode('utf-8').rstrip()
+                msg = self.arduino.read(self.INPUT_SIZE).decode('utf-8').rstrip()
                 self.arduino.flushInput()  # remove data after reading
                 logging.info('received from arduino' + msg)
                 return self.decode(msg)
