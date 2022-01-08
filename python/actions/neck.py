@@ -3,6 +3,7 @@ import pwmio
 import board
 import logging
 from adafruit_motor import servo
+from microcontroller import Pin
 
 from python.config import Config
 from python.utils import Utils
@@ -25,7 +26,7 @@ class Neck:
     # pwmio.PWMOut(board.LED, frequency=5000, duty_cycle=0)
 
     def __init__(self, config: Config):
-        self.head_pwm = pwmio.PWMOut(config.NECK_PIN, duty_cycle=2 ** 15, frequency=50)
+        self.head_pwm = pwmio.PWMOut(Pin(config.NECK_PIN), duty_cycle=2 ** 15, frequency=50)
         self.servo = servo.Servo(self.head_pwm)
 
     def update(self, key):

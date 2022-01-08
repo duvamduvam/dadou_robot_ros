@@ -8,6 +8,8 @@ import logging.config
 
 # todo check thread : https://www.geeksforgeeks.org/python-communicating-between-threads-set-1/
 # todo check thread2 : https://riptutorial.com/python/example/4691/communicating-between-threads
+from microcontroller import Pin
+
 from python.visual.animations import Animations
 from python.config import Config
 from python.json_manager import JsonManager
@@ -49,7 +51,7 @@ class Lights:
     animations = Animations(LED_COUNT, strip, sequence)
 
     def __init__(self, json_manager: JsonManager, config: Config):
-        self.strip = neopixel.NeoPixel(config.LIGHTS_PIN, self.LED_COUNT)
+        self.strip = neopixel.NeoPixel(Pin(config.LIGHTS_PIN), self.LED_COUNT)
         self.strip.brightness = 0.1
         self.json_manager = json_manager
         self.update('default')
