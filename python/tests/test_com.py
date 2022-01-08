@@ -14,6 +14,4 @@ class MyTestCase(unittest.TestCase):
     def test_com(self):
         start_time = Utils.current_milli_time()
         while True:
-            msg = self.com.get_msg()
-            if msg:
-                logging.info("new msg : " + msg)
+            self.com.get_msg()
