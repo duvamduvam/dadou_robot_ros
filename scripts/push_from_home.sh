@@ -1,5 +1,5 @@
-#/bin/bash
 #!/bin/bash
+
 #reload bash for modif
 source ~/.bashrc
 /home/pi/scripts/check_internet.sh

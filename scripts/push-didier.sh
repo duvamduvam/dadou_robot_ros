@@ -1,4 +1,4 @@
-#/bin/bash
+#!/bin/bash
 
 cd ~/Nextcloud/rosita/python/didier-python
 git add --all
