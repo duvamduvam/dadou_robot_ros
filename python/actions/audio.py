@@ -35,15 +35,16 @@ class Audio:
 
     def process(self, key):
         audio_sequence = self.json_manager.get_audios(key)
-        audios = []
-        for seq in audio_sequence:
-            logging.debug("iterate key : " + seq['key'])
-            if seq['key'] == key:
-                logging.debug("found key : " + key)
-                for audio_seq in seq['sequence']:
-                    audio_path = self.get_audio_path_by_name(audio_seq['name'])
-                    logging.debug("audios name : " + audio_seq['name'] + " path : " + audio_path)
-                    audios.append(PathTime(audio_path, audio_seq['wait']))
+        if audio_sequence:
+            audios = []
+            for seq in audio_sequence:
+                logging.debug("iterate key : " + seq['key'])
+                if seq['key'] == key:
+                    logging.debug("found key : " + key)
+                    for audio_seq in seq['sequence']:
+                        audio_path = self.get_audio_path_by_name(audio_seq['name'])
+                        logging.debug("audios name : " + audio_seq['name'] + " path : " + audio_path)
+                        audios.append(PathTime(audio_path, audio_seq['wait']))
 
-        self.play_sounds(audios)
-        logging.info("update")
+            self.play_sounds(audios)
+            logging.info("update")

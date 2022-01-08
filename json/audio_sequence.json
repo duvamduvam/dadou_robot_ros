@@ -1,7 +1,7 @@
 {
   "audios_seq": [
     {
-      "key": "A1",
+      "keys": "A1",
       "name": "example1",
       "sequence": [
         {
@@ -19,7 +19,7 @@
       ]
     },
     {
-      "key": "A2",
+      "keys": "A2",
       "name": "example2",
       "sequence": [
         {
