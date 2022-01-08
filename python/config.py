@@ -1,3 +1,5 @@
+import logging
+
 from python.json_manager import JsonManager
 
 
@@ -15,6 +17,7 @@ class Config:
 
     def load(self):
         self.load_pins()
+        logging.debug(self)
 
     def reload(self):
         self.json_config = JsonManager().get_config()
