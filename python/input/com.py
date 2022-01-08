@@ -20,7 +20,7 @@ class Com:
         if self.arduino_enable & self.arduino.isOpen():
             # logging.info("{} connected!".format(self.arduino.port))
             if self.arduino.inWaiting() > 0:
-                msg = self.arduino.readline().decode('ISO-8859-1').rstrip()
+                msg = self.arduino.readline()
                 print(msg)
                 self.arduino.flushInput()  # remove data after reading
                 logging.info('received from arduino' + msg)
