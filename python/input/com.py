@@ -1,3 +1,5 @@
+from builtins import staticmethod
+
 from python.input.message import Message
 import serial
 import logging
@@ -21,7 +23,6 @@ class Com:
         if self.arduino_enable & self.arduino.isOpen():
             # logging.info("{} connected!".format(self.arduino.port))
             if self.arduino.inWaiting() > 0:
-
                 msg = self.arduino.read(self.INPUT_SIZE).decode('utf-8').rstrip()
                 self.arduino.flushInput()  # remove data after reading
                 logging.info('received from arduino' + msg)
@@ -32,10 +33,10 @@ class Com:
         if self.arduino.isOpen():
             self.arduino.write(msg)
 
-    def decode(self, msg: str):
+    @staticmethod
+    def decode(msg: str):
         if msg.startswith(Message.PREFIX) and msg.endswith(Message.POSTFIX):
             return Message(msg[1], msg[2], msg[3], msg[4] + msg[5])
         else:
             logging.error("wrong message : \"" + msg + "\"")
             return None
-

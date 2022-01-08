@@ -5,6 +5,7 @@ import pwmio
 from digitalio import DigitalInOut
 
 from python.config import Config
+from python.input.message import Message
 from python.utils import Utils
 
 
@@ -20,17 +21,17 @@ class Wheel:
 
     utils = Utils()
 
-    def __init__(self, config:Config):
+    def __init__(self, config: Config):
         self.left_pwm = pwmio.PWMOut(config.LEFT_PWM_PIN, frequency=5000, duty_cycle=0)
         self.right_pwm = pwmio.PWMOut(config.RIGHT_PWM_PIN, frequency=5000, duty_cycle=0)
         self.dir_left = DigitalInOut(config.LEFT_DIR_PIN)
         self.dir_right = DigitalInOut(config.RIGHT_DIR_PIN)
 
-    def update(self, key: str):
-        if key:
-            logging.debug("update wheel with key : " + key)
-            left = self.utils.translate(ord(key[0]))
-            right = self.utils.translate(ord(key[1]))
+    def update(self, msg: Message):
+        if msg:
+            logging.debug("update wheel with left : " + msg.left_wheel + "left : " + msg.right_wheel)
+            left = self.utils.translate(msg.left_wheel)
+            right = self.utils.translate(msg.right_wheel)
             self.dir_left = self.utils.is_positive(left)
             self.dir_right = self.utils.is_positive(right)
             self.move_time = Utils.current_milli_time()

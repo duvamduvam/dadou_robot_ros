@@ -21,20 +21,20 @@ json_manager = JsonManager()
 config = MConfig(json_manager)
 audio = Audio(json_manager)
 com = Com()
-face = Face(json_manager, confg)
+face = Face(json_manager, config)
 lights = Lights(json_manager, config)
 neck = Neck(config)
 wheel = Wheel(config)
 
 
 while True:
-    key = com.get_msg()
-    if key:
-        audio.process(key)
-        face.update(key)
-        neck.update(key)
-        wheel.update(key)
-        lights.update(key)
+    msg = com.get_msg()
+    if msg:
+        audio.process(msg)
+        face.update(msg)
+        neck.update(msg)
+        wheel.update(msg)
+        lights.update(msg)
 
     face.animate()
     lights.animate()
