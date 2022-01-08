@@ -1,5 +1,6 @@
 import logging.config
 import neopixel
+from microcontroller import Pin
 
 from python.config import Config
 from python.visual.image_mapping import ImageMapping
@@ -29,7 +30,7 @@ class Face:
 
     def __init__(self, json_manager: JsonManager, config: Config):
         logging.debug("start face with pin " + str(config.FACE_PIN))
-        self.pixels = neopixel.NeoPixel(config.FACE_PIN, self.leye_end + 1, auto_write=False)
+        self.pixels = neopixel.NeoPixel(Pin(config.FACE_PIN), self.leye_end + 1, auto_write=False)
         self.pixels.brightness = 0.1
         self.json_manager = json_manager
         self.load_visuals()
