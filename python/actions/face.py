@@ -61,7 +61,7 @@ class Face:
         if key:
             logging.info("update face sequence : " + key)
             json_seq = self.json_manager.get_face_seq(key)
-            self.loop = json_seq[JsonManager.LOOP]
+            #self.loop = json_seq[JsonManager.LOOP]
             self.duration = json_seq['duration']
             self.mouth_seq = self.load_seq_part(json_seq['mouth'])
             self.leye_seq = self.load_seq_part(json_seq['reye'])
