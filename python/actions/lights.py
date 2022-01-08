@@ -82,9 +82,9 @@ class Lights:
             self.sequence.next()
             self.current_animation = getattr(self.animations, self.sequence.current_element.method)(
                 self.sequence.current_element)
-            logging.debug(
-                "change sequence to " + self.sequence.current_element.method + " with time " + str(
-                    self.sequence.current_element.timeout))
+            #logging.debug(
+            #    "change sequence to " + self.sequence.current_element.method + " with time " + str(
+            #        self.sequence.current_element.timeout))
         self.current_animation.animate()
 
 
@@ -94,7 +94,7 @@ class Animation:
     start_time = Utils.current_milli_time()
 
     def __init__(self, method, timeout: int):
-        #logging.debug("add animation method : " + method + " timeout : " + str(timeout))
+        logging.debug("add animation method : " + method + " timeout : " + str(timeout))
         self.method = method
         self.timeout = timeout
 
