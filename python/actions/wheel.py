@@ -28,11 +28,11 @@ class Wheel:
         self.dir_left = DigitalInOut(Pin(config.LEFT_DIR_PIN))
         self.dir_right = DigitalInOut(Pin(config.RIGHT_DIR_PIN))
 
-    def update(self, msg: Message):
-        if msg:
-            logging.debug("update wheel with left : " + msg.left_wheel + "left : " + msg.right_wheel)
-            left = self.utils.translate(msg.left_wheel)
-            right = self.utils.translate(msg.right_wheel)
+    def update(self, left_wheel, right_wheel):
+        if left_wheel and right_wheel:
+            logging.debug("update wheel with left : " + left_wheel + "left : " + right_wheel)
+            left = self.utils.translate(left_wheel)
+            right = self.utils.translate(right_wheel)
             self.dir_left = self.utils.is_positive(left)
             self.dir_right = self.utils.is_positive(right)
             self.move_time = Utils.current_milli_time()

@@ -29,11 +29,11 @@ wheel = Wheel(config)
 while True:
     msg = com.get_msg()
     if msg:
-        audio.process(msg)
-        face.update(msg)
-        neck.update(msg)
-        wheel.update(msg)
-        lights.update(msg)
+        audio.process(msg.key)
+        face.update(msg.key)
+        neck.update(msg.neck)
+        wheel.update(msg.left_wheel, msg.right_wheel)
+        lights.update(msg.key)
 
     face.animate()
     lights.animate()
