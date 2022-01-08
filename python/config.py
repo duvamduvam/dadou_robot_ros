@@ -19,7 +19,7 @@ class Config:
 
     def load(self):
         self.load_pins()
-        logging.debug(self)
+        logging.debug(self.__dict__)
 
     def reload(self):
         self.json_config = JsonManager().get_config()
