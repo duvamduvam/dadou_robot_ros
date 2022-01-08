@@ -1,11 +1,10 @@
 import logging.config
-
 import sys
+sys.path.append('.')
 
 from python.config import Config
 from python.json_manager import JsonManager
 
-sys.path.append('.')
 
 from python.input.com import Com
 from python.actions.audio import Audio
