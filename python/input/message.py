@@ -18,10 +18,3 @@ class Message:
         self.head = head
         self.key = key
 
-    @staticmethod
-    def decode(msg: str):
-        if msg.startswith(Message.PREFIX) and msg.endswith(Message.POSTFIX):
-            return Message(msg[1], msg[2], msg[3], msg[4] + msg[5])
-        else:
-            logging.error("wrong message : \"" + msg + "\"")
-            return None

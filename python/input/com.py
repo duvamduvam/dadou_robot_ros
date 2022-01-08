@@ -21,12 +21,19 @@ class Com:
             # logging.info("{} connected!".format(self.arduino.port))
             if self.arduino.inWaiting() > 0:
                 msg = self.arduino.readline().decode('utf-8').rstrip()
-                print(msg)
                 self.arduino.flushInput()  # remove data after reading
                 logging.info('received from arduino' + msg)
-                return Message.decode(msg)
+                return self.decode(msg)
         return None
 
     def send_msg(self, msg):
         if self.arduino.isOpen():
             self.arduino.write(msg)
+
+    def decode(self, msg: str):
+        if msg.startswith(Message.PREFIX) and msg.endswith(Message.POSTFIX):
+            return Message(msg[1], msg[2], msg[3], msg[4] + msg[5])
+        else:
+            logging.error("wrong message : \"" + msg + "\"")
+            return None
+
