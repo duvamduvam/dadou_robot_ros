@@ -2,7 +2,7 @@ import logging.config
 
 import sys
 
-from python.config import MConfig
+from python.config import Config
 from python.json_manager import JsonManager
 
 sys.path.append('.')
@@ -18,7 +18,7 @@ logging.config.fileConfig(fname='logging.conf', disable_existing_loggers=False)
 logging.info('Starting didier')
 
 json_manager = JsonManager()
-config = MConfig(json_manager)
+config = Config(json_manager)
 audio = Audio(json_manager)
 com = Com()
 face = Face(json_manager, config)
