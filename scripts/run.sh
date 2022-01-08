@@ -1,3 +1,5 @@
 #!/bin/bash
 
-sudo python3 $1
+cd /home/pi/deploy/didier-python
+export PYTHONPATH='pwd'
+sudo python3 python/$1
