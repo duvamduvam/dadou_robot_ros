@@ -57,7 +57,7 @@ class Lights:
 
     def update(self, key):
         json_seq = self.json_manager.get_lights(key)
-        if json_seq == 0:
+        if not json_seq:
             logging.error("key : " + key + " not found for lights sequences")
             return
         sequences = []
