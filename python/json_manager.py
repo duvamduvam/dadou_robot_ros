@@ -64,8 +64,7 @@ class JsonManager:
 
         if not error:
             return to_return
-        else:
-            logging.error("no data for " + input_key + " in " + json_file)
+
         return None
 
     @staticmethod
