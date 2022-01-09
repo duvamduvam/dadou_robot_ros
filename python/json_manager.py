@@ -45,7 +45,7 @@ class JsonManager:
 
     @staticmethod
     def standard_return(result, return_first, input_key, attribut, json_file):
-        logging.debug(result)
+        # logging.debug(result)
         to_return = {}
         error = False
 
@@ -97,7 +97,7 @@ class JsonManager:
 
     def get_lights(self, key):
         result = jsonpath_rw_ext.match('$.lights_seq[?keys~' + key + ']', self.lights_seq)
-        logging.debug(result)
+        # logging.debug(result)
         return self.standard_return(result, True, key, False, self.LIGHTS_SEQUENCE)
 
     def get_color(self, key):
@@ -111,7 +111,7 @@ class JsonManager:
             return None
 
     def get_audio_seq(self, key):
-        logging.debug("key " + key)
+        #logging.debug("key " + key)
         result = self.find(self.audio_seq, 'audios_seq', '$.keys[?key ~ ' + key + ']')
         return self.standard_return(result, False, key, False, self.AUDIO_SEQUENCE)
 
