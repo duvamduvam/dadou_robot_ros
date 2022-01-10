@@ -16,7 +16,7 @@ class JsonManager:
     LOOP = 'loop'
     SEQUENCE = 'sequence'
 
-    JSON_PATH = "json/"
+    JSON_PATH = None
     AUDIOS = "audios.json"
     AUDIO_SEQUENCE = "audio_sequence.json"
     COLORS = "colors.json"
@@ -26,22 +26,33 @@ class JsonManager:
     LIGHTS_SEQUENCE = "lights_sequence.json"
     VISUALS = "visuals.json"
 
-    with open(JSON_PATH + COLORS, 'r') as json_file:
-        colors = json.load(json_file)
-    with open(JSON_PATH + FACE_SEQUENCE, 'r') as json_file:
-        face_seq = json.load(json_file)
-    with open(JSON_PATH + LIGHTS, 'r') as json_file:
-        lights = json.load(json_file)
-    with open(JSON_PATH + CONFIG, 'r') as json_file:
-        config = json.load(json_file)
-    with open(JSON_PATH + LIGHTS_SEQUENCE, 'r') as json_file:
-        lights_seq = json.load(json_file)
-    with open(JSON_PATH + VISUALS, 'r') as json_file:
-        visual = json.load(json_file)
-    with open(JSON_PATH + AUDIOS) as json_file:
-        audios = json.load(json_file)
-    with open(JSON_PATH + AUDIO_SEQUENCE) as json_file:
-        audio_seq = json.load(json_file)
+    colors = None
+    face_seq = None
+    lights = None
+    config = None
+    lights_seq = None
+    visual = None
+    audios = None
+    audio_seq = None
+
+    def __init__(self, base_path):
+        json_path = base_path + "json/"
+        with open(json_path + self.COLORS, 'r') as json_file:
+            self.colors = json.load(json_file)
+        with open(json_path + self.FACE_SEQUENCE, 'r') as json_file:
+            self.face_seq = json.load(json_file)
+        with open(json_path + self.LIGHTS, 'r') as json_file:
+            self.lights = json.load(json_file)
+        with open(json_path + self.CONFIG, 'r') as json_file:
+            self.config = json.load(json_file)
+        with open(json_path + self.LIGHTS_SEQUENCE, 'r') as json_file:
+            self.lights_seq = json.load(json_file)
+        with open(json_path + self.VISUALS, 'r') as json_file:
+            self.visual = json.load(json_file)
+        with open(json_path + self.AUDIOS) as json_file:
+            self.audios = json.load(json_file)
+        with open(json_path + self.AUDIO_SEQUENCE) as json_file:
+            self.audio_seq = json.load(json_file)
 
     @staticmethod
     def standard_return(result, return_first, input_key, attribut, json_file):
@@ -111,7 +122,7 @@ class JsonManager:
             return None
 
     def get_audio_seq(self, key):
-        #logging.debug("key " + key)
+        # logging.debug("key " + key)
         result = self.find(self.audio_seq, 'audios_seq', '$.keys[?key ~ ' + key + ']')
         return self.standard_return(result, False, key, False, self.AUDIO_SEQUENCE)
 

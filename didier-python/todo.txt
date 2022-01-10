@@ -1,0 +1,2 @@
+améliorer les scrits avec un retour console / check internet retour si pas de connections
+retour en couleur ?

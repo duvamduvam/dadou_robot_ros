@@ -13,11 +13,11 @@ from python.actions.neck import Neck
 from python.actions.lights import Lights
 from python.actions.wheel import Wheel
 
-logging.config.fileConfig(fname='conf/logging.conf', disable_existing_loggers=False)
+logging.config.fileConfig(fname=Config.BASE_PATH + 'conf/logging.conf', disable_existing_loggers=False)
 logging.info('Starting didier')
 
 com = Com()
-json_manager = JsonManager()
+json_manager = JsonManager(Config.BASE_PATH)
 config = Config(json_manager)
 audio = Audio(json_manager)
 face = Face(json_manager, config)

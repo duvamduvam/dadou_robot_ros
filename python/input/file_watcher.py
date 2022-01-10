@@ -2,12 +2,13 @@ import time
 import logging
 import os
 
+from python.config import Config
 from python.utils import Utils
 
 
 class FileWatcher:
     keys = []
-    file = 'conf/test_key.txt'
+    file = Config.BASE_PATH + 'conf/test_key.txt'
     last_modified = os.path.getctime(file)
 
     def changed(self) -> bool:

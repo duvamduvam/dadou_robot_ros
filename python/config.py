@@ -5,6 +5,8 @@ from python.json_manager import JsonManager
 
 class Config:
 
+    BASE_PATH = "/home/pi/deploy/"
+
     FACE_PIN = 0
     NECK_PIN = 0
     LIGHTS_PIN = 0

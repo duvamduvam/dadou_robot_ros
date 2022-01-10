@@ -11,7 +11,7 @@
     },
     {
       "name": "default",
-      "duration": 100,
+      "duration": 150,
       "loop": true,
       "mouth": "mspeak",
       "reye": "ebase",

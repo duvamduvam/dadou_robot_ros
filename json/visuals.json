@@ -2,31 +2,31 @@
   "visual": [
     {
       "name": "mopen1",
-      "path": "visuals/mopen1.png"
+      "path": "../visuals/mopen1.png"
     },
     {
       "name": "mopen2",
-      "path": "visuals/mopen2.png"
+      "path": "../visuals/mopen2.png"
     },
     {
       "name": "mopen3",
-      "path": "visuals/mopen3.png"
+      "path": "../visuals/mopen3.png"
     },
     {
       "name": "eye-still",
-      "path": "visuals/eye-still.png"
+      "path": "../visuals/eye-still.png"
     },
     {
       "name": "test",
-      "path": "visuals/test.png"
+      "path": "../visuals/test.png"
     },
     {
       "name": "test",
-      "path": "visuals/test.png"
+      "path": "../visuals/test.png"
     },
     {
       "name": "test2",
-      "path": "visuals/test2.png"
+      "path": "../visuals/test2.png"
     }
   ]
 }
