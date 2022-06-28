@@ -2,18 +2,33 @@
   "audios": [
     {
       "name": "lunettes",
-      "key": "A1",
-      "path": "audios/lunettes.wav"
+      "key": "D1",
+      "path": "lunettes.wav"
     },
     {
       "name": "manteau",
-      "key": "A3",
-      "path": "audios/manteau.wav"
+      "key": "D3",
+      "path": "manteau.wav"
     },
     {
       "name": "gig",
-      "key": "A5",
-      "path": "audios/gig.wav"
+      "key": "D5",
+      "path": "gig.wav"
+    },
+    {
+      "name": "never die",
+      "key": "D6",
+      "path": "neverDie.wav"
+    },
+    {
+      "name": "annie",
+      "key": "D7",
+      "path": "annie.mp3"
+    },
+    {
+      "name": "great balls",
+      "key": "D8",
+      "path": "great-balls.mp3"
     }
   ]
 }

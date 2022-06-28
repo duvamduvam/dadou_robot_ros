@@ -7,7 +7,14 @@
       "mouth": "mspeak",
       "reye": "ebase",
       "leye": "ebase",
-      "keys": "A1 Z1"
+      "keys": [
+        {
+          "key": "B2"
+        },
+        {
+          "key": "default"
+        }
+      ]
     },
     {
       "name": "default",
@@ -18,7 +25,7 @@
       "leye": "ebase",
       "keys": [
         {
-          "key": "Z3"
+          "key": "B1"
         },
         {
           "key": "default"
@@ -51,14 +58,6 @@
         {
           "name": "mopen3",
           "duration": 90
-        },
-        {
-          "name": "test",
-          "duration": 40
-        },
-        {
-          "name": "test2",
-          "duration": 100
         },
         {
           "name": "mopen3",

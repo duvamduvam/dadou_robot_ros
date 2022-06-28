@@ -1,0 +1,22 @@
+[Unit]
+Description=Didier Daemon
+After=network.target
+
+[Service]
+Type=oneshot
+
+User=didier
+Group=didier
+UMask=007
+
+ExecStart=/home/didier/deploy/scripts/run.sh
+Environment="DISPLAY=:0"
+RemainAfterExit=yes
+
+Restart=on-failure
+
+# Configures the time to wait before service is stopped forcefully.
+TimeoutStopSec=300
+
+[Install]
+WantedBy=multi-user.target

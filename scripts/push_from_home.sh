@@ -6,6 +6,6 @@ echo "push and update code"
 
 source ~/.bashrc
 /home/pi/scripts/check_internet.sh
-ssh home '~/Nextcloud/rosita/python/didier-python/scripts/push-didier.sh'
-cd /home/pi/deploy/didier-python
+ssh home '~/Nextcloud/rosita/dadoutils/didier-dadoutils/scripts/push-didier.sh'
+cd /home/pi/deploy/didier-dadoutils
 git pull origin

@@ -27,7 +27,7 @@ class MyEventHandler(pyinotify.ProcessEvent):
 
 def main():
     # watch manager
-    file = '/home/david/Nextcloud/rosita/python/didier-python/conf/'
+    file = '/home/david/Nextcloud/rosita/dadoutils/didier-dadoutils/conf/'
     wm = pyinotify.WatchManager()
     wm.add_watch(file, pyinotify.ALL_EVENTS, rec=True)
 

@@ -1,12 +1,14 @@
 {
-  "__pin map__": "http://www.andycbruce.com/p02_PWM.html",
+  "head_mega_id": "usb-Arduino__www.arduino.cc__Arduino_Mega_2560_75033303334351C01211-if00",
+  "radio_mega_id": "usb-1a86_USB_Serial-if00-port0",
+  "__rpi pin map__": "http://www.andycbruce.com/p02_PWM.html (pwm l)arduino 3 -> rpi 22 | (pwm r) arduino 4 -> 25 | (dir l)arduino 22 -> rpi 23 | (dir r)arduino 23 -> rpi 24 ",
   "pins": {
-    "lights": 12,
+    "lights": 18,
     "face": 18,
-    "right_pwm": 17,
-    "right_dir": 27,
+    "right_pwm": 25,
+    "right_dir": 23,
     "left_pwm": 22,
-    "left_dir": 23,
-    "neck": 24
+    "left_dir": 24,
+    "neck": 26
   }
 }
