@@ -13,7 +13,7 @@ ExecStart=/home/didier/deploy/scripts/run.sh
 Environment="DISPLAY=:0"
 RemainAfterExit=yes
 
-Restart=on-failure
+Restart=always
 
 # Configures the time to wait before service is stopped forcefully.
 TimeoutStopSec=300
