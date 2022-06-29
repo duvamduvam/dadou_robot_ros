@@ -2,6 +2,7 @@ import logging
 
 from dadou_utils.com.serial_device import SerialDevice
 from dadou_utils.com.ws_server import WsServer
+from dadou_utils.misc import Misc
 
 from dadourobot.input.message import Message
 from dadourobot.robot_factory import RobotFactory
@@ -24,7 +25,7 @@ class GlobalReceiver:
 
     def get_msg(self):
         radio_msg = self.lora_radio.get_msg()
-        if radio_msg:
+        if radio_msg and Misc.is_input_ok(radio_msg):
             logging.info('received radio msg : {}'.format(radio_msg))
             return self.filter_msg(radio_msg)
         """glove = self.glove.get_msg()

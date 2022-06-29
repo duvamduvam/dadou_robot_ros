@@ -1,34 +1,68 @@
 {
   "audios": [
     {
-      "name": "lunettes",
-      "key": "D1",
-      "path": "lunettes.wav"
+      "name": "stop",
+      "keys": ["Da"]
     },
     {
-      "name": "manteau",
-      "key": "D3",
-      "path": "manteau.wav"
+      "name": "et des robots",
+      "keys": ["D1"],
+      "path": "et-des-robots.mp3"
     },
     {
-      "name": "gig",
-      "key": "D5",
-      "path": "gig.wav"
+      "name": "kidnape",
+      "keys": ["D3"],
+      "path": "kidnape.mp3"
     },
     {
-      "name": "never die",
-      "key": "D6",
-      "path": "neverDie.wav"
+      "name": "pas vrai",
+      "keys": ["D4"],
+      "path": "pas-vrai.mp3"
+    },
+    {
+      "name": "electrochoc",
+      "keys": ["D5"],
+      "path": "electrochoc.mp3"
+    },
+    {
+      "name": "pas de bras",
+      "keys": ["D6"],
+      "path": "pas-de-bras.mp3"
+    },
+    {
+      "name": "oui j etais la",
+      "keys": ["D8"],
+      "path": "oui-j-etais-la.mp3"
+    },
+    {
+      "name": "ne coroyez pas",
+      "keys": ["e"],
+      "path": "ne-croyez-pas.mp3"
     },
     {
       "name": "annie",
-      "key": "D7",
+      "keys": ["f"],
       "path": "annie.mp3"
     },
     {
       "name": "great balls",
-      "key": "D8",
+      "keys": ["g"],
       "path": "great-balls.mp3"
+    },
+    {
+      "name": "salut salut",
+      "keys": ["a"],
+      "path": "salut-salut.mp3"
+    },
+    {
+      "name": "moi c est didier",
+      "keys": ["b"],
+      "path": "moi-c-est-didier.mp3"
+    },
+    {
+      "name": "ca va",
+      "keys": ["c"],
+      "path": "ca-va.mp3"
     }
   ]
 }

@@ -31,38 +31,6 @@ class RobotJsonManager(AbstractJsonManager):
         self.audios = self.open_json(RobotStatic.AUDIOS)
         self.audio_seq = self.open_json(RobotStatic.AUDIO_SEQUENCE)
 
-    """@staticmethod
-    def standard_return(result, return_first, attribut):
-        # logging.debug(result)
-        to_return = {}
-        error = False
-
-        if not bool(result):
-            error = True
-        else:
-            if return_first:
-                if len(result) > 0:
-                    to_return = result[0]
-                else:
-                    error = True
-            else:
-                to_return = result
-            if attribut:
-                to_return = to_return[attribut]
-
-        if not error:
-            return to_return
-
-        return None
-
-    @staticmethod
-    def find(json_data, iterate_key, expression):
-        result = 0
-        for seq in json_data[iterate_key]:
-            if len(jsonpath_rw_ext.match(expression, seq)) > 0:
-                result = seq
-        return result"""
-
     def get_visual_path(self, key) -> str:
         result = jsonpath_rw_ext.match('$.visual[?name==' + key + ']', self.visual)
         return self.standard_return(result, True, 'path')
@@ -116,21 +84,10 @@ class RobotJsonManager(AbstractJsonManager):
         return self.standard_return(result, True, False)
 
     def get_audios(self, key: str) -> str:
-        result = jsonpath_rw_ext.match('$.audios[?key~' + key + ']', self.audios)
+        #result = jsonpath_rw_ext.match('$.audios[?key~' + key + ']', self.audios)
+        result = jsonpath_rw_ext.match("$.audios[?(keys[*]~'"+key+"')]", self.audios)
         return self.standard_return(result, True, False)
 
     def get_config(self):
         return self.config
 
-        """
-        audios = []
-        for seq in self.audio_sequence:
-            logging.debug("iterate key : " + seq['key'])
-            if seq['key'] == key:
-                logging.debug("found key : " + key)
-                for audio_seq in seq[JsonManager.SEQUENCE]:
-                    audio_path = self.get_audio_path_by_name(audio_seq[JsonManager.NAME])
-                    logging.debug("audios name : " + audio_seq[JsonManager.NAME] + " path : " + audio_path)
-                    audios.append(PathTime(audio_path, audio_seq[JsonManager.DELAY]))
-        return audios
-        """

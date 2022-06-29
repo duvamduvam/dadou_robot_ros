@@ -4,6 +4,7 @@ from dadourobot.files.robot_json_manager import RobotJsonManager
 
 
 class RobotConfig:
+    STOP_KEY = None
 
     BASE_PATH = None
     HEAD_MEGA_ID = None
@@ -27,6 +28,7 @@ class RobotConfig:
         self.json_config = self.json_manager.get_config()
         self.load_pins()
         self.load_serials()
+        self.STOP_KEY = self.json_config['stop_key']
         logging.debug(self.__dict__)
 
     def reload(self):

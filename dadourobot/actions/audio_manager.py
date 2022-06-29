@@ -1,7 +1,7 @@
 # pip3 install sound-player
 # https://github.com/Krozark/sound-player/blob/master/example.py
 import logging
-
+from os.path import exists
 from sound_player import Sound, SoundPlayer
 
 from dadourobot.robot_static import RobotStatic
@@ -17,6 +17,7 @@ class AudioManager:
     silence = "audios/silence.wav"
     playlist = []
     current_audio = None
+    current_audio_path = None
 
     def __init__(self):
         self.json_manager = RobotFactory().robot_json_manager
@@ -31,10 +32,17 @@ class AudioManager:
         self.player.play()
 
     def play_sound(self, audio):
+        if exists(RobotStatic.AUDIOS_DIRECTORY+audio['path']):
+            self.current_audio = SoundObject(RobotStatic.AUDIOS_DIRECTORY, audio['path'])
+            self.current_audio.play()
+            self.current_audio_name = audio['path']
+        else:
+            logging.error("audio {} don't exist".format(audio['path']))
 
-        self.current_audio = SoundObject(RobotStatic.AUDIOS_DIRECTORY, audio['path'])
-        self.current_audio.play()
-        #self.player.play()
+    def is_playing(self):
+        if not self.current_audio or not self.current_audio.is_playing():
+            return False
+        return True
 
     def play_sounds(self, audios):
         self.player.stop()
@@ -50,15 +58,24 @@ class AudioManager:
         #self.player.play()
 
     def stop_sound(self):
-        self.player.stop()
+        if self.current_audio:
+            self.current_audio.stop()
+            self.current_audio_name = ""
 
     def process(self, msg):
         if msg and hasattr(msg, 'key'):
             audio_path = self.json_manager.get_audios(msg.key)
             if audio_path:
-                if self.current_audio:
-                    self.current_audio.stop()
-                self.play_sound(audio_path)
+                if hasattr(audio_path, 'path') and audio_path['path'] == self.current_audio_path:
+                    return
+                if audio_path['name'] == 'stop':
+                    self.stop_sound()
+                    logging.info("stop sound")
+                else:
+                    if self.current_audio:
+                        self.current_audio.stop()
+                    self.current_audio_path = audio_path['path']
+                    self.play_sound(audio_path)
 
 
             """           audio_sequence = self.json_manager.get_audio_seq(key)
