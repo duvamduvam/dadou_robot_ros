@@ -1,6 +1,7 @@
 # pip3 install sound-player
 # https://github.com/Krozark/sound-player/blob/master/example.py
 import logging
+import threading
 from os.path import exists
 from sound_player import Sound, SoundPlayer
 
@@ -17,7 +18,7 @@ class AudioManager:
     silence = "audios/silence.wav"
     playlist = []
     current_audio = None
-    current_audio_path = None
+    current_audio_name = None
 
     def __init__(self):
         self.json_manager = RobotFactory().robot_json_manager
@@ -64,9 +65,11 @@ class AudioManager:
 
     def process(self, msg):
         if msg and hasattr(msg, 'key'):
+            logging.debug("number of thread : {}".format(threading.active_count()))
             audio_path = self.json_manager.get_audios(msg.key)
             if audio_path:
-                if hasattr(audio_path, 'path') and audio_path['path'] == self.current_audio_path:
+                if audio_path['path'] == self.current_audio_name:
+                    logging.debug("already playing {}".format(self.current_audio_name))
                     return
                 if audio_path['name'] == 'stop':
                     self.stop_sound()
@@ -74,7 +77,7 @@ class AudioManager:
                 else:
                     if self.current_audio:
                         self.current_audio.stop()
-                    self.current_audio_path = audio_path['path']
+                    self.current_audio_name = audio_path['path']
                     self.play_sound(audio_path)
 
 

@@ -2,7 +2,8 @@
   "audios": [
     {
       "name": "stop",
-      "keys": ["Da"]
+      "keys": ["Da"],
+      "path": ""
     },
     {
       "name": "et des robots",
@@ -21,21 +22,21 @@
     },
     {
       "name": "electrochoc",
-      "keys": ["D5"],
+      "keys": ["D5", "f"],
       "path": "electrochoc.mp3"
     },
     {
       "name": "pas de bras",
-      "keys": ["D6"],
+      "keys": ["D6", "e"],
       "path": "pas-de-bras.mp3"
     },
     {
       "name": "oui j etais la",
-      "keys": ["D8"],
+      "keys": ["D8", "d"],
       "path": "oui-j-etais-la.mp3"
     },
     {
-      "name": "ne coroyez pas",
+      "name": "ne croyez pas",
       "keys": ["e"],
       "path": "ne-croyez-pas.mp3"
     },
@@ -63,6 +64,11 @@
       "name": "ca va",
       "keys": ["c"],
       "path": "ca-va.mp3"
+    },
+    {
+      "name": "avec-life-forever-mourrir",
+      "keys": ["h"],
+      "path": "avec-life-forever-mourrir.mp3"
     }
   ]
 }
