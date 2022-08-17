@@ -13,7 +13,7 @@ class RobotJsonManager(AbstractJsonManager):
     logging.info("start json manager")
 
     colors = None
-    face_seq = None
+    expressions = None
     lights = None
     config = None
     lights_seq = None
@@ -24,9 +24,8 @@ class RobotJsonManager(AbstractJsonManager):
     def __init__(self, base_path, json_folder, config_file):
         super().__init__(base_path, json_folder, config_file)
         self.colors = self.open_json(RobotStatic.COLORS)
-        self.face_seq = self.open_json(RobotStatic.FACE_SEQUENCE)
+        self.expressions = self.open_json(RobotStatic.EXPRESSIONS)
         self.lights = self.open_json(RobotStatic.LIGHTS)
-        self.lights_seq = self.open_json(RobotStatic.LIGHTS_SEQUENCE)
         self.visual = self.open_json(RobotStatic.VISUALS)
         self.audios = self.open_json(RobotStatic.AUDIOS)
         self.audio_seq = self.open_json(RobotStatic.AUDIO_SEQUENCE)
@@ -36,26 +35,30 @@ class RobotJsonManager(AbstractJsonManager):
         return self.standard_return(result, True, 'path')
 
     def get_face_part(self, name) -> str:
-        result = jsonpath_rw_ext.match('$.part_seq[?name==' + name + ']', self.face_seq)
+        result = jsonpath_rw_ext.match('$.part_seq[?name==' + name + ']', self.expressions)
         return self.standard_return(result, False, 'path')
 
     def get_all_visual(self):
         result = jsonpath_rw_ext.match('$.visual[*]', self.visual)
         return self.standard_return(result, False, False)
 
-    def get_face_seq(self, key):
-        result = self.find(self.face_seq, 'main_seq', '$.keys[?key ~ ' + key + ']')
-        return self.standard_return(result, False, False)
+    #def get_face_seq(self, key):
+    #    result = self.find(self.face_seq, 'main_seq', '$.keys[?key ~ ' + key + ']')
+    #    return self.standard_return(result, False, False)
+
+    def get_face_seq(self, value):
+        return self.get_dict_from_list(self.expressions, "keys", value)
 
     def get_part_seq(self, name):
-        result = jsonpath_rw_ext.match('$.part_seq[?name==' + name + ']', self.face_seq)
+        result = jsonpath_rw_ext.match('$.part_seq[?name==' + name + ']', self.expressions)
         return self.standard_return(result, True, False)
 
     def get_lights(self, key):
-        result = jsonpath_rw_ext.match('$.lights_seq[?keys~' + key + ']', self.lights_seq)
+        result = jsonpath_rw_ext.match('$.lights_seq[?keys~' + key + ']', self.lights)
         # logging.debug(result)
         #return self.standard_return(result, True, key)
-        return result[0]
+        if len(result) > 0:
+            return result[0]
 
     def get_color(self, key):
         result = jsonpath_rw_ext.match('$.colors[?name~' + key + ']', self.colors)
@@ -85,8 +88,11 @@ class RobotJsonManager(AbstractJsonManager):
 
     def get_audios(self, key: str) -> str:
         #result = jsonpath_rw_ext.match('$.audios[?key~' + key + ']', self.audios)
-        result = jsonpath_rw_ext.match("$.audios[?(keys[*]~'"+key+"')]", self.audios)
-        return self.standard_return(result, True, False)
+        if key:
+            result = jsonpath_rw_ext.match("$.audios[?(keys[*]~'"+key+"')]", self.audios)
+            return self.standard_return(result, True, False)
+        else:
+            logging.error("input str None")
 
     def get_config(self):
         return self.config

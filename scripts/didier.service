@@ -1,12 +1,12 @@
 [Unit]
 Description=Didier Daemon
-After=network.target
+#After=network.target
 
 [Service]
 Type=simple
 
-User=didier
-Group=didier
+User=root
+Group=root
 UMask=007
 
 ExecStart=/home/didier/deploy/scripts/run.sh
@@ -17,6 +17,9 @@ Restart=always
 RestartSec=3
 # Configures the time to wait before service is stopped forcefully.
 TimeoutStopSec=300
+
+StandardOutput=append:/home/didier/deploy/logs/service-standard.log
+StandardError=append:/home/didier/deploy/logs/service-error.log
 
 [Install]
 WantedBy=multi-user.target

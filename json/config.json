@@ -1,8 +1,13 @@
 {
   "head_mega_id": "usb-Arduino__www.arduino.cc__Arduino_Mega_2560_75033303334351C01211-if00",
   "radio_mega_id": "usb-1a86_USB_Serial-if00-port0",
+  "main_due": "usb-Arduino__www.arduino.cc__Arduino_Due_Prog._Port_85037313635351E05272-if00",
   "__rpi pin map__": "http://www.andycbruce.com/p02_PWM.html (pwm l)arduino 3 -> rpi 22 | (pwm r) arduino 4 -> 25 | (dir l)arduino 22 -> rpi 23 | (dir r)arduino 23 -> rpi 24 ",
   "stop_key": "Db",
+  "mouth_visuals_path": "../visuals/mouth",
+  "eye_visuals_path": "../visuals/eye",
+  "_comment": "main loop sleep to reduce cpu usage // 0 to disable",
+  "main_loop_sleep": 0.001,
   "pins": {
     "lights": 18,
     "face": 18,

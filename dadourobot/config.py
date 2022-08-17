@@ -5,6 +5,10 @@ from dadourobot.files.robot_json_manager import RobotJsonManager
 
 class RobotConfig:
     STOP_KEY = None
+    MAIN_LOOP_SLEEP = 0
+
+    MOUTH_VISUALS_PATH = None
+    EYE_VISUALS_PATH = None
 
     BASE_PATH = None
     HEAD_MEGA_ID = None
@@ -29,6 +33,9 @@ class RobotConfig:
         self.load_pins()
         self.load_serials()
         self.STOP_KEY = self.json_config['stop_key']
+        self.MAIN_LOOP_SLEEP = self.json_config['main_loop_sleep']
+        self.MOUTH_VISUALS_PATH = self.json_config['mouth_visuals_path']
+        self.EYE_VISUALS_PATH = self.json_config['eye_visuals_path']
         logging.debug(self.__dict__)
 
     def reload(self):

@@ -1,5 +1,6 @@
 import logging.config
 import sys
+import time
 
 from dadou_utils.misc import Misc
 
@@ -22,13 +23,15 @@ logging.info('Starting didier')
 
 RobotFactory()
 audio = AudioManager()
-#head = Head()
-#face = Face()
-#lights = Lights()
-neck = Neck()
+#face = Face(RobotFactory().get_strip())
+#lights = Lights(RobotFactory().get_strip())
+#neck = Neck()
+head = Head()
 wheel = Wheel()
 
 global_receiver = GlobalReceiver()
+
+main_loop_sleep = RobotFactory().config.MAIN_LOOP_SLEEP
 
 
 def stop(msg):
@@ -42,12 +45,13 @@ while True:
     if msg:
         stop(msg)
         audio.process(msg)
-        #head.process(msg)
-        #face.update(msg)
-        #neck.update(msg)
+        #face.update(msg.key)
+        head.process(msg)
         #wheel.update(msg.left_wheel, msg.right_wheel)
-        #lights.update(msg)
+        #lights.update(msg.key)
 
+    if main_loop_sleep and main_loop_sleep != 0:
+        time.sleep(main_loop_sleep)
 
     #face.animate()
     #lights.animate()

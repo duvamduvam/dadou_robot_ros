@@ -28,27 +28,9 @@ class Utils:
         return interp(value, [left_min, left_max], [right_min, right_max])
         # return abs(right_min + (value_scaled * right_span))
 
-    @staticmethod
-    def current_milli_time():
-        return round(time.time() * 1000)
 
     def is_positive(self, value: int) -> bool:
         return value > (self.last_char - self.first_char)
-
-    @staticmethod
-    def is_time(last_time, time_out) -> bool:
-        # logging.debug(" last_time is int : " + str(isinstance(last_time, int)) + " -> " + str(
-        #    last_time) + " timeout is int : " + str(
-        #    isinstance(time_out, int)) + " -> " + str(
-        #    time_out))
-        current = Utils.current_milli_time()
-        try:
-            is_time = ((current - last_time) - time_out) > 0
-        except TypeError:
-            logging.error("is_time = (" + str(current) + " - " + str(last_time) + ") - " + str(time_out) + ") > 0)")
-            # logging.debug("last time: " + str(last_time) + " current time : " + str(current) +
-            #              " time step : " + str(time_out) + " is time : " + str(is_time))
-        return is_time
 
     @staticmethod
     def last_line(file) -> str:

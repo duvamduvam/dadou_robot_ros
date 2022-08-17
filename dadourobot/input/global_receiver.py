@@ -25,7 +25,7 @@ class GlobalReceiver:
 
     def get_msg(self):
         radio_msg = self.lora_radio.get_msg()
-        if radio_msg and Misc.is_input_ok(radio_msg):
+        if radio_msg:
             logging.info('received radio msg : {}'.format(radio_msg))
             return self.filter_msg(radio_msg)
         """glove = self.glove.get_msg()

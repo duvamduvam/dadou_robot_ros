@@ -8,14 +8,31 @@ import logging.config
 
 # todo check thread : https://www.geeksforgeeks.org/python-communicating-between-threads-set-1/
 # todo check thread2 : https://riptutorial.com/python/example/4691/communicating-between-threads
+from dadou_utils.time.time_utils import TimeUtils
 from microcontroller import Pin
 from rpi_ws281x import Adafruit_NeoPixel
 
+from dadourobot.actions.sequence import Sequence
 from dadourobot.robot_factory import RobotFactory
 from dadourobot.robot_static import RobotStatic
 from dadourobot.visual.animations import Animations
-from dadourobot.sequence import Sequence
 from dadourobot.utils import Utils
+
+"""
+      "method": "sparkle_pulse",
+      "color": "AMBER"
+      "method": "chase",
+      "color": "RED"
+      "method": "blink",
+      "color": "BLUE"
+      "method": "color_cycle"
+      "method": "pulse",
+      "color": "BLUE"
+      "method": "rainbow_chase"
+      "method": "rainbow_comet"
+      "method": "color_cycle"
+      "method": "comet"
+"""
 
 
 class Lights:
@@ -87,20 +104,20 @@ class Lights:
 
             self.current_animation = getattr(self.animations, self.sequence.current_element.method)(
                 self.sequence.current_element)
-            self.sequence.start_time = Utils.current_milli_time()
+            self.sequence.start_time = TimeUtils.current_milli_time()
             logging.info("update lights sequence to " + json_seq[RobotStatic.NAME])
 
     def animate(self):
-        if not self.sequence.loop and Utils.is_time(self.sequence.start_time, self.sequence.duration):
+        if not self.sequence.loop and TimeUtils.is_time(self.sequence.start_time, self.sequence.duration):
             self.update('default')
             return
 
-        if Utils.is_time(self.sequence.current_element.start_time, self.sequence.current_element.duration):
+        if self.sequence.time_to_switch():
             self.sequence.next()
-            self.sequence.current_element.start_time = Utils.current_milli_time()
+            self.sequence.current_element.start_time = TimeUtils.current_milli_time()
             self.current_animation = getattr(self.animations, self.sequence.current_element.method)(
                 self.sequence.current_element)
-            self.sequence.current_element.start_time = Utils.current_milli_time()
+            self.sequence.current_element.start_time = TimeUtils.current_milli_time()
             # logging.debug(
             #    "change sequence to " + self.sequence.current_element.method + " with time " + str(
             #        self.sequence.current_element.duration))
@@ -110,7 +127,7 @@ class Lights:
 class Animation:
     color = ()
     duration = 0
-    start_time = Utils.current_milli_time()
+    start_time = TimeUtils.current_milli_time()
 
     def __init__(self, method, duration: int):
         logging.debug("add animation method : " + method + " duration : " + str(duration))

@@ -1,5 +1,7 @@
 import glob
 import logging.config
+import os
+
 import imageio
 
 from dadourobot.visual.image_mapping import ImageMapping
@@ -9,8 +11,16 @@ class Visual:
     name: {}
     rgb: []
 
-    def __init__(self, name, path):
+    """def __init__(self, name, path):
         self.name = name
+        self.rgb = ImageMapping.inverse_bottom_image(Image.get_rgb_from_image(path))
+        #self.rgb = Image.get_rgb_from_image(path)
+    """
+
+    def __init__(self, path):
+        self.name = os.path.basename(path)
+        self.name = os.path.splitext(self.name)
+        self.name = self.name[0]
         self.rgb = ImageMapping.inverse_bottom_image(Image.get_rgb_from_image(path))
         #self.rgb = Image.get_rgb_from_image(path)
 
@@ -25,7 +35,7 @@ class Visual:
     @staticmethod
     def get_visual(name, visuals):
         for visual in visuals:
-            if visual.name == name:
+            if visual.name in name:
                 return visual
         logging.error("no visual name : " + name)
 

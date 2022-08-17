@@ -3,6 +3,8 @@
 import logging
 import threading
 from os.path import exists
+
+from dadou_utils.misc import Misc
 from sound_player import Sound, SoundPlayer
 
 from dadourobot.robot_static import RobotStatic
@@ -40,11 +42,6 @@ class AudioManager:
         else:
             logging.error("audio {} don't exist".format(audio['path']))
 
-    def is_playing(self):
-        if not self.current_audio or not self.current_audio.is_playing():
-            return False
-        return True
-
     def play_sounds(self, audios):
         self.player.stop()
         for audio in audios:
@@ -64,17 +61,21 @@ class AudioManager:
             self.current_audio_name = ""
 
     def process(self, msg):
-        if msg and hasattr(msg, 'key'):
+        if msg and hasattr(msg, 'key') and msg.key:
             logging.debug("number of thread : {}".format(threading.active_count()))
             audio_path = self.json_manager.get_audios(msg.key)
             if audio_path:
-                if audio_path['path'] == self.current_audio_name:
-                    logging.debug("already playing {}".format(self.current_audio_name))
-                    return
-                if audio_path['name'] == 'stop':
+                if 'name' in audio_path and audio_path['name'] == 'stop':
                     self.stop_sound()
                     logging.info("stop sound")
+                    return
+                if audio_path['path'] == self.current_audio_name and self.current_audio and self.current_audio.is_playing():
+                    logging.debug("already playing {}".format(self.current_audio_name))
+                    return
                 else:
+                    if not Misc.is_audio(RobotStatic.AUDIOS_DIRECTORY + audio_path['path']):
+                        logging.error("{} is not audio file".format(audio_path['path']))
+                        return
                     if self.current_audio:
                         self.current_audio.stop()
                     self.current_audio_name = audio_path['path']

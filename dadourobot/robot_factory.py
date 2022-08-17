@@ -2,6 +2,8 @@ import logging
 import logging.config
 import os
 
+import neopixel
+from microcontroller import Pin
 from dadou_utils.com.ws_server import WsMessage
 
 from dadourobot.config import RobotConfig
@@ -23,4 +25,11 @@ class RobotFactory(metaclass=SingletonMeta):
         self.robot_json_manager = RobotJsonManager(base_path, RobotStatic.JSON_DIRECTORY, RobotStatic.CONFIG_FILE)
         self.config = RobotConfig(self.robot_json_manager)
         self.ws_message = WsMessage()
+
+        #TODO improve led lights
+        #self.pixels = neopixel.NeoPixel(Pin(self.config.FACE_PIN), 512, auto_write=False, brightness=0.2)
+        #self.pixels.brightness = 0.1
+
+    def get_strip(self):
+        return self.pixels
 

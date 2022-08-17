@@ -2,73 +2,40 @@
   "audios": [
     {
       "name": "stop",
-      "keys": ["Da"],
+      "keys": ["Da", "Aa"],
       "path": ""
     },
     {
-      "name": "et des robots",
-      "keys": ["D1"],
-      "path": "et-des-robots.mp3"
+      "keys": ["g"],
+      "path": "speak/salut-salut.mp3"
     },
     {
-      "name": "kidnape",
-      "keys": ["D3"],
-      "path": "kidnape.mp3"
+      "keys": ["D8", "h"],
+      "path": "speak/ca-va.mp3"
     },
     {
-      "name": "pas vrai",
-      "keys": ["D4"],
-      "path": "pas-vrai.mp3"
+      "keys": ["D8", "i"],
+      "path": "speak/moi-c-est-didier.mp3"
     },
     {
-      "name": "electrochoc",
-      "keys": ["D5", "f"],
-      "path": "electrochoc.mp3"
+      "keys": ["A4"],
+      "path": "motivation.mp3"
     },
     {
-      "name": "pas de bras",
-      "keys": ["D6", "e"],
-      "path": "pas-de-bras.mp3"
+      "keys": ["A5"],
+      "path": "lacrimosa.mp3"
     },
     {
-      "name": "oui j etais la",
-      "keys": ["D8", "d"],
-      "path": "oui-j-etais-la.mp3"
+      "keys": ["A6"],
+      "path": "le-professionnel.mp3"
     },
     {
-      "name": "ne croyez pas",
-      "keys": ["e"],
-      "path": "ne-croyez-pas.mp3"
-    },
-    {
-      "name": "annie",
-      "keys": ["f"],
+      "keys": ["A7"],
       "path": "annie.mp3"
     },
     {
-      "name": "great balls",
-      "keys": ["g"],
-      "path": "great-balls.mp3"
-    },
-    {
-      "name": "salut salut",
-      "keys": ["a"],
-      "path": "salut-salut.mp3"
-    },
-    {
-      "name": "moi c est didier",
-      "keys": ["b"],
-      "path": "moi-c-est-didier.mp3"
-    },
-    {
-      "name": "ca va",
-      "keys": ["c"],
-      "path": "ca-va.mp3"
-    },
-    {
-      "name": "avec-life-forever-mourrir",
-      "keys": ["h"],
-      "path": "avec-life-forever-mourrir.mp3"
+      "keys": ["A8"],
+      "path": "caca-kaki.mp3"
     }
   ]
 }

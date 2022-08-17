@@ -16,10 +16,15 @@ class RobotStatic:
     LOOP = 'loop'
     SEQUENCE = 'sequence'
 
+    MOUTHS = 'mouths'
+    LEYE = "left_eyes"
+    REYE = "right_eyes"
+
     AUDIOS = "audios.json"
     AUDIO_SEQUENCE = "audio_sequence.json"
     COLORS = "colors.json"
     CONFIG = "config.json"
+    EXPRESSIONS = "expressions.json"
     FACE_SEQUENCE = "face_sequence.json"
     LIGHTS = "lights.json"
     LIGHTS_SEQUENCE = "lights_sequence.json"
