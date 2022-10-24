@@ -1,11 +1,10 @@
 class RobotStatic:
-    GLOVE_LEFT_SERIAL_ID = 'usb-Raspberry_Pi_Pico_E6611CB6976B8D28-if00'
-    RADIO_SERIAL_ID = "usb-1a86_USB_Serial-if00-port0"
 
     CONFIG_FILE = 'config.json'
     LOGGING_CONFIG_FILE = '/../conf/logging.conf'
     JSON_DIRECTORY = "/../json/"
     AUDIOS_DIRECTORY = "../audios/"
+    SEQUENCES_DIRECTORY = "../json/sequences/"
 
     COLOR = 'color'
     DELAY = 'delay'
@@ -28,4 +27,11 @@ class RobotStatic:
     FACE_SEQUENCE = "face_sequence.json"
     LIGHTS = "lights.json"
     LIGHTS_SEQUENCE = "lights_sequence.json"
+    MAPPINGS = "mappings.json"
     VISUALS = "visuals.json"
+
+    DEVICES_KEY = "devices"
+
+    HEAD_MEGA = "head_mega"
+    RADIO_MEGA = "radio_mega"
+    MAIN_DUE = "main_due"

@@ -12,23 +12,25 @@ from dadourobot.robot_static import RobotStatic
 class RobotJsonManager(AbstractJsonManager):
     logging.info("start json manager")
 
-    colors = None
-    expressions = None
-    lights = None
-    config = None
-    lights_seq = None
-    visual = None
     audios = None
     audio_seq = None
+    colors = None
+    config = None
+    expressions = None
+    lights = None
+    lights_seq = None
+    mappings = None
+    visual = None
 
     def __init__(self, base_path, json_folder, config_file):
         super().__init__(base_path, json_folder, config_file)
+        self.audios = self.open_json(RobotStatic.AUDIOS)
+        self.audio_seq = self.open_json(RobotStatic.AUDIO_SEQUENCE)
         self.colors = self.open_json(RobotStatic.COLORS)
         self.expressions = self.open_json(RobotStatic.EXPRESSIONS)
         self.lights = self.open_json(RobotStatic.LIGHTS)
+        self.mappings = self.open_json(RobotStatic.MAPPINGS)
         self.visual = self.open_json(RobotStatic.VISUALS)
-        self.audios = self.open_json(RobotStatic.AUDIOS)
-        self.audio_seq = self.open_json(RobotStatic.AUDIO_SEQUENCE)
 
     def get_visual_path(self, key) -> str:
         result = jsonpath_rw_ext.match('$.visual[?name==' + key + ']', self.visual)
@@ -91,6 +93,13 @@ class RobotJsonManager(AbstractJsonManager):
         if key:
             result = jsonpath_rw_ext.match("$.audios[?(keys[*]~'"+key+"')]", self.audios)
             return self.standard_return(result, True, False)
+        else:
+            logging.error("input str None")
+
+    def get_mappings(self, key: str, mapping_type: str) -> str:
+        if key:
+            result = jsonpath_rw_ext.match("$."+mapping_type+"[?(keys[*]~'"+key+"')]", self.mappings)
+            return self.standard_return(result, True, 'value')
         else:
             logging.error("input str None")
 

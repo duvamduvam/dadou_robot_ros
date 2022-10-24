@@ -4,7 +4,6 @@ from dadou_utils.files.files_manager import FilesUtils
 from dadou_utils.time.time_utils import TimeUtils
 
 from dadourobot.actions.sequence import Sequence
-from dadourobot.robot_factory import RobotFactory
 from dadourobot.robot_static import RobotStatic
 from dadourobot.visual.image_mapping import ImageMapping
 from dadourobot.visual.visual import Visual
@@ -31,13 +30,12 @@ class Face:
     loop = False
     start_time = 0
 
-    def __init__(self, strip):
-        self.config = RobotFactory().config
+    def __init__(self, json_manager, config, strip):
+        self.config = config
+        self.json_manager = json_manager
         logging.info("start face with pin " + str(self.config.FACE_PIN))
         self.strip = strip
-        self.json_manager = RobotFactory().robot_json_manager
         self.load_visuals()
-
         self.update(self.DEFAULT)
 
     def load_visuals(self):

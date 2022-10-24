@@ -1,10 +1,11 @@
 import logging
 
 import pwmio
+from dadou_utils.com.serial_device import SerialDevice
+from dadou_utils.time.time_utils import TimeUtils
 from digitalio import DigitalInOut
 from microcontroller import Pin
 
-from dadourobot.robot_factory import RobotFactory
 from dadourobot.utils import Utils
 
 
@@ -20,12 +21,22 @@ class Wheel:
 
     utils = Utils()
 
-    def __init__(self):
-        config = RobotFactory().config
+    def __init__(self, config):
+        self.config = config
         self.left_pwm = pwmio.PWMOut(Pin(config.LEFT_PWM_PIN), frequency=500, duty_cycle=0)
         self.right_pwm = pwmio.PWMOut(Pin(config.RIGHT_PWM_PIN), frequency=500, duty_cycle=0)
         self.dir_left = DigitalInOut(Pin(config.LEFT_DIR_PIN))
         self.dir_right = DigitalInOut(Pin(config.RIGHT_DIR_PIN))
+        self.due = None
+
+    def set_due(self):
+        self.due = SerialDevice('head', self.config.MAIN_DUE_ID, 7)
+
+    def send_msg(self, wheels):
+        if not self.due:
+            self.set_due()
+        msg = "W"+str(int(wheels[0]*100))+str(int(wheels[1]*100))
+        self.due.send_msg(msg)
 
     def update(self, left_wheel, right_wheel):
         if left_wheel and right_wheel:
@@ -34,7 +45,7 @@ class Wheel:
             right = self.utils.translate(right_wheel)
             self.dir_left = self.utils.is_positive(left)
             self.dir_right = self.utils.is_positive(right)
-            self.move_time = Utils.current_milli_time()
+            self.move_time = TimeUtils.current_milli_time()
 
             self.dir_left = True
             self.dir_right = True
@@ -42,7 +53,7 @@ class Wheel:
             self.right_pwm.duty_cycle = 60000
 
         else:
-            if Utils.is_time(self.move_time, self.move_timeout):
+            if TimeUtils.is_time(self.move_time, self.move_timeout):
                 self.stop()
 
     def test(self):
@@ -73,3 +84,6 @@ class Wheel:
                 pwm.duty_cycle = target
             else:
                 pwm.duty_cycle -= self.pwm_step
+
+    def send_to_due(self, left, right):
+        self.due.send_msg(left+right, True)

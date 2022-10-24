@@ -2,6 +2,8 @@ import logging
 
 from dadou_utils.misc import Misc
 
+from dadourobot.robot_factory import RobotFactory
+
 
 class Message:
     key = None
@@ -11,6 +13,9 @@ class Message:
 
     PREFIX = '<'
     POSTFIX = '>'
+
+    def __init__(self):
+        self.json_manager = RobotFactory().robot_json_manager
 
     def set(self, msg):
 
@@ -29,12 +34,22 @@ class Message:
                 self.right_wheel = msg[1]
                 self.neck = msg[2]
             elif len(msg) > 3:
+                # head_mapping = self.json_manager.get_mappings(msg[3:5], 'head')
+                # if head_mapping:
+                #    self.neck = head_mapping
+                # else:
+                #    self.neck = msg[2]
                 self.left_wheel = msg[0]
                 self.right_wheel = msg[1]
                 self.neck = msg[2]
                 self.key = msg[3:5]
 
             else:
+                head_mapping = self.json_manager.get_mappings(msg, 'head')
+                if head_mapping:
+                    self.neck = head_mapping
+                else:
+                    self.neck = msg
                 self.key = msg
 
             if self.key and not Misc.is_input_ok(self.key):

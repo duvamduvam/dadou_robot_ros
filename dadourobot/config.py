@@ -13,14 +13,10 @@ class RobotConfig:
     BASE_PATH = None
     HEAD_MEGA_ID = None
     RADIO_MEGA_ID = None
+    MAIN_DUE_ID = None
 
-    FACE_PIN = 0
-    NECK_PIN = 0
-    LIGHTS_PIN = 0
-    LEFT_PWM_PIN = 0
-    LEFT_DIR_PIN = 0
-    RIGHT_PWM_PIN = 0
-    RIGHT_DIR_PIN = 0
+    FACE_PIN, NECK_PIN, LIGHTS_PIN, LEFT_PWM_PIN, LEFT_DIR_PIN, RIGHT_PWM_PIN, RIGHT_DIR_PIN,\
+        LORA_CS_PIN, LORA_RESET_PIN, LORA_SCK_PIN, LORA_MOSI_PIN, LORA_MISO_PIN = 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
 
     json_config = None
 
@@ -31,7 +27,6 @@ class RobotConfig:
     def load(self):
         self.json_config = self.json_manager.get_config()
         self.load_pins()
-        self.load_serials()
         self.STOP_KEY = self.json_config['stop_key']
         self.MAIN_LOOP_SLEEP = self.json_config['main_loop_sleep']
         self.MOUTH_VISUALS_PATH = self.json_config['mouth_visuals_path']
@@ -51,6 +46,17 @@ class RobotConfig:
         self.RIGHT_PWM_PIN = self.json_config['pins']['right_pwm']
         self.RIGHT_DIR_PIN = self.json_config['pins']['right_dir']
 
-    def load_serials(self):
-        self.HEAD_MEGA_ID = self.json_config['head_mega_id']
-        self.RADIO_MEGA_ID = self.json_config['radio_mega_id']
+        self.LORA_CS_PIN = self.json_config['pins']['lora_cs']
+        self.LORA_RESET_PIN = self.json_config['pins']['lora_reset']
+        self.LORA_SCK_PIN = self.json_config['pins']['lora_sck']
+        self.LORA_MOSI_PIN = self.json_config['pins']['lora_mosi']
+        self.LORA_MISO_PIN = self.json_config['pins']['lora_miso']
+
+        #cs = digitalio.DigitalInOut(board.GP8)
+        #reset = digitalio.DigitalInOut(board.GP9)
+        #spi = busio.SPI(board.GP18, MOSI=board.GP19, MISO=board.GP16)
+
+    #def load_serials(self):
+    #    self.HEAD_MEGA_ID = self.json_config['head_mega_id']
+    #    self.RADIO_MEGA_ID = self.json_config['radio_mega_id']
+    #    self.MAIN_DUE_ID = self.json_config['main_due_id']
