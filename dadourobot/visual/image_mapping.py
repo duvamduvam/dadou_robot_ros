@@ -11,7 +11,7 @@ class ImageMapping:
         self.matrix_height_nb = matrix_width_nb
         self.matrix_width_nb = matrix_width_nb
 
-    def mapping(self, pixels, image):
+    def mapping(self, pixels, image, start_pixel):
         for y in range(len(image)):
             for x in range(len(image[y])):
                 xpos = x % self.matrix_width
@@ -28,7 +28,7 @@ class ImageMapping:
 
                 # logging.debug("pixel[" + str(index) + "] = image[" + str(y) + "][" + str(x) + "] xpos  -> " + str(
                 #    xpos) + " matrix  -> " + str(matrix) + " ypos  -> " + str(ypos))
-                pixels[index] = image[y][x]
+                pixels[index+start_pixel] = image[y][x]
 
     def inverse_bottom_image(image):
         new_image = copy.copy(image)

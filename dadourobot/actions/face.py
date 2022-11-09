@@ -2,9 +2,10 @@ import logging.config
 
 from dadou_utils.files.files_manager import FilesUtils
 from dadou_utils.time.time_utils import TimeUtils
+from dadou_utils.utils_static import NAME, DURATION, LOOP
 
 from dadourobot.actions.sequence import Sequence
-from dadourobot.robot_static import RobotStatic
+from dadourobot.robot_static import MOUTHS, LEYE, REYE
 from dadourobot.visual.image_mapping import ImageMapping
 from dadourobot.visual.visual import Visual
 
@@ -46,10 +47,16 @@ class Face:
         eye_names = FilesUtils.get_folder_files(eye_visuals_path)
 
         for visual_path in mouth_names:
-            self.visuals.append(Visual(visual_path))
+            self.visuals.append(Visual(visual_path, True))
 
         for visual_path in eye_names:
-            self.visuals.append(Visual(visual_path))
+            self.visuals.append(Visual(visual_path, False))
+
+    def get_visual(self, name):
+        for visual in self.visuals:
+            if visual.name in name:
+                return visual
+        logging.error("no visual name : " + name)
 
     def fill_matrix(self, start, end, visual):
         i = start
@@ -64,13 +71,13 @@ class Face:
         if key:
             json_seq = self.json_manager.get_face_seq(key)
             if json_seq:
-                logging.info("update face sequence : " + json_seq[RobotStatic.NAME])
-                self.duration = json_seq[RobotStatic.DURATION]
-                self.loop = json_seq[RobotStatic.LOOP]
+                logging.info("update face sequence : " + json_seq[NAME])
+                self.duration = json_seq[DURATION]
+                self.loop = json_seq[LOOP]
                 self.start_time = TimeUtils.current_milli_time()
-                self.mouth = json_seq[RobotStatic.MOUTHS]
-                self.leye = json_seq[RobotStatic.LEYE]
-                self.reye = json_seq[RobotStatic.REYE]
+                self.mouth = Sequence(self.duration, self.loop, json_seq[MOUTHS], 0)
+                self.leye = Sequence(self.duration, self.loop, json_seq[LEYE], 257) #385
+                self.reye = Sequence(self.duration, self.loop, json_seq[REYE], 320) #448
 
     def animate_part(self, seq: Sequence):
         change = False
@@ -78,9 +85,9 @@ class Face:
             seq.next()
             frame = seq.get_current_element()
             # logging.debug("seq.current_time : " + str(seq.current_time) + " frame.time " + str(frame.time))
-            visual = Visual.get_visual(frame[0], self.visuals)
+            visual = self.get_visual(frame[0])
             # logging.debug("update part : " + visual.name)
-            self.image_mapping.mapping(self.strip, visual.rgb)
+            self.image_mapping.mapping(self.strip, visual.rgb, seq.start_pixel)
             # logging.debug("next sequence[" + str(seq.current_frame) + "] total : " + str(len(seq.frames)))
             change = True
         return change

@@ -8,7 +8,7 @@ from dadourobot.visual.image_mapping import ImageMapping
 
 
 class Visual:
-    name: {}
+    name: ""
     rgb: []
 
     """def __init__(self, name, path):
@@ -17,12 +17,15 @@ class Visual:
         #self.rgb = Image.get_rgb_from_image(path)
     """
 
-    def __init__(self, path):
+    def __init__(self, path, inverse_bottom:bool):
         self.name = os.path.basename(path)
         self.name = os.path.splitext(self.name)
         self.name = self.name[0]
-        self.rgb = ImageMapping.inverse_bottom_image(Image.get_rgb_from_image(path))
-        #self.rgb = Image.get_rgb_from_image(path)
+        if inverse_bottom:
+            self.rgb = ImageMapping.inverse_bottom_image(Image.get_rgb_from_image(path))
+        else:
+            self.rgb = Image.get_rgb_from_image(path)
+            #self.rgb = Image.get_rgb_from_image(path)
 
 
     @staticmethod
@@ -31,13 +34,6 @@ class Visual:
         path = path.replace(Image.visual_ext, "")
         path = path.replace(Image.up, "")
         return path
-
-    @staticmethod
-    def get_visual(name, visuals):
-        for visual in visuals:
-            if visual.name in name:
-                return visual
-        logging.error("no visual name : " + name)
 
 class Image:
     visual_rep = "visuals/"
@@ -50,9 +46,9 @@ class Image:
         logging.info("create new image")
         self.load_images()
 
-    def __init__(self, visuals_path):
+    """def __init__(self, visuals_path):
         logging.info("create new image")
-        self.visual_rep = visuals_path
+        self.visual_rep = visuals_path"""
 
     def load_images(self):
         logging.info("load visuals")

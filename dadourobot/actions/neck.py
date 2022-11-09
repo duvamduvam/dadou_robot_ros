@@ -16,6 +16,7 @@ class Neck:
     step = 10
 
     servo_max = 180
+    servo_default = 50
     margin = 5
     last_time = TimeUtils.current_milli_time()
     time_step = 200
@@ -28,6 +29,7 @@ class Neck:
         config = RobotFactory().config
         self.head_pwm = pwmio.PWMOut(Pin(config.NECK_PIN), duty_cycle=2 ** 15, frequency=50)
         self.servo = servo.Servo(self.head_pwm)
+        self.servo.angle = self.servo_default
 
     def update(self, msg):
         if msg:

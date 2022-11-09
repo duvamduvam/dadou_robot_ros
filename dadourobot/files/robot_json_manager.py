@@ -5,8 +5,10 @@ import jsonpath_rw_ext
 
 # '{}_{}_{}_{}'.format(s1, i, s2, f)
 from dadou_utils.files.abstract_json_manager import AbstractJsonManager
+from dadou_utils.utils_static import COLOR
 
-from dadourobot.robot_static import RobotStatic
+from dadourobot.robot_static import JSON_AUDIOS, JSON_AUDIO_SEQUENCE, JSON_COLORS, JSON_EXPRESSIONS, JSON_MAPPINGS, \
+    JSON_VISUALS, JSON_LIGHTS
 
 
 class RobotJsonManager(AbstractJsonManager):
@@ -24,13 +26,13 @@ class RobotJsonManager(AbstractJsonManager):
 
     def __init__(self, base_path, json_folder, config_file):
         super().__init__(base_path, json_folder, config_file)
-        self.audios = self.open_json(RobotStatic.AUDIOS)
-        self.audio_seq = self.open_json(RobotStatic.AUDIO_SEQUENCE)
-        self.colors = self.open_json(RobotStatic.COLORS)
-        self.expressions = self.open_json(RobotStatic.EXPRESSIONS)
-        self.lights = self.open_json(RobotStatic.LIGHTS)
-        self.mappings = self.open_json(RobotStatic.MAPPINGS)
-        self.visual = self.open_json(RobotStatic.VISUALS)
+        self.audios = self.open_json(JSON_AUDIOS)
+        self.audio_seq = self.open_json(JSON_AUDIO_SEQUENCE)
+        self.colors = self.open_json(JSON_COLORS)
+        self.expressions = self.open_json(JSON_EXPRESSIONS)
+        self.lights = self.open_json(JSON_LIGHTS)
+        self.mappings = self.open_json(JSON_MAPPINGS)
+        self.visual = self.open_json(JSON_VISUALS)
 
     def get_visual_path(self, key) -> str:
         result = jsonpath_rw_ext.match('$.visual[?name==' + key + ']', self.visual)
@@ -66,7 +68,7 @@ class RobotJsonManager(AbstractJsonManager):
         result = jsonpath_rw_ext.match('$.colors[?name~' + key + ']', self.colors)
         logging.debug(result)
         if len(result) > 0:
-            json_color = result[0][RobotStatic.COLOR]
+            json_color = result[0][COLOR]
             return (int(json_color['red']), int(json_color['green']), int(json_color['blue']))
         else:
             logging.error("no color" + key)

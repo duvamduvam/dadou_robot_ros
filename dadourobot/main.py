@@ -1,5 +1,6 @@
 import logging.config
 import sys
+import traceback
 
 from dadou_utils.com.serial_devices_manager import SerialDeviceManager
 from dadou_utils.time.time_utils import TimeUtils
@@ -10,40 +11,34 @@ import time
 
 from dadou_utils.misc import Misc
 
-#from dadourobot.sequence.animation_manager import AnimationManager
-from dadourobot.robot_static import RobotStatic
-from dadourobot.sequence.animation_manager import AnimationManager
+from dadourobot.actions.neck import Neck
+from dadourobot.com.main_due_com import MainDueCom
+from dadourobot.robot_static import MAIN_DUE
 
-
-
-from dadourobot.actions.audio_manager import AudioManager
-from dadourobot.actions.head import Head
 from dadourobot.robot_factory import RobotFactory
 from dadourobot.input.global_receiver import GlobalReceiver
 
 
 print(sys.path)
-
-from dadourobot.actions.face import Face
-from dadourobot.actions.neck import Neck
-from dadourobot.actions.lights import Lights
-from dadourobot.actions.wheel import Wheel
-
-logging.info('Starting didier')
+print('Starting didier')
 
 
-RobotFactory()
-audio = AudioManager()
-    #face = Face(RobotFactory().get_strip())
+
+audio = RobotFactory().get_audio()
+face = RobotFactory().face
+lights = RobotFactory().lights
     #lights = Lights(RobotFactory().get_strip())
-    #neck = Neck()
-head = RobotFactory().head
-    #wheel = Wheel()
+neck = Neck()
+#head = RobotFactory().head
+wheel = RobotFactory().wheel
 #animations = AnimationManager()
 
 global_receiver = GlobalReceiver(RobotFactory().device_manager)
 main_loop_sleep = RobotFactory().config.MAIN_LOOP_SLEEP
-due_device = RobotFactory().device_manager.get_device(RobotStatic.MAIN_DUE)
+due_device = RobotFactory().device_manager.get_device(MAIN_DUE)
+main_due_com = MainDueCom(RobotFactory().device_manager)
+
+logging.info('send starting didier')
 
 def stop(msg):
     if msg and hasattr(msg, 'key') and msg.key == RobotFactory().config.STOP_KEY:
@@ -51,29 +46,35 @@ def stop(msg):
         Misc.exec_shell("sudo halt")
 
 while True:
+    #logging.debug('run')
     try:
         msg = global_receiver.get_msg()
+
         if msg:
             stop(msg)
-            due_device.send_msg("   "+msg, True)
+            #main_due_com.send_dict(msg)
             #animations.update(msg.key)
             audio.process(msg)
                 #face.update(msg.key)
                 #head.process(msg)
-                #wheel.update(msg.left_wheel, msg.right_wheel)
-                #lights.update(msg.key)
+            wheel.update(msg)
+            lights.update(msg.key)
 
         if main_loop_sleep and main_loop_sleep != 0:
             time.sleep(main_loop_sleep)
 
             #animations.process()
-            #face.animate()
-            #lights.animate()
-            #neck.animate()
+        face.animate()
+        lights.animate()
+        neck.animate()
             #wheel.process()
 
-        if TimeUtils.is_time(SerialDeviceManager.last_update, SerialDeviceManager.update_period):
-            RobotFactory().device_manager.update_devices()
+        #if TimeUtils.is_time(SerialDeviceManager.last_update, SerialDeviceManager.update_period):
+        #    RobotFactory().device_manager.update_devices()
+
+        #wheel.test()
+        #main_due_com.get_msg()
 
     except Exception as err:
         logging.error('exception {}'.format(err))
+        traceback.print_exc()

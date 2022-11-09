@@ -8,13 +8,16 @@ import logging.config
 
 # todo check thread : https://www.geeksforgeeks.org/python-communicating-between-threads-set-1/
 # todo check thread2 : https://riptutorial.com/python/example/4691/communicating-between-threads
+from adafruit_led_animation.animation.blink import Blink
+from adafruit_led_animation.animation.chase import Chase
+from adafruit_led_animation.animation.comet import Comet
+from adafruit_led_animation.color import RED, YELLOW, ORANGE, GREEN, TEAL, CYAN, BLUE, PURPLE, MAGENTA, WHITE, BLACK, GOLD, PINK, AQUA, JADE, AMBER
 from dadou_utils.time.time_utils import TimeUtils
+from dadou_utils.utils_static import METHOD, DURATION, SEQUENCES, LOOP, COLOR, NAME
 from microcontroller import Pin
 from rpi_ws281x import Adafruit_NeoPixel
 
 from dadourobot.actions.sequence import Sequence
-from dadourobot.robot_factory import RobotFactory
-from dadourobot.robot_static import RobotStatic
 from dadourobot.visual.animations import Animations
 from dadourobot.utils import Utils
 
@@ -77,15 +80,15 @@ class Lights:
     #https://forums.raspberrypi.com/viewtopic.php?t=274479
     """
 
-    def __init__(self, strip):
-        config = RobotFactory().config
+    def __init__(self, config, json_manager, strip):
+        self.config = config
         #self.strip = neopixel.NeoPixel(self.LED_COUNT, Pin(config.LIGHTS_PIN), self.LED_FREQ_HZ, self.LED_DMA, self.LED_INVERT, self.LED_BRIGHTNESS, self.LED_CHANNEL)
         self.strip = strip
 
         #self.strip = Adafruit_NeoPixel(LED_COUNT, LED_PIN, LED_FREQ_HZ, LED_DMA, LED_INVERT, LED_BRIGHTNESS, 1)
 
         self.animations = Animations(self.LED_COUNT, self.strip)
-        self.json_manager = RobotFactory().robot_json_manager
+        self.json_manager = json_manager
         self.update('default')
 
     def update(self, key):
@@ -94,18 +97,21 @@ class Lights:
             if not json_seq:
                 return
             sequences = []
-            for s in json_seq[RobotStatic.SEQUENCE]:
-                animation = Animation(s[RobotStatic.METHOD], s[RobotStatic.DURATION])
-                color_name = self.json_manager.get_attribut(s, RobotStatic.COLOR)
+            for s in json_seq[SEQUENCES]:
+                animation = [Animation(s[METHOD], s[DURATION]),s[DURATION]]
+                color_name = self.json_manager.get_attribut(s, COLOR)
                 if color_name:
-                    animation.color = self.json_manager.get_color(color_name)
+                    animation[0].color = self.json_manager.get_color(color_name)
                 sequences.append(animation)
-            self.sequence = Sequence(json_seq[RobotStatic.DURATION], json_seq[RobotStatic.LOOP], sequences)
+            self.sequence = Sequence(json_seq[DURATION], json_seq[LOOP], sequences, 0)
 
+            #self.current_animation = Comet(self.strip, speed=0.01, color=PURPLE, tail_length=50, bounce=True)
+
+            #TODO animation parameters not working
             self.current_animation = getattr(self.animations, self.sequence.current_element.method)(
                 self.sequence.current_element)
             self.sequence.start_time = TimeUtils.current_milli_time()
-            logging.info("update lights sequence to " + json_seq[RobotStatic.NAME])
+            logging.info("update lights sequence to " + json_seq[NAME])
 
     def animate(self):
         if not self.sequence.loop and TimeUtils.is_time(self.sequence.start_time, self.sequence.duration):

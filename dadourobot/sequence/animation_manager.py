@@ -5,7 +5,7 @@ from dadou_utils.misc import Misc
 from dadou_utils.time.time_utils import TimeUtils
 
 from dadourobot.robot_factory import RobotFactory
-from dadourobot.robot_static import RobotStatic
+from dadourobot.robot_static import SEQUENCES_DIRECTORY
 from dadourobot.sequence.animation import Animation
 
 
@@ -33,7 +33,7 @@ class AnimationManager:
         self.load_sequences()
 
     def load_sequences(self):
-        sequences_files = FilesUtils.get_folder_files(RobotStatic.SEQUENCES_DIRECTORY)
+        sequences_files = FilesUtils.get_folder_files(SEQUENCES_DIRECTORY)
         for sequence_file in sequences_files:
             json_sequence = FilesUtils.open_json(sequence_file, 'r')
             self.sequences[json_sequence['keys']] = json_sequence

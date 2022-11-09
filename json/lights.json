@@ -4,21 +4,24 @@
       "name": "default",
       "keys": "default",
       "loop": true,
-      "duration": 7000,
-      "sequence": [
+      "duration": 15000,
+      "sequences": [
         {
           "method": "sparkle_pulse",
-          "duration": 300,
-          "color": "AMBER"
+          "duration": 0.3,
+          "speed": 5,
+          "color": "AQUA"
         },
         {
           "method": "chase",
-          "duration": 200,
-          "color": "GREEN"
+          "duration": 0.8,
+          "period": 5,
+          "color": "PINK"
         },
         {
-          "method": "blink",
-          "duration": 450,
+          "method": "rainbow",
+          "duration": 1,
+          "period": 20,
           "color": "BLUE"
         }
       ]
@@ -28,7 +31,7 @@
       "keys": "A2",
       "loop": false,
       "duration": 6000,
-      "sequence": [
+      "sequences": [
         {
           "method": "sparkle",
           "duration": 300,
@@ -43,10 +46,10 @@
     },
     {
       "name": "heidi",
-      "keys": "C3",
+      "keys": "default",
       "loop": false,
       "duration": 5000,
-      "sequence": [
+      "sequences": [
         {
           "method": "rainbow_chase",
           "duration": 200

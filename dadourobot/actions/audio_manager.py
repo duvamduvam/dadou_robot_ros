@@ -5,13 +5,14 @@ import threading
 from os.path import exists
 
 from dadou_utils.misc import Misc
+from dadou_utils.utils_static import KEY, NAME, PATH
 from sound_player import Sound, SoundPlayer
 
-from dadourobot.robot_static import RobotStatic
-from dadourobot.path_time import PathTime
-from dadourobot.robot_factory import RobotFactory
+from dadourobot.files.robot_json_manager import RobotJsonManager
 
 from dadou_utils.audios.sound_object import SoundObject
+
+from dadourobot.robot_static import AUDIOS_DIRECTORY
 
 
 class AudioManager:
@@ -22,8 +23,8 @@ class AudioManager:
     current_audio = None
     current_audio_name = None
 
-    def __init__(self):
-        self.json_manager = RobotFactory().robot_json_manager
+    def __init__(self, robot_json_manager:RobotJsonManager):
+        self.json_manager = robot_json_manager
 
     def play_sounds_bak(self, audios):
         self.player.stop()
@@ -35,19 +36,19 @@ class AudioManager:
         self.player.play()
 
     def play_sound(self, audio):
-        if exists(RobotStatic.AUDIOS_DIRECTORY+audio['path']):
-            self.current_audio = SoundObject(RobotStatic.AUDIOS_DIRECTORY, audio['path'])
+        if exists(AUDIOS_DIRECTORY+audio[PATH]):
+            self.current_audio = SoundObject(AUDIOS_DIRECTORY, audio[PATH])
             self.current_audio.play()
-            self.current_audio_name = audio['path']
+            self.current_audio_name = audio[PATH]
         else:
-            logging.error("audio {} don't exist".format(audio['path']))
+            logging.error("audio {} don't exist".format(audio[PATH]))
 
     def play_sounds(self, audios):
         self.player.stop()
         for audio in audios:
             logging.info("enqueue: " + audio.get_path())
 
-            sound = SoundObject(RobotStatic.AUDIOS_DIRECTORY, audio.get_path())
+            sound = SoundObject(AUDIOS_DIRECTORY, audio.get_path())
             self.playlist.append(sound)
             #self.player.enqueue(Sound(audio.get_path()), 1)
             #for s in range(int(audio.get_time())):
@@ -61,24 +62,24 @@ class AudioManager:
             self.current_audio_name = ""
 
     def process(self, msg):
-        if msg and hasattr(msg, 'key') and msg.key:
+        if msg and hasattr(msg, KEY) and msg.key:
             logging.debug("number of thread : {}".format(threading.active_count()))
             audio_path = self.json_manager.get_audios(msg.key)
             if audio_path:
-                if 'name' in audio_path and audio_path['name'] == 'stop':
+                if NAME in audio_path and audio_path[NAME] == 'stop':
                     self.stop_sound()
                     logging.info("stop sound")
                     return
-                if audio_path['path'] == self.current_audio_name and self.current_audio and self.current_audio.is_playing():
+                if audio_path[PATH] == self.current_audio_name and self.current_audio and self.current_audio.is_playing():
                     logging.debug("already playing {}".format(self.current_audio_name))
                     return
                 else:
-                    if not Misc.is_audio(RobotStatic.AUDIOS_DIRECTORY + audio_path['path']):
-                        logging.error("{} is not audio file".format(audio_path['path']))
+                    if not Misc.is_audio(AUDIOS_DIRECTORY + audio_path[PATH]):
+                        logging.error("{} is not audio file".format(audio_path[PATH]))
                         return
                     if self.current_audio:
                         self.current_audio.stop()
-                    self.current_audio_name = audio_path['path']
+                    self.current_audio_name = audio_path[PATH]
                     self.play_sound(audio_path)
 
 
@@ -86,10 +87,10 @@ class AudioManager:
             if audio_sequence:
                 logging.info("play new audio")
                 audios = []
-                for audio_seq in audio_sequence[RobotStatic.SEQUENCE]:
-                    audio_path = self.json_manager.get_audio_path_by_name(audio_seq[RobotStatic.NAME])
-                    logging.debug("audios name : " + audio_seq[RobotStatic.NAME] + " path : " + audio_path)
-                    audios.append(PathTime(audio_path, audio_seq[RobotStatic.DELAY]))
+                for audio_seq in audio_sequence[SEQUENCE]:
+                    audio_path = self.json_manager.get_audio_path_by_name(audio_seq[NAME])
+                    logging.debug("audios name : " + audio_seq[NAME] + " path : " + audio_path)
+                    audios.append(PathTime(audio_path, audio_seq[DELAY]))
 
                 self.play_sounds(audios)"""
 

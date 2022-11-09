@@ -13,4 +13,4 @@ class MyTestCase(unittest.TestCase):
     def test_com(self):
         start_time = Utils.current_milli_time()
         while True:
-            self.com.get_msg()
+            self.com.pop_msg()

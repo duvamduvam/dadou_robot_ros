@@ -13,7 +13,7 @@ import board
 from dadoucontrol import JsonManager
 from dadoucontrol import Visual
 from dadoucontrol import Face
-from adafruit_led_animation.color import AMBER, RED, BLACK
+from adafruit_led_animation.color import RED, YELLOW, ORANGE, GREEN, TEAL, CYAN, BLUE, PURPLE, MAGENTA, WHITE, BLACK, GOLD, PINK, AQUA, JADE, AMBER
 
 import unittest
 

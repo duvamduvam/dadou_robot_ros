@@ -14,5 +14,5 @@ class TestSetup:
             os.chdir(path)
             print(os.path.join(path))
 
-        logging.config.fileConfig(fname=RobotConfig.BASE_PATH + 'conf/logging-test.conf', disable_existing_loggers=False)
+        logging.config.fileConfig('/home/didier/deploy/conf/logging-test.conf', disable_existing_loggers=False)
         logging.info("start logging")
