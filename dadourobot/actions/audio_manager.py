@@ -61,10 +61,10 @@ class AudioManager:
             self.current_audio.stop()
             self.current_audio_name = ""
 
-    def process(self, msg):
-        if msg and hasattr(msg, KEY) and msg.key:
+    def update(self, msg):
+        if msg and KEY in msg:
             logging.debug("number of thread : {}".format(threading.active_count()))
-            audio_path = self.json_manager.get_audios(msg.key)
+            audio_path = self.json_manager.get_audios(msg[KEY])
             if audio_path:
                 if NAME in audio_path and audio_path[NAME] == 'stop':
                     self.stop_sound()

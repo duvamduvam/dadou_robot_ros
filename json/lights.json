@@ -7,20 +7,20 @@
       "duration": 15000,
       "sequences": [
         {
-          "method": "sparkle_pulse",
           "duration": 0.3,
+          "method": "sparkle_pulse",
           "speed": 5,
           "color": "AQUA"
         },
         {
-          "method": "chase",
           "duration": 0.8,
+          "method": "chase",
           "period": 5,
           "color": "PINK"
         },
         {
-          "method": "rainbow",
           "duration": 1,
+          "method": "rainbow",
           "period": 20,
           "color": "BLUE"
         }
@@ -33,13 +33,13 @@
       "duration": 6000,
       "sequences": [
         {
-          "method": "sparkle",
           "duration": 300,
+          "method": "sparkle",
           "color": "RED"
         },
         {
-          "method": "pulse",
           "duration": 200,
+          "method": "pulse",
           "color": "RED"
         }
       ]
@@ -51,8 +51,8 @@
       "duration": 5000,
       "sequences": [
         {
-          "method": "rainbow_chase",
-          "duration": 200
+          "duration": 200,
+          "method": "rainbow_chase"
         }
       ]
     }

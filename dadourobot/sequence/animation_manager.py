@@ -46,7 +46,7 @@ class AnimationManager:
         self.current_animation = self.sequences[key]
         self.playing = True
 
-        duration = Misc.cast_float(self.current_animation['duration']) * 1000
+        duration = Misc.cast_float(self.current_animation['duration'])
 
         self.necks_animation = Animation(self.current_animation['necks'], duration, 'necks', 1)
         self.faces_animation = Animation(self.current_animation['faces'], duration, 'faces', 1)

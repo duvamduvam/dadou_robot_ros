@@ -1,4 +1,8 @@
 import logging.config
+
+from dadourobot.actions.neck import Neck
+from dadourobot.config import RobotConfig
+from dadourobot.robot_static import NECK
 from dadourobot.tests.conf_test import TestSetup
 TestSetup()
 
@@ -7,36 +11,23 @@ import unittest
 import logging
 import logging.config
 
-from dadoucontrol import Neck
 
 
 class NeckTests(unittest.TestCase):
-    TestSetup()
-
-    neck = Neck()
+    setup = TestSetup()
 
     def test_move_key(self):
         logging.debug("start test servo")
-        for i in range(3):
+        while True:
+        #for i in range(3):
             logging.debug("test key 60 for servo")
-            self.neck.update(40)
-            self.neck.process()
-            time.sleep(1)
-            self.neck.process()
-            time.sleep(1)
-            self.neck.process()
-            time.sleep(1)
-            self.neck.process()
+            self.setup.neck.update({NECK:5})
             time.sleep(5)
-            logging.debug("test key 130 for servo")
-            self.neck.update(100)
-            self.neck.process()
-            time.sleep(1)
-            self.neck.process()
-            time.sleep(1)
-            self.neck.process()
-            time.sleep(1)
-            self.neck.process()
+            self.setup.neck.update({NECK:80})
+            time.sleep(5)
+            self.setup.neck.update({NECK:50})
+            time.sleep(5)
+            self.setup.neck.update({NECK:100})
             time.sleep(5)
 
 

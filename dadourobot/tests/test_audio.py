@@ -16,7 +16,7 @@ class AudioTests(unittest.TestCase):
 
     @unittest.skip
     def test_key_seq(self):
-        self.audio.process("C1")
+        self.audio.update("C1")
         time.sleep(1000)
 
     """

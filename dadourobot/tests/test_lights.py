@@ -1,11 +1,15 @@
 import logging
+import os
 
+from dadou_utils.time.time_utils import TimeUtils
+
+from dadourobot.actions.lights import Lights
+from dadourobot.config import RobotConfig
+from dadourobot.files.robot_json_manager import RobotJsonManager
+from dadourobot.robot_static import JSON_DIRECTORY, JSON_CONFIG
 from dadourobot.tests.conf_test import TestSetup
-from dadourobot import Utils
 
 TestSetup()
-
-from dadoucontrol import JsonManager
 
 import time
 import unittest
@@ -20,8 +24,6 @@ from adafruit_led_animation.helper import PixelMap
 from adafruit_led_animation.sequence import AnimationSequence
 from adafruit_led_animation import color
 
-from dadoucontrol import Lights
-
 
 class LightsTest(unittest.TestCase):
     RED = (255, 0, 0)
@@ -32,23 +34,38 @@ class LightsTest(unittest.TestCase):
     PURPLE = (180, 0, 255)
     BLACK = (0, 0, 0)
 
-    json_manager = JsonManager()
-    lights = Lights(json_manager)
+    base_path = os.getcwd()
+    robot_json_manager = RobotJsonManager(base_path, "/.."+JSON_DIRECTORY, JSON_CONFIG)
+    config = RobotConfig(robot_json_manager)
+
+    pixel_pin = board.D18
+
+    # The number of NeoPixels
+    num_pixels = 30
+
+    # The order of the pixel colors - RGB or GRB. Some NeoPixels have red and green reversed!
+    # For RGBW NeoPixels, simply change the ORDER to RGBW or GRBW.
+    ORDER = neopixel.GRB
+
+    pixels = neopixel.NeoPixel(
+        pixel_pin, num_pixels, brightness=0.2, auto_write=False, pixel_order=ORDER
+    )
+
+    lights = Lights(config, robot_json_manager, pixels)
 
     def test_lights_key(self):
-        current_time = Utils.current_milli_time()
-        while not Utils.is_time(current_time, 2000):
+        current_time = TimeUtils.current_milli_time()
+        while not TimeUtils.is_time(current_time, 2000):
             self.lights.animate()
 
         keys = {"C2", "C3", "C10"}
         for k in keys:
             logging.info("test lights key " + k)
             self.lights.update(k)
-            current_time = Utils.current_milli_time()
-            while not Utils.is_time(current_time, 10000):
+            current_time = TimeUtils.current_milli_time()
+            while not TimeUtils.is_time(current_time, 10000):
                 self.lights.animate()
 
-    @unittest.skip
     def test_lights_default(self):
         # self.lights.update("B1")
         while True:

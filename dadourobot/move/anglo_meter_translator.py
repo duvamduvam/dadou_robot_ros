@@ -19,24 +19,22 @@ class AngloMeterTranslator:
         turn = int(command[0:2])
         forward = int(command[2:4])
 
-        differential =  self.axis_to_diff(turn, forward, self.MIN_JOYSTICK, self.MAX_JOYSTICK, self.MIN_INPUT, self.MAX_INPUT)
+        differential =  self.axis_to_diff2(turn, forward)
         logging.info("translate turn {} forward {} to {}".format(turn, forward, differential))
         return differential
 
     def axis_to_diff2(self, x, y)->(int, int):
 
-        left, right = 0, 0
-
-        angle = int(math.degrees(math.atan(x/y)))
+        angle = int(math.degrees(math.atan(y/x)))
         logging.debug("angle : {}".format(angle))
 
         # differential 90° / 0 <-> 1 / 0  + facteur exponential * x
         # INVERSE / angle * right or left
-        if y >= 0:
-            left = Misc.mapping(x, 0, 1024, 0, 100)
+        if y >= 50:
+            left = x #Misc.mapping(x, 0, 1024, 0, 100)
             right = self.create_differential(angle, left)
         else:
-            right = Misc.mapping(x, 0, 1024, 0, 100)
+            right = x #Misc.mapping(x, 0, 1024, 0, 100)
             left = self.create_differential(angle, right)
 
         logging.info("x {} y {} -> left {} right {}".format(x, y, left, right))

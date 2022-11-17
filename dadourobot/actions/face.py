@@ -2,7 +2,7 @@ import logging.config
 
 from dadou_utils.files.files_manager import FilesUtils
 from dadou_utils.time.time_utils import TimeUtils
-from dadou_utils.utils_static import NAME, DURATION, LOOP
+from dadou_utils.utils_static import NAME, DURATION, LOOP, KEY
 
 from dadourobot.actions.sequence import Sequence
 from dadourobot.robot_static import MOUTHS, LEYE, REYE
@@ -37,7 +37,7 @@ class Face:
         logging.info("start face with pin " + str(self.config.FACE_PIN))
         self.strip = strip
         self.load_visuals()
-        self.update(self.DEFAULT)
+        self.update({KEY:self.DEFAULT})
 
     def load_visuals(self):
         mouth_visuals_path = self.config.MOUTH_VISUALS_PATH
@@ -67,28 +67,28 @@ class Face:
                 self.strip[i] = visual.rgb[x][y]
                 i += 1
 
-    def update(self, key):
-        if key:
-            json_seq = self.json_manager.get_face_seq(key)
+    def update(self, msg):
+        if msg and KEY in msg :
+            json_seq = self.json_manager.get_face_seq(msg[KEY])
             if json_seq:
                 logging.info("update face sequence : " + json_seq[NAME])
                 self.duration = json_seq[DURATION]
                 self.loop = json_seq[LOOP]
                 self.start_time = TimeUtils.current_milli_time()
                 self.mouth = Sequence(self.duration, self.loop, json_seq[MOUTHS], 0)
-                self.leye = Sequence(self.duration, self.loop, json_seq[LEYE], 257) #385
-                self.reye = Sequence(self.duration, self.loop, json_seq[REYE], 320) #448
+                self.leye = Sequence(self.duration, self.loop, json_seq[LEYE], 385) #385
+                self.reye = Sequence(self.duration, self.loop, json_seq[REYE], 448) #448
 
     def animate_part(self, seq: Sequence):
         change = False
         if seq.time_to_switch():
             seq.next()
             frame = seq.get_current_element()
-            # logging.debug("seq.current_time : " + str(seq.current_time) + " frame.time " + str(frame.time))
-            visual = self.get_visual(frame[0])
-            # logging.debug("update part : " + visual.name)
+            #logging.info("seq.current_time : {} current element {} duration {}".format(seq.start_time, seq.current_element, seq.element_duration*seq.duration))
+            visual = self.get_visual(frame[1])
+            #logging.debug("update part : " + visual.name)
             self.image_mapping.mapping(self.strip, visual.rgb, seq.start_pixel)
-            # logging.debug("next sequence[" + str(seq.current_frame) + "] total : " + str(len(seq.frames)))
+            #logging.debug("next sequence[" + str(seq.current_frame) + "] total : " + str(len(seq.frames)))
             change = True
         return change
 
@@ -96,7 +96,7 @@ class Face:
 
         if self.start_time != 0 and not self.loop and \
                 TimeUtils.is_time(self.start_time, self.duration):
-            self.update(self.DEFAULT)
+            self.update({KEY: self.DEFAULT})
         if self.animate_part(self.mouth) or self.animate_part(self.leye) or self.animate_part(self.reye):
             self.strip.show()
 

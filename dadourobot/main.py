@@ -2,8 +2,12 @@ import logging.config
 import sys
 import traceback
 
+import board
+import digitalio
 from dadou_utils.com.serial_devices_manager import SerialDeviceManager
 from dadou_utils.time.time_utils import TimeUtils
+from dadou_utils.utils_static import WHEEL_LEFT, WHEEL_RIGHT
+from digitalio import DigitalInOut, Direction
 
 import time
 
@@ -28,7 +32,7 @@ audio = RobotFactory().get_audio()
 face = RobotFactory().face
 lights = RobotFactory().lights
     #lights = Lights(RobotFactory().get_strip())
-neck = Neck()
+#neck = RobotFactory().neck
 #head = RobotFactory().head
 wheel = RobotFactory().wheel
 #animations = AnimationManager()
@@ -47,6 +51,7 @@ def stop(msg):
 
 while True:
     #logging.debug('run')
+
     try:
         msg = global_receiver.get_msg()
 
@@ -54,19 +59,20 @@ while True:
             stop(msg)
             #main_due_com.send_dict(msg)
             #animations.update(msg.key)
-            audio.process(msg)
-                #face.update(msg.key)
+            audio.update(msg)
+            face.update(msg)
                 #head.process(msg)
             wheel.update(msg)
-            lights.update(msg.key)
+            lights.update(msg)
 
-        if main_loop_sleep and main_loop_sleep != 0:
-            time.sleep(main_loop_sleep)
+        #if main_loop_sleep and main_loop_sleep != 0:
+        #    time.sleep(main_loop_sleep)
 
             #animations.process()
         face.animate()
         lights.animate()
-        neck.animate()
+        wheel.check_stop()
+        #neck.animate()
             #wheel.process()
 
         #if TimeUtils.is_time(SerialDeviceManager.last_update, SerialDeviceManager.update_period):

@@ -23,7 +23,7 @@ class GlobalReceiver:
         #glove_id = SerialDevice.USB_ID_PATH + "usb-Raspberry_Pi_Pico_E6611CB6976B8D28-if00"
         #self.glove = SerialDevice(glove_id)
         WsServer().start()
-        self.lora_radio = LoraRadio(self.config)
+        #self.lora_radio = LoraRadio(self.config)
 
     def get_msg(self):
         #TODO mettre a jour la logique lora pour qu'elle corresponde a la logique dict ws
@@ -39,10 +39,10 @@ class GlobalReceiver:
         if msg:
             logging.info('received ws msg : {}'.format(msg))
             return msg
-        radio_msg = self.lora_radio.receive_msg()
-        if radio_msg:
-            logging.info('received lora msg : {}'.format(radio_msg))
-            return radio_msg
+        #radio_msg = self.lora_radio.receive_msg()
+        #if radio_msg:
+        #    logging.info('received lora msg : {}'.format(radio_msg))
+        #    return radio_msg
 
 
     #def filter_msg(self, m):

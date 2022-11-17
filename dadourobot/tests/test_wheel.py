@@ -24,14 +24,19 @@ class WheelTest(unittest.TestCase):
 
     def test_run(self):
 
-        #for w in range(0, 100):
-        self.wheel.update({WHEEL_LEFT:-70, WHEEL_RIGHT:-70})
-        time.sleep(5)
-        self.wheel.update({WHEEL_LEFT:70, WHEEL_RIGHT:70})
-        time.sleep(5)
-        self.wheel.update({WHEEL_LEFT:-70, WHEEL_RIGHT:1})
-        time.sleep(5)
-        self.wheel.update({WHEEL_LEFT:1, WHEEL_RIGHT:-70})
-        time.sleep(5)
-        self.wheel.update({WHEEL_LEFT:70, WHEEL_RIGHT:70})
-        time.sleep(5)
+        for w in range(0, 50):
+        #while True:
+            self.wheel.update({WHEEL_LEFT:70, WHEEL_RIGHT:70})
+            time.sleep(5)
+            self.wheel.update({WHEEL_LEFT:70, WHEEL_RIGHT:-70})
+            time.sleep(5)
+            """self.wheel.update({WHEEL_LEFT:-45, WHEEL_RIGHT:-45})
+            time.sleep(5)
+            self.wheel.update({WHEEL_LEFT:45, WHEEL_RIGHT:45})
+            time.sleep(5)
+            self.wheel.update({WHEEL_LEFT:-70, WHEEL_RIGHT:1})
+            time.sleep(5)
+            self.wheel.update({WHEEL_LEFT:1, WHEEL_RIGHT:-70})
+            time.sleep(5)
+            self.wheel.update({WHEEL_LEFT:70, WHEEL_RIGHT:70})
+            time.sleep(5)"""
