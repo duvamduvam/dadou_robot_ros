@@ -41,7 +41,7 @@ class RobotFactory(metaclass=SingletonMeta):
 
 
         #TODO improve led lights
-        self.pixels = neopixel.NeoPixel(Pin(self.config.FACE_PIN), 715, auto_write=False, brightness=0.2, pixel_order=neopixel.GRB)
+        self.pixels = neopixel.NeoPixel(Pin(self.config.FACE_PIN), 782, auto_write=False, brightness=0.2, pixel_order=neopixel.GRB)
 
         """pixel_pin = board.D18
         num_pixels = 30

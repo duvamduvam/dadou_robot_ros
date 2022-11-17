@@ -86,7 +86,7 @@ class Lights:
         #self.strip = neopixel.NeoPixel(self.LED_COUNT, Pin(config.LIGHTS_PIN), self.LED_FREQ_HZ, self.LED_DMA, self.LED_INVERT, self.LED_BRIGHTNESS, self.LED_CHANNEL)
 
         strip_pixels_range = ()
-        for x in range(513, 713): #513
+        for x in range(513, 782): #513
             strip_pixels_range += (x,)
 
         self.strip = PixelMap(strip,
