@@ -8,6 +8,7 @@ from dadou_utils.misc import Misc
 
 from dadourobot.input.message import Message
 from dadourobot.robot_factory import RobotFactory
+from dadourobot.sequence.animation_manager import AnimationManager
 
 
 class GlobalReceiver:
@@ -16,14 +17,16 @@ class GlobalReceiver:
     postfix = '>'
     messages = InputMessagesList()
 
-    def __init__(self, device_manager):
-        self.config = RobotFactory().config
+    def __init__(self, config, device_manager, animation_manager):
+        self.config = config
         #self.mega_lora_radio = SerialDevice('modem', self.config.RADIO_MEGA_ID, 7)
         #self.mega_lora_radio = device_manager.get_device(RobotStatic.RADIO_MEGA)
         #glove_id = SerialDevice.USB_ID_PATH + "usb-Raspberry_Pi_Pico_E6611CB6976B8D28-if00"
         #self.glove = SerialDevice(glove_id)
         WsServer().start()
         #self.lora_radio = LoraRadio(self.config)
+
+        self.animation_manager = animation_manager
 
     def get_msg(self):
         #TODO mettre a jour la logique lora pour qu'elle corresponde a la logique dict ws
@@ -38,7 +41,15 @@ class GlobalReceiver:
         msg = self.messages.pop_msg()
         if msg:
             logging.info('received ws msg : {}'.format(msg))
+            self.animation_manager.update(msg)
+
             return msg
+
+        msg = self.animation_manager.event()
+        if msg:
+            logging.info('next animation : {}'.format(msg))
+            return msg
+
         #radio_msg = self.lora_radio.receive_msg()
         #if radio_msg:
         #    logging.info('received lora msg : {}'.format(radio_msg))

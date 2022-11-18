@@ -2,10 +2,10 @@ import logging.config
 
 from dadou_utils.files.files_manager import FilesUtils
 from dadou_utils.time.time_utils import TimeUtils
-from dadou_utils.utils_static import NAME, DURATION, LOOP, KEY
+from dadou_utils.utils_static import NAME, DURATION, LOOP, KEY, KEYS, FACE
 
 from dadourobot.actions.sequence import Sequence
-from dadourobot.robot_static import MOUTHS, LEYE, REYE
+from dadourobot.robot_static import MOUTHS, LEYE, REYE, JSON_EXPRESSIONS
 from dadourobot.visual.image_mapping import ImageMapping
 from dadourobot.visual.visual import Visual
 
@@ -25,6 +25,9 @@ class Face:
     leye = None
     reye = None
 
+    sequences_key = {}
+    sequences_name = {}
+
     DEFAULT = "default"
 
     duration = 0
@@ -36,8 +39,22 @@ class Face:
         self.json_manager = json_manager
         logging.info("start face with pin " + str(self.config.FACE_PIN))
         self.strip = strip
+        self.load_sequences()
         self.load_visuals()
         self.update({KEY:self.DEFAULT})
+
+    def load_sequences(self):
+        expression_sequences = self.json_manager.open_json(JSON_EXPRESSIONS)
+        for seq in expression_sequences:
+            for key in seq[KEYS]:
+                self.sequences_key[key] = seq
+            self.sequences_name[seq[NAME]] = seq
+
+    def get_expressions_sequence(self, msg):
+        if msg and KEY in msg and msg[KEY] in self.sequences_key.keys():
+            return self.sequences_key[msg[KEY]]
+        if msg and FACE in msg and msg[FACE] in self.sequences_name.keys():
+            return self.sequences_name[msg[FACE]]
 
     def load_visuals(self):
         mouth_visuals_path = self.config.MOUTH_VISUALS_PATH
@@ -68,16 +85,17 @@ class Face:
                 i += 1
 
     def update(self, msg):
-        if msg and KEY in msg :
-            json_seq = self.json_manager.get_face_seq(msg[KEY])
-            if json_seq:
-                logging.info("update face sequence : " + json_seq[NAME])
-                self.duration = json_seq[DURATION]
-                self.loop = json_seq[LOOP]
-                self.start_time = TimeUtils.current_milli_time()
-                self.mouth = Sequence(self.duration, self.loop, json_seq[MOUTHS], 0)
-                self.leye = Sequence(self.duration, self.loop, json_seq[LEYE], 385) #385
-                self.reye = Sequence(self.duration, self.loop, json_seq[REYE], 448) #448
+        json_seq = self.get_expressions_sequence(msg)
+        if not json_seq:
+            return
+
+        logging.info("update face sequence : " + json_seq[NAME])
+        self.duration = json_seq[DURATION]
+        self.loop = json_seq[LOOP]
+        self.start_time = TimeUtils.current_milli_time()
+        self.mouth = Sequence(self.duration, self.loop, json_seq[MOUTHS], 0)
+        self.leye = Sequence(self.duration, self.loop, json_seq[LEYE], 385) #385
+        self.reye = Sequence(self.duration, self.loop, json_seq[REYE], 448) #448
 
     def animate_part(self, seq: Sequence):
         change = False

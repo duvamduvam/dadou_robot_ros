@@ -6,7 +6,7 @@ import pwmio
 from dadou_utils.com.serial_device import SerialDevice
 from dadou_utils.misc import Misc
 from dadou_utils.time.time_utils import TimeUtils
-from dadou_utils.utils_static import ANGLO, WHEEL_RIGHT, WHEEL_LEFT, JOY
+from dadou_utils.utils_static import ANIMATION, ANGLO, WHEEL_RIGHT, WHEEL_LEFT, JOY, WHEELS
 from microcontroller import Pin
 
 from dadourobot.move.anglo_meter_translator import AngloMeterTranslator
@@ -24,6 +24,8 @@ class Wheel:
     MAX_PWM = 20000
     MAX_DIR = 65530
     FREQUENCY = 500
+
+    animation_ongoing = False
 
     test_speed = 0
     test_direction = 0
@@ -58,36 +60,41 @@ class Wheel:
         self.due.send_msg(msg)
 
     def update(self, msg:dict):
-        if msg and ANGLO in msg:
+        if not msg:
+            return
+
+        if ANGLO in msg:
             wheels = self.anglo_meter_translator.translate(msg[ANGLO])
             self.update_cmd(wheels[0], wheels[1])
-        if msg and JOY in msg:
+        if JOY in msg:
             wheels = self.anglo_meter_translator.translate(msg[JOY])
             self.update_cmd(wheels[0], wheels[1])
-        if msg and WHEEL_LEFT in msg and WHEEL_RIGHT in msg:
+        if WHEEL_LEFT in msg and WHEEL_RIGHT in msg:
             self.update_cmd(msg[WHEEL_LEFT], msg[WHEEL_RIGHT])
+        if  WHEELS in msg:
+            self.update_cmd(msg[WHEELS][0]*100, msg[WHEELS][1]*100)
 
     def update_cmd(self, left_wheel, right_wheel):
-        if left_wheel and right_wheel:
-            logging.info("update wheel with left : " + str(left_wheel) + " right : " + str(right_wheel))
+        #if left_wheel and right_wheel:
+        logging.info("update wheel with left : " + str(left_wheel) + " right : " + str(right_wheel))
             #left = self.utils.translate(left_wheel)
-            self.left_pwm.duty_cycle = Misc.mapping(abs(left_wheel), 0, 100, 0, self.MAX_PWM)
+        self.left_pwm.duty_cycle = Misc.mapping(abs(left_wheel), 0, 100, 0, self.MAX_PWM)
             #right = self.utils.translate(right_wheel)
-            self.right_pwm.duty_cycle = Misc.mapping(abs(right_wheel), 0, 100, 0, self.MAX_PWM)
+        self.right_pwm.duty_cycle = Misc.mapping(abs(right_wheel), 0, 100, 0, self.MAX_PWM)
 
-            self.set_direction(left_wheel, self.dir_left)
+        self.set_direction(left_wheel, self.dir_left)
             #self.dir_left.value = left_wheel >= 0
             #self.dir_right.value = right_wheel >= 0
             #self.dir_right.value = True
-            self.set_direction(right_wheel, self.dir_right)
+        self.set_direction(right_wheel, self.dir_right)
 
-            self.move_time = TimeUtils.current_milli_time()
-            logging.info("cmd left {} duty cycle {} direction {} // cmd right {} duty cycle {} direction {}".
-                         format(left_wheel, self.left_pwm.duty_cycle, self.dir_left.duty_cycle, right_wheel, self.right_pwm.duty_cycle, self.dir_right.duty_cycle))
+        self.move_time = TimeUtils.current_milli_time()
+        logging.info("cmd left {} duty cycle {} direction {} // cmd right {} duty cycle {} direction {}".
+                        format(left_wheel, self.left_pwm.duty_cycle, self.dir_left.duty_cycle, right_wheel, self.right_pwm.duty_cycle, self.dir_right.duty_cycle))
 
-        else:
-            if TimeUtils.is_time(self.move_time, self.MOVE_TIMEOUT):
-                self.stop()
+        #else:
+        #    if TimeUtils.is_time(self.move_time, self.MOVE_TIMEOUT):
+        #        self.stop()
 
     """def set_direction(self, cmd_dir, pwm_dir):
         value = cmd_dir < 0
@@ -110,8 +117,12 @@ class Wheel:
         self.left_pwm.duty_cycle = 0
         self.right_pwm.duty_cycle = 0
 
-    def check_stop(self):
-        if TimeUtils.is_time(last_time= self.last_update, time_out= self.TIME_OUT):
+    def check_stop(self, msg):
+
+        if msg and ANIMATION in msg:
+            self.animation_ongoing = msg[ANIMATION]
+
+        if not self.animation_ongoing and TimeUtils.is_time(last_time= self.last_update, time_out= self.TIME_OUT):
             self.last_update = TimeUtils.current_milli_time()
             self.stop()
 

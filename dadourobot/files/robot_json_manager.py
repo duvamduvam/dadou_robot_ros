@@ -58,11 +58,15 @@ class RobotJsonManager(AbstractJsonManager):
         return self.standard_return(result, True, False)
 
     def get_lights(self, key):
+        return self.get_dict_from_list(self.lights, "keys", key)
+
+
+    """def get_lights(self, key):
         result = jsonpath_rw_ext.match('$.lights_seq[?keys~' + key + ']', self.lights)
         # logging.debug(result)
         #return self.standard_return(result, True, key)
         if len(result) > 0:
-            return result[0]
+            return result[0]"""
 
     def get_color(self, key):
         result = jsonpath_rw_ext.match('$.colors[?name~' + key + ']', self.colors)

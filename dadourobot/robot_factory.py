@@ -21,6 +21,7 @@ from dadourobot.files.robot_json_manager import RobotJsonManager
 from dadou_utils.singleton import SingletonMeta
 
 from dadourobot.robot_static import LOGGING_CONFIG_FILE, JSON_CONFIG, JSON_DIRECTORY, DEVICES
+from dadourobot.sequence.animation_manager import AnimationManager
 
 
 class RobotFactory(metaclass=SingletonMeta):
@@ -41,7 +42,7 @@ class RobotFactory(metaclass=SingletonMeta):
 
 
         #TODO improve led lights
-        self.pixels = neopixel.NeoPixel(Pin(self.config.FACE_PIN), 782, auto_write=False, brightness=0.2, pixel_order=neopixel.GRB)
+        self.pixels = neopixel.NeoPixel(Pin(self.config.FACE_PIN), 782, auto_write=False, brightness=0.05, pixel_order=neopixel.GRB)
 
         """pixel_pin = board.D18
         num_pixels = 30
@@ -54,6 +55,8 @@ class RobotFactory(metaclass=SingletonMeta):
         self.face = Face(self.robot_json_manager, self.config, self.pixels)
         self.lights = Lights(self.config, self.robot_json_manager, self.pixels)
         self.neck = Neck(self.config)
+
+        self.animation_manager = AnimationManager()
 
     def get_strip(self):
         return self.pixels

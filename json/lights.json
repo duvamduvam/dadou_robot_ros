@@ -1,8 +1,10 @@
-{
-  "lights_seq": [
+[
     {
       "name": "default",
-      "keys": "default",
+      "keys": [
+        "default",
+            "B1"
+        ],
       "loop": true,
       "duration": 15000,
       "sequences": [
@@ -28,33 +30,81 @@
     },
     {
       "name": "love",
-      "keys": "A2",
+      "keys": ["B2"],
       "loop": false,
       "duration": 6000,
       "sequences": [
         {
-          "duration": 300,
+          "duration": 0.5,
           "method": "sparkle",
           "color": "RED"
         },
         {
-          "duration": 200,
+          "duration": 1,
           "method": "pulse",
-          "color": "RED"
+          "color": "PINK"
         }
       ]
     },
     {
       "name": "heidi",
-      "keys": "default",
+      "keys": ["B3"],
       "loop": false,
       "duration": 5000,
       "sequences": [
         {
-          "duration": 200,
+          "duration": 1,
           "method": "rainbow_chase"
         }
       ]
+    },
+    {
+      "name": "color comet",
+      "keys": ["B4"],
+      "loop": false,
+      "duration": 15000,
+      "sequences": [
+        {
+          "duration": 1,
+          "method": "rainbow_comet"
+        }
+      ]
+    },
+    {
+      "name": "color sparkle",
+      "keys": ["B5"],
+      "loop": false,
+      "duration": 15000,
+      "sequences": [
+        {
+          "duration": 1,
+          "method": "rainbow_sparkle"
+        }
+      ]
+    },
+    {
+      "name": "colorcycle",
+      "keys": ["B6"],
+      "loop": false,
+      "duration": 15000,
+      "sequences": [
+        {
+          "duration": 1,
+          "method": "color_cycle"
+        }
+      ]
+    },
+    {
+      "name": "purple blink",
+      "keys": ["B4"],
+      "loop": false,
+      "duration": 15000,
+      "sequences": [
+        {
+          "duration": 1,
+          "method": "blink",
+          "color": "PURPLE"
+        }
+      ]
     }
-  ]
-}
+]

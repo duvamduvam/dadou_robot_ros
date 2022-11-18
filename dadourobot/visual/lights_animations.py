@@ -19,7 +19,7 @@ from adafruit_led_animation.color import \
     AMBER, BLACK, BLUE, CYAN, GREEN, JADE, ORANGE, PURPLE, RED, MAGENTA, TEAL, WHITE, YELLOW
 
 
-class Animations:
+class LightsAnimations:
 
     def __init__(self, led_count, strip):
         self.LED_COUNT = led_count

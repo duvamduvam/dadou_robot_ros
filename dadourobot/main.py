@@ -35,9 +35,9 @@ lights = RobotFactory().lights
 #neck = RobotFactory().neck
 #head = RobotFactory().head
 wheel = RobotFactory().wheel
-#animations = AnimationManager()
+animations = RobotFactory().animation_manager
 
-global_receiver = GlobalReceiver(RobotFactory().device_manager)
+global_receiver = GlobalReceiver(RobotFactory().config, RobotFactory().device_manager, animations)
 main_loop_sleep = RobotFactory().config.MAIN_LOOP_SLEEP
 due_device = RobotFactory().device_manager.get_device(MAIN_DUE)
 main_due_com = MainDueCom(RobotFactory().device_manager)
@@ -58,7 +58,6 @@ while True:
         if msg:
             stop(msg)
             #main_due_com.send_dict(msg)
-            #animations.update(msg.key)
             audio.update(msg)
             face.update(msg)
                 #head.process(msg)
@@ -68,10 +67,10 @@ while True:
         #if main_loop_sleep and main_loop_sleep != 0:
         #    time.sleep(main_loop_sleep)
 
-            #animations.process()
         face.animate()
         lights.animate()
-        wheel.check_stop()
+
+        wheel.check_stop(msg)
         #neck.animate()
             #wheel.process()
 
@@ -82,5 +81,4 @@ while True:
         #main_due_com.get_msg()
 
     except Exception as err:
-        logging.error('exception {}'.format(err))
-        traceback.print_exc()
+        logging.error('exception {}'.format(err), exc_info=True)

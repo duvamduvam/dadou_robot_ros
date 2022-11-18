@@ -1,29 +1,26 @@
+[
   {
-    "audios": [
-      {
-        "name": "stop",
-        "keys": ["Da", "Aa"],
-        "path": ""
-      },
-    {
-      "keys": ["A4"],
-      "path": "motivation.mp3"
-    },
-    {
-      "keys": ["A5"],
-      "path": "lacrimosa.mp3"
-    },
-    {
-      "keys": ["A6"],
-      "path": "le-professionnel.mp3"
-    },
-    {
-      "keys": ["A7"],
-      "path": "gig.wav"
-    },
-    {
-      "keys": ["A8"],
-      "path": "caca-kaki.mp3"
-    }
-  ]
-}
+    "keys": ["A&", "Aa"],
+    "name": "stop"
+  },
+  {
+    "keys": ["A4"],
+    "name": "motivation.mp3"
+  },
+  {
+    "keys": ["A5"],
+    "name": "lacrimosa.mp3"
+  },
+  {
+    "keys": ["A6"],
+    "name": "le-professionnel.mp3"
+  },
+  {
+    "keys": ["A7"],
+    "name": "gig.wav"
+  },
+  {
+    "keys": ["A8"],
+    "name": "caca-kaki.mp3"
+  }
+]

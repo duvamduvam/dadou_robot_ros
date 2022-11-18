@@ -32,6 +32,7 @@ class Neck:
         self.servo = servo.Servo(self.head_pwm)
         self.servo.angle = self.DEFAULT_POS
 
+    #TODO fix move from animation
     def update(self, msg):
         if msg and NECK in msg:
             self.target_pos = msg[NECK] #abs(self.utils.translate(msg))
