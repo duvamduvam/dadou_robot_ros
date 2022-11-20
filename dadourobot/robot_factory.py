@@ -2,15 +2,13 @@ import logging
 import logging.config
 import os
 
-import board
 import neopixel
-from adafruit_led_animation.helper import PixelMap
 from dadou_utils.com.serial_devices_manager import SerialDeviceManager
 from microcontroller import Pin
 
-from dadourobot.actions.audio_manager import AudioManager
-from dadourobot.actions.face import Face
-from dadourobot.actions.head import Head
+from dadourobot.actions.audios import AudioManager
+from dadourobot.actions.expressions import Face
+from dadourobot.bak.head import Head
 #from dadourobot.actions.lights import Lights
 from dadourobot.actions.lights import Lights
 from dadourobot.actions.neck import Neck
@@ -21,7 +19,7 @@ from dadourobot.files.robot_json_manager import RobotJsonManager
 from dadou_utils.singleton import SingletonMeta
 
 from dadourobot.robot_static import LOGGING_CONFIG_FILE, JSON_CONFIG, JSON_DIRECTORY, DEVICES
-from dadourobot.sequence.animation_manager import AnimationManager
+from dadourobot.sequences.animation_manager import AnimationManager
 
 
 class RobotFactory(metaclass=SingletonMeta):
@@ -56,7 +54,7 @@ class RobotFactory(metaclass=SingletonMeta):
         self.lights = Lights(self.config, self.robot_json_manager, self.pixels)
         self.neck = Neck(self.config)
 
-        self.animation_manager = AnimationManager()
+        self.animation_manager = AnimationManager(self.robot_json_manager, self.config)
 
     def get_strip(self):
         return self.pixels

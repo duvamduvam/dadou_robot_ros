@@ -21,10 +21,11 @@ class Visual:
         self.name = os.path.basename(path)
         self.name = os.path.splitext(self.name)
         self.name = self.name[0]
+        image = Image(path)
         if inverse_bottom:
-            self.rgb = ImageMapping.inverse_bottom_image(Image.get_rgb_from_image(path))
+            self.rgb = ImageMapping.inverse_bottom_image(image.get_rgb_from_image(path))
         else:
-            self.rgb = Image.get_rgb_from_image(path)
+            self.rgb = image.get_rgb_from_image(path)
             #self.rgb = Image.get_rgb_from_image(path)
 
 
@@ -42,32 +43,50 @@ class Image:
     up = "../"
     visuals = []
 
-    def __init__(self):
+    matrix_width = 24
+    matrix_height = 16
+
+    matrix_height_nb = 2
+    matrix_width_nb = 3
+
+
+
+    def __init__(self, path):
         logging.info("create new image")
-        self.load_images()
+        #self.load_images()
+        self.path = path
+    #def __init__(self, visuals_path):
+    #    logging.info("create new image")
+    #    self.visual_rep = visuals_path
 
-    """def __init__(self, visuals_path):
-        logging.info("create new image")
-        self.visual_rep = visuals_path"""
 
-    def load_images(self):
-        logging.info("load visuals")
-        images_path = glob.glob(self.visual_rep + "*")
-        logging.info(self.visual_rep + " content : ")
-        logging.info(images_path)
-        visual_nb = len(images_path)
-        self.visuals = [0 for i in range(visual_nb)]
-        i = 0
-        for p in images_path:
-            rgb = self.get_rgb_from_image(p)
-            self.visuals[i] = Visual(p, rgb)
-            logging.info("load image : " + self.visuals[i].name)
-            i = i + 1
+    def mapping(self, image, start_pixel):
+        #pixels.insert(0, 10) = image
+        #pixels[start_pixel:len(image)] = image
+        pixels = []
+        for y in range(len(image)):
+            for x in range(len(image[y])):
+                xpos = x % self.matrix_width
 
-    @staticmethod
-    def get_rgb_from_image(path):
+                matrix = (x // self.matrix_width) * (self.matrix_width * self.matrix_height)
+                if y > self.matrix_height - 1:
+                    matrix += self.matrix_width * self.matrix_height * self.matrix_width_nb
+
+                ypos = (y * self.matrix_width)  # % (self.matrix_height * self.matrix_width)
+                if ypos > (self.matrix_height * self.matrix_width):
+                    ypos -= self.matrix_height * self.matrix_width
+
+                index = xpos + matrix + ypos
+
+                # logging.debug("pixel[" + str(index) + "] = image[" + str(y) + "][" + str(x) + "] xpos  -> " + str(
+                #    xpos) + " matrix  -> " + str(matrix) + " ypos  -> " + str(ypos))
+                pixels.append(image[y][x])
+        return pixels
+
+    def get_rgb_from_image(self, path):
         rgb = imageio.imread(path)
+        #rgb = self.mapping(rgb, 0)
         # logging.info(rgb)
         return rgb
         # arr[20, 30] # 3-vector for a pixel
-        # arr[20, 30, 1] # green value for a pixel
+        # arr[20, 30, 1] # green value for a pixel"""

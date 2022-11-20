@@ -1,14 +1,9 @@
 import logging
 
 from dadou_utils.com.input_messages_list import InputMessagesList
-from dadou_utils.com.lora_radio import LoraRadio
-from dadou_utils.com.serial_device import SerialDevice
+#from dadou_utils.com.lora_radio import LoraRadio
+#from dadou_utils.com.serial_device import SerialDevice
 from dadou_utils.com.ws_server import WsServer
-from dadou_utils.misc import Misc
-
-from dadourobot.input.message import Message
-from dadourobot.robot_factory import RobotFactory
-from dadourobot.sequence.animation_manager import AnimationManager
 
 
 class GlobalReceiver:
@@ -38,24 +33,27 @@ class GlobalReceiver:
         if glove:
             logging.info('received glove msg : {}'.format(glove))
             return glove"""
+
         msg = self.messages.pop_msg()
         if msg:
-            logging.info('received ws msg : {}'.format(msg))
+            logging.info('received from ws server'.format(msg))
             self.animation_manager.update(msg)
-
             return msg
 
         msg = self.animation_manager.event()
         if msg:
-            logging.info('next animation : {}'.format(msg))
+            logging.info('received animation'.format(msg))
             return msg
-
         #radio_msg = self.lora_radio.receive_msg()
         #if radio_msg:
         #    logging.info('received lora msg : {}'.format(radio_msg))
         #    return radio_msg
 
 
+    def return_msg(self, msg, log_text):
+        if msg:
+            logging.info(log_text.format(msg))
+            return msg
     #def filter_msg(self, m):
     #    return self.msg.set(m)
 

@@ -33,6 +33,12 @@ class RobotConfig:
         self.EYE_VISUALS_PATH = self.json_config['eye_visuals_path']
         logging.debug(self.__dict__)
 
+    def get(self, key):
+        if key not in self.json_config.keys():
+            logging.error('{} key not in config'.format(key))
+            return
+        return self.json_config[key]
+
     def reload(self):
         self.json_config = self.json_manager.get_config()
         self.load()

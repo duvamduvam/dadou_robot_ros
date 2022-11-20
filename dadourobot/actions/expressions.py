@@ -2,15 +2,16 @@ import logging.config
 
 from dadou_utils.files.files_manager import FilesUtils
 from dadou_utils.time.time_utils import TimeUtils
-from dadou_utils.utils_static import NAME, DURATION, LOOP, KEY, KEYS, FACE
+from dadou_utils.utils_static import NAME, DURATION, LOOP, KEY, FACE, SPEAK, SPEAK_DURATION, DEFAULT
 
-from dadourobot.actions.sequence import Sequence
+from dadourobot.actions.abstract_actions import ActionsAbstract
+from dadourobot.sequences.sequence import Sequence
 from dadourobot.robot_static import MOUTHS, LEYE, REYE, JSON_EXPRESSIONS
 from dadourobot.visual.image_mapping import ImageMapping
 from dadourobot.visual.visual import Visual
 
 
-class Face:
+class Face(ActionsAbstract):
     visuals = []
     image_mapping = ImageMapping(8, 8, 3, 2)
 
@@ -25,30 +26,23 @@ class Face:
     leye = None
     reye = None
 
-    sequences_key = {}
-    sequences_name = {}
-
     DEFAULT = "default"
 
     duration = 0
-    loop = False
     start_time = 0
 
+    speak_duration = 0
+    start_speak_time = 0
+    loop = False
+
+
     def __init__(self, json_manager, config, strip):
+        super().__init__(json_manager, JSON_EXPRESSIONS)
         self.config = config
-        self.json_manager = json_manager
         logging.info("start face with pin " + str(self.config.FACE_PIN))
         self.strip = strip
-        self.load_sequences()
         self.load_visuals()
-        self.update({KEY:self.DEFAULT})
-
-    def load_sequences(self):
-        expression_sequences = self.json_manager.open_json(JSON_EXPRESSIONS)
-        for seq in expression_sequences:
-            for key in seq[KEYS]:
-                self.sequences_key[key] = seq
-            self.sequences_name[seq[NAME]] = seq
+        self.update({FACE:self.DEFAULT})
 
     def get_expressions_sequence(self, msg):
         if msg and KEY in msg and msg[KEY] in self.sequences_key.keys():
@@ -84,12 +78,29 @@ class Face:
                 self.strip[i] = visual.rgb[x][y]
                 i += 1
 
-    def update(self, msg):
-        json_seq = self.get_expressions_sequence(msg)
-        if not json_seq:
-            return
+    def speak_during_audio(self, msg):
+        if not msg: return
+        if SPEAK in msg.keys():
+            if SPEAK_DURATION not in msg.keys():
+                logging.error("no duration for speak sequences")
+            else:
+                speak_seq = self.sequences_name[SPEAK]
+                self.speak_duration = msg[SPEAK_DURATION]
+                self.start_speak_time = TimeUtils.current_milli_time()
+                speak_seq[LOOP] = True
+                return speak_seq
 
-        logging.info("update face sequence : " + json_seq[NAME])
+    def check_input(self, msg):
+        sequence = self.get_sequence(msg, FACE)
+        if sequence: return sequence
+        speak_seq = self.speak_during_audio(msg)
+        if speak_seq : return speak_seq
+
+    def update(self, msg):
+        json_seq = self.check_input(msg)
+        if not json_seq: return
+
+        logging.info("update face sequences : " + json_seq[NAME])
         self.duration = json_seq[DURATION]
         self.loop = json_seq[LOOP]
         self.start_time = TimeUtils.current_milli_time()
@@ -102,19 +113,23 @@ class Face:
         if seq.time_to_switch():
             seq.next()
             frame = seq.get_current_element()
-            #logging.info("seq.current_time : {} current element {} duration {}".format(seq.start_time, seq.current_element, seq.element_duration*seq.duration))
+            logging.debug("seq.current_time : {} current element {} duration {}".format(seq.start_time, seq.current_element, seq.element_duration*seq.duration))
             visual = self.get_visual(frame[1])
             #logging.debug("update part : " + visual.name)
             self.image_mapping.mapping(self.strip, visual.rgb, seq.start_pixel)
-            #logging.debug("next sequence[" + str(seq.current_frame) + "] total : " + str(len(seq.frames)))
+            #logging.debug("next sequences[" + str(seq.current_frame) + "] total : " + str(len(seq.frames)))
             change = True
         return change
 
     def animate(self):
 
+        if self.speak_duration != 0:
+            if TimeUtils.is_time(self.start_speak_time, self.speak_duration):
+                self.speak_duration = 0
+                self.loop = False
         if self.start_time != 0 and not self.loop and \
                 TimeUtils.is_time(self.start_time, self.duration):
-            self.update({KEY: self.DEFAULT})
+            self.update({FACE: DEFAULT})
         if self.animate_part(self.mouth) or self.animate_part(self.leye) or self.animate_part(self.reye):
             self.strip.show()
 

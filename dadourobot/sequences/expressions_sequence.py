@@ -24,6 +24,8 @@ class FaceSequence:
     reyes_time = 0
     mouths_time = 0
 
+    started = False
+
     current_element = None
 
     def __init__(self, json):
@@ -33,6 +35,7 @@ class FaceSequence:
         self.duration = json[DURATION]
         self.loop = json[DURATION]
         self.start_time = TimeUtils.current_milli_time()
+        self.started = True
 
     def get_pos(self, part: LedPart):
         if part == LedPart.LEYE:
@@ -64,6 +67,9 @@ class FaceSequence:
             return self.mouths_time
 
     def time_to_switch(self, part: LedPart):
+        if self.started:
+            self.started = False
+            return True
         pos = self.get_pos(part)
         frames = self.get_frames(part)
         time = self.get_part_time(part)

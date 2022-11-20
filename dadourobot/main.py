@@ -57,8 +57,10 @@ while True:
 
         if msg:
             stop(msg)
-            #main_due_com.send_dict(msg)
             audio.update(msg)
+
+            #main_due_com.send_dict(msg)
+
             face.update(msg)
                 #head.process(msg)
             wheel.update(msg)

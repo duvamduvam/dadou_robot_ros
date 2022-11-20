@@ -18,6 +18,8 @@ HEAD_MEGA = 'head_mega'
 RADIO_MEGA = 'radio_mega'
 MAIN_DUE = 'main_due'
 
+RANDOM_ANIMATION =  'random_animation'
+
 ############### JSON FILES ###############
 
 JSON_CONFIG = 'config.json'

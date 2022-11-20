@@ -12,6 +12,8 @@ class ImageMapping:
         self.matrix_width_nb = matrix_width_nb
 
     def mapping(self, pixels, image, start_pixel):
+        #pixels.insert(0, 10) = image
+        #pixels[start_pixel:len(image)] = image
         for y in range(len(image)):
             for x in range(len(image[y])):
                 xpos = x % self.matrix_width

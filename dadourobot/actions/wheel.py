@@ -118,7 +118,6 @@ class Wheel:
         self.right_pwm.duty_cycle = 0
 
     def check_stop(self, msg):
-
         if msg and ANIMATION in msg:
             self.animation_ongoing = msg[ANIMATION]
 

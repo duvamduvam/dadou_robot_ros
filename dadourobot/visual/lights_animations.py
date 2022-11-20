@@ -59,7 +59,7 @@ class LightsAnimations:
         return Sparkle(self.strip, speed=0.05, color=params.color, num_sparkles=10)
 
     def sparkle_pulse(self, params):
-        return SparklePulse(self.strip, speed=0.05, period=3, color=params.color)
+        return SparklePulse(self.strip, speed=1, period=3, color=params.color)
 
     def fade_red(self, params):
         self.strip.fill((255, 0, 0))

@@ -3,23 +3,16 @@
 # sudo python3 -m pip install --force-reinstall adafruit-blinka
 # sudo pip3 install adafruit-circuitpython-led-animation
 
-import neopixel
 import logging.config
 
 # todo check thread : https://www.geeksforgeeks.org/python-communicating-between-threads-set-1/
 # todo check thread2 : https://riptutorial.com/python/example/4691/communicating-between-threads
-from adafruit_led_animation.animation.blink import Blink
-from adafruit_led_animation.animation.chase import Chase
-from adafruit_led_animation.animation.comet import Comet
-from adafruit_led_animation.color import RED, YELLOW, ORANGE, GREEN, TEAL, CYAN, BLUE, PURPLE, MAGENTA, WHITE, BLACK, GOLD, PINK, AQUA, JADE, AMBER
 from adafruit_led_animation.helper import PixelMap
-from dadou_utils.files.files_utils import FilesUtils
 from dadou_utils.time.time_utils import TimeUtils
-from dadou_utils.utils_static import METHOD, DEFAULT, DURATION, SEQUENCES, LOOP, COLOR, NAME, KEY, KEYS, LIGHTS
-from microcontroller import Pin
-from rpi_ws281x import Adafruit_NeoPixel
+from dadou_utils.utils_static import METHOD, DEFAULT, DURATION, SEQUENCES, LOOP, COLOR, NAME, KEY, LIGHTS, FACE
 
-from dadourobot.actions.sequence import Sequence
+from dadourobot.actions.abstract_actions import ActionsAbstract
+from dadourobot.sequences.sequence import Sequence
 from dadourobot.robot_static import JSON_LIGHTS
 from dadourobot.visual.lights_animations import LightsAnimations
 
@@ -41,7 +34,7 @@ from dadourobot.visual.lights_animations import LightsAnimations
 """
 
 
-class Lights:
+class Lights(ActionsAbstract):
     # LED strip configuration:
     LED_COUNT = 782 # Number of LED pixels.
     FIRST_STRIP_LED = 513
@@ -57,6 +50,7 @@ class Lights:
 
 
     def __init__(self, config, json_manager, strip):
+        super().__init__(json_manager, JSON_LIGHTS)
         self.config = config
         #self.strip = neopixel.NeoPixel(self.LED_COUNT, Pin(config.LIGHTS_PIN), self.LED_FREQ_HZ, self.LED_DMA, self.LED_INVERT, self.LED_BRIGHTNESS, self.LED_CHANNEL)
 
@@ -68,20 +62,11 @@ class Lights:
             strip_pixels_range, individual_pixels=True)
 
         self.animations = LightsAnimations(self.LED_COUNT - self.FIRST_STRIP_LED, self.strip)
-        self.json_manager = json_manager
-        self.load_sequences()
         self.update({KEY:DEFAULT})
-
-    def load_sequences(self):
-        lights_sequences = self.json_manager.open_json(JSON_LIGHTS)
-        for seq in lights_sequences:
-            for key in seq[KEYS]:
-                self.sequences_key[key] = seq
-            self.sequences_name[seq[NAME]] = seq
 
     def update(self, msg):
 
-        json_seq = self.get_lights_sequence(msg)
+        json_seq = self.get_sequence(msg, LIGHTS)
         if not json_seq:
             return
 
@@ -100,17 +85,11 @@ class Lights:
         self.current_animation = getattr(self.animations, self.sequence.current_element.method)(
             self.sequence.current_element)
         self.sequence.start_time = TimeUtils.current_milli_time()
-        logging.info("update lights sequence to " + json_seq[NAME])
-
-    def get_lights_sequence(self, msg):
-        if msg and KEY in msg and msg[KEY] in self.sequences_key.keys():
-            return self.sequences_key[msg[KEY]]
-        if msg and LIGHTS in msg and msg[LIGHTS] in self.sequences_name.keys():
-            return self.sequences_name[msg[LIGHTS]]
+        logging.info("update lights sequences to " + json_seq[NAME])
 
     def animate(self):
         if not self.sequence.loop and TimeUtils.is_time(self.sequence.start_time, self.sequence.duration):
-            self.update({KEY:DEFAULT})
+            self.update({LIGHTS:DEFAULT})
             return
 
         if self.sequence.time_to_switch():
@@ -120,8 +99,8 @@ class Lights:
                 self.sequence.current_element)
             self.sequence.current_element.start_time = TimeUtils.current_milli_time()
             # logging.debug(
-            #    "change sequence to " + self.sequence.current_element.method + " with time " + str(
-            #        self.sequence.current_element.duration))
+            #    "change sequences to " + self.sequences.current_element.method + " with time " + str(
+            #        self.sequences.current_element.duration))
         self.current_animation.animate()
 
 

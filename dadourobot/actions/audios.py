@@ -5,9 +5,10 @@ import threading
 from os.path import exists
 
 from dadou_utils.misc import Misc
-from dadou_utils.utils_static import AUDIO, KEY, NAME, PATH, KEYS, STOP
+from dadou_utils.utils_static import ANIMATION, AUDIO, KEY, NAME, PATH, KEYS, STOP, SPEAK, SPEAK_DURATION, TYPE
 from sound_player import Sound, SoundPlayer
 
+from dadourobot.actions.abstract_actions import ActionsAbstract
 from dadourobot.files.robot_json_manager import RobotJsonManager
 
 from dadou_utils.audios.sound_object import SoundObject
@@ -15,7 +16,7 @@ from dadou_utils.audios.sound_object import SoundObject
 from dadourobot.robot_static import AUDIOS_DIRECTORY, JSON_AUDIOS
 
 
-class AudioManager:
+class AudioManager(ActionsAbstract):
 
     player = SoundPlayer()
     silence = "audios/silence.wav"
@@ -23,19 +24,18 @@ class AudioManager:
     current_audio = None
     current_audio_name = None
 
-    audios_key = {}
-    audios_name = {}
+    sequences_key = {}
+    sequences_name = {}
 
     def __init__(self, robot_json_manager:RobotJsonManager):
-        self.json_manager = robot_json_manager
-        self.load_sequences()
+        super().__init__(robot_json_manager, JSON_AUDIOS)
 
-    def load_sequences(self):
-        audio_list = self.json_manager.open_json(JSON_AUDIOS)
-        for audio in audio_list:
-            for key in audio[KEYS]:
-                self.audios_key[key] = audio
-            self.audios_name[audio[NAME]] = audio
+    #def load_sequences(self):
+    #    audio_list = self.json_manager.open_json(JSON_AUDIOS)
+    #    for audio in audio_list:
+    #        for key in audio[KEYS]:
+    #            self.sequences_key[key] = audio
+    #        self.sequences_name[audio[NAME]] = audio
 
     def play_sounds_bak(self, audios):
         self.player.stop()
@@ -51,6 +51,7 @@ class AudioManager:
             self.current_audio = SoundObject(AUDIOS_DIRECTORY, audio[NAME])
             self.current_audio.play()
             self.current_audio_name = audio[NAME]
+            return self.current_audio.duration
         else:
             logging.error("audio {} don't exist".format(audio[NAME]))
 
@@ -71,36 +72,33 @@ class AudioManager:
         if self.current_audio:
             self.current_audio.stop()
             self.current_audio_name = ""
-
-    def get_audio_from_input(self, msg):
-        if not msg:
-            return
-        if KEY in msg and msg[KEY] in self.audios_key.keys():
-            return self.audios_key[msg[KEY]]
-        if AUDIO in msg  and msg[AUDIO] in self.audios_name.keys():
-            return self.audios_name[msg[AUDIO]]
+            logging.info("stop sound")
 
     def update(self, msg):
 
-        audio_name = self.get_audio_from_input(msg)
-        if not audio_name:
-            return
+        if msg and ANIMATION in msg.keys() and not msg[ANIMATION]:
+            self.stop_sound()
+
+        audio = self.get_sequence(msg, AUDIO)
+        if not audio: return
 
         logging.debug("number of thread : {}".format(threading.active_count()))
 
-        if audio_name[NAME] == STOP:
+        if audio[NAME] == STOP:
             self.stop_sound()
-            logging.info("stop sound")
             return
-        if audio_name[NAME] == self.current_audio_name and self.current_audio and self.current_audio.is_playing():
+        if audio[NAME] == self.current_audio_name and self.current_audio and self.current_audio.is_playing():
             logging.debug("already playing {}".format(self.current_audio_name))
             return
         else:
-            if not Misc.is_audio(AUDIOS_DIRECTORY + audio_name[NAME]):
-                logging.error("{} is not audio file".format(audio_name[NAME]))
+            if not Misc.is_audio(AUDIOS_DIRECTORY + audio[NAME]):
+                logging.error("{} is not audio file".format(audio[NAME]))
                 return
             if self.current_audio:
                 self.current_audio.stop()
-            self.current_audio_name = audio_name[NAME]
-            self.play_sound(audio_name)
-
+            self.current_audio_name = audio[NAME]
+            length = self.play_sound(audio)
+            if TYPE in audio and audio[TYPE] == SPEAK:
+                msg[SPEAK] = True
+                msg[SPEAK_DURATION] = int(length*1000)
+                return msg

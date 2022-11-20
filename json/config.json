@@ -5,6 +5,10 @@
   "eye_visuals_path": "../visuals/eye",
   "_comment": "main loop sleep to reduce cpu usage // 0 to disable",
   "main_loop_sleep": 0.001,
+  "random_animation": 60000,
+  "stop animation key": [
+    "C0"
+  ],
   "devices": [
     {
       "name": "head_mega",

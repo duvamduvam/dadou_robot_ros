@@ -6,8 +6,8 @@ from dadourobot.files.robot_json_manager import RobotJsonManager
 
 import time
 import unittest
-from dadourobot.actions.audio_manager import AudioManager
-from dadourobot.actions.vlc_audio import VlCAudio
+from dadourobot.actions.audios import AudioManager
+from dadourobot.bak.vlc_audio import VlCAudio
 
 
 class AudioTests(unittest.TestCase):
@@ -37,6 +37,6 @@ class AudioTests(unittest.TestCase):
 
     def test_vlc3(self):
         json_manager = RobotJsonManager(RobotConfig.BASE_PATH)
-        audiovlc = VlCAudio(json_manager)
+        audiovlc = VlCAudio()
         audiovlc.process("C1")
         time.sleep(1000)

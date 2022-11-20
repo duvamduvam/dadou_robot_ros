@@ -19,6 +19,7 @@ class Sequence:
         self.elements = elements
         self.current_element = elements[self.pos][1]
         self.start_time = TimeUtils.current_milli_time()
+        self.started = True
 
     def get_current_element(self):
         return self.elements[self.pos]
@@ -30,6 +31,9 @@ class Sequence:
         self.current_element = self.elements[self.pos][1]
 
     def time_to_switch(self):
+        if self.started:
+            self.started = False
+            return True
         duration = self.element_duration * self.duration
         #logging.debug("change face part millis {} duration {}".format(TimeUtils.current_milli_time(), duration))
         return TimeUtils.is_time(self.start_time, duration)

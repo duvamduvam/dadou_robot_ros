@@ -1,0 +1,120 @@
+import logging
+import os
+import random
+
+from dadou_utils.files.files_utils import FilesUtils
+from dadou_utils.misc import Misc
+from dadou_utils.time.time_utils import TimeUtils
+from dadou_utils.utils_static import ANIMATION, STOP_ANIMATION_KEYS, AUDIO, AUDIOS, KEY, NECK, NECKS, FACE, FACES, LIGHTS, WHEELS, NAME, \
+    DURATION, KEYS, RANDOM, START, STOP, TYPES
+
+from dadourobot.actions.abstract_actions import ActionsAbstract
+from dadourobot.robot_static import SEQUENCES_DIRECTORY
+from dadourobot.sequences.animation import Animation
+
+
+class AnimationManager(ActionsAbstract):
+
+    current_key = None
+    playing = False
+    start = False
+
+    last_time = 0
+    timeout = 0
+    last_random = 0
+    random_duration = 0
+
+    datas = None
+    duration = 0
+
+    audios_animation = None
+    necks_animation = None
+    faces_animation = None
+    lights_animation = None
+    wheels_animation = None
+
+    current_animation = None
+
+    def __init__(self, json_manager, config):
+        super().__init__(json_manager)
+        self.load_animation_sequences()
+        self.stop_keys = config.get(STOP_ANIMATION_KEYS)
+
+
+    def load_animation_sequences(self):
+        sequences_files = FilesUtils.get_folder_files(SEQUENCES_DIRECTORY)
+        for sequence_file in sequences_files:
+            json_sequence = FilesUtils.open_json(sequence_file, 'r')
+            json_sequence[NAME] = os.path.basename(sequence_file)
+            self.sequences_key[json_sequence[KEYS]] = json_sequence
+            self.sequences_name[json_sequence[NAME]] = json_sequence
+
+
+    def random(self):
+        if TimeUtils.is_time(self.last_random, self.random_duration):
+            random_seq_names = []
+            for seq_key in self.sequences_name.keys():
+                sequence = self.sequences_name[seq_key]
+                if TYPES in sequence.keys():
+                    for t in sequence[TYPES]:
+                        if t == RANDOM:
+                            random_seq_names.append(sequence[NAME])
+
+            if len(random_seq_names)>0:
+                random_index = random.randint(0, len(random_seq_names)-1)
+                self.update({ANIMATION:random_seq_names[random_index]})
+
+    def update(self, msg):
+        if msg and KEY in msg.keys() and msg[KEY] in self.stop_keys:
+            self.duration = 0
+            return
+
+        animation = self.get_sequence(msg, ANIMATION)
+        if not animation: return
+
+        self.current_animation = animation
+        logging.info('start animation {} with key {}'.format(self.current_animation[NAME], msg[KEY]))
+
+        self.playing = True
+        self.start = True
+
+        self.duration = self.current_animation[DURATION]
+        self.last_time = TimeUtils.current_milli_time()
+
+        self.audios_animation = Animation(self.current_animation, self.duration, AUDIOS, 1)
+        self.necks_animation = Animation(self.current_animation, self.duration, NECKS, 1)
+        self.faces_animation = Animation(self.current_animation, self.duration, FACES, 1)
+        self.lights_animation = Animation(self.current_animation, self.duration, LIGHTS, 1)
+        self.wheels_animation = Animation(self.current_animation, self.duration, WHEELS, 2)
+
+    def event(self):
+        if not self.playing or not self.current_animation or TimeUtils.is_time(self.last_time, self.duration):
+            if self.playing:
+                logging.info('stop animation')
+                self.playing = False
+                return {ANIMATION:False}
+            return
+
+        events = {}
+
+        if self.start:
+            events[ANIMATION] = True
+            self.start = False
+
+        #TODO improve neck
+        self.fill_event(events, AUDIO, self.audios_animation)
+        self.fill_event(events, NECK, self.necks_animation)
+        self.fill_event(events, WHEELS, self.wheels_animation)
+        self.fill_event(events, FACE, self.faces_animation)
+        self.fill_event(events, LIGHTS, self.lights_animation)
+
+        return events
+
+    def fill_event(self, events, key, animation):
+        if not animation or not events or not animation.has_data:
+            return
+        event_action = animation.next()
+        if event_action:
+            events[key] = event_action
+
+        

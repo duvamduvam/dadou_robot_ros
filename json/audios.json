@@ -22,5 +22,20 @@
   {
     "keys": ["A8"],
     "name": "caca-kaki.mp3"
+  },
+  {
+    "keys": ["A9"],
+    "type": "speak",
+    "name": "neverDie.wav"
+  },
+  {
+    "keys": ["E1"],
+    "type": "speak",
+    "name": "speak/bonjour.mp3"
+  },
+  {
+    "keys": ["E2"],
+    "type": "speak",
+    "name": "speak/avec-life-forever-mourrir.mp3"
   }
 ]
