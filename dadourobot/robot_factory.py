@@ -34,7 +34,7 @@ class RobotFactory(metaclass=SingletonMeta):
         self.device_manager = SerialDeviceManager(self.robot_json_manager.get_config_item(DEVICES))
         self.config = RobotConfig(self.robot_json_manager)
 
-        self.audio = AudioManager(self.robot_json_manager)
+        self.audio = AudioManager(self.robot_json_manager, self.config)
         self.head = Head(self.device_manager, self.config)
         self.wheel = Wheel(self.config)
 

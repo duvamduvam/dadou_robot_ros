@@ -9,6 +9,8 @@
   "stop animation key": [
     "C0"
   ],
+  "random_animation_low": 50000,
+  "random_animation_high": 150000,
   "devices": [
     {
       "name": "head_mega",

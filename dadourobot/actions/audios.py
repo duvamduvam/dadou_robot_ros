@@ -5,7 +5,8 @@ import threading
 from os.path import exists
 
 from dadou_utils.misc import Misc
-from dadou_utils.utils_static import ANIMATION, AUDIO, KEY, NAME, PATH, KEYS, STOP, SPEAK, SPEAK_DURATION, TYPE
+from dadou_utils.utils_static import ANIMATION, AUDIO, KEY, NAME, PATH, KEYS, STOP, SPEAK, SPEAK_DURATION, TYPE, FACE, \
+    LIGHTS
 from sound_player import Sound, SoundPlayer
 
 from dadourobot.actions.abstract_actions import ActionsAbstract
@@ -13,8 +14,8 @@ from dadourobot.files.robot_json_manager import RobotJsonManager
 
 from dadou_utils.audios.sound_object import SoundObject
 
-from dadourobot.robot_static import AUDIOS_DIRECTORY, JSON_AUDIOS
-
+from dadourobot.robot_static import AUDIOS_DIRECTORY, JSON_AUDIOS, LOOP_DURATION
+from dadou_utils.utils_static import EXPRESSION
 
 class AudioManager(ActionsAbstract):
 
@@ -27,8 +28,8 @@ class AudioManager(ActionsAbstract):
     sequences_key = {}
     sequences_name = {}
 
-    def __init__(self, robot_json_manager:RobotJsonManager):
-        super().__init__(robot_json_manager, JSON_AUDIOS)
+    def __init__(self, robot_json_manager:RobotJsonManager, config):
+        super().__init__(robot_json_manager, config, JSON_AUDIOS)
 
     #def load_sequences(self):
     #    audio_list = self.json_manager.open_json(JSON_AUDIOS)
@@ -79,7 +80,7 @@ class AudioManager(ActionsAbstract):
         if msg and ANIMATION in msg.keys() and not msg[ANIMATION]:
             self.stop_sound()
 
-        audio = self.get_sequence(msg, AUDIO)
+        audio = self.get_sequence(msg, AUDIO, False)
         if not audio: return
 
         logging.debug("number of thread : {}".format(threading.active_count()))
@@ -98,7 +99,10 @@ class AudioManager(ActionsAbstract):
                 self.current_audio.stop()
             self.current_audio_name = audio[NAME]
             length = self.play_sound(audio)
-            if TYPE in audio and audio[TYPE] == SPEAK:
-                msg[SPEAK] = True
-                msg[SPEAK_DURATION] = int(length*1000)
+            if EXPRESSION in audio or LIGHTS in audio:
+                msg[LOOP_DURATION] = int(length*1000)
+                if EXPRESSION in audio:
+                    msg[FACE] = audio[EXPRESSION]
+                if LIGHTS in audio:
+                    msg[LIGHTS] = audio[LIGHTS]
                 return msg

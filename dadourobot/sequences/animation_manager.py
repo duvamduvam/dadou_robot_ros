@@ -9,8 +9,9 @@ from dadou_utils.utils_static import ANIMATION, STOP_ANIMATION_KEYS, AUDIO, AUDI
     DURATION, KEYS, RANDOM, START, STOP, TYPES
 
 from dadourobot.actions.abstract_actions import ActionsAbstract
-from dadourobot.robot_static import SEQUENCES_DIRECTORY
+from dadourobot.robot_static import SEQUENCES_DIRECTORY, RANDOM_ANIMATION_LOW, RANDOM_ANIMATION_HIGH, LOOP_DURATION
 from dadourobot.sequences.animation import Animation
+from dadourobot.sequences.random_animation_start import RandomAnimationStart
 
 
 class AnimationManager(ActionsAbstract):
@@ -21,7 +22,6 @@ class AnimationManager(ActionsAbstract):
 
     last_time = 0
     timeout = 0
-    last_random = 0
     random_duration = 0
 
     datas = None
@@ -36,9 +36,13 @@ class AnimationManager(ActionsAbstract):
     current_animation = None
 
     def __init__(self, json_manager, config):
-        super().__init__(json_manager)
+        super().__init__(json_manager, config)
+        self.config = config
         self.load_animation_sequences()
         self.stop_keys = config.get(STOP_ANIMATION_KEYS)
+        self.random_duration = random.randint(config.get(RANDOM_ANIMATION_LOW), config.get(RANDOM_ANIMATION_HIGH))
+        RandomAnimationStart.value = TimeUtils.current_milli_time()
+        logging.info("random duration time {}".format(self.random_duration))
 
 
     def load_animation_sequences(self):
@@ -51,7 +55,7 @@ class AnimationManager(ActionsAbstract):
 
 
     def random(self):
-        if TimeUtils.is_time(self.last_random, self.random_duration):
+        if TimeUtils.is_time(RandomAnimationStart.value, self.random_duration):
             random_seq_names = []
             for seq_key in self.sequences_name.keys():
                 sequence = self.sequences_name[seq_key]
@@ -62,24 +66,31 @@ class AnimationManager(ActionsAbstract):
 
             if len(random_seq_names)>0:
                 random_index = random.randint(0, len(random_seq_names)-1)
+                RandomAnimationStart.value = TimeUtils.current_milli_time()
                 self.update({ANIMATION:random_seq_names[random_index]})
+                self.random_duration = random.randint(self.config.get(RANDOM_ANIMATION_LOW),
+                                                      self.config.get(RANDOM_ANIMATION_HIGH))
+                logging.info('random animation {}'.format(random_seq_names[random_index]))
 
     def update(self, msg):
-        if msg and KEY in msg.keys() and msg[KEY] in self.stop_keys:
+        #if msg and KEY in msg.keys() and msg[KEY] in self.stop_keys:
+        #    self.duration = 0
+        #    return
+
+        animation = self.get_sequence(msg, ANIMATION, False)
+        if not animation:
             self.duration = 0
             return
 
-        animation = self.get_sequence(msg, ANIMATION)
-        if not animation: return
-
         self.current_animation = animation
-        logging.info('start animation {} with key {}'.format(self.current_animation[NAME], msg[KEY]))
+        logging.info('start animation {}'.format(self.current_animation[NAME]))
 
         self.playing = True
         self.start = True
 
         self.duration = self.current_animation[DURATION]
         self.last_time = TimeUtils.current_milli_time()
+        self.last_random = TimeUtils.current_milli_time()
 
         self.audios_animation = Animation(self.current_animation, self.duration, AUDIOS, 1)
         self.necks_animation = Animation(self.current_animation, self.duration, NECKS, 1)
@@ -99,6 +110,7 @@ class AnimationManager(ActionsAbstract):
 
         if self.start:
             events[ANIMATION] = True
+            events[LOOP_DURATION] = self.duration
             self.start = False
 
         #TODO improve neck
@@ -107,7 +119,8 @@ class AnimationManager(ActionsAbstract):
         self.fill_event(events, WHEELS, self.wheels_animation)
         self.fill_event(events, FACE, self.faces_animation)
         self.fill_event(events, LIGHTS, self.lights_animation)
-
+        if len(events) > 0:
+            logging.info('udpate animation {}'.format(self.current_animation[NAME]))
         return events
 
     def fill_event(self, events, key, animation):

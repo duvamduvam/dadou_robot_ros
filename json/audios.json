@@ -25,17 +25,18 @@
   },
   {
     "keys": ["A9"],
-    "type": "speak",
+    "expression": "speak",
     "name": "neverDie.wav"
   },
   {
     "keys": ["E1"],
-    "type": "speak",
+    "expression": "speak",
     "name": "speak/bonjour.mp3"
   },
   {
     "keys": ["E2"],
-    "type": "speak",
+    "expression": "speak",
+    "lights": "love",
     "name": "speak/avec-life-forever-mourrir.mp3"
   }
 ]

@@ -38,7 +38,7 @@ class LightsAnimations:
         return ColorCycle(self.strip, 0.5, colors=[MAGENTA, ORANGE, TEAL])
 
     def comet(self, params):
-        return Rainbow(self.strip, speed=0.1, period=2)
+        return Comet(self.strip, speed=0.1, color=params.color)
 
     def pulse(self, params):
         return Pulse(self.strip, speed=0.1, color=params.color, period=3)

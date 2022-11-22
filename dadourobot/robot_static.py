@@ -18,7 +18,10 @@ HEAD_MEGA = 'head_mega'
 RADIO_MEGA = 'radio_mega'
 MAIN_DUE = 'main_due'
 
+LOOP_DURATION = "loop_duration"
 RANDOM_ANIMATION =  'random_animation'
+RANDOM_ANIMATION_LOW = 'random_animation_low'
+RANDOM_ANIMATION_HIGH = 'random_animation_high'
 
 ############### JSON FILES ###############
 

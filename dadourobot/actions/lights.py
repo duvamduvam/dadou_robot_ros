@@ -48,9 +48,12 @@ class Lights(ActionsAbstract):
     current_animation = {}
     animations = {}
 
+    duration = 0
+    start_time = 0
+
 
     def __init__(self, config, json_manager, strip):
-        super().__init__(json_manager, JSON_LIGHTS)
+        super().__init__(json_manager, config, JSON_LIGHTS)
         self.config = config
         #self.strip = neopixel.NeoPixel(self.LED_COUNT, Pin(config.LIGHTS_PIN), self.LED_FREQ_HZ, self.LED_DMA, self.LED_INVERT, self.LED_BRIGHTNESS, self.LED_CHANNEL)
 
@@ -62,14 +65,16 @@ class Lights(ActionsAbstract):
             strip_pixels_range, individual_pixels=True)
 
         self.animations = LightsAnimations(self.LED_COUNT - self.FIRST_STRIP_LED, self.strip)
-        self.update({KEY:DEFAULT})
+        self.update({LIGHTS:DEFAULT})
 
     def update(self, msg):
 
-        json_seq = self.get_sequence(msg, LIGHTS)
+        json_seq = self.get_sequence(msg, LIGHTS, True)
         if not json_seq:
             return
 
+        self.duration = json_seq[DURATION]
+        self.loop = json_seq[LOOP]
         sequences = []
         for s in json_seq[SEQUENCES]:
             animation = [s[DURATION], Animation(s[METHOD], s[DURATION])]
@@ -88,7 +93,13 @@ class Lights(ActionsAbstract):
         logging.info("update lights sequences to " + json_seq[NAME])
 
     def animate(self):
-        if not self.sequence.loop and TimeUtils.is_time(self.sequence.start_time, self.sequence.duration):
+
+        if self.loop_duration != 0:
+            if TimeUtils.is_time(self.start_loop_duration, self.loop_duration):
+                self.loop_duration = 0
+                self.loop = False
+
+        if not self.loop and TimeUtils.is_time(self.start_time, self.duration):
             self.update({LIGHTS:DEFAULT})
             return
 

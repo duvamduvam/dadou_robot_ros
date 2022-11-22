@@ -5,8 +5,9 @@ from dadou_utils.time.time_utils import TimeUtils
 from dadou_utils.utils_static import NAME, DURATION, LOOP, KEY, FACE, SPEAK, SPEAK_DURATION, DEFAULT
 
 from dadourobot.actions.abstract_actions import ActionsAbstract
+from dadourobot.sequences.random_animation_start import RandomAnimationStart
 from dadourobot.sequences.sequence import Sequence
-from dadourobot.robot_static import MOUTHS, LEYE, REYE, JSON_EXPRESSIONS
+from dadourobot.robot_static import MOUTHS, LEYE, REYE, JSON_EXPRESSIONS, LOOP_DURATION
 from dadourobot.visual.image_mapping import ImageMapping
 from dadourobot.visual.visual import Visual
 
@@ -31,13 +32,12 @@ class Face(ActionsAbstract):
     duration = 0
     start_time = 0
 
-    speak_duration = 0
-    start_speak_time = 0
-    loop = False
+    #speak_duration = 0
+    #start_speak_time = 0
 
 
     def __init__(self, json_manager, config, strip):
-        super().__init__(json_manager, JSON_EXPRESSIONS)
+        super().__init__(json_manager, config, JSON_EXPRESSIONS)
         self.config = config
         logging.info("start face with pin " + str(self.config.FACE_PIN))
         self.strip = strip
@@ -78,7 +78,7 @@ class Face(ActionsAbstract):
                 self.strip[i] = visual.rgb[x][y]
                 i += 1
 
-    def speak_during_audio(self, msg):
+    """def speak_during_audio(self, msg):
         if not msg: return
         if SPEAK in msg.keys():
             if SPEAK_DURATION not in msg.keys():
@@ -88,16 +88,22 @@ class Face(ActionsAbstract):
                 self.speak_duration = msg[SPEAK_DURATION]
                 self.start_speak_time = TimeUtils.current_milli_time()
                 speak_seq[LOOP] = True
-                return speak_seq
+                return speak_seq"""
 
-    def check_input(self, msg):
-        sequence = self.get_sequence(msg, FACE)
-        if sequence: return sequence
-        speak_seq = self.speak_during_audio(msg)
-        if speak_seq : return speak_seq
+    """def check_input(self, msg):
+        sequence = self.get_sequence(msg, FACE, True)
+        if sequence:
+            if LOOP_DURATION in msg.keys():
+                sequence[LOOP] = True
+                self.loop_duration = msg[LOOP_DURATION]
+                self.start_loop_duration = TimeUtils.current_milli_time()
+            return sequence
+
+        #speak_seq = self.speak_during_audio(msg)
+        #if speak_seq : return speak_seq"""
 
     def update(self, msg):
-        json_seq = self.check_input(msg)
+        json_seq = self.get_sequence(msg, FACE, True)
         if not json_seq: return
 
         logging.info("update face sequences : " + json_seq[NAME])
@@ -121,12 +127,17 @@ class Face(ActionsAbstract):
             change = True
         return change
 
-    def animate(self):
+    #def
 
-        if self.speak_duration != 0:
-            if TimeUtils.is_time(self.start_speak_time, self.speak_duration):
-                self.speak_duration = 0
+    def animate(self):
+        if self.loop_duration != 0:
+            if TimeUtils.is_time(self.start_loop_duration, self.loop_duration):
+                self.loop_duration = 0
                 self.loop = False
+        #if self.speak_duration != 0:
+        #    if TimeUtils.is_time(self.start_speak_time, self.speak_duration):
+        #        self.speak_duration = 0
+        #        self.loop = False
         if self.start_time != 0 and not self.loop and \
                 TimeUtils.is_time(self.start_time, self.duration):
             self.update({FACE: DEFAULT})

@@ -4,6 +4,9 @@ from dadou_utils.com.input_messages_list import InputMessagesList
 #from dadou_utils.com.lora_radio import LoraRadio
 #from dadou_utils.com.serial_device import SerialDevice
 from dadou_utils.com.ws_server import WsServer
+from dadou_utils.time.time_utils import TimeUtils
+
+from dadourobot.sequences.random_animation_start import RandomAnimationStart
 
 
 class GlobalReceiver:
@@ -37,13 +40,17 @@ class GlobalReceiver:
         msg = self.messages.pop_msg()
         if msg:
             logging.info('received from ws server'.format(msg))
+            RandomAnimationStart.value = TimeUtils.current_milli_time()
             self.animation_manager.update(msg)
             return msg
 
+        self.animation_manager.random()
+
         msg = self.animation_manager.event()
-        if msg:
+        if msg and len(msg)> 0:
             logging.info('received animation'.format(msg))
             return msg
+
         #radio_msg = self.lora_radio.receive_msg()
         #if radio_msg:
         #    logging.info('received lora msg : {}'.format(radio_msg))
