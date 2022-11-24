@@ -89,7 +89,8 @@ class Lights(ActionsAbstract):
         #TODO animation parameters not working
         self.current_animation = getattr(self.animations, self.sequence.current_element.method)(
             self.sequence.current_element)
-        self.sequence.start_time = TimeUtils.current_milli_time()
+        #self.sequence.start_time = TimeUtils.current_milli_time()
+        self.start_time = TimeUtils.current_milli_time()
         logging.info("update lights sequences to " + json_seq[NAME])
 
     def animate(self):

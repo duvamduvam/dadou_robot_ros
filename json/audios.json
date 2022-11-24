@@ -1,30 +1,30 @@
 [
   {
-    "keys": ["A&", "Aa"],
+    "keys": ["H&", "Aa"],
     "name": "stop"
   },
   {
-    "keys": ["A4"],
+    "keys": ["H1"],
     "name": "motivation.mp3"
   },
   {
-    "keys": ["A5"],
+    "keys": ["H2"],
     "name": "lacrimosa.mp3"
   },
   {
-    "keys": ["A6"],
+    "keys": ["H3"],
     "name": "le-professionnel.mp3"
   },
   {
-    "keys": ["A7"],
+    "keys": ["H4"],
     "name": "gig.wav"
   },
   {
-    "keys": ["A8"],
+    "keys": ["H5"],
     "name": "caca-kaki.mp3"
   },
   {
-    "keys": ["A9"],
+    "keys": ["H6"],
     "expression": "speak",
     "name": "neverDie.wav"
   },
@@ -37,6 +37,30 @@
     "keys": ["E2"],
     "expression": "speak",
     "lights": "love",
-    "name": "speak/avec-life-forever-mourrir.mp3"
+    "name": "speak/ca-va.mp3"
+  },
+  {
+    "keys": ["E3"],
+    "expression": "speak",
+    "lights": "love",
+    "name": "speak/moi-c-est-didier.mp3"
+  },
+  {
+    "keys": ["E4"],
+    "expression": "speak",
+    "lights": "love",
+    "name": "speak/salut-salut.mp3"
+  },
+  {
+    "keys": ["E5"],
+    "expression": "speak",
+    "lights": "love",
+    "name": "speak/ton-pere-travail-chez-nintendo.mp3"
+  },
+  {
+    "keys": ["E6"],
+    "expression": "speak",
+    "lights": "love",
+    "name": "neverDie.wav"
   }
 ]

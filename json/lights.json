@@ -27,7 +27,6 @@
     {
       "name": "rainbow",
       "keys": [
-        "default",
             "B1"
         ],
       "loop": true,
@@ -57,7 +56,7 @@
       "name": "love",
       "keys": ["B2"],
       "loop": false,
-      "duration": 6000,
+      "duration": 20000,
       "sequences": [
         {
           "duration": 0.5,
@@ -75,7 +74,7 @@
       "name": "heidi",
       "keys": ["B3"],
       "loop": false,
-      "duration": 5000,
+      "duration": 15000,
       "sequences": [
         {
           "duration": 1,
@@ -121,7 +120,7 @@
     },
     {
       "name": "purple blink",
-      "keys": ["B4"],
+      "keys": ["B7"],
       "loop": false,
       "duration": 15000,
       "sequences": [

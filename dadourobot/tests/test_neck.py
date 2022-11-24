@@ -2,7 +2,7 @@ import logging.config
 
 from dadourobot.actions.neck import Neck
 from dadourobot.config import RobotConfig
-from dadourobot.robot_static import NECK
+from dadou_utils.utils_static import NECK
 from dadourobot.tests.conf_test import TestSetup
 TestSetup()
 

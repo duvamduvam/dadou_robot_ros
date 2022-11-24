@@ -38,7 +38,7 @@
     "right_dir": 5,
     "left_pwm": 22,
     "left_dir": 6,
-    "neck": 10,
+    "neck": 12,
     "lora_cs": 0,
     "lora_reset": 0,
     "lora_sck": 0,

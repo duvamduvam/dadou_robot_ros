@@ -32,7 +32,7 @@ audio = RobotFactory().get_audio()
 face = RobotFactory().face
 lights = RobotFactory().lights
     #lights = Lights(RobotFactory().get_strip())
-#neck = RobotFactory().neck
+neck = RobotFactory().neck
 #head = RobotFactory().head
 wheel = RobotFactory().wheel
 animations = RobotFactory().animation_manager
@@ -58,7 +58,7 @@ while True:
         if msg:
             stop(msg)
             audio.update(msg)
-
+            neck.update(msg)
             #main_due_com.send_dict(msg)
 
             face.update(msg)
