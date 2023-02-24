@@ -38,14 +38,14 @@ class Wheel:
         self.config = config
         self.left_pwm = pwmio.PWMOut(Pin(config.LEFT_PWM_PIN))
         self.right_pwm = pwmio.PWMOut(Pin(config.RIGHT_PWM_PIN))
-        #self.dir_left = digitalio.DigitalInOut(Pin(config.LEFT_DIR_PIN))
-        #self.dir_left.direction = digitalio.Direction.OUTPUT
-        #self.dir_right = digitalio.DigitalInOut(Pin(config.RIGHT_DIR_PIN))
-        #self.dir_right.direction= digitalio.Direction.OUTPUT
+        self.dir_left = digitalio.DigitalInOut(Pin(config.LEFT_DIR_PIN))
+        self.dir_left.direction = digitalio.Direction.OUTPUT
+        self.dir_right = digitalio.DigitalInOut(Pin(config.RIGHT_DIR_PIN))
+        self.dir_right.direction= digitalio.Direction.OUTPUT
         #self.dir_left = pwmio.PWMOut(board.D6)
         #self.dir_right = pwmio.PWMOut(board.D5)
-        self.dir_left = pwmio.PWMOut(Pin(config.LEFT_DIR_PIN))
-        self.dir_right = pwmio.PWMOut(Pin(config.RIGHT_DIR_PIN))
+        #self.dir_left = pwmio.PWMOut(Pin(config.LEFT_DIR_PIN))
+        #self.dir_right = pwmio.PWMOut(Pin(config.RIGHT_DIR_PIN))
         self.due = None
 
         self.anglo_meter_translator = AngloMeterTranslator()
@@ -83,8 +83,8 @@ class Wheel:
         self.right_pwm.duty_cycle = Misc.mapping(abs(right_wheel), 0, 100, 0, self.MAX_PWM)
 
         self.set_direction(left_wheel, self.dir_left)
-            #self.dir_left.value = left_wheel >= 0
-            #self.dir_right.value = right_wheel >= 0
+        #self.dir_left.value = left_wheel >= 0
+        #self.dir_right.value = right_wheel >= 0
             #self.dir_right.value = True
         self.set_direction(right_wheel, self.dir_right)
 

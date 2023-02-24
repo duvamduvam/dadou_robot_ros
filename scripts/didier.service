@@ -18,7 +18,7 @@ RestartSec=3
 # Configures the time to wait before service is stopped forcefully.
 TimeoutStopSec=300
 
-StandardOutput=append:/home/didier/deploy/logs/service-standard.log
+#StandardOutput=append:/home/didier/deploy/logs/service-standard.log
 StandardError=append:/home/didier/deploy/logs/service-error.log
 
 [Install]

@@ -3,6 +3,7 @@ import logging
 from dadou_utils.com.input_messages_list import InputMessagesList
 #from dadou_utils.com.lora_radio import LoraRadio
 #from dadou_utils.com.serial_device import SerialDevice
+from dadou_utils.com.lora_radio import LoraRadio
 from dadou_utils.com.ws_server import WsServer
 from dadou_utils.time.time_utils import TimeUtils
 
@@ -22,7 +23,7 @@ class GlobalReceiver:
         #glove_id = SerialDevice.USB_ID_PATH + "usb-Raspberry_Pi_Pico_E6611CB6976B8D28-if00"
         #self.glove = SerialDevice(glove_id)
         WsServer().start()
-        #self.lora_radio = LoraRadio(self.config)
+        self.lora_radio = LoraRadio(self.config)
 
         self.animation_manager = animation_manager
 
@@ -51,10 +52,10 @@ class GlobalReceiver:
             logging.info('received animation'.format(msg))
             return msg
 
-        #radio_msg = self.lora_radio.receive_msg()
-        #if radio_msg:
-        #    logging.info('received lora msg : {}'.format(radio_msg))
-        #    return radio_msg
+        radio_msg = self.lora_radio.receive_msg()
+        if radio_msg:
+            logging.info('received lora msg : {}'.format(radio_msg))
+            return radio_msg
 
 
     def return_msg(self, msg, log_text):

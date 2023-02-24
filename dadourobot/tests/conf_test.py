@@ -24,4 +24,4 @@ class TestSetup:
         robot_json_manager = RobotJsonManager('/home/didier/deploy/', 'json/', JSON_CONFIG)
         self.config = RobotConfig(robot_json_manager)
 
-        self.neck = Neck(self.config)
+        #  self.neck = Neck(self.config)

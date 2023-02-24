@@ -11,8 +11,9 @@ fi
 sudo apt update
 sudo apt upgrade
 
-# install bashrc
+# install .bashrc
 ln -sf $deploy/scripts/bashrc ~/.bashrc
+ln -sf $deploy/scripts/bashrc /root/.bashrc
 source $home/.bashrc
 
 # ssh root
@@ -37,3 +38,14 @@ sudo chmod 644 $deploy/scripts/didier.service
 sudo chown root:root $deploy/scripts/didier.service
 sudo systemctl enable didier.service
 sudo systemctl daemon-reload
+
+# install alsa
+sudo ln -sf $deploy/scripts/.asoundrc $home
+sudo ln -sf $deploy/scripts/.asoundrc /root
+
+# .bashrc
+sudo ln -sf $deploy/scripts/.bashrc $home
+sudo ln -sf $deploy/scripts/.bashrc /root
+
+echo set mouse-=a > ~/.vimrc
+sudo echo set mouse-=a > ~/.vimrc

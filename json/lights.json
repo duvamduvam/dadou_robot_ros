@@ -130,5 +130,18 @@
           "color": "PURPLE"
         }
       ]
+    },
+    {
+      "name": "off",
+      "keys": ["B0"],
+      "loop": true,
+      "duration": 15000,
+      "sequences": [
+        {
+          "duration": 1,
+          "method": "blink",
+          "color": "BLACK"
+        }
+      ]
     }
 ]

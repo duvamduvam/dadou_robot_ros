@@ -1,5 +1,7 @@
 import os
 
+import adafruit_pcf8574
+import board
 from dadou_utils.utils_static import WHEEL_LEFT, WHEEL_RIGHT
 
 from dadourobot.config import RobotConfig
@@ -22,13 +24,21 @@ class WheelTest(unittest.TestCase):
 
     wheel = Wheel(config)
 
+    i2c = board.I2C()  # uses board.SCL and board.SDA
+    pcf = adafruit_pcf8574.PCF8574(i2c)
+
+    dir1 = pcf.get_pin(0)
+
+
     def test_run(self):
 
-        for w in range(0, 50):
+        for w in range(0, 5):
         #while True:
-            self.wheel.update({WHEEL_LEFT:70, WHEEL_RIGHT:70})
+            self.wheel.update({WHEEL_LEFT:60, WHEEL_RIGHT:60})
+            self.dir1.value = True
             time.sleep(5)
-            self.wheel.update({WHEEL_LEFT:70, WHEEL_RIGHT:-70})
+            self.wheel.update({WHEEL_LEFT:60, WHEEL_RIGHT:-60})
+            self.dir1.value = False
             time.sleep(5)
             """self.wheel.update({WHEEL_LEFT:-45, WHEEL_RIGHT:-45})
             time.sleep(5)

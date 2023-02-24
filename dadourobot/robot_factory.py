@@ -52,12 +52,12 @@ class RobotFactory(metaclass=SingletonMeta):
 
         self.face = Face(self.robot_json_manager, self.config, self.pixels)
         self.lights = Lights(self.config, self.robot_json_manager, self.pixels)
-        self.neck = Neck(self.config)
+        #self.neck = Neck(self.config)
 
         self.animation_manager = AnimationManager(self.robot_json_manager, self.config)
 
-    def get_strip(self):
-        return self.pixels
+    #def get_strip(self):
+    #    return self.pixels
 
     def get_audio(self):
         return self.audio

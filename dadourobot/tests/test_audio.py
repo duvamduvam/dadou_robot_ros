@@ -1,3 +1,8 @@
+import os
+
+from dadou_utils.utils_static import KEY
+
+from dadourobot.robot_static import JSON_DIRECTORY, JSON_CONFIG
 from dadourobot.tests.conf_test import TestSetup
 TestSetup()
 
@@ -7,16 +12,17 @@ from dadourobot.files.robot_json_manager import RobotJsonManager
 import time
 import unittest
 from dadourobot.actions.audios import AudioManager
-from dadourobot.bak.vlc_audio import VlCAudio
 
 
 class AudioTests(unittest.TestCase):
-    json_manager = RobotJsonManager(RobotConfig.BASE_PATH)
-    audio = AudioManager(json_manager)
 
-    @unittest.skip
+    robot_json_manager = RobotJsonManager(os.getcwd(), "/.."+JSON_DIRECTORY, JSON_CONFIG)
+    config = RobotConfig(robot_json_manager)
+    audio = AudioManager(robot_json_manager, config)
+
     def test_key_seq(self):
-        self.audio.update("C1")
+        msg = {KEY: "A9"}
+        self.audio.update(msg)
         time.sleep(1000)
 
     """
@@ -34,9 +40,3 @@ class AudioTests(unittest.TestCase):
         while True:
             time.sleep(10)
                 """
-
-    def test_vlc3(self):
-        json_manager = RobotJsonManager(RobotConfig.BASE_PATH)
-        audiovlc = VlCAudio()
-        audiovlc.process("C1")
-        time.sleep(1000)

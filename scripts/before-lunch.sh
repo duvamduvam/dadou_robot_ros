@@ -1,5 +1,6 @@
 #!/bin/bash
 
+ssh d sudo killall python3
 #TODO make base path configurable
 ./copy-audio.sh
 rsync -auvzrL --delete-after /home/dadou/Nextcloud/Didier/python/dadou_robot/* dr:/home/didier/deploy

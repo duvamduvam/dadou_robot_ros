@@ -19,7 +19,7 @@ class Neck:
     SERVO_MIN = 0
     SERVO_MAX = 180
     STEP = 10
-    DEFAULT_POS = 90
+    DEFAULT_POS = 110
     MARGIN = 5
 
     SERVO_POS = 0

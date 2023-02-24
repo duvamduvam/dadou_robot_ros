@@ -25,7 +25,7 @@ RANDOM_ANIMATION_HIGH = 'random_animation_high'
 
 ############### JSON FILES ###############
 
-JSON_CONFIG = 'config.json'
+JSON_CONFIG = 'robot_config.json'
 JSON_AUDIOS = 'audios.json'
 JSON_AUDIO_SEQUENCE = 'audio_sequence.json'
 JSON_COLORS = 'colors.json'

@@ -39,6 +39,7 @@ class ActionsAbstract:
                 self.loop_duration = msg[LOOP_DURATION]
                 self.start_loop_duration = TimeUtils.current_milli_time()
             return sequence
+        logging.info("no sequence with key {}".format(sequence_key))
 
     """def get_sequence_from_input(self, msg, sequence_key):
         if not msg:

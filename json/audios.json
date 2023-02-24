@@ -1,66 +1,65 @@
 [
   {
-    "keys": ["H&", "Aa"],
+    "keys": ["H&", "Aa", "A&"],
     "name": "stop"
   },
   {
-    "keys": ["H1"],
-    "name": "motivation.mp3"
+    "keys": ["A9"],
+    "name": "song/motivation.mp3"
   },
   {
-    "keys": ["H2"],
-    "name": "lacrimosa.mp3"
+    "keys": ["A0"],
+    "name": "song/lacrimosa.mp3"
   },
   {
-    "keys": ["H3"],
-    "name": "le-professionnel.mp3"
-  },
-  {
-    "keys": ["H4"],
-    "name": "gig.wav"
-  },
-  {
-    "keys": ["H5"],
-    "name": "caca-kaki.mp3"
-  },
-  {
-    "keys": ["H6"],
-    "expression": "speak",
-    "name": "neverDie.wav"
-  },
-  {
-    "keys": ["E1"],
-    "expression": "speak",
-    "name": "speak/bonjour.mp3"
-  },
-  {
-    "keys": ["E2"],
+    "keys": ["a"],
     "expression": "speak",
     "lights": "love",
-    "name": "speak/ca-va.mp3"
+    "name": "speak/je-suis-pas-sourd.wav"
   },
   {
-    "keys": ["E3"],
-    "expression": "speak",
-    "lights": "love",
-    "name": "speak/moi-c-est-didier.mp3"
+    "keys": ["b"],
+    "name": "speak/bonjour-moi-c-est-didier-blase.wav"
   },
   {
-    "keys": ["E4"],
+    "keys": ["A1"],
     "expression": "speak",
-    "lights": "love",
-    "name": "speak/salut-salut.mp3"
+    "name": "speak/oui-j-etais-la.mp3"
   },
   {
-    "keys": ["E5"],
+    "keys": ["c"],
     "expression": "speak",
-    "lights": "love",
-    "name": "speak/ton-pere-travail-chez-nintendo.mp3"
+    "name": "speak/pas-de-bras.mp3"
   },
   {
-    "keys": ["E6"],
+    "keys": ["d"],
     "expression": "speak",
-    "lights": "love",
-    "name": "neverDie.wav"
+    "name": "speak/quoi-pas-du-tout.wav"
+  },
+  {
+    "keys": ["A2"],
+    "expression": "speak",
+    "name": "speak/avec-life-forever-mourrir.mp3"
+  },
+  {
+    "keys": ["A3"],
+    "expression": "speak",
+    "name": "speak/langues.wav"
+  },
+  {
+    "keys": ["A$"],
+    "name": "speak/electrochoc-aie.wav"
+  },
+  {
+    "keys": ["e"],
+    "name": "effects/encephalogramme.mp3"
+  },
+  {
+    "keys": ["f"],
+    "name": "song/love.mp3"
+  },
+  {
+    "keys": ["i"],
+    "name": "speak/fait-pas-ca.mp3"
   }
 ]
