@@ -6,9 +6,9 @@ import vlc
 #from sound_player import Sound, Playlist, SoundPlayer
 
 
-from dadourobot.json_manager import JsonManager
-from dadourobot.path_time import PathTime
-from dadourobot.robot_factory import RobotFactory
+from json_manager import JsonManager
+from path_time import PathTime
+from robot_factory import RobotFactory
 
 
 class VlCAudio:

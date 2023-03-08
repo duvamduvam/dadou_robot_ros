@@ -1,17 +1,17 @@
 import os
 
-from dadou_utils.utils_static import KEY
+from dadou_utils.utils_static import AUDIO, KEY
 
-from dadourobot.robot_static import JSON_DIRECTORY, JSON_CONFIG
-from dadourobot.tests.conf_test import TestSetup
+from robot_static import JSON_DIRECTORY, JSON_CONFIG
+from tests.conf_test import TestSetup
 TestSetup()
 
-from dadourobot.config import RobotConfig
-from dadourobot.files.robot_json_manager import RobotJsonManager
+from config import RobotConfig
+from files.robot_json_manager import RobotJsonManager
 
 import time
 import unittest
-from dadourobot.actions.audios import AudioManager
+from actions.audios import AudioManager
 
 
 class AudioTests(unittest.TestCase):
@@ -24,6 +24,11 @@ class AudioTests(unittest.TestCase):
         msg = {KEY: "A9"}
         self.audio.update(msg)
         time.sleep(1000)
+
+    #TODO fix path pb
+    def test_audio_cmd(self):
+        msg = {AUDIO: "speak/et-des-robots.mp3"}
+        self.audio.update(msg)
 
     """
     @unittest.skip

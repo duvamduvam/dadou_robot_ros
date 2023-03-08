@@ -1,9 +1,9 @@
-from dadoucontrol.tests import TestSetup
+from tests import TestSetup
 TestSetup()
 
 import unittest
 
-from dadoucontrol.tests import TestSetup
+from tests import TestSetup
 from dadoucontrol import Image
 
 

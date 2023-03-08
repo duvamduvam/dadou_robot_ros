@@ -1,8 +1,8 @@
 import logging.config
 
-from dadourobot.config import Config
+from config import Config
 from dadourobot import ImageMapping
-from dadourobot.tests import TestSetup
+from tests import TestSetup
 from dadourobot import Utils
 
 TestSetup()

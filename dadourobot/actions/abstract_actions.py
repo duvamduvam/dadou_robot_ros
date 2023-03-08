@@ -4,7 +4,7 @@ import random
 from dadou_utils.time.time_utils import TimeUtils
 from dadou_utils.utils_static import KEY, KEYS, NAME, LOOP
 
-from dadourobot.robot_static import RANDOM_ANIMATION_LOW, RANDOM_ANIMATION_HIGH, LOOP_DURATION
+from robot_static import RANDOM_ANIMATION_LOW, RANDOM_ANIMATION_HIGH, LOOP_DURATION
 
 
 class ActionsAbstract:

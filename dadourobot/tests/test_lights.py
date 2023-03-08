@@ -3,11 +3,11 @@ import os
 
 from dadou_utils.time.time_utils import TimeUtils
 
-from dadourobot.actions.lights import Lights
-from dadourobot.config import RobotConfig
-from dadourobot.files.robot_json_manager import RobotJsonManager
-from dadourobot.robot_static import JSON_DIRECTORY, JSON_CONFIG
-from dadourobot.tests.conf_test import TestSetup
+from actions.lights import Lights
+from config import RobotConfig
+from files.robot_json_manager import RobotJsonManager
+from robot_static import JSON_DIRECTORY, JSON_CONFIG
+from tests.conf_test import TestSetup
 
 TestSetup()
 

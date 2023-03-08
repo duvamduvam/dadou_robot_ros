@@ -1,7 +1,7 @@
 import unittest
 
 from dadoucontrol import Com
-from dadoucontrol.tests import TestSetup
+from tests import TestSetup
 from dadoucontrol import Utils
 
 TestSetup()

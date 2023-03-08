@@ -1,6 +1,6 @@
 import logging
 
-from dadourobot.files.robot_json_manager import RobotJsonManager
+from files.robot_json_manager import RobotJsonManager
 
 
 class RobotConfig:

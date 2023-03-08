@@ -7,7 +7,7 @@ from dadou_utils.com.lora_radio import LoraRadio
 from dadou_utils.com.ws_server import WsServer
 from dadou_utils.time.time_utils import TimeUtils
 
-from dadourobot.sequences.random_animation_start import RandomAnimationStart
+from sequences.random_animation_start import RandomAnimationStart
 
 
 class GlobalReceiver:

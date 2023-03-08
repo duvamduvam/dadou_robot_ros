@@ -8,17 +8,21 @@
     "name": "song/motivation.mp3"
   },
   {
+    "keys": ["A8"],
+    "name": "song/motivation_short.mp3"
+  },
+  {
     "keys": ["A0"],
     "name": "song/lacrimosa.mp3"
   },
   {
-    "keys": ["a"],
+    "keys": ["A10"],
     "expression": "speak",
     "lights": "love",
     "name": "speak/je-suis-pas-sourd.wav"
   },
   {
-    "keys": ["b"],
+    "keys": ["A11"],
     "name": "speak/bonjour-moi-c-est-didier-blase.wav"
   },
   {

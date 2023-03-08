@@ -6,10 +6,10 @@ import busio
 from adafruit_servokit import ServoKit
 from dadou_utils.utils_static import WHEEL_LEFT, WHEEL_RIGHT
 
-from dadourobot.config import RobotConfig
-from dadourobot.files.robot_json_manager import RobotJsonManager
-from dadourobot.robot_static import JSON_DIRECTORY, JSON_CONFIG
-from dadourobot.tests.conf_test import TestSetup
+from config import RobotConfig
+from files.robot_json_manager import RobotJsonManager
+from robot_static import JSON_DIRECTORY, JSON_CONFIG
+from tests.conf_test import TestSetup
 TestSetup()
 
 import time

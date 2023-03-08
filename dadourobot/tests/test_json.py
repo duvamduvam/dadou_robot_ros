@@ -1,6 +1,6 @@
 import logging.config
-from dadourobot.tests.conf_test import TestSetup
-from dadourobot.actions import Visual
+from tests.conf_test import TestSetup
+from actions import Visual
 
 TestSetup()
 

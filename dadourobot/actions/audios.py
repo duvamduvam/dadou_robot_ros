@@ -5,16 +5,16 @@ import threading
 from os.path import exists
 
 from dadou_utils.misc import Misc
-from dadou_utils.utils_static import ANIMATION, AUDIO, KEY, NAME, PATH, KEYS, STOP, SPEAK, SPEAK_DURATION, TYPE, FACE, \
+from dadou_utils.utils_static import ANIMATION, AUDIO, NAME, STOP, FACE, \
     LIGHTS
 from sound_player import Sound, SoundPlayer
 
-from dadourobot.actions.abstract_actions import ActionsAbstract
-from dadourobot.files.robot_json_manager import RobotJsonManager
+from actions.abstract_actions import ActionsAbstract
+from files.robot_json_manager import RobotJsonManager
 
 from dadou_utils.audios.sound_object import SoundObject
 
-from dadourobot.robot_static import AUDIOS_DIRECTORY, JSON_AUDIOS, LOOP_DURATION
+from robot_static import AUDIOS_DIRECTORY, JSON_AUDIOS, LOOP_DURATION
 from dadou_utils.utils_static import EXPRESSION
 
 class AudioManager(ActionsAbstract):
@@ -48,19 +48,19 @@ class AudioManager(ActionsAbstract):
         self.player.play()
 
     def play_sound(self, audio):
-        if exists(AUDIOS_DIRECTORY+audio[NAME]):
-            self.current_audio = SoundObject(AUDIOS_DIRECTORY, audio[NAME])
+        if exists(AUDIOS_DIRECTORY+audio):
+            self.stop_sound()
+            self.current_audio = SoundObject(AUDIOS_DIRECTORY, audio)
             self.current_audio.play()
-            self.current_audio_name = audio[NAME]
+            self.current_audio_name = audio
             return self.current_audio.duration
         else:
-            logging.error("audio {} don't exist".format(audio[NAME]))
+            logging.error("audio {} don't exist".format(audio))
 
     def play_sounds(self, audios):
         self.player.stop()
         for audio in audios:
             logging.info("enqueue: " + audio.get_path())
-
             sound = SoundObject(AUDIOS_DIRECTORY, audio.get_path())
             self.playlist.append(sound)
             #self.player.enqueue(Sound(audio.get_path()), 1)
@@ -75,13 +75,24 @@ class AudioManager(ActionsAbstract):
             self.current_audio_name = ""
             logging.info("stop sound")
 
+    #TODO improve audio[NAME] // msg[AUDIO]
     def update(self, msg):
+        if msg and AUDIO in msg:
+            if msg[AUDIO] == STOP:
+                self.stop_sound()
+                return
+            if msg[AUDIO] == self.current_audio_name and self.current_audio and self.current_audio.is_playing():
+                logging.debug("already playing {}".format(self.current_audio_name))
+                return
+            length = self.play_sound(msg[AUDIO])
+            msg[LOOP_DURATION] = int(length * 1000)
+            return
 
         if msg and ANIMATION in msg.keys() and not msg[ANIMATION]:
             self.stop_sound()
 
         audio = self.get_sequence(msg, AUDIO, False)
-        if not audio: return
+        if not audio : return
 
         logging.debug("number of thread : {}".format(threading.active_count()))
 
@@ -95,10 +106,7 @@ class AudioManager(ActionsAbstract):
             if not Misc.is_audio(AUDIOS_DIRECTORY + audio[NAME]):
                 logging.error("{} is not audio file".format(audio[NAME]))
                 return
-            if self.current_audio:
-                self.current_audio.stop()
-            self.current_audio_name = audio[NAME]
-            length = self.play_sound(audio)
+            length = self.play_sound(audio[NAME])
             if EXPRESSION in audio or LIGHTS in audio:
                 msg[LOOP_DURATION] = int(length*1000)
                 if EXPRESSION in audio:

@@ -2,10 +2,10 @@ import logging.config
 import platform
 import os
 
-from dadourobot.actions.neck import Neck
-from dadourobot.config import RobotConfig
-from dadourobot.files.robot_json_manager import RobotJsonManager
-from dadourobot.robot_static import JSON_CONFIG
+from actions.neck import Neck
+from config import RobotConfig
+from files.robot_json_manager import RobotJsonManager
+from robot_static import JSON_CONFIG
 
 
 class TestSetup:

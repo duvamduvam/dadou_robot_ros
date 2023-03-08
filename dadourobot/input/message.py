@@ -2,7 +2,7 @@ import logging
 
 from dadou_utils.misc import Misc
 
-from dadourobot.robot_factory import RobotFactory
+from robot_factory import RobotFactory
 
 
 class Message:

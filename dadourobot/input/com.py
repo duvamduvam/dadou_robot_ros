@@ -1,10 +1,10 @@
 from builtins import staticmethod
 
-from dadourobot.input.message import Message
+from input.message import Message
 import serial
 import logging
 
-from dadourobot.input.file_watcher import FileWatcher
+from input.file_watcher import FileWatcher
 
 
 class Com:

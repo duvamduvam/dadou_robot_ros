@@ -6,20 +6,21 @@ import neopixel
 from dadou_utils.com.serial_devices_manager import SerialDeviceManager
 from microcontroller import Pin
 
-from dadourobot.actions.audios import AudioManager
-from dadourobot.actions.expressions import Face
-from dadourobot.bak.head import Head
-#from dadourobot.actions.lights import Lights
-from dadourobot.actions.lights import Lights
-from dadourobot.actions.neck import Neck
-from dadourobot.actions.wheel import Wheel
-from dadourobot.config import RobotConfig
-from dadourobot.files.robot_json_manager import RobotJsonManager
+from actions.audios import AudioManager
+from actions.expressions import Face
+from actions.relays import RelaysManager
+from bak.head import Head
+#from actions.lights import Lights
+from actions.lights import Lights
+from actions.neck import Neck
+from actions.wheel import Wheel
+from config import RobotConfig
+from files.robot_json_manager import RobotJsonManager
 
 from dadou_utils.singleton import SingletonMeta
 
-from dadourobot.robot_static import LOGGING_CONFIG_FILE, JSON_CONFIG, JSON_DIRECTORY, DEVICES
-from dadourobot.sequences.animation_manager import AnimationManager
+from robot_static import LOGGING_CONFIG_FILE, JSON_CONFIG, JSON_DIRECTORY, DEVICES
+from sequences.animation_manager import AnimationManager
 
 
 class RobotFactory(metaclass=SingletonMeta):
@@ -36,6 +37,7 @@ class RobotFactory(metaclass=SingletonMeta):
 
         self.audio = AudioManager(self.robot_json_manager, self.config)
         self.head = Head(self.device_manager, self.config)
+        self.relays = RelaysManager(self.robot_json_manager)
         self.wheel = Wheel(self.config)
 
 

@@ -1,7 +1,7 @@
 import logging
 import os
 
-from dadourobot.utils import Utils
+from utils import Utils
 
 
 class FileWatcher:

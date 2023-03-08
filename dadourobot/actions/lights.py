@@ -11,10 +11,10 @@ from adafruit_led_animation.helper import PixelMap
 from dadou_utils.time.time_utils import TimeUtils
 from dadou_utils.utils_static import METHOD, DEFAULT, DURATION, SEQUENCES, LOOP, COLOR, NAME, KEY, LIGHTS, FACE
 
-from dadourobot.actions.abstract_actions import ActionsAbstract
-from dadourobot.sequences.sequence import Sequence
-from dadourobot.robot_static import JSON_LIGHTS
-from dadourobot.visual.lights_animations import LightsAnimations
+from actions.abstract_actions import ActionsAbstract
+from sequences.sequence import Sequence
+from robot_static import JSON_LIGHTS
+from visual.lights_animations import LightsAnimations
 
 
 """

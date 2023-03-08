@@ -2,9 +2,9 @@ import unittest
 import logging.config
 import board
 
-from dadourobot.config import Config
+from config import Config
 from dadourobot import JsonManager
-from dadourobot.tests import TestSetup
+from tests import TestSetup
 
 TestSetup()
 

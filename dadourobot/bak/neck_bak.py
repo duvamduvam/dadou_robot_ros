@@ -6,7 +6,7 @@ from dadou_utils.time.time_utils import TimeUtils
 from dadou_utils.utils_static import NECK
 from microcontroller import Pin
 
-from dadourobot.utils import Utils
+from utils import Utils
 
 
 class Neck:

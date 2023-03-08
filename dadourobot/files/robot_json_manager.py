@@ -7,8 +7,8 @@ import jsonpath_rw_ext
 from dadou_utils.files.abstract_json_manager import AbstractJsonManager
 from dadou_utils.utils_static import COLOR
 
-from dadourobot.robot_static import JSON_AUDIOS, JSON_AUDIO_SEQUENCE, JSON_COLORS, JSON_EXPRESSIONS, JSON_MAPPINGS, \
-    JSON_VISUALS, JSON_LIGHTS
+from robot_static import JSON_AUDIOS, JSON_AUDIO_SEQUENCE, JSON_COLORS, JSON_EXPRESSIONS, JSON_MAPPINGS, \
+    JSON_VISUALS, JSON_LIGHTS, JSON_RELAYS
 
 
 class RobotJsonManager(AbstractJsonManager):
@@ -22,6 +22,7 @@ class RobotJsonManager(AbstractJsonManager):
     lights = None
     lights_seq = None
     mappings = None
+    relays = None
     visual = None
 
     def __init__(self, base_path, json_folder, config_file):
@@ -32,6 +33,7 @@ class RobotJsonManager(AbstractJsonManager):
         self.expressions = self.open_json(JSON_EXPRESSIONS)
         self.lights = self.open_json(JSON_LIGHTS)
         self.mappings = self.open_json(JSON_MAPPINGS)
+        self.relays = self.open_json(JSON_RELAYS)
         self.visual = self.open_json(JSON_VISUALS)
 
     def get_visual_path(self, key) -> str:
@@ -108,6 +110,14 @@ class RobotJsonManager(AbstractJsonManager):
             return self.standard_return(result, True, 'value')
         else:
             logging.error("input str None")
+
+    def get_relay(self, input_key: str):
+        if input_key:
+            for key, value in self.relays.items():
+                if input_key in value:
+                    return key
+        else:
+            logging.info("input str None")
 
     def get_config(self):
         return self.config

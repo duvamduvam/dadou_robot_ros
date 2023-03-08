@@ -8,10 +8,10 @@ from dadou_utils.time.time_utils import TimeUtils
 from dadou_utils.utils_static import ANIMATION, STOP_ANIMATION_KEYS, AUDIO, AUDIOS, KEY, NECK, NECKS, FACE, FACES, LIGHTS, WHEELS, NAME, \
     DURATION, KEYS, RANDOM, START, STOP, TYPES
 
-from dadourobot.actions.abstract_actions import ActionsAbstract
-from dadourobot.robot_static import SEQUENCES_DIRECTORY, RANDOM_ANIMATION_LOW, RANDOM_ANIMATION_HIGH, LOOP_DURATION
-from dadourobot.sequences.animation import Animation
-from dadourobot.sequences.random_animation_start import RandomAnimationStart
+from actions.abstract_actions import ActionsAbstract
+from robot_static import SEQUENCES_DIRECTORY, RANDOM_ANIMATION_LOW, RANDOM_ANIMATION_HIGH, LOOP_DURATION
+from sequences.animation import Animation
+from sequences.random_animation_start import RandomAnimationStart
 
 
 class AnimationManager(ActionsAbstract):

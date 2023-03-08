@@ -1,5 +1,5 @@
 import logging.config
-from dadoucontrol.tests import TestSetup
+from tests import TestSetup
 TestSetup()
 import random
 import unittest

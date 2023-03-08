@@ -4,12 +4,12 @@ from dadou_utils.files.files_manager import FilesUtils
 from dadou_utils.time.time_utils import TimeUtils
 from dadou_utils.utils_static import NAME, DURATION, LOOP, KEY, FACE, SPEAK, SPEAK_DURATION, DEFAULT
 
-from dadourobot.actions.abstract_actions import ActionsAbstract
-from dadourobot.sequences.random_animation_start import RandomAnimationStart
-from dadourobot.sequences.sequence import Sequence
-from dadourobot.robot_static import MOUTHS, LEYE, REYE, JSON_EXPRESSIONS, LOOP_DURATION
-from dadourobot.visual.image_mapping import ImageMapping
-from dadourobot.visual.visual import Visual
+from actions.abstract_actions import ActionsAbstract
+from sequences.random_animation_start import RandomAnimationStart
+from sequences.sequence import Sequence
+from robot_static import MOUTHS, LEYE, REYE, JSON_EXPRESSIONS, LOOP_DURATION
+from visual.image_mapping import ImageMapping
+from visual.visual import Visual
 
 
 class Face(ActionsAbstract):

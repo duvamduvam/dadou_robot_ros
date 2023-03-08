@@ -15,12 +15,12 @@ import time
 
 from dadou_utils.misc import Misc
 
-from dadourobot.actions.neck import Neck
-from dadourobot.com.main_due_com import MainDueCom
-from dadourobot.robot_static import MAIN_DUE
+from actions.neck import Neck
+from com.main_due_com import MainDueCom
+from robot_static import MAIN_DUE
 
-from dadourobot.robot_factory import RobotFactory
-from dadourobot.input.global_receiver import GlobalReceiver
+from robot_factory import RobotFactory
+from input.global_receiver import GlobalReceiver
 
 
 print(sys.path)
@@ -28,10 +28,11 @@ print('Starting didier')
 
 audio = RobotFactory().get_audio()
 face = RobotFactory().face
-lights = RobotFactory().lights
+#lights = RobotFactory().lights
     #lights = Lights(RobotFactory().get_strip())
 #neck = RobotFactory().neck
 #head = RobotFactory().head
+relays = RobotFactory().relays
 wheel = RobotFactory().wheel
 animations = RobotFactory().animation_manager
 
@@ -61,18 +62,20 @@ while True:
 
             face.update(msg)
                 #head.process(msg)
+            relays.update(msg)
             wheel.update(msg)
-            lights.update(msg)
+            #lights.update(msg)
 
         #if main_loop_sleep and main_loop_sleep != 0:
         #    time.sleep(main_loop_sleep)
 
         face.animate()
-        lights.animate()
-
+        #lights.animate()
+        relays.process()
         wheel.check_stop(msg)
+        wheel.process()
         #neck.animate()
-            #wheel.process()
+            #
 
         #if TimeUtils.is_time(SerialDeviceManager.last_update, SerialDeviceManager.update_period):
         #    RobotFactory().device_manager.update_devices()

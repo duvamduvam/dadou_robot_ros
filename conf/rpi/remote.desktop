@@ -1,0 +1,5 @@
+[Desktop Entry]
+Name=Robot Remote Control
+Type=Application
+Comment=Remote control
+Exec=/home/didier/deploy/scripts/run-pi.sh

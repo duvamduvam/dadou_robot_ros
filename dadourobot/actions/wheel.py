@@ -1,6 +1,8 @@
 import logging
 
+import adafruit_pca9685
 import board
+import busio
 import digitalio
 import pwmio
 from dadou_utils.com.serial_device import SerialDevice
@@ -9,7 +11,7 @@ from dadou_utils.time.time_utils import TimeUtils
 from dadou_utils.utils_static import ANIMATION, ANGLO, WHEEL_RIGHT, WHEEL_LEFT, JOY, WHEELS
 from microcontroller import Pin
 
-from dadourobot.move.anglo_meter_translator import AngloMeterTranslator
+from move.anglo_meter_translator import AngloMeterTranslator
 
 
 class Wheel:
@@ -21,7 +23,8 @@ class Wheel:
     TIME_STEP = 50
     move_time = 0
     MOVE_TIMEOUT = 500
-    MAX_PWM = 20000
+    MIN_PWM = 5000
+    MAX_PWM = 30000
     MAX_DIR = 65530
     FREQUENCY = 500
 
@@ -36,12 +39,24 @@ class Wheel:
 
     def __init__(self, config):
         self.config = config
-        self.left_pwm = pwmio.PWMOut(Pin(config.LEFT_PWM_PIN))
-        self.right_pwm = pwmio.PWMOut(Pin(config.RIGHT_PWM_PIN))
-        self.dir_left = digitalio.DigitalInOut(Pin(config.LEFT_DIR_PIN))
-        self.dir_left.direction = digitalio.Direction.OUTPUT
-        self.dir_right = digitalio.DigitalInOut(Pin(config.RIGHT_DIR_PIN))
-        self.dir_right.direction= digitalio.Direction.OUTPUT
+        #self.left_pwm = pwmio.PWMOut(Pin(config.LEFT_PWM_PIN))
+        #self.right_pwm = pwmio.PWMOut(Pin(config.RIGHT_PWM_PIN))
+        #self.dir_left = digitalio.DigitalInOut(Pin(config.LEFT_DIR_PIN))
+        #self.dir_left.direction = digitalio.Direction.OUTPUT
+        #self.dir_right = digitalio.DigitalInOut(Pin(config.RIGHT_DIR_PIN))
+        #self.dir_right.direction = digitalio.Direction.OUTPUT
+
+        #TODO improve this with config
+
+        i2c = busio.I2C(board.SCL, board.SDA)
+        pca9685 = adafruit_pca9685.PCA9685(i2c)
+        pca9685.frequency = 60
+
+        self.left_pwm = pca9685.channels[1]
+        self.right_pwm = pca9685.channels[2]
+        self.dir_left = pca9685.channels[0]
+        self.dir_right = pca9685.channels[3]
+
         #self.dir_left = pwmio.PWMOut(board.D6)
         #self.dir_right = pwmio.PWMOut(board.D5)
         #self.dir_left = pwmio.PWMOut(Pin(config.LEFT_DIR_PIN))
@@ -71,16 +86,16 @@ class Wheel:
             self.update_cmd(wheels[0], wheels[1])
         if WHEEL_LEFT in msg and WHEEL_RIGHT in msg:
             self.update_cmd(msg[WHEEL_LEFT], msg[WHEEL_RIGHT])
-        if  WHEELS in msg:
+        if WHEELS in msg:
             self.update_cmd(msg[WHEELS][0]*100, msg[WHEELS][1]*100)
 
     def update_cmd(self, left_wheel, right_wheel):
         #if left_wheel and right_wheel:
         logging.info("update wheel with left : " + str(left_wheel) + " right : " + str(right_wheel))
             #left = self.utils.translate(left_wheel)
-        self.left_pwm.duty_cycle = Misc.mapping(abs(left_wheel), 0, 100, 0, self.MAX_PWM)
+        self.left_pwm.duty_cycle = Misc.mapping(abs(left_wheel), 0, 100, self.MIN_PWM, self.MAX_PWM)
             #right = self.utils.translate(right_wheel)
-        self.right_pwm.duty_cycle = Misc.mapping(abs(right_wheel), 0, 100, 0, self.MAX_PWM)
+        self.right_pwm.duty_cycle = Misc.mapping(abs(right_wheel), 0, 100, self.MIN_PWM, self.MAX_PWM)
 
         self.set_direction(left_wheel, self.dir_left)
         #self.dir_left.value = left_wheel >= 0
@@ -102,7 +117,7 @@ class Wheel:
         pwm_dir.value = value"""
 
     def set_direction(self, cmd_dir, pwm_dir):
-        if cmd_dir >=0:
+        if cmd_dir >= 0:
             pwm_dir.duty_cycle = 0
         else:
             pwm_dir.duty_cycle = self.MAX_DIR
@@ -126,11 +141,11 @@ class Wheel:
             self.stop()
 
     def process(self):
-        logging.info("process wheels")
+        #logging.info("process wheels")
         #if (self.left_pwm.duty_cycle != self.left and self.right_pwm.duty_cycle != self.right) \
         #        and Utils.is_time(self.move_time, self.move_timeout):
-        self.update_pwm(self.left, self.left_pwm.duty_cycle)
-        self.update_pwm(self.right, self.right_pwm.duty_cycle)
+        self.update_pwm(self.left, self.left_pwm)
+        self.update_pwm(self.right, self.right_pwm)
 
     def update_pwm(self, target, pwm: pwmio.PWMOut):
         if pwm.duty_cycle < target:
