@@ -19,6 +19,8 @@ from files.robot_json_manager import RobotJsonManager
 
 from dadou_utils.singleton import SingletonMeta
 
+from config import I2C_ENABLED
+
 from robot_static import LOGGING_CONFIG_FILE, JSON_CONFIG, JSON_DIRECTORY, DEVICES
 from sequences.animation_manager import AnimationManager
 
@@ -28,7 +30,7 @@ class RobotFactory(metaclass=SingletonMeta):
     def __init__(self):
         base_path = os.getcwd()
         logging_file = base_path+LOGGING_CONFIG_FILE
-        print(logging_file)
+        #print(logging_file)
         logging.config.fileConfig(logging_file, disable_existing_loggers=False)
 
         self.robot_json_manager = RobotJsonManager(base_path, JSON_DIRECTORY, JSON_CONFIG)
@@ -37,8 +39,9 @@ class RobotFactory(metaclass=SingletonMeta):
 
         self.audio = AudioManager(self.robot_json_manager, self.config)
         self.head = Head(self.device_manager, self.config)
-        self.relays = RelaysManager(self.robot_json_manager)
-        self.wheel = Wheel(self.config)
+        if I2C_ENABLED:
+            self.relays = RelaysManager(self.robot_json_manager)
+            self.wheel = Wheel(self.config)
 
 
         #TODO improve led lights

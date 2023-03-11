@@ -6,7 +6,7 @@ from robot_static import JSON_DIRECTORY, JSON_CONFIG
 from tests.conf_test import TestSetup
 TestSetup()
 
-from config import RobotConfig
+from dadourobot.config import RobotConfig
 from files.robot_json_manager import RobotJsonManager
 
 import time

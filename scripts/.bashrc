@@ -129,3 +129,7 @@ alias utils='cd /usr/local/lib/python3.9/dist-packages/dadou_utils/'
 
 alias log='sudo tail -f $deploy/logs/didier.log'
 alias err='sudo tail -f $deploy/logs/service-error.log'
+
+alias i2c='i2cdetect -y 1'
+alias p='ps -aux | grep python'
+alias k='sudo pkill python'

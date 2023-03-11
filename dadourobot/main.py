@@ -4,6 +4,9 @@ import traceback
 
 import board
 import digitalio
+
+from config import I2C_ENABLED
+
 from dadou_utils.com.serial_devices_manager import SerialDeviceManager
 from dadou_utils.time.time_utils import TimeUtils
 from dadou_utils.utils_static import WHEEL_LEFT, WHEEL_RIGHT
@@ -32,8 +35,10 @@ face = RobotFactory().face
     #lights = Lights(RobotFactory().get_strip())
 #neck = RobotFactory().neck
 #head = RobotFactory().head
-relays = RobotFactory().relays
-wheel = RobotFactory().wheel
+
+if I2C_ENABLED:
+    relays = RobotFactory().relays
+    wheel = RobotFactory().wheel
 animations = RobotFactory().animation_manager
 
 global_receiver = GlobalReceiver(RobotFactory().config, RobotFactory().device_manager, animations)
@@ -62,18 +67,20 @@ while True:
 
             face.update(msg)
                 #head.process(msg)
-            relays.update(msg)
-            wheel.update(msg)
+            if I2C_ENABLED:
+                relays.update(msg)
+                wheel.update(msg)
             #lights.update(msg)
 
         #if main_loop_sleep and main_loop_sleep != 0:
         #    time.sleep(main_loop_sleep)
 
-        face.animate()
+        #face.animate()
         #lights.animate()
-        relays.process()
-        wheel.check_stop(msg)
-        wheel.process()
+        if I2C_ENABLED:
+            relays.process()
+            wheel.check_stop(msg)
+        #wheel.process()
         #neck.animate()
             #
 

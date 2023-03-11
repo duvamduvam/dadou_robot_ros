@@ -1,25 +1,26 @@
 import logging.config
 
-from config import Config
-from dadourobot import ImageMapping
-from tests import TestSetup
-from dadourobot import Utils
+from dadourobot.config import RobotConfig
+from dadourobot.files.robot_json_manager import RobotJsonManager
+from dadourobot.tests.conf_test import TestSetup
+from dadourobot.utils import Utils
+from dadourobot.visual.image_mapping import ImageMapping
+
+from dadourobot.visual.visual import Visual
 
 TestSetup()
 
 import time
 import neopixel
 import board
-from dadoucontrol import JsonManager
-from dadoucontrol import Visual
-from dadoucontrol import Face
+
 from adafruit_led_animation.color import RED, YELLOW, ORANGE, GREEN, TEAL, CYAN, BLUE, PURPLE, MAGENTA, WHITE, BLACK, GOLD, PINK, AQUA, JADE, AMBER
 
 import unittest
 
 
 class TestFace(unittest.TestCase):
-    json_manager = JsonManager(Config.BASE_PATH)
+    json_manager = RobotJsonManager(RobotConfig.BASE_PATH)
     face = Face(json_manager)
     logging.info("start face test")
     image_mapping = ImageMapping(8, 8, 3, 2)
@@ -59,9 +60,8 @@ class TestFace(unittest.TestCase):
             # logging.info("animate")
             self.face.animate()
 
-    @unittest.skip
     def test_basic(self):
-        pixels = neopixel.NeoPixel(board.D18, 8 * 6 * 8, auto_write=False)
+        pixels = neopixel.NeoPixel(board.D21, 8 * 6 * 8, auto_write=False)
         pixels.brightness = 0.1
         while True:
             # Comment this line out if you have RGBW/GRBW NeoPixels
@@ -73,7 +73,6 @@ class TestFace(unittest.TestCase):
             pixels.show()
             time.sleep(1)
 
-    @unittest.skip
     def test_img_eye(self):
         path = self.json_manager.get_visual_path("eye-still")
         visual = Visual("eye-still", path)

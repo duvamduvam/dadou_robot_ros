@@ -2,6 +2,12 @@ import logging
 
 from files.robot_json_manager import RobotJsonManager
 
+I2C_ENABLED = True
+
+CMD_FORWARD = "g"
+CMD_BACKWARD = "h"
+CMD_LEFT = "e"
+CMD_RIGHT = "d"
 
 class RobotConfig:
     STOP_KEY = None

@@ -8,10 +8,12 @@ import pwmio
 from dadou_utils.com.serial_device import SerialDevice
 from dadou_utils.misc import Misc
 from dadou_utils.time.time_utils import TimeUtils
-from dadou_utils.utils_static import ANIMATION, ANGLO, WHEEL_RIGHT, WHEEL_LEFT, JOY, WHEELS
+from dadou_utils.utils_static import ANIMATION, ANGLO, WHEEL_RIGHT, WHEEL_LEFT, JOY, WHEELS, KEY
 from microcontroller import Pin
 
 from move.anglo_meter_translator import AngloMeterTranslator
+
+from config import CMD_FORWARD, CMD_BACKWARD, CMD_LEFT, CMD_RIGHT
 
 
 class Wheel:
@@ -19,10 +21,10 @@ class Wheel:
     right = 0
 
     # TODO check steps
-    pwm_step = 5
+    PWM_STEP = 5
     TIME_STEP = 50
     move_time = 0
-    MOVE_TIMEOUT = 500
+    MOVE_TIMEOUT = 400
     MIN_PWM = 5000
     MAX_PWM = 30000
     MAX_DIR = 65530
@@ -32,9 +34,6 @@ class Wheel:
 
     test_speed = 0
     test_direction = 0
-
-    last_update = 0
-    TIME_OUT = 1500
 
 
     def __init__(self, config):
@@ -77,6 +76,16 @@ class Wheel:
     def update(self, msg:dict):
         if not msg:
             return
+
+        if KEY in msg and (msg[KEY] == CMD_FORWARD or msg[KEY] == CMD_BACKWARD or msg[KEY] == CMD_LEFT or msg[KEY] == CMD_RIGHT):
+            if msg[KEY] == CMD_FORWARD:
+                self.update_cmd(30, 30)
+            elif msg[KEY] == CMD_BACKWARD:
+                self.update_cmd(-30, -30)
+            elif msg[KEY] == CMD_LEFT:
+                self.update_cmd(-30, 30)
+            elif msg[KEY] == CMD_RIGHT:
+                self.update_cmd(30, -30)
 
         if ANGLO in msg:
             wheels = self.anglo_meter_translator.translate(msg[ANGLO])
@@ -136,7 +145,7 @@ class Wheel:
         if msg and ANIMATION in msg:
             self.animation_ongoing = msg[ANIMATION]
 
-        if not self.animation_ongoing and TimeUtils.is_time(last_time= self.last_update, time_out= self.TIME_OUT):
+        if not self.animation_ongoing and TimeUtils.is_time(last_time=self.move_time, time_out=self.MOVE_TIMEOUT):
             self.last_update = TimeUtils.current_milli_time()
             self.stop()
 
@@ -149,15 +158,15 @@ class Wheel:
 
     def update_pwm(self, target, pwm: pwmio.PWMOut):
         if pwm.duty_cycle < target:
-            if (target - pwm.duty_cycle) < self.pwm_step:
+            if (target - pwm.duty_cycle) < self.PWM_STEP:
                 pwm.duty_cycle = target
             else:
-                pwm.duty_cycle += self.pwm_step
+                pwm.duty_cycle += self.PWM_STEP
         else:
-            if (pwm.duty_cycle - target) < self.pwm_step:
+            if (pwm.duty_cycle - target) < self.PWM_STEP:
                 pwm.duty_cycle = target
             else:
-                pwm.duty_cycle -= self.pwm_step
+                pwm.duty_cycle -= self.PWM_STEP
 
     def send_to_due(self, left, right):
         self.due.send_msg(left+right, True)

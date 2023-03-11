@@ -1,9 +1,17 @@
 #!/bin/bash
 
-ssh -t d sudo raspi-config nonint do_i2c 0
-ssh -t d sudo cp -r /home/didier/.ssh /root/
+if [ -z "$1" ]
+then
+      host="dr"
+else
+      host=$1
+fi
 
-source before-lunch.sh
+ssh -t $host sudo raspi-config nonint do_i2c 0
+#ssh -t d sudo cp -r /home/didier/.ssh /root/
 
-ssh dr 'bash -s < /home/didier/deploy/scripts/install-lib.sh'
-ssh dr 'bash -s < /home/didier/deploy/scripts/install-didier.sh'
+source deploy.sh $host
+
+ssh -t $host chmod +x /home/didier/deploy/scripts/*.sh
+ssh $host 'bash -s < /home/didier/deploy/scripts/install-lib.sh'
+ssh $host 'bash -s < /home/didier/deploy/scripts/install-didier.sh'

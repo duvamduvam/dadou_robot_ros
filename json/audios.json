@@ -9,6 +9,10 @@
   },
   {
     "keys": ["A8"],
+    "name": "song/motivation_mid.mp3"
+  },
+  {
+    "keys": ["A7"],
     "name": "song/motivation_short.mp3"
   },
   {
@@ -31,16 +35,6 @@
     "name": "speak/oui-j-etais-la.mp3"
   },
   {
-    "keys": ["c"],
-    "expression": "speak",
-    "name": "speak/pas-de-bras.mp3"
-  },
-  {
-    "keys": ["d"],
-    "expression": "speak",
-    "name": "speak/quoi-pas-du-tout.wav"
-  },
-  {
     "keys": ["A2"],
     "expression": "speak",
     "name": "speak/avec-life-forever-mourrir.mp3"
@@ -53,17 +47,5 @@
   {
     "keys": ["A$"],
     "name": "speak/electrochoc-aie.wav"
-  },
-  {
-    "keys": ["e"],
-    "name": "effects/encephalogramme.mp3"
-  },
-  {
-    "keys": ["f"],
-    "name": "song/love.mp3"
-  },
-  {
-    "keys": ["i"],
-    "name": "speak/fait-pas-ca.mp3"
   }
 ]
