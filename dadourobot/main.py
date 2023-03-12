@@ -75,7 +75,7 @@ while True:
         #if main_loop_sleep and main_loop_sleep != 0:
         #    time.sleep(main_loop_sleep)
 
-        #face.animate()
+        face.animate()
         #lights.animate()
         if I2C_ENABLED:
             relays.process()

@@ -1,6 +1,0 @@
-alias clone=' git clone https://github.com/duvamduvam/didier-python.git'
-alias pull='/home/pi/scripts/push_from_home.sh'
-alias copy='/home/pi/scripts/deploy-start.sh'
-alias d='cd ~/deploy/didier-python'
-alias p='python3'
-

@@ -120,6 +120,7 @@ alias deploy='cd $deploy'
 alias halt='sudo shutdown -h now'
 alias temp='vcgencmd measure_temp'
 
+alias h='cd /home/didier/deploy'
 alias run='$deploy/scripts/run.sh'
 alias start='sudo service didier start && log'
 alias restart='sudo service didier stop && sudo service didier start && log'
