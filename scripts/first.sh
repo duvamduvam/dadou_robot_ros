@@ -23,7 +23,6 @@ YELLOW='\033[0;33m'
 printf "${RED}FIRST DIDIER INSTALL${YELLOW}\n\n"
 
 ssh-keygen -f "/home/dadou/.ssh/known_hosts" -R "192.168.1.200"
-
 ssh -o StrictHostKeyChecking=accept-new -t $host_user sudo cp -rf /home/didier/.ssh/ /root/
 
 #ssh -t d sudo cp -r /home/didier/.ssh /root/
