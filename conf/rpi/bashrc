@@ -116,16 +116,21 @@ home=/home/didier
 deploy=$home/deploy
 
 alias p='python3'
-#alias dr='$home/script/update_run.sh'
-#alias r='$deploy/didier-python/scripts/run.sh'
-#alias dr='$deploy/didier-python/scripts/update_run.sh'
-alias halt='sudo shutdown -h now'
-#alias t='$deploy/didier-python/scripts/test.sh'
-alias temp='vcgencmd measure_temp'
-#alias dt='$deploy/didier-python/scripts/update_test.sh'
-alias drun='dr main.py'
-alias run='r main.py'
-alias start='sudo service didier start'
-alias stop='sudo service didier stop'
-alias log='tail -f $deploy/logs/didier.log'
 alias deploy='cd $deploy'
+alias halt='sudo shutdown -h now'
+alias temp='vcgencmd measure_temp'
+
+alias h='cd /home/didier/deploy'
+alias run='$deploy/scripts/run.sh'
+alias start='sudo service didier start && log'
+alias restart='sudo service didier stop && sudo service didier start && log'
+alias stop='sudo service didier stop'
+
+alias utils='cd /usr/local/lib/python3.9/dist-packages/dadou_utils/'
+
+alias log='sudo tail -f $deploy/logs/didier.log'
+alias err='sudo tail -f $deploy/logs/service-error.log'
+
+alias i2c='i2cdetect -y 1'
+alias p='ps -aux | grep python'
+alias k='sudo pkill python'

@@ -2,50 +2,55 @@
 
 home=/home/didier
 deploy=$home/deploy
+scripts=$deploy/scripts/
+rpi_conf=$deploy/conf/rpi
 
-if [ ! -d "deploy" ];then
-  mkdir deploy
-fi
+RED='\033[4;31m'
+CYAN='\033[0;36m'
+NC='\033[0m' # No Color
 
 # install librairies
-sudo apt update
-sudo apt upgrade
-
-# install .bashrc
-ln -sf $deploy/scripts/bashrc ~/.bashrc
-ln -sf $deploy/scripts/bashrc /root/.bashrc
-source $home/.bashrc
-
-# ssh root
-sudo mkdir /root/.ssh/
-#TODO fix cp: impossible d'évaluer '/home/didier/.ssh/authorized_keys': Aucun fichier ou dossier de ce type
-sudo cp $home/.ssh/authorized_keys /root/.ssh/
+printf "${RED}update system${CYAN}\n"
+apt-get update
+apt-get upgrade
 
 # pip alias
-sudo ln -sf /usr/local/bin/pip3 /usr/bin/pip3.9
-sudo ln -sf /usr/local/bin/pip3 /usr/bin/pip3
-sudo ln -sf /usr/local/bin/pip3 /usr/bin/pip
+#ln -sf /usr/local/bin/pip3 /usr/bin/pip3.9
+#ln -sf /usr/local/bin/pip3 /usr/bin/pip3
+#ln -sf /usr/local/bin/pip3 /usr/bin/pip
 
-sudo pip3 install --upgrade pip
+
 #install pycharm helper
-pip3 install --no-index /home/didier/.pycharm_helpers/setuptools-44.1.1-py2.py3-none-any.whl
+#pip3 install --no-index /home/didier/.pycharm_helpers/setuptools-44.1.1-py2.py3-none-any.whl
 
-source install-lib.sh
+#install system and python lib
+source $scripts/install-lib.sh
+
+# install sound config usb
+printf "${RED}configure sound${CYAN}\n"
+cp $rpi_conf/alsa-blacklist.conf /etc/modprobe.d
+ln -sf $rpi_conf/asoundrc $home/.asoundrc
+ln -sf $rpi_conf/asoundrc /root/.asoundrc
+
+# activate i2c
+printf "${RED}activate i2c${CYAN}\n"
+raspi-config nonint do_i2c 0
+
+# install bashrc
+printf "${RED}install bash configuration${CYAN}\n"
+ln -sf $rpi_conf/bashrc $home/.bashrc
+ln -sf $rpi_conf/bashrc /root/.bashrc
+
+#install vim config
+printf "${RED}update vim parameter${CYAN}\n"
+echo set mouse-=a > ~/.vimrc
+echo set mouse-=a > ~/.vimrc
 
 # install service
-sudo ln -sf $deploy/scripts/didier.service /etc/systemd/system/
-sudo chmod 644 $deploy/scripts/didier.service
-sudo chown root:root $deploy/scripts/didier.service
-sudo systemctl enable didier.service
-sudo systemctl daemon-reload
-
-# install alsa
-sudo ln -sf $deploy/scripts/.asoundrc $home
-sudo ln -sf $deploy/scripts/.asoundrc /root
-
-# .bashrc
-sudo ln -sf $deploy/scripts/.bashrc $home
-sudo ln -sf $deploy/scripts/.bashrc /root
-
-echo set mouse-=a > ~/.vimrc
-sudo echo set mouse-=a > ~/.vimrc
+printf "${RED}install service${CYAN}\n"
+ln -sf $rpi_conf/didier.service /etc/systemd/system/
+chmod 644 $rpi_conf/didier.service
+chown root:root $rpi_conf/didier.service
+systemctl enable didier.service
+systemctl daemon-reload
+service didier start

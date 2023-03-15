@@ -11,7 +11,7 @@ ssh -t $host 'service didier stop'
 ssh -t $host 'pkill python3'
 
 #TODO make base path configurable
-./copy-audio.sh $host
+#./copy-audio.sh $host
 rsync -auvzrL --delete-after --exclude-from='exclude_me.txt' /home/dadou/Nextcloud/Didier/python/dadou_robot/* $host:/home/didier/deploy
 rsync -auvzrL --delete-after  --exclude-from='exclude_me.txt' /home/dadou/Nextcloud/Didier/python/dadou_utils/ $host:/usr/local/lib/python3.9/dist-packages/dadou_utils/
 #ssh d sudo ln -nsf /home/didier/deploy/dadourobot/ /usr/local/lib/python3.9/dist-packages/

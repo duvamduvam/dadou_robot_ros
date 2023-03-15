@@ -1,22 +1,14 @@
 import logging.config
 import sys
-import traceback
 
 import board
-import digitalio
 
-from config import I2C_ENABLED
-
-from dadou_utils.com.serial_devices_manager import SerialDeviceManager
-from dadou_utils.time.time_utils import TimeUtils
-from dadou_utils.utils_static import WHEEL_LEFT, WHEEL_RIGHT
-from digitalio import DigitalInOut, Direction
-
-import time
+from config import I2C_ENABLED, SHUTDOWN_PIN, RESTART_PIN, STATUS_LED_PIN
 
 #sys.path.append('..')
 
 from dadou_utils.misc import Misc
+from dadou_utils.utils.shutdown_restart import ShutDownRestart
 
 from actions.neck import Neck
 from com.main_due_com import MainDueCom
@@ -27,7 +19,10 @@ from input.global_receiver import GlobalReceiver
 
 
 print(sys.path)
-print('Starting didier')
+print(dir(board))
+print('Starting Didier')
+
+shutdown_restart = ShutDownRestart(SHUTDOWN_PIN, RESTART_PIN, STATUS_LED_PIN)
 
 audio = RobotFactory().get_audio()
 face = RobotFactory().face
@@ -45,8 +40,6 @@ global_receiver = GlobalReceiver(RobotFactory().config, RobotFactory().device_ma
 main_loop_sleep = RobotFactory().config.MAIN_LOOP_SLEEP
 due_device = RobotFactory().device_manager.get_device(MAIN_DUE)
 main_due_com = MainDueCom(RobotFactory().device_manager)
-
-logging.info('send starting didier')
 
 def stop(msg):
     if msg and hasattr(msg, 'key') and msg.key == RobotFactory().config.STOP_KEY:
@@ -89,6 +82,8 @@ while True:
 
         #wheel.test()
         #main_due_com.get_msg()
+
+        #shutdown_restart.process()
 
     except Exception as err:
         logging.error('exception {}'.format(err), exc_info=True)
