@@ -1,10 +1,5 @@
 #!/bin/bash
 
-RED='\033[4;31m'
-NC='\033[0m' # No Color
-BLUE='\033[0;34m'
-PURPLE='\033[0;35m'
-
 printf "${RED}Install system libraries${BLUE}\n"
 apt-get install -y ffmpeg i2c-tools python3 python3-dev python3-pip python3-opencv libatlas-base-dev libopenjp2-7 libasound2-dev vim
 

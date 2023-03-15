@@ -6,5 +6,5 @@ echo $scripts_folder
 scp $scripts_folder/$install_script virtual-didier:/home/pi/$install_script
 rsync $scripts_folder/bashrc virtual-didier:/home/pi/.bashrc
 rsync $scripts_folder/bashrc virtual-didier:/root/.bashrc
-ssh virtual-didier 'chmod +x /home/pi/install-didier.sh'
-ssh virtual-didier '/home/pi/install-didier.sh'
+ssh virtual-didier 'chmod +x /home/pi/install-robot.sh'
+ssh virtual-didier '/home/pi/install-robot.sh'
