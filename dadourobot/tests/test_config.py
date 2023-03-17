@@ -2,7 +2,7 @@ import unittest
 import logging.config
 import board
 
-from config import Config
+from robot_config import Config
 from dadourobot import JsonManager
 from tests import TestSetup
 

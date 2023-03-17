@@ -2,13 +2,13 @@ import logging
 
 from dadou_utils.files.files_utils import FilesUtils
 from dadou_utils.misc import Misc
-from dadou_utils.time.time_utils import TimeUtils
+from dadou_utils.utils.time_utils import TimeUtils
 
 from robot_factory import RobotFactory
-from robot_static import RobotStatic
+from robot_config import RobotStatic
 from sequence.animation import Animation
 
-
+#TODO 2 AnimationManager ...
 class AnimationManager:
 
     current_key = None

@@ -7,8 +7,8 @@ import jsonpath_rw_ext
 from dadou_utils.files.abstract_json_manager import AbstractJsonManager
 from dadou_utils.utils_static import COLOR
 
-from robot_static import JSON_AUDIOS, JSON_AUDIO_SEQUENCE, JSON_COLORS, JSON_EXPRESSIONS, JSON_MAPPINGS, \
-    JSON_VISUALS, JSON_LIGHTS, JSON_RELAYS
+from dadourobot.robot_config import JSON_AUDIOS, JSON_AUDIO_SEQUENCE, JSON_COLORS, JSON_EXPRESSIONS, JSON_MAPPINGS, \
+    JSON_VISUALS, JSON_LIGHTS, JSON_RELAYS, LOGGING_CONFIG_FILE, BASE_PATH, JSON_DIRECTORY
 
 
 class RobotJsonManager(AbstractJsonManager):
@@ -25,8 +25,8 @@ class RobotJsonManager(AbstractJsonManager):
     relays = None
     visual = None
 
-    def __init__(self, base_path, json_folder, config_file):
-        super().__init__(base_path, json_folder, config_file)
+    def __init__(self):
+        super().__init__(BASE_PATH, JSON_DIRECTORY)
         self.audios = self.open_json(JSON_AUDIOS)
         self.audio_seq = self.open_json(JSON_AUDIO_SEQUENCE)
         self.colors = self.open_json(JSON_COLORS)

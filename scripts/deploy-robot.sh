@@ -16,6 +16,7 @@ ssh -t $host 'pkill python3'
 
 #TODO make base path configurable
 rsync -auvzrL --delete-after --exclude-from='common/exclude_me.txt' $ROBOT_PROJECT/* $host:$RPI_HOME/deploy
+ssh -t $host "sudo ln -sf $DEPLOY/$PROJECT_NAME /usr/local/lib/python3.9/dist-packages"
 rsync -auvzrL --delete-after  --exclude-from='common/exclude_me.txt' $UTILS_PROJECT $host:/usr/local/lib/python3.9/dist-packages
 #ssh d sudo ln -nsf /home/didier/deploy/dadourobot/ /usr/local/lib/python3.9/dist-packages/
 #stop dameon before lunch

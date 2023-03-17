@@ -3,7 +3,7 @@ import sys
 
 import board
 
-from config import I2C_ENABLED, SHUTDOWN_PIN, RESTART_PIN, STATUS_LED_PIN
+from robot_config import I2C_ENABLED, SHUTDOWN_PIN, RESTART_PIN, STATUS_LED_PIN, STOP_KEY
 
 #sys.path.append('..')
 
@@ -11,8 +11,7 @@ from dadou_utils.misc import Misc
 from dadou_utils.utils.shutdown_restart import ShutDownRestart
 
 from actions.neck import Neck
-from com.main_due_com import MainDueCom
-from robot_static import MAIN_DUE
+from robot_config import MAIN_DUE
 
 from robot_factory import RobotFactory
 from input.global_receiver import GlobalReceiver
@@ -36,13 +35,10 @@ if I2C_ENABLED:
     wheel = RobotFactory().wheel
 animations = RobotFactory().animation_manager
 
-global_receiver = GlobalReceiver(RobotFactory().config, RobotFactory().device_manager, animations)
-main_loop_sleep = RobotFactory().config.MAIN_LOOP_SLEEP
-due_device = RobotFactory().device_manager.get_device(MAIN_DUE)
-main_due_com = MainDueCom(RobotFactory().device_manager)
+global_receiver = GlobalReceiver(RobotFactory().device_manager, animations)
 
 def stop(msg):
-    if msg and hasattr(msg, 'key') and msg.key == RobotFactory().config.STOP_KEY:
+    if msg and hasattr(msg, 'key') and msg.key == STOP_KEY:
         logging.fatal("stopping Didier")
         Misc.exec_shell("sudo halt")
 
@@ -81,9 +77,8 @@ while True:
         #    RobotFactory().device_manager.update_devices()
 
         #wheel.test()
-        #main_due_com.get_msg()
 
-        #shutdown_restart.process()
+        shutdown_restart.process()
 
     except Exception as err:
         logging.error('exception {}'.format(err), exc_info=True)

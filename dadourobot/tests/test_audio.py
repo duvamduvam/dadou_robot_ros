@@ -2,11 +2,11 @@ import os
 
 from dadou_utils.utils_static import AUDIO, KEY
 
-from robot_static import JSON_DIRECTORY, JSON_CONFIG
+from robot_config import JSON_DIRECTORY, JSON_CONFIG
 from tests.conf_test import TestSetup
 TestSetup()
 
-from dadourobot.config import RobotConfig
+from dadourobot.robot_config import RobotConfig
 from files.robot_json_manager import RobotJsonManager
 
 import time

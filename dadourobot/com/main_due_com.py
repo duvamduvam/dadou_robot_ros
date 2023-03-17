@@ -4,7 +4,7 @@ from dadou_utils.com.serial_devices_manager import SerialDeviceManager
 from dadou_utils.utils_static import MOVE, KEY, ANGLO
 
 from move.anglo_meter_translator import AngloMeterTranslator
-from robot_static import MAIN_DUE
+from robot_config import MAIN_DUE
 
 
 class MainDueCom:

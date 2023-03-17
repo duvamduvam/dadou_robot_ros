@@ -4,14 +4,16 @@ import random
 
 from dadou_utils.files.files_utils import FilesUtils
 from dadou_utils.misc import Misc
-from dadou_utils.time.time_utils import TimeUtils
+from dadou_utils.utils.time_utils import TimeUtils
 from dadou_utils.utils_static import ANIMATION, STOP_ANIMATION_KEYS, AUDIO, AUDIOS, KEY, NECK, NECKS, FACE, FACES, LIGHTS, WHEELS, NAME, \
     DURATION, KEYS, RANDOM, START, STOP, TYPES
 
 from actions.abstract_actions import ActionsAbstract
-from robot_static import SEQUENCES_DIRECTORY, RANDOM_ANIMATION_LOW, RANDOM_ANIMATION_HIGH, LOOP_DURATION
+from robot_config import SEQUENCES_DIRECTORY, LOOP_DURATION
 from sequences.animation import Animation
 from sequences.random_animation_start import RandomAnimationStart
+
+from dadourobot.robot_config import RANDOM_ANIMATION_LOW, RANDOM_ANIMATION_HIGH, BASE_PATH
 
 
 class AnimationManager(ActionsAbstract):
@@ -35,18 +37,17 @@ class AnimationManager(ActionsAbstract):
 
     current_animation = None
 
-    def __init__(self, json_manager, config):
-        super().__init__(json_manager, config)
-        self.config = config
+    def __init__(self, json_manager):
+        super().__init__(json_manager)
         self.load_animation_sequences()
-        self.stop_keys = config.get(STOP_ANIMATION_KEYS)
-        self.random_duration = random.randint(config.get(RANDOM_ANIMATION_LOW), config.get(RANDOM_ANIMATION_HIGH))
+        self.stop_keys = STOP_ANIMATION_KEYS
+        self.random_duration = random.randint(RANDOM_ANIMATION_LOW, RANDOM_ANIMATION_HIGH)
         RandomAnimationStart.value = TimeUtils.current_milli_time()
         logging.info("random duration time {}".format(self.random_duration))
 
 
     def load_animation_sequences(self):
-        sequences_files = FilesUtils.get_folder_files(SEQUENCES_DIRECTORY)
+        sequences_files = FilesUtils.get_folder_files(BASE_PATH+SEQUENCES_DIRECTORY)
         for sequence_file in sequences_files:
             json_sequence = FilesUtils.open_json(sequence_file, 'r')
             json_sequence[NAME] = os.path.basename(sequence_file)

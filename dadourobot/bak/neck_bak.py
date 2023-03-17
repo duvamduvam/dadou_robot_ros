@@ -2,7 +2,7 @@
 import pwmio
 import logging
 from adafruit_motor import servo
-from dadou_utils.time.time_utils import TimeUtils
+from dadou_utils.utils.time_utils import TimeUtils
 from dadou_utils.utils_static import NECK
 from microcontroller import Pin
 

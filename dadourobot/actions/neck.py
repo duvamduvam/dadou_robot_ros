@@ -1,49 +1,34 @@
 # pip3 install adafruit-circuitpython-servokit
-import pwmio
 import logging
-from adafruit_motor import servo
 from adafruit_servokit import ServoKit
+
+from dadourobot.robot_config import HEAD_PWM_NB, I2C_ENABLED, PWM_CHANNELS_ENABLED
+
 from dadou_utils.misc import Misc
-from dadou_utils.time.time_utils import TimeUtils
-from dadou_utils.utils_static import NECK
-from microcontroller import Pin
-
-from utils import Utils
+from dadou_utils.utils.time_utils import TimeUtils
+from dadou_utils.utils_static import NECK, KEY
+from dadou_utils.actions.servo_abstract import ServoAbstract
 
 
-class Neck:
+MIN_PWM = 5000
+MAX_PWM = 65530
 
-    INPUT_MIN = 0
-    INPUT_MAX = 99
+DEFAULT_POS = 180
+
+
+class Neck(ServoAbstract):
 
     SERVO_MIN = 0
     SERVO_MAX = 180
-    STEP = 10
-    DEFAULT_POS = 110
-    MARGIN = 5
+    DEFAULT_POS = 0
 
-    SERVO_POS = 0
+    def __init__(self):
 
-    target_pos = 0
-    current_pos = 0
-
-    last_time = TimeUtils.current_milli_time()
-    time_step = 200
-
-    utils = Utils()
-
-    # pwmio.PWMOut(board.LED, frequency=5000, duty_cycle=0)
-
-    def __init__(self, config):
         self.self_pwm_channels = ServoKit(channels=16)
-        self.self_pwm_channels.servo[self.SERVO_POS].angle = self.DEFAULT_POS
+        pwm_neck = self.self_pwm_channels.servo[HEAD_PWM_NB]
 
-    #TODO fix move from animation
-    def update(self, msg):
-        if msg and NECK in msg:
-            self.target_pos = Misc.mapping(int(msg[NECK]),self.INPUT_MIN, self.INPUT_MAX, self.SERVO_MIN, self.SERVO_MAX)
-            logging.debug("update servo key : " + str(msg) + " target :" + str(self.target_pos))
-            self.self_pwm_channels.servo[self.SERVO_POS].angle = self.target_pos
+        super().__init__(NECK, pwm_neck, self.DEFAULT_POS, self.SERVO_MAX, I2C_ENABLED, PWM_CHANNELS_ENABLED)
+
 
     """def animate(self):
         if TimeUtils.is_time(self.last_time, self.time_step):

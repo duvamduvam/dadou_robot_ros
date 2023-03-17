@@ -14,7 +14,7 @@ from files.robot_json_manager import RobotJsonManager
 
 from dadou_utils.audios.sound_object import SoundObject
 
-from robot_static import AUDIOS_DIRECTORY, JSON_AUDIOS, LOOP_DURATION
+from dadourobot.robot_config import AUDIOS_DIRECTORY, JSON_AUDIOS, LOOP_DURATION
 from dadou_utils.utils_static import EXPRESSION
 
 class AudioManager(ActionsAbstract):
@@ -28,8 +28,8 @@ class AudioManager(ActionsAbstract):
     sequences_key = {}
     sequences_name = {}
 
-    def __init__(self, robot_json_manager:RobotJsonManager, config):
-        super().__init__(robot_json_manager, config, JSON_AUDIOS)
+    def __init__(self, robot_json_manager: RobotJsonManager):
+        super().__init__(robot_json_manager, JSON_AUDIOS)
 
     #def load_sequences(self):
     #    audio_list = self.json_manager.open_json(JSON_AUDIOS)
@@ -92,7 +92,7 @@ class AudioManager(ActionsAbstract):
             self.stop_sound()
 
         audio = self.get_sequence(msg, AUDIO, False)
-        if not audio : return
+        if not audio: return
 
         logging.debug("number of thread : {}".format(threading.active_count()))
 

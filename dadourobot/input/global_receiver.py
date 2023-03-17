@@ -5,7 +5,7 @@ from dadou_utils.com.input_messages_list import InputMessagesList
 #from dadou_utils.com.serial_device import SerialDevice
 from dadou_utils.com.lora_radio import LoraRadio
 from dadou_utils.com.ws_server import WsServer
-from dadou_utils.time.time_utils import TimeUtils
+from dadou_utils.utils.time_utils import TimeUtils
 
 from sequences.random_animation_start import RandomAnimationStart
 
@@ -16,14 +16,13 @@ class GlobalReceiver:
     postfix = '>'
     messages = InputMessagesList()
 
-    def __init__(self, config, device_manager, animation_manager):
-        self.config = config
+    def __init__(self, device_manager, animation_manager):
         #self.mega_lora_radio = SerialDevice('modem', self.config.RADIO_MEGA_ID, 7)
         #self.mega_lora_radio = device_manager.get_device(RobotStatic.RADIO_MEGA)
         #glove_id = SerialDevice.USB_ID_PATH + "usb-Raspberry_Pi_Pico_E6611CB6976B8D28-if00"
         #self.glove = SerialDevice(glove_id)
         WsServer().start()
-        self.lora_radio = LoraRadio(self.config)
+        #self.lora_radio = LoraRadio(self.config)
 
         self.animation_manager = animation_manager
 
@@ -52,10 +51,10 @@ class GlobalReceiver:
             logging.info('received animation'.format(msg))
             return msg
 
-        radio_msg = self.lora_radio.receive_msg()
-        if radio_msg:
-            logging.info('received lora msg : {}'.format(radio_msg))
-            return radio_msg
+        #radio_msg = self.lora_radio.receive_msg()
+        #if radio_msg:
+        #    logging.info('received lora msg : {}'.format(radio_msg))
+        #    return radio_msg
 
 
     def return_msg(self, msg, log_text):

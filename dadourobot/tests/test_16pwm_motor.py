@@ -6,9 +6,9 @@ import busio
 from adafruit_servokit import ServoKit
 from dadou_utils.utils_static import WHEEL_LEFT, WHEEL_RIGHT
 
-from config import RobotConfig
+from robot_config import RobotConfig
 from files.robot_json_manager import RobotJsonManager
-from robot_static import JSON_DIRECTORY, JSON_CONFIG
+from robot_config import JSON_DIRECTORY, JSON_CONFIG
 from tests.conf_test import TestSetup
 TestSetup()
 
@@ -18,7 +18,7 @@ import unittest
 
 class PWMMotorTest(unittest.TestCase):
     TestSetup()
-    base_path = os.getcwd()
+
     robot_json_manager = RobotJsonManager('/home/didier/deploy/', 'json/', JSON_CONFIG)
     config = RobotConfig(robot_json_manager)
 

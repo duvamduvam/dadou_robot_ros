@@ -2,26 +2,25 @@ import logging.config
 import platform
 import os
 
-from actions.neck import Neck
-from config import RobotConfig
-from files.robot_json_manager import RobotJsonManager
-from robot_static import JSON_CONFIG
+from dadou_utils.utils_static import RPI_TYPE
+
+from dadourobot.actions.neck import Neck
+from dadourobot.files.robot_json_manager import RobotJsonManager
+from dadourobot.robot_factory import RobotFactory
+from dadourobot.robot_config import JSON_CONFIG
 
 
 class TestSetup:
 
     def __init__(self):
         # check rapsberry
-        if platform.machine() not in ('armv7l', 'armv6l'):
+        if platform.machine() not in RPI_TYPE:
             path = "/home/dadou/Nextcloud/rosita/dadoutils/didier-dadoutils"
             os.chdir(path)
             print(os.path.join(path))
 
-        logging.config.fileConfig('/home/didier/deploy/conf/logging-test.conf', disable_existing_loggers=False)
-        logging.info("start logging")
+        robot_factory = RobotFactory()
 
-        base_path = os.getcwd()
-        robot_json_manager = RobotJsonManager('/home/didier/deploy/', 'json/', JSON_CONFIG)
-        self.config = RobotConfig(robot_json_manager)
+        self.neck = robot_factory.neck
+        self.wheel = robot_factory.wheel
 
-        #  self.neck = Neck(self.config)

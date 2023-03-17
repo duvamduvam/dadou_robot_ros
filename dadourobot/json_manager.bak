@@ -35,8 +35,8 @@ class JsonManager:
     audios = None
     audio_seq = None
 
-    def __init__(self, base_path):
-        json_path = base_path + "json/"
+    def __init__(self):
+        json_path = BASE_PATH + "json/"
         with open(json_path + self.COLORS, 'r') as json_file:
             self.colors = json.load(json_file)
         with open(json_path + self.FACE_SEQUENCE, 'r') as json_file:

@@ -7,7 +7,7 @@ from os.path import exists
 from dadou_utils.misc import Misc
 from sound_player import Sound, SoundPlayer
 
-from robot_static import RobotStatic
+from robot_config import RobotStatic
 from path_time import PathTime
 from robot_factory import RobotFactory
 

@@ -3,17 +3,15 @@ import logging
 import adafruit_pca9685
 import board
 import busio
-import digitalio
 import pwmio
-from dadou_utils.com.serial_device import SerialDevice
+
 from dadou_utils.misc import Misc
-from dadou_utils.time.time_utils import TimeUtils
+from dadou_utils.utils.time_utils import TimeUtils
 from dadou_utils.utils_static import ANIMATION, ANGLO, WHEEL_RIGHT, WHEEL_LEFT, JOY, WHEELS, KEY
-from microcontroller import Pin
 
-from move.anglo_meter_translator import AngloMeterTranslator
-
-from config import CMD_FORWARD, CMD_BACKWARD, CMD_LEFT, CMD_RIGHT
+from dadourobot.move.anglo_meter_translator import AngloMeterTranslator
+from dadourobot.robot_config import CMD_FORWARD, CMD_BACKWARD, CMD_LEFT, CMD_RIGHT, I2C_ENABLED, PWM_CHANNELS_ENABLED
+from dadourobot.robot_config import WHEEL_LEFT_PWM, WHEEL_RIGHT_PWM, WHEEL_LEFT_DIR, WHEEL_RIGHT_DIR
 
 
 class Wheel:
@@ -35,9 +33,16 @@ class Wheel:
     test_speed = 0
     test_direction = 0
 
+    def __init__(self):
 
-    def __init__(self, config):
-        self.config = config
+        if not I2C_ENABLED or not PWM_CHANNELS_ENABLED:
+            logging.warning("i2c pwm disabled")
+            return
+
+        i2c = busio.I2C(board.SCL, board.SDA)
+        pca9685 = adafruit_pca9685.PCA9685(i2c)
+        pca9685.frequency = 60
+
         #self.left_pwm = pwmio.PWMOut(Pin(config.LEFT_PWM_PIN))
         #self.right_pwm = pwmio.PWMOut(Pin(config.RIGHT_PWM_PIN))
         #self.dir_left = digitalio.DigitalInOut(Pin(config.LEFT_DIR_PIN))
@@ -45,16 +50,14 @@ class Wheel:
         #self.dir_right = digitalio.DigitalInOut(Pin(config.RIGHT_DIR_PIN))
         #self.dir_right.direction = digitalio.Direction.OUTPUT
 
-        #TODO improve this with config
+        #i2c = busio.I2C(board.SCL, board.SDA)
+        #pca9685 = adafruit_pca9685.PCA9685(i2c)
+        #pca9685.frequency = 60
 
-        i2c = busio.I2C(board.SCL, board.SDA)
-        pca9685 = adafruit_pca9685.PCA9685(i2c)
-        pca9685.frequency = 60
-
-        self.left_pwm = pca9685.channels[1]
-        self.right_pwm = pca9685.channels[2]
-        self.dir_left = pca9685.channels[0]
-        self.dir_right = pca9685.channels[3]
+        self.left_pwm = pca9685.channels[WHEEL_LEFT_PWM]
+        self.right_pwm = pca9685.channels[WHEEL_RIGHT_PWM]
+        self.dir_left = pca9685.channels[WHEEL_LEFT_DIR]
+        self.dir_right = pca9685.channels[WHEEL_RIGHT_DIR]
 
         #self.dir_left = pwmio.PWMOut(board.D6)
         #self.dir_right = pwmio.PWMOut(board.D5)
@@ -64,16 +67,11 @@ class Wheel:
 
         self.anglo_meter_translator = AngloMeterTranslator()
 
-    def set_due(self):
-        self.due = SerialDevice('head', self.config.MAIN_DUE_ID, 7)
+    def update(self, msg: dict):
 
-    def send_msg(self, wheels):
-        if not self.due:
-            self.set_due()
-        msg = "W"+str(int(wheels[0]*100))+str(int(wheels[1]*100))
-        self.due.send_msg(msg)
+        if not I2C_ENABLED or not PWM_CHANNELS_ENABLED:
+            return
 
-    def update(self, msg:dict):
         if not msg:
             return
 
@@ -142,6 +140,10 @@ class Wheel:
         self.right_pwm.duty_cycle = 0
 
     def check_stop(self, msg):
+
+        if not I2C_ENABLED or not PWM_CHANNELS_ENABLED:
+            return
+
         if msg and ANIMATION in msg:
             self.animation_ongoing = msg[ANIMATION]
 
@@ -150,6 +152,10 @@ class Wheel:
             self.stop()
 
     def process(self):
+
+        if not I2C_ENABLED or not PWM_CHANNELS_ENABLED:
+            return
+
         #logging.info("process wheels")
         #if (self.left_pwm.duty_cycle != self.left and self.right_pwm.duty_cycle != self.right) \
         #        and Utils.is_time(self.move_time, self.move_timeout):

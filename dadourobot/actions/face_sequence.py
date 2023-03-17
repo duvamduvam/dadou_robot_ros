@@ -1,8 +1,8 @@
 from enum import Enum
 
-from dadou_utils.time.time_utils import TimeUtils
+from dadou_utils.utils.time_utils import TimeUtils
 
-from robot_static import RobotStatic
+from robot_config import RobotStatic
 
 
 class LedPart(Enum):

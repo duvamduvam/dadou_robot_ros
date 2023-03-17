@@ -1,6 +1,6 @@
 import logging.config
 
-from dadourobot.config import RobotConfig
+from dadourobot.robot_config import RobotConfig
 from dadourobot.files.robot_json_manager import RobotJsonManager
 from dadourobot.tests.conf_test import TestSetup
 from dadourobot.utils import Utils

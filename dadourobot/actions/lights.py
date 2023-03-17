@@ -8,12 +8,12 @@ import logging.config
 # todo check thread : https://www.geeksforgeeks.org/python-communicating-between-threads-set-1/
 # todo check thread2 : https://riptutorial.com/python/example/4691/communicating-between-threads
 from adafruit_led_animation.helper import PixelMap
-from dadou_utils.time.time_utils import TimeUtils
+from dadou_utils.utils.time_utils import TimeUtils
 from dadou_utils.utils_static import METHOD, DEFAULT, DURATION, SEQUENCES, LOOP, COLOR, NAME, KEY, LIGHTS, FACE
 
 from actions.abstract_actions import ActionsAbstract
 from sequences.sequence import Sequence
-from robot_static import JSON_LIGHTS
+from robot_config import JSON_LIGHTS
 from visual.lights_animations import LightsAnimations
 
 
@@ -51,10 +51,8 @@ class Lights(ActionsAbstract):
     duration = 0
     start_time = 0
 
-
-    def __init__(self, config, json_manager, strip):
-        super().__init__(json_manager, config, JSON_LIGHTS)
-        self.config = config
+    def __init__(self, json_manager, strip):
+        super().__init__(json_manager, JSON_LIGHTS)
         #self.strip = neopixel.NeoPixel(self.LED_COUNT, Pin(config.LIGHTS_PIN), self.LED_FREQ_HZ, self.LED_DMA, self.LED_INVERT, self.LED_BRIGHTNESS, self.LED_CHANNEL)
 
         strip_pixels_range = ()

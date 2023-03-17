@@ -1,6 +1,6 @@
 import logging
 
-from dadou_utils.time.time_utils import TimeUtils
+from dadou_utils.utils.time_utils import TimeUtils
 
 
 class Head:
