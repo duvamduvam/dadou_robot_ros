@@ -1,0 +1,8 @@
+{
+  "normal_voice": ["a"],
+  "pitched_voice": ["b"],
+  "effect_on": ["D1", "D2"],
+  "voice_out": ["D7", "D8"],
+  "octaver": ["D3", "D4"],
+  "hf_receiver": ["D5", "D6"]
+}
