@@ -33,6 +33,8 @@ WHEEL_LEFT_PWM = 1
 WHEEL_RIGHT_PWM = 2
 WHEEL_LEFT_DIR = 0
 WHEEL_RIGHT_DIR = 3
+LEFT_ARM_NB = 8
+RIGHT_ARM_NB = 9
 
 STOP_KEY = "Db"
 MAIN_LOOP_SLEEP = 0.001
@@ -69,6 +71,8 @@ DEVICES = 'devices'
 HEAD_MEGA = 'head_mega'
 RADIO_MEGA = 'radio_mega'
 MAIN_DUE = 'main_due'
+LEFT_ARM = 'left_arm'
+RIGHT_ARM = 'right_arm'
 
 LOOP_DURATION = 'loop_duration'
 

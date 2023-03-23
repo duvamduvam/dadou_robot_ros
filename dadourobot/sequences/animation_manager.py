@@ -104,7 +104,7 @@ class AnimationManager(ActionsAbstract):
             if self.playing:
                 logging.info('stop animation')
                 self.playing = False
-                return {ANIMATION:False}
+                return {ANIMATION: False}
             return
 
         events = {}

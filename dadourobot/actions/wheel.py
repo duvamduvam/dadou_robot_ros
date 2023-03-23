@@ -35,13 +35,19 @@ class Wheel:
 
     def __init__(self):
 
-        if not I2C_ENABLED or not PWM_CHANNELS_ENABLED:
+        self.enabled = I2C_ENABLED or PWM_CHANNELS_ENABLED
+        if not self.enabled:
             logging.warning("i2c pwm disabled")
             return
 
-        i2c = busio.I2C(board.SCL, board.SDA)
-        pca9685 = adafruit_pca9685.PCA9685(i2c)
-        pca9685.frequency = 60
+        try:
+            i2c = busio.I2C(board.SCL, board.SDA)
+            pca9685 = adafruit_pca9685.PCA9685(i2c)
+            pca9685.frequency = 60
+        except ValueError as err:
+            logging.error("can't connect to to i2c")
+            self.enabled = False
+            return
 
         #self.left_pwm = pwmio.PWMOut(Pin(config.LEFT_PWM_PIN))
         #self.right_pwm = pwmio.PWMOut(Pin(config.RIGHT_PWM_PIN))
@@ -69,7 +75,7 @@ class Wheel:
 
     def update(self, msg: dict):
 
-        if not I2C_ENABLED or not PWM_CHANNELS_ENABLED:
+        if not self.enabled:
             return
 
         if not msg:
@@ -141,7 +147,7 @@ class Wheel:
 
     def check_stop(self, msg):
 
-        if not I2C_ENABLED or not PWM_CHANNELS_ENABLED:
+        if not self.enabled:
             return
 
         if msg and ANIMATION in msg:
@@ -153,7 +159,7 @@ class Wheel:
 
     def process(self):
 
-        if not I2C_ENABLED or not PWM_CHANNELS_ENABLED:
+        if not self.enabled:
             return
 
         #logging.info("process wheels")

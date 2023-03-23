@@ -1,0 +1,94 @@
+import logging.config
+import time
+import unittest
+import logging
+import logging.config
+
+from adafruit_servokit import ServoKit
+from dadou_utils.com.input_messages_list import InputMessagesList
+from dadou_utils.utils.time_utils import TimeUtils
+
+from dadourobot.actions.left_arm import LeftArm
+from dadourobot.actions.neck import Neck
+
+from dadou_utils.utils_static import NECK, ANIMATION, KEY
+
+from dadourobot.actions.right_arm import RightArm
+from dadourobot.input.global_receiver import GlobalReceiver
+from dadourobot.robot_config import LEFT_ARM, RIGHT_ARM
+from dadourobot.robot_factory import RobotFactory
+from dadourobot.tests.conf_test import TestSetup
+TestSetup()
+
+
+class SequenceTests(unittest.TestCase):
+    #setup = TestSetup()
+     #setup.neck
+     #setup.left_arm
+    neck = Neck()
+    left_arm = LeftArm()
+    right_arm = RightArm() #setup.right_arm
+
+    def test_neck(self):
+        logging.debug("start test neck")
+
+        for i in range(3):
+            self.neck.update({NECK: 0})
+            time.sleep(5)
+            self.neck.update({NECK: 120})
+            time.sleep(5)
+            self.neck.update({NECK: 10})
+            time.sleep(5)
+            self.neck.update({NECK: 170})
+            time.sleep(5)
+
+    def test_sequence(self):
+
+        audio = RobotFactory().get_audio()
+        face = RobotFactory().face
+        #lights = RobotFactory().lights
+            #lights = Lights(RobotFactory().get_strip())
+        neck = RobotFactory().neck
+        relays = RobotFactory().relays
+        wheel = RobotFactory().wheel
+        animations = RobotFactory().animation_manager
+
+        global_receiver = GlobalReceiver(RobotFactory().device_manager, animations)
+
+        start_time = TimeUtils.current_milli_time()
+        msg_time = TimeUtils.current_milli_time()
+        msg = None
+        msg_sent = False
+        input_messages = InputMessagesList()
+        while True:
+
+            if TimeUtils.is_time(start_time, 50000):
+                return
+
+            if not msg_sent and TimeUtils.is_time(msg_time, 500):
+                msg_sent = True
+                input_messages.add_msg({KEY: "T1"})
+
+            msg = global_receiver.get_msg()
+
+            if msg:
+                audio.update(msg)
+                neck.update(msg)
+                face.update(msg)
+                relays.update(msg)
+                wheel.update(msg)
+                #lights.update(msg)
+
+                #if main_loop_sleep and main_loop_sleep != 0:
+                #    time.sleep(main_loop_sleep)
+
+            face.animate()
+            #lights.animate()
+            relays.process()
+            wheel.check_stop(msg)
+            #wheel.process()
+            #neck.animate()
+
+
+if __name__ == '__main__':
+    unittest.main()

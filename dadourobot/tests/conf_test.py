@@ -20,7 +20,8 @@ class TestSetup:
             print(os.path.join(path))
 
         robot_factory = RobotFactory()
-
+        self.left_arm = robot_factory.left_arm
+        self.right_arm = robot_factory.right_arm
         self.neck = robot_factory.neck
         self.wheel = robot_factory.wheel
 

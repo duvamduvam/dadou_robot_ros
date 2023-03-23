@@ -24,10 +24,7 @@ class Neck(ServoAbstract):
 
     def __init__(self):
 
-        self.self_pwm_channels = ServoKit(channels=16)
-        pwm_neck = self.self_pwm_channels.servo[HEAD_PWM_NB]
-
-        super().__init__(NECK, pwm_neck, self.DEFAULT_POS, self.SERVO_MAX, I2C_ENABLED, PWM_CHANNELS_ENABLED)
+        super().__init__(NECK, HEAD_PWM_NB, self.DEFAULT_POS, self.SERVO_MAX, I2C_ENABLED, PWM_CHANNELS_ENABLED)
 
 
     """def animate(self):

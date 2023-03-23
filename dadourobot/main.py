@@ -27,12 +27,9 @@ audio = RobotFactory().get_audio()
 face = RobotFactory().face
 #lights = RobotFactory().lights
     #lights = Lights(RobotFactory().get_strip())
-#neck = RobotFactory().neck
-#head = RobotFactory().head
-
-if I2C_ENABLED:
-    relays = RobotFactory().relays
-    wheel = RobotFactory().wheel
+neck = RobotFactory().neck
+relays = RobotFactory().relays
+wheel = RobotFactory().wheel
 animations = RobotFactory().animation_manager
 
 global_receiver = GlobalReceiver(RobotFactory().device_manager, animations)
@@ -51,14 +48,10 @@ while True:
         if msg:
             stop(msg)
             audio.update(msg)
-            #neck.update(msg)
-            #main_due_com.send_dict(msg)
-
+            neck.update(msg)
             face.update(msg)
-                #head.process(msg)
-            if I2C_ENABLED:
-                relays.update(msg)
-                wheel.update(msg)
+            relays.update(msg)
+            wheel.update(msg)
             #lights.update(msg)
 
         #if main_loop_sleep and main_loop_sleep != 0:
@@ -66,9 +59,8 @@ while True:
 
         face.animate()
         #lights.animate()
-        if I2C_ENABLED:
-            relays.process()
-            wheel.check_stop(msg)
+        relays.process()
+        wheel.check_stop(msg)
         #wheel.process()
         #neck.animate()
             #

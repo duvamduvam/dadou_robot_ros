@@ -7,7 +7,7 @@ from dadou_utils.com.lora_radio import LoraRadio
 from dadou_utils.com.ws_server import WsServer
 from dadou_utils.utils.time_utils import TimeUtils
 
-from sequences.random_animation_start import RandomAnimationStart
+from dadourobot.sequences.random_animation_start import RandomAnimationStart
 
 
 class GlobalReceiver:
@@ -47,7 +47,7 @@ class GlobalReceiver:
         self.animation_manager.random()
 
         msg = self.animation_manager.event()
-        if msg and len(msg)> 0:
+        if msg and len(msg) > 0:
             logging.info('received animation'.format(msg))
             return msg
 

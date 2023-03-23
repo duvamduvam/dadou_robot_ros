@@ -36,9 +36,8 @@ class Animation:
             self.last_time = TimeUtils.current_milli_time()
             return self.get(self.current_pos)
 
-
     def get(self, index):
-        logging.info("next {} pos {}".format(self.animation_type, index))
+        logging.info("next {} index {}".format(self.animation_type, index))
         if self.items_nb == 1:
             return self.datas[index][1]
         if self.items_nb == 2:

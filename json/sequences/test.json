@@ -1,0 +1,54 @@
+{
+    "keys": "T1",
+    "duration": 7000,
+    "audio_name": "applause.mp3",
+    "audio_path": "/home/dadou/Nextcloud/Didier/audios/",
+    "faces": [
+        [
+            0.5,
+            "test6"
+        ],
+        [
+            1.0,
+            "test4"
+        ]
+    ],
+    "lights": [
+        [
+            0.33,
+            "comet"
+        ],
+        [
+            0.66,
+            "tata"
+        ],
+        [
+            1.0,
+            "tutu"
+        ]
+    ],
+    "necks": [
+        [
+            0.1,
+            0.3
+        ],
+        [
+            0.33,
+            0.82
+        ],
+        [
+            0.66,
+            0.11
+        ]
+    ],
+    "left_arm": [
+        [
+            0.33,
+            0.82
+        ],
+        [
+            0.66,
+            0.11
+        ]
+    ]
+}

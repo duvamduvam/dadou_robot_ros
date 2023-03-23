@@ -16,6 +16,8 @@ from actions.relays import RelaysManager
 from actions.lights import Lights
 from actions.neck import Neck
 from actions.wheel import Wheel
+from dadourobot.actions.left_arm import LeftArm
+from dadourobot.actions.right_arm import RightArm
 
 from files.robot_json_manager import RobotJsonManager
 
@@ -36,6 +38,8 @@ class RobotFactory(metaclass=SingletonMeta):
         self.robot_json_manager = RobotJsonManager()
         self.device_manager = SerialDeviceManager(DEVICES_LIST)
         self.audio = AudioManager(self.robot_json_manager)
+        self.left_arm = LeftArm()
+        self.right_arm = RightArm()
         self.neck = Neck()
         self.wheel = Wheel()
         self.relays = RelaysManager(self.robot_json_manager)
