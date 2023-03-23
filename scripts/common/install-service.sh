@@ -2,22 +2,22 @@
 
 if [ -z "$1" ]
 then
-      printf "${RED}! no service name !${NF}\n"
+      printf "\n${RED}! no service name !${NF}\n"
 else
-      service_name=$1
+      SERVICE_NAME=$1
 fi
 
 if [ -z "$RPI_CONF" ]
 then
-      echo "\$RPI_CONF is empty"
+      echo "\n$RPI_CONF is empty\n"
       exit 0
 fi
 
 # install service
-printf "${RED}install service${CYAN}\n"
-ln -sf $RPI_CONF/$service_name.service /etc/systemd/system/
-chmod 644 $RPI_CONF/$service_name.service
-chown root:root $RPI_CONF/$service_name.service
-systemctl enable $service_name.service
+printf "\n${RED}INSTALL SERVICE${CYAN}\n"
+ln -sf $RPI_CONF/$SERVICE_NAME.service /etc/systemd/system/
+chmod 644 $RPI_CONF/$SERVICE_NAME.service
+chown root:root $RPI_CONF/$SERVICE_NAME.service
+systemctl enable $SERVICE_NAME.service
 systemctl daemon-reload
-service $service_name start
+service $SERVICE_NAME start

@@ -13,7 +13,7 @@ from robot_config import SEQUENCES_DIRECTORY, LOOP_DURATION
 from sequences.animation import Animation
 from sequences.random_animation_start import RandomAnimationStart
 
-from dadourobot.robot_config import RANDOM_ANIMATION_LOW, RANDOM_ANIMATION_HIGH, BASE_PATH
+from dadourobot.robot_config import RANDOM_ANIMATION_LOW, RANDOM_ANIMATION_HIGH, BASE_PATH, LEFT_ARM, RIGHT_ARM
 
 
 class AnimationManager(ActionsAbstract):
@@ -25,11 +25,14 @@ class AnimationManager(ActionsAbstract):
     last_time = 0
     timeout = 0
     random_duration = 0
+    last_random = 0
 
     datas = None
     duration = 0
 
     audios_animation = None
+    left_arm_animation = None
+    right_arm_animation = None
     necks_animation = None
     faces_animation = None
     lights_animation = None
@@ -94,7 +97,9 @@ class AnimationManager(ActionsAbstract):
         self.last_random = TimeUtils.current_milli_time()
 
         self.audios_animation = Animation(self.current_animation, self.duration, AUDIOS, 1)
-        self.necks_animation = Animation(self.current_animation, self.duration, NECKS, 1)
+        self.left_arm_animation = Animation(self.current_animation, self.duration, LEFT_ARM, 1)
+        self.right_arm_animation = Animation(self.current_animation, self.duration, RIGHT_ARM, 1)
+        self.necks_animation = Animation(self.current_animation, self.duration, NECK, 1)
         self.faces_animation = Animation(self.current_animation, self.duration, FACES, 1)
         self.lights_animation = Animation(self.current_animation, self.duration, LIGHTS, 1)
         self.wheels_animation = Animation(self.current_animation, self.duration, WHEELS, 2)
@@ -116,6 +121,8 @@ class AnimationManager(ActionsAbstract):
 
         #TODO improve neck
         self.fill_event(events, AUDIO, self.audios_animation)
+        self.fill_event(events, LEFT_ARM, self.left_arm_animation)
+        self.fill_event(events, RIGHT_ARM, self.right_arm_animation)
         self.fill_event(events, NECK, self.necks_animation)
         self.fill_event(events, WHEELS, self.wheels_animation)
         self.fill_event(events, FACE, self.faces_animation)
@@ -125,7 +132,7 @@ class AnimationManager(ActionsAbstract):
         return events
 
     def fill_event(self, events, key, animation):
-        if not animation or not events or not animation.has_data:
+        if not animation or not animation.has_data:
             return
         event_action = animation.next()
         if event_action:

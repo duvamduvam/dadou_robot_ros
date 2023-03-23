@@ -34,6 +34,7 @@ class RobotFactory(metaclass=SingletonMeta):
     def __init__(self):
 
         logging.config.fileConfig(LOGGING_CONFIG_FILE, disable_existing_loggers=False)
+        logging.getLogger("dadou_utils").setLevel(logging.DEBUG)
 
         self.robot_json_manager = RobotJsonManager()
         self.device_manager = SerialDeviceManager(DEVICES_LIST)

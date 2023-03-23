@@ -7,7 +7,7 @@ then
 fi
 
 # install sound config usb
-printf "${RED}configure sound${CYAN}\n"
+printf "\n${RED}CONFIGURE USB SOUND${CYAN}\n"
 cp $RPI_CONF/alsa-blacklist.conf /etc/modprobe.d
 ln -sf $RPI_CONF/asoundrc $RPI_HOME/.asoundrc
 ln -sf $RPI_CONF/asoundrc /root/.asoundrc

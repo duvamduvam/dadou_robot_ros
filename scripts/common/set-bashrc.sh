@@ -7,6 +7,6 @@ then
 fi
 
 # install bashrc
-printf "${RED}install bash configuration${CYAN}\n"
+printf "\n${RED}CONFIGURE BASH${CYAN}\n"
 ln -sf $RPI_CONF/bashrc $RPI_HOME/.bashrc
 ln -sf $RPI_CONF/bashrc /root/.bashrc

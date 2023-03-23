@@ -70,6 +70,7 @@ class Face(ActionsAbstract):
                 return visual
         logging.error("no visual name : " + name)
 
+    #TODO record matrix array
     def fill_matrix(self, start, end, visual):
         i = start
         for x in range(0, len(visual.rgb)):

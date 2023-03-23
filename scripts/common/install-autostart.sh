@@ -6,7 +6,7 @@ then
       exit 0
 fi
 
-printf "${RED}install autostart${CYAN}\n"
+printf "\n${RED}INSTALL AUTOSTART${CYAN}\n"
 
 mkdir $RPI_HOME/.config/autostart/
 chmod u+x $RPI_CONF/remote.desktop

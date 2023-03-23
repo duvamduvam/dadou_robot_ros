@@ -11,7 +11,7 @@ from dadou_utils.utils.time_utils import TimeUtils
 from dadourobot.actions.left_arm import LeftArm
 from dadourobot.actions.neck import Neck
 
-from dadou_utils.utils_static import NECK, ANIMATION, KEY
+from dadou_utils.utils_static import NECK, ANIMATION, KEY, STOP
 
 from dadourobot.actions.right_arm import RightArm
 from dadourobot.input.global_receiver import GlobalReceiver
@@ -44,11 +44,17 @@ class SequenceTests(unittest.TestCase):
 
     def test_sequence(self):
 
+        self.process_sequence("D1", 500)
+
+    def process_sequence(self, key, key_lunch_time):
+
         audio = RobotFactory().get_audio()
         face = RobotFactory().face
-        #lights = RobotFactory().lights
-            #lights = Lights(RobotFactory().get_strip())
+        # lights = RobotFactory().lights
+        # lights = Lights(RobotFactory().get_strip())
         neck = RobotFactory().neck
+        left_arm = RobotFactory().left_arm
+        right_arm = RobotFactory().right_arm
         relays = RobotFactory().relays
         wheel = RobotFactory().wheel
         animations = RobotFactory().animation_manager
@@ -62,32 +68,33 @@ class SequenceTests(unittest.TestCase):
         input_messages = InputMessagesList()
         while True:
 
-            if TimeUtils.is_time(start_time, 50000):
-                return
-
-            if not msg_sent and TimeUtils.is_time(msg_time, 500):
+            if not msg_sent and TimeUtils.is_time(msg_time, key_lunch_time):
                 msg_sent = True
-                input_messages.add_msg({KEY: "T1"})
+                input_messages.add_msg({KEY: key})
 
             msg = global_receiver.get_msg()
+            if msg and ANIMATION in msg and not msg[ANIMATION]:
+                return
 
             if msg:
                 audio.update(msg)
                 neck.update(msg)
+                left_arm.update(msg)
+                right_arm.update(msg)
                 face.update(msg)
                 relays.update(msg)
                 wheel.update(msg)
-                #lights.update(msg)
+                # lights.update(msg)
 
-                #if main_loop_sleep and main_loop_sleep != 0:
+                # if main_loop_sleep and main_loop_sleep != 0:
                 #    time.sleep(main_loop_sleep)
 
             face.animate()
-            #lights.animate()
+            # lights.animate()
             relays.process()
             wheel.check_stop(msg)
-            #wheel.process()
-            #neck.animate()
+            # wheel.process()
+            # neck.animate()
 
 
 if __name__ == '__main__':
