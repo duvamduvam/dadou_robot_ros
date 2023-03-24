@@ -16,7 +16,7 @@ class GlobalReceiver:
     postfix = '>'
     messages = InputMessagesList()
 
-    def __init__(self, device_manager, animation_manager):
+    def __init__(self, animation_manager=None):
         #self.mega_lora_radio = SerialDevice('modem', self.config.RADIO_MEGA_ID, 7)
         #self.mega_lora_radio = device_manager.get_device(RobotStatic.RADIO_MEGA)
         #glove_id = SerialDevice.USB_ID_PATH + "usb-Raspberry_Pi_Pico_E6611CB6976B8D28-if00"
@@ -41,12 +41,13 @@ class GlobalReceiver:
         if msg:
             logging.info('received from ws server'.format(msg))
             RandomAnimationStart.value = TimeUtils.current_milli_time()
-            self.animation_manager.update(msg)
+            if self.animation_manager:
+                self.animation_manager.update(msg)
             return msg
+        if self.animation_manager:
+            self.animation_manager.random()
+            msg = self.animation_manager.event()
 
-        self.animation_manager.random()
-
-        msg = self.animation_manager.event()
         if msg and len(msg) > 0:
             logging.info('received animation'.format(msg))
             return msg

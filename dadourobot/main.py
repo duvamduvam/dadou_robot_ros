@@ -26,18 +26,13 @@ shutdown_restart = ShutDownRestart(SHUTDOWN_PIN, RESTART_PIN, STATUS_LED_PIN)
 audio = RobotFactory().get_audio()
 face = RobotFactory().face
 #lights = RobotFactory().lights
-    #lights = Lights(RobotFactory().get_strip())
+#lights = Lights(RobotFactory().get_strip())
 neck = RobotFactory().neck
 relays = RobotFactory().relays
 wheel = RobotFactory().wheel
 animations = RobotFactory().animation_manager
 
 global_receiver = GlobalReceiver(RobotFactory().device_manager, animations)
-
-def stop(msg):
-    if msg and hasattr(msg, 'key') and msg.key == STOP_KEY:
-        logging.fatal("stopping Didier")
-        Misc.exec_shell("sudo halt")
 
 while True:
     #logging.debug('run')
@@ -46,7 +41,6 @@ while True:
         msg = global_receiver.get_msg()
 
         if msg:
-            stop(msg)
             audio.update(msg)
             neck.update(msg)
             face.update(msg)
