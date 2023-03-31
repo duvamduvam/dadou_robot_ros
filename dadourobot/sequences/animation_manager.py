@@ -3,17 +3,14 @@ import os
 import random
 
 from dadou_utils.files.files_utils import FilesUtils
-from dadou_utils.misc import Misc
 from dadou_utils.utils.time_utils import TimeUtils
 from dadou_utils.utils_static import ANIMATION, STOP_ANIMATION_KEYS, AUDIO, AUDIOS, KEY, NECK, NECKS, FACE, FACES, LIGHTS, WHEELS, NAME, \
-    DURATION, KEYS, RANDOM, START, STOP, TYPES
+    DURATION, KEYS, RANDOM, START, STOP, TYPES, SEQUENCES_DIRECTORY, LOOP_DURATION, RANDOM_ANIMATION_LOW, RANDOM_ANIMATION_HIGH, BASE_PATH, \
+    LEFT_ARM, RIGHT_ARM
 
-from actions.abstract_actions import ActionsAbstract
-from robot_config import SEQUENCES_DIRECTORY, LOOP_DURATION
-from sequences.animation import Animation
-from sequences.random_animation_start import RandomAnimationStart
-
-from dadourobot.robot_config import RANDOM_ANIMATION_LOW, RANDOM_ANIMATION_HIGH, BASE_PATH, LEFT_ARM, RIGHT_ARM
+from dadourobot.actions.abstract_actions import ActionsAbstract
+from dadourobot.sequences.animation import Animation
+from dadourobot.sequences.random_animation_start import RandomAnimationStart
 
 
 class AnimationManager(ActionsAbstract):
@@ -40,17 +37,18 @@ class AnimationManager(ActionsAbstract):
 
     current_animation = None
 
-    def __init__(self, json_manager):
-        super().__init__(json_manager)
+    def __init__(self, config, json_manager):
+        self.config = config
+        super().__init__(config, json_manager, None)
         self.load_animation_sequences()
-        self.stop_keys = STOP_ANIMATION_KEYS
-        self.random_duration = random.randint(RANDOM_ANIMATION_LOW, RANDOM_ANIMATION_HIGH)
+        self.stop_keys = self.config[STOP_ANIMATION_KEYS]
+        self.random_duration = random.randint(self.config[RANDOM_ANIMATION_LOW], self.config[RANDOM_ANIMATION_HIGH])
         RandomAnimationStart.value = TimeUtils.current_milli_time()
         logging.info("random duration time {}".format(self.random_duration))
 
 
     def load_animation_sequences(self):
-        sequences_files = FilesUtils.get_folder_files(BASE_PATH+SEQUENCES_DIRECTORY)
+        sequences_files = FilesUtils.get_folder_files(self.config[BASE_PATH]+self.config[SEQUENCES_DIRECTORY])
         for sequence_file in sequences_files:
             json_sequence = FilesUtils.open_json(sequence_file, 'r')
             json_sequence[NAME] = os.path.basename(sequence_file)
@@ -68,12 +66,12 @@ class AnimationManager(ActionsAbstract):
                         if t == RANDOM:
                             random_seq_names.append(sequence[NAME])
 
-            if len(random_seq_names)>0:
+            if len(random_seq_names) > 0:
                 random_index = random.randint(0, len(random_seq_names)-1)
                 RandomAnimationStart.value = TimeUtils.current_milli_time()
-                self.update({ANIMATION:random_seq_names[random_index]})
-                self.random_duration = random.randint(self.config.get(RANDOM_ANIMATION_LOW),
-                                                      self.config.get(RANDOM_ANIMATION_HIGH))
+                self.update({ANIMATION: random_seq_names[random_index]})
+                self.random_duration = random.randint(self.config[RANDOM_ANIMATION_LOW],
+                                                      self.config[RANDOM_ANIMATION_HIGH])
                 logging.info('random animation {}'.format(random_seq_names[random_index]))
 
     def update(self, msg):

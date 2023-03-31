@@ -4,7 +4,7 @@ import os
 from dadou_utils.utils.time_utils import TimeUtils
 
 from dadourobot.actions.lights import Lights
-from dadourobot.files.robot_json_manager import RobotJsonManager
+from hardrive.files import RobotJsonManager
 from dadourobot.robot_config import JSON_DIRECTORY, JSON_CONFIG
 from dadourobot.tests.conf_test import TestSetup
 

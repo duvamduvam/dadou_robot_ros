@@ -2,10 +2,7 @@ import logging
 import random
 
 from dadou_utils.utils.time_utils import TimeUtils
-from dadou_utils.utils_static import KEY, KEYS, NAME, LOOP
-
-from dadourobot.robot_config import RANDOM_ANIMATION_LOW, RANDOM_ANIMATION_HIGH
-from dadourobot.robot_config import LOOP_DURATION
+from dadou_utils.utils_static import KEY, KEYS, NAME, LOOP, RANDOM_ANIMATION_LOW, RANDOM_ANIMATION_HIGH, LOOP_DURATION
 
 
 class ActionsAbstract:
@@ -14,13 +11,14 @@ class ActionsAbstract:
     start_loop_duration = 0
     loop = False
 
-    def __init__(self, json_manager, json_key=None):
+    def __init__(self, config, json_manager, json_key):
         self.json_manager = json_manager
         self.sequences_key = {}
         self.sequences_name = {}
-        self.random_duration = random.randint(RANDOM_ANIMATION_LOW, RANDOM_ANIMATION_HIGH)
+        #self.random_duration = random.randint(config[RANDOM_ANIMATION_LOW], config[RANDOM_ANIMATION_HIGH])
         self.last_random = TimeUtils.current_milli_time()
-        if json_key : self.load_sequences(json_key)
+        if json_key:
+            self.load_sequences(json_key)
 
     def load_sequences(self, json_key):
         sequences = self.json_manager.open_json(json_key)

@@ -5,21 +5,16 @@ import vlc
 
 #from sound_player import Sound, Playlist, SoundPlayer
 
+from dadou_utils.utils_static import DELAY, NAME, SEQUENCE
 
-from json_manager import JsonManager
-from path_time import PathTime
-from robot_factory import RobotFactory
+from dadourobot.path_time import PathTime
 
 
 class VlCAudio:
 
-
     silence = "audios/silence.wav"
-
     player = vlc.MediaPlayer(silence)
 
-    def __init__(self):
-        self.json_manager = RobotFactory().robot_json_manager
 
     def play_sounds(self, audios):
         self.player.stop()
@@ -35,14 +30,15 @@ class VlCAudio:
 
     def process(self, key):
         if key:
-            audio_sequence = self.json_manager.get_audio_seq(key)
-            if audio_sequence:
-                logging.info("play new audio")
-                audios = []
-                for audio_seq in audio_sequence[JsonManager.SEQUENCE]:
-                    audio_path = self.json_manager.get_audio_path_by_name(audio_seq[JsonManager.NAME])
-                    logging.debug("audios name : " + audio_seq[JsonManager.NAME] + " path : " + audio_path)
-                    audios.append(PathTime(audio_path, audio_seq[JsonManager.DELAY]))
-
-                self.play_sounds(audios)
+            logging.info("process: ")
+            #audio_sequence = self.json_manager.get_audio_seq(key)
+            #if audio_sequence:
+            #    logging.info("play new audio")
+            #    audios = []
+            #    for audio_seq in audio_sequence[SEQUENCE]:
+            #        audio_path = self.json_manager.get_audio_path_by_name(audio_seq[NAME])
+            #        logging.debug("audios name : " + audio_seq[NAME] + " path : " + audio_path)
+            #        audios.append(PathTime(audio_path, audio_seq[DELAY]))
+            #
+            #    self.play_sounds(audios)
 

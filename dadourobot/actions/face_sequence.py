@@ -1,8 +1,7 @@
 from enum import Enum
 
 from dadou_utils.utils.time_utils import TimeUtils
-
-from robot_config import RobotStatic
+from dadou_utils.utils_static import DURATION, MOUTHS
 
 
 class LedPart(Enum):
@@ -27,11 +26,11 @@ class FaceSequence:
     current_element = None
 
     def __init__(self, json):
-        self.mouths = json['mouths']
-        self.leyes = json['right_eyes']
-        self.reyes = json['left_eyes']
-        self.duration = json[RobotStatic.DURATION]
-        self.loop = json[RobotStatic.DURATION]
+        self.mouths = json[MOUTHS]
+        self.leyes = json[RIGHTS_EYES]
+        self.reyes = json[LEFT_EYES]
+        self.duration = json[DURATION]
+        self.loop = json[DURATION]
         self.start_time = TimeUtils.current_milli_time()
 
     def get_pos(self, part: LedPart):

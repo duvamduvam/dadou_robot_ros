@@ -9,11 +9,12 @@ from adafruit_servokit import ServoKit
 from dadourobot.actions.left_arm import LeftArm
 from dadourobot.actions.neck import Neck
 
-from dadou_utils.utils_static import NECK
+from dadou_utils.utils_static import NECK, LEFT_ARM, RIGHT_ARM, LOGGING_CONFIG_TEST_FILE
 
 from dadourobot.actions.right_arm import RightArm
-from dadourobot.robot_config import LEFT_ARM, RIGHT_ARM
+from dadourobot.robot_config import config
 from dadourobot.tests.conf_test import TestSetup
+
 TestSetup()
 
 
@@ -21,9 +22,10 @@ class NeckTests(unittest.TestCase):
     #setup = TestSetup()
      #setup.neck
      #setup.left_arm
-    neck = Neck()
-    left_arm = LeftArm()
-    right_arm = RightArm() #setup.right_arm
+    logging.config.fileConfig(config[LOGGING_CONFIG_TEST_FILE], disable_existing_loggers=False)
+    neck = Neck(config)
+    left_arm = LeftArm(config)
+    right_arm = RightArm(config) #setup.right_arm
 
     def test_neck(self):
         logging.debug("start test neck")

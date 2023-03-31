@@ -3,19 +3,16 @@
 import logging
 import threading
 from os.path import exists
-
-from dadou_utils.misc import Misc
-from dadou_utils.utils_static import ANIMATION, AUDIO, NAME, STOP, FACE, \
-    LIGHTS
 from sound_player import Sound, SoundPlayer
 
-from actions.abstract_actions import ActionsAbstract
-from files.robot_json_manager import RobotJsonManager
-
+from dadou_utils.misc import Misc
+from dadou_utils.utils_static import ANIMATION, AUDIO, EXPRESSION, NAME, STOP, FACE, \
+    LIGHTS, JSON_AUDIOS
 from dadou_utils.audios.sound_object import SoundObject
 
-from dadourobot.robot_config import AUDIOS_DIRECTORY, JSON_AUDIOS, LOOP_DURATION
-from dadou_utils.utils_static import EXPRESSION
+from dadourobot.actions.abstract_actions import ActionsAbstract
+from dadourobot.files.robot_json_manager import RobotJsonManager
+
 
 class AudioManager(ActionsAbstract):
 
@@ -28,15 +25,18 @@ class AudioManager(ActionsAbstract):
     sequences_key = {}
     sequences_name = {}
 
-    def __init__(self, robot_json_manager: RobotJsonManager):
-        super().__init__(robot_json_manager, JSON_AUDIOS)
-
+    def __init__(self, config, robot_json_manager: RobotJsonManager):
+        super().__init__(config, robot_json_manager, config[JSON_AUDIOS])
+        self.config = config
     #def load_sequences(self):
     #    audio_list = self.json_manager.open_json(JSON_AUDIOS)
     #    for audio in audio_list:
     #        for key in audio[KEYS]:
     #            self.sequences_key[key] = audio
     #        self.sequences_name[audio[NAME]] = audio
+
+    def process(self):
+        pass
 
     def play_sounds_bak(self, audios):
         self.player.stop()
@@ -48,9 +48,9 @@ class AudioManager(ActionsAbstract):
         self.player.play()
 
     def play_sound(self, audio):
-        if exists(AUDIOS_DIRECTORY+audio):
+        if exists(self.config[AUDIOS_DIRECTORY]+audio):
             self.stop_sound()
-            self.current_audio = SoundObject(AUDIOS_DIRECTORY, audio)
+            self.current_audio = SoundObject(self.config[AUDIOS_DIRECTORY], audio)
             self.current_audio.play()
             self.current_audio_name = audio
             return self.current_audio.duration
@@ -61,7 +61,7 @@ class AudioManager(ActionsAbstract):
         self.player.stop()
         for audio in audios:
             logging.info("enqueue: " + audio.get_path())
-            sound = SoundObject(AUDIOS_DIRECTORY, audio.get_path())
+            sound = SoundObject(self.config[AUDIOS_DIRECTORY], audio.get_path())
             self.playlist.append(sound)
             #self.player.enqueue(Sound(audio.get_path()), 1)
             #for s in range(int(audio.get_time())):
@@ -78,7 +78,7 @@ class AudioManager(ActionsAbstract):
     #TODO improve audio[NAME] // msg[AUDIO]
     def update(self, msg):
         if msg and AUDIO in msg:
-            if msg[AUDIO] == STOP:
+            if msg[AUDIO] == self.config[STOP]:
                 self.stop_sound()
                 return
             if msg[AUDIO] == self.current_audio_name and self.current_audio and self.current_audio.is_playing():
@@ -103,7 +103,7 @@ class AudioManager(ActionsAbstract):
             logging.debug("already playing {}".format(self.current_audio_name))
             return
         else:
-            if not Misc.is_audio(AUDIOS_DIRECTORY + audio[NAME]):
+            if not Misc.is_audio(self.config[AUDIOS_DIRECTORY] + audio[NAME]):
                 logging.error("{} is not audio file".format(audio[NAME]))
                 return
             length = self.play_sound(audio[NAME])

@@ -1,12 +1,6 @@
 # pip3 install adafruit-circuitpython-servokit
-import logging
-from adafruit_servokit import ServoKit
 
-from dadourobot.robot_config import HEAD_PWM_NB, I2C_ENABLED, PWM_CHANNELS_ENABLED
-
-from dadou_utils.misc import Misc
-from dadou_utils.utils.time_utils import TimeUtils
-from dadou_utils.utils_static import NECK, KEY
+from dadou_utils.utils_static import NECK, HEAD_PWM_NB, I2C_ENABLED, PWM_CHANNELS_ENABLED
 from dadou_utils.actions.servo_abstract import ServoAbstract
 
 
@@ -22,9 +16,9 @@ class Neck(ServoAbstract):
     SERVO_MAX = 180
     DEFAULT_POS = 0
 
-    def __init__(self):
+    def __init__(self, config):
 
-        super().__init__(NECK, HEAD_PWM_NB, self.DEFAULT_POS, self.SERVO_MAX, I2C_ENABLED, PWM_CHANNELS_ENABLED)
+        super().__init__(NECK, config[HEAD_PWM_NB], self.DEFAULT_POS, self.SERVO_MAX, config[I2C_ENABLED], config[PWM_CHANNELS_ENABLED])
 
 
     """def animate(self):

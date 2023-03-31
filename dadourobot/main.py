@@ -2,69 +2,75 @@ import logging.config
 import sys
 
 import board
+import neopixel
 
-from robot_config import I2C_ENABLED, SHUTDOWN_PIN, RESTART_PIN, STATUS_LED_PIN, STOP_KEY
-
-#sys.path.append('..')
-
-from dadou_utils.misc import Misc
+from dadou_utils.com.serial_devices_manager import SerialDeviceManager
 from dadou_utils.utils.shutdown_restart import ShutDownRestart
+from dadou_utils.utils_static import SHUTDOWN_PIN, RESTART_PIN, STATUS_LED_PIN, DEVICES_LIST, LIGHTS_PIN, LIGHTS, \
+    LIGHTS_LED_COUNT, LOGGING_CONFIG_FILE
 
-from actions.neck import Neck
-from robot_config import MAIN_DUE
+from dadourobot.sequences.animation_manager import AnimationManager
+from dadourobot.actions.neck import Neck
+from dadourobot.actions.audio_manager import AudioManager
+from dadourobot.actions.face import Face
+from dadourobot.actions.left_arm import LeftArm
+from dadourobot.actions.lights import Lights
+from dadourobot.actions.relays import RelaysManager
+from dadourobot.actions.right_arm import RightArm
+from dadourobot.actions.wheel import Wheel
+from dadourobot.files.robot_json_manager import RobotJsonManager
+from dadourobot.input.global_receiver import GlobalReceiver
+from dadourobot.robot_config import config
 
-from robot_factory import RobotFactory
-from input.global_receiver import GlobalReceiver
-
-
+sys.path.append('..')
 print(sys.path)
 print(dir(board))
 print('Starting Didier')
 
-shutdown_restart = ShutDownRestart(SHUTDOWN_PIN, RESTART_PIN, STATUS_LED_PIN)
+logging.config.fileConfig(config[LOGGING_CONFIG_FILE], disable_existing_loggers=False)
 
-audio = RobotFactory().get_audio()
-face = RobotFactory().face
-#lights = RobotFactory().lights
-#lights = Lights(RobotFactory().get_strip())
-neck = RobotFactory().neck
-relays = RobotFactory().relays
-wheel = RobotFactory().wheel
-animations = RobotFactory().animation_manager
+################################ Component initialisations ##################################
+# TODO profiling
+# TODO multitreading : https://makergram.com/community/topic/29/multi-thread-handling-for-normal-processes-using-python/4
 
-global_receiver = GlobalReceiver(RobotFactory().device_manager, animations)
+components = []
+
+robot_json_manager = RobotJsonManager(config)
+pixels = neopixel.NeoPixel(config[LIGHTS_PIN], config[LIGHTS_LED_COUNT], auto_write=False, brightness=0.05, pixel_order=neopixel.GRB)
+
+#TODO check best order for performances
+components.extend([AudioManager(config, robot_json_manager),
+                    Face(config, robot_json_manager, pixels),
+                    LeftArm(config),
+                    Lights(config, robot_json_manager, pixels, LIGHTS),
+                    Neck(config),
+                    RelaysManager(config, robot_json_manager),
+                    RightArm(config),
+                    ShutDownRestart(config[SHUTDOWN_PIN], config[RESTART_PIN], config[STATUS_LED_PIN]),
+                    Wheel(config),
+                   ])
+
+#devices_manager = SerialDeviceManager(DEVICES_LIST)
+animations = AnimationManager(config, robot_json_manager)
+global_receiver = GlobalReceiver()
+
+################################ Main loop ##################################
 
 while True:
-    #logging.debug('run')
+    # logging.debug('run')
 
     try:
         msg = global_receiver.get_msg()
 
         if msg:
-            audio.update(msg)
-            neck.update(msg)
-            face.update(msg)
-            relays.update(msg)
-            wheel.update(msg)
-            #lights.update(msg)
+            for component in components:
+                component.update(msg)
 
-        #if main_loop_sleep and main_loop_sleep != 0:
-        #    time.sleep(main_loop_sleep)
+        for component in components:
+            component.process()
 
-        face.animate()
-        #lights.animate()
-        relays.process()
-        wheel.check_stop(msg)
-        #wheel.process()
-        #neck.animate()
-            #
+        #wheel.check_stop(msg)
 
-        #if TimeUtils.is_time(SerialDeviceManager.last_update, SerialDeviceManager.update_period):
-        #    RobotFactory().device_manager.update_devices()
-
-        #wheel.test()
-
-        shutdown_restart.process()
 
     except Exception as err:
         logging.error('exception {}'.format(err), exc_info=True)

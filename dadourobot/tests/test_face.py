@@ -1,7 +1,7 @@
 import logging.config
 
 from dadourobot.robot_config import RobotConfig
-from dadourobot.files.robot_json_manager import RobotJsonManager
+from hardrive.files import RobotJsonManager
 from dadourobot.tests.conf_test import TestSetup
 from dadourobot.utils import Utils
 from dadourobot.visual.image_mapping import ImageMapping
@@ -14,7 +14,7 @@ import time
 import neopixel
 import board
 
-from adafruit_led_animation.color import RED, YELLOW, ORANGE, GREEN, TEAL, CYAN, BLUE, PURPLE, MAGENTA, WHITE, BLACK, GOLD, PINK, AQUA, JADE, AMBER
+from adafruit_led_animation.color import RED, BLACK, AMBER
 
 import unittest
 

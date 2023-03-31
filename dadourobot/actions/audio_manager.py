@@ -4,13 +4,10 @@ import logging
 import threading
 from os.path import exists
 
-from dadou_utils.misc import Misc
+from dadou_utils.utils_static import AUDIOS_DIRECTORY
 from sound_player import Sound, SoundPlayer
 
-from robot_config import RobotStatic
-from path_time import PathTime
-from robot_factory import RobotFactory
-
+from dadou_utils.misc import Misc
 from dadou_utils.audios.sound_object import SoundObject
 
 
@@ -22,8 +19,9 @@ class AudioManager:
     current_audio = None
     current_audio_name = None
 
-    def __init__(self):
-        self.json_manager = RobotFactory().robot_json_manager
+    def __init__(self, config, json_manager):
+        self.config = config
+        self.json_manager = json_manager
 
     def play_sounds_bak(self, audios):
         self.player.stop()
@@ -35,8 +33,8 @@ class AudioManager:
         self.player.play()
 
     def play_sound(self, audio):
-        if exists(RobotStatic.AUDIOS_DIRECTORY+audio['path']):
-            self.current_audio = SoundObject(RobotStatic.AUDIOS_DIRECTORY, audio['path'])
+        if exists(self.config[AUDIOS_DIRECTORY]+audio['path']):
+            self.current_audio = SoundObject(self.config[AUDIOS_DIRECTORY], audio['path'])
             self.current_audio.play()
             self.current_audio_name = audio['path']
         else:
@@ -47,7 +45,7 @@ class AudioManager:
         for audio in audios:
             logging.info("enqueue: " + audio.get_path())
 
-            sound = SoundObject(RobotStatic.AUDIOS_DIRECTORY, audio.get_path())
+            sound = SoundObject(self.config[AUDIOS_DIRECTORY], audio.get_path())
             self.playlist.append(sound)
             #self.player.enqueue(Sound(audio.get_path()), 1)
             #for s in range(int(audio.get_time())):
@@ -60,7 +58,10 @@ class AudioManager:
             self.current_audio.stop()
             self.current_audio_name = ""
 
-    def process(self, msg):
+    def process(self):
+        pass
+
+    def update(self, msg):
         if msg and hasattr(msg, 'key') and msg.key:
             logging.debug("number of thread : {}".format(threading.active_count()))
             audio_path = self.json_manager.get_audios(msg.key)
@@ -73,7 +74,7 @@ class AudioManager:
                     logging.debug("already playing {}".format(self.current_audio_name))
                     return
                 else:
-                    if not Misc.is_audio(RobotStatic.AUDIOS_DIRECTORY + audio_path['path']):
+                    if not Misc.is_audio(self.config[AUDIOS_DIRECTORY] + audio_path['path']):
                         logging.error("{} is not audio file".format(audio_path['path']))
                         return
                     if self.current_audio:

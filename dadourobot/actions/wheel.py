@@ -7,11 +7,11 @@ import pwmio
 
 from dadou_utils.misc import Misc
 from dadou_utils.utils.time_utils import TimeUtils
-from dadou_utils.utils_static import ANIMATION, ANGLO, WHEEL_RIGHT, WHEEL_LEFT, JOY, WHEELS, KEY
+from dadou_utils.utils_static import ANIMATION, ANGLO, WHEEL_RIGHT, WHEEL_LEFT, JOY, WHEELS, KEY, \
+    CMD_FORWARD, CMD_BACKWARD, CMD_LEFT, CMD_RIGHT, I2C_ENABLED, PWM_CHANNELS_ENABLED, \
+WHEEL_LEFT_PWM, WHEEL_RIGHT_PWM, WHEEL_LEFT_DIR, WHEEL_RIGHT_DIR
 
 from dadourobot.move.anglo_meter_translator import AngloMeterTranslator
-from dadourobot.robot_config import CMD_FORWARD, CMD_BACKWARD, CMD_LEFT, CMD_RIGHT, I2C_ENABLED, PWM_CHANNELS_ENABLED
-from dadourobot.robot_config import WHEEL_LEFT_PWM, WHEEL_RIGHT_PWM, WHEEL_LEFT_DIR, WHEEL_RIGHT_DIR
 
 
 class Wheel:
@@ -33,9 +33,9 @@ class Wheel:
     test_speed = 0
     test_direction = 0
 
-    def __init__(self):
-
-        self.enabled = I2C_ENABLED or PWM_CHANNELS_ENABLED
+    def __init__(self, config):
+        self.config = config
+        self.enabled = self.config[I2C_ENABLED] or self.config[PWM_CHANNELS_ENABLED]
         if not self.enabled:
             logging.warning("i2c pwm disabled")
             return
@@ -60,16 +60,16 @@ class Wheel:
         #pca9685 = adafruit_pca9685.PCA9685(i2c)
         #pca9685.frequency = 60
 
-        self.left_pwm = pca9685.channels[WHEEL_LEFT_PWM]
-        self.right_pwm = pca9685.channels[WHEEL_RIGHT_PWM]
-        self.dir_left = pca9685.channels[WHEEL_LEFT_DIR]
-        self.dir_right = pca9685.channels[WHEEL_RIGHT_DIR]
+        self.left_pwm = pca9685.channels[self.config[WHEEL_LEFT_PWM]]
+        self.right_pwm = pca9685.channels[self.config[WHEEL_RIGHT_PWM]]
+        self.dir_left = pca9685.channels[self.config[WHEEL_LEFT_DIR]]
+        self.dir_right = pca9685.channels[self.config[WHEEL_RIGHT_DIR]]
 
         #self.dir_left = pwmio.PWMOut(board.D6)
         #self.dir_right = pwmio.PWMOut(board.D5)
         #self.dir_left = pwmio.PWMOut(Pin(config.LEFT_DIR_PIN))
         #self.dir_right = pwmio.PWMOut(Pin(config.RIGHT_DIR_PIN))
-        self.due = None
+        #self.due = None
 
         self.anglo_meter_translator = AngloMeterTranslator()
 
@@ -81,14 +81,14 @@ class Wheel:
         if not msg:
             return
 
-        if KEY in msg and (msg[KEY] == CMD_FORWARD or msg[KEY] == CMD_BACKWARD or msg[KEY] == CMD_LEFT or msg[KEY] == CMD_RIGHT):
-            if msg[KEY] == CMD_FORWARD:
+        if KEY in msg and (msg[KEY] == self.config[CMD_FORWARD] or msg[KEY] == self.config[CMD_BACKWARD] or msg[KEY] == CMD_LEFT or msg[KEY] == self.config[CMD_RIGHT]):
+            if msg[KEY] == self.config[CMD_FORWARD]:
                 self.update_cmd(30, 30)
-            elif msg[KEY] == CMD_BACKWARD:
+            elif msg[KEY] == self.config[CMD_BACKWARD]:
                 self.update_cmd(-30, -30)
-            elif msg[KEY] == CMD_LEFT:
+            elif msg[KEY] == self.config[CMD_LEFT]:
                 self.update_cmd(-30, 30)
-            elif msg[KEY] == CMD_RIGHT:
+            elif msg[KEY] == self.config[CMD_RIGHT]:
                 self.update_cmd(30, -30)
 
         if ANGLO in msg:

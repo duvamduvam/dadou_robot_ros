@@ -2,10 +2,9 @@ import logging
 
 import adafruit_pcf8574
 import board
-from dadou_utils.utils.time_utils import TimeUtils
-from dadou_utils.utils_static import KEY
 
-from dadourobot.robot_config import I2C_ENABLED, DIGITAL_CHANNELS_ENABLED
+from dadou_utils.utils.time_utils import TimeUtils
+from dadou_utils.utils_static import KEY, I2C_ENABLED, DIGITAL_CHANNELS_ENABLED
 
 
 class RelaysManager:
@@ -18,9 +17,10 @@ class RelaysManager:
     NORMAL_VOICE = "normal_voice"
     PITCHED_VOICE = "pitched_voice"
 
-    def __init__(self, json_manager):
+    def __init__(self, config, json_manager):
 
-        if not I2C_ENABLED or not DIGITAL_CHANNELS_ENABLED:
+        self.config = config
+        if not self.config[I2C_ENABLED] or not self.config[DIGITAL_CHANNELS_ENABLED]:
             logging.warning("i2c digital disabled")
             return
 
@@ -43,7 +43,7 @@ class RelaysManager:
 
     def update(self, msg):
 
-        if not I2C_ENABLED or not DIGITAL_CHANNELS_ENABLED:
+        if not self.config[I2C_ENABLED] or not self.config[DIGITAL_CHANNELS_ENABLED]:
             return
 
         if msg and KEY in msg:
@@ -77,7 +77,7 @@ class RelaysManager:
 
     def process(self):
 
-        if not I2C_ENABLED or not DIGITAL_CHANNELS_ENABLED:
+        if not self.config[I2C_ENABLED] or not self.config[DIGITAL_CHANNELS_ENABLED]:
             return
 
         if not self.voice_out.value and TimeUtils.is_time(self.last_effect_time, self.effect_timeout):

@@ -2,16 +2,15 @@ import logging.config
 
 from dadou_utils.files.files_manager import FilesUtils
 from dadou_utils.utils.time_utils import TimeUtils
-from dadou_utils.utils_static import NAME, DURATION, LOOP, KEY, FACE, SPEAK, SPEAK_DURATION, DEFAULT
+from dadou_utils.utils_static import NAME, DURATION, LOOP, KEY, FACE, SPEAK, SPEAK_DURATION, DEFAULT, \
+    MOUTH_VISUALS_PATH, EYE_VISUALS_PATH, LIGHTS_PIN, BASE_PATH, MOUTHS, LEYE, REYE, JSON_EXPRESSIONS, LOOP_DURATION, \
+    RIGHT_EYES, LEFT_EYES
 
-from actions.abstract_actions import ActionsAbstract
-from sequences.random_animation_start import RandomAnimationStart
-from sequences.sequence import Sequence
-from robot_config import MOUTHS, LEYE, REYE, JSON_EXPRESSIONS, LOOP_DURATION
-from visual.image_mapping import ImageMapping
-from visual.visual import Visual
-
-from dadourobot.robot_config import MOUTH_VISUALS_PATH, EYE_VISUALS_PATH, LIGHTS_PIN, BASE_PATH
+from dadourobot.actions.abstract_actions import ActionsAbstract
+from dadourobot.sequences.random_animation_start import RandomAnimationStart
+from dadourobot.sequences.sequence import Sequence
+from dadourobot.visual.image_mapping import ImageMapping
+from dadourobot.visual.visual import Visual
 
 
 #TODO wrong file name
@@ -39,10 +38,10 @@ class Face(ActionsAbstract):
     #speak_duration = 0
     #start_speak_time = 0
 
-
-    def __init__(self, json_manager,  strip):
-        super().__init__(json_manager, JSON_EXPRESSIONS)
-        logging.info("start face with pin " + str(LIGHTS_PIN))
+    def __init__(self, config, json_manager,  strip):
+        super().__init__(config, json_manager, config[JSON_EXPRESSIONS])
+        logging.info("start face with pin " + str(config[LIGHTS_PIN]))
+        self.config = config
         self.strip = strip
         self.load_visuals()
         self.update({FACE: self.DEFAULT})
@@ -55,8 +54,8 @@ class Face(ActionsAbstract):
 
     def load_visuals(self):
 
-        mouth_names = FilesUtils.get_folder_files(BASE_PATH+MOUTH_VISUALS_PATH)
-        eye_names = FilesUtils.get_folder_files(BASE_PATH+EYE_VISUALS_PATH)
+        mouth_names = FilesUtils.get_folder_files(self.config[BASE_PATH]+self.config[MOUTH_VISUALS_PATH])
+        eye_names = FilesUtils.get_folder_files(self.config[BASE_PATH]+self.config[EYE_VISUALS_PATH])
 
         for visual_path in mouth_names:
             self.visuals.append(Visual(visual_path, True))
@@ -113,8 +112,8 @@ class Face(ActionsAbstract):
         self.loop = json_seq[LOOP]
         self.start_time = TimeUtils.current_milli_time()
         self.mouth = Sequence(self.duration, self.loop, json_seq[MOUTHS], 0)
-        self.leye = Sequence(self.duration, self.loop, json_seq[LEYE], 385) #385
-        self.reye = Sequence(self.duration, self.loop, json_seq[REYE], 448) #448
+        self.leye = Sequence(self.duration, self.loop, json_seq[LEFT_EYES], 385) #385
+        self.reye = Sequence(self.duration, self.loop, json_seq[RIGHT_EYES], 448) #448
 
     def animate_part(self, seq: Sequence):
         change = False
@@ -131,7 +130,7 @@ class Face(ActionsAbstract):
 
     #def
 
-    def animate(self):
+    def process(self):
         if self.loop_duration != 0:
             if TimeUtils.is_time(self.start_loop_duration, self.loop_duration):
                 self.loop_duration = 0

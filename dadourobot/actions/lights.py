@@ -8,14 +8,13 @@ import logging.config
 # todo check thread : https://www.geeksforgeeks.org/python-communicating-between-threads-set-1/
 # todo check thread2 : https://riptutorial.com/python/example/4691/communicating-between-threads
 from adafruit_led_animation.helper import PixelMap
+
 from dadou_utils.utils.time_utils import TimeUtils
-from dadou_utils.utils_static import METHOD, DEFAULT, DURATION, SEQUENCES, LOOP, COLOR, NAME, KEY, LIGHTS, FACE
+from dadou_utils.utils_static import METHOD, DEFAULT, DURATION, SEQUENCES, LOOP, COLOR, NAME, KEY, LIGHTS, FACE, LIGHTS_START_LED, LIGHTS_END_LED
 
 from dadourobot.actions.abstract_actions import ActionsAbstract
 from dadourobot.sequences.sequence import Sequence
-from dadourobot.robot_config import JSON_LIGHTS
 from dadourobot.visual.lights_animations import LightsAnimations
-
 
 """
       "method": "sparkle_pulse",
@@ -51,23 +50,26 @@ class Lights(ActionsAbstract):
     duration = 0
     start_time = 0
 
-    def __init__(self, json_manager, strip):
-        super().__init__(json_manager, JSON_LIGHTS)
+    def __init__(self, config, json_manager, strip, light_type):
+        self.light_type = light_type
+        super().__init__(config, json_manager, self.light_type+".json")
+        self.config = config
         #self.strip = neopixel.NeoPixel(self.LED_COUNT, Pin(config.LIGHTS_PIN), self.LED_FREQ_HZ, self.LED_DMA, self.LED_INVERT, self.LED_BRIGHTNESS, self.LED_CHANNEL)
 
-        strip_pixels_range = ()
-        for x in range(self.FIRST_STRIP_LED, self.LED_COUNT): #513
-            strip_pixels_range += (x,)
+        #strip_pixels_range = ()
+        #for x in range(self.config[LIGHTS_START_LED], self.config[LIGHTS_END_LED]): #513
+        #    strip_pixels_range += (x,)
 
-        self.strip = PixelMap(strip,
-            strip_pixels_range, individual_pixels=True)
+        #self.strip = PixelMap(strip,
+        #    strip_pixels_range, individual_pixels=True)
+        self.strip = strip
 
-        self.animations = LightsAnimations(self.LED_COUNT - self.FIRST_STRIP_LED, self.strip)
-        self.update({LIGHTS:DEFAULT})
+        self.animations = LightsAnimations(self.config[LIGHTS_END_LED] - self.config[LIGHTS_START_LED], self.strip)
+        self.update({light_type: DEFAULT})
 
     def update(self, msg):
 
-        json_seq = self.get_sequence(msg, LIGHTS, True)
+        json_seq = self.get_sequence(msg, self.light_type, True)
         if not json_seq:
             return
 
@@ -91,7 +93,7 @@ class Lights(ActionsAbstract):
         self.start_time = TimeUtils.current_milli_time()
         logging.info("update lights sequences to " + json_seq[NAME])
 
-    def animate(self):
+    def process(self):
 
         if self.loop_duration != 0:
             if TimeUtils.is_time(self.start_loop_duration, self.loop_duration):
@@ -99,7 +101,7 @@ class Lights(ActionsAbstract):
                 self.loop = False
 
         if not self.loop and TimeUtils.is_time(self.start_time, self.duration):
-            self.update({LIGHTS:DEFAULT})
+            self.update({self.light_type: DEFAULT})
             return
 
         if self.sequence.time_to_switch():

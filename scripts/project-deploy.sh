@@ -19,13 +19,22 @@ export INSTALL_SERVICE="yes"
 #export INSTALL_AUTOSTART="yes"
 export SERVICE_NAME=didier
 
+export PROJECT_SYSTEM_LIB="python3-opencv"
+export PROJECT_PYTHON_LIB="adafruit-circuitpython-rfm9x"
+
 ####################################################################
 
 export RPI_HOME=/home/didier
 export LOCAL_HOME=~
 
-export UTILS_PATH=$LOCAL_HOME/Nextcloud/Didier/python/dadou_utils
-export UTILS_SCRIPTS=$UTILS_PATH/scripts/deploy
+export UTILS_PROJECT=$LOCAL_HOME/Nextcloud/Didier/python/dadou_utils
+export UTILS_SCRIPTS=$UTILS_PROJECT/scripts/deploy
+
+declare -A PROJECT_DEPENDENCIES
+PROJECT_DEPENDENCIES[0]=$LOCAL_HOME/Nextcloud/Didier/python/dadou_robot/dadourobot
+PROJECT_DEPENDENCIES[1]=$UTILS_PROJECT
+export PROJECT_DEPENDENCIES
+#printf "$PROJECT_DEPENDENCIES[@]"
 
 if [ "$1" = "read_param" ]; then
   printf "${CYAN}Only read param${CYAN}\n"
