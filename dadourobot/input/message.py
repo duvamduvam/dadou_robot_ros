@@ -15,7 +15,7 @@ class Message:
     POSTFIX = '>'
 
     def __init__(self):
-        self.json_manager = RobotFactory().robot_json_manager
+        self.json_manager = RobotFactory().disk_json_manager
 
     def set(self, msg):
 

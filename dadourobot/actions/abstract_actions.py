@@ -11,7 +11,7 @@ class ActionsAbstract:
     start_loop_duration = 0
     loop = False
 
-    def __init__(self, config, json_manager, json_key):
+    def __init__(self, json_manager, json_key):
         self.json_manager = json_manager
         self.sequences_key = {}
         self.sequences_name = {}

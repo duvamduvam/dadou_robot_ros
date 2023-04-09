@@ -4,12 +4,14 @@ import unittest
 from dadou_utils.utils_static import WHEEL_LEFT, WHEEL_RIGHT
 
 import dadourobot
+from dadourobot.actions.wheel import Wheel
+from dadourobot.robot_config import config
 from dadourobot.tests.conf_test import TestSetup
 
 
 class WheelTest(unittest.TestCase):
     test_setup = TestSetup()
-    wheel = test_setup.wheel
+    wheel = Wheel(config)
 
     def test_run(self):
 

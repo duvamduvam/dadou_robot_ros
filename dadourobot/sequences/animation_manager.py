@@ -39,7 +39,7 @@ class AnimationManager(ActionsAbstract):
 
     def __init__(self, config, json_manager):
         self.config = config
-        super().__init__(config, json_manager, None)
+        super().__init__(json_manager, None)
         self.load_animation_sequences()
         self.stop_keys = self.config[STOP_ANIMATION_KEYS]
         self.random_duration = random.randint(self.config[RANDOM_ANIMATION_LOW], self.config[RANDOM_ANIMATION_HIGH])

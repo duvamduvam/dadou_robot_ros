@@ -39,7 +39,7 @@ class Face(ActionsAbstract):
     #start_speak_time = 0
 
     def __init__(self, config, json_manager,  strip):
-        super().__init__(config, json_manager, config[JSON_EXPRESSIONS])
+        super().__init__(json_manager, config[JSON_EXPRESSIONS])
         logging.info("start face with pin " + str(config[LIGHTS_PIN]))
         self.config = config
         self.strip = strip

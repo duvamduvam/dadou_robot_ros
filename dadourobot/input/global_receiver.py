@@ -1,4 +1,8 @@
+import fcntl
 import logging
+import json
+import time
+from json import JSONDecodeError
 
 from dadou_utils.com.input_messages_list import InputMessagesList
 #from dadou_utils.com.lora_radio import LoraRadio
@@ -6,8 +10,10 @@ from dadou_utils.com.input_messages_list import InputMessagesList
 from dadou_utils.com.lora_radio import LoraRadio
 from dadou_utils.com.ws_server import WsServer
 from dadou_utils.utils.time_utils import TimeUtils
+from dadou_utils.utils_static import INPUT_MESSAGE_FILE, TIME
 
 from dadourobot.sequences.random_animation_start import RandomAnimationStart
+
 
 
 class GlobalReceiver:
@@ -43,20 +49,34 @@ class GlobalReceiver:
             RandomAnimationStart.value = TimeUtils.current_milli_time()
             if self.animation_manager:
                 self.animation_manager.update(msg)
-            return msg
+            return self.write_msg(msg)
         if self.animation_manager:
             self.animation_manager.random()
-            msg = self.animation_manager.event()
+            return self.write_msg(self.animation_manager.event())
 
         if msg and len(msg) > 0:
             logging.info('received animation'.format(msg))
-            return msg
+            return self.write_msg(msg)
 
         #radio_msg = self.lora_radio.receive_msg()
         #if radio_msg:
         #    logging.info('received lora msg : {}'.format(radio_msg))
         #    return radio_msg
 
+    def write_msg(self, msg):
+        msg[TIME] = time.time()
+        json_object = json.dumps(msg, indent=4)
+        with open(INPUT_MESSAGE_FILE, "w") as j:
+            j.write(json_object)
+        return msg
+
+    @staticmethod
+    def read_msg():
+        with open(INPUT_MESSAGE_FILE, 'r') as j:
+            try:
+                return json.loads(j.read())
+            except JSONDecodeError:
+                logging.debug("{} wrong format {}".format(INPUT_MESSAGE_FILE, j))
 
     def return_msg(self, msg, log_text):
         if msg:

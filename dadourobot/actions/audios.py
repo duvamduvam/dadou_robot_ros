@@ -7,7 +7,7 @@ from sound_player import Sound, SoundPlayer
 
 from dadou_utils.misc import Misc
 from dadou_utils.utils_static import ANIMATION, AUDIO, EXPRESSION, NAME, STOP, FACE, \
-    LIGHTS, JSON_AUDIOS
+    LIGHTS, JSON_AUDIOS, AUDIOS_DIRECTORY, LOOP_DURATION
 from dadou_utils.audios.sound_object import SoundObject
 
 from dadourobot.actions.abstract_actions import ActionsAbstract
@@ -104,7 +104,7 @@ class AudioManager(ActionsAbstract):
             return
         else:
             if not Misc.is_audio(self.config[AUDIOS_DIRECTORY] + audio[NAME]):
-                logging.error("{} is not audio file".format(audio[NAME]))
+                logging.error("{} is not audio file".format(self.config[AUDIOS_DIRECTORY] + audio[NAME]))
                 return
             length = self.play_sound(audio[NAME])
             if EXPRESSION in audio or LIGHTS in audio:

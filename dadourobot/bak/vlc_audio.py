@@ -19,7 +19,7 @@ class VlCAudio:
     player = vlc.MediaPlayer(silence)
 
     def __init__(self):
-        self.json_manager = RobotFactory().robot_json_manager
+        self.json_manager = RobotFactory().disk_json_manager
 
     def play_sounds(self, audios):
         self.player.stop()

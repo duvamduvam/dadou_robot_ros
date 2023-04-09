@@ -52,9 +52,9 @@ config[RIGHT_ARM_NB] = 9
 
 config[STOP_KEY] = "Db"
 config[MAIN_LOOP_SLEEP] = 0.001
-config[MOUTH_VISUALS_PATH] = "/../visuals/mouth"
-config[EYE_VISUALS_PATH] = "/../visuals/eye"
-config[SEQUENCES_DIRECTORY] = '/../json/sequences/'
+config[MOUTH_VISUALS_PATH] = "/visuals/mouth"
+config[EYE_VISUALS_PATH] = "/visuals/eye"
+config[SEQUENCES_DIRECTORY] = '/json/sequences/'
 
 config[RANDOM_ANIMATION] = 60000
 config[RANDOM_ANIMATION_LOW] = 50000
@@ -63,9 +63,9 @@ config[STOP_ANIMATION_KEYS] = ['x']
 
 config[BASE_PATH] = os.getcwd()
 config[BASE_PATH] = config[BASE_PATH].replace('/tests', '')
-config[LOGGING_CONFIG_TEST_FILE] = config[BASE_PATH]+'/../conf/logging-test.conf'
-config[LOGGING_CONFIG_FILE] = config[BASE_PATH]+'/../conf/logging.conf'
-config[JSON_DIRECTORY] = '/../json/'
+config[LOGGING_CONFIG_TEST_FILE] = config[BASE_PATH]+'/conf/logging-test.conf'
+config[LOGGING_CONFIG_FILE] = config[BASE_PATH]+'/conf/logging.conf'
+config[JSON_DIRECTORY] = '/json/'
 
 ############### JSON FILES ###############
 

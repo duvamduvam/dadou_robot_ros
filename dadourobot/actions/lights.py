@@ -50,21 +50,17 @@ class Lights(ActionsAbstract):
     duration = 0
     start_time = 0
 
-    def __init__(self, config, json_manager, strip, light_type):
+    def __init__(self, start, end, json_manager, global_strip, light_type):
         self.light_type = light_type
-        super().__init__(config, json_manager, self.light_type+".json")
-        self.config = config
+        super().__init__(json_manager, self.light_type+".json")
         #self.strip = neopixel.NeoPixel(self.LED_COUNT, Pin(config.LIGHTS_PIN), self.LED_FREQ_HZ, self.LED_DMA, self.LED_INVERT, self.LED_BRIGHTNESS, self.LED_CHANNEL)
 
-        #strip_pixels_range = ()
-        #for x in range(self.config[LIGHTS_START_LED], self.config[LIGHTS_END_LED]): #513
-        #    strip_pixels_range += (x,)
+        strip_pixels_range = ()
+        for x in range(start, end):
+            strip_pixels_range += (x,)
+        self.strip = PixelMap(global_strip, strip_pixels_range, individual_pixels=True)
 
-        #self.strip = PixelMap(strip,
-        #    strip_pixels_range, individual_pixels=True)
-        self.strip = strip
-
-        self.animations = LightsAnimations(self.config[LIGHTS_END_LED] - self.config[LIGHTS_START_LED], self.strip)
+        self.animations = LightsAnimations(end - start, self.strip)
         self.update({light_type: DEFAULT})
 
     def update(self, msg):
@@ -91,7 +87,7 @@ class Lights(ActionsAbstract):
             self.sequence.current_element)
         #self.sequence.start_time = TimeUtils.current_milli_time()
         self.start_time = TimeUtils.current_milli_time()
-        logging.info("update lights sequences to " + json_seq[NAME])
+        logging.info("update lights {} sequences to {}".format(self.light_type, json_seq[NAME]))
 
     def process(self):
 

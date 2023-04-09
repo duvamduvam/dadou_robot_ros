@@ -6,8 +6,8 @@ export PROJECT_NAME="dadourobot"
 export PROJECT_PATH=~/Nextcloud/Didier/python/dadou_robot
 export UTILS_PROJECT=~/Nextcloud/Didier/python/dadou_utils
 
-export USER_HOST="d"
-export ROOT_HOST="dr"
+export USER_HOST="r"
+export ROOT_HOST="rr"
 export RPI_IP="192.168.1.200"
 
 export INSTALL_LIB="yes"
@@ -21,6 +21,8 @@ export SERVICE_NAME=didier
 
 export PROJECT_SYSTEM_LIB="python3-opencv"
 export PROJECT_PYTHON_LIB="adafruit-circuitpython-rfm9x"
+
+export LOG_FILE="didier.log"
 
 ####################################################################
 

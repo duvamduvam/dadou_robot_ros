@@ -284,7 +284,7 @@
     {
         "name": "default",
         "duration": 3000,
-        "loop": false,
+        "loop": true,
         "keys": [
             "A3",
             "default"
