@@ -10,10 +10,10 @@ kit = ServoKit(channels=16)
 #kit.frequency(60)
 # Below will create an infinite loop
 while True:
-    kit.servo[4].angle = 0
+    kit.servo[8].angle = 0
     sleep(5)
 
-    kit.servo[4].angle = 180
+    kit.servo[8].angle = 180
     sleep(5)
 
 

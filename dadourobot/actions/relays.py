@@ -44,7 +44,7 @@ class RelaysManager:
     def update(self, msg):
 
         if not self.config[I2C_ENABLED] or not self.config[DIGITAL_CHANNELS_ENABLED]:
-            return
+            return msg
 
         if msg and KEY in msg:
             relay = self.json_manager.get_relay(msg[KEY])
@@ -74,6 +74,7 @@ class RelaysManager:
                 self.voice_out.value = False
                 self.last_effect_time = TimeUtils.current_milli_time()
                 logging.info("switch effect on")
+        return msg
 
     def process(self):
 

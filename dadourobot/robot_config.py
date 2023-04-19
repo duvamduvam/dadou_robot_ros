@@ -1,7 +1,7 @@
 import os
 
 import board
-from dadou_utils.utils_static import BASE_PATH, MSG_SIZE, NAME, SERIAL_ID, TYPE, NONE, I2C_ENABLED, DEVICES, \
+from dadou_utils.utils_static import AUDIOS_DIRECTORY, BASE_PATH, MSG_SIZE, NAME, SERIAL_ID, TYPE, NONE, I2C_ENABLED, DEVICES, \
     STOP_ANIMATION_KEYS, \
     I2C_ENABLED, DEVICES_LIST, JSON_VISUALS, JSON_RELAYS, JSON_MAPPINGS, JSON_LIGHTS_SEQUENCE, \
     JSON_LIGHTS, JSON_FACE_SEQUENCE, JSON_EXPRESSIONS, JSON_COLORS, JSON_AUDIO_SEQUENCE, JSON_AUDIOS, JSON_CONFIG, \
@@ -16,7 +16,7 @@ config = {}
 
 config[I2C_ENABLED] = True
 config[PWM_CHANNELS_ENABLED] = True
-config[DIGITAL_CHANNELS_ENABLED] = False
+config[DIGITAL_CHANNELS_ENABLED] = True
 
 config[CMD_FORWARD] = "g"
 config[CMD_BACKWARD] = "h"
@@ -50,13 +50,13 @@ config[WHEEL_RIGHT_DIR] = 3
 config[LEFT_ARM_NB] = 8
 config[RIGHT_ARM_NB] = 9
 
-config[STOP_KEY] = "Db"
+config[STOP_KEY] = "Db C&"
 config[MAIN_LOOP_SLEEP] = 0.001
 config[MOUTH_VISUALS_PATH] = "/visuals/mouth"
 config[EYE_VISUALS_PATH] = "/visuals/eye"
 config[SEQUENCES_DIRECTORY] = '/json/sequences/'
 
-config[RANDOM_ANIMATION] = 60000
+#config[RANDOM_ANIMATION] = 1000
 config[RANDOM_ANIMATION_LOW] = 50000
 config[RANDOM_ANIMATION_HIGH] = 150000
 config[STOP_ANIMATION_KEYS] = ['x']
@@ -66,6 +66,8 @@ config[BASE_PATH] = config[BASE_PATH].replace('/tests', '')
 config[LOGGING_CONFIG_TEST_FILE] = config[BASE_PATH]+'/conf/logging-test.conf'
 config[LOGGING_CONFIG_FILE] = config[BASE_PATH]+'/conf/logging.conf'
 config[JSON_DIRECTORY] = '/json/'
+config[AUDIOS_DIRECTORY] = config[BASE_PATH]+'/audios/'
+
 
 ############### JSON FILES ###############
 

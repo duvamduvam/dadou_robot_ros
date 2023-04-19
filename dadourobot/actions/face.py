@@ -2,7 +2,7 @@ import logging.config
 
 from dadou_utils.files.files_manager import FilesUtils
 from dadou_utils.utils.time_utils import TimeUtils
-from dadou_utils.utils_static import NAME, DURATION, LOOP, KEY, FACE, SPEAK, SPEAK_DURATION, DEFAULT, \
+from dadou_utils.utils_static import ANIMATION, NAME, DURATION, LOOP, KEY, FACE, SPEAK, SPEAK_DURATION, DEFAULT, \
     MOUTH_VISUALS_PATH, EYE_VISUALS_PATH, LIGHTS_PIN, BASE_PATH, MOUTHS, LEYE, REYE, JSON_EXPRESSIONS, LOOP_DURATION, \
     RIGHT_EYES, LEFT_EYES
 
@@ -104,16 +104,28 @@ class Face(ActionsAbstract):
         #if speak_seq : return speak_seq"""
 
     def update(self, msg):
+
+        #if msg and ANIMATION in msg and not msg[ANIMATION]:
+        #    self.update({FACE: self.DEFAULT})
+
         json_seq = self.get_sequence(msg, FACE, True)
-        if not json_seq: return
+        if not json_seq:
+            return msg
 
         logging.info("update face sequences : " + json_seq[NAME])
+        if DURATION in msg:
+            self.loop_duration = msg[DURATION]
+            self.start_loop_duration = TimeUtils.current_milli_time()
+            self.loop = True
+        else:
+            self.loop = json_seq[LOOP]
         self.duration = json_seq[DURATION]
-        self.loop = json_seq[LOOP]
         self.start_time = TimeUtils.current_milli_time()
         self.mouth = Sequence(self.duration, self.loop, json_seq[MOUTHS], 0)
         self.leye = Sequence(self.duration, self.loop, json_seq[LEFT_EYES], 385) #385
         self.reye = Sequence(self.duration, self.loop, json_seq[RIGHT_EYES], 448) #448
+
+        return msg
 
     def animate_part(self, seq: Sequence):
         change = False

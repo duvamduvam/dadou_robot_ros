@@ -45,14 +45,15 @@ class GlobalReceiver:
 
         msg = self.messages.pop_msg()
         if msg:
-            logging.info('received from ws server'.format(msg))
-            RandomAnimationStart.value = TimeUtils.current_milli_time()
             if self.animation_manager:
                 self.animation_manager.update(msg)
-            return self.write_msg(msg)
-        if self.animation_manager:
+
+        if self.animation_manager and not self.animation_manager.playing:
             self.animation_manager.random()
-            return self.write_msg(self.animation_manager.event())
+            #return self.write_msg(self.animation_manager.event())
+
+        if self.animation_manager:
+            msg.update(self.animation_manager.event())
 
         if msg and len(msg) > 0:
             logging.info('received animation'.format(msg))

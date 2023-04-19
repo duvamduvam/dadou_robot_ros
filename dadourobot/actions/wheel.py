@@ -75,13 +75,16 @@ class Wheel:
 
     def update(self, msg: dict):
 
+        if msg and ANIMATION in msg:
+            self.animation_ongoing = msg[ANIMATION]
+
         if not self.enabled:
-            return
+            return msg
 
         if not msg:
-            return
+            return msg
 
-        if KEY in msg and (msg[KEY] == self.config[CMD_FORWARD] or msg[KEY] == self.config[CMD_BACKWARD] or msg[KEY] == CMD_LEFT or msg[KEY] == self.config[CMD_RIGHT]):
+        if KEY in msg and (msg[KEY] == self.config[CMD_FORWARD] or msg[KEY] == self.config[CMD_BACKWARD] or msg[KEY] == self.config[CMD_LEFT] or msg[KEY] == self.config[CMD_RIGHT]):
             if msg[KEY] == self.config[CMD_FORWARD]:
                 self.update_cmd(30, 30)
             elif msg[KEY] == self.config[CMD_BACKWARD]:
@@ -100,7 +103,9 @@ class Wheel:
         if WHEEL_LEFT in msg and WHEEL_RIGHT in msg:
             self.update_cmd(msg[WHEEL_LEFT], msg[WHEEL_RIGHT])
         if WHEELS in msg:
-            self.update_cmd(msg[WHEELS][0]*100, msg[WHEELS][1]*100)
+            self.update_cmd(int(msg[WHEELS][0]*100), int(msg[WHEELS][1]*100))
+
+        return msg
 
     def update_cmd(self, left_wheel, right_wheel):
         #if left_wheel and right_wheel:
@@ -119,6 +124,7 @@ class Wheel:
         self.move_time = TimeUtils.current_milli_time()
         logging.info("cmd left {} duty cycle {} direction {} // cmd right {} duty cycle {} direction {}".
                         format(left_wheel, self.left_pwm.duty_cycle, self.dir_left.duty_cycle, right_wheel, self.right_pwm.duty_cycle, self.dir_right.duty_cycle))
+
 
         #else:
         #    if TimeUtils.is_time(self.move_time, self.MOVE_TIMEOUT):
@@ -145,13 +151,10 @@ class Wheel:
         self.left_pwm.duty_cycle = 0
         self.right_pwm.duty_cycle = 0
 
-    def check_stop(self, msg):
+    def check_stop(self):
 
         if not self.enabled:
             return
-
-        if msg and ANIMATION in msg:
-            self.animation_ongoing = msg[ANIMATION]
 
         if not self.animation_ongoing and TimeUtils.is_time(last_time=self.move_time, time_out=self.MOVE_TIMEOUT):
             self.last_update = TimeUtils.current_milli_time()
@@ -165,8 +168,9 @@ class Wheel:
         #logging.info("process wheels")
         #if (self.left_pwm.duty_cycle != self.left and self.right_pwm.duty_cycle != self.right) \
         #        and Utils.is_time(self.move_time, self.move_timeout):
-        self.update_pwm(self.left, self.left_pwm)
-        self.update_pwm(self.right, self.right_pwm)
+        #self.update_pwm(self.left, self.left_pwm)
+        #self.update_pwm(self.right, self.right_pwm)
+        self.check_stop()
 
     def update_pwm(self, target, pwm: pwmio.PWMOut):
         if pwm.duty_cycle < target:

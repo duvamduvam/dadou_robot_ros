@@ -1,16 +1,16 @@
 {
-    "keys": "C1",
+    "keys": "C2",
     "duration": 1000,
     "audio_name": "applause.mp3",
     "audio_path": "/home/dadou/Nextcloud/Didier/audios/",
     "faces": [
         [
             0.5,
-            "test6"
+            "speak"
         ],
         [
             1.0,
-            "test4"
+            "scooby-doo"
         ]
     ],
     "lights": [
@@ -38,7 +38,7 @@
         ],
         [
             0.90,
-            0.90
+            0.50
         ]
     ],
     "wheels": [

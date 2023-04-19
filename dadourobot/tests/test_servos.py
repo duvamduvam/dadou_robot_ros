@@ -22,7 +22,7 @@ class NeckTests(unittest.TestCase):
     #setup = TestSetup()
      #setup.neck
      #setup.left_arm
-    logging.config.fileConfig(config[LOGGING_CONFIG_TEST_FILE], disable_existing_loggers=False)
+    #logging.config.fileConfig(config[LOGGING_CONFIG_TEST_FILE], disable_existing_loggers=False)
     neck = Neck(config)
     left_arm = LeftArm(config)
     right_arm = RightArm(config) #setup.right_arm
@@ -33,12 +33,13 @@ class NeckTests(unittest.TestCase):
         for i in range(3):
             self.neck.update({NECK: 0})
             time.sleep(5)
-            self.neck.update({NECK: 120})
+            self.neck.update({NECK: 5})
             time.sleep(5)
-            self.neck.update({NECK: 10})
-            time.sleep(5)
-            self.neck.update({NECK: 170})
-            time.sleep(5)
+            #self.neck.update({NECK: 90})
+            #time.sleep(5)
+            #self.neck.update({NECK: 180})
+            #time.sleep(5)
+
 
     def test_left_arm(self):
         logging.debug("start test left arm")

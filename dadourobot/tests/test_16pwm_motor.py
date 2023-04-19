@@ -4,12 +4,12 @@ import adafruit_pca9685
 import board
 import busio
 from adafruit_servokit import ServoKit
-from dadou_utils.utils_static import WHEEL_LEFT, WHEEL_RIGHT
+from dadou_utils.utils_static import WHEEL_LEFT, WHEEL_RIGHT, HEAD_PWM_NB
 
-from robot_config import RobotConfig
-from files.robot_json_manager import RobotJsonManager
-from robot_config import JSON_DIRECTORY, JSON_CONFIG
-from tests.conf_test import TestSetup
+from dadourobot.robot_config import config
+from dadourobot.files.robot_json_manager import RobotJsonManager
+from dadourobot.tests.conf_test import TestSetup
+
 TestSetup()
 
 import time
@@ -18,9 +18,6 @@ import unittest
 
 class PWMMotorTest(unittest.TestCase):
     TestSetup()
-
-    robot_json_manager = RobotJsonManager('/home/didier/deploy/', 'json/', JSON_CONFIG)
-    config = RobotConfig(robot_json_manager)
 
     #kit = ServoKit(channels=16)
 
@@ -45,6 +42,9 @@ class PWMMotorTest(unittest.TestCase):
     dir_motor2 = pca9685.channels[3]
     dir_motor2.duty_cycle = 0
 
+    neck = pca9685.channels[config[HEAD_PWM_NB]]
+    neck.duty_cycle = 0
+
     def test_left_run(self):
         self.dir_motor1.duty_cycle = self.MAX
         self.pwm_motor1.duty_cycle = 10000
@@ -54,14 +54,11 @@ class PWMMotorTest(unittest.TestCase):
         time.sleep(15)
         self.pwm_motor1.duty_cycle = 0
 
-    def test_right_run(self):
-        self.dir_motor2.duty_cycle = self.MAX
-        self.pwm_motor2.duty_cycle = 30000
-        time.sleep(30)
-        #self.dir_motor2.duty_cycle = 0
-        #self.pwm_motor2.duty_cycle = 10000
-        #time.sleep(5)
-        #self.pwm_motor2.duty_cycle = 0
+    def test_neck_run(self):
+        for i in range(3):
+            self.neck.duty_cycle = 0
+            self.neck.duty_cycle = 10000
+            time.sleep(5)
 
     def test_both(self):
         self.dir_motor1.duty_cycle = 0

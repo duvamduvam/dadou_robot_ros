@@ -50,12 +50,12 @@ components.extend([AudioManager(config, robot_json_manager),
                     RelaysManager(config, robot_json_manager),
                     RightArm(config),
                     ShutDownRestart(config[SHUTDOWN_PIN], config[RESTART_PIN], config[STATUS_LED_PIN]),
-                    Wheel(config),
+                    Wheel(config)
                    ])
 
 #devices_manager = SerialDeviceManager(DEVICES_LIST)
 animations = AnimationManager(config, robot_json_manager)
-global_receiver = GlobalReceiver()
+global_receiver = GlobalReceiver(AnimationManager(config, robot_json_manager))
 
 ################################ Main loop ##################################
 
@@ -67,7 +67,7 @@ while True:
 
         if msg:
             for component in components:
-                component.update(msg)
+                msg = component.update(msg)
 
         for component in components:
             component.process()

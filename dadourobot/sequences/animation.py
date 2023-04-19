@@ -31,7 +31,7 @@ class Animation:
         if self.first_animation:
             self.first_animation = False
             return self.get(self.current_pos)
-        if self.has_data and TimeUtils.is_time(self.last_time, self.current_element_duration):
+        if self.has_data and self.current_pos != len(self.datas)-1 and TimeUtils.is_time(self.last_time, self.current_element_duration):
             self.current_pos = (self.current_pos + 1) % len(self.datas)
             self.last_time = TimeUtils.current_milli_time()
             return self.get(self.current_pos)

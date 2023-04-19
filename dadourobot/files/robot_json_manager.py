@@ -118,11 +118,11 @@ class RobotJsonManager(AbstractJsonManager):
 
     def get_relay(self, input_key: str):
         if input_key:
-            for key, value in self.relays.items():
-                if input_key in value:
+            for key, values in self.json_files[self.config[JSON_RELAYS]].items():
+                if input_key in values:
                     return key
         else:
-            logging.info("input str None")
+            logging.error("input str None")
 
     def get_config(self):
         return self.config

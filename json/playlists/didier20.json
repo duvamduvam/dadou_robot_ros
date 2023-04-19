@@ -1,51 +1,163 @@
 {
-    "didier20/activation_transfer.mp3": {
+    "activation_transfer": {
+        "audio": "didier20/activation_transfer2.mp3",
+        "light": "default"
+    },
+    "electrochoc": {
+        "audio": "effects/electrochoc1.mp3",
+        "light": "default"
+    },
+    "activation_transfer2": {
+        "audio": "didier20/activation_transfer2.mp3",
+        "light": "default"
+    },
+    "upload_en_cours":{
+        "audio": "didier20/upload_en_cours2.mp3",
+        "light": "default"
+    },
+    "transfer_prometeus": {
+        "audio": "didier20/transfer_prometeus.mp3",
+        "light": "default"
+    },
+    "transfer_impossible": {
+        "audio": "didier20/transfer_impossible2.mp3",
+        "light": "default"
+    },
+    "c_est_quoi_ce_bordel": {
+        "audio": "didier20/c_est_quoi_ce_bordel.mp3",
+        "face" : "speak",
+        "animation": "little-move",
+        "light": "default"
+    },
+    "tu_m_as_fait_quoi": {
+        "audio": "didier20/tu_m_as_fait_quoi.mp3",
+        "face" : "speak",
+        "light": "default",
+        "animation": "little-move2"
+    },
+    "c_est_pas_le_pape": {
+        "audio": "didier20/c_est_pas_le_pape.mp3",
+        "face" : "speak",
+        "light": "default",
+        "animation": "little-move3"
+    },
+    "arrete_de_me_regarder_le_cul": {
+        "audio": "didier20/arrete_de_me_regarder_le_cul.mp3",
+        "face" : "speak",
+        "light": "default",
+        "animation": "little-move2"
+    },
+    "je_me_sens_chelou": {
+        "audio": "didier20/je_me_sens_chelou.mp3",
         "face" : "speak",
         "light": "default"
     },
-    "effects/electrochoc1.mp3": {
+    "nan_juste_soif":{
+        "audio": "didier20/nan_juste_soif.mp3",
         "face" : "speak",
         "light": "default"
     },
-    "didier20/activation_transfer.mp3": {
+    "Qu-est-ce-que-tu-ma-fait": {
+        "audio": "didier20/Qu-est-ce-que-tu-ma-fait.mp3",
+        "face" : "speak",
+        "light": "default",
+        "animation": "little-move"
+    },
+    "Quoi-ce-tas-de-feraille": {
+        "audio": "didier20/Quoi-ce-tas-de-feraille.mp3",
+        "face" : "speak",
+        "light": "default",
+        "animation": "little-move2"
+    },
+    "Je-sens-plus-rien": {
+        "audio": "didier20/Je-sens-plus-rien.mp3",
+        "face" : "speak",
+        "light": "default",
+        "animation": "little-move3"
+    },
+    "s-adapter-de-quoi":{
+        "audio": "didier20/s-adapter-de-quoi.mp3",
+        "face" : "speak",
+        "light": "default",
+        "animation": "little-move"
+    },
+    "reconfiguration-acceptation-inconditionnelle": {
+        "audio": "didier20/reconfiguration-acceptation-inconditionnelle.mp3",
+        "animation": "upgrade"
+    },
+    "il-est-genial-ce-corps": {
+        "audio": "il-est-genial-ce-corps",
+        "animation": "moon-walk",
         "face" : "speak",
         "light": "default"
     },
-    "didier20/upload_en_cours.mp3":{
-        "face" : "speak",
-        "light": "default"
+    "reconfiguration-langagiere": {
+        "audio": "didier20/reconfiguration-langagiere.mp3",
+        "animation": "upgrade"
     },
-    "didier20/transfer_impossible.mp3": {
+    "merci-cher-jack": {
+        "audio": "didier20/merci-cher-jack.mp3",
         "face" : "speak",
-        "light": "default"
+        "light": "default",
+        "animation": "little-neck"
     },
-    "didier20/c_est_quoi_ce_bordel.mp3": {
-        "face" : "speak",
-        "light": "default"
+    "procedure-reconfiguration-vocal": {
+        "audio": "didier20/procedure-reconfiguration-vocal.mp3",
+        "animation": "upgrade"
     },
-    "didier20/tu_m_as_fait_quoi.mp3": {
+    "ca-donne-quoi-aigue": {
+        "audio": "didier20/ca-donne-quoi-aigue.mp3",
         "face" : "speak",
-        "light": "default"
+        "light": "default",
+        "animation": "little-neck2"
     },
-    "didier20/c_est_pas_le_pape.mp3": {
-        "face" : "speak",
-        "light": "default"
+    "procedure-reconfiguration-vocal 2": {
+        "audio": "didier20/procedure-reconfiguration-vocal.mp3",
+        "animation": "upgrade"
     },
-    "didier20/arrete_de_me_regarder_le_cul.mp3": {
+    "macron-je-ne-cederais-rien": {
+        "audio": "didier20/macron-je-ne-cederais-rien.mp3",
         "face" : "speak",
-        "light": "default"
+        "animation": "little-neck2"
     },
-    "didier20/je_me_sens_chelou.mp3": {
-        "face" : "speak",
-        "light": "default"
+    "procedure-reconfiguration-vocal 3": {
+        "audio": "didier20/procedure-reconfiguration-vocal.mp3",
+        "animation": "upgrade"
     },
-    "didier20/nan_juste_soif.mp3":{
+    "ok-on-va-sarreter-la": {
+        "audio": "didier20/ok-on-va-sarreter-la.mp3",
         "face" : "speak",
-        "light": "default"
+        "animation": "little-neck"
     },
-    "didier20/mais_tu_m_as_fait_quoi.mp3": {
-        "face" : "speak",
-        "light": "default"
+    "procedure-reconfiguration-faciale": {
+        "audio": "didier20/procedure-reconfiguration-faciale.mp3",
+        "animation": "upgrade"
+    },
+    "tes-sur": {
+        "audio": "didier20/tes-sur.mp3",
+        "face" : "sexy",
+        "animation": "little-neck2"
+    },
+    "procedure-reconnaissance-inconditionnel": {
+        "audio": "didier20/procedure-reconnaissance-inconditionnel.mp3",
+        "animation": "upgrade"
+    },
+    "tu-es-extraordinaire-jack": {
+        "audio": "didier20/tu-es-extraordinaire-jack.mp3",
+        "face" : "sexy",
+        "animation": "little-neck"
+    },
+    "ouverture-internet": {
+        "audio": "didier20/ouverture-internet.mp3",
+        "animation": "upgrade"
+    },
+    "c-est-extraordinaire": {
+        "audio": "didier20/c-est-extraordinaire.mp3",
+        "face" : "sexy",
+        "animation": "little-neck2"
+    },
+    "I love you": {
+        "animation": "iloveyou"
     },
     "didier20/comment_je_vais_picoler.mp3": {
         "face" : "speak",

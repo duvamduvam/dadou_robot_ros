@@ -4,6 +4,10 @@
     "name": "stop"
   },
   {
+    "keys": ["C9"],
+    "name": "effects/upgrade.mp3"
+  },
+  {
     "keys": ["A9"],
     "name": "song/motivation.mp3"
   },
@@ -32,7 +36,7 @@
   {
     "keys": ["A1"],
     "expression": "speak",
-    "name": "speak/oui-j-etais-la.mp3"
+    "name": "song/motivation.mp3"
   },
   {
     "keys": ["A2"],

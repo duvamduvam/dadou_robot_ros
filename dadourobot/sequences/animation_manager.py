@@ -6,7 +6,7 @@ from dadou_utils.files.files_utils import FilesUtils
 from dadou_utils.utils.time_utils import TimeUtils
 from dadou_utils.utils_static import ANIMATION, STOP_ANIMATION_KEYS, AUDIO, AUDIOS, KEY, NECK, NECKS, FACE, FACES, LIGHTS, WHEELS, NAME, \
     DURATION, KEYS, RANDOM, START, STOP, TYPES, SEQUENCES_DIRECTORY, LOOP_DURATION, RANDOM_ANIMATION_LOW, RANDOM_ANIMATION_HIGH, BASE_PATH, \
-    LEFT_ARM, RIGHT_ARM
+    LEFT_ARM, RIGHT_ARM, STOP_KEY
 
 from dadourobot.actions.abstract_actions import ActionsAbstract
 from dadourobot.sequences.animation import Animation
@@ -51,10 +51,9 @@ class AnimationManager(ActionsAbstract):
         sequences_files = FilesUtils.get_folder_files(self.config[BASE_PATH]+self.config[SEQUENCES_DIRECTORY])
         for sequence_file in sequences_files:
             json_sequence = FilesUtils.open_json(sequence_file, 'r')
-            json_sequence[NAME] = os.path.basename(sequence_file)
+            json_sequence[NAME] = os.path.basename(sequence_file).replace(".json", "")
             self.sequences_key[json_sequence[KEYS]] = json_sequence
             self.sequences_name[json_sequence[NAME]] = json_sequence
-
 
     def random(self):
         if TimeUtils.is_time(RandomAnimationStart.value, self.random_duration):
@@ -75,10 +74,12 @@ class AnimationManager(ActionsAbstract):
                 logging.info('random animation {}'.format(random_seq_names[random_index]))
 
     def update(self, msg):
-        #if msg and KEY in msg.keys() and msg[KEY] in self.stop_keys:
-        #    self.duration = 0
-        #    return
+        if msg and KEY in msg and msg[KEY] in self.config[STOP_KEY]:
+            return msg.update(self.stop())
+        self.get_animation(msg)
+        return msg
 
+    def get_animation(self, msg):
         animation = self.get_sequence(msg, ANIMATION, False)
         if not animation:
             self.duration = 0
@@ -102,13 +103,17 @@ class AnimationManager(ActionsAbstract):
         self.lights_animation = Animation(self.current_animation, self.duration, LIGHTS, 1)
         self.wheels_animation = Animation(self.current_animation, self.duration, WHEELS, 2)
 
+    def stop(self):
+        if self.playing:
+            logging.info('stop animation')
+            self.playing = False
+        return {ANIMATION: False}
     def event(self):
-        if not self.playing or not self.current_animation or TimeUtils.is_time(self.last_time, self.duration):
-            if self.playing:
-                logging.info('stop animation')
-                self.playing = False
-                return {ANIMATION: False}
-            return
+        if self.playing and TimeUtils.is_time(self.last_time, self.duration):
+            return self.stop()
+
+        if not self.playing:
+            return {}
 
         events = {}
 
@@ -117,7 +122,6 @@ class AnimationManager(ActionsAbstract):
             events[LOOP_DURATION] = self.duration
             self.start = False
 
-        #TODO improve neck
         self.fill_event(events, AUDIO, self.audios_animation)
         self.fill_event(events, LEFT_ARM, self.left_arm_animation)
         self.fill_event(events, RIGHT_ARM, self.right_arm_animation)
@@ -126,7 +130,7 @@ class AnimationManager(ActionsAbstract):
         self.fill_event(events, FACE, self.faces_animation)
         self.fill_event(events, LIGHTS, self.lights_animation)
         if len(events) > 0:
-            logging.info('udpate animation {}'.format(self.current_animation[NAME]))
+            logging.warning('update animation {} with values {}'.format(self.current_animation[NAME], events))
         return events
 
     def fill_event(self, events, key, animation):
@@ -136,4 +140,5 @@ class AnimationManager(ActionsAbstract):
         if event_action:
             events[key] = event_action
 
-        
+    def process(self):
+        pass

@@ -4,12 +4,14 @@ import logging
 import threading
 from os.path import exists
 
-from dadou_utils.utils_static import AUDIOS_DIRECTORY
+from dadou_utils.utils_static import AUDIO, AUDIOS_DIRECTORY, KEY, STOP, NAME, PATH, KEYS, JSON_AUDIOS, EXPRESSION, FACE, DURATION
 from sound_player import Sound, SoundPlayer
 
 from dadou_utils.misc import Misc
 from dadou_utils.audios.sound_object import SoundObject
 
+
+#TODO check : https://maelfabien.github.io/machinelearning/Speech8/#iv2a-noise-reduction
 
 class AudioManager:
 
@@ -33,12 +35,20 @@ class AudioManager:
         self.player.play()
 
     def play_sound(self, audio):
-        if exists(self.config[AUDIOS_DIRECTORY]+audio['path']):
-            self.current_audio = SoundObject(self.config[AUDIOS_DIRECTORY], audio['path'])
+        if exists(self.config[AUDIOS_DIRECTORY]+audio):
+            if self.current_audio:
+                self.current_audio.stop()
+            self.current_audio = SoundObject(self.config[AUDIOS_DIRECTORY]+audio)
+
+            #t = threading.Thread(target=self.current_audio.play)
+            #t.start()
+
             self.current_audio.play()
-            self.current_audio_name = audio['path']
+            self.current_audio_name = audio
+            return True
         else:
-            logging.error("audio {} don't exist".format(audio['path']))
+            logging.error("audio {} don't exist".format(self.config[AUDIOS_DIRECTORY]+audio))
+            return False
 
     def play_sounds(self, audios):
         self.player.stop()
@@ -62,35 +72,41 @@ class AudioManager:
         pass
 
     def update(self, msg):
-        if msg and hasattr(msg, 'key') and msg.key:
+        #TODO improve this part
+        if msg and KEY in msg:
             logging.debug("number of thread : {}".format(threading.active_count()))
-            audio_path = self.json_manager.get_audios(msg.key)
-            if audio_path:
-                if 'name' in audio_path and audio_path['name'] == 'stop':
+            audio_param = self.json_manager.get_element_from_key(self.config[JSON_AUDIOS], KEYS, msg[KEY])#self.json_manager.get_audios(msg[KEY])
+            if audio_param:
+                if audio_param and NAME in audio_param and audio_param[NAME] == STOP:
                     self.stop_sound()
                     logging.info("stop sound")
                     return
-                if audio_path['path'] == self.current_audio_name and self.current_audio and self.current_audio.is_playing():
+                if audio_param == self.current_audio_name and self.current_audio and self.current_audio.is_playing():
                     logging.debug("already playing {}".format(self.current_audio_name))
                     return
                 else:
-                    if not Misc.is_audio(self.config[AUDIOS_DIRECTORY] + audio_path['path']):
-                        logging.error("{} is not audio file".format(audio_path['path']))
+                    path = self.config[AUDIOS_DIRECTORY] + audio_param[NAME]
+                    if not Misc.is_audio(path):
+                        logging.error("{} is not audio file".format(path))
                         return
                     if self.current_audio:
                         self.current_audio.stop()
-                    self.current_audio_name = audio_path['path']
-                    self.play_sound(audio_path)
+                    self.current_audio_name = audio_param[NAME]
+                    self.play_sound(audio_param[NAME])
 
+                    if EXPRESSION in audio_param:
+                        msg[FACE] = audio_param[EXPRESSION]
+                        msg[DURATION] = self.current_audio.duration * 1000
 
-            """           audio_sequence = self.json_manager.get_audio_seq(key)
-            if audio_sequence:
-                logging.info("play new audio")
-                audios = []
-                for audio_seq in audio_sequence[RobotStatic.SEQUENCE]:
-                    audio_path = self.json_manager.get_audio_path_by_name(audio_seq[RobotStatic.NAME])
-                    logging.debug("audios name : " + audio_seq[RobotStatic.NAME] + " path : " + audio_path)
-                    audios.append(PathTime(audio_path, audio_seq[RobotStatic.DELAY]))
+        if msg and AUDIO in msg:
+            if self.current_audio:
+                self.current_audio.stop()
 
-                self.play_sounds(audios)"""
+            if self.play_sound(msg[AUDIO]):
+                self.current_audio_name = msg[AUDIO]
+                if FACE in msg:
+                    msg[DURATION] = self.current_audio.duration * 1000
+
+        return msg
+
 

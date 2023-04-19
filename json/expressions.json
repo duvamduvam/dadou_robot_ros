@@ -1,4 +1,127 @@
-[
+[{
+        "name": "sexy",
+        "keys": [
+            "D6"
+        ],
+        "loop": false,
+        "duration": 8000,
+        "left_eyes": [
+            [
+                1,
+                "oeil-droit.png"
+            ]
+        ],
+        "right_eyes": [
+            [
+                1,
+                "oeil-droit.png"
+            ]
+        ],
+        "mouths": [
+            [
+                0.2,
+                "woman-close.png"
+            ],
+            [
+                0.4,
+                "woman-ouvert1.png"
+            ],
+            [
+                0.6,
+                "woman-ouvert2.png"
+            ],
+            [
+                0.8,
+                "woman-ouvert3.png"
+            ],
+            [
+                1,
+                "woman-ouvert2.png"
+            ]
+        ]
+    },
+    {
+        "name": "upgrade",
+        "keys": [
+            "D1"
+        ],
+        "loop": false,
+        "duration": 1000,
+        "left_eyes": [
+            [
+                0.2,
+                "oeil-droit.png"
+            ],
+            [
+                0.6,
+                "oeil-droit.png"
+            ],
+            [
+                0.8,
+                "oeil-gauche.png"
+            ],
+            [
+                1,
+                "oeil-droit.png"
+            ]
+        ],
+        "right_eyes": [
+            [
+                0.2,
+                "oeil-droit.png"
+            ],
+            [
+                0.6,
+                "oeil-droit.png"
+            ],
+            [
+                0.8,
+                "oeil-gauche.png"
+            ],
+            [
+                1,
+                "oeil-droit.png"
+            ]
+        ],
+        "mouths": [
+            [
+                0.1,
+                "upgrade1.png"
+            ],
+            [
+                0.2,
+                "upgrade2.png"
+            ],
+            [
+                0.3,
+                "upgrade3.png"
+            ],
+            [
+                0.4,
+                "upgrade4.png"
+            ],
+            [
+                0.5,
+                "upgrade5.png"
+            ],
+            [
+                0.6,
+                "upgrade6.png"
+            ],
+            [
+                0.7,
+                "upgrade7.png"
+            ],
+            [
+                0.8,
+                "upgrade8.png"
+            ],
+            [
+                0.9,
+                "upgrade9.png"
+            ]
+        ]
+    },
     {
         "name": "voila",
         "keys": [
@@ -283,7 +406,7 @@
     },
     {
         "name": "default",
-        "duration": 3000,
+        "duration": 10000,
         "loop": true,
         "keys": [
             "A3",
@@ -331,17 +454,93 @@
         ],
         "mouths": [
             [
-                0.8,
-                "bouche-ferme.png"
+                0.1,
+                "bouche-ferme-droit.png"
             ],
             [
-                0.9,
-                "bouche-ferme-droit.png"
+                0.8,
+                "bouche-ferme.png"
             ],
             [
                 1.0,
                 "bouche-ferme-gauche.png"
             ]
         ]
+    },
+
+    {
+        "name": "love",
+        "duration": 10000,
+        "loop": false,
+        "keys": [
+            "A3",
+            "default"
+        ],
+        "left_eyes": [
+            [
+                0.1,
+                "oeil-gauche.png"
+            ],
+            [
+                0.2,
+                "oeil-gauche.png"
+            ],
+            [
+                0.3,
+                "oeil-fixe.png"
+            ],
+            [
+                0.6,
+                "oeil-gauche.png"
+            ],
+            [
+                1.0,
+                "oeil-gauche.png"
+            ]
+        ],
+        "right_eyes": [
+            [
+                0.2,
+                "oeil-droit.png"
+            ],
+            [
+                0.4,
+                "oeil-droit.png"
+            ],
+            [
+                0.8,
+                "oeil-gauche.png"
+            ],
+            [
+                1.0,
+                "oeil-droit.png"
+            ]
+        ],
+        "mouths": [
+            [
+                0.1,
+                "coeur.png"
+            ],
+            [
+                0.3,
+                "off.png"
+            ],
+            [
+                0.5,
+                "coeur.png"
+            ],
+            [
+                0.7,
+                "off.png"
+            ],            [
+                0.9,
+                "coeur.png"
+            ],
+            [
+                1,
+                "off.png"
+            ]
+        ]
     }
+
 ]
