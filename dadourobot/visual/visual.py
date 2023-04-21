@@ -17,10 +17,10 @@ class Visual:
         #self.rgb = Image.get_rgb_from_image(path)
     """
 
-    def __init__(self, path, inverse_bottom:bool):
+    def __init__(self, path, inverse_bottom: bool):
         self.name = os.path.basename(path)
-        self.name = os.path.splitext(self.name)
-        self.name = self.name[0]
+        #self.name = os.path.splitext(self.name)
+        #self.name = self.name[0]
         image = Image(path)
         if inverse_bottom:
             self.rgb = ImageMapping.inverse_bottom_image(image.get_rgb_from_image(path))

@@ -7,7 +7,6 @@ from dadou_utils.utils_static import ANIMATION, NAME, DURATION, LOOP, KEY, FACE,
     RIGHT_EYES, LEFT_EYES
 
 from dadourobot.actions.abstract_actions import ActionsAbstract
-from dadourobot.sequences.random_animation_start import RandomAnimationStart
 from dadourobot.sequences.sequence import Sequence
 from dadourobot.visual.image_mapping import ImageMapping
 from dadourobot.visual.visual import Visual
@@ -16,7 +15,7 @@ from dadourobot.visual.visual import Visual
 #TODO wrong file name
 
 class Face(ActionsAbstract):
-    visuals = []
+    visuals = {}
     image_mapping = ImageMapping(8, 8, 3, 2)
 
     mouth_start = 0
@@ -58,16 +57,18 @@ class Face(ActionsAbstract):
         eye_names = FilesUtils.get_folder_files(self.config[BASE_PATH]+self.config[EYE_VISUALS_PATH])
 
         for visual_path in mouth_names:
-            self.visuals.append(Visual(visual_path, True))
+            visual = Visual(visual_path, True)
+            self.visuals[visual.name] = visual
 
         for visual_path in eye_names:
-            self.visuals.append(Visual(visual_path, False))
+            visual = Visual(visual_path, False)
+            self.visuals[visual.name] = visual
 
     def get_visual(self, name):
-        for visual in self.visuals:
-            if visual.name in name:
-                return visual
-        logging.error("no visual name : " + name)
+        if name in self.visuals.keys():
+            return self.visuals[name]
+        else:
+            logging.error("no visual name : " + name)
 
     #TODO record matrix array
     def fill_matrix(self, start, end, visual):
@@ -78,30 +79,6 @@ class Face(ActionsAbstract):
                     "fill_matrix self.pixels[" + str(i) + "] = visual.rgb[" + str(x) + "][" + str(y) + "]")
                 self.strip[i] = visual.rgb[x][y]
                 i += 1
-
-    """def speak_during_audio(self, msg):
-        if not msg: return
-        if SPEAK in msg.keys():
-            if SPEAK_DURATION not in msg.keys():
-                logging.error("no duration for speak sequences")
-            else:
-                speak_seq = self.sequences_name[SPEAK]
-                self.speak_duration = msg[SPEAK_DURATION]
-                self.start_speak_time = TimeUtils.current_milli_time()
-                speak_seq[LOOP] = True
-                return speak_seq"""
-
-    """def check_input(self, msg):
-        sequence = self.get_sequence(msg, FACE, True)
-        if sequence:
-            if LOOP_DURATION in msg.keys():
-                sequence[LOOP] = True
-                self.loop_duration = msg[LOOP_DURATION]
-                self.start_loop_duration = TimeUtils.current_milli_time()
-            return sequence
-
-        #speak_seq = self.speak_during_audio(msg)
-        #if speak_seq : return speak_seq"""
 
     def update(self, msg):
 
@@ -134,7 +111,7 @@ class Face(ActionsAbstract):
             frame = seq.get_current_element()
             logging.debug("seq.current_time : {} current element {} duration {}".format(seq.start_time, seq.current_element, seq.element_duration*seq.duration))
             visual = self.get_visual(frame[1])
-            #logging.debug("update part : " + visual.name)
+            logging.debug("update part : " + visual.name)
             self.image_mapping.mapping(self.strip, visual.rgb, seq.start_pixel)
             #logging.debug("next sequences[" + str(seq.current_frame) + "] total : " + str(len(seq.frames)))
             change = True

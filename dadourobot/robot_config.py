@@ -57,8 +57,8 @@ config[EYE_VISUALS_PATH] = "/visuals/eye"
 config[SEQUENCES_DIRECTORY] = '/json/sequences/'
 
 #config[RANDOM_ANIMATION] = 1000
-config[RANDOM_ANIMATION_LOW] = 50000
-config[RANDOM_ANIMATION_HIGH] = 150000
+config[RANDOM_ANIMATION_LOW] = 10000
+config[RANDOM_ANIMATION_HIGH] = 50000
 config[STOP_ANIMATION_KEYS] = ['x']
 
 config[BASE_PATH] = os.getcwd()

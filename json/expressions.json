@@ -1,7 +1,7 @@
 [{
         "name": "sexy",
         "keys": [
-            "D6"
+            "E1"
         ],
         "loop": false,
         "duration": 8000,
@@ -43,7 +43,7 @@
     {
         "name": "upgrade",
         "keys": [
-            "D1"
+            "E2"
         ],
         "loop": false,
         "duration": 1000,
@@ -125,7 +125,7 @@
     {
         "name": "voila",
         "keys": [
-            "A7"
+            "E3"
         ],
         "loop": false,
         "duration": 15000,
@@ -191,7 +191,7 @@
     {
         "name": "bored",
         "keys": [
-            "A6"
+            "E4"
         ],
         "loop": false,
         "duration": 150,
@@ -229,74 +229,8 @@
         ],
         "mouths": [
             [
-                0.2,
+                0.9,
                 "bouche-ouvert1.png"
-            ],
-            [
-                0.3,
-                "bouche-ferme.png"
-            ],
-            [
-                0.6,
-                "bouche-ouvert3.png"
-            ],
-            [
-                1,
-                "bouche-ferme.png"
-            ]
-        ]
-    },
-    {
-        "name": "test",
-        "duration": 150,
-        "keys": [
-            "A5"
-        ],
-        "loop": false,
-        "left_eyes": [
-            [
-                0.1,
-                "oeil-fixe.png"
-            ],
-            [
-                0.3,
-                "oeil-droit.png"
-            ],
-            [
-                0.6,
-                "oeil-fixe.png"
-            ],
-            [
-                1,
-                "oeil-gauche.png"
-            ]
-        ],
-        "right_eyes": [
-            [
-                0.2,
-                "oeil-gauche.png"
-            ],
-            [
-                0.6,
-                "oeil-droit.png"
-            ],
-            [
-                1,
-                "oeil-gauche.png"
-            ]
-        ],
-        "mouths": [
-            [
-                0.1,
-                "bouche-ouvert1.png"
-            ],
-            [
-                0.4,
-                "bouche-ouvert2.png"
-            ],
-            [
-                1,
-                "bouche-ferme.png"
             ]
         ]
     },
@@ -304,7 +238,7 @@
         "name": "scooby-doo",
         "duration": 250,
         "keys": [
-            "A9"
+            "E5"
         ],
         "loop": true,
         "left_eyes": [
@@ -351,7 +285,7 @@
         "duration": 150,
         "loop": false,
         "keys": [
-            "A5"
+            "E6"
         ],
         "left_eyes": [
             [
@@ -388,28 +322,28 @@
         "mouths": [
             [
                 0.274,
-                "/bouche-ouvert2.png"
+                "bouche-ouvert2.png"
             ],
             [
                 0.521,
-                "/bouche-ouvert3.png"
+                "bouche-ouvert3.png"
             ],
             [
                 0.866,
-                "/bouche-ouvert2.png"
+                "bouche-ouvert2.png"
             ],
             [
                 1.0,
-                "/bouche-ouvert3.png"
+                "bouche-ouvert3.png"
             ]
         ]
     },
     {
         "name": "default",
-        "duration": 10000,
+        "duration": 5000,
         "loop": true,
         "keys": [
-            "A3",
+            "E7",
             "default"
         ],
         "left_eyes": [
@@ -454,16 +388,21 @@
         ],
         "mouths": [
             [
-                0.1,
-                "bouche-ferme-droit.png"
-            ],
-            [
-                0.8,
+                0.05,
                 "bouche-ferme.png"
             ],
             [
-                1.0,
+                0.5,
                 "bouche-ferme-gauche.png"
+            ],
+
+            [
+                0.52,
+                "bouche-ferme-droit.png"
+            ],
+            [
+                1.0,
+                "bouche-ferme.png"
             ]
         ]
     },
@@ -473,7 +412,7 @@
         "duration": 10000,
         "loop": false,
         "keys": [
-            "A3",
+            "E8",
             "default"
         ],
         "left_eyes": [
@@ -541,6 +480,109 @@
                 "off.png"
             ]
         ]
+    },
+    {
+        "name": "internet",
+        "duration": 5000,
+        "loop": false,
+        "keys": [
+            "E9",
+            "default"
+        ],
+        "left_eyes": [],
+        "right_eyes": [],
+        "mouths": [
+            [
+                1,
+                "internet.png"
+            ]
+        ]
+    },
+    {
+        "name": "warning",
+        "duration": 5000,
+        "loop": false,
+        "keys": [
+            "E0",
+            "default"
+        ],
+        "left_eyes": [
+                        [
+                1,
+                "oeil-droit.png"
+            ]
+        ],
+        "right_eyes": [
+                        [
+                1,
+                "oeil-droit.png"
+            ]
+        ],
+        "mouths": [
+            [
+                0.2,
+                "warning2.png"
+            ],
+            [
+                0.4,
+                "warning1.png"
+            ],
+            [
+                0.6,
+                "warning2.png"
+            ],
+            [
+                0.8,
+                "warning1.png"
+            ],
+            [
+                1,
+                "warning2.png"
+            ]
+        ]
+    },
+    {
+        "name": "brain",
+        "duration": 5000,
+        "loop": false,
+        "keys": [
+            "G1"
+        ],
+        "left_eyes": [
+                        [
+                1,
+                "oeil-droit.png"
+            ]
+        ],
+        "right_eyes": [
+                        [
+                1,
+                "oeil-droit.png"
+            ]
+        ],
+        "mouths": [
+            [
+                0.2,
+                "brain.png"
+            ],
+            [
+                0.4,
+                "brain2.png"
+            ],
+            [
+                0.6,
+                "brain.png"
+            ],
+            [
+                0.8,
+                "brain2.png"
+            ],
+            [
+                1,
+                "brain.png"
+            ]
+        ]
     }
+
 
 ]

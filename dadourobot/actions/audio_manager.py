@@ -51,7 +51,6 @@ class AudioManager:
             return False
 
     def play_sounds(self, audios):
-        self.player.stop()
         for audio in audios:
             logging.info("enqueue: " + audio.get_path())
 
@@ -89,8 +88,6 @@ class AudioManager:
                     if not Misc.is_audio(path):
                         logging.error("{} is not audio file".format(path))
                         return
-                    if self.current_audio:
-                        self.current_audio.stop()
                     self.current_audio_name = audio_param[NAME]
                     self.play_sound(audio_param[NAME])
 
@@ -99,9 +96,9 @@ class AudioManager:
                         msg[DURATION] = self.current_audio.duration * 1000
 
         if msg and AUDIO in msg:
-            if self.current_audio:
-                self.current_audio.stop()
-
+            if msg[AUDIO] == STOP:
+                self.stop_sound()
+                return
             if self.play_sound(msg[AUDIO]):
                 self.current_audio_name = msg[AUDIO]
                 if FACE in msg:
