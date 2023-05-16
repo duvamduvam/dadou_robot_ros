@@ -29,18 +29,17 @@ class WheelTest(unittest.TestCase):
             time.sleep(5)
         self.wheel.stop()
 
-    def test_wheel_servo(self):
+    def test_wheel(self):
 
         for w in range(0, 5):
         #while True:
             self.wheel.update({WHEEL_LEFT: 60, WHEEL_RIGHT: 60})
-            self.right_arm.update({RIGHT_ARM: 0})
-            self.left_arm.update({LEFT_ARM: 0})
             #self.dir1.value = True
             time.sleep(5)
             self.wheel.update({WHEEL_LEFT: -60, WHEEL_RIGHT: -60})
-            self.right_arm.update({RIGHT_ARM: 10})
-            self.left_arm.update({LEFT_ARM: 10})
             #self.dir1.value = False
+            time.sleep(5)
+            self.wheel.update({WHEEL_LEFT: 0, WHEEL_RIGHT: 0})
+            # self.dir1.value = False
             time.sleep(5)
         self.wheel.stop()

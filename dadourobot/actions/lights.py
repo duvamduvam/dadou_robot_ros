@@ -51,9 +51,10 @@ class Lights(ActionsAbstract):
     duration = 0
     start_time = 0
 
-    def __init__(self, start, end, json_manager, global_strip, light_type):
+    def __init__(self, start, end, json_manager, global_strip, light_type, receiver):
         self.light_type = light_type
         super().__init__(json_manager, self.light_type+".json")
+        self.receiver = receiver
         #self.strip = neopixel.NeoPixel(self.LED_COUNT, Pin(config.LIGHTS_PIN), self.LED_FREQ_HZ, self.LED_DMA, self.LED_INVERT, self.LED_BRIGHTNESS, self.LED_CHANNEL)
 
         strip_pixels_range = ()
@@ -92,7 +93,7 @@ class Lights(ActionsAbstract):
 
         del msg[self.light_type]
 
-        GlobalReceiver.write_msg(msg)
+        self.receiver.write_msg(msg)
 
     def process(self):
 

@@ -40,8 +40,9 @@ class Face(ActionsAbstract):
     #speak_duration = 0
     #start_speak_time = 0
 
-    def __init__(self, config, json_manager,  strip):
+    def __init__(self, config, receiver, json_manager,  strip):
         super().__init__(json_manager, config[JSON_EXPRESSIONS])
+        self.receiver = receiver
         logging.debug("start face with pin " + str(config[LIGHTS_PIN]))
         self.config = config
         self.strip = strip
@@ -114,7 +115,7 @@ class Face(ActionsAbstract):
 
         if FACE in msg:
             del msg[FACE]
-            GlobalReceiver.write_msg(msg)
+            self.receiver.write_msg(msg)
 
         return msg
 

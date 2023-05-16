@@ -13,7 +13,7 @@ from dadou_utils.utils.shutdown_restart import ShutDownRestart
 from dadou_utils.utils_static import ANIMATION, LIGHTS, SHUTDOWN_PIN, RESTART_PIN, STATUS_LED_PIN, LIGHTS_PIN, \
     LIGHTS_LED_COUNT, \
     LOGGING_CONFIG_FILE, WHEELS, FACE, SERVOS, PROFILER, MAIN_THREAD, AUDIO, TYPE, TYPES, NECK, LEFT_ARM, RIGHT_ARM, \
-    SINGLE_THREAD, LOGGING, PROCESS, LOGGING_FILE_NAME, MULTI_THREAD
+    SINGLE_THREAD, LOGGING, PROCESS, LOGGING_FILE_NAME, MULTI_THREAD, PROCESS_NAME
 from dadourobot.actions.audio_manager import AudioManager
 from dadourobot.actions.face import Face
 from dadourobot.actions.left_arm import LeftArm
@@ -28,8 +28,8 @@ from dadourobot.input.global_receiver import GlobalReceiver
 from dadourobot.robot_config import config
 from dadourobot.sequences.animation_manager import AnimationManager
 
-print(sys.path)
-print(dir(board))
+#print(sys.path)
+#print(dir(board))
 sys.path.append('')
 sys.path.append('..')
 
@@ -62,6 +62,11 @@ receiver = GlobalReceiver(config, AnimationManager(config, robot_json_manager))
 
 input_components = []
 
+if len(sys.argv) > 1:
+    config[PROCESS_NAME] = sys.argv[1]
+else:
+    config[PROCESS_NAME] = "main"
+
 if config[MAIN_THREAD]:
     logging.info("start main thread")
     config[MAIN_THREAD] = True
@@ -69,7 +74,8 @@ if config[MAIN_THREAD]:
     if not (len(sys.argv) > 1 and sys.argv[1] == SINGLE_THREAD):
         for param in [AUDIO, FACE, SERVOS, WHEELS]:
             logging.warning("lunch {} process".format(param))
-            process = subprocess.Popen(['python3', 'main.py', param], stdout=subprocess.PIPE)
+            # stdout=subprocess.PIPE, stderr=subprocess.PIPE because it stopped the process after a certain amount of log
+            subprocess.Popen(['python3', 'main.py', param])
     else:
         input_components.extend([AUDIO, FACE, SERVOS, WHEELS])
     components.extend([ShutDownRestart(config[SHUTDOWN_PIN], config[STATUS_LED_PIN], config[RESTART_PIN])])
@@ -82,16 +88,16 @@ for component in input_components:
     if component == AUDIO:
         components.append(AudioManager(config, receiver, robot_json_manager))
     elif component == FACE:
-        components.append(Face(config, robot_json_manager, pixels))
+        components.append(Face(config, receiver, robot_json_manager, pixels))
     elif component == SERVOS:
-        components.append(Neck(config))
-        components.append(LeftArm(config))
-        components.append(RightArm(config))
-        components.append(LeftEye(config))
-        components.append(RightEye(config))
-        components.append(RelaysManager(config, robot_json_manager))
-    elif sys.argv[1] == WHEELS:
-        components.append(Wheel(config))
+        components.append(Neck(config, receiver))
+        components.append(LeftArm(config, receiver))
+        components.append(RightArm(config, receiver))
+        components.append(LeftEye(config, receiver))
+        components.append(RightEye(config, receiver))
+        components.append(RelaysManager(config, receiver, robot_json_manager))
+    elif component == WHEELS:
+        components.append(Wheel(config, receiver))
     else:
         logging.error("wrong argument")
 

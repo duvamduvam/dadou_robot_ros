@@ -12,9 +12,10 @@ SERVO_MIN = 0
 
 class ServoAbstract:
 
-    def __init__(self, type, pwm_channel_nb, default_pos, servo_max, i2c_enabled, pwm_channels_enabled):
+    def __init__(self, type, pwm_channel_nb, default_pos, servo_max, i2c_enabled, pwm_channels_enabled, receiver):
 
         logging.info("init  {} servo".format(type))
+        self.receiver = receiver
         self.enabled = i2c_enabled or pwm_channels_enabled
         if not self.enabled:
             logging.warning("i2c pwm disabled")
@@ -47,7 +48,7 @@ class ServoAbstract:
             self.pwm_channel.angle = target_pos
 
             del msg[self.type]
-            GlobalReceiver.write_msg(msg)
+            self.receiver.write_msg(msg)
 
         return msg
 

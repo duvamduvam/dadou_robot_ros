@@ -12,8 +12,8 @@ class LeftEye(ServoAbstract):
 
     SERVO_MIN = 0
     SERVO_MAX = 180
-    DEFAULT_POS = 0
+    DEFAULT_POS = 50
 
-    def __init__(self, config):
+    def __init__(self, config, receiver):
 
-        super().__init__(LEFT_EYE, config[LEFT_EYE_NB], self.DEFAULT_POS, self.SERVO_MAX, config[I2C_ENABLED], config[PWM_CHANNELS_ENABLED])
+        super().__init__(LEFT_EYE, config[LEFT_EYE_NB], self.DEFAULT_POS, self.SERVO_MAX, config[I2C_ENABLED], config[PWM_CHANNELS_ENABLED], receiver)

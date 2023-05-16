@@ -45,8 +45,9 @@ class Wheel:
     test_direction = 0
     last_move = 0
 
-    def __init__(self, config):
+    def __init__(self, config, receiver):
         self.config = config
+        self.receiver = receiver
         self.enabled = self.config[I2C_ENABLED] or self.config[PWM_CHANNELS_ENABLED]
         if not self.enabled:
             logging.warning("i2c pwm disabled")
@@ -113,27 +114,29 @@ class Wheel:
             wheels = self.anglo_meter_translator.translate(msg[ANGLO])
             self.update_cmd(wheels[0], wheels[1])
             del msg[ANGLO]
+            self.receiver.write_msg(msg)
         if JOY in msg:
             wheels = self.anglo_meter_translator.translate(msg[JOY])
             self.update_cmd(wheels[0], wheels[1])
             del msg[JOY]
+            self.receiver.write_msg(msg)
         if WHEEL_LEFT in msg and WHEEL_RIGHT in msg:
             self.update_cmd(msg[WHEEL_LEFT], msg[WHEEL_RIGHT])
             del msg[WHEEL_LEFT]
             del msg[WHEEL_RIGHT]
+            self.receiver.write_msg(msg)
         if WHEELS in msg:
             self.update_cmd(int(msg[WHEELS][0]*100), int(msg[WHEELS][1]*100))
             del msg[WHEELS]
+            self.receiver.write_msg(msg)
 
-        if ANGLO in msg or JOY in msg or WHEEL_LEFT in msg or WHEEL_RIGHT in msg or WHEELS in msg:
-            GlobalReceiver.write_msg(msg)
         return msg
 
     def update_cmd(self, left_wheel, right_wheel):
         self.left = left_wheel
         self.right = right_wheel
 
-        logging.info("update wheel with left : " + str(left_wheel) + " right : " + str(right_wheel))
+        #logging.info("update wheel with left : " + str(left_wheel) + " right : " + str(right_wheel))
 
         self.left_pwm.duty_cycle = Misc.mapping(abs(left_wheel), 0, 100, self.MIN_PWM, self.MAX_PWM)
         self.right_pwm.duty_cycle = Misc.mapping(abs(right_wheel), 0, 100, self.MIN_PWM, self.MAX_PWM)
@@ -168,7 +171,8 @@ class Wheel:
         if not self.enabled:
             return
 
-        if not self.animation_ongoing and TimeUtils.is_time(last_time=self.move_time, time_out=self.MOVE_TIMEOUT):
+        if not self.animation_ongoing and self.left_pwm.duty_cycle != 0 and self.right_pwm.duty_cycle != 0 \
+                and TimeUtils.is_time(last_time=self.move_time, time_out=self.MOVE_TIMEOUT):
             self.stop()
 
     def process(self):

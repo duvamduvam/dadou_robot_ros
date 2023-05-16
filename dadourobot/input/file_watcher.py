@@ -1,6 +1,7 @@
 #!/usr/bin/python
 import json
 import logging
+import os
 import time
 from json import JSONDecodeError
 
@@ -22,12 +23,14 @@ class FileWatcher(FileSystemEventHandler):
 
     def on_modified(self, event):
         new_msg = self.read_msg()
+        logging.info(os.path.getctime(INPUT_MESSAGE_FILE))
         if new_msg and not self.last_msg == new_msg:
             #self.msg_last_time = TimeUtils.current_milli_time()
             StaticValue.set(NEW_DATA, True)
             logging.debug("new msg {}".format(new_msg))
 
-    def read_msg(self):
+    @staticmethod
+    def read_msg():
         with open(INPUT_MESSAGE_FILE, 'r') as j:
             try:
                 return json.loads(j.read())
@@ -53,7 +56,7 @@ class FileWatcher(FileSystemEventHandler):
                     new_msg[key] = msg_from_file[key]
             self.last_msg = msg_from_file
         else:
-            logging.error("msg from file empty")
+            logging.debug("msg from file empty")
         return new_msg
 
 

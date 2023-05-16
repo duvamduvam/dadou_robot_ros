@@ -14,7 +14,7 @@ class LeftArm(ServoAbstract):
     SERVO_MAX = 180
     DEFAULT_POS = 0
 
-    def __init__(self, config):
+    def __init__(self, config, receiver):
 
-        super().__init__(LEFT_ARM, config[LEFT_ARM_NB], self.DEFAULT_POS, self.SERVO_MAX, config[I2C_ENABLED], config[PWM_CHANNELS_ENABLED])
+        super().__init__(LEFT_ARM, config[LEFT_ARM_NB], self.DEFAULT_POS, self.SERVO_MAX, config[I2C_ENABLED], config[PWM_CHANNELS_ENABLED], receiver )
 

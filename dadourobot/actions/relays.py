@@ -17,8 +17,9 @@ class RelaysManager:
     NORMAL_VOICE = "normal_voice"
     PITCHED_VOICE = "pitched_voice"
 
-    def __init__(self, config, json_manager):
+    def __init__(self, config, receiver, json_manager):
 
+        self.receiver = receiver
         self.config = config
         if not self.config[I2C_ENABLED] or not self.config[DIGITAL_CHANNELS_ENABLED]:
             logging.warning("i2c digital disabled")

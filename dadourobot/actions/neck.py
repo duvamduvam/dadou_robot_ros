@@ -16,8 +16,8 @@ class Neck(ServoAbstract):
     SERVO_MAX = 180
     DEFAULT_POS = 52
 
-    def __init__(self, config):
-        super().__init__(NECK, config[HEAD_PWM_NB], self.DEFAULT_POS, self.SERVO_MAX, config[I2C_ENABLED], config[PWM_CHANNELS_ENABLED])
+    def __init__(self, config, receiver):
+        super().__init__(NECK, config[HEAD_PWM_NB], self.DEFAULT_POS, self.SERVO_MAX, config[I2C_ENABLED], config[PWM_CHANNELS_ENABLED], receiver)
 
     """def animate(self):
         if TimeUtils.is_time(self.last_time, self.time_step):
