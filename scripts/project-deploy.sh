@@ -20,9 +20,9 @@ export INSTALL_SERVICE="yes"
 export SERVICE_NAME=didier
 
 export PROJECT_SYSTEM_LIB="python3-opencv"
-export PROJECT_PYTHON_LIB="adafruit-circuitpython-rfm9x"
+export PROJECT_PYTHON_LIB="adafruit-circuitpython-rfm9x watchdog adafruit-circuitpython-bno055"
 
-export LOG_FILE="didier.log"
+export LOG_FILE="robot.log"
 
 ####################################################################
 

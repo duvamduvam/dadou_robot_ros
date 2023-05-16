@@ -2,6 +2,11 @@
     "keys": "E9",
     "duration": 5000,
     "types": ["random"],
+    "faces": [
+        [    0.9,
+            "upgrade"
+        ]
+    ],
     "neck": [
         [
             0.10,

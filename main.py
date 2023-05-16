@@ -1,36 +1,51 @@
+
+import cProfile
 import logging.config
+import subprocess
 import sys
+import time
 
 import board
 import neopixel
 
-from dadou_utils.com.serial_devices_manager import SerialDeviceManager
+from dadou_utils.logging_conf import LoggingConf
 from dadou_utils.utils.shutdown_restart import ShutDownRestart
-from dadou_utils.utils_static import SHUTDOWN_PIN, RESTART_PIN, STATUS_LED_PIN, DEVICES_LIST, LIGHTS_PIN, LIGHTS, \
-    LIGHTS_LED_COUNT, LOGGING_CONFIG_FILE
-
-from dadourobot.sequences.animation_manager import AnimationManager
-from dadourobot.actions.neck import Neck
+from dadou_utils.utils_static import ANIMATION, LIGHTS, SHUTDOWN_PIN, RESTART_PIN, STATUS_LED_PIN, LIGHTS_PIN, \
+    LIGHTS_LED_COUNT, \
+    LOGGING_CONFIG_FILE, WHEELS, FACE, SERVOS, PROFILER, MAIN_THREAD, AUDIO, TYPE, TYPES, NECK, LEFT_ARM, RIGHT_ARM, \
+    SINGLE_THREAD, LOGGING, PROCESS, LOGGING_FILE_NAME, MULTI_THREAD
 from dadourobot.actions.audio_manager import AudioManager
 from dadourobot.actions.face import Face
 from dadourobot.actions.left_arm import LeftArm
-from dadourobot.actions.lights import Lights
+from dadourobot.actions.left_eye import LeftEye
+from dadourobot.actions.neck import Neck
 from dadourobot.actions.relays import RelaysManager
 from dadourobot.actions.right_arm import RightArm
+from dadourobot.actions.right_eye import RightEye
 from dadourobot.actions.wheel import Wheel
 from dadourobot.files.robot_json_manager import RobotJsonManager
 from dadourobot.input.global_receiver import GlobalReceiver
 from dadourobot.robot_config import config
+from dadourobot.sequences.animation_manager import AnimationManager
 
 print(sys.path)
 print(dir(board))
 sys.path.append('')
 sys.path.append('..')
 
-print('Starting Didier')
+config[MAIN_THREAD] = (len(sys.argv) == 1) or (len(sys.argv) == 2 and sys.argv[1] == SINGLE_THREAD)
+config[MULTI_THREAD] = True
 
-print(config[LOGGING_CONFIG_FILE])
-logging.config.fileConfig(config[LOGGING_CONFIG_FILE], disable_existing_loggers=False)
+if config[PROFILER]:
+    profiler = cProfile.Profile()
+
+#print(config[LOGGING_CONFIG_FILE])
+#logging.config.fileConfig(config[LOGGING_CONFIG_FILE], disable_existing_loggers=False)
+if len(sys.argv) > 1:
+    process_name = sys.argv[1]
+else:
+    process_name = 'main'
+logging.config.dictConfig(LoggingConf.get(config[LOGGING_FILE_NAME], process_name))
 
 ################################ Component initialisations ##################################
 # TODO profiling
@@ -39,32 +54,56 @@ logging.config.fileConfig(config[LOGGING_CONFIG_FILE], disable_existing_loggers=
 components = []
 
 robot_json_manager = RobotJsonManager(config)
-pixels = neopixel.NeoPixel(config[LIGHTS_PIN], config[LIGHTS_LED_COUNT], auto_write=False, brightness=0.05, pixel_order=neopixel.GRB)
+pixels = neopixel.NeoPixel(config[LIGHTS_PIN], config[LIGHTS_LED_COUNT], auto_write=False, brightness=0.05,
+                           pixel_order=neopixel.GRB)
 
-#TODO check best order for performances
-components.extend([AudioManager(config, robot_json_manager),
-                    Face(config, robot_json_manager, pixels),
-                    LeftArm(config),
-                    #Lights(config, robot_json_manager, pixels, LIGHTS),
-                    Neck(config),
-                    RelaysManager(config, robot_json_manager),
-                    RightArm(config),
-                    ShutDownRestart(config[SHUTDOWN_PIN], config[RESTART_PIN], config[STATUS_LED_PIN]),
-                    Wheel(config)
-                   ])
+config[TYPES] = [ANIMATION, AUDIO, FACE, LIGHTS, NECK, LEFT_ARM, RIGHT_ARM]
+receiver = GlobalReceiver(config, AnimationManager(config, robot_json_manager))
 
-#devices_manager = SerialDeviceManager(DEVICES_LIST)
-animations = AnimationManager(config, robot_json_manager)
-global_receiver = GlobalReceiver(AnimationManager(config, robot_json_manager))
+input_components = []
+
+if config[MAIN_THREAD]:
+    logging.info("start main thread")
+    config[MAIN_THREAD] = True
+
+    if not (len(sys.argv) > 1 and sys.argv[1] == SINGLE_THREAD):
+        for param in [AUDIO, FACE, SERVOS, WHEELS]:
+            logging.warning("lunch {} process".format(param))
+            process = subprocess.Popen(['python3', 'main.py', param], stdout=subprocess.PIPE)
+    else:
+        input_components.extend([AUDIO, FACE, SERVOS, WHEELS])
+    components.extend([ShutDownRestart(config[SHUTDOWN_PIN], config[STATUS_LED_PIN], config[RESTART_PIN])])
+else:
+    input_components.append(sys.argv[1])
+
+for component in input_components:
+    logging.info("start {}".format(component))
+    config[TYPE] = sys.argv[1]
+    if component == AUDIO:
+        components.append(AudioManager(config, receiver, robot_json_manager))
+    elif component == FACE:
+        components.append(Face(config, robot_json_manager, pixels))
+    elif component == SERVOS:
+        components.append(Neck(config))
+        components.append(LeftArm(config))
+        components.append(RightArm(config))
+        components.append(LeftEye(config))
+        components.append(RightEye(config))
+        components.append(RelaysManager(config, robot_json_manager))
+    elif sys.argv[1] == WHEELS:
+        components.append(Wheel(config))
+    else:
+        logging.error("wrong argument")
+
+
+
 
 ################################ Main loop ##################################
 
 while True:
-    # logging.debug('run')
 
     try:
-        msg = global_receiver.get_msg()
-
+        msg = receiver.multi_get()
         if msg:
             for component in components:
                 msg = component.update(msg)
@@ -72,8 +111,8 @@ while True:
         for component in components:
             component.process()
 
-        #wheel.check_stop(msg)
-
+        #Reduce CPU load, better solution ?
+        time.sleep(0.001)
 
     except Exception as err:
         logging.error('exception {}'.format(err), exc_info=True)

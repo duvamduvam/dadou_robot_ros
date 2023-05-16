@@ -15,8 +15,9 @@ class ActionsAbstract:
         self.json_manager = json_manager
         self.sequences_key = {}
         self.sequences_name = {}
-        #self.random_duration = random.randint(config[RANDOM_ANIMATION_LOW], config[RANDOM_ANIMATION_HIGH])
-        self.last_random = TimeUtils.current_milli_time()
+        self.msg_time = 0
+
+
         if json_key:
             self.load_sequences(json_key)
 
@@ -28,17 +29,27 @@ class ActionsAbstract:
                     self.sequences_key[key] = seq
             self.sequences_name[seq[NAME]] = seq
 
-    def get_sequence(self, msg, sequence_key, animation_loop):
-        if msg and KEY in msg and msg[KEY] in self.sequences_key.keys():
-            return self.sequences_key[msg[KEY]]
-        if msg and sequence_key in msg and msg[sequence_key] in self.sequences_name.keys():
-            sequence = self.sequences_name[msg[sequence_key]]
+    def get_sequence(self, msg, sequence_type, animation_loop):
+
+        sequence = self.get_sequence_by_key(msg, sequence_type, self.sequences_name)
+        if not sequence:
+            sequence = self.get_sequence_by_key(msg, KEY, self.sequences_key)
+
+        if sequence:
             if animation_loop and LOOP_DURATION in msg.keys():
                 sequence[LOOP] = True
                 self.loop_duration = msg[LOOP_DURATION]
                 self.start_loop_duration = TimeUtils.current_milli_time()
             return sequence
-        logging.debug("no sequence with key {}".format(sequence_key))
+        else:
+           logging.debug("no sequence with key {}".format(sequence_type))
+
+    def get_sequence_by_key(self, msg, input_key, sequence_values):
+
+        if msg and input_key in msg.keys():
+            if msg[input_key] in sequence_values.keys():
+                return sequence_values[msg[input_key]]
+
 
     """def get_sequence_from_input(self, msg, sequence_key):
         if not msg:

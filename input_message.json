@@ -1,0 +1,23 @@
+{
+    "audio": [
+        1682592661321,
+        "didier20/Quoi-ce-tas-de-feraille.mp3"
+    ],
+    "face": [
+        1682592661299,
+        "speak"
+    ],
+    "light": [
+        1682592661299,
+        "default"
+    ],
+    "wheel_left": [
+        1682596219130,
+        30
+    ],
+    "wheel_right": [
+        168259621916,
+        26
+    ]
+
+}

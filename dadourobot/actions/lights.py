@@ -13,6 +13,7 @@ from dadou_utils.utils.time_utils import TimeUtils
 from dadou_utils.utils_static import METHOD, DEFAULT, DURATION, SEQUENCES, LOOP, COLOR, NAME, KEY, LIGHTS, FACE, LIGHTS_START_LED, LIGHTS_END_LED
 
 from dadourobot.actions.abstract_actions import ActionsAbstract
+from dadourobot.input.global_receiver import GlobalReceiver
 from dadourobot.sequences.sequence import Sequence
 from dadourobot.visual.lights_animations import LightsAnimations
 
@@ -88,6 +89,10 @@ class Lights(ActionsAbstract):
         #self.sequence.start_time = TimeUtils.current_milli_time()
         self.start_time = TimeUtils.current_milli_time()
         logging.info("update lights {} sequences to {}".format(self.light_type, json_seq[NAME]))
+
+        del msg[self.light_type]
+
+        GlobalReceiver.write_msg(msg)
 
     def process(self):
 

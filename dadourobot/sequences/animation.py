@@ -17,7 +17,7 @@ class Animation:
         self.items_nb = items_nb
 
         if animation_type not in datas or not datas[animation_type] or len(datas[animation_type]) == 0:
-            logging.warning("animation part {} is empty".format(animation_type))
+            logging.debug("animation part {} is empty".format(animation_type))
             self.has_data = False
             return
         else:

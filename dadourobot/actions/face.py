@@ -7,6 +7,7 @@ from dadou_utils.utils_static import ANIMATION, NAME, DURATION, LOOP, KEY, FACE,
     RIGHT_EYES, LEFT_EYES
 
 from dadourobot.actions.abstract_actions import ActionsAbstract
+from dadourobot.input.global_receiver import GlobalReceiver
 from dadourobot.sequences.sequence import Sequence
 from dadourobot.visual.image_mapping import ImageMapping
 from dadourobot.visual.visual import Visual
@@ -34,12 +35,14 @@ class Face(ActionsAbstract):
     duration = 0
     start_time = 0
 
+    current_face = ""
+
     #speak_duration = 0
     #start_speak_time = 0
 
     def __init__(self, config, json_manager,  strip):
         super().__init__(json_manager, config[JSON_EXPRESSIONS])
-        logging.info("start face with pin " + str(config[LIGHTS_PIN]))
+        logging.debug("start face with pin " + str(config[LIGHTS_PIN]))
         self.config = config
         self.strip = strip
         self.load_visuals()
@@ -89,6 +92,13 @@ class Face(ActionsAbstract):
         if not json_seq:
             return msg
 
+        if self.current_face == json_seq[NAME]:
+            self.start_time = TimeUtils.current_milli_time()
+            return msg
+
+        self.current_face = json_seq[NAME]
+
+
         logging.info("update face sequences : " + json_seq[NAME])
         if DURATION in msg:
             self.loop_duration = msg[DURATION]
@@ -102,18 +112,22 @@ class Face(ActionsAbstract):
         self.leye = Sequence(self.duration, self.loop, json_seq[LEFT_EYES], 385) #385
         self.reye = Sequence(self.duration, self.loop, json_seq[RIGHT_EYES], 448) #448
 
+        if FACE in msg:
+            del msg[FACE]
+            GlobalReceiver.write_msg(msg)
+
         return msg
 
     def animate_part(self, seq: Sequence):
         change = False
         if seq.time_to_switch():
-            seq.next()
             frame = seq.get_current_element()
-            logging.debug("seq.current_time : {} current element {} duration {}".format(seq.start_time, seq.current_element, seq.element_duration*seq.duration))
+            logging.debug("seq.current_time : {} current element {} duration {}".format(seq.start_time, seq.current_element, seq.element_duration))
             visual = self.get_visual(frame[1])
             logging.debug("update part : " + visual.name)
             self.image_mapping.mapping(self.strip, visual.rgb, seq.start_pixel)
             #logging.debug("next sequences[" + str(seq.current_frame) + "] total : " + str(len(seq.frames)))
+            seq.next()
             change = True
         return change
 

@@ -19,22 +19,6 @@
         ],
         "mouths": [
             [
-                0.2,
-                "woman-close.png"
-            ],
-            [
-                0.4,
-                "woman-ouvert1.png"
-            ],
-            [
-                0.6,
-                "woman-ouvert2.png"
-            ],
-            [
-                0.8,
-                "woman-ouvert3.png"
-            ],
-            [
                 1,
                 "woman-ouvert2.png"
             ]
@@ -236,11 +220,11 @@
     },
     {
         "name": "scooby-doo",
-        "duration": 250,
+        "duration": 2000,
         "keys": [
             "E5"
         ],
-        "loop": true,
+        "loop": false,
         "left_eyes": [
             [
                 0.333,
@@ -281,8 +265,42 @@
         ]
     },
     {
+        "name": "speak_test",
+        "duration": 250,
+        "loop": false,
+        "keys": [
+            "a", "b"
+        ],
+        "left_eyes": [
+            [
+                1,
+                "oeil-fixe.png"
+            ]
+        ],
+        "right_eyes": [
+            [
+                1,
+                "oeil-fixe.png"
+            ]
+        ],
+        "mouths": [
+            [
+                0.5,
+                "bouche-ouvert1.png"
+            ],
+            [
+                0.8,
+                "bouche-ouvert3.png"
+            ],
+            [
+                1,
+                "bouche-ouvert2.png"
+            ]
+        ]
+    },
+    {
         "name": "speak",
-        "duration": 150,
+        "duration": 15000,
         "loop": false,
         "keys": [
             "E6"
@@ -325,16 +343,12 @@
                 "bouche-ouvert2.png"
             ],
             [
-                0.521,
+                0.6,
                 "bouche-ouvert3.png"
             ],
             [
-                0.866,
-                "bouche-ouvert2.png"
-            ],
-            [
-                1.0,
-                "bouche-ouvert3.png"
+                1,
+                "bouche-ouvert1.png"
             ]
         ]
     },

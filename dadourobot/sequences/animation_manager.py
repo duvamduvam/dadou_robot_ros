@@ -42,10 +42,11 @@ class AnimationManager(ActionsAbstract):
         super().__init__(json_manager, None)
         self.load_animation_sequences()
         self.stop_keys = self.config[STOP_ANIMATION_KEYS]
+        self.random_animation_sequence = []
         self.random_duration = random.randint(self.config[RANDOM_ANIMATION_LOW], self.config[RANDOM_ANIMATION_HIGH])
         RandomAnimationStart.value = TimeUtils.current_milli_time()
-        logging.info("random duration time {}".format(self.random_duration))
-
+        logging.debug("random duration time {}".format(self.random_duration))
+        self.load_random_animation_sequences()
 
     def load_animation_sequences(self):
         sequences_files = FilesUtils.get_folder_files(self.config[BASE_PATH]+self.config[SEQUENCES_DIRECTORY])
@@ -55,23 +56,23 @@ class AnimationManager(ActionsAbstract):
             self.sequences_key[json_sequence[KEYS]] = json_sequence
             self.sequences_name[json_sequence[NAME]] = json_sequence
 
+    def load_random_animation_sequences(self):
+        for seq_key in self.sequences_name.keys():
+            sequence = self.sequences_name[seq_key]
+            if TYPES in sequence.keys():
+                for t in sequence[TYPES]:
+                    if t == RANDOM:
+                        self.random_animation_sequence.append(sequence[NAME])
+
     def random(self):
         if TimeUtils.is_time(RandomAnimationStart.value, self.random_duration):
-            random_seq_names = []
-            for seq_key in self.sequences_name.keys():
-                sequence = self.sequences_name[seq_key]
-                if TYPES in sequence.keys():
-                    for t in sequence[TYPES]:
-                        if t == RANDOM:
-                            random_seq_names.append(sequence[NAME])
-
-            if len(random_seq_names) > 0:
-                random_index = random.randint(0, len(random_seq_names)-1)
+            if len(self.random_animation_sequence) > 0:
+                random_index = random.randint(0, len(self.random_animation_sequence)-1)
                 RandomAnimationStart.value = TimeUtils.current_milli_time()
-                self.update({ANIMATION: random_seq_names[random_index]})
+                self.update({ANIMATION: self.random_animation_sequence[random_index]})
                 self.random_duration = random.randint(self.config[RANDOM_ANIMATION_LOW],
                                                       self.config[RANDOM_ANIMATION_HIGH])
-                logging.info('random animation {}'.format(random_seq_names[random_index]))
+                logging.info('random animation {}'.format(self.random_animation_sequence[random_index]))
 
     def update(self, msg):
         if msg and KEY in msg and msg[KEY] in self.config[STOP_KEY]:
@@ -130,7 +131,7 @@ class AnimationManager(ActionsAbstract):
         self.fill_event(events, FACE, self.faces_animation)
         self.fill_event(events, LIGHTS, self.lights_animation)
         if len(events) > 0:
-            logging.warning('update animation {} with values {}'.format(self.current_animation[NAME], events))
+           logging.warning('update animation {} with values {}'.format(self.current_animation[NAME], events))
         return events
 
     def fill_event(self, events, key, animation):

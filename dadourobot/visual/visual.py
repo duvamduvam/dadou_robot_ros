@@ -52,7 +52,7 @@ class Image:
 
 
     def __init__(self, path):
-        logging.info("create new image")
+        logging.debug("create new image")
         #self.load_images()
         self.path = path
     #def __init__(self, visuals_path):

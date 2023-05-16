@@ -1,6 +1,6 @@
-from dadou_utils.utils_static import I2C_ENABLED, PWM_CHANNELS_ENABLED, LEFT_ARM, LEFT_ARM_NB, RIGHT_ARM, RIGHT_ARM_NB
-from dadou_utils.actions.servo_abstract import ServoAbstract
-
+from dadou_utils.utils_static import I2C_ENABLED, PWM_CHANNELS_ENABLED, RIGHT_ARM, RIGHT_ARM_NB
+from dadourobot.actions.servo_abstract import ServoAbstract
+from dadourobot.input.global_receiver import GlobalReceiver
 
 MIN_PWM = 5000
 MAX_PWM = 65530
@@ -17,3 +17,4 @@ class RightArm(ServoAbstract):
     def __init__(self, config):
 
         super().__init__(RIGHT_ARM, config[RIGHT_ARM_NB], self.DEFAULT_POS, self.SERVO_MAX, config[I2C_ENABLED], config[PWM_CHANNELS_ENABLED])
+

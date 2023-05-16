@@ -10,6 +10,8 @@ from sound_player import Sound, SoundPlayer
 from dadou_utils.misc import Misc
 from dadou_utils.audios.sound_object import SoundObject
 
+from dadourobot.input.global_receiver import GlobalReceiver
+
 
 #TODO check : https://maelfabien.github.io/machinelearning/Speech8/#iv2a-noise-reduction
 
@@ -21,8 +23,9 @@ class AudioManager:
     current_audio = None
     current_audio_name = None
 
-    def __init__(self, config, json_manager):
+    def __init__(self, config, global_receiver, json_manager):
         self.config = config
+        self.global_receiver = global_receiver
         self.json_manager = json_manager
 
     def play_sounds_bak(self, audios):
@@ -71,6 +74,7 @@ class AudioManager:
         pass
 
     def update(self, msg):
+
         #TODO improve this part
         if msg and KEY in msg:
             logging.debug("number of thread : {}".format(threading.active_count()))
@@ -92,8 +96,10 @@ class AudioManager:
                     self.play_sound(audio_param[NAME])
 
                     if EXPRESSION in audio_param:
-                        msg[FACE] = audio_param[EXPRESSION]
-                        msg[DURATION] = self.current_audio.duration * 1000
+                        face = audio_param[EXPRESSION]
+                        duration = self.current_audio.duration * 1000
+                        msg[DURATION] = duration
+                        self.global_receiver.write_values({FACE: face, DURATION: duration})
 
         if msg and AUDIO in msg:
             if msg[AUDIO] == STOP:
@@ -102,7 +108,12 @@ class AudioManager:
             if self.play_sound(msg[AUDIO]):
                 self.current_audio_name = msg[AUDIO]
                 if FACE in msg:
-                    msg[DURATION] = self.current_audio.duration * 1000
+                    duration = self.current_audio.duration * 1000
+                    msg[DURATION] = duration
+                    self.global_receiver.write_values({DURATION: duration})
+
+            del msg[AUDIO]
+            GlobalReceiver.write_msg(msg)
 
         return msg
 
