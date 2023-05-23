@@ -4,7 +4,7 @@ import os
 
 import imageio
 
-from visual.image_mapping import ImageMapping
+from dadourobot.visual.image_mapping import ImageMapping
 
 
 class Visual:

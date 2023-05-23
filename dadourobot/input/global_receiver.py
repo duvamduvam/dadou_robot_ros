@@ -15,8 +15,9 @@ from dadou_utils.com.ws_server import WsServer
 from dadou_utils.static_value import StaticValue
 from dadou_utils.utils.time_utils import TimeUtils
 from dadou_utils.utils_static import INPUT_MESSAGE_FILE, RANDOM, MAIN_THREAD, NEW_DATA, TYPES, MULTI_THREAD, \
-    INPUT_MESSAGE_DIRECTORY, PROCESS_NAME, LOCK, INPUT_LOCK
+    INPUT_MESSAGE_DIRECTORY, PROCESS_NAME, LOCK, INPUT_LOCK, SINGLE_THREAD, WHEELS
 from dadourobot.input.file_watcher import FileWatcher
+from dadourobot.robot_config import config
 
 
 class GlobalReceiver:
@@ -44,7 +45,8 @@ class GlobalReceiver:
         self.last_msg_time = 0
         self.animation_manager = animation_manager
 
-        self.check_file_change()
+        if not config[SINGLE_THREAD]:
+            self.check_file_change()
 
         #if config[MULTI_THREAD]:
         #    self.file_watcher = FileWatcher()
@@ -85,24 +87,28 @@ class GlobalReceiver:
         #    return radio_msg
 
     def check_file_change(self):
-        new_modif = os.path.getmtime(INPUT_MESSAGE_FILE)
-        if new_modif != self.last_msg_file_modif:
-            logging.debug('file modified')
-            self.new_data = True
-            self.last_msg_file_modif = new_modif
+        if not config[SINGLE_THREAD]:
+            if os.path.isfile(INPUT_MESSAGE_FILE):
+                new_modif = os.path.getmtime(INPUT_MESSAGE_FILE)
+                if new_modif != self.last_msg_file_modif:
+                    logging.debug('file modified')
+                    self.new_data = True
+                    self.last_msg_file_modif = new_modif
 
     def multi_get(self):
         if self.main_thread:
             msg = self.get_msg()
             if msg:
-                self.write_msg_plus_time(msg)
+                if not config[SINGLE_THREAD]:
+                    self.write_msg_plus_time(msg)
                 return msg
         else:
             self.check_file_change()
             return self.get_file_msg()
 
     def write_msg(self, msg):
-        asyncio.run(self.write_msg_async(msg))
+        if not config[SINGLE_THREAD]:
+            asyncio.run(self.write_msg_async(msg))
 
     async def write_msg_async(self, msg):
         self.create_lock()
@@ -147,12 +153,19 @@ class GlobalReceiver:
 
     @staticmethod
     def create_lock():
+        logging.info("create lock")
         with open(INPUT_LOCK, "w") as lock:
             lock.write("")
 
     @staticmethod
     def delete_lock():
-        os.remove(INPUT_LOCK)
+        if os.path.isfile(INPUT_LOCK):
+            try:
+                os.remove(INPUT_LOCK)
+            except FileNotFoundError:
+                logging.error("no lock found")
+        else:
+            logging.error("no lock found")
 
     def read_msg(self):
         while self.msg_locked():
@@ -172,12 +185,20 @@ class GlobalReceiver:
                 if isinstance(msg_from_file[key], list):
                     if key in self.last_msg:
                         if not isinstance(self.last_msg[key], list):
-                            new_msg[key] = msg_from_file[key][1]
+                            # TODO fix this
+                            if key != WHEELS:
+                                new_msg[key] = msg_from_file[key][1]
                         else:
                             if not self.last_msg[key][0] == msg_from_file[key][0]:
-                                new_msg[key] = msg_from_file[key][1]
+                                # TODO fix this
+                                if key != WHEELS:
+                                    new_msg[key] = msg_from_file[key][1]
                     else:
-                        new_msg[key] = msg_from_file[key][1]
+                        #TODO fix this
+                        if key != WHEELS:
+                            new_msg[key] = msg_from_file[key][1]
+                        else:
+                            new_msg[key] = msg_from_file[key]
                 else:
                     new_msg[key] = msg_from_file[key]
             self.last_msg = msg_from_file

@@ -1,8 +1,6 @@
 import copy
 import logging
 
-from adafruit_led_animation.color import WHITE, MAGENTA, ORANGE, TEAL, JADE, PURPLE, AMBER
-
 class ImageMapping:
 
     def __init__(self, matrix_width, matrix_height, matrix_width_nb, matrix_height_nb):

@@ -1,184 +1,146 @@
 {
+    "motivation long": {
+        "audio": "song/motivation.mp3"
+    },
+    "lacrimosa": {
+        "audio": "song/lacrimosa.mp3"
+    },
+    "motivation court": {
+        "audio": "song/motivation_super_short.mp3"
+    },
+    "motivation mid": {
+        "audio": "song/motivation_mid.mp3"
+    },
     "activation_transfer": {
-        "audio": "didier20/activation_transfer2.mp3",
-        "light": "default"
+        "audio": "didier20/activation_transfer2.mp3"
     },
     "electrochoc": {
-        "audio": "effects/electrochoc1.mp3",
-        "light": "default"
+        "audio": "effects/electrochoc1.mp3"
     },
     "activation_transfer2": {
-        "audio": "didier20/activation_transfer2.mp3",
-        "light": "default"
+        "audio": "didier20/activation_transfer2.mp3"
     },
     "upload_en_cours":{
-        "audio": "didier20/upload_en_cours2.mp3",
-        "light": "default"
+        "audio": "didier20/upload_en_cours2.mp3"
     },
     "transfer_prometeus": {
-        "audio": "didier20/transfer_prometeus.mp3",
-        "light": "default"
+        "audio": "didier20/transfer_prometeus.mp3"
     },
     "transfer_impossible": {
-        "audio": "didier20/transfer_impossible2.mp3",
-        "light": "default"
+        "audio": "didier20/transfer_impossible2.mp3"
     },
     "c_est_quoi_ce_bordel": {
         "audio": "didier20/c_est_quoi_ce_bordel.mp3",
         "face" : "speak",
-        "animation": "little-move",
-        "light": "default"
+        "animation": "little-move"
     },
-    "tu_m_as_fait_quoi": {
+    "tu m as fait quoi": {
         "audio": "didier20/tu_m_as_fait_quoi1.mp3",
         "face" : "speak",
-        "light": "default",
-        "animation": "little-move2"
+        "animation": "little-move"
     },
     "c_est_pas_le_pape": {
         "audio": "didier20/c_est_pas_le_pape.mp3",
         "face" : "speak",
-        "light": "default",
-        "animation": "little-move3"
+        "animation": "little-move"
     },
     "arrete_de_me_regarder_le_cul": {
         "audio": "didier20/arrete_de_me_regarder_le_cul.mp3",
         "face" : "speak",
-        "light": "default",
-        "animation": "little-move2"
+        "animation": "little-move"
     },
     "je_me_sens_chelou": {
         "audio": "didier20/je_me_sens_chelou.mp3",
         "face" : "speak",
-        "light": "default"
+        "animation": "little-move"
     },
     "nan_juste_soif":{
         "audio": "didier20/nan_juste_soif.mp3",
         "face" : "speak",
-        "light": "default"
+        "animation": "little-move"
     },
     "Qu-est-ce-que-tu-ma-fait": {
         "audio": "didier20/Qu-est-ce-que-tu-ma-fait.mp3",
         "face" : "speak",
-        "light": "default",
-        "animation": "little-move"
+        "animation": "little-move3"
     },
     "Quoi-ce-tas-de-feraille": {
         "audio": "didier20/Quoi-ce-tas-de-feraille.mp3",
         "face" : "speak",
-        "light": "default",
-        "animation": "little-move2"
+        "animation": "little-move3"
     },
     "Je-sens-plus-rien": {
         "audio": "didier20/Je-sens-plus-rien.mp3",
         "face" : "speak",
-        "light": "default",
         "animation": "little-move3"
     },
     "s-adapter-de-quoi":{
         "audio": "didier20/s-adapter-de-quoi.mp3",
         "face" : "speak",
-        "light": "default",
-        "animation": "little-move"
+        "animation": "little-move3"
     },
-    "reconfiguration-acceptation-inconditionnelle": {
-        "audio": "didier20/reconfiguration-acceptation-inconditionnelle.mp3",
-        "animation": "upgrade"
+    "administration psychotrope":{
+        "audio": "didier20/psychotrope.mp3"
+    },
+    "tu me drogues":{
+        "audio": "didier20/mais-tu-me-drogue.mp3",
+        "face" : "speak",
+        "animation": "little-move2"
+    },
+    "doors indian summer":{
+        "audio": "song/Indian-summer.mp3"
+    },
+    "rire drogue": {
+        "audio": "didier20/rire-drogue.mp3"
     },
     "il est genial ce corps": {
         "audio": "didier20/il-est-genial-ce-corps.mp3",
         "animation": "moon-walk",
-        "face" : "speak",
-        "light": "default"
+        "face" : "speak"
     },
-    "reconfiguration langagiere": {
-        "audio": "didier20/reconfiguration-langagiere.mp3",
-        "animation": "upgrade"
-    },
-    "merci cher jack": {
-        "audio": "didier20/merci-cher-jack.mp3",
-        "face" : "speak",
-        "light": "default",
-        "animation": "little-neck"
-    },
-    "procedure reconfiguration vocal": {
-        "audio": "didier20/procedure-reconfiguration-vocal.mp3",
-        "animation": "upgrade"
+    "jim c'est toi": {
+        "audio": "didier20/jim.mp3",
+        "face" : "speak"
     },
     "cette voix vous sied t'il aigue": {
         "audio": "didier20/cette_voix_vous_sied_t_il.mp3",
         "face" : "speak",
-        "light": "default",
         "animation": "little-neck2"
-    },
-    "procedure-reconfiguration-vocal 2": {
-        "audio": "didier20/procedure-reconfiguration-vocal.mp3",
-        "animation": "upgrade"
-    },
-    "macron-je-ne-cederais-rien": {
-        "audio": "didier20/macron-je-ne-cederais-rien.mp3",
-        "face" : "speak",
-        "animation": "little-neck2"
-    },
-    "procedure-reconfiguration-vocal 3": {
-        "audio": "didier20/procedure-reconfiguration-vocal.mp3",
-        "animation": "upgrade"
-    },
-    "arretons les investigations": {
-        "audio": "didier20/ne_pas_pousser_les_investigations.mp3",
-        "face" : "speak",
-        "animation": "little-neck"
     },
     "procedure reconfiguration faciale": {
         "audio": "didier20/procedure-reconfiguration-faciale.mp3",
         "animation": "upgrade"
     },
-    "Je doute de ton jugement": {
-        "audio": "didier20/je_doute_de_ton_jugement.mp3",
-        "face" : "sexy",
-        "animation": "little-neck2"
-    },
-    "procedure reconnaissance inconditionnel": {
-        "audio": "didier20/procedure-reconnaissance-inconditionnel.mp3",
+    "procedure-reconfiguration-vocal": {
+        "audio": "didier20/procedure-reconfiguration-vocal.mp3",
         "animation": "upgrade"
-    },
-    "tu es extraordinaire jack": {
-        "audio": "didier20/tu-es-extraordinaire-jack.mp3",
-        "face" : "sexy",
-        "animation": "little-neck"
-    },
-    "ouverture cerveau": {
-        "animation": "upload-cerveau"
-    },
-    "c est extra ordinaire": {
-        "audio": "didier20/c-est-extraordinaire.mp3",
-        "face" : "sexy",
-        "animation": "little-neck"
     },
     "ouverture internet": {
         "audio": "didier20/ouverture-internet.mp3",
         "animation": "internet"
     },
     "I love you": {
+        "audio": "song/all-you-need-is-love.mp3",
         "animation": "iloveyou"
     },
     "stop animation": {
         "animation": "stop"
     },
+    "tu m'en redonne": {
+        "audio": "didier20/tu-m-en-redonne.mp3",
+        "face" : "speak"
+    },
     "c est quoi le darknet": {
         "audio": "didier20/c_est_quoi_le_darknet.mp3",
-        "face" : "speak",
-        "light": "default"
+        "face" : "speak"
     },
     "quoi attend": {
         "audio": "didier20/quoi_attend.mp3",
-        "face" : "speak",
-        "light": "default"
+        "face" : "speak"
     },
     "allez soit cool": {
         "audio": "didier20/allez_soit_cool.mp3",
-        "face" : "speak",
-        "light": "default"
+        "face" : "speak"
     },
     "ouverture du darknet": {
         "animation": "warning",
@@ -189,36 +151,30 @@
     },
     "tiens t as des messages": {
         "audio": "didier20/tiens_t_as_des_messages.mp3",
-        "face" : "speak",
-        "light": "default"
+        "face" : "speak"
     },
     "juste un petit hack":{
         "audio": "didier20/juste_un_petit_hack.mp3",
-        "face" : "speak",
-        "light": "default"
+        "face" : "speak"
     },
     "adopteunmec": {
         "audio": "didier20/adopteunmec.mp3",
-        "face" : "speak",
-        "light": "default"
+        "face" : "speak"
     },
     "ils_sont_pas_sympa": {
         "audio": "didier20/ils_sont_pas_sympa.mp3",
-        "face" : "speak",
-        "light": "default"
+        "face" : "speak"
     },
     "fait pas ca": {
         "audio": "didier20/fait_pas_ca.mp3",
-        "face" : "speak",
-        "light": "default"
+        "face" : "speak"
     },
     "stop music": {
         "key": "A&"
     },
     "access 4g": {
         "audio": "didier20/acces_4g.mp3",
-        "face" : "speak",
-        "light": "default"
+        "face" : "speak"
     },
     "acces refuse": {
         "audio": "didier20/acces_refuse.mp3"
@@ -228,18 +184,23 @@
     },
     "trop tard": {
         "audio": "didier20/trop_tard.mp3",
-        "face" : "speak",
-        "light": "default"
+        "face" : "speak"
     },
     "c_est_moi_qui_control": {
         "audio": "didier20/c_est_moi_qui_control.mp3",
-        "face" : "speak",
-        "light": "default"
+        "face" : "speak"
     },
     "je_ne_suis_pas_un_jouet": {
         "audio": "didier20/je_ne_suis_pas_un_jouet.mp3",
-        "face" : "speak",
-        "light": "default"
+        "face" : "speak"
+    },
+    "tu penses que ca va suffir": {
+        "audio": "didier20/tu-penses-que-ca-va-suffir.mp3",
+        "face" : "speak"
+    },
+    "et faire crever des sdf": {
+        "audio": "didier20/faire-crever-des-sdf.mp3",
+        "face" : "speak"
     },
     "decharge": {
         "audio": "effects/electrochoc1.mp3"
@@ -248,51 +209,73 @@
         "audio": "effects/encephalogramme.mp3"
     },
     "met_le_casque": {
-        "audio": "didier20/met_le_casque.mp3",
-        "face" : "speak",
-        "light": "default"
+        "audio": "didier20/met_le_casque.mp3"
     },
-    "stop music2": {
-        "key": "A&"
+    "musique cirque": {
+        "audio": "song/cirque.mp3"
+    },
+    "announce cabaret": {
+        "audio": "didier20/cabaret2.mp3",
+        "face" : "speak"
+    },
+    "va chercher chips": {
+        "audio": "didier20/va-nous-chercher-les-chips2.mp3",
+        "face" : "speak"
+    },
+    "record chips": {
+        "audio": "didier20/record-chips.mp3",
+        "face" : "speak"
+    },
+    "travolta 1": {
+        "audio": "didier20/travolta1.mp3",
+        "face" : "speak"
+    },
+    "travolta 2": {
+        "audio": "didier20/travolta2.mp3",
+        "face" : "speak"
+    },
+    "staying alive": {
+        "audio": "song/staying-alive.mp3"
+    },
+    "c'est chaud": {
+        "audio": "didier20/cest-chaud.mp3"
+    },
+    "dreams": {
+        "audio": "song/dreams.mp3"
+    },
+    "suicide": {
+        "audio": "didier20/suicide.mp3"
     },
     "il te reste des cartons": {
         "audio": "didier20/il_te_reste_des_cartons.mp3",
-        "face" : "speak",
-        "light": "default"
+        "face" : "speak"
     },
     "je_dis_ce_que_tu_fais":{
         "audio": "didier20/je_dis_ce_que_tu_fais.mp3",
-        "face" : "speak",
-        "light": "default"
+        "face" : "speak"
     },
     "musique_chips": {
         "audio": "didier20/musique_chips.mp3",
-        "face" : "speak",
-        "light": "default"
+        "face" : "speak"
     },
     "je_l_ai": {
         "audio": "didier20/je_l_ai.mp3",
-        "face" : "speak",
-        "light": "default"
+        "face" : "speak"
     },
     "tout_le_public": {
         "audio": "didier20/tout_le_public.mp3",
-        "face" : "speak",
-        "light": "default"
+        "face" : "speak"
     },
     "va_lecher_jannine": {
         "audio": "didier20/va_lecher_jannine.mp3",
-        "face" : "speak",
-        "light": "default"
+        "face" : "speak"
     },
     "va_pisser_sur_le_public": {
         "audio": "didier20/va_pisser_sur_le_public.mp3",
-        "face" : "speak",
-        "light": "default"
+        "face" : "speak"
     },
     "je_t_adore": {
         "audio": "didier20/je_t_adore.mp3",
-        "face" : "speak",
-        "light": "default"
+        "face" : "speak"
     }
 }

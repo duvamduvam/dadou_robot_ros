@@ -8,7 +8,8 @@ export UTILS_PROJECT=~/Nextcloud/Didier/python/dadou_utils
 
 export USER_HOST="r"
 export ROOT_HOST="rr"
-export RPI_IP="192.168.1.200"
+#export RPI_IP="192.168.1.200"
+export RPI_HOST_NAME="didier.local"
 
 export INSTALL_LIB="yes"
 export SET_USB_AUDIO="yes"
@@ -19,8 +20,8 @@ export INSTALL_SERVICE="yes"
 #export INSTALL_AUTOSTART="yes"
 export SERVICE_NAME=didier
 
-export PROJECT_SYSTEM_LIB="python3-opencv"
-export PROJECT_PYTHON_LIB="adafruit-circuitpython-rfm9x watchdog adafruit-circuitpython-bno055"
+export PROJECT_SYSTEM_LIB="python3-opencv portaudio19-dev python3-pyaudio"
+export PROJECT_PYTHON_LIB="imageio adafruit-circuitpython-rfm9x watchdog adafruit-circuitpython-bno055 adafruit-circuitpython-neopixel"
 
 export LOG_FILE="robot.log"
 

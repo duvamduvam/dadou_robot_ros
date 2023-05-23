@@ -1,12 +1,6 @@
 {
     "keys": "C5",
     "duration": 120000,
-    "audios": [
-        [
-            1,
-            "song/all-you-need-is-love.mp3"
-        ]
-    ],
     "faces": [
         [
             0.3,

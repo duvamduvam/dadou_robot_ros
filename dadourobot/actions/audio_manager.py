@@ -39,6 +39,9 @@ class AudioManager:
 
     def play_sound(self, audio):
         if exists(self.config[AUDIOS_DIRECTORY]+audio):
+        # TODO pb audio call 3 times / to improve
+            if self.current_audio_name and audio in self.current_audio_name:
+                return False
             if self.current_audio:
                 self.current_audio.stop()
             self.current_audio = SoundObject(self.config[AUDIOS_DIRECTORY]+audio)
@@ -56,13 +59,13 @@ class AudioManager:
     def play_sounds(self, audios):
         for audio in audios:
             logging.info("enqueue: " + audio.get_path())
-
-            sound = SoundObject(self.config[AUDIOS_DIRECTORY], audio.get_path())
-            self.playlist.append(sound)
+            if not self.current_audio_name in audio.get_path:
+                sound = SoundObject(self.config[AUDIOS_DIRECTORY]+audio.get_path())
+                self.playlist.append(sound)
             #self.player.enqueue(Sound(audio.get_path()), 1)
             #for s in range(int(audio.get_time())):
             #    self.player.enqueue(Sound(self.silence), 1)
-            sound.play()
+                sound.play()
         #self.player.play()
 
     def stop_sound(self):
@@ -113,7 +116,7 @@ class AudioManager:
                     self.global_receiver.write_values({DURATION: duration})
 
             del msg[AUDIO]
-            GlobalReceiver.write_msg(msg)
+            self.global_receiver.write_msg(msg)
 
         return msg
 

@@ -1,12 +1,12 @@
 import adafruit_bno055
 
-class BNO055Extended(adafruit_bno055.BNO055):
-
+class BNO055Extended(adafruit_bno055.BNO055_I2C):
 
     def __init__(self, i2c, calibration=None):
         super().__init__(i2c)
         if calibration:
             self.set_calibration(calibration)
+        self.last_temperature = 0
     def get_calibration(self):
         """Return the sensor's calibration data and return it as an array of
         22 bytes. Can be saved and then reloaded with the set_calibration function
@@ -37,6 +37,15 @@ class BNO055Extended(adafruit_bno055.BNO055):
         self._write_register_data(0X55, data)
         # Go back to normal operation mode.
         self.mode = adafruit_bno055.NDOF_MODE
+
+    def get_temperature(self):
+        result = super().temperature
+        if abs(result - self.last_temperature) == 128:
+            result = super().temperature
+            if abs(result - self.last_temperature) == 128:
+                return 0b00111111 & result
+        last_val = result
+        return result
 
     def _write_register_data(self, register, data):
         write_buffer = bytearray(1)

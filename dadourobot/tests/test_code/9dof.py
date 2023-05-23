@@ -17,17 +17,9 @@ last_val = 0xFFFF
 
 i2c = board.I2C()  # uses board.SCL and board.SDA
 # i2c = board.STEMMA_I2C()  # For using the built-in STEMMA QT connector on a microcontroller
+#sensor = BNO055Extended(i2c, config[CALIBRATION])
+#sensor = adafruit_bno055.BNO055_I2C(i2c)
 sensor = BNO055Extended(i2c, config[CALIBRATION])
-
-def temperature():
-    global last_val  # pylint: disable=global-statement
-    result = sensor.temperature
-    if abs(result - last_val) == 128:
-        result = sensor.temperature
-        if abs(result - last_val) == 128:
-            return 0b00111111 & result
-    last_val = result
-    return result
 
 
 while True:

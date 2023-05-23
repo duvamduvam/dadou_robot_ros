@@ -9,7 +9,7 @@ from dadou_utils.misc import Misc
 from dadou_utils.utils.time_utils import TimeUtils
 from dadou_utils.utils_static import ANGLO, WHEEL_RIGHT, WHEEL_LEFT, JOY, WHEELS, KEY, \
     CMD_FORWARD, CMD_BACKWARD, CMD_LEFT, CMD_RIGHT, I2C_ENABLED, PWM_CHANNELS_ENABLED, \
-    WHEEL_LEFT_PWM, WHEEL_RIGHT_PWM, WHEEL_LEFT_DIR, WHEEL_RIGHT_DIR, STRAIGHT
+    WHEEL_LEFT_PWM, WHEEL_RIGHT_PWM, WHEEL_LEFT_DIR, WHEEL_RIGHT_DIR, STRAIGHT, ANIMATION
 from dadourobot.input.global_receiver import GlobalReceiver
 from dadourobot.move.anglo_meter_translator import AngloMeterTranslator
 
@@ -91,14 +91,14 @@ class Wheel:
 
     def update(self, msg):
 
-        #if msg and ANIMATION in msg and WHEEL_LEFT in msg and WHEEL_RIGHT in msg:
-        #    self.animation_ongoing = msg[ANIMATION]
-
-        if not self.enabled:
+        if not self.enabled or not msg:
             return msg
 
-        if not msg:
-            return msg
+        if ANIMATION in msg and not msg[ANIMATION]:
+            self.animation_ongoing = False
+
+        if ANIMATION in msg and ((WHEEL_LEFT in msg and WHEEL_RIGHT in msg) or (WHEELS in msg)):
+            self.animation_ongoing = msg[ANIMATION]
 
         if KEY in msg and (msg[KEY] == self.config[CMD_FORWARD] or msg[KEY] == self.config[CMD_BACKWARD] or msg[KEY] == self.config[CMD_LEFT] or msg[KEY] == self.config[CMD_RIGHT]):
             if msg[KEY] == self.config[CMD_FORWARD]:

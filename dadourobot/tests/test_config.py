@@ -2,15 +2,18 @@ import unittest
 import logging.config
 import board
 
-from robot_config import Config
-from dadourobot import JsonManager
-from tests import TestSetup
-
-TestSetup()
+from dadourobot.files.robot_json_manager import RobotJsonManager
+from dadourobot.input.global_receiver import GlobalReceiver
+from dadourobot.robot_config import config
 
 
 class TestConfig(unittest.TestCase):
 
+    def __init__(self):
+        super().__init__()
+        #robot_json_manager = RobotJsonManager(config)
+        self.receiver = GlobalReceiver(config, None)
+
     def test_get_rpi_pins(self):
         logging.info(board.__dict__)
-        logging.info(self.config.LIGHTS_PIN)
+        logging.info(config.LIGHTS_PIN)

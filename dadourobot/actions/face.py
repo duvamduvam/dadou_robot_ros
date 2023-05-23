@@ -86,8 +86,8 @@ class Face(ActionsAbstract):
 
     def update(self, msg):
 
-        #if msg and ANIMATION in msg and not msg[ANIMATION]:
-        #    self.update({FACE: self.DEFAULT})
+        if msg and ANIMATION in msg and not msg[ANIMATION]:
+            self.update({FACE: self.DEFAULT})
 
         json_seq = self.get_sequence(msg, FACE, True)
         if not json_seq:

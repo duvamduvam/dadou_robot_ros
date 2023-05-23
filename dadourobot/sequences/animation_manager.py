@@ -4,9 +4,11 @@ import random
 
 from dadou_utils.files.files_utils import FilesUtils
 from dadou_utils.utils.time_utils import TimeUtils
-from dadou_utils.utils_static import ANIMATION, STOP_ANIMATION_KEYS, AUDIO, AUDIOS, KEY, NECK, NECKS, FACE, FACES, LIGHTS, WHEELS, NAME, \
-    DURATION, KEYS, RANDOM, START, STOP, TYPES, SEQUENCES_DIRECTORY, LOOP_DURATION, RANDOM_ANIMATION_LOW, RANDOM_ANIMATION_HIGH, BASE_PATH, \
-    LEFT_ARM, RIGHT_ARM, STOP_KEY
+from dadou_utils.utils_static import ANIMATION, STOP_ANIMATION_KEYS, AUDIO, AUDIOS, KEY, NECK, NECKS, FACE, FACES, \
+    LIGHTS, WHEELS, NAME, \
+    DURATION, KEYS, RANDOM, START, STOP, TYPES, SEQUENCES_DIRECTORY, LOOP_DURATION, RANDOM_ANIMATION_LOW, \
+    RANDOM_ANIMATION_HIGH, BASE_PATH, \
+    LEFT_ARM, RIGHT_ARM, STOP_KEY, LEFT_EYE, RIGHT_EYE
 
 from dadourobot.actions.abstract_actions import ActionsAbstract
 from dadourobot.sequences.animation import Animation
@@ -30,6 +32,8 @@ class AnimationManager(ActionsAbstract):
     audios_animation = None
     left_arm_animation = None
     right_arm_animation = None
+    left_eye_animation = None
+    right_eye_animation = None
     necks_animation = None
     faces_animation = None
     lights_animation = None
@@ -99,6 +103,8 @@ class AnimationManager(ActionsAbstract):
         self.audios_animation = Animation(self.current_animation, self.duration, AUDIOS, 1)
         self.left_arm_animation = Animation(self.current_animation, self.duration, LEFT_ARM, 1)
         self.right_arm_animation = Animation(self.current_animation, self.duration, RIGHT_ARM, 1)
+        self.left_eye_animation = Animation(self.current_animation, self.duration, LEFT_EYE, 1)
+        self.right_eye_animation = Animation(self.current_animation, self.duration, RIGHT_EYE, 1)
         self.necks_animation = Animation(self.current_animation, self.duration, NECK, 1)
         self.faces_animation = Animation(self.current_animation, self.duration, FACES, 1)
         self.lights_animation = Animation(self.current_animation, self.duration, LIGHTS, 1)
@@ -126,6 +132,8 @@ class AnimationManager(ActionsAbstract):
         self.fill_event(events, AUDIO, self.audios_animation)
         self.fill_event(events, LEFT_ARM, self.left_arm_animation)
         self.fill_event(events, RIGHT_ARM, self.right_arm_animation)
+        self.fill_event(events, LEFT_EYE, self.left_eye_animation)
+        self.fill_event(events, RIGHT_EYE, self.right_eye_animation)
         self.fill_event(events, NECK, self.necks_animation)
         self.fill_event(events, WHEELS, self.wheels_animation)
         self.fill_event(events, FACE, self.faces_animation)

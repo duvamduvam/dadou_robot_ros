@@ -300,7 +300,7 @@
     },
     {
         "name": "speak",
-        "duration": 15000,
+        "duration": 250,
         "loop": false,
         "keys": [
             "E6"

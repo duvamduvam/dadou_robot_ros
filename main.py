@@ -13,15 +13,12 @@ from dadou_utils.utils.shutdown_restart import ShutDownRestart
 from dadou_utils.utils_static import ANIMATION, LIGHTS, SHUTDOWN_PIN, RESTART_PIN, STATUS_LED_PIN, LIGHTS_PIN, \
     LIGHTS_LED_COUNT, \
     LOGGING_CONFIG_FILE, WHEELS, FACE, SERVOS, PROFILER, MAIN_THREAD, AUDIO, TYPE, TYPES, NECK, LEFT_ARM, RIGHT_ARM, \
-    SINGLE_THREAD, LOGGING, PROCESS, LOGGING_FILE_NAME, MULTI_THREAD, PROCESS_NAME
+    SINGLE_THREAD, LOGGING_FILE_NAME, MULTI_THREAD, PROCESS_NAME, LEFT_EYE, RIGHT_EYE, HEAD_PWM_NB, \
+    LEFT_EYE_NB, RIGHT_EYE_NB, LEFT_ARM_NB, RIGHT_ARM_NB, I2C_ENABLED, PWM_CHANNELS_ENABLED
 from dadourobot.actions.audio_manager import AudioManager
 from dadourobot.actions.face import Face
-from dadourobot.actions.left_arm import LeftArm
-from dadourobot.actions.left_eye import LeftEye
-from dadourobot.actions.neck import Neck
 from dadourobot.actions.relays import RelaysManager
-from dadourobot.actions.right_arm import RightArm
-from dadourobot.actions.right_eye import RightEye
+from dadourobot.actions.servo import Servo
 from dadourobot.actions.wheel import Wheel
 from dadourobot.files.robot_json_manager import RobotJsonManager
 from dadourobot.input.global_receiver import GlobalReceiver
@@ -90,11 +87,11 @@ for component in input_components:
     elif component == FACE:
         components.append(Face(config, receiver, robot_json_manager, pixels))
     elif component == SERVOS:
-        components.append(Neck(config, receiver))
-        components.append(LeftArm(config, receiver))
-        components.append(RightArm(config, receiver))
-        components.append(LeftEye(config, receiver))
-        components.append(RightEye(config, receiver))
+        components.append(Servo(NECK, config[HEAD_PWM_NB], 60, 180, config[I2C_ENABLED], config[PWM_CHANNELS_ENABLED], receiver))
+        components.append(Servo(LEFT_EYE, config[LEFT_EYE_NB], 55, 180, config[I2C_ENABLED], config[PWM_CHANNELS_ENABLED], receiver))
+        components.append(Servo(RIGHT_EYE, config[RIGHT_EYE_NB], 55, 180, config[I2C_ENABLED], config[PWM_CHANNELS_ENABLED], receiver))
+        components.append(Servo(LEFT_ARM, config[LEFT_ARM_NB], 99, 180, config[I2C_ENABLED], config[PWM_CHANNELS_ENABLED], receiver))
+        components.append(Servo(RIGHT_ARM, config[RIGHT_ARM_NB], 99, 180, config[I2C_ENABLED], config[PWM_CHANNELS_ENABLED], receiver))
         components.append(RelaysManager(config, receiver, robot_json_manager))
     elif component == WHEELS:
         components.append(Wheel(config, receiver))
