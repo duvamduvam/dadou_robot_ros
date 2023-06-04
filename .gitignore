@@ -1,1 +1,2 @@
-/conf/chatgpt-key.txt
+# .gitignore
+chatgpt-key.txt
