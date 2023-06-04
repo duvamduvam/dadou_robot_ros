@@ -86,8 +86,9 @@ class AnimationManager(ActionsAbstract):
 
     def get_animation(self, msg):
         animation = self.get_sequence(msg, ANIMATION, False)
+
         if not animation:
-            self.duration = 0
+            #self.duration = 0
             return
 
         self.current_animation = animation
@@ -96,19 +97,23 @@ class AnimationManager(ActionsAbstract):
         self.playing = True
         self.start = True
 
-        self.duration = self.current_animation[DURATION]
+        if DURATION in msg:
+            self.duration = msg[DURATION]
+        else:
+            self.duration = self.current_animation[DURATION]
+            
         self.last_time = TimeUtils.current_milli_time()
         self.last_random = TimeUtils.current_milli_time()
 
-        self.audios_animation = Animation(self.current_animation, self.duration, AUDIOS, 1)
-        self.left_arm_animation = Animation(self.current_animation, self.duration, LEFT_ARM, 1)
-        self.right_arm_animation = Animation(self.current_animation, self.duration, RIGHT_ARM, 1)
-        self.left_eye_animation = Animation(self.current_animation, self.duration, LEFT_EYE, 1)
-        self.right_eye_animation = Animation(self.current_animation, self.duration, RIGHT_EYE, 1)
-        self.necks_animation = Animation(self.current_animation, self.duration, NECK, 1)
-        self.faces_animation = Animation(self.current_animation, self.duration, FACES, 1)
-        self.lights_animation = Animation(self.current_animation, self.duration, LIGHTS, 1)
-        self.wheels_animation = Animation(self.current_animation, self.duration, WHEELS, 2)
+        self.audios_animation = Animation(self.current_animation, self.duration, AUDIOS)
+        self.left_arm_animation = Animation(self.current_animation, self.duration, LEFT_ARM)
+        self.right_arm_animation = Animation(self.current_animation, self.duration, RIGHT_ARM)
+        self.left_eye_animation = Animation(self.current_animation, self.duration, LEFT_EYE)
+        self.right_eye_animation = Animation(self.current_animation, self.duration, RIGHT_EYE)
+        self.necks_animation = Animation(self.current_animation, self.duration, NECK)
+        self.faces_animation = Animation(self.current_animation, self.duration, FACES)
+        self.lights_animation = Animation(self.current_animation, self.duration, LIGHTS)
+        self.wheels_animation = Animation(self.current_animation, self.duration, WHEELS)
 
     def stop(self):
         if self.playing:
@@ -126,7 +131,7 @@ class AnimationManager(ActionsAbstract):
 
         if self.start:
             events[ANIMATION] = True
-            events[LOOP_DURATION] = self.duration
+            events[DURATION] = self.duration
             self.start = False
 
         self.fill_event(events, AUDIO, self.audios_animation)

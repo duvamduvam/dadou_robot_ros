@@ -1,12 +1,7 @@
 {
     "keys": "H1",
     "duration": 5000,
-    "neck": [
-        [1,
-          {"mode": "random", "random move min": 40,
-            "random move max": 70, "random time min": 500, "random time max":1000}
-        ]
-    ],
+    "wait audio": true,
     "left eye": [
         [1,
           {"mode": "random", "random move min": 65,
@@ -29,38 +24,6 @@
         [1,
           {"mode": "random", "random move min": 60,
             "random move max": 95, "random time min": 500, "random time max": 1000}
-        ]
-    ],
-    "wheels": [
-        [
-            0.2,
-            0.5,
-            -0.5
-        ],
-        [
-            0.3,
-            0,
-            0
-        ],
-        [
-            0.4,
-            0,
-            0
-        ],
-        [
-            0.41,
-            -0.5,
-            0.5
-        ],
-        [
-            0.5,
-            0,
-            0
-        ],
-        [
-            1,
-            0,
-            0
         ]
     ]
 }

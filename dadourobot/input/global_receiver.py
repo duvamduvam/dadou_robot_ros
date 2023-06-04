@@ -15,7 +15,7 @@ from dadou_utils.com.ws_server import WsServer
 from dadou_utils.static_value import StaticValue
 from dadou_utils.utils.time_utils import TimeUtils
 from dadou_utils.utils_static import INPUT_MESSAGE_FILE, RANDOM, MAIN_THREAD, NEW_DATA, TYPES, MULTI_THREAD, \
-    INPUT_MESSAGE_DIRECTORY, PROCESS_NAME, LOCK, INPUT_LOCK, SINGLE_THREAD, WHEELS
+    INPUT_MESSAGE_DIRECTORY, PROCESS_NAME, LOCK, INPUT_LOCK, SINGLE_THREAD, WHEELS, KEY, DURATION
 from dadourobot.input.file_watcher import FileWatcher
 from dadourobot.robot_config import config
 
@@ -28,6 +28,7 @@ class GlobalReceiver:
     last_msg_file_modif = 0
     last_msg = {}
     new_data = False
+    not_timed_key = [KEY, DURATION]
 
     def __init__(self, config, animation_manager=None):
         #self.mega_lora_radio = SerialDevice('modem', self.config.RADIO_MEGA_ID, 7)
@@ -127,8 +128,7 @@ class GlobalReceiver:
         t = TimeUtils.current_milli_time()
         time_msg = copy.copy(msg)
         for key in msg.keys():
-            if not isinstance(msg[key], list):
-            #if len(msg[key]):
+            if key not in self.not_timed_key:
                 time_msg[key] = [t, msg[key]]
             else:
                 time_msg[key] = msg[key]
@@ -185,20 +185,12 @@ class GlobalReceiver:
                 if isinstance(msg_from_file[key], list):
                     if key in self.last_msg:
                         if not isinstance(self.last_msg[key], list):
-                            # TODO fix this
-                            if key != WHEELS:
-                                new_msg[key] = msg_from_file[key][1]
-                        else:
-                            if not self.last_msg[key][0] == msg_from_file[key][0]:
-                                # TODO fix this
-                                if key != WHEELS:
-                                    new_msg[key] = msg_from_file[key][1]
-                    else:
-                        #TODO fix this
-                        if key != WHEELS:
                             new_msg[key] = msg_from_file[key][1]
                         else:
-                            new_msg[key] = msg_from_file[key]
+                            if not self.last_msg[key][0] == msg_from_file[key][0]:
+                                new_msg[key] = msg_from_file[key][1]
+                    else:
+                        new_msg[key] = msg_from_file[key][1]
                 else:
                     new_msg[key] = msg_from_file[key]
             self.last_msg = msg_from_file

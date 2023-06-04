@@ -9,7 +9,7 @@ import board
 import neopixel
 
 from dadou_utils.logging_conf import LoggingConf
-from dadou_utils.utils.shutdown_restart import ShutDownRestart
+from dadou_utils.utils.status import Status
 from dadou_utils.utils_static import ANIMATION, LIGHTS, SHUTDOWN_PIN, RESTART_PIN, STATUS_LED_PIN, LIGHTS_PIN, \
     LIGHTS_LED_COUNT, \
     LOGGING_CONFIG_FILE, WHEELS, FACE, SERVOS, PROFILER, MAIN_THREAD, AUDIO, TYPE, TYPES, NECK, LEFT_ARM, RIGHT_ARM, \
@@ -75,7 +75,8 @@ if config[MAIN_THREAD]:
             subprocess.Popen(['python3', 'main.py', param])
     else:
         input_components.extend([AUDIO, FACE, SERVOS, WHEELS])
-    components.extend([ShutDownRestart(config[SHUTDOWN_PIN], config[STATUS_LED_PIN], config[RESTART_PIN])])
+    components.extend([Status(config[SHUTDOWN_PIN], config[STATUS_LED_PIN], config[RESTART_PIN])])
+    components.append(AudioManager(config, receiver, robot_json_manager))
 else:
     input_components.append(sys.argv[1])
 
@@ -83,11 +84,12 @@ for component in input_components:
     logging.info("start {}".format(component))
     config[TYPE] = sys.argv[1]
     if component == AUDIO:
-        components.append(AudioManager(config, receiver, robot_json_manager))
+        pass
+        #components.append(AudioManager(config, receiver, robot_json_manager))
     elif component == FACE:
         components.append(Face(config, receiver, robot_json_manager, pixels))
     elif component == SERVOS:
-        components.append(Servo(NECK, config[HEAD_PWM_NB], 60, 180, config[I2C_ENABLED], config[PWM_CHANNELS_ENABLED], receiver))
+        components.append(Servo(NECK, config[HEAD_PWM_NB], 50, 180, config[I2C_ENABLED], config[PWM_CHANNELS_ENABLED], receiver))
         components.append(Servo(LEFT_EYE, config[LEFT_EYE_NB], 55, 180, config[I2C_ENABLED], config[PWM_CHANNELS_ENABLED], receiver))
         components.append(Servo(RIGHT_EYE, config[RIGHT_EYE_NB], 55, 180, config[I2C_ENABLED], config[PWM_CHANNELS_ENABLED], receiver))
         components.append(Servo(LEFT_ARM, config[LEFT_ARM_NB], 99, 180, config[I2C_ENABLED], config[PWM_CHANNELS_ENABLED], receiver))

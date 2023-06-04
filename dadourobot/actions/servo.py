@@ -60,7 +60,10 @@ class Servo:
 
         if msg and self.type in msg:
             if isinstance(msg[self.type], float) or isinstance(msg[self.type], int) or Misc.cast_int(msg[self.type]):
-                value = Misc.cast_int(msg[self.type])
+                if 0 < msg[self.type] <= 1:
+                    value = msg[self.type] * 100
+                else:
+                    value = msg[self.type]
                 self.set_angle(value)
             else:
                 if isinstance(msg[self.type], dict) and MODE in msg[self.type]:
@@ -93,7 +96,7 @@ class Servo:
         self.pwm_channel.angle = target_pos
 
     def process(self):
-        if self.mode == RANDOM:
+        if self.enabled and self.mode == RANDOM:
             if self.random_start_time != 0 and TimeUtils.is_time(self.random_start_time, self.random_duration):
                 self.mode = NORMAL
             if TimeUtils.is_time(self.random_last_time, self.random_next_time):

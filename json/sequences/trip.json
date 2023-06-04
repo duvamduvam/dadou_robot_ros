@@ -1,0 +1,88 @@
+{
+    "keys": "H1",
+    "duration": 60000,
+    "audios": [
+        [
+            0.3,
+           "didier20/rien"
+        ],
+        [
+            0.4,
+           "didier20/rire-drogue.mp3"
+        ],
+        [
+            0.6,
+           "didier20/jim.mp3"
+        ],
+        [
+            0.8,
+           "didier20/bordel-de-cul.mp3"
+        ]
+    ],
+    "faces": [
+        [
+            0.3,
+           "default"
+        ],
+        [
+            0.4,
+           "speak"
+        ],
+        [
+            0.6,
+           "speak"
+        ],
+        [
+            0.9,
+           "speak"
+        ]
+    ],
+    "loop": true,
+    "neck": [
+        [1,
+          {"mode": "random", "random move min": 1,
+            "random move max": 99, "random time min": 500, "random time max":1000}
+        ]
+    ],
+    "left eye": [
+        [1,
+          {"mode": "random", "random move min": 1,
+            "random move max": 99, "random time min": 500, "random time max":1000}
+        ]
+    ],
+    "right eye": [
+        [1,
+          {"mode": "random", "random move min": 1,
+            "random move max": 99, "random time min": 500, "random time max": 1000}
+        ]
+    ],
+    "left arm": [
+        [1,
+          {"mode": "random", "random move min": 1,
+            "random move max": 99, "random time min": 500, "random time max": 1000}
+        ]
+    ],
+    "right arm": [
+        [1,
+          {"mode": "random", "random move min": 1,
+            "random move max": 99, "random time min": 500, "random time max": 1000}
+        ]
+    ],
+    "wheels": [
+        [
+            0.4,[0.2,-0.2]
+        ],
+        [
+            0.85,[-0.2,0.2]
+        ],
+        [
+            0.88,[-0.1,-0.1]
+        ],
+        [
+            0.95,[0.4,0.4]
+        ],
+        [
+            1,[0,0]
+        ]
+    ]
+}

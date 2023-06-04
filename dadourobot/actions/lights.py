@@ -1,4 +1,4 @@
-# linux rpi install : sudo pip3 install Adafruit-Blinka
+    # linux rpi install : sudo pip3 install Adafruit-Blinka
 # sudo pip3 install rpi_ws281x adafruit-circuitpython-neopixel
 # sudo python3 -m pip install --force-reinstall adafruit-blinka
 # sudo pip3 install adafruit-circuitpython-led-animation
@@ -97,8 +97,8 @@ class Lights(ActionsAbstract):
 
     def process(self):
 
-        if self.loop_duration != 0:
-            if TimeUtils.is_time(self.start_loop_duration, self.loop_duration):
+        if self.duration != 0:
+            if TimeUtils.is_time(self.start_loop_duration, self.duration):
                 self.loop_duration = 0
                 self.loop = False
 

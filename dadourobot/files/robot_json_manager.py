@@ -3,7 +3,6 @@ import logging
 
 import jsonpath_rw_ext
 
-# '{}_{}_{}_{}'.format(s1, i, s2, f)
 from dadou_utils.files.abstract_json_manager import AbstractJsonManager
 from dadou_utils.utils_static import COLOR
 

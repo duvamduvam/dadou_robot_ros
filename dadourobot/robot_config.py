@@ -17,7 +17,7 @@ from dadou_utils.utils_static import AUDIOS_DIRECTORY, BASE_PATH, MSG_SIZE, NAME
 
 config = {}
 
-config[I2C_ENABLED] = True
+config[I2C_ENABLED] = False
 config[PWM_CHANNELS_ENABLED] = True
 config[DIGITAL_CHANNELS_ENABLED] = True
 config[SINGLE_THREAD] = False

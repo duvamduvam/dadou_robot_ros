@@ -2,14 +2,16 @@ import logging
 import random
 
 from dadou_utils.utils.time_utils import TimeUtils
-from dadou_utils.utils_static import KEY, KEYS, NAME, LOOP, RANDOM_ANIMATION_LOW, RANDOM_ANIMATION_HIGH, LOOP_DURATION
+from dadou_utils.utils_static import KEY, KEYS, NAME, LOOP, RANDOM_ANIMATION_LOW, RANDOM_ANIMATION_HIGH, LOOP_DURATION, \
+    DURATION
 
 
 class ActionsAbstract:
 
-    loop_duration = 0
-    start_loop_duration = 0
+    global_duration = 0
+    start_global_lime = 0
     loop = False
+
 
     def __init__(self, json_manager, json_key):
         self.json_manager = json_manager
@@ -36,10 +38,9 @@ class ActionsAbstract:
             sequence = self.get_sequence_by_key(msg, KEY, self.sequences_key)
 
         if sequence:
-            if animation_loop and LOOP_DURATION in msg.keys():
-                sequence[LOOP] = True
-                self.loop_duration = msg[LOOP_DURATION]
-                self.start_loop_duration = TimeUtils.current_milli_time()
+            if animation_loop and DURATION in msg.keys():
+                self.global_duration = msg[DURATION]
+                self.start_global_lime = TimeUtils.current_milli_time()
             return sequence
         else:
            logging.debug("no sequence with key {}".format(sequence_type))

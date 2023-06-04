@@ -6,7 +6,7 @@ from dadou_utils.utils.time_utils import TimeUtils
 
 class Animation:
 
-    def __init__(self, datas, duration, animation_type, items_nb):
+    def __init__(self, datas, duration, animation_type):
 
         self.global_duration = duration
         self.animation_type = animation_type
@@ -14,7 +14,6 @@ class Animation:
         self.first_animation = True
         self.last_time = None
         self.current_element_duration = 0
-        self.items_nb = items_nb
 
         if animation_type not in datas or not datas[animation_type] or len(datas[animation_type]) == 0:
             logging.debug("animation part {} is empty".format(animation_type))
@@ -38,8 +37,8 @@ class Animation:
 
     def get(self, index):
         logging.info("next {} index {}".format(self.animation_type, index))
-        if self.items_nb == 1:
-            return self.datas[index][1]
-        if self.items_nb == 2:
-            return [self.datas[index][1], self.datas[index][2]]
-        self.current_element_duration = self.global_duration * self.datas[index][0]
+        #if self.items_nb == 1:
+        return self.datas[index][1]
+        #if self.items_nb == 2:
+        #    return [self.datas[index][1], self.datas[index][2]]
+        #self.current_element_duration = self.global_duration * self.datas[index][0]

@@ -1,5 +1,6 @@
 [{
         "name": "sexy",
+        "follow audio": true,
         "keys": [
             "E1"
         ],
@@ -302,6 +303,7 @@
         "name": "speak",
         "duration": 250,
         "loop": false,
+        "follow audio": true,
         "keys": [
             "E6"
         ],
@@ -594,6 +596,29 @@
             [
                 1,
                 "brain.png"
+            ]
+        ]
+    },
+    {
+        "name": "off",
+        "duration": 5000,
+        "loop": true,
+        "left_eyes": [
+                        [
+                1,
+                "oeil-noir.png"
+            ]
+        ],
+        "right_eyes": [
+                        [
+                1,
+                "oeil-noir.png"
+            ]
+        ],
+        "mouths": [
+            [
+                1,
+                "off.png"
             ]
         ]
     }

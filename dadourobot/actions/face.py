@@ -32,7 +32,7 @@ class Face(ActionsAbstract):
 
     DEFAULT = "default"
 
-    duration = 0
+    element_duration = 0
     start_time = 0
 
     current_face = ""
@@ -86,7 +86,8 @@ class Face(ActionsAbstract):
 
     def update(self, msg):
 
-        if msg and ANIMATION in msg and not msg[ANIMATION]:
+        #TODO improve this
+        if KEY not in msg and msg and ANIMATION in msg and not msg[ANIMATION] and not self.loop:
             self.update({FACE: self.DEFAULT})
 
         json_seq = self.get_sequence(msg, FACE, True)
@@ -101,17 +102,18 @@ class Face(ActionsAbstract):
 
 
         logging.info("update face sequences : " + json_seq[NAME])
-        if DURATION in msg:
+        """if DURATION in msg:
             self.loop_duration = msg[DURATION]
             self.start_loop_duration = TimeUtils.current_milli_time()
             self.loop = True
-        else:
-            self.loop = json_seq[LOOP]
-        self.duration = json_seq[DURATION]
+        else:"""
+
+        self.loop = json_seq[LOOP]
+        self.element_duration = json_seq[DURATION]
         self.start_time = TimeUtils.current_milli_time()
-        self.mouth = Sequence(self.duration, self.loop, json_seq[MOUTHS], 0)
-        self.leye = Sequence(self.duration, self.loop, json_seq[LEFT_EYES], 385) #385
-        self.reye = Sequence(self.duration, self.loop, json_seq[RIGHT_EYES], 448) #448
+        self.mouth = Sequence(self.element_duration, self.loop, json_seq[MOUTHS], 0)
+        self.leye = Sequence(self.element_duration, self.loop, json_seq[LEFT_EYES], 385) #385
+        self.reye = Sequence(self.element_duration, self.loop, json_seq[RIGHT_EYES], 448) #448
 
         if FACE in msg:
             del msg[FACE]
@@ -135,17 +137,19 @@ class Face(ActionsAbstract):
     #def
 
     def process(self):
-        if self.loop_duration != 0:
-            if TimeUtils.is_time(self.start_loop_duration, self.loop_duration):
-                self.loop_duration = 0
-                self.loop = False
+        if not self.loop:
+            if self.global_duration != 0:
+                if TimeUtils.is_time(self.start_global_lime, self.global_duration):
+                    self.global_duration = 0
+                    self.update({FACE: DEFAULT})
+            else:
+                if self.start_time != 0 and TimeUtils.is_time(self.start_time, self.element_duration):
+                    self.update({FACE: DEFAULT})
         #if self.speak_duration != 0:
         #    if TimeUtils.is_time(self.start_speak_time, self.speak_duration):
         #        self.speak_duration = 0
         #        self.loop = False
-        if self.start_time != 0 and not self.loop and \
-                TimeUtils.is_time(self.start_time, self.duration):
-            self.update({FACE: DEFAULT})
+
         if self.animate_part(self.mouth) or self.animate_part(self.leye) or self.animate_part(self.reye):
             self.strip.show()
 

@@ -25,7 +25,8 @@ class Wheel:
     move_time = 0
     MOVE_TIMEOUT = 400
     MIN_PWM = 5000
-    MAX_PWM = 30000
+    MAX_PWM_L = 30000
+    MAX_PWM_R = 27000
     MAX_DIR = 65530
     FREQUENCY = 500
 
@@ -126,7 +127,10 @@ class Wheel:
             del msg[WHEEL_RIGHT]
             self.receiver.write_msg(msg)
         if WHEELS in msg:
-            self.update_cmd(int(msg[WHEELS][0]*100), int(msg[WHEELS][1]*100))
+            try:
+                self.update_cmd(int(msg[WHEELS][0]*100), int(msg[WHEELS][1]*100))
+            except TypeError:
+                logging.error("can't process {}".format(msg[WHEELS]))
             del msg[WHEELS]
             self.receiver.write_msg(msg)
 
@@ -138,8 +142,8 @@ class Wheel:
 
         #logging.info("update wheel with left : " + str(left_wheel) + " right : " + str(right_wheel))
 
-        self.left_pwm.duty_cycle = Misc.mapping(abs(left_wheel), 0, 100, self.MIN_PWM, self.MAX_PWM)
-        self.right_pwm.duty_cycle = Misc.mapping(abs(right_wheel), 0, 100, self.MIN_PWM, self.MAX_PWM)
+        self.left_pwm.duty_cycle = Misc.mapping(abs(left_wheel), 0, 100, self.MIN_PWM, self.MAX_PWM_L)
+        self.right_pwm.duty_cycle = Misc.mapping(abs(right_wheel), 0, 100, self.MIN_PWM, self.MAX_PWM_R)
 
         self.set_direction(left_wheel, self.dir_left)
         self.set_direction(right_wheel, self.dir_right)
@@ -204,7 +208,7 @@ class Wheel:
         if self.starting_angle_x != -1 and self.sensor:
             if self.half_turn and abs(self.starting_angle_x - self.sensor.euler[0]) <= self.angle_margin:
                 return True
-            if not self.half_turn and abs(self.starting_angle_x - self.sensor.euler[0])> 180:
+            if not self.half_turn and abs(self.starting_angle_x - self.sensor.euler[0]) > 180:
                 self.half_turn = True
         return False
 
