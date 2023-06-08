@@ -114,25 +114,16 @@ class Wheel:
         if ANGLO in msg:
             wheels = self.anglo_meter_translator.translate(msg[ANGLO])
             self.update_cmd(wheels[0], wheels[1])
-            del msg[ANGLO]
-            self.receiver.write_msg(msg)
         if JOY in msg:
             wheels = self.anglo_meter_translator.translate(msg[JOY])
             self.update_cmd(wheels[0], wheels[1])
-            del msg[JOY]
-            self.receiver.write_msg(msg)
         if WHEEL_LEFT in msg and WHEEL_RIGHT in msg:
             self.update_cmd(msg[WHEEL_LEFT], msg[WHEEL_RIGHT])
-            del msg[WHEEL_LEFT]
-            del msg[WHEEL_RIGHT]
-            self.receiver.write_msg(msg)
         if WHEELS in msg:
             try:
                 self.update_cmd(int(msg[WHEELS][0]*100), int(msg[WHEELS][1]*100))
             except TypeError:
                 logging.error("can't process {}".format(msg[WHEELS]))
-            del msg[WHEELS]
-            self.receiver.write_msg(msg)
 
         return msg
 

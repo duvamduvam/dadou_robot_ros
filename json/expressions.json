@@ -1,4 +1,5 @@
-[{
+{
+    "sexy": {
         "name": "sexy",
         "follow audio": true,
         "keys": [
@@ -25,8 +26,7 @@
             ]
         ]
     },
-    {
-        "name": "upgrade",
+    "upgrade": {
         "keys": [
             "E2"
         ],
@@ -107,8 +107,7 @@
             ]
         ]
     },
-    {
-        "name": "voila",
+    "voila": {
         "keys": [
             "E3"
         ],
@@ -173,8 +172,7 @@
             ]
         ]
     },
-    {
-        "name": "bored",
+    "bored": {
         "keys": [
             "E4"
         ],
@@ -219,8 +217,7 @@
             ]
         ]
     },
-    {
-        "name": "scooby-doo",
+    "scooby-doo": {
         "duration": 2000,
         "keys": [
             "E5"
@@ -265,8 +262,7 @@
             ]
         ]
     },
-    {
-        "name": "speak_test",
+    "speak_test": {
         "duration": 250,
         "loop": false,
         "keys": [
@@ -299,8 +295,7 @@
             ]
         ]
     },
-    {
-        "name": "speak",
+    "speak": {
         "duration": 250,
         "loop": false,
         "follow audio": true,
@@ -354,8 +349,7 @@
             ]
         ]
     },
-    {
-        "name": "default",
+    "default": {
         "duration": 5000,
         "loop": true,
         "keys": [
@@ -423,8 +417,7 @@
         ]
     },
 
-    {
-        "name": "love",
+    "love": {
         "duration": 10000,
         "loop": false,
         "keys": [
@@ -497,8 +490,7 @@
             ]
         ]
     },
-    {
-        "name": "internet",
+    "internet": {
         "duration": 5000,
         "loop": false,
         "keys": [
@@ -514,8 +506,7 @@
             ]
         ]
     },
-    {
-        "name": "warning",
+    "warning": {
         "duration": 5000,
         "loop": false,
         "keys": [
@@ -557,8 +548,7 @@
             ]
         ]
     },
-    {
-        "name": "brain",
+    "brain": {
         "duration": 5000,
         "loop": false,
         "keys": [
@@ -599,8 +589,7 @@
             ]
         ]
     },
-    {
-        "name": "off",
+    "off": {
         "duration": 5000,
         "loop": true,
         "left_eyes": [
@@ -622,6 +611,4 @@
             ]
         ]
     }
-
-
-]
+}

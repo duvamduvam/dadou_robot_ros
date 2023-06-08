@@ -1,6 +1,5 @@
-[
-    {
-      "name": "default",
+{
+    "default": {
       "keys": [
             "B6"
         ],
@@ -24,8 +23,7 @@
         }
       ]
     },
-    {
-      "name": "rainbow",
+    "rainbow": {
       "keys": [
         "default",
             "B1"
@@ -53,8 +51,7 @@
         }
       ]
     },
-    {
-      "name": "love",
+    "love": {
       "keys": ["B2"],
       "loop": false,
       "duration": 6000,
@@ -71,8 +68,7 @@
         }
       ]
     },
-    {
-      "name": "heidi",
+    "heidi": {
       "keys": ["B3"],
       "loop": false,
       "duration": 5000,
@@ -83,8 +79,7 @@
         }
       ]
     },
-    {
-      "name": "color comet",
+    "color comet": {
       "keys": ["B4"],
       "loop": false,
       "duration": 15000,
@@ -95,8 +90,7 @@
         }
       ]
     },
-    {
-      "name": "color sparkle",
+    "color sparkle": {
       "keys": ["B5"],
       "loop": false,
       "duration": 15000,
@@ -107,8 +101,7 @@
         }
       ]
     },
-    {
-      "name": "colorcycle",
+    "colorcycle": {
       "keys": ["B6"],
       "loop": false,
       "duration": 15000,
@@ -119,8 +112,7 @@
         }
       ]
     },
-    {
-      "name": "purple blink",
+    "purple blink": {
       "keys": ["B4"],
       "loop": false,
       "duration": 15000,
@@ -132,4 +124,4 @@
         }
       ]
     }
-]
+}

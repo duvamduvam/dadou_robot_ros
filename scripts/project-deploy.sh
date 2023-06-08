@@ -21,7 +21,7 @@ export INSTALL_SERVICE="yes"
 export SERVICE_NAME=didier
 
 export PROJECT_SYSTEM_LIB="python3-opencv portaudio19-dev python3-pyaudio"
-export PROJECT_PYTHON_LIB="imageio adafruit-circuitpython-rfm9x watchdog adafruit-circuitpython-bno055 adafruit-circuitpython-neopixel"
+export PROJECT_PYTHON_LIB="imageio adafruit-circuitpython-rfm9x watchdog adafruit-circuitpython-bno055 adafruit-circuitpython-neopixel openai whisper"
 
 export LOG_FILE="robot.log"
 

@@ -15,9 +15,9 @@ class TestJson(unittest.TestCase):
 
     json_manager = JsonManager()
 
-    def test_get_main_seq(self):
-        result = self.json_manager.get_face_seq("A1")
-        logging.info(result)
+    #def test_get_main_seq(self):
+    #    result = self.json_manager.get_face_seq("A1")
+    #    logging.info(result)
 
     @unittest.skip
     def test_json_path(self):
@@ -27,17 +27,17 @@ class TestJson(unittest.TestCase):
         print(list_val[0][JsonManager.SEQUENCE])
         #logging.error("test45")
 
-    @unittest.skip
-    def test_get_visual_path(self):
-        result = self.json_manager.get_visual_path("mopen1")
-        print(result)
+    #@unittest.skip
+    #def test_get_visual_path(self):
+    #    result = self.json_manager.get_visual_path("mopen1")
+    #    print(result)
 
-    @unittest.skip
-    def test_get_face_seq(self):
-        result = self.json_manager.get_face_seq("speak")
-        print(result)
+    #@unittest.skip
+    #def test_get_face_seq(self):
+    #    result = self.json_manager.get_face_seq("speak")
+    #    print(result)
 
-    @unittest.skip
+    """@unittest.skip
     def test_get_all_visual(self):
         print("load all visual")
         visuals_path = self.json_manager.get_all_visual()
@@ -45,4 +45,4 @@ class TestJson(unittest.TestCase):
             self.visuals.append(Visual(visual_path[JsonManager.NAME], visual_path['path']))
 
         result = self.json_manager.get_all_visual()
-        print(result)
+        print(result)"""

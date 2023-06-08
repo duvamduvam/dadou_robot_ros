@@ -1,8 +1,8 @@
 {
-  "normal_voice": ["a"],
-  "pitched_voice": ["b"],
-  "effect_on": ["D1", "D2"],
-  "voice_out": ["D7", "D8"],
-  "octaver": ["D3", "D4"],
-  "hf_receiver": ["D5", "D6"]
+  "normal_voice": {"keys":["a"]},
+  "pitched_voice": {"keys":["b"]},
+  "effect_on": {"keys":["D1", "D2"]},
+  "voice_out": {"keys":["D7", "D8"]},
+  "octaver": {"keys":["D3", "D4"]},
+  "hf_receiver": {"keys":["D5", "D6"]}
 }

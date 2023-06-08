@@ -18,6 +18,8 @@ from adafruit_led_animation.animation.rainbowsparkle import RainbowSparkle
 from adafruit_led_animation.color import \
     AMBER, BLACK, BLUE, CYAN, GREEN, JADE, ORANGE, PURPLE, RED, MAGENTA, TEAL, WHITE, YELLOW
 
+from dadou_utils.utils_static import COLOR
+
 
 class LightsAnimations:
 
@@ -26,22 +28,22 @@ class LightsAnimations:
         self.strip = strip
 
     def default(self, params):
-        return Chase(self.strip, speed=0.1, color=params.color, size=3, spacing=6)
+        return Chase(self.strip, speed=0.1, color=params[COLOR], size=3, spacing=6)
 
     def chase(self, params):
-        return Chase(self.strip, speed=0.1, color=params.color, size=3, spacing=6)
+        return Chase(self.strip, speed=0.1, color=params[COLOR], size=3, spacing=6)
 
     def blink(self, params):
-        return Blink(self.strip, speed=0.5, color=params.color)
+        return Blink(self.strip, speed=0.5, color=params[COLOR])
 
     def color_cycle(self, params):
         return ColorCycle(self.strip, 0.5, colors=[MAGENTA, ORANGE, TEAL])
 
     def comet(self, params):
-        return Comet(self.strip, speed=0.1, color=params.color)
+        return Comet(self.strip, speed=0.1, color=params[COLOR])
 
     def pulse(self, params):
-        return Pulse(self.strip, speed=0.1, color=params.color, period=3)
+        return Pulse(self.strip, speed=0.1, color=params[COLOR], period=3)
 
     def rainbow(self, params):
         return Rainbow(self.strip, speed=0.1, period=2)
@@ -56,10 +58,10 @@ class LightsAnimations:
         return RainbowSparkle(self.strip, speed=0.1, num_sparkles=15)
 
     def sparkle(self, params):
-        return Sparkle(self.strip, speed=0.05, color=params.color, num_sparkles=10)
+        return Sparkle(self.strip, speed=0.05, color=params[COLOR], num_sparkles=10)
 
     def sparkle_pulse(self, params):
-        return SparklePulse(self.strip, speed=1, period=3, color=params.color)
+        return SparklePulse(self.strip, speed=1, period=3, color=params[COLOR])
 
     def fade_red(self, params):
         self.strip.fill((255, 0, 0))
@@ -71,14 +73,14 @@ class LightsAnimations:
 
     def random(self, params):
         # red = 0x100000
-        i = random.randint(0, self.LED_COUNT - 1)
+        i = random.randint(513, 600)
 
         red = random.randint(0, 255)
         green = random.randint(0, 255)
         blue = random.randint(0, 255)
         logging.debug("random strip[" + str(i) + "] blue " + str(blue) + " red " + str(red) + " green " + str(green))
         self.strip[i] = (red, green, blue)
-        self.strip.show()
+        #self.strip.show()
 
     def fill(self, color):
         logging.info("fill strip with " + str(color))

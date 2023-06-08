@@ -1,4 +1,4 @@
-import logging
+"""import logging
 
 from dadou_utils.misc import Misc
 
@@ -34,11 +34,6 @@ class Message:
                 self.right_wheel = msg[1]
                 self.neck = msg[2]
             elif len(msg) > 3:
-                # head_mapping = self.json_manager.get_mappings(msg[3:5], 'head')
-                # if head_mapping:
-                #    self.neck = head_mapping
-                # else:
-                #    self.neck = msg[2]
                 self.left_wheel = msg[0]
                 self.right_wheel = msg[1]
                 self.neck = msg[2]
@@ -55,4 +50,4 @@ class Message:
             if self.key and not Misc.is_input_ok(self.key):
                 self.key = None
             logging.debug("message key {}".format(self.key))
-        return self
+        return self"""

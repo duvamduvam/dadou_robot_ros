@@ -1,7 +1,5 @@
 {
-  "lights_seq": [
-    {
-      "name": "default",
+  "default":{
       "keys": "default",
       "loop": true,
       "duration": 7000,
@@ -23,8 +21,7 @@
         }
       ]
     },
-    {
-      "name": "love",
+    "love": {
       "keys": "A2",
       "loop": false,
       "duration": 6000,
@@ -41,8 +38,7 @@
         }
       ]
     },
-    {
-      "name": "heidi",
+    "heidi": {
       "keys": "C3",
       "loop": false,
       "duration": 5000,

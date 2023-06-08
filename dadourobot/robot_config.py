@@ -13,11 +13,11 @@ from dadou_utils.utils_static import AUDIOS_DIRECTORY, BASE_PATH, MSG_SIZE, NAME
     CMD_FORWARD, DIGITAL_CHANNELS_ENABLED, PWM_CHANNELS_ENABLED, LIGHTS_PIN, LIGHTS_LED_COUNT, LIGHTS_START_LED, \
     LIGHTS_END_LED, JSON_DIRECTORY, SEQUENCES_DIRECTORY, LOGGING_CONFIG_FILE, LOGGING_CONFIG_TEST_FILE, RANDOM, \
     PROFILER, CALIBRATION, LOGGING, PROCESS, LOGGING_FILE_NAME, LEFT_EYE_NB, RIGHT_EYE_NB, LOGGING_TEST_FILE_NAME, \
-    SINGLE_THREAD
+    SINGLE_THREAD, JSON_LIGHTS_BASE
 
 config = {}
 
-config[I2C_ENABLED] = False
+config[I2C_ENABLED] = True
 config[PWM_CHANNELS_ENABLED] = True
 config[DIGITAL_CHANNELS_ENABLED] = True
 config[SINGLE_THREAD] = False
@@ -39,7 +39,7 @@ config[RESTART_PIN] = board.D20
 config[STATUS_LED_PIN] = board.D12
 
 config[LIGHTS_PIN] = board.D18
-config[LIGHTS_LED_COUNT] = 782
+config[LIGHTS_LED_COUNT] = 1000
 config[LIGHTS_START_LED] = 513
 config[LIGHTS_END_LED] = 782
 
@@ -85,15 +85,16 @@ config[AUDIOS_DIRECTORY] = config[BASE_PATH] + '/audios/'
 
 config[JSON_CONFIG] = 'robot_config.json'
 config[JSON_AUDIOS] = 'audios.json'
-config[JSON_AUDIO_SEQUENCE] = 'audio_sequence.json'
+#config[JSON_AUDIO_SEQUENCE] = 'audio_sequence.json'
 config[JSON_COLORS] = 'colors.json'
 config[JSON_EXPRESSIONS] = 'expressions.json'
 config[JSON_FACE_SEQUENCE] = 'face_sequence.json'
 config[JSON_LIGHTS] = 'robot_lights.json'
+config[JSON_LIGHTS_BASE] = 'lights_base.json'
 config[JSON_LIGHTS_SEQUENCE] = 'lights_sequence.json'
 config[JSON_MAPPINGS] = 'mappings.json'
 config[JSON_RELAYS] = 'relays.json'
-config[JSON_VISUALS] = 'visuals.json'
+#config[JSON_VISUALS] = 'visuals.json'
 
 ############## DEVICES ####################
 

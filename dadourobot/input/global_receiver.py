@@ -128,10 +128,10 @@ class GlobalReceiver:
         t = TimeUtils.current_milli_time()
         time_msg = copy.copy(msg)
         for key in msg.keys():
-            if key not in self.not_timed_key:
-                time_msg[key] = [t, msg[key]]
-            else:
-                time_msg[key] = msg[key]
+            #if key not in self.not_timed_key:
+            time_msg[key] = [t, msg[key]]
+            #else:
+            #    time_msg[key] = msg[key]
 
         self.write_msg(time_msg)
 

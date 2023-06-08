@@ -22,7 +22,7 @@ class TestImageMapping(unittest.TestCase):
         visual = Visual.get_visual("mopen1", self.visuals)
         self.image_mapping.mapping(strip, visual.rgb)
 
-    def load_visual(self):
+    """def load_visual(self):
         visuals_path = self.json_manager.get_all_visual()
         for visual_path in visuals_path:
-            self.visuals.append(Visual(visual_path[JsonManager.NAME], visual_path['path']))
+            self.visuals.append(Visual(visual_path[JsonManager.NAME], visual_path['path']))"""

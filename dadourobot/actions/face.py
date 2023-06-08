@@ -1,12 +1,12 @@
 import logging.config
 
-from dadou_utils.files.files_manager import FilesUtils
+from dadou_utils.files.files_utils import FilesUtils
 from dadou_utils.utils.time_utils import TimeUtils
 from dadou_utils.utils_static import ANIMATION, NAME, DURATION, LOOP, KEY, FACE, SPEAK, SPEAK_DURATION, DEFAULT, \
     MOUTH_VISUALS_PATH, EYE_VISUALS_PATH, LIGHTS_PIN, BASE_PATH, MOUTHS, LEYE, REYE, JSON_EXPRESSIONS, LOOP_DURATION, \
     RIGHT_EYES, LEFT_EYES
 
-from dadourobot.actions.abstract_actions import ActionsAbstract
+from dadourobot.actions.abstract_json_actions import AbstractJsonActions
 from dadourobot.input.global_receiver import GlobalReceiver
 from dadourobot.sequences.sequence import Sequence
 from dadourobot.visual.image_mapping import ImageMapping
@@ -15,7 +15,7 @@ from dadourobot.visual.visual import Visual
 
 #TODO wrong file name
 
-class Face(ActionsAbstract):
+class Face(AbstractJsonActions):
     visuals = {}
     image_mapping = ImageMapping(8, 8, 3, 2)
 
@@ -41,7 +41,7 @@ class Face(ActionsAbstract):
     #start_speak_time = 0
 
     def __init__(self, config, receiver, json_manager,  strip):
-        super().__init__(json_manager, config[JSON_EXPRESSIONS])
+        super().__init__(config=config, json_manager=json_manager, json_file=config[JSON_EXPRESSIONS], action_type=FACE)
         self.receiver = receiver
         logging.debug("start face with pin " + str(config[LIGHTS_PIN]))
         self.config = config
@@ -87,10 +87,12 @@ class Face(ActionsAbstract):
     def update(self, msg):
 
         #TODO improve this
-        if KEY not in msg and msg and ANIMATION in msg and not msg[ANIMATION] and not self.loop:
+        """if KEY not in msg and msg and ANIMATION in msg and not msg[ANIMATION] and not self.loop:
             self.update({FACE: self.DEFAULT})
+        elif FACE not in msg:
+            return msg"""
 
-        json_seq = self.get_sequence(msg, FACE, True)
+        json_seq = self.get_sequence(msg, True)
         if not json_seq:
             return msg
 
@@ -117,7 +119,7 @@ class Face(ActionsAbstract):
 
         if FACE in msg:
             del msg[FACE]
-            self.receiver.write_msg(msg)
+            #self.receiver.write_msg(msg)
 
         return msg
 

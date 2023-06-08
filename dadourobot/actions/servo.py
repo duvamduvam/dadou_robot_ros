@@ -83,8 +83,6 @@ class Servo:
                         else:
                             logging.error("missing parameter in random instruction {}".format(msg[self.type]))
                             self.mode = RANDOM
-            del msg[self.type]
-            self.receiver.write_msg(msg)
 
         return msg
 

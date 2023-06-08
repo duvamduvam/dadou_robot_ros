@@ -10,12 +10,12 @@ from dadou_utils.utils_static import ANIMATION, STOP_ANIMATION_KEYS, AUDIO, AUDI
     RANDOM_ANIMATION_HIGH, BASE_PATH, \
     LEFT_ARM, RIGHT_ARM, STOP_KEY, LEFT_EYE, RIGHT_EYE
 
-from dadourobot.actions.abstract_actions import ActionsAbstract
+from dadourobot.actions.abstract_json_actions import AbstractJsonActions
 from dadourobot.sequences.animation import Animation
 from dadourobot.sequences.random_animation_start import RandomAnimationStart
 
 
-class AnimationManager(ActionsAbstract):
+class AnimationManager(AbstractJsonActions):
 
     current_key = None
     playing = False
@@ -43,22 +43,13 @@ class AnimationManager(ActionsAbstract):
 
     def __init__(self, config, json_manager):
         self.config = config
-        super().__init__(json_manager, None)
-        self.load_animation_sequences()
+        super().__init__(config=config, json_manager=json_manager, action_type=ANIMATION, sequence_dir=self.config[SEQUENCES_DIRECTORY])
         self.stop_keys = self.config[STOP_ANIMATION_KEYS]
         self.random_animation_sequence = []
         self.random_duration = random.randint(self.config[RANDOM_ANIMATION_LOW], self.config[RANDOM_ANIMATION_HIGH])
         RandomAnimationStart.value = TimeUtils.current_milli_time()
         logging.debug("random duration time {}".format(self.random_duration))
         self.load_random_animation_sequences()
-
-    def load_animation_sequences(self):
-        sequences_files = FilesUtils.get_folder_files(self.config[BASE_PATH]+self.config[SEQUENCES_DIRECTORY])
-        for sequence_file in sequences_files:
-            json_sequence = FilesUtils.open_json(sequence_file, 'r')
-            json_sequence[NAME] = os.path.basename(sequence_file).replace(".json", "")
-            self.sequences_key[json_sequence[KEYS]] = json_sequence
-            self.sequences_name[json_sequence[NAME]] = json_sequence
 
     def load_random_animation_sequences(self):
         for seq_key in self.sequences_name.keys():
@@ -85,7 +76,7 @@ class AnimationManager(ActionsAbstract):
         return msg
 
     def get_animation(self, msg):
-        animation = self.get_sequence(msg, ANIMATION, False)
+        animation = self.get_sequence(msg, False)
 
         if not animation:
             #self.duration = 0
@@ -120,6 +111,7 @@ class AnimationManager(ActionsAbstract):
             logging.info('stop animation')
             self.playing = False
         return {ANIMATION: False}
+
     def event(self):
         if self.playing and TimeUtils.is_time(self.last_time, self.duration):
             return self.stop()

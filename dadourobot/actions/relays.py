@@ -4,10 +4,11 @@ import adafruit_pcf8574
 import board
 
 from dadou_utils.utils.time_utils import TimeUtils
-from dadou_utils.utils_static import KEY, I2C_ENABLED, DIGITAL_CHANNELS_ENABLED
+from dadou_utils.utils_static import KEY, I2C_ENABLED, DIGITAL_CHANNELS_ENABLED, JSON_RELAYS, RELAY
+from dadourobot.actions.abstract_json_actions import AbstractJsonActions
 
 
-class RelaysManager:
+class RelaysManager(AbstractJsonActions):
 
     OCTAVER = "octaver"
     HF_RECEIVER = "hf_receiver"
@@ -18,7 +19,7 @@ class RelaysManager:
     PITCHED_VOICE = "pitched_voice"
 
     def __init__(self, config, receiver, json_manager):
-
+        super().__init__(config=config, json_manager=json_manager, json_file=config[JSON_RELAYS], action_type=RELAY)
         self.receiver = receiver
         self.config = config
         if not self.config[I2C_ENABLED] or not self.config[DIGITAL_CHANNELS_ENABLED]:
@@ -48,7 +49,7 @@ class RelaysManager:
             return msg
 
         if msg and KEY in msg:
-            relay = self.json_manager.get_relay(msg[KEY])
+            relay = self.sequences_key(msg[KEY])
 
             if relay == self.PITCHED_VOICE:
                 self.voice_out.value = False

@@ -5,15 +5,18 @@
 
 import logging.config
 
+from adafruit_led_animation.animation.blink import Blink
+from adafruit_led_animation.animation.colorcycle import ColorCycle
 # todo check thread : https://www.geeksforgeeks.org/python-communicating-between-threads-set-1/
 # todo check thread2 : https://riptutorial.com/python/example/4691/communicating-between-threads
-from adafruit_led_animation.helper import PixelMap
+from adafruit_led_animation.helper import PixelMap, PixelSubset
+import adafruit_led_animation.color as color
 
 from dadou_utils.utils.time_utils import TimeUtils
-from dadou_utils.utils_static import METHOD, DEFAULT, DURATION, SEQUENCES, LOOP, COLOR, NAME, KEY, LIGHTS, FACE, LIGHTS_START_LED, LIGHTS_END_LED
+from dadou_utils.utils_static import METHOD, DEFAULT, DURATION, SEQUENCES, LOOP, COLOR, NAME, KEY, LIGHTS, FACE, \
+    LIGHTS_START_LED, LIGHTS_END_LED, JSON_COLORS, JSON_LIGHTS_BASE, RED, GREEN, BLUE
 
-from dadourobot.actions.abstract_actions import ActionsAbstract
-from dadourobot.input.global_receiver import GlobalReceiver
+from dadourobot.actions.abstract_json_actions import AbstractJsonActions
 from dadourobot.sequences.sequence import Sequence
 from dadourobot.visual.lights_animations import LightsAnimations
 
@@ -34,7 +37,7 @@ from dadourobot.visual.lights_animations import LightsAnimations
 """
 
 
-class Lights(ActionsAbstract):
+class Lights(AbstractJsonActions):
     # LED strip configuration:
     LED_COUNT = 782 # Number of LED pixels.
     FIRST_STRIP_LED = 513
@@ -46,62 +49,80 @@ class Lights(ActionsAbstract):
 
     sequence = {}
     current_animation = {}
-    animations = {}
+    animations_methods = {}
 
     duration = 0
     start_time = 0
 
-    def __init__(self, start, end, json_manager, global_strip, light_type, receiver):
+    def __init__(self, config, start, end, json_manager, global_strip, light_type, json_light):
         self.light_type = light_type
-        super().__init__(json_manager, self.light_type+".json")
-        self.receiver = receiver
-        #self.strip = neopixel.NeoPixel(self.LED_COUNT, Pin(config.LIGHTS_PIN), self.LED_FREQ_HZ, self.LED_DMA, self.LED_INVERT, self.LED_BRIGHTNESS, self.LED_CHANNEL)
+        super().__init__(config=config, json_manager=json_manager, action_type=self.light_type, json_file=json_light)
 
-        strip_pixels_range = ()
-        for x in range(start, end):
-            strip_pixels_range += (x,)
-        self.strip = PixelMap(global_strip, strip_pixels_range, individual_pixels=True)
-
-        self.animations = LightsAnimations(end - start, self.strip)
+        self.strip = PixelSubset(global_strip, start, end)
+        #self.strip = global_strip
+        self.colors = json_manager.get_json_file(config[JSON_COLORS])
+        self.lights_base = self.load_light_base(config, json_manager)
+        self.animations_methods = LightsAnimations(end - start, self.strip)
         self.update({light_type: DEFAULT})
+
+    def load_light_base(self, config, json_manager):
+        lights_base = json_manager.get_json_file(config[JSON_LIGHTS_BASE])
+        for light_name in lights_base:
+            if COLOR in lights_base[light_name]:
+                lights_base[light_name][COLOR] = self.get_color(lights_base[light_name][COLOR])
+
+        return lights_base
 
     def update(self, msg):
 
-        json_seq = self.get_sequence(msg, self.light_type, True)
+        json_seq = self.get_sequence(msg, True)
         if not json_seq:
             return
 
+        #Load lights sequences
         self.duration = json_seq[DURATION]
         self.loop = json_seq[LOOP]
         sequences = []
-        for s in json_seq[SEQUENCES]:
-            animation = [s[DURATION], Animation(s[METHOD], s[DURATION])]
-            color_name = self.json_manager.get_attribut(s, COLOR)
-            if color_name:
-                animation[1].color = self.json_manager.get_color(color_name)
+        for lights_base, duration in json_seq[SEQUENCES].items():
+            animation = [duration, LightAnimation(lights_base, duration)]
+            #color_name = self.json_manager.get_attribut(s, COLOR)
+            if COLOR in animation and COLOR in self.colors:
+                #TODO pourquoi animation 1 ?
+                animation[1].color = self.colors[animation[COLOR]]
             sequences.append(animation)
         self.sequence = Sequence(json_seq[DURATION], json_seq[LOOP], sequences, 0)
 
-            #self.current_animation = Comet(self.strip, speed=0.01, color=PURPLE, tail_length=50, bounce=True)
-
         #TODO animation parameters not working
-        self.current_animation = getattr(self.animations, self.sequence.current_element.method)(
-            self.sequence.current_element)
+        #Initiate light method
+        self.load_light_method(self.sequence.current_element.method)
+
         #self.sequence.start_time = TimeUtils.current_milli_time()
         self.start_time = TimeUtils.current_milli_time()
         logging.info("update lights {} sequences to {}".format(self.light_type, json_seq[NAME]))
 
-        del msg[self.light_type]
+    def load_light_method(self, light_name):
 
-        self.receiver.write_msg(msg)
+        if light_name not in self.lights_base:
+            logging.error("{} not in lights base".format(light_name))
+            return
+        light = self.lights_base[light_name]
+        if not hasattr(self.animations_methods, light[METHOD]):
+            logging.error('{} not in lights base'.format(light[METHOD]))
+            return
+        self.current_animation = getattr(self.animations_methods, light[METHOD])(
+            light)
+
+        #self.current_animation = Blink(self.strip, speed=0.5, color=color.MAGENTA)
+        #self.current_animation = ColorCycle(self.strip, 0.5, colors=[color.MAGENTA, color.ORANGE, color.TEAL])
+
+    def get_color(self, color_name):
+        if color_name in self.colors:
+            return self.colors[color_name][0], self.colors[color_name][1], self.colors[color_name][2]
+            #return color.PURPLE
+        else:
+            logging.info("color {} not defined".format(color))
 
     def process(self):
-
-        if self.duration != 0:
-            if TimeUtils.is_time(self.start_loop_duration, self.duration):
-                self.loop_duration = 0
-                self.loop = False
-
         if not self.loop and TimeUtils.is_time(self.start_time, self.duration):
             self.update({self.light_type: DEFAULT})
             return
@@ -109,16 +130,19 @@ class Lights(ActionsAbstract):
         if self.sequence.time_to_switch():
             self.sequence.next()
             self.sequence.current_element.start_time = TimeUtils.current_milli_time()
-            self.current_animation = getattr(self.animations, self.sequence.current_element.method)(
-                self.sequence.current_element)
+            #self.current_animation = getattr(self.animations_methods, self.sequence.current_element.method)(
+            #    self.sequence.current_element)
+            self.load_light_method(self.sequence.current_element.method)
             self.sequence.current_element.start_time = TimeUtils.current_milli_time()
             # logging.debug(
             #    "change sequences to " + self.sequences.current_element.method + " with time " + str(
             #        self.sequences.current_element.duration))
+
         self.current_animation.animate()
+        #self.animations_methods.random(None)
 
 
-class Animation:
+class LightAnimation:
     color = ()
     duration = 0
     start_time = TimeUtils.current_milli_time()

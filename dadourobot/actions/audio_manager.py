@@ -13,6 +13,7 @@ from sound_player import Sound, SoundPlayer
 
 from dadou_utils.misc import Misc
 from dadou_utils.audios.sound_object import SoundObject
+from dadourobot.actions.abstract_json_actions import AbstractJsonActions
 
 from dadourobot.input.global_receiver import GlobalReceiver
 
@@ -24,7 +25,8 @@ VOLUME_DEFAULT = 50
 FONDU_TIME_STEP = 100
 FONDU_STEP = 2
 
-class AudioManager:
+
+class AudioManager(AbstractJsonActions):
 
     player = SoundPlayer()
     silence = "audios/silence.wav"
@@ -40,6 +42,7 @@ class AudioManager:
     stopping = False
 
     def __init__(self, config, global_receiver, json_manager):
+        super().__init__(config=config, json_manager=json_manager, json_file=config[JSON_AUDIOS], action_type=AUDIO)
         self.config = config
         self.global_receiver = global_receiver
         self.json_manager = json_manager
@@ -47,7 +50,6 @@ class AudioManager:
 
     def play_sounds_bak(self, audios):
         self.player.stop()
-
         for audio in audios:
             logging.info("enqueue: " + audio.get_path())
             self.player.enqueue(Sound(audio.get_path()), 1)
@@ -111,7 +113,8 @@ class AudioManager:
         #TODO improve this part
         if msg and KEY in msg:
             logging.debug("number of thread : {}".format(threading.active_count()))
-            audio_param = self.json_manager.get_element_from_key(self.config[JSON_AUDIOS], KEYS, msg[KEY])#self.json_manager.get_audios(msg[KEY])
+            audio_param = self.sequences_key[msg[KEY]]
+            #    self.json_manager.get_element_from_key(self.config[JSON_AUDIOS], KEYS, msg[KEY])#self.json_manager.get_audios(msg[KEY])
             if audio_param:
                 if audio_param and NAME in audio_param and audio_param[NAME] == STOP:
                     self.stop_sound()
@@ -144,9 +147,6 @@ class AudioManager:
                     duration = self.current_audio.duration * 1000
                     msg[DURATION] = duration
                     self.global_receiver.write_values({AUDIO_DURATION: duration})
-
-            del msg[AUDIO]
-            self.global_receiver.write_msg(msg)
 
         return msg
 
