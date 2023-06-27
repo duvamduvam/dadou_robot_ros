@@ -2,11 +2,11 @@ import logging
 import random
 
 from adafruit_servokit import ServoKit
+
 from dadou_utils.misc import Misc
 from dadou_utils.utils.time_utils import TimeUtils
 from dadou_utils.utils_static import NORMAL, RANDOM, RANDOM_MOVE_MAX, RANDOM_MOVE_MIN, RANDOM_TIME_MAX, RANDOM_TIME_MIN, \
-    RANDOM_DURATION, MODE, ANIMATION, STOP
-from dadourobot.input.global_receiver import GlobalReceiver
+    RANDOM_DURATION, MODE, ANIMATION
 
 INPUT_MIN = 0
 INPUT_MAX = 99
@@ -59,12 +59,13 @@ class Servo:
             self.mode = NORMAL
 
         if msg and self.type in msg:
-            if isinstance(msg[self.type], float) or isinstance(msg[self.type], int) or Misc.cast_int(msg[self.type]):
+            if isinstance(msg[self.type], float) or isinstance(msg[self.type], int):
                 if 0 < msg[self.type] <= 1:
                     value = msg[self.type] * 100
                 else:
                     value = msg[self.type]
                 self.set_angle(value)
+                self.mode = NORMAL
             else:
                 if isinstance(msg[self.type], dict) and MODE in msg[self.type]:
                     self.mode = msg[self.type][MODE]
@@ -90,7 +91,7 @@ class Servo:
         if value > 0 and value <= 1:
             value = value * 100
         target_pos = Misc.mapping(value, INPUT_MIN, INPUT_MAX, SERVO_MIN, self.servo_max)
-        logging.info("update servo {} with value {} for target {}".format(self.type, value, target_pos))
+        logging.debug("update servo {} with value {} for target {}".format(self.type, value, target_pos))
         self.pwm_channel.angle = target_pos
 
     def process(self):

@@ -1,7 +1,6 @@
 from enum import Enum
 
 from dadou_utils.utils.time_utils import TimeUtils
-
 from dadou_utils.utils_static import DURATION
 
 

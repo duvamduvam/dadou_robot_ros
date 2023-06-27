@@ -1,12 +1,13 @@
 # pip3 install adafruit-circuitpython-servokit
-import pwmio
 import logging
+
+import pwmio
 from adafruit_motor import servo
+from microcontroller import Pin
+from utils import Utils
+
 from dadou_utils.utils.time_utils import TimeUtils
 from dadou_utils.utils_static import NECK
-from microcontroller import Pin
-
-from utils import Utils
 
 
 class Neck:

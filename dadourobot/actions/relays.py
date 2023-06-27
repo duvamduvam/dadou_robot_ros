@@ -4,7 +4,7 @@ import adafruit_pcf8574
 import board
 
 from dadou_utils.utils.time_utils import TimeUtils
-from dadou_utils.utils_static import KEY, I2C_ENABLED, DIGITAL_CHANNELS_ENABLED, JSON_RELAYS, RELAY
+from dadou_utils.utils_static import KEY, I2C_ENABLED, DIGITAL_CHANNELS_ENABLED, JSON_RELAYS, RELAY, NAME
 from dadourobot.actions.abstract_json_actions import AbstractJsonActions
 
 
@@ -48,30 +48,32 @@ class RelaysManager(AbstractJsonActions):
         if not self.config[I2C_ENABLED] or not self.config[DIGITAL_CHANNELS_ENABLED]:
             return msg
 
-        if msg and KEY in msg:
-            relay = self.sequences_key(msg[KEY])
+        json_seq = self.get_sequence(msg, True)
 
-            if relay == self.PITCHED_VOICE:
+        if json_seq:
+            relay = self.sequences_key[msg[KEY]]
+
+            if relay[NAME] == self.PITCHED_VOICE:
                 self.voice_out.value = False
                 self.effect.value = True
                 self.last_effect_time = TimeUtils.current_milli_time()
                 logging.info("switch effect on")
 
-            if relay == self.NORMAL_VOICE:
+            if relay[NAME] == self.NORMAL_VOICE:
                 self.voice_out.value = False
                 self.effect.value = False
                 self.last_effect_time = TimeUtils.current_milli_time()
                 logging.info("switch effect on")
 
-            if relay == self.OCTAVER:
+            if relay[NAME] == self.OCTAVER:
                 self.power_effect.value = not self.power_effect.value
                 logging.info("switch octaver {}".format(self.power_effect.value))
 
-            if relay == self.HF_RECEIVER:
+            if relay[NAME] == self.HF_RECEIVER:
                 self.power_hf.value = not self.power_hf.value
                 logging.info("switch hf receiver {}".format(self.power_hf.value))
 
-            if relay == self.EFFECT:
+            if relay[NAME] == self.EFFECT:
                 #self.effect.value = True
                 self.voice_out.value = False
                 self.last_effect_time = TimeUtils.current_milli_time()

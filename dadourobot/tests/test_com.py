@@ -1,8 +1,8 @@
 import unittest
 
 from dadoucontrol import Com
-from tests import TestSetup
 from dadoucontrol import Utils
+from tests import TestSetup
 
 TestSetup()
 

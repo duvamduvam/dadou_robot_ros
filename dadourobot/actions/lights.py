@@ -5,35 +5,36 @@
 
 import logging.config
 
-from adafruit_led_animation.animation.blink import Blink
-from adafruit_led_animation.animation.colorcycle import ColorCycle
-# todo check thread : https://www.geeksforgeeks.org/python-communicating-between-threads-set-1/
+    # todo check thread : https://www.geeksforgeeks.org/python-communicating-between-threads-set-1/
 # todo check thread2 : https://riptutorial.com/python/example/4691/communicating-between-threads
-from adafruit_led_animation.helper import PixelMap, PixelSubset
+import logging.config
+
 import adafruit_led_animation.color as color
+    # todo check thread : https://www.geeksforgeeks.org/python-communicating-between-threads-set-1/
+    # todo check thread2 : https://riptutorial.com/python/example/4691/communicating-between-threads
+from adafruit_led_animation.helper import PixelSubset
 
 from dadou_utils.utils.time_utils import TimeUtils
-from dadou_utils.utils_static import METHOD, DEFAULT, DURATION, SEQUENCES, LOOP, COLOR, NAME, KEY, LIGHTS, FACE, \
-    LIGHTS_START_LED, LIGHTS_END_LED, JSON_COLORS, JSON_LIGHTS_BASE, RED, GREEN, BLUE
-
+from dadou_utils.utils_static import METHOD, DEFAULT, DURATION, SEQUENCES, LOOP, COLOR, NAME, JSON_COLORS, \
+        JSON_LIGHTS_BASE
 from dadourobot.actions.abstract_json_actions import AbstractJsonActions
 from dadourobot.sequences.sequence import Sequence
 from dadourobot.visual.lights_animations import LightsAnimations
 
 """
-      "method": "sparkle_pulse",
-      "color": "AMBER"
-      "method": "chase",
-      "color": "RED"
-      "method": "blink",
-      "color": "BLUE"
-      "method": "color_cycle"
-      "method": "pulse",
-      "color": "BLUE"
-      "method": "rainbow_chase"
-      "method": "rainbow_comet"
-      "method": "color_cycle"
-      "method": "comet"
+          "method": "sparkle_pulse",
+          "color": "AMBER"
+          "method": "chase",
+          "color": "RED"
+          "method": "blink",
+          "color": "BLUE"
+          "method": "color_cycle"
+          "method": "pulse",
+          "color": "BLUE"
+          "method": "rainbow_chase"
+          "method": "rainbow_comet"
+          "method": "color_cycle"
+          "method": "comet"
 """
 
 
@@ -44,13 +45,10 @@ class Lights(AbstractJsonActions):
 
     # TODO check examples : https://www.digikey.fr/en/maker/projects/circuitpython-led-animations/d15c769c6f6d411297657c35f0166958
 
-    sequences_key = {}
-    sequences_name = {}
-
     sequence = {}
     current_animation = {}
     animations_methods = {}
-
+    default = DEFAULT
     duration = 0
     start_time = 0
 
@@ -59,6 +57,7 @@ class Lights(AbstractJsonActions):
         super().__init__(config=config, json_manager=json_manager, action_type=self.light_type, json_file=json_light)
 
         self.strip = PixelSubset(global_strip, start, end)
+        #self.strip.brightness = 1
         #self.strip = global_strip
         self.colors = json_manager.get_json_file(config[JSON_COLORS])
         self.lights_base = self.load_light_base(config, json_manager)
@@ -80,8 +79,15 @@ class Lights(AbstractJsonActions):
             return
 
         #Load lights sequences
-        self.duration = json_seq[DURATION]
+        if DURATION in msg:
+            self.duration = msg[DURATION]
+        else:
+            self.duration = json_seq[DURATION]
         self.loop = json_seq[LOOP]
+
+        if DEFAULT in json_seq:
+            self.default = json_seq[NAME]
+
         sequences = []
         for lights_base, duration in json_seq[SEQUENCES].items():
             animation = [duration, LightAnimation(lights_base, duration)]
@@ -112,34 +118,25 @@ class Lights(AbstractJsonActions):
         self.current_animation = getattr(self.animations_methods, light[METHOD])(
             light)
 
-        #self.current_animation = Blink(self.strip, speed=0.5, color=color.MAGENTA)
-        #self.current_animation = ColorCycle(self.strip, 0.5, colors=[color.MAGENTA, color.ORANGE, color.TEAL])
-
     def get_color(self, color_name):
         if color_name in self.colors:
             return self.colors[color_name][0], self.colors[color_name][1], self.colors[color_name][2]
-            #return color.PURPLE
         else:
-            logging.info("color {} not defined".format(color))
+            logging.error("color {} not defined".format(color))
 
     def process(self):
         if not self.loop and TimeUtils.is_time(self.start_time, self.duration):
-            self.update({self.light_type: DEFAULT})
+            self.update({self.light_type: self.default})
             return
 
         if self.sequence.time_to_switch():
             self.sequence.next()
             self.sequence.current_element.start_time = TimeUtils.current_milli_time()
-            #self.current_animation = getattr(self.animations_methods, self.sequence.current_element.method)(
-            #    self.sequence.current_element)
+
             self.load_light_method(self.sequence.current_element.method)
             self.sequence.current_element.start_time = TimeUtils.current_milli_time()
-            # logging.debug(
-            #    "change sequences to " + self.sequences.current_element.method + " with time " + str(
-            #        self.sequences.current_element.duration))
 
         self.current_animation.animate()
-        #self.animations_methods.random(None)
 
 
 class LightAnimation:

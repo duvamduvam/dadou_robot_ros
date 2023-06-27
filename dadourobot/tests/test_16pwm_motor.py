@@ -1,13 +1,9 @@
-import os
-
 import adafruit_pca9685
 import board
 import busio
-from adafruit_servokit import ServoKit
-from dadou_utils.utils_static import WHEEL_LEFT, WHEEL_RIGHT, HEAD_PWM_NB
 
+from dadou_utils.utils_static import HEAD_PWM_NB
 from dadourobot.robot_config import config
-from dadourobot.files.robot_json_manager import RobotJsonManager
 from dadourobot.tests.conf_test import TestSetup
 
 TestSetup()

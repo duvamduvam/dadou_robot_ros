@@ -48,8 +48,10 @@ class AbstractJsonActions:
         if KEY not in msg and self.action_type not in msg:
             return
 
-        sequence = self.sequences_name[msg[self.action_type]]
-        if not sequence:
+        sequence = None
+        if self.action_type in msg and msg[self.action_type] in self.sequences_name:
+            sequence = self.sequences_name[msg[self.action_type]]
+        elif KEY in msg and msg[KEY] in self.sequences_key:
             sequence = self.sequences_key[msg[KEY]]
 
         if sequence:

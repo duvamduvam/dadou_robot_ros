@@ -1,15 +1,11 @@
 import logging
-import os
 import random
 
-from dadou_utils.files.files_utils import FilesUtils
 from dadou_utils.utils.time_utils import TimeUtils
-from dadou_utils.utils_static import ANIMATION, STOP_ANIMATION_KEYS, AUDIO, AUDIOS, KEY, NECK, NECKS, FACE, FACES, \
+from dadou_utils.utils_static import ANIMATION, STOP_ANIMATION_KEYS, AUDIO, AUDIOS, KEY, NECK, FACE, FACES, \
     LIGHTS, WHEELS, NAME, \
-    DURATION, KEYS, RANDOM, START, STOP, TYPES, SEQUENCES_DIRECTORY, LOOP_DURATION, RANDOM_ANIMATION_LOW, \
-    RANDOM_ANIMATION_HIGH, BASE_PATH, \
-    LEFT_ARM, RIGHT_ARM, STOP_KEY, LEFT_EYE, RIGHT_EYE
-
+    DURATION, RANDOM, TYPES, SEQUENCES_DIRECTORY, RANDOM_ANIMATION_LOW, \
+    RANDOM_ANIMATION_HIGH, LEFT_ARM, RIGHT_ARM, STOP_KEY, LEFT_EYE, RIGHT_EYE
 from dadourobot.actions.abstract_json_actions import AbstractJsonActions
 from dadourobot.sequences.animation import Animation
 from dadourobot.sequences.random_animation_start import RandomAnimationStart
@@ -72,7 +68,10 @@ class AnimationManager(AbstractJsonActions):
     def update(self, msg):
         if msg and KEY in msg and msg[KEY] in self.config[STOP_KEY]:
             return msg.update(self.stop())
-        self.get_animation(msg)
+        elif ANIMATION in msg and not msg[ANIMATION]:
+            self.stop()
+        elif ANIMATION in msg:
+            self.get_animation(msg)
         return msg
 
     def get_animation(self, msg):
@@ -103,7 +102,7 @@ class AnimationManager(AbstractJsonActions):
         self.right_eye_animation = Animation(self.current_animation, self.duration, RIGHT_EYE)
         self.necks_animation = Animation(self.current_animation, self.duration, NECK)
         self.faces_animation = Animation(self.current_animation, self.duration, FACES)
-        self.lights_animation = Animation(self.current_animation, self.duration, LIGHTS)
+        self.lights_animation = Animation(self.current_animation, self.duration, 'robot_lights')
         self.wheels_animation = Animation(self.current_animation, self.duration, WHEELS)
 
     def stop(self):
@@ -134,9 +133,10 @@ class AnimationManager(AbstractJsonActions):
         self.fill_event(events, NECK, self.necks_animation)
         self.fill_event(events, WHEELS, self.wheels_animation)
         self.fill_event(events, FACE, self.faces_animation)
-        self.fill_event(events, LIGHTS, self.lights_animation)
+        self.fill_event(events, 'robot_lights', self.lights_animation)
         if len(events) > 0:
-           logging.warning('update animation {} with values {}'.format(self.current_animation[NAME], events))
+            logging.warning('update animation {} with values {}'.format(self.current_animation[NAME], events))
+            events[ANIMATION] = True
         return events
 
     def fill_event(self, events, key, animation):

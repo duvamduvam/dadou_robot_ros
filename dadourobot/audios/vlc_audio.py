@@ -1,13 +1,11 @@
 # pip3 install sound-player
 # https://github.com/Krozark/sound-player/blob/master/example.py
 import logging
+
 import vlc
 
+
 #from sound_player import Sound, Playlist, SoundPlayer
-
-from dadou_utils.utils_static import DELAY, NAME, SEQUENCE
-
-from dadourobot.path_time import PathTime
 
 
 class VlCAudio:

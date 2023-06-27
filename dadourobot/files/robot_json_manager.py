@@ -1,13 +1,8 @@
-import json
 import logging
 
-import jsonpath_rw_ext
-
 from dadou_utils.files.abstract_json_manager import AbstractJsonManager
-from dadou_utils.utils_static import COLOR, JSON_LIGHTS_BASE
-
-from dadou_utils.utils_static import JSON_AUDIOS, JSON_AUDIO_SEQUENCE, JSON_COLORS, JSON_EXPRESSIONS, JSON_MAPPINGS, \
-    JSON_VISUALS, JSON_LIGHTS, JSON_RELAYS, LOGGING_CONFIG_FILE, BASE_PATH, JSON_DIRECTORY
+from dadou_utils.utils_static import JSON_AUDIOS, JSON_COLORS, JSON_EXPRESSIONS, JSON_LIGHTS, JSON_RELAYS
+from dadou_utils.utils_static import JSON_LIGHTS_BASE
 
 
 class RobotJsonManager(AbstractJsonManager):

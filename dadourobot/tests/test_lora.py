@@ -1,9 +1,10 @@
 import time
-import busio
-from digitalio import DigitalInOut, Direction, Pull
-import board
+
 # Import the RFM9x radio module.
 import adafruit_rfm9x
+import board
+import busio
+from digitalio import DigitalInOut
 
 # Configure RFM9x LoRa Radio
 CS = DigitalInOut(board.CE1)

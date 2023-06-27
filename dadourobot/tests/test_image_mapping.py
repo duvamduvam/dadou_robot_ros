@@ -1,5 +1,7 @@
 import logging.config
+
 from tests import TestSetup
+
 TestSetup()
 
 from dadourobot import JsonManager

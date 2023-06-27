@@ -2,16 +2,12 @@
 import json
 import logging
 import os
-import time
 from json import JSONDecodeError
 
-from watchdog.observers import Observer
 from watchdog.events import FileSystemEventHandler
 
 from dadou_utils.static_value import StaticValue
-from dadou_utils.utils_static import INPUT_MESSAGE_FILE, NEW_DATA, TIME
-
-from dadou_utils.utils.time_utils import TimeUtils
+from dadou_utils.utils_static import INPUT_MESSAGE_FILE, NEW_DATA
 
 
 class FileWatcher(FileSystemEventHandler):

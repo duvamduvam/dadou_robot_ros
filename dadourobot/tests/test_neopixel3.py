@@ -13,15 +13,14 @@ This example does not work on SAMD21 (M0) boards.
 """
 import board
 import neopixel
-
-from adafruit_led_animation.animation.comet import Comet
-from adafruit_led_animation.animation.rainbowcomet import RainbowComet
-from adafruit_led_animation.animation.rainbowchase import RainbowChase
-from adafruit_led_animation.animation.chase import Chase
-from adafruit_led_animation.animation.rainbow import Rainbow
-from adafruit_led_animation.sequence import AnimationSequence
 from adafruit_led_animation import helper
+from adafruit_led_animation.animation.chase import Chase
+from adafruit_led_animation.animation.comet import Comet
+from adafruit_led_animation.animation.rainbow import Rainbow
+from adafruit_led_animation.animation.rainbowchase import RainbowChase
+from adafruit_led_animation.animation.rainbowcomet import RainbowComet
 from adafruit_led_animation.color import PURPLE, JADE, AMBER
+from adafruit_led_animation.sequence import AnimationSequence
 
 # Update to match the pin connected to your NeoPixels
 pixel_pin = board.D18

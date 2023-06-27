@@ -1,7 +1,7 @@
 import logging
 import logging.config
-import platform
 import os
+import platform
 
 from dadou_utils.logging_conf import LoggingConf
 from dadou_utils.utils_static import RPI_TYPE, LOGGING_TEST_FILE_NAME

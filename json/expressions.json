@@ -2,6 +2,7 @@
     "sexy": {
         "name": "sexy",
         "follow audio": true,
+        "loop": true,
         "keys": [
             "E1"
         ],
@@ -30,7 +31,7 @@
         "keys": [
             "E2"
         ],
-        "loop": false,
+        "loop": true,
         "duration": 1000,
         "left_eyes": [
             [
@@ -262,46 +263,65 @@
             ]
         ]
     },
-    "speak_test": {
-        "duration": 250,
-        "loop": false,
-        "keys": [
-            "a", "b"
-        ],
-        "left_eyes": [
-            [
-                1,
-                "oeil-fixe.png"
-            ]
-        ],
-        "right_eyes": [
-            [
-                1,
-                "oeil-fixe.png"
-            ]
-        ],
-        "mouths": [
-            [
-                0.5,
-                "bouche-ouvert1.png"
-            ],
-            [
-                0.8,
-                "bouche-ouvert3.png"
-            ],
-            [
-                1,
-                "bouche-ouvert2.png"
-            ]
-        ]
-    },
     "speak": {
         "duration": 250,
         "loop": false,
         "follow audio": true,
         "keys": [
-            "E6"
+            "E6", "i", "f"
         ],
+        "left_eyes": [
+            [
+                0.1,
+                "oeil-fixe.png"
+            ],
+            [
+                0.3,
+                "oeil-droit.png"
+            ],
+            [
+                0.6,
+                "oeil-fixe.png"
+            ],
+            [
+                1.0,
+                "oeil-gauche.png"
+            ]
+        ],
+        "right_eyes": [
+            [
+                0.2,
+                "oeil-gauche.png"
+            ],
+            [
+                0.6,
+                "oeil-droit.png"
+            ],
+            [
+                1.0,
+                "oeil-gauche.png"
+            ]
+        ],
+        "mouths": [
+            [
+                0.274,
+                "bouche-ouvert2.png"
+            ],
+            [
+                0.6,
+                "bouche-ouvert3.png"
+            ],
+            [
+                1,
+                "bouche-ouvert1.png"
+            ]
+        ]
+    },
+    "speak loop": {
+        "duration": 250,
+        "loop": true,
+        "follow audio": true,
+        "keys": [],
         "left_eyes": [
             [
                 0.1,

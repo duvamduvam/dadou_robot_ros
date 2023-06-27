@@ -2,21 +2,19 @@ import logging
 import random
 import time
 
-from rainbowio import colorwheel
-from adafruit_led_animation import helper
-from adafruit_led_animation.animation.chase import Chase
 from adafruit_led_animation.animation.blink import Blink
+from adafruit_led_animation.animation.chase import Chase
 from adafruit_led_animation.animation.colorcycle import ColorCycle
-from adafruit_led_animation.animation.comet import Comet
 from adafruit_led_animation.animation.pulse import Pulse
 from adafruit_led_animation.animation.rainbow import Rainbow
-from adafruit_led_animation.animation.sparkle import Sparkle
-from adafruit_led_animation.animation.sparklepulse import SparklePulse
 from adafruit_led_animation.animation.rainbowchase import RainbowChase
 from adafruit_led_animation.animation.rainbowcomet import RainbowComet
 from adafruit_led_animation.animation.rainbowsparkle import RainbowSparkle
+from adafruit_led_animation.animation.sparkle import Sparkle
+from adafruit_led_animation.animation.sparklepulse import SparklePulse
 from adafruit_led_animation.color import \
-    AMBER, BLACK, BLUE, CYAN, GREEN, JADE, ORANGE, PURPLE, RED, MAGENTA, TEAL, WHITE, YELLOW
+    BLACK, ORANGE, MAGENTA, TEAL
+from rainbowio import colorwheel
 
 
 class Animations:

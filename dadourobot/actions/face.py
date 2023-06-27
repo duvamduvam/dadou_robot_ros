@@ -2,12 +2,9 @@ import logging.config
 
 from dadou_utils.files.files_utils import FilesUtils
 from dadou_utils.utils.time_utils import TimeUtils
-from dadou_utils.utils_static import ANIMATION, NAME, DURATION, LOOP, KEY, FACE, SPEAK, SPEAK_DURATION, DEFAULT, \
-    MOUTH_VISUALS_PATH, EYE_VISUALS_PATH, LIGHTS_PIN, BASE_PATH, MOUTHS, LEYE, REYE, JSON_EXPRESSIONS, LOOP_DURATION, \
-    RIGHT_EYES, LEFT_EYES
-
+from dadou_utils.utils_static import NAME, DURATION, LOOP, KEY, FACE, DEFAULT, \
+    MOUTH_VISUALS_PATH, EYE_VISUALS_PATH, LIGHTS_PIN, BASE_PATH, MOUTHS, JSON_EXPRESSIONS, RIGHT_EYES, LEFT_EYES
 from dadourobot.actions.abstract_json_actions import AbstractJsonActions
-from dadourobot.input.global_receiver import GlobalReceiver
 from dadourobot.sequences.sequence import Sequence
 from dadourobot.visual.image_mapping import ImageMapping
 from dadourobot.visual.visual import Visual

@@ -1,8 +1,8 @@
-import board
-
 import time
 import unittest
+
 import adafruit_pcf8574
+import board
 
 
 class TestPCF8574(unittest.TestCase):

@@ -10,7 +10,6 @@ from dadou_utils.utils.time_utils import TimeUtils
 from dadou_utils.utils_static import ANGLO, WHEEL_RIGHT, WHEEL_LEFT, JOY, WHEELS, KEY, \
     CMD_FORWARD, CMD_BACKWARD, CMD_LEFT, CMD_RIGHT, I2C_ENABLED, PWM_CHANNELS_ENABLED, \
     WHEEL_LEFT_PWM, WHEEL_RIGHT_PWM, WHEEL_LEFT_DIR, WHEEL_RIGHT_DIR, STRAIGHT, ANIMATION
-from dadourobot.input.global_receiver import GlobalReceiver
 from dadourobot.move.anglo_meter_translator import AngloMeterTranslator
 
 
@@ -103,13 +102,13 @@ class Wheel:
 
         if KEY in msg and (msg[KEY] == self.config[CMD_FORWARD] or msg[KEY] == self.config[CMD_BACKWARD] or msg[KEY] == self.config[CMD_LEFT] or msg[KEY] == self.config[CMD_RIGHT]):
             if msg[KEY] == self.config[CMD_FORWARD]:
-                self.update_cmd(30, 30)
+                self.update_cmd(50, 50)
             elif msg[KEY] == self.config[CMD_BACKWARD]:
-                self.update_cmd(-30, -30)
+                self.update_cmd(-50, -50)
             elif msg[KEY] == self.config[CMD_LEFT]:
-                self.update_cmd(-30, 30)
+                self.update_cmd(-50, 50)
             elif msg[KEY] == self.config[CMD_RIGHT]:
-                self.update_cmd(30, -30)
+                self.update_cmd(50, -50)
 
         if ANGLO in msg:
             wheels = self.anglo_meter_translator.translate(msg[ANGLO])

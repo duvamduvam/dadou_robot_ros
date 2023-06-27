@@ -1,14 +1,14 @@
 # pip3 install sound-player
 # https://github.com/Krozark/sound-player/blob/master/example.py
 import logging
+
 import vlc
-
-#from sound_player import Sound, Playlist, SoundPlayer
-
-
 from json_manager import JsonManager
 from path_time import PathTime
 from robot_factory import RobotFactory
+
+
+# from sound_player import Sound, Playlist, SoundPlayer
 
 
 class VlCAudio:

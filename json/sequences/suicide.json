@@ -3,11 +3,7 @@
     "duration": 45000,
     "audios": [
         [
-            0.9,
-            "didier20/suicide.mp3"
-        ],
-        [
-            1,
+            0,
            "effects/shutdown.mp3"
         ]
     ],

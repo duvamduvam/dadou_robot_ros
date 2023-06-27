@@ -1,11 +1,11 @@
 import logging.config
 
-from dadourobot.robot_config import RobotConfig
 from hardrive.files import RobotJsonManager
+
+from dadourobot.robot_config import RobotConfig
 from dadourobot.tests.conf_test import TestSetup
 from dadourobot.utils import Utils
 from dadourobot.visual.image_mapping import ImageMapping
-
 from dadourobot.visual.visual import Visual
 
 TestSetup()

@@ -1,11 +1,10 @@
 import time
 import unittest
 
-from dadou_utils.utils_static import WHEEL_LEFT, WHEEL_RIGHT, RIGHT_ARM, LEFT_ARM
-
-import dadourobot
 from dadourobot.actions.left_arm import LeftArm
 from dadourobot.actions.right_arm import RightArm
+
+from dadou_utils.utils_static import WHEEL_LEFT, WHEEL_RIGHT
 from dadourobot.actions.wheel import Wheel
 from dadourobot.robot_config import config
 from dadourobot.tests.conf_test import TestSetup

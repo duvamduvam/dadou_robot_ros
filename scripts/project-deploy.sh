@@ -47,5 +47,6 @@ if [ "$1" = "read_param" ]; then
     printf "$UTILS_SCRIPTS/params.sh\n"
   fi
 else
+  printf "${CYAN}$UTILS_SCRIPTS/deploy-utils.sh $1${CYAN}\n"
   source $UTILS_SCRIPTS/deploy-utils.sh $1
 fi

@@ -4,12 +4,13 @@
 
 """CircuitPython Essentials NeoPixel example"""
 import time
+
 import board
-from rainbowio import colorwheel
 import neopixel
+from rainbowio import colorwheel
 
 pixel_pin = board.D18
-num_pixels = 200
+num_pixels = 30
 
 pixels = neopixel.NeoPixel(pixel_pin, num_pixels, brightness=0.3, auto_write=False, pixel_order=neopixel.RGB)
 

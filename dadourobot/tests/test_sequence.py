@@ -4,18 +4,16 @@ import unittest
 import logging
 import logging.config
 
-from adafruit_servokit import ServoKit
 from dadou_utils.com.input_messages_list import InputMessagesList
 from dadou_utils.utils.time_utils import TimeUtils
 
 from dadourobot.actions.left_arm import LeftArm
 from dadourobot.actions.neck import Neck
 
-from dadou_utils.utils_static import NECK, ANIMATION, KEY, STOP
+from dadou_utils.utils_static import NECK, ANIMATION, KEY
 
 from dadourobot.actions.right_arm import RightArm
 from dadourobot.input.global_receiver import GlobalReceiver
-from dadourobot.robot_config import LEFT_ARM, RIGHT_ARM
 from dadourobot.robot_factory import RobotFactory
 from dadourobot.tests.conf_test import TestSetup
 TestSetup()

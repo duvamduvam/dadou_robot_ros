@@ -7,7 +7,7 @@
 # release of Raspbian.
 
 import time
-import os
+
 import board
 import digitalio
 

@@ -1,8 +1,8 @@
 # SPDX-FileCopyrightText: 2021 ladyada for Adafruit Industries
 # SPDX-License-Identifier: MIT
+import time
 import unittest
 
-import time
 import board
 import neopixel
 

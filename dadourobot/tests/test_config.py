@@ -1,8 +1,8 @@
-import unittest
 import logging.config
+import unittest
+
 import board
 
-from dadourobot.files.robot_json_manager import RobotJsonManager
 from dadourobot.input.global_receiver import GlobalReceiver
 from dadourobot.robot_config import config
 

@@ -1,11 +1,8 @@
-import sys
-import time
 import logging
-from watchdog.observers import Observer
+import time
 
 from watchdog.events import LoggingEventHandler
-
-from dadou_utils.utils_static import INPUT_MESSAGE_FILE
+from watchdog.observers import Observer
 
 if __name__ == "__main__":
     logging.basicConfig(level=logging.INFO,

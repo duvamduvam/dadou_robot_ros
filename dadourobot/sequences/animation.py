@@ -1,6 +1,5 @@
 import logging
 
-from dadou_utils.misc import Misc
 from dadou_utils.utils.time_utils import TimeUtils
 
 
@@ -13,7 +12,8 @@ class Animation:
         self.has_data = True
         self.first_animation = True
         self.last_time = None
-        self.current_element_duration = 0
+        self.start_time = TimeUtils.current_milli_time()
+        self.next_element_start_duration = 0
 
         if animation_type not in datas or not datas[animation_type] or len(datas[animation_type]) == 0:
             logging.debug("animation part {} is empty".format(animation_type))
@@ -24,16 +24,34 @@ class Animation:
 
         self.current_pos = 0
         self.last_time = TimeUtils.current_milli_time()
-        self.current_element_duration = self.global_duration * self.datas[self.current_pos][0]
+        self.next_element_start_duration = None
+        if self.datas[0][0] == 0:
+            self.start_delay = 0
+        else:
+            self.start_delay = self.global_duration * self.datas[0][0]
+
 
     def next(self):
         if self.first_animation:
-            self.first_animation = False
-            return self.get(self.current_pos)
-        if self.has_data and self.current_pos != len(self.datas)-1 and TimeUtils.is_time(self.last_time, self.current_element_duration):
+            if TimeUtils.is_time(self.start_time, self.start_delay):
+                self.first_animation = False
+                self.set_next_duration()
+                return self.get(self.current_pos)
+        elif self.has_data and self.current_pos != len(self.datas)-1 and TimeUtils.is_time(self.start_time, self.next_element_start_duration):
             self.current_pos = (self.current_pos + 1) % len(self.datas)
-            self.last_time = TimeUtils.current_milli_time()
+            self.set_next_duration()
+
+
+
+            #self.current_element_duration = self.global_duration * self.datas[self.current_pos][0]
+            #self.last_time = TimeUtils.current_milli_time()
             return self.get(self.current_pos)
+
+    def set_next_duration(self):
+        if self.current_pos + 1 == len(self.datas):
+            self.next_element_start_duration = self.global_duration
+        else:
+            self.next_element_start_duration = self.global_duration * self.datas[self.current_pos+1][0]
 
     def get(self, index):
         logging.info("next {} index {}".format(self.animation_type, index))

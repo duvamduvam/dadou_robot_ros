@@ -3,25 +3,21 @@
 import logging
 import os
 import threading
-from asyncio import subprocess
+import time
 from os.path import exists
 
-from dadou_utils.utils.time_utils import TimeUtils
-from dadou_utils.utils_static import AUDIO, AUDIOS_DIRECTORY, KEY, STOP, NAME, PATH, KEYS, JSON_AUDIOS, EXPRESSION, \
-    FACE, DURATION, AUDIO_DURATION
 from sound_player import Sound, SoundPlayer
 
-from dadou_utils.misc import Misc
 from dadou_utils.audios.sound_object import SoundObject
+from dadou_utils.misc import Misc
+from dadou_utils.utils.time_utils import TimeUtils
+from dadou_utils.utils_static import AUDIO, AUDIOS_DIRECTORY, KEY, STOP, NAME, JSON_AUDIOS, EXPRESSION, \
+    FACE, DURATION, AUDIO_DURATION, AUDIO_DEVICE_ID, DEFAULT_VOLUME_LEVEL
 from dadourobot.actions.abstract_json_actions import AbstractJsonActions
-
-from dadourobot.input.global_receiver import GlobalReceiver
-
 
 #TODO check : https://maelfabien.github.io/machinelearning/Speech8/#iv2a-noise-reduction
 
-VOLUME_COMMAND = "amixer cset numid=6 {}% &"
-VOLUME_DEFAULT = 50
+VOLUME_COMMAND = "amixer cset numid={} {}% &"
 FONDU_TIME_STEP = 100
 FONDU_STEP = 2
 
@@ -36,7 +32,8 @@ class AudioManager(AbstractJsonActions):
     start_time = 0
     new_play_timeout = 2000
 
-    volume = VOLUME_DEFAULT
+    volume_default = 0
+    volume = volume_default
 
     fondu_last_time = 0
     stopping = False
@@ -46,7 +43,8 @@ class AudioManager(AbstractJsonActions):
         self.config = config
         self.global_receiver = global_receiver
         self.json_manager = json_manager
-        os.system(VOLUME_COMMAND.format(VOLUME_DEFAULT))
+        self.volume_default = config[DEFAULT_VOLUME_LEVEL]
+        self.change_volume(self.volume_default)
 
     def play_sounds_bak(self, audios):
         self.player.stop()
@@ -78,6 +76,9 @@ class AudioManager(AbstractJsonActions):
             logging.info("enqueue: " + audio.get_path())
             if not self.current_audio_name in audio.get_path:
                 sound = SoundObject(self.config[AUDIOS_DIRECTORY]+audio.get_path())
+                if self.volume != self.volume_default:
+                    os.system(VOLUME_COMMAND.format(self.volume_default))
+                    self.stopping = False
                 self.playlist.append(sound)
             #self.player.enqueue(Sound(audio.get_path()), 1)
             #for s in range(int(audio.get_time())):
@@ -92,17 +93,23 @@ class AudioManager(AbstractJsonActions):
             self.current_audio_name = ""
 
     def stop_sound_fondu(self):
-        if not self.volume <= 5:
+        if not self.volume <= 20:
             if TimeUtils.is_time(self.fondu_last_time, FONDU_TIME_STEP):
                 self.stopping = True
-                os.system(VOLUME_COMMAND.format(self.volume))
+                self.change_volume(self.volume)
                 self.fondu_last_time = TimeUtils.current_milli_time()
                 self.volume -= FONDU_STEP
         else:
             self.stop_sound()
-            os.system(VOLUME_COMMAND.format(VOLUME_DEFAULT))
-            self.volume = VOLUME_DEFAULT
+            time.sleep(1)
+            self.volume = self.volume_default
+            self.change_volume(self.volume)
             self.stopping = False
+
+    def change_volume(self, volume):
+        logging.info("change sound : {}".format(VOLUME_COMMAND.format(self.config[AUDIO_DEVICE_ID], volume)))
+        os.system(VOLUME_COMMAND.format(self.config[AUDIO_DEVICE_ID], volume))
+        self.volume = volume
 
     def process(self):
         if self.stopping:
@@ -111,7 +118,7 @@ class AudioManager(AbstractJsonActions):
     def update(self, msg):
 
         #TODO improve this part
-        if msg and KEY in msg:
+        if msg and KEY in msg and msg[KEY] in self.sequences_key:
             logging.debug("number of thread : {}".format(threading.active_count()))
             audio_param = self.sequences_key[msg[KEY]]
             #    self.json_manager.get_element_from_key(self.config[JSON_AUDIOS], KEYS, msg[KEY])#self.json_manager.get_audios(msg[KEY])

@@ -6,17 +6,13 @@ import multiprocessing
 import os
 from json import JSONDecodeError
 
-from watchdog.observers import Observer
-
 from dadou_utils.com.input_messages_list import InputMessagesList
 # from dadou_utils.com.lora_radio import LoraRadio
 # from dadou_utils.com.serial_device import SerialDevice
 from dadou_utils.com.ws_server import WsServer
-from dadou_utils.static_value import StaticValue
 from dadou_utils.utils.time_utils import TimeUtils
-from dadou_utils.utils_static import INPUT_MESSAGE_FILE, RANDOM, MAIN_THREAD, NEW_DATA, TYPES, MULTI_THREAD, \
-    INPUT_MESSAGE_DIRECTORY, PROCESS_NAME, LOCK, INPUT_LOCK, SINGLE_THREAD, WHEELS, KEY, DURATION
-from dadourobot.input.file_watcher import FileWatcher
+from dadou_utils.utils_static import INPUT_MESSAGE_FILE, RANDOM, MAIN_THREAD, TYPES, INPUT_LOCK, SINGLE_THREAD, KEY, \
+    DURATION
 from dadourobot.robot_config import config
 
 
@@ -41,6 +37,7 @@ class GlobalReceiver:
         self.main_thread = MAIN_THREAD in config and config[MAIN_THREAD]
 
         if self.main_thread:
+            self.clean_msg()
             WsServer().start()
         #self.lora_radio = LoraRadio(self.config)
         self.last_msg_time = 0
@@ -106,6 +103,10 @@ class GlobalReceiver:
         else:
             self.check_file_change()
             return self.get_file_msg()
+
+    def clean_msg(self):
+        if os.path.exists(INPUT_MESSAGE_FILE):
+            os.remove(INPUT_MESSAGE_FILE)
 
     def write_msg(self, msg):
         if not config[SINGLE_THREAD]:

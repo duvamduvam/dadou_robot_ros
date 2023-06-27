@@ -1,5 +1,7 @@
 import logging.config
+
 from tests import TestSetup
+
 TestSetup()
 import random
 import unittest

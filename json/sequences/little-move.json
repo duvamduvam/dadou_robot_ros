@@ -3,25 +3,25 @@
     "duration": 5000,
     "wait audio": true,
     "left eye": [
-        [1,
+        [0,
           {"mode": "random", "random move min": 65,
             "random move max": 85, "random time min": 500, "random time max":1000}
         ]
     ],
     "right eye": [
-        [1,
+        [0,
           {"mode": "random", "random move min": 60,
             "random move max": 90, "random time min": 500, "random time max": 1000}
         ]
     ],
     "left arm": [
-        [1,
+        [0,
           {"mode": "random", "random move min": 60,
             "random move max": 95, "random time min": 500, "random time max": 1000}
         ]
     ],
     "right arm": [
-        [1,
+        [0,
           {"mode": "random", "random move min": 60,
             "random move max": 95, "random time min": 500, "random time max": 1000}
         ]

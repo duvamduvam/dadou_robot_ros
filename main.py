@@ -99,7 +99,7 @@ for component in input_components:
         #Face matrix and lights strip component can't be in separate process, otherwise strange behaviour appear
         components.append(Face(config, receiver, robot_json_manager, face_strip))
         components.append(Lights(config=config, start=config[LIGHTS_START_LED], end=config[LIGHTS_END_LED],
-                                 json_manager=robot_json_manager, global_strip=pixels, light_type='ROBOT_LIGHTS', json_light=config[JSON_LIGHTS]))
+                                 json_manager=robot_json_manager, global_strip=pixels, light_type='robot_lights', json_light=config[JSON_LIGHTS]))
     elif component == SERVOS:
         components.append(Servo(NECK, config[HEAD_PWM_NB], 50, 180, config[I2C_ENABLED], config[PWM_CHANNELS_ENABLED], receiver))
         components.append(Servo(LEFT_EYE, config[LEFT_EYE_NB], 55, 180, config[I2C_ENABLED], config[PWM_CHANNELS_ENABLED], receiver))

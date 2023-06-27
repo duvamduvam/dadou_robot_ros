@@ -2,21 +2,21 @@ import logging
 import random
 import time
 
-from rainbowio import colorwheel
-from adafruit_led_animation import helper
-from adafruit_led_animation.animation.chase import Chase
 from adafruit_led_animation.animation.blink import Blink
+from adafruit_led_animation.animation.chase import Chase
 from adafruit_led_animation.animation.colorcycle import ColorCycle
 from adafruit_led_animation.animation.comet import Comet
 from adafruit_led_animation.animation.pulse import Pulse
 from adafruit_led_animation.animation.rainbow import Rainbow
-from adafruit_led_animation.animation.sparkle import Sparkle
-from adafruit_led_animation.animation.sparklepulse import SparklePulse
 from adafruit_led_animation.animation.rainbowchase import RainbowChase
 from adafruit_led_animation.animation.rainbowcomet import RainbowComet
 from adafruit_led_animation.animation.rainbowsparkle import RainbowSparkle
+from adafruit_led_animation.animation.solid import Solid
+from adafruit_led_animation.animation.sparkle import Sparkle
+from adafruit_led_animation.animation.sparklepulse import SparklePulse
 from adafruit_led_animation.color import \
-    AMBER, BLACK, BLUE, CYAN, GREEN, JADE, ORANGE, PURPLE, RED, MAGENTA, TEAL, WHITE, YELLOW
+    BLACK, ORANGE, MAGENTA, TEAL
+from rainbowio import colorwheel
 
 from dadou_utils.utils_static import COLOR
 
@@ -43,7 +43,7 @@ class LightsAnimations:
         return Comet(self.strip, speed=0.1, color=params[COLOR])
 
     def pulse(self, params):
-        return Pulse(self.strip, speed=0.1, color=params[COLOR], period=3)
+        return Pulse(self.strip, speed=0.1,  color=params[COLOR], period=1)
 
     def rainbow(self, params):
         return Rainbow(self.strip, speed=0.1, period=2)
@@ -52,7 +52,7 @@ class LightsAnimations:
         return RainbowChase(self.strip, speed=0.1, size=5, spacing=3)
 
     def rainbow_comet(self, params):
-        return RainbowComet(self.strip, speed=0.1, tail_length=7, bounce=True)
+        return RainbowComet(self.strip, speed=0.1, tail_length=30, bounce=True)
 
     def rainbow_sparkle(self, params):
         return RainbowSparkle(self.strip, speed=0.1, num_sparkles=15)
@@ -62,6 +62,9 @@ class LightsAnimations:
 
     def sparkle_pulse(self, params):
         return SparklePulse(self.strip, speed=1, period=3, color=params[COLOR])
+
+    def solid(self, params):
+        return Solid(self.strip, color=params[COLOR])
 
     def fade_red(self, params):
         self.strip.fill((255, 0, 0))

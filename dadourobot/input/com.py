@@ -1,10 +1,9 @@
+import logging
 from builtins import staticmethod
 
-from input.message import Message
 import serial
-import logging
-
 from input.file_watcher import FileWatcher
+from input.message import Message
 
 
 class Com:

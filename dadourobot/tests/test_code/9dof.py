@@ -2,8 +2,8 @@
 # SPDX-License-Identifier: MIT
 
 import time
+
 import board
-import adafruit_bno055
 
 from dadou_utils.utils_static import CALIBRATION
 from dadourobot.move.bno_055_extended import BNO055Extended

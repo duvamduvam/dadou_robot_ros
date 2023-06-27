@@ -1,10 +1,8 @@
-import adafruit_pcf8574
-import board
-import digitalio
-
 import time
 import unittest
-from microcontroller import Pin
+
+import adafruit_pcf8574
+import board
 from digitalio import DigitalInOut, Direction
 
 

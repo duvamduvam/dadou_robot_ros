@@ -1,6 +1,4 @@
-import logging.config
 from tests.conf_test import TestSetup
-from actions import Visual
 
 TestSetup()
 
