@@ -22,7 +22,10 @@ config[PWM_CHANNELS_ENABLED] = True
 config[DIGITAL_CHANNELS_ENABLED] = True
 config[SINGLE_THREAD] = False
 
-config[RANDOM] = False
+config[RANDOM] = True
+config[RANDOM_ANIMATION_LOW] = 120000
+config[RANDOM_ANIMATION_HIGH] = 360000
+
 config[PROFILER] = False
 
 config[AUDIO_DEVICE_ID] = 6
@@ -59,19 +62,17 @@ config[WHEEL_LEFT_PWM] = 1
 config[WHEEL_RIGHT_PWM] = 2
 config[WHEEL_LEFT_DIR] = 0
 config[WHEEL_RIGHT_DIR] = 3
-config[LEFT_ARM_NB] = 8
-config[RIGHT_ARM_NB] = 9
-config[LEFT_EYE_NB] = 6
-config[RIGHT_EYE_NB] = 7
+config[LEFT_ARM_NB] = 5
+config[RIGHT_ARM_NB] = 15
+config[LEFT_EYE_NB] = 8
+config[RIGHT_EYE_NB] = 9
 
-config[STOP_KEY] = "Db C&"
+config[STOP_KEY] = "L"
 config[MAIN_LOOP_SLEEP] = 0.001
 config[MOUTH_VISUALS_PATH] = "/visuals/mouth"
 config[EYE_VISUALS_PATH] = "/visuals/eye"
 config[SEQUENCES_DIRECTORY] = '/json/sequences/'
 
-config[RANDOM_ANIMATION_LOW] = 10000
-config[RANDOM_ANIMATION_HIGH] = 50000
 config[STOP_ANIMATION_KEYS] = ['x']
 
 config[BASE_PATH] = os.getcwd()

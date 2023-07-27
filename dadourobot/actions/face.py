@@ -3,7 +3,8 @@ import logging.config
 from dadou_utils.files.files_utils import FilesUtils
 from dadou_utils.utils.time_utils import TimeUtils
 from dadou_utils.utils_static import NAME, DURATION, LOOP, KEY, FACE, DEFAULT, \
-    MOUTH_VISUALS_PATH, EYE_VISUALS_PATH, LIGHTS_PIN, BASE_PATH, MOUTHS, JSON_EXPRESSIONS, RIGHT_EYES, LEFT_EYES
+    MOUTH_VISUALS_PATH, EYE_VISUALS_PATH, LIGHTS_PIN, BASE_PATH, MOUTHS, JSON_EXPRESSIONS, RIGHT_EYES, LEFT_EYES, \
+    ANIMATION
 from dadourobot.actions.abstract_json_actions import AbstractJsonActions
 from dadourobot.sequences.sequence import Sequence
 from dadourobot.visual.image_mapping import ImageMapping
@@ -14,7 +15,8 @@ from dadourobot.visual.visual import Visual
 
 class Face(AbstractJsonActions):
     visuals = {}
-    image_mapping = ImageMapping(8, 8, 3, 2)
+    mouth_image_mapping = ImageMapping(start_pixel=0, global_width=24, global_height=16, matrix_width=8,
+                                       matrix_height=8, matrix_width_nb=3, matrix_height_nb=2)
 
     mouth_start = 0
     mouth_end = 384
@@ -27,7 +29,7 @@ class Face(AbstractJsonActions):
     leye = None
     reye = None
 
-    DEFAULT = "default"
+    default = "default"
 
     element_duration = 0
     start_time = 0
@@ -44,7 +46,7 @@ class Face(AbstractJsonActions):
         self.config = config
         self.strip = strip
         self.load_visuals()
-        self.update({FACE: self.DEFAULT})
+        self.update({FACE: self.default})
 
     def get_expressions_sequence(self, msg):
         if msg and KEY in msg and msg[KEY] in self.sequences_key.keys():
@@ -89,6 +91,9 @@ class Face(AbstractJsonActions):
         elif FACE not in msg:
             return msg"""
 
+        if ANIMATION in msg and not msg[ANIMATION]:
+            self.update({FACE: self.default})
+
         json_seq = self.get_sequence(msg, True)
         if not json_seq:
             return msg
@@ -99,24 +104,19 @@ class Face(AbstractJsonActions):
 
         self.current_face = json_seq[NAME]
 
-
         logging.info("update face sequences : " + json_seq[NAME])
-        """if DURATION in msg:
-            self.loop_duration = msg[DURATION]
-            self.start_loop_duration = TimeUtils.current_milli_time()
-            self.loop = True
-        else:"""
 
-        self.loop = json_seq[LOOP]
+        if ANIMATION in msg and msg[ANIMATION]:
+            self.loop = True
+        else:
+            self.loop = json_seq[LOOP]
+        if DEFAULT in json_seq:
+            self.default = json_seq[NAME]
         self.element_duration = json_seq[DURATION]
         self.start_time = TimeUtils.current_milli_time()
         self.mouth = Sequence(self.element_duration, self.loop, json_seq[MOUTHS], 0)
         self.leye = Sequence(self.element_duration, self.loop, json_seq[LEFT_EYES], 385) #385
         self.reye = Sequence(self.element_duration, self.loop, json_seq[RIGHT_EYES], 448) #448
-
-        if FACE in msg:
-            del msg[FACE]
-            #self.receiver.write_msg(msg)
 
         return msg
 
@@ -127,7 +127,7 @@ class Face(AbstractJsonActions):
             logging.debug("seq.current_time : {} current element {} duration {}".format(seq.start_time, seq.current_element, seq.element_duration))
             visual = self.get_visual(frame[1])
             logging.debug("update part : " + visual.name)
-            self.image_mapping.mapping(self.strip, visual.rgb, seq.start_pixel)
+            self.mouth_image_mapping.mapping(self.strip, visual.rgb, seq.start_pixel)
             #logging.debug("next sequences[" + str(seq.current_frame) + "] total : " + str(len(seq.frames)))
             seq.next()
             change = True

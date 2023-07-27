@@ -18,18 +18,18 @@
         "audio": "song/game-show1.mp3"
     },
     "activation_transfer": {
-        "audio": "didier20/activation_transfer2.mp3",
-        "lights_helmet": "transfer"
+        "duration": 24000,
+        "audio": "didier20/activation_scan.mp3",
+        "face": "upgrade",
+        "lights_helmet": "scan",
+        "robot_lights": "scan"
     },
-    "upload_en_cours":{
-        "audio": "didier20/upload_en_cours2.mp3",
-        "lights_helmet": "upload"
-    },
-    "transfer_prometeus": {
-        "audio": "didier20/transfer_prometeus.mp3"
-    },
-    "transfer_impossible": {
-        "audio": "didier20/transfer_impossible2.mp3"
+    "transfer impossible": {
+        "duration": 32000                                                                                                                                                                                                                                                                                                       ,
+        "audio": "didier20/activation_transfer.mp3",
+        "face": "upgrade",
+        "lights_helmet": "transfer",
+        "robot_lights": "transfer"
     },
     "c_est_quoi_ce_bordel": {
         "audio": "didier20/c_est_quoi_ce_bordel.mp3",
@@ -194,25 +194,18 @@
     },
     "c est moi qui control": {
         "audio": "didier20/c_est_moi_qui_control.mp3",
-        "face" : "speak",
+        "face" : "speak red",
         "animation": "little-move",
-        "robot_lights" : "speak dark",
+        "robot_lights" : "devil",
         "duration": 8500
     },
     "je ne suis pas un jouet": {
-        "audio": "didier20/je_ne_suis_pas_un_jouet.mp3",
-        "face" : "speak",
-        "animation": "little-move",
-        "robot_lights" : "speak dark",
-        "duration": 52500
+        "audio": "effects/encephalogramme-delay.mp3",
+        "animation": "pas-un-jouet"
     },
-    "decharge": {
-        "audio": "effects/electrochoc1.mp3"
-    },
-    "son strident": {
-        "audio": "effects/encephalogramme.mp3"
-    },
-    "mort": {
-        "animation": "breakdown"
+    "initialisation prometeus": {
+        "face" : "default",
+        "robot_lights" : "default",
+        "audio": "didier20/reinitialisation-prometeus.mp3"
     }
 }

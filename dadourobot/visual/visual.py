@@ -1,7 +1,7 @@
 import logging.config
 import os
 
-import imageio
+import imageio.v2 as imageio
 
 from dadourobot.visual.image_mapping import ImageMapping
 

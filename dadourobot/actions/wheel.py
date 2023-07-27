@@ -9,7 +9,8 @@ from dadou_utils.misc import Misc
 from dadou_utils.utils.time_utils import TimeUtils
 from dadou_utils.utils_static import ANGLO, WHEEL_RIGHT, WHEEL_LEFT, JOY, WHEELS, KEY, \
     CMD_FORWARD, CMD_BACKWARD, CMD_LEFT, CMD_RIGHT, I2C_ENABLED, PWM_CHANNELS_ENABLED, \
-    WHEEL_LEFT_PWM, WHEEL_RIGHT_PWM, WHEEL_LEFT_DIR, WHEEL_RIGHT_DIR, STRAIGHT, ANIMATION
+    WHEEL_LEFT_PWM, WHEEL_RIGHT_PWM, WHEEL_LEFT_DIR, WHEEL_RIGHT_DIR, STRAIGHT, ANIMATION, STOP, FORWARD, BACKWARD, \
+    LEFT, RIGHT
 from dadourobot.move.anglo_meter_translator import AngloMeterTranslator
 
 
@@ -24,8 +25,8 @@ class Wheel:
     move_time = 0
     MOVE_TIMEOUT = 400
     MIN_PWM = 5000
-    MAX_PWM_L = 30000
-    MAX_PWM_R = 27000
+    MAX_PWM_L = 25000
+    MAX_PWM_R = 25000
     MAX_DIR = 65530
     FREQUENCY = 500
 
@@ -100,7 +101,7 @@ class Wheel:
         if ANIMATION in msg and ((WHEEL_LEFT in msg and WHEEL_RIGHT in msg) or (WHEELS in msg)):
             self.animation_ongoing = msg[ANIMATION]
 
-        if KEY in msg and (msg[KEY] == self.config[CMD_FORWARD] or msg[KEY] == self.config[CMD_BACKWARD] or msg[KEY] == self.config[CMD_LEFT] or msg[KEY] == self.config[CMD_RIGHT]):
+        if KEY in msg and (msg[KEY] == self.config[FORWARD] or msg[KEY] == self.config[BACKWARD] or msg[KEY] == self.config[LEFT] or msg[KEY] == self.config[RIGHT]):
             if msg[KEY] == self.config[CMD_FORWARD]:
                 self.update_cmd(50, 50)
             elif msg[KEY] == self.config[CMD_BACKWARD]:
@@ -119,8 +120,20 @@ class Wheel:
         if WHEEL_LEFT in msg and WHEEL_RIGHT in msg:
             self.update_cmd(msg[WHEEL_LEFT], msg[WHEEL_RIGHT])
         if WHEELS in msg:
+            if msg[WHEELS] == STOP:
+                self.stop()
+                return msg
             try:
-                self.update_cmd(int(msg[WHEELS][0]*100), int(msg[WHEELS][1]*100))
+                if msg[WHEELS] == FORWARD:
+                    self.update_cmd(50, 50)
+                elif msg[WHEELS] == BACKWARD:
+                    self.update_cmd(-50, -50)
+                elif msg[WHEELS] == LEFT:
+                    self.update_cmd(-50, 50)
+                elif msg[WHEELS] == RIGHT:
+                    self.update_cmd(50, -50)
+                else:
+                    self.update_cmd(int(msg[WHEELS][0]*100), int(msg[WHEELS][1]*100))
             except TypeError:
                 logging.error("can't process {}".format(msg[WHEELS]))
 

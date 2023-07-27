@@ -32,9 +32,6 @@ class AudioManager(AbstractJsonActions):
     start_time = 0
     new_play_timeout = 2000
 
-    volume_default = 0
-    volume = volume_default
-
     fondu_last_time = 0
     stopping = False
 
@@ -43,7 +40,9 @@ class AudioManager(AbstractJsonActions):
         self.config = config
         self.global_receiver = global_receiver
         self.json_manager = json_manager
+
         self.volume_default = config[DEFAULT_VOLUME_LEVEL]
+        self.volume = self.volume_default
         self.change_volume(self.volume_default)
 
     def play_sounds_bak(self, audios):
@@ -61,6 +60,10 @@ class AudioManager(AbstractJsonActions):
                 return False
             if self.current_audio:
                 self.current_audio.stop()
+
+            if self.volume != self.volume_default:
+                self.change_volume(self.volume_default)
+
             self.current_audio = SoundObject(self.config[AUDIOS_DIRECTORY]+audio)
 
             self.current_audio.play()
@@ -77,8 +80,7 @@ class AudioManager(AbstractJsonActions):
             if not self.current_audio_name in audio.get_path:
                 sound = SoundObject(self.config[AUDIOS_DIRECTORY]+audio.get_path())
                 if self.volume != self.volume_default:
-                    os.system(VOLUME_COMMAND.format(self.volume_default))
-                    self.stopping = False
+                    self.change_volume(self.volume_default)
                 self.playlist.append(sound)
             #self.player.enqueue(Sound(audio.get_path()), 1)
             #for s in range(int(audio.get_time())):
@@ -104,10 +106,11 @@ class AudioManager(AbstractJsonActions):
             time.sleep(1)
             self.volume = self.volume_default
             self.change_volume(self.volume)
-            self.stopping = False
 
     def change_volume(self, volume):
         logging.info("change sound : {}".format(VOLUME_COMMAND.format(self.config[AUDIO_DEVICE_ID], volume)))
+        if volume == self.volume_default:
+            self.stopping = False
         os.system(VOLUME_COMMAND.format(self.config[AUDIO_DEVICE_ID], volume))
         self.volume = volume
 

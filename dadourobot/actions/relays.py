@@ -48,10 +48,9 @@ class RelaysManager(AbstractJsonActions):
         if not self.config[I2C_ENABLED] or not self.config[DIGITAL_CHANNELS_ENABLED]:
             return msg
 
-        json_seq = self.get_sequence(msg, True)
+        relay = self.get_sequence(msg, True)
 
-        if json_seq:
-            relay = self.sequences_key[msg[KEY]]
+        if relay:
 
             if relay[NAME] == self.PITCHED_VOICE:
                 self.voice_out.value = False
@@ -78,6 +77,20 @@ class RelaysManager(AbstractJsonActions):
                 self.voice_out.value = False
                 self.last_effect_time = TimeUtils.current_milli_time()
                 logging.info("switch effect on")
+
+        """if json_seq:
+            if json_seq[NAME] == self.PITCHED_VOICE:
+                self.voice_out.value = False
+                self.effect.value = True
+                self.last_effect_time = TimeUtils.current_milli_time()
+                logging.info("switch effect on")
+
+            if json_seq[NAME] == self.NORMAL_VOICE:
+                self.voice_out.value = False
+                self.effect.value = False
+                self.last_effect_time = TimeUtils.current_milli_time()
+                logging.info("switch effect on")"""
+
         return msg
 
     def process(self):
@@ -88,5 +101,4 @@ class RelaysManager(AbstractJsonActions):
         if not self.voice_out.value and TimeUtils.is_time(self.last_effect_time, self.effect_timeout):
             #self.effect.value = False
             self.voice_out.value = True
-
             logging.info("activate effect off")

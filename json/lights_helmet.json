@@ -1,11 +1,11 @@
 {
-    "default": {
+    "default2": {
         "keys": [
             "B6"
         ],
         "loop": true,
         "default": true,
-        "duration": 150000,
+        "duration": 60000,
         "sequences": {
             "chase me": 1
         }
@@ -21,16 +21,15 @@
             "chase me dark": 1
         }
     },
-    "upload": {
+    "scan": {
         "keys": [
             "B9"
         ],
         "loop": false,
-        "duration": 30000,
+        "duration": 24000,
         "sequences": {
-            "pulse": 0,
-            "love": 0.5,
-            "comet2": 0.75
+            "rainbow": 0,
+            "pulse green": 0.8
         }
     },
     "transfer": {
@@ -38,11 +37,10 @@
             "B9"
         ],
         "loop": false,
-        "duration": 30000,
+        "duration": 32000,
         "sequences": {
-            "rainbow_sparkle": 0,
-            "sea colorcycle": 0.33,
-            "rainbow": 0.66
+            "rainbow": 0,
+            "pulse red": 0.55
         }
     },
     "upload dark": {
@@ -53,6 +51,17 @@
         "duration": 30000,
         "sequences": {
             "pulse purple": 1
+        }
+    },
+    "default": {
+        "keys": [],
+        "loop": false,
+        "duration": 60000,
+        "sequences": {
+            "chase me": 0,
+            "rainbow": 0.3,
+            "pulse red": 0.6,
+            "sea colorcycle": 0.8
         }
     }
 }

@@ -21,28 +21,25 @@
     ],
     "left arm": [
         [0,
-          {"mode": "random", "random move min": 75,
+          {"mode": "random", "random move min": 60,
             "random move max": 95, "random time min": 500, "random time max": 1000}
         ]
     ],
     "right arm": [
         [0,
-          {"mode": "random", "random move min": 75,
+          {"mode": "random", "random move min": 60,
             "random move max": 95, "random time min": 500, "random time max": 1000}
         ]
     ],
     "wheels": [
         [
-            0.1,[0.5,0.5]
+            0.25,[0.5,0.5]
         ],
         [
-            0.7,[0,0]
+            0.5,[-0.5,-0.5]
         ],
         [
-            0.75,[-0.5,-0.5]
-        ],
-        [
-            1,[0,0]
+            0.75,[0,0]
         ]
     ]
 }

@@ -127,14 +127,12 @@ class Lights(AbstractJsonActions):
     def process(self):
         if not self.loop and TimeUtils.is_time(self.start_time, self.duration):
             self.update({self.light_type: self.default})
-            return
 
         if self.sequence.time_to_switch():
             self.sequence.next()
-            self.sequence.current_element.start_time = TimeUtils.current_milli_time()
-
+            #self.sequence.current_element.start_time = TimeUtils.current_milli_time()
             self.load_light_method(self.sequence.current_element.method)
-            self.sequence.current_element.start_time = TimeUtils.current_milli_time()
+            #self.sequence.current_element.start_time = TimeUtils.current_milli_time()"""
 
         self.current_animation.animate()
 

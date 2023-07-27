@@ -57,8 +57,24 @@
         "color": "PURPLE",
         "method": "pulse"
     },
+    "pulse green": {
+        "color": "GREEN",
+        "method": "pulse"
+    },
+    "pulse red": {
+        "color": "RED",
+        "method": "pulse"
+    },
     "solido": {
         "color": "GOLD",
+        "method": "solid"
+    },
+    "solid red": {
+        "color": "RED",
+        "method": "solid"
+    },
+    "off": {
+        "color": "BLACK",
         "method": "solid"
     },
     "sparkle": {

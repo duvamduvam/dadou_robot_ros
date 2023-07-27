@@ -6,7 +6,6 @@
         "keys": [
             "E1"
         ],
-        "loop": false,
         "duration": 8000,
         "left_eyes": [
             [
@@ -27,11 +26,49 @@
             ]
         ]
     },
+    "default red": {
+        "loop": true,
+        "keys": [
+            "E9"
+        ],
+        "duration": 8000,
+        "left_eyes": [
+            [
+                1,
+                "oeil-rouge-gauche.png"
+            ]
+        ],
+        "right_eyes": [
+            [
+                1,
+                "oeil-rouge-droit.png"
+            ]
+        ],
+        "mouths": [
+            [
+                0.05,
+                "bouche-ferme.png"
+            ],
+            [
+                0.5,
+                "bouche-ferme-gauche.png"
+            ],
+
+            [
+                0.52,
+                "bouche-ferme-droit.png"
+            ],
+            [
+                1.0,
+                "bouche-ferme.png"
+            ]
+        ]
+    },
     "upgrade": {
         "keys": [
             "E2"
         ],
-        "loop": true,
+        "loop": false,
         "duration": 1000,
         "left_eyes": [
             [
@@ -317,6 +354,38 @@
             ]
         ]
     },
+    "speak red": {
+        "duration": 250,
+        "loop": false,
+        "follow audio": true,
+        "keys": [],
+        "left_eyes": [
+            [
+                1,
+                "oeil-rouge-gauche.png"
+            ]
+        ],
+        "right_eyes": [
+            [
+                1,
+                "oeil-rouge-droit.png"
+            ]
+        ],
+        "mouths": [
+            [
+                0.274,
+                "bouche-ouvert2.png"
+            ],
+            [
+                0.6,
+                "bouche-ouvert3.png"
+            ],
+            [
+                1,
+                "bouche-ouvert1.png"
+            ]
+        ]
+    },
     "speak loop": {
         "duration": 250,
         "loop": true,
@@ -372,6 +441,7 @@
     "default": {
         "duration": 5000,
         "loop": true,
+        "default": true,
         "keys": [
             "E7",
             "default"
@@ -528,7 +598,7 @@
     },
     "warning": {
         "duration": 5000,
-        "loop": false,
+        "loop": true,
         "keys": [
             "E0",
             "default"
@@ -612,6 +682,7 @@
     "off": {
         "duration": 5000,
         "loop": true,
+        "default": true,
         "left_eyes": [
                         [
                 1,

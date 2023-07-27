@@ -74,11 +74,35 @@
             "chase me": 1
         }
     },
-    "truc": {
-        "loop": false,
-        "duration": 0,
+    "devil": {
+        "loop": true,
+        "duration": 10000,
         "keys": "None",
-        "sequences": {}
+        "sequences": {
+            "solid red": 0
+        }
+    },
+    "scan": {
+        "keys": [
+            "B9"
+        ],
+        "loop": false,
+        "duration": 24000,
+        "sequences": {
+            "rainbow": 0,
+            "pulse green": 0.8
+        }
+    },
+    "transfer": {
+        "keys": [
+            "B9"
+        ],
+        "loop": false,
+        "duration": 32000,
+        "sequences": {
+            "rainbow": 0,
+            "pulse red": 0.55
+        }
     },
     "test": {
         "keys": [
@@ -94,6 +118,14 @@
             "sparkle": 0.7,
             "sparklepulse": 0.84,
             "solido": 1
+        }
+    },
+    "off": {
+        "keys": [],
+        "duration": 150000,
+        "loop": true,
+        "sequences": {
+            "off": 0.14
         }
     },
     "test2": {
