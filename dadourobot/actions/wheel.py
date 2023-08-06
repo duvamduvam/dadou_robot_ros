@@ -25,8 +25,8 @@ class Wheel:
     move_time = 0
     MOVE_TIMEOUT = 400
     MIN_PWM = 5000
-    MAX_PWM_L = 25000
-    MAX_PWM_R = 25000
+    MAX_PWM_L = 27500
+    MAX_PWM_R = 27500
     MAX_DIR = 65530
     FREQUENCY = 500
 

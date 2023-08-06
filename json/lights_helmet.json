@@ -1,5 +1,5 @@
 {
-    "default2": {
+    "default": {
         "keys": [
             "B6"
         ],
@@ -53,7 +53,7 @@
             "pulse purple": 1
         }
     },
-    "default": {
+    "demo": {
         "keys": [],
         "loop": false,
         "duration": 60000,

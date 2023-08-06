@@ -1,34 +1,38 @@
 {
     "keys": "H9",
-    "duration": 2000,
+    "duration": 1000,
+    "faces": [
+        [
+            0,
+           "speak"
+        ],
+        [
+            0.9,
+           "default"
+        ]
+    ],
     "left eye": [
-        [1,
-          {"mode": "random", "random move min": 45,
-            "random move max": 85, "random time min": 500, "random time max": 3000}
+        [0,
+          {"mode": "random", "random move min": 65,
+            "random move max": 85, "random time min": 500, "random time max":1000}
         ]
     ],
     "right eye": [
-        [1,
-          {"mode": "random", "random move min": 45,
-            "random move max": 90, "random time min": 500, "random time max": 3000}
+        [0,
+          {"mode": "random", "random move min": 60,
+            "random move max": 90, "random time min": 500, "random time max": 1000}
         ]
     ],
     "left arm": [
-        [1,
-          {"mode": "random", "random move min": 80,
-            "random move max": 95, "random time min": 500, "random time max": 3000}
+        [0,
+          {"mode": "random", "random move min": 60,
+            "random move max": 95, "random time min": 500, "random time max": 1000}
         ]
     ],
     "right arm": [
-        [1,
-          {"mode": "random", "random move min": 80,
-            "random move max": 95, "random time min": 500, "random time max": 3000}
-        ]
-    ],
-    "neck": [
-        [1,
+        [0,
           {"mode": "random", "random move min": 60,
-            "random move max": 75, "random time min": 500, "random time max": 3000}
+            "random move max": 95, "random time min": 500, "random time max": 1000}
         ]
     ]
 }

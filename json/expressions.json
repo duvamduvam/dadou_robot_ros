@@ -301,7 +301,7 @@
         ]
     },
     "speak": {
-        "duration": 250,
+        "duration": 20,
         "loop": false,
         "follow audio": true,
         "keys": [
