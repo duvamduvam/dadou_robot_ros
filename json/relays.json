@@ -4,5 +4,6 @@
   "effect_on": {"keys":["D1", "D2"]},
   "voice_out": {"keys":["D7", "D8"]},
   "octaver": {"keys":["D3", "D4"]},
-  "hf_receiver": {"keys":["D5", "D6"]}
+  "hf_receiver": {"keys":["D5", "D6"]},
+  "off": {"keys":["a"]}
 }

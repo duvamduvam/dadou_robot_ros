@@ -16,7 +16,7 @@ from dadou_utils.utils_static import ANIMATION, LIGHTS, SHUTDOWN_PIN, RESTART_PI
     LOGGING_CONFIG_FILE, WHEELS, FACE, SERVOS, PROFILER, MAIN_THREAD, AUDIO, TYPE, TYPES, NECK, LEFT_ARM, RIGHT_ARM, \
     SINGLE_THREAD, LOGGING_FILE_NAME, MULTI_THREAD, PROCESS_NAME, LEFT_EYE, RIGHT_EYE, HEAD_PWM_NB, \
     LEFT_EYE_NB, RIGHT_EYE_NB, LEFT_ARM_NB, RIGHT_ARM_NB, I2C_ENABLED, PWM_CHANNELS_ENABLED, ROBOT, JSON_LIGHTS, \
-    LIGHTS_START_LED, LIGHTS_END_LED
+    LIGHTS_START_LED, LIGHTS_END_LED, BRIGHTNESS
 from dadourobot.actions.audio_manager import AudioManager
 from dadourobot.actions.face import Face
 from dadourobot.actions.lights import Lights
@@ -54,7 +54,7 @@ logging.config.dictConfig(LoggingConf.get(config[LOGGING_FILE_NAME], process_nam
 components = []
 
 robot_json_manager = RobotJsonManager(config)
-pixels = neopixel.NeoPixel(config[LIGHTS_PIN], config[LIGHTS_LED_COUNT], auto_write=False, brightness=0.05)
+pixels = neopixel.NeoPixel(config[LIGHTS_PIN], config[LIGHTS_LED_COUNT], auto_write=False, brightness=config[BRIGHTNESS])
 
 strip_pixels_range = ()
 for x in range(0, 512):
@@ -106,7 +106,7 @@ for component in input_components:
         components.append(Servo(RIGHT_EYE, config[RIGHT_EYE_NB], 55, 180, config[I2C_ENABLED], config[PWM_CHANNELS_ENABLED], receiver))
         components.append(Servo(LEFT_ARM, config[LEFT_ARM_NB], 99, 180, config[I2C_ENABLED], config[PWM_CHANNELS_ENABLED], receiver))
         components.append(Servo(RIGHT_ARM, config[RIGHT_ARM_NB], 99, 180, config[I2C_ENABLED], config[PWM_CHANNELS_ENABLED], receiver))
-        components.append(RelaysManager(config, receiver, robot_json_manager))
+        components.append(RelaysManager(config, receiver, robot_json_manager, receiver))
     #elif component == LIGHTS:
     #    #config, start, end, json_manager, global_strip, light_type
     #    #TODO check led number

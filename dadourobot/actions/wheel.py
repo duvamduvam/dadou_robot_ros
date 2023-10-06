@@ -10,8 +10,9 @@ from dadou_utils.utils.time_utils import TimeUtils
 from dadou_utils.utils_static import ANGLO, WHEEL_RIGHT, WHEEL_LEFT, JOY, WHEELS, KEY, \
     CMD_FORWARD, CMD_BACKWARD, CMD_LEFT, CMD_RIGHT, I2C_ENABLED, PWM_CHANNELS_ENABLED, \
     WHEEL_LEFT_PWM, WHEEL_RIGHT_PWM, WHEEL_LEFT_DIR, WHEEL_RIGHT_DIR, STRAIGHT, ANIMATION, STOP, FORWARD, BACKWARD, \
-    LEFT, RIGHT
+    LEFT, RIGHT, INCLINO
 from dadourobot.move.anglo_meter_translator import AngloMeterTranslator
+from dadourobot.robot_config import MAX_PWM_L, MAX_PWM_R
 
 
 class Wheel:
@@ -25,8 +26,6 @@ class Wheel:
     move_time = 0
     MOVE_TIMEOUT = 400
     MIN_PWM = 5000
-    MAX_PWM_L = 27500
-    MAX_PWM_R = 27500
     MAX_DIR = 65530
     FREQUENCY = 500
 
@@ -47,7 +46,12 @@ class Wheel:
     last_move = 0
 
     def __init__(self, config, receiver):
+
         self.config = config
+
+        self.max_pwm_l = MAX_PWM_L
+        self.max_pwm_r = MAX_PWM_R
+
         self.receiver = receiver
         self.enabled = self.config[I2C_ENABLED] or self.config[PWM_CHANNELS_ENABLED]
         if not self.enabled:
@@ -111,8 +115,8 @@ class Wheel:
             elif msg[KEY] == self.config[CMD_RIGHT]:
                 self.update_cmd(50, -50)
 
-        if ANGLO in msg:
-            wheels = self.anglo_meter_translator.translate(msg[ANGLO])
+        if INCLINO in msg:
+            wheels = self.anglo_meter_translator.translate(msg[INCLINO])
             self.update_cmd(wheels[0], wheels[1])
         if JOY in msg:
             wheels = self.anglo_meter_translator.translate(msg[JOY])
@@ -145,8 +149,8 @@ class Wheel:
 
         #logging.info("update wheel with left : " + str(left_wheel) + " right : " + str(right_wheel))
 
-        self.left_pwm.duty_cycle = Misc.mapping(abs(left_wheel), 0, 100, self.MIN_PWM, self.MAX_PWM_L)
-        self.right_pwm.duty_cycle = Misc.mapping(abs(right_wheel), 0, 100, self.MIN_PWM, self.MAX_PWM_R)
+        self.left_pwm.duty_cycle = Misc.mapping(abs(left_wheel), 0, 100, self.MIN_PWM, self.max_pwm_l)
+        self.right_pwm.duty_cycle = Misc.mapping(abs(right_wheel), 0, 100, self.MIN_PWM, self.max_pwm_r)
 
         self.set_direction(left_wheel, self.dir_left)
         self.set_direction(right_wheel, self.dir_right)

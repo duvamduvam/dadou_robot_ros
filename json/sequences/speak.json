@@ -11,6 +11,12 @@
            "default"
         ]
     ],
+    "neck": [
+        [0,
+          {"mode": "random", "random move min": 40,
+            "random move max": 70, "random time min": 500, "random time max":1000}
+        ]
+    ],
     "left eye": [
         [0,
           {"mode": "random", "random move min": 65,

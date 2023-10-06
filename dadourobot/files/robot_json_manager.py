@@ -1,7 +1,8 @@
 import logging
 
 from dadou_utils.files.abstract_json_manager import AbstractJsonManager
-from dadou_utils.utils_static import JSON_AUDIOS, JSON_COLORS, JSON_EXPRESSIONS, JSON_LIGHTS, JSON_RELAYS
+from dadou_utils.utils_static import JSON_AUDIOS, JSON_COLORS, JSON_EXPRESSIONS, JSON_LIGHTS, JSON_RELAYS, JSON_NOTES, \
+    JSON_AUDIOS_DATAS
 from dadou_utils.utils_static import JSON_LIGHTS_BASE
 
 
@@ -21,8 +22,8 @@ class RobotJsonManager(AbstractJsonManager):
 
     def __init__(self, config):
         self.config = config
-        component = [self.config[JSON_AUDIOS], self.config[JSON_COLORS], self.config[JSON_EXPRESSIONS], \
-                self.config[JSON_LIGHTS], config[JSON_LIGHTS_BASE], self.config[JSON_RELAYS]]
+        component = [self.config[JSON_AUDIOS], self.config[JSON_COLORS], self.config[JSON_EXPRESSIONS],\
+                self.config[JSON_LIGHTS], config[JSON_LIGHTS_BASE], self.config[JSON_RELAYS], self.config[JSON_NOTES], self.config[JSON_AUDIOS_DATAS]]
 
         super().__init__(config, component)
         #super().__init__(self.config[BASE_PATH], self.config[JSON_DIRECTORY])

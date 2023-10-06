@@ -45,7 +45,7 @@ class AbstractJsonActions:
 
     def get_sequence(self, msg, animation_loop):
 
-        if KEY not in msg and self.action_type not in msg:
+        if not msg or (KEY not in msg and self.action_type not in msg):
             return
 
         sequence = None

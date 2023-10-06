@@ -53,7 +53,7 @@ class Servo:
         if not self.enabled:
             return msg
 
-        if ANIMATION in msg and not msg[ANIMATION]:
+        if msg and ANIMATION in msg and not msg[ANIMATION]:
             logging.info("update {} servo with default pos {}".format(self.type, self.default_pos))
             self.set_angle(self.default_pos)
             self.mode = NORMAL
@@ -68,6 +68,9 @@ class Servo:
                 self.mode = NORMAL
             else:
                 if isinstance(msg[self.type], dict) and MODE in msg[self.type]:
+                    #let the last instruction finish
+                    if self.mode == RANDOM:
+                        return
                     self.mode = msg[self.type][MODE]
                     if self.mode == RANDOM:
                         if RANDOM_MOVE_MAX in msg[self.type] and RANDOM_MOVE_MIN in msg[self.type]\

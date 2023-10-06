@@ -58,10 +58,6 @@ class GlobalReceiver:
         #if mega_msg:
         #    logging.info('received radio msg : {}'.format(mega_msg))
         #    return self.filter_msg(mega_msg)
-        """glove = self.glove.get_msg()
-        if glove:
-            logging.info('received glove msg : {}'.format(glove))
-            return glove"""
 
         msg = self.messages.pop_msg()
         if msg:
@@ -154,7 +150,7 @@ class GlobalReceiver:
 
     @staticmethod
     def create_lock():
-        logging.info("create lock")
+        logging.debug("create lock")
         with open(INPUT_LOCK, "w") as lock:
             lock.write("")
 

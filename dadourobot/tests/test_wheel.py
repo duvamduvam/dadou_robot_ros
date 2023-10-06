@@ -6,6 +6,7 @@ from dadourobot.actions.right_arm import RightArm
 
 from dadou_utils.utils_static import WHEEL_LEFT, WHEEL_RIGHT
 from dadourobot.actions.wheel import Wheel
+from dadourobot.move.anglo_meter_translator import AngloMeterTranslator
 from dadourobot.robot_config import config
 from dadourobot.tests.conf_test import TestSetup
 

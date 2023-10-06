@@ -4,12 +4,14 @@ import adafruit_pcf8574
 import board
 
 from dadou_utils.utils.time_utils import TimeUtils
-from dadou_utils.utils_static import KEY, I2C_ENABLED, DIGITAL_CHANNELS_ENABLED, JSON_RELAYS, RELAY, NAME
+from dadou_utils.utils_static import KEY, I2C_ENABLED, DIGITAL_CHANNELS_ENABLED, JSON_RELAYS, RELAY, NAME, ANIMATION, \
+    SPEAK, STOP, OFF
 from dadourobot.actions.abstract_json_actions import AbstractJsonActions
 
 
 class RelaysManager(AbstractJsonActions):
 
+    SWITCH = "switch"
     OCTAVER = "octaver"
     HF_RECEIVER = "hf_receiver"
     EFFECT = "effect_on"
@@ -18,8 +20,9 @@ class RelaysManager(AbstractJsonActions):
     NORMAL_VOICE = "normal_voice"
     PITCHED_VOICE = "pitched_voice"
 
-    def __init__(self, config, receiver, json_manager):
+    def __init__(self, config, receiver, json_manager, global_receiver):
         super().__init__(config=config, json_manager=json_manager, json_file=config[JSON_RELAYS], action_type=RELAY)
+        self.global_receiver = global_receiver
         self.receiver = receiver
         self.config = config
         if not self.config[I2C_ENABLED] or not self.config[DIGITAL_CHANNELS_ENABLED]:
@@ -40,10 +43,19 @@ class RelaysManager(AbstractJsonActions):
         self.voice_out = pcf.get_pin(0)
         self.voice_out.value = True
 
+        self.manual_switch = False
+
         self.last_effect_time = 0
-        self.effect_timeout = 800
+        self.effect_timeout = 2000
+
+        #self.last_input_msg_time = 0
+        #self.input_msg_timeout = 300
 
     def update(self, msg):
+
+        #if not TimeUtils.is_time(self.last_input_msg_time, self.input_msg_timeout):
+        #    return
+        #self.last_input_msg_time = TimeUtils.current_milli_time()
 
         if not self.config[I2C_ENABLED] or not self.config[DIGITAL_CHANNELS_ENABLED]:
             return msg
@@ -51,18 +63,11 @@ class RelaysManager(AbstractJsonActions):
         relay = self.get_sequence(msg, True)
 
         if relay:
-
             if relay[NAME] == self.PITCHED_VOICE:
-                self.voice_out.value = False
-                self.effect.value = True
-                self.last_effect_time = TimeUtils.current_milli_time()
-                logging.info("switch effect on")
+                self.pitched_voice()
 
             if relay[NAME] == self.NORMAL_VOICE:
-                self.voice_out.value = False
-                self.effect.value = False
-                self.last_effect_time = TimeUtils.current_milli_time()
-                logging.info("switch effect on")
+                self.normal_voice()
 
             if relay[NAME] == self.OCTAVER:
                 self.power_effect.value = not self.power_effect.value
@@ -78,20 +83,26 @@ class RelaysManager(AbstractJsonActions):
                 self.last_effect_time = TimeUtils.current_milli_time()
                 logging.info("switch effect on")
 
-        """if json_seq:
-            if json_seq[NAME] == self.PITCHED_VOICE:
-                self.voice_out.value = False
-                self.effect.value = True
-                self.last_effect_time = TimeUtils.current_milli_time()
-                logging.info("switch effect on")
-
-            if json_seq[NAME] == self.NORMAL_VOICE:
-                self.voice_out.value = False
-                self.effect.value = False
-                self.last_effect_time = TimeUtils.current_milli_time()
-                logging.info("switch effect on")"""
+            if relay[NAME] == OFF:
+                    #self.manual_switch = False
+                    self.last_effect_time = 0
+                    logging.info("manual switch off")
+                    #msg.update({ANIMATION: SPEAK})
+                    #self.global_receiver.write_msg_plus_time({ANIMATION: False})
 
         return msg
+
+    def pitched_voice(self):
+        self.voice_out.value = False
+        self.effect.value = True
+        self.last_effect_time = TimeUtils.current_milli_time()
+        logging.info("switch effect on")
+
+    def normal_voice(self):
+        self.voice_out.value = False
+        self.effect.value = False
+        self.last_effect_time = TimeUtils.current_milli_time()
+        logging.info("switch effect on")
 
     def process(self):
 
@@ -101,4 +112,4 @@ class RelaysManager(AbstractJsonActions):
         if not self.voice_out.value and TimeUtils.is_time(self.last_effect_time, self.effect_timeout):
             #self.effect.value = False
             self.voice_out.value = True
-            logging.info("activate effect off")
+            logging.info("effect off")

@@ -1,27 +1,28 @@
 import os
 
-from robot_config import JSON_DIRECTORY, JSON_CONFIG
-from tests.conf_test import TestSetup
+from playsound import playsound
 
-from dadou_utils.utils_static import AUDIO, KEY
-
-TestSetup()
-
-from dadourobot.robot_config import RobotConfig
-from files.robot_json_manager import RobotJsonManager
-from dadousceno.sceno_config import config
+from dadou_utils.utils_static import AUDIO, KEY, JSON_DIRECTORY, JSON_CONFIG, BASE_PATH, AUDIOS_DIRECTORY
+from dadourobot.actions.audio_manager import AudioManager
+import simpleaudio as sa
+from dadourobot.files.robot_json_manager import RobotJsonManager
 
 
 import time
 import unittest
-from actions.audios import AudioManager
+
+from dadourobot.input.global_receiver import GlobalReceiver
+from dadourobot.robot_config import config
+from dadourobot.sequences.animation_manager import AnimationManager
 
 
 class AudioTests(unittest.TestCase):
+    config[BASE_PATH] = config[BASE_PATH].replace("/dadourobot", "")
+    config[AUDIOS_DIRECTORY] = config[AUDIOS_DIRECTORY].replace("/dadourobot", "")
 
-    robot_json_manager = RobotJsonManager(os.getcwd(), "/.."+JSON_DIRECTORY, JSON_CONFIG)
-    config = RobotConfig(robot_json_manager)
-    audio = AudioManager(robot_json_manager, config)
+    robot_json_manager = RobotJsonManager(config)
+    receiver = GlobalReceiver(config, AnimationManager(config, robot_json_manager))
+    audio = AudioManager(config, receiver, robot_json_manager)
 
     def test_key_seq(self):
         msg = {KEY: "A9"}
@@ -29,9 +30,25 @@ class AudioTests(unittest.TestCase):
         time.sleep(1000)
 
     #TODO fix path pb
-    def test_audio_cmd(self):
-        msg = {AUDIO: "speak/et-des-robots.mp3"}
+    def test_background_sound(self):
+        msg = {AUDIO: "song/gig.wav"}
         self.audio.update(msg)
+        print("audio lunched duration {}".format(self.audio.get_audio_length()))
+        time.sleep(5)
+        msg = {AUDIO: "aie.wav"}
+        self.audio.update(msg)
+        print("audio lunched duration {}".format(self.audio.get_audio_length()))
+        time.sleep(5)
+        self.audio.stop_sound()
+
+    def test_simpleaudio(self):
+        #sound_object = sa.WaveObject.from_wave_file("/home/dadou/Nextcloud/Didier/python/dadou_robot/audios/speak/aie.wav")
+        #play_obj = sound_object.play()
+        #play_obj.wait_done()
+        playsound('/home/dadou/Nextcloud/Didier/python/dadou_robot/audios/speak/aie.wav', block=False)
+
+    def test_load(self):
+        self.audio.index_audios()
 
     """
     @unittest.skip
