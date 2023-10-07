@@ -6,12 +6,13 @@ from adafruit_servokit import ServoKit
 from dadou_utils.misc import Misc
 from dadou_utils.utils.time_utils import TimeUtils
 from dadou_utils.utils_static import NORMAL, RANDOM, RANDOM_MOVE_MAX, RANDOM_MOVE_MIN, RANDOM_TIME_MAX, RANDOM_TIME_MIN, \
-    RANDOM_DURATION, MODE, ANIMATION
+    RANDOM_DURATION, MODE, ANIMATION, UP, DOWN
 
 INPUT_MIN = 0
 INPUT_MAX = 99
 
 SERVO_MIN = 0
+STEP = 5
 
 
 class Servo:
@@ -57,6 +58,14 @@ class Servo:
             logging.info("update {} servo with default pos {}".format(self.type, self.default_pos))
             self.set_angle(self.default_pos)
             self.mode = NORMAL
+
+        if msg and self.type in msg:
+            if msg[self.type] == UP:
+                if self.pwm_channel.angle < self.servo_max - STEP:
+                    self.pwm_channel.angle = self.pwm_channel.angle + STEP
+            if msg[self.type] == DOWN:
+                if self.pwm_channel.angle > STEP:
+                    self.pwm_channel.angle = self.pwm_channel.angle - STEP
 
         if msg and self.type in msg:
             if isinstance(msg[self.type], float) or isinstance(msg[self.type], int):

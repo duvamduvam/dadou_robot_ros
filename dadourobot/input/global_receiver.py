@@ -72,7 +72,7 @@ class GlobalReceiver:
             msg.update(self.animation_manager.event())
 
         if msg and len(msg) > 0:
-            logging.info('return msg {}'.format(msg))
+            logging.debug('return msg {}'.format(msg))
             return msg
 
         #radio_msg = self.lora_radio.receive_msg()
@@ -114,7 +114,7 @@ class GlobalReceiver:
             json_object = json.dumps(msg, indent=4)
             with open(INPUT_MESSAGE_FILE, "w") as j:
                 j.write(json_object)
-            logging.info("new msg written {}".format(msg))
+            logging.debug("new msg written {}".format(msg))
         else:
             with open(INPUT_MESSAGE_FILE, "w") as j:
                 j.write("")
