@@ -16,7 +16,7 @@ from dadou_utils.utils_static import ANIMATION, LIGHTS, SHUTDOWN_PIN, RESTART_PI
     LOGGING_CONFIG_FILE, WHEELS, FACE, SERVOS, PROFILER, MAIN_THREAD, AUDIO, TYPE, TYPES, NECK, LEFT_ARM, RIGHT_ARM, \
     SINGLE_THREAD, LOGGING_FILE_NAME, MULTI_THREAD, PROCESS_NAME, LEFT_EYE, RIGHT_EYE, HEAD_PWM_NB, \
     LEFT_EYE_NB, RIGHT_EYE_NB, LEFT_ARM_NB, RIGHT_ARM_NB, I2C_ENABLED, PWM_CHANNELS_ENABLED, ROBOT, JSON_LIGHTS, \
-    LIGHTS_START_LED, LIGHTS_END_LED, BRIGHTNESS
+    LIGHTS_START_LED, LIGHTS_END_LED, BRIGHTNESS, ROBOT_LIGHTS
 from dadourobot.actions.audio_manager import AudioManager
 from dadourobot.actions.face import Face
 from dadourobot.actions.lights import Lights
@@ -99,7 +99,7 @@ for component in input_components:
         #Face matrix and lights strip component can't be in separate process, otherwise strange behaviour appear
         components.append(Face(config, receiver, robot_json_manager, face_strip))
         components.append(Lights(config=config, start=config[LIGHTS_START_LED], end=config[LIGHTS_END_LED],
-                                 json_manager=robot_json_manager, global_strip=pixels, light_type='robot_lights', json_light=config[JSON_LIGHTS]))
+                                 json_manager=robot_json_manager, global_strip=pixels, light_type=ROBOT_LIGHTS, json_light=config[JSON_LIGHTS]))
     elif component == SERVOS:
         components.append(Servo(NECK, config[HEAD_PWM_NB], 50, 180, config[I2C_ENABLED], config[PWM_CHANNELS_ENABLED], receiver))
         components.append(Servo(LEFT_EYE, config[LEFT_EYE_NB], 55, 180, config[I2C_ENABLED], config[PWM_CHANNELS_ENABLED], receiver))
@@ -115,7 +115,7 @@ for component in input_components:
     elif component == WHEELS:
         components.append(Wheel(config, receiver))
     else:
-        logging.error("wrong argument")
+        logging.error("wrong argument {}".format(component))
 
 
 

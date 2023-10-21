@@ -7,10 +7,10 @@ import pwmio
 
 from dadou_utils.misc import Misc
 from dadou_utils.utils.time_utils import TimeUtils
-from dadou_utils.utils_static import ANGLO, WHEEL_RIGHT, WHEEL_LEFT, JOY, WHEELS, KEY, \
+from dadou_utils.utils_static import ANGLO, WHEEL_RIGHT, WHEEL_LEFT, WHEELS, KEY, \
     CMD_FORWARD, CMD_BACKWARD, CMD_LEFT, CMD_RIGHT, I2C_ENABLED, PWM_CHANNELS_ENABLED, \
     WHEEL_LEFT_PWM, WHEEL_RIGHT_PWM, WHEEL_LEFT_DIR, WHEEL_RIGHT_DIR, STRAIGHT, ANIMATION, STOP, FORWARD, BACKWARD, \
-    LEFT, RIGHT, INCLINO
+    LEFT, RIGHT, INCLINO, SPEED, JOYSTICK, X, Y
 from dadourobot.move.anglo_meter_translator import AngloMeterTranslator
 from dadourobot.robot_config import MAX_PWM_L, MAX_PWM_R
 
@@ -115,12 +115,17 @@ class Wheel:
             elif msg[KEY] == self.config[CMD_RIGHT]:
                 self.update_cmd(50, -50)
 
+        if SPEED in msg:
+            max_speed = int((self.MAX_DIR / 100) * int(msg[SPEED]))
+            logging.info("update max speed to {}".format(max_speed))
+            self.max_pwm_r = max_speed
+            self.max_pwm_l = max_speed
         if INCLINO in msg:
-            wheels = self.anglo_meter_translator.translate(msg[INCLINO])
-            self.update_cmd(wheels[0], wheels[1])
-        if JOY in msg:
-            wheels = self.anglo_meter_translator.translate(msg[JOY])
-            self.update_cmd(wheels[0], wheels[1])
+            left, right = self.anglo_meter_translator.translate(turn=msg[ANGLO][X], forward=msg[ANGLO][Y])
+            self.update_cmd(left, right)
+        if JOYSTICK in msg:
+            left, right = self.anglo_meter_translator.translate(turn=msg[JOYSTICK][X], forward=msg[JOYSTICK][Y])
+            self.update_cmd(left, right)
         if WHEEL_LEFT in msg and WHEEL_RIGHT in msg:
             self.update_cmd(msg[WHEEL_LEFT], msg[WHEEL_RIGHT])
         if WHEELS in msg:
@@ -218,7 +223,6 @@ class Wheel:
             if not self.half_turn and abs(self.starting_angle_x - self.sensor.euler[0]) > 180:
                 self.half_turn = True
         return False
-
 
     def set_front_pos(self):
         if self.sensor:

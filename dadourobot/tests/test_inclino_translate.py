@@ -7,7 +7,7 @@ class MyTestCase(unittest.TestCase):
 
     def test_anglo_translate(self):
         anglo_meter_translator = AngloMeterTranslator()
-        left, right = anglo_meter_translator.joystickToDiff(y=1, x=20)
+        left, right = anglo_meter_translator.translate(forward=50, turn=0)
         print("left {} right {}".format(left, right))
 
 

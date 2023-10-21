@@ -70,6 +70,9 @@ class AnimationManager(AbstractJsonActions):
             return msg.update(self.stop())
         elif ANIMATION in msg and not msg[ANIMATION]:
             self.stop()
+        elif RANDOM in msg:
+            logging.info("update random {}".format(msg[RANDOM]))
+            self.config[RANDOM] = msg[RANDOM]
         elif ANIMATION in msg:
             self.get_animation(msg)
         return msg

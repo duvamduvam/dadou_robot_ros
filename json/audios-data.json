@@ -9,16 +9,20 @@
         "duration": 9.69
     },
     "didier20/Je-sens-plus-rien.mp3": {
-        "duration": 3.18
+        "duration": 3.18,
+        "type": "r2d2"
     },
     "didier20/Qu-est-ce-que-tu-ma-fait.mp3": {
-        "duration": 5.74
+        "duration": 5.74,
+        "type": "r2d2"
     },
     "didier20/Quoi-ce-tas-de-feraille.mp3": {
-        "duration": 4.47
+        "duration": 4.47,
+        "type": "r2d2"
     },
     "didier20/acces_4g.mp3": {
-        "duration": 10.54
+        "duration": 10.54,
+        "type": "r2d2"
     },
     "didier20/adopteunmec.mp3": {
         "duration": 16.21

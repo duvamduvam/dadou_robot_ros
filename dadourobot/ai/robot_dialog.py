@@ -100,6 +100,19 @@ class RobotDialog:
             self.global_receiver.write_values({FACE: "speak"})
             self.global_receiver.write_values({ANIMATION: STOP})
 
+    def translate(self, input):
+        response = openai.Completion.create(
+            engine="text-davinci-002",
+            prompt=f"Translate the following text into french: {input}\n",
+            max_tokens=60,
+            n=1,
+            stop=None,
+            temperature=0.7, )
+        print(response.choices[0].text.strip())
+        f = open("/home/dadou/tmp/translate.txt", "a")
+        f.write(response.choices[0].text.strip())
+        f.close()
+        return response.choices[0].text.strip()
 
 # Python program to translate
 # speech to text and text to speech

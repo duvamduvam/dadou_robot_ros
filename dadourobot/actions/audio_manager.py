@@ -12,7 +12,7 @@ from dadou_utils.audios.sound_object import SoundObject
 from dadou_utils.misc import Misc
 from dadou_utils.utils.time_utils import TimeUtils
 from dadou_utils.utils_static import AUDIO, AUDIOS_DIRECTORY, KEY, STOP, NAME, JSON_AUDIOS, EXPRESSION, \
-    FACE, DURATION, AUDIO_DURATION, AUDIO_DEVICE_ID, DEFAULT_VOLUME_LEVEL
+    FACE, DURATION, AUDIO_DURATION, AUDIO_DEVICE_ID, DEFAULT_VOLUME_LEVEL, RAUDIO
 from dadourobot.actions.abstract_json_actions import AbstractJsonActions
 
 #TODO check : https://maelfabien.github.io/machinelearning/Speech8/#iv2a-noise-reduction
@@ -118,6 +118,9 @@ class AudioManager(AbstractJsonActions):
         if self.stopping:
             self.stop_sound_fondu()
 
+    #def get_random_type(self, type):
+
+
     def update(self, msg):
 
         #TODO improve this part
@@ -151,6 +154,14 @@ class AudioManager(AbstractJsonActions):
             if msg[AUDIO] == STOP:
                 self.stop_sound_fondu()
                 return
+            if self.play_sound(msg[AUDIO]):
+                self.current_audio_name = msg[AUDIO]
+                if FACE in msg:
+                    duration = self.current_audio.duration * 1000
+                    msg[DURATION] = duration
+                    self.global_receiver.write_values({AUDIO_DURATION: duration})
+
+        if msg and RAUDIO in msg:
             if self.play_sound(msg[AUDIO]):
                 self.current_audio_name = msg[AUDIO]
                 if FACE in msg:

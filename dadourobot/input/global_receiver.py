@@ -4,6 +4,7 @@ import json
 import logging
 import multiprocessing
 import os
+import socket
 from json import JSONDecodeError
 
 from dadou_utils.com.input_messages_list import InputMessagesList
@@ -12,8 +13,7 @@ from dadou_utils.com.input_messages_list import InputMessagesList
 from dadou_utils.com.ws_server import WsServer
 from dadou_utils.utils.time_utils import TimeUtils
 from dadou_utils.utils_static import INPUT_MESSAGE_FILE, RANDOM, MAIN_THREAD, TYPES, INPUT_LOCK, SINGLE_THREAD, KEY, \
-    DURATION
-from dadourobot.robot_config import config
+    DURATION, BANNED_HOST, IP
 
 
 class GlobalReceiver:
@@ -46,11 +46,22 @@ class GlobalReceiver:
         if not config[SINGLE_THREAD]:
             self.check_file_change()
 
+        # self.banned_hosts = self.get_banned_ip()
+
         #if config[MULTI_THREAD]:
         #    self.file_watcher = FileWatcher()
         #    observer = Observer()
         #    observer.schedule(self.file_watcher, path=INPUT_MESSAGE_DIRECTORY, recursive=True)
         #    observer.start()
+
+    def get_banned_ip(self):
+        banned_hosts = {}
+        if BANNED_HOST not in self.config:
+            return banned_hosts
+        for banned_host in self.config[BANNED_HOST]:
+            ip = socket.gethostbyname(banned_host)
+            banned_hosts[ip] = banned_host
+        return banned_hosts
 
     def get_msg(self):
         #TODO mettre a jour la logique lora pour qu'elle corresponde a la logique dict ws
@@ -60,6 +71,10 @@ class GlobalReceiver:
         #    return self.filter_msg(mega_msg)
 
         msg = self.messages.pop_msg()
+
+        #if IP in msg and msg[IP] in msg[IP] in self.banned_hosts:
+        #    logging.warning("msg {} from blocked host {}".format(msg, self.banned_hosts(msg[IP])))
+
         if msg:
             if self.animation_manager:
                 self.animation_manager.update(msg)
@@ -81,7 +96,7 @@ class GlobalReceiver:
         #    return radio_msg
 
     def check_file_change(self):
-        if not config[SINGLE_THREAD]:
+        if not self.config[SINGLE_THREAD]:
             if os.path.isfile(INPUT_MESSAGE_FILE):
                 new_modif = os.path.getmtime(INPUT_MESSAGE_FILE)
                 if new_modif != self.last_msg_file_modif:
@@ -93,7 +108,7 @@ class GlobalReceiver:
         if self.main_thread:
             msg = self.get_msg()
             if msg:
-                if not config[SINGLE_THREAD]:
+                if not self.config[SINGLE_THREAD]:
                     self.write_msg_plus_time(msg)
                 return msg
         else:
@@ -105,7 +120,7 @@ class GlobalReceiver:
             os.remove(INPUT_MESSAGE_FILE)
 
     def write_msg(self, msg):
-        if not config[SINGLE_THREAD]:
+        if not self.config[SINGLE_THREAD]:
             asyncio.run(self.write_msg_async(msg))
 
     async def write_msg_async(self, msg):
