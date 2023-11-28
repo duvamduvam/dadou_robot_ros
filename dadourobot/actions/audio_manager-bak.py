@@ -1,19 +1,18 @@
 # pip3 install sound-player
 # https://github.com/Krozark/sound-player/blob/master/example.py
-import glob
-import json
 import logging
 import os
 import threading
 import time
-from _decimal import Decimal, ROUND_DOWN
 from os.path import exists
+
+from sound_player import Sound, SoundPlayer
 
 from dadou_utils.audios.sound_object import SoundObject
 from dadou_utils.misc import Misc
 from dadou_utils.utils.time_utils import TimeUtils
 from dadou_utils.utils_static import AUDIO, AUDIOS_DIRECTORY, KEY, STOP, NAME, JSON_AUDIOS, EXPRESSION, \
-    FACE, DURATION, AUDIO_DURATION, AUDIO_DEVICE_ID, DEFAULT_VOLUME_LEVEL, TIME, JSON_AUDIOS_DATAS, BACKGROUND
+    FACE, DURATION, AUDIO_DURATION, AUDIO_DEVICE_ID, DEFAULT_VOLUME_LEVEL, RAUDIO
 from dadourobot.actions.abstract_json_actions import AbstractJsonActions
 
 #TODO check : https://maelfabien.github.io/machinelearning/Speech8/#iv2a-noise-reduction
@@ -25,6 +24,7 @@ FONDU_STEP = 2
 
 class AudioManager(AbstractJsonActions):
 
+    player = SoundPlayer()
     silence = "audios/silence.wav"
     playlist = []
     current_audio = None
@@ -40,87 +40,53 @@ class AudioManager(AbstractJsonActions):
         self.config = config
         self.global_receiver = global_receiver
         self.json_manager = json_manager
-        self.recorded_audio_data = self.json_manager.open_json(self.config[JSON_AUDIOS_DATAS])
 
         self.volume_default = config[DEFAULT_VOLUME_LEVEL]
         self.volume = self.volume_default
         self.change_volume(self.volume_default)
 
-        self.index_audios()
-
-    def index_audios(self):
-
-        audio_datas = []
-        for subdir, dirs, files in os.walk(self.config[AUDIOS_DIRECTORY]):
-            files.sort()
-            for file in files:
-                if ".wav" in file or ".mp3" in file:
-                    path = os.path.join(subdir, file)
-                    path = path.replace(self.config[AUDIOS_DIRECTORY], "")
-                    audio_datas.append(path)
-
-        #delete values not in audio directories
-        to_delete = []
-        for record_key, record_value in self.recorded_audio_data.items():
-            if record_key not in audio_datas:
-                logging.info("remove audio key {}".format(record_key))
-                to_delete.append(record_key)
-
-        for delete in to_delete:
-            self.recorded_audio_data.pop(delete)
-
-        #add new audio to file
-        for audio_path in audio_datas:
-            if not audio_path in self.recorded_audio_data:
-                audio = SoundObject(os.path.join(self.config[AUDIOS_DIRECTORY], audio_path))
-                duration = Decimal(audio.duration).quantize(Decimal('.01'), rounding=ROUND_DOWN)
-                logging.info("new audio {} with duration {}".format(audio_path, duration))
-                self.recorded_audio_data[audio_path] = {DURATION: float(duration)}
-
-        self.json_manager.write_json(self.recorded_audio_data, self.config[JSON_AUDIOS_DATAS])
-
-    def get_audio_length(self):
-        if self.current_audio_name and self.current_audio_name in self.recorded_audio_data:
-            return self.recorded_audio_data[self.current_audio_name][DURATION]
-
-    def is_background_sound(self):
-        if (self.current_audio_name and self.current_audio_name in self.recorded_audio_data
-                and BACKGROUND in self.recorded_audio_data[self.current_audio_name]):
-            return self.recorded_audio_data[self.current_audio_name][BACKGROUND]
+    def play_sounds_bak(self, audios):
+        self.player.stop()
+        for audio in audios:
+            logging.info("enqueue: " + audio.get_path())
+            self.player.enqueue(Sound(audio.get_path()), 1)
+            for s in range(int(audio.get_time())):
+                self.player.enqueue(Sound(self.silence), 1)
+        self.player.play()
 
     def play_sound(self, audio):
         if exists(self.config[AUDIOS_DIRECTORY]+audio):
             if self.current_audio_name and audio in self.current_audio_name and not TimeUtils.is_time(self.start_time, self.new_play_timeout):
                 return False
-            if self.current_audio and not self.is_background_sound():
+            if self.current_audio:
                 self.current_audio.stop()
 
             if self.volume != self.volume_default:
                 self.change_volume(self.volume_default)
 
-            self.current_audio_name = audio
-            self.current_audio = SoundObject(self.config[AUDIOS_DIRECTORY]+audio, duration=self.get_audio_length())
-            self.current_audio.play(self.is_background_sound())
-            self.start_time = TimeUtils.current_milli_time()
+            self.current_audio = SoundObject(self.config[AUDIOS_DIRECTORY]+audio)
 
+            self.current_audio.play()
+            self.start_time = TimeUtils.current_milli_time()
+            self.current_audio_name = audio
             return True
         else:
             logging.error("audio {} don't exist".format(self.config[AUDIOS_DIRECTORY]+audio))
             return False
 
-    #def play_sounds(self, audios):
-    #    for audio in audios:
-    #        logging.info("enqueue: " + audio.get_path())
-    #        if not self.current_audio_name in audio.get_path:
-    #            sound = SoundObject(self.config[AUDIOS_DIRECTORY]+audio.get_path())
-    #            if self.volume != self.volume_default:
-    #                self.change_volume(self.volume_default)
-    #            self.playlist.append(sound)
-    #        #self.player.enqueue(Sound(audio.get_path()), 1)
-    #        #for s in range(int(audio.get_time())):
-    #        #    self.player.enqueue(Sound(self.silence), 1)
-    #            sound.play()
-    #    #self.player.play()
+    def play_sounds(self, audios):
+        for audio in audios:
+            logging.info("enqueue: " + audio.get_path())
+            if not self.current_audio_name in audio.get_path:
+                sound = SoundObject(self.config[AUDIOS_DIRECTORY]+audio.get_path())
+                if self.volume != self.volume_default:
+                    self.change_volume(self.volume_default)
+                self.playlist.append(sound)
+            #self.player.enqueue(Sound(audio.get_path()), 1)
+            #for s in range(int(audio.get_time())):
+            #    self.player.enqueue(Sound(self.silence), 1)
+                sound.play()
+        #self.player.play()
 
     def stop_sound(self):
         if self.current_audio:
@@ -152,7 +118,11 @@ class AudioManager(AbstractJsonActions):
         if self.stopping:
             self.stop_sound_fondu()
 
+    #def get_random_type(self, type):
+
+
     def update(self, msg):
+
         #TODO improve this part
         if msg and KEY in msg and msg[KEY] in self.sequences_key:
             logging.debug("number of thread : {}".format(threading.active_count()))
@@ -184,6 +154,14 @@ class AudioManager(AbstractJsonActions):
             if msg[AUDIO] == STOP:
                 self.stop_sound_fondu()
                 return
+            if self.play_sound(msg[AUDIO]):
+                self.current_audio_name = msg[AUDIO]
+                if FACE in msg:
+                    duration = self.current_audio.duration * 1000
+                    msg[DURATION] = duration
+                    self.global_receiver.write_values({AUDIO_DURATION: duration})
+
+        if msg and RAUDIO in msg:
             if self.play_sound(msg[AUDIO]):
                 self.current_audio_name = msg[AUDIO]
                 if FACE in msg:

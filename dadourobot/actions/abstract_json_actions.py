@@ -5,7 +5,7 @@ import random
 from dadou_utils.files.files_utils import FilesUtils
 from dadou_utils.utils.time_utils import TimeUtils
 from dadou_utils.utils_static import KEY, KEYS, NAME, LOOP, RANDOM_ANIMATION_LOW, RANDOM_ANIMATION_HIGH, LOOP_DURATION, \
-    DURATION, BASE_PATH
+    DURATION, BASE_PATH, TYPE
 
 
 class AbstractJsonActions:
@@ -61,6 +61,14 @@ class AbstractJsonActions:
             return sequence
         else:
            logging.debug("no sequence with key {}".format(self.json_file))
+
+    def get_random_sequence(self, type):
+        random_sequences = []
+        for sequence in self.sequences_name:
+            if TYPE in sequence and type in sequence[TYPE]:
+                random_sequences.append(sequence)
+        if len(random_sequences) > 0:
+            return random_sequences[random.randint(0, len(random_sequences)-1)]
 
     def get_sequence_by_key(self, msg, input_key, sequence_values):
 

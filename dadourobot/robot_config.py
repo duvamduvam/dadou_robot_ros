@@ -23,7 +23,7 @@ config[PWM_CHANNELS_ENABLED] = True
 config[DIGITAL_CHANNELS_ENABLED] = True
 config[SINGLE_THREAD] = False
 
-config[BRIGHTNESS] = 0.2
+config[BRIGHTNESS] = 0.05
 
 MAX_PWM_L = 25000
 MAX_PWM_R = 25000
@@ -67,12 +67,12 @@ if Misc.is_raspberrypi():
 
 ########## I2C SERVO NUMBER #########
 
-config[HEAD_PWM_NB] = 4
+config[HEAD_PWM_NB] = 5
 config[WHEEL_LEFT_PWM] = 1
 config[WHEEL_RIGHT_PWM] = 2
 config[WHEEL_LEFT_DIR] = 0
 config[WHEEL_RIGHT_DIR] = 3
-config[LEFT_ARM_NB] = 5
+config[LEFT_ARM_NB] = 4
 config[RIGHT_ARM_NB] = 15
 config[LEFT_EYE_NB] = 8
 config[RIGHT_EYE_NB] = 9

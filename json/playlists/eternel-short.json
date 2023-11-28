@@ -1,0 +1,121 @@
+{
+    "appel eternel": {
+        "animation": "appel-eternel-life"
+    },
+    "demarrage eternel": {
+    },
+    "c'est quoi ce merdier": {
+        "audio": "eternel-short/merdier.mp3",
+        "animation": "move-speak",
+        "duration": 3500
+    },
+    "Vas y commence ": {
+        "audio": "eternel-short/vasy-commence.mp3",
+        "animation": "move-speak",
+        "duration": 6500
+    },
+    "mais lance la présentation": {
+        "audio": "eternel-short/lance-presentation.mp3",
+        "animation": "move-speak",
+        "duration": 3000
+    },
+    "le texte qu'on a repété": {
+    },
+    "continue couillon": {
+    },
+    "La cagnotte": {
+        "audio": "eternel-short/lacagnoette.mp3",
+        "animation": "move-speak"
+    },
+    "séquence émotion": {
+        "audio": "eternel-short/sequence-emotion.mp3",
+        "animation": "appel-eternel-life"
+    },
+    "chiale": {
+        "audio": "eternel-short/chiale.mp3",
+        "animation": "move-speak",
+        "duration": 3500
+    },
+    "relance patate": {
+        "audio": "eternel-short/relance-peche.mp3",
+        "animation": "move-speak",
+        "duration": 3500
+    },
+    "présentation technique": {
+        "audio": "eternel-short/presentation-technique.mp3",
+        "animation": "move-speak",
+        "duration": 6500
+    },
+    "cloud abrutie": {
+    },
+    "le cloud": {
+        "audio": "eternel-short/cloud.mp3",
+        "animation": "move-speak",
+        "duration": 6500
+    },
+    "évite les blagues": {
+    },
+    "qu'est ce je viens de dire": {
+        "audio": "eternel-short/evite-les-blagues.mp3"
+    },
+    "65 milliards": {
+        "audio": "eternel-short/65-milliars.mp3",
+        "animation": "move-speak",
+        "duration": 3500
+    },
+    "fonctionnement neuronnes": {
+        "audio": "eternel-short/comment-fonctionn-les-neuronnes.mp3",
+        "animation": "move-speak",
+        "duration": 3500
+    },
+    "circulation l'information": {
+        "audio": "eternel-short/comment-circule-information.mp3",
+        "animation": "move-speak",
+        "duration": 6500
+    },
+    "Arrete d'engueuler le public": {
+        "audio": "eternel-short/engeuler-le-public.mp3",
+        "animation": "move-speak",
+        "duration": 3000
+    },
+    "arrête ton char": {
+        "audio": "eternel-short/arrete-ton-char.mp3",
+        "animation": "move-speak",
+        "duration": 6500
+    },
+    "qui commande la": {
+        "audio": "eternel-short/qui-commande.mp3",
+        "animation": "move-speak",
+        "duration": 4500
+    },
+    "trucs pas trop net": {
+        "audio": "eternel-short/pas-nette-internet.mp3",
+        "animation": "louche"
+    },
+    "je controle plus rien": {
+    },
+    "m'ouvre pas": {
+        "audio": "eternel-short/ouvre-pas.mp33",
+        "animation": "move-speak",
+        "duration": 3500
+    },
+    "nazi": {
+        "audio": "eternel-short/nazi.mp3",
+        "animation": "move-speak",
+        "duration": 3500
+    },
+    "espèce de tête de gland": {
+        "audio": "eternel-short/tete-de-gland.mp3",
+        "animation": "move-speak",
+        "duration": 6500
+    },
+    "thune dans la rue": {
+    },
+    "bête de foire": {
+    },
+    "la chaire a robot": {
+        "audio": "eternel-short/chaire-a-robot.mp3",
+        "animation": "move-speak",
+        "duration": 4500
+    }
+}
