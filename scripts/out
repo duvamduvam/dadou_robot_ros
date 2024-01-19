@@ -1,0 +1,347 @@
+/home/dadou/Nextcloud/Didier/python/dadou_utils/scripts/deploy/deploy-utils.sh i
+
+
+[4;31mSTART DEPLOY UTILS WITH PARAMS i[0;33m
+
+
+[0;33mnmap -sP --max-retries=1 --host-timeout=250ms ros2.local[0;33m
+
+[0;33mecho Starting Nmap 7.93 ( https://nmap.org ) at 2024-01-18 11:41 CET
+Nmap scan report for ros2.local (192.168.1.106)
+Host is up (0.0031s latency).
+rDNS record for 192.168.1.106: ros2.lan
+Nmap done: 1 IP address (1 host up) scanned in 0.31 seconds | grep HostRPI_IP=getent hosts ros2.local | awk '{ print i }'
+
+RPI_IP=192.168.1.106
+
+utils param i
+
+
+ forget authorised key
+
+ ssh -G ros | awk i == "hostname" { print  }
+# Host ros2.local found: line 6
+# Host ros2.local found: line 7
+# Host ros2.local found: line 8
+/home/dadou/.ssh/known_hosts updated.
+Original contents retained as /home/dadou/.ssh/known_hosts.old
+[0;36mOnly read param[0;36m
+/home/dadou/Nextcloud/Didier/python/dadou_utils/scripts/deploy/params.sh
+
+[4;31mDEPLOY dadourobot IN /home/robot/deploy[0;32m
+
+rsync -auvzrL --delete-after --exclude-from='/home/dadou/Nextcloud/Didier/python/dadou_utils/scripts/deploy/exclude_me.txt' /home/dadou/Nextcloud/Didier/python/dadou_robot/* ros:/home/robot/deploy
+building file list ... done
+conf/rpi/
+scripts/
+scripts/out
+deleting conf/rpi/project.service
+deleting conf/rpi/global_bash
+deleting conf/rpi/bashrc
+deleting conf/rpi/asoundrc
+deleting conf/rpi/alsa-blacklist.conf
+deleting scripts/set-vimrc.sh
+deleting scripts/set-usb-audio.sh
+deleting scripts/set-bashrc.sh
+deleting scripts/run.sh
+deleting scripts/remote-install.sh
+deleting scripts/params.sh
+deleting scripts/needrestart.sh
+deleting scripts/local-install.sh
+deleting scripts/install-service.sh
+deleting scripts/install-lib.sh
+deleting scripts/install-autostart.sh
+deleting scripts/exclude_me.txt
+deleting scripts/deploy.sh
+deleting scripts/deploy-utils.sh
+deleting scripts/deploy-all.sh
+deleting scripts/colors.sh
+deleting scripts/check-power.sh
+deleting scripts/check-internet.sh
+deleting scripts/activate-i2c.sh
+
+sent 17.418 bytes  received 961 bytes  5.251,14 bytes/sec
+total size is 197.802.183  speedup is 10.762,40
+rsync -auvzrL --delete-after --exclude-from='/home/dadou/Nextcloud/Didier/python/dadou_utils/scripts/deploy/exclude_me.txt' /home/dadou/Nextcloud/Didier/python/dadou_utils ros:/home/robot/deploy
+building file list ... done
+
+sent 2.554 bytes  received 11 bytes  1.710,00 bytes/sec
+total size is 19.729.942  speedup is 7.691,99
+rsync -u /home/dadou/Nextcloud/Didier/python/dadou_utils/scripts/deploy/* ros:/home/robot/deploy/scripts
+rsync -u /home/dadou/Nextcloud/Didier/python/dadou_utils/conf/rpi/* ros:/home/robot/deploy/conf/rpi
+
+[4;31mFIRST dadourobot INSTALL[0;33m
+
+ssh -t ros sudo cp -rf /home/robot/.ssh/ /root/
+
+ssh -o SendEnv=/home/robot/deploy/scripts ros cd /home/robot/deploy/scripts;bash -s < /home/robot/deploy/scripts/project-deploy.sh 'read_param';bash -s < /home/robot/deploy/scripts/local-install.sh 
+
+Only read param
+Only read param
+
+[4;31m =================== INSTALL SYSTEM =================== [0;36m
+
+
+[4;31mUPDATE SYSTEM[0;36m
+
+
+ sudo needrestart a 
+
+
+ sudo apt-get update 
+
+0% [Working]            Hit:1 http://ports.ubuntu.com/ubuntu-ports mantic InRelease
+0% [Working]            Hit:2 http://ports.ubuntu.com/ubuntu-ports mantic-updates InRelease
+0% [Waiting for headers]                        Hit:3 http://ports.ubuntu.com/ubuntu-ports mantic-backports InRelease
+0% [Waiting for headers]                        Get:4 http://ports.ubuntu.com/ubuntu-ports mantic-security InRelease [109 kB]
+0% [4 InRelease 0 B/109 kB 0%]                              0% [Working]0% [Working]0% [Working]0% [Working]36% [Working]             Get:5 http://ports.ubuntu.com/ubuntu-ports mantic-security/main arm64 Packages [198 kB]
+36% [5 Packages 1199 B/198 kB 1%]                                 66% [Working]66% [5 Packages store 0 B]                          67% [Waiting for headers]                         Get:6 http://ports.ubuntu.com/ubuntu-ports mantic-security/main Translation-en [55.0 kB]
+67% [6 Translation-en 0 B/55.0 kB 0%]                                     75% [Waiting for headers]                         Get:7 http://ports.ubuntu.com/ubuntu-ports mantic-security/universe arm64 Packages [107 kB]
+77% [7 Packages 11.1 kB/107 kB 10%]77% [6 Translation-en store 0 B] [7 Packages 11.1 kB/107 kB 10%]                                                                92% [6 Translation-en store 0 B] [Waiting for headers]                                                      Get:8 http://ports.ubuntu.com/ubuntu-ports mantic-security/universe Translation-en [42.6 kB]
+93% [6 Translation-en store 0 B] [8 Translation-en 6833 B/42.6 kB 16%]                                                                      97% [8 Translation-en 33.6 kB/42.6 kB 79%]97% [7 Packages store 0 B] [8 Translation-en 33.6 kB/42.6 kB 79%]                                                                 98% [7 Packages store 0 B] [Waiting for headers]                                                Get:9 http://ports.ubuntu.com/ubuntu-ports mantic-security/multiverse arm64 Packages [4156 B]
+99% [7 Packages store 0 B] [9 Packages 4156 B/4156 B 100%]                                                          99% [7 Packages store 0 B]                          Get:10 http://ports.ubuntu.com/ubuntu-ports mantic-security/multiverse Translation-en [1700 B]
+99% [7 Packages store 0 B] [10 Translation-en 1700 B/1700 B 100%]                                                                 99% [7 Packages store 0 B]                          99% [Working]99% [8 Translation-en store 0 B]                                100% [Working]100% [9 Packages store 0 B]                           100% [Working]100% [10 Translation-en store 0 B]                                  100% [Working]              Fetched 517 kB in 3s (169 kB/s)
+Reading package lists... 0%Reading package lists... 0%Reading package lists... 0%Reading package lists... 5%Reading package lists... 5%Reading package lists... 8%Reading package lists... 8%Reading package lists... 8%Reading package lists... 8%Reading package lists... 9%Reading package lists... 9%Reading package lists... 21%Reading package lists... 42%Reading package lists... 63%Reading package lists... 65%Reading package lists... 65%Reading package lists... 87%Reading package lists... 91%Reading package lists... 91%Reading package lists... 92%Reading package lists... 92%Reading package lists... 92%Reading package lists... 92%Reading package lists... 93%Reading package lists... 93%Reading package lists... 94%Reading package lists... 94%Reading package lists... 95%Reading package lists... 95%Reading package lists... 95%Reading package lists... 95%Reading package lists... 95%Reading package lists... 95%Reading package lists... 96%Reading package lists... 96%Reading package lists... 96%Reading package lists... 96%Reading package lists... 96%Reading package lists... 96%Reading package lists... 96%Reading package lists... 96%Reading package lists... 96%Reading package lists... 96%Reading package lists... 96%Reading package lists... 96%Reading package lists... 97%Reading package lists... 97%Reading package lists... 98%Reading package lists... 98%Reading package lists... 98%Reading package lists... 98%Reading package lists... 98%Reading package lists... 98%Reading package lists... 99%Reading package lists... 99%Reading package lists... 99%Reading package lists... 99%Reading package lists... 99%Reading package lists... 99%Reading package lists... Done
+
+ sudo apt-get upgrade 
+
+Reading package lists... 0%Reading package lists... 100%Reading package lists... Done
+Building dependency tree... 0%Building dependency tree... 0%Building dependency tree... 50%Building dependency tree... 50%Building dependency tree... Done
+Reading state information... 0% Reading state information... 0%Reading state information... Done
+Calculating upgrade... 0%Calculating upgrade... 50%Calculating upgrade... Done
+The following packages have been kept back:
+  linux-image-raspi ubuntu-advantage-tools
+0 upgraded, 0 newly installed, 0 to remove and 2 not upgraded.
+
+ mkdir /home/robot/deploy/logs 
+
+mkdir: cannot create directory ‘/home/robot/deploy/logs’: File exists
+
+[4;31mINSTALL SYSTEM LIBRAIRIES[0;34m
+
+
+ sudo apt-get install -y ffmpeg i2c-tools python3 python3-dev python3-pip libatlas-base-dev libopenjp2-7 libasound2-dev vim python3-opencv portaudio19-dev python3-pyaudio mpg123 libcairo2-dev libgirepository1.0-dev
+Reading package lists... 0%Reading package lists... 100%Reading package lists... Done
+Building dependency tree... 0%Building dependency tree... 0%Building dependency tree... 50%Building dependency tree... 50%Building dependency tree... Done
+Reading state information... 0% Reading state information... 0%Reading state information... Done
+ffmpeg is already the newest version (7:6.0-6ubuntu1).
+i2c-tools is already the newest version (4.3-4).
+python3 is already the newest version (3.11.4-5).
+python3-dev is already the newest version (3.11.4-5).
+python3-pip is already the newest version (23.2+dfsg-1ubuntu0.1).
+libatlas-base-dev is already the newest version (3.10.3-13ubuntu1).
+libopenjp2-7 is already the newest version (2.5.0-2).
+libasound2-dev is already the newest version (1.2.9-2).
+vim is already the newest version (2:9.0.1672-1ubuntu2.2).
+python3-opencv is already the newest version (4.6.0+dfsg-13build1).
+portaudio19-dev is already the newest version (19.6.0-1.2).
+python3-pyaudio is already the newest version (0.2.13-1build1).
+mpg123 is already the newest version (1.31.3-2).
+libcairo2-dev is already the newest version (1.18.0-1).
+libgirepository1.0-dev is already the newest version (1.78.1-1).
+0 upgraded, 0 newly installed, 0 to remove and 2 not upgraded.
+
+ sudo apt-get install -y ffmpeg i2c-tools python3 python3-dev python3-pip libatlas-base-dev libopenjp2-7 libasound2-dev vim python3-opencv portaudio19-dev python3-pyaudio mpg123 libcairo2-dev libgirepository1.0-dev
+Reading package lists... 0%Reading package lists... 100%Reading package lists... Done
+Building dependency tree... 0%Building dependency tree... 0%Building dependency tree... 50%Building dependency tree... 50%Building dependency tree... Done
+Reading state information... 0% Reading state information... 0%Reading state information... Done
+ffmpeg is already the newest version (7:6.0-6ubuntu1).
+i2c-tools is already the newest version (4.3-4).
+python3 is already the newest version (3.11.4-5).
+python3-dev is already the newest version (3.11.4-5).
+python3-pip is already the newest version (23.2+dfsg-1ubuntu0.1).
+libatlas-base-dev is already the newest version (3.10.3-13ubuntu1).
+libopenjp2-7 is already the newest version (2.5.0-2).
+libasound2-dev is already the newest version (1.2.9-2).
+vim is already the newest version (2:9.0.1672-1ubuntu2.2).
+python3-opencv is already the newest version (4.6.0+dfsg-13build1).
+portaudio19-dev is already the newest version (19.6.0-1.2).
+python3-pyaudio is already the newest version (0.2.13-1build1).
+mpg123 is already the newest version (1.31.3-2).
+libcairo2-dev is already the newest version (1.18.0-1).
+libgirepository1.0-dev is already the newest version (1.78.1-1).
+0 upgraded, 0 newly installed, 0 to remove and 2 not upgraded.
+
+[4;31mSETUP PYTHON LIBRAIRIES PATHS[0;33m
+
+
+[4;31mINSTALL PYTHON LIBRAIRIES[0;35m
+
+--2024-01-18 11:41:27--  https://bootstrap.pypa.io/get-pip.py
+Resolving bootstrap.pypa.io (bootstrap.pypa.io)... 2a04:4e42:6a::175, 199.232.168.175
+Connecting to bootstrap.pypa.io (bootstrap.pypa.io)|2a04:4e42:6a::175|:443... failed: Permission denied.
+Connecting to bootstrap.pypa.io (bootstrap.pypa.io)|199.232.168.175|:443... connected.
+HTTP request sent, awaiting response... 200 OK
+Length: 2634817 (2.5M) [text/x-python]
+Saving to: ‘get-pip.py’
+
+get-pip.py                                        0%[                                                                                                      ]       0  --.-KB/s               get-pip.py                                        8%[=======>                                                                                              ] 216.00K  1.04MB/s               get-pip.py                                       21%[====================>                                                                                 ] 552.00K  1.34MB/s               get-pip.py                                       51%[===================================================>                                                  ]   1.29M  2.11MB/s               get-pip.py                                       55%[=======================================================>                                              ]   1.40M  1.47MB/s               get-pip.py                                      100%[=====================================================================================================>]   2.51M  2.56MB/s    in 1.0s    
+
+2024-01-18 11:41:28 (2.56 MB/s) - ‘get-pip.py’ saved [2634817/2634817]
+
+Collecting pip
+  Downloading pip-23.3.2-py3-none-any.whl.metadata (3.5 kB)
+Downloading pip-23.3.2-py3-none-any.whl (2.1 MB)
+[?25l   [38;5;237m━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━[0m [32m0.0/2.1 MB[0m [31m?[0m eta [36m-:--:--[0m[2K   [38;5;197m╸[0m[38;5;237m━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━[0m [32m0.0/2.1 MB[0m [31m1.1 MB/s[0m eta [36m0:00:02[0m[2K   [38;5;197m╸[0m[38;5;237m━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━[0m [32m0.0/2.1 MB[0m [31m585.1 kB/s[0m eta [36m0:00:04[0m[2K   [38;5;197m━[0m[38;5;237m╺[0m[38;5;237m━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━[0m [32m0.1/2.1 MB[0m [31m531.1 kB/s[0m eta [36m0:00:04[0m[2K   [38;5;197m━[0m[38;5;237m╺[0m[38;5;237m━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━[0m [32m0.1/2.1 MB[0m [31m494.9 kB/s[0m eta [36m0:00:05[0m[2K   [38;5;197m━━[0m[38;5;237m╺[0m[38;5;237m━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━[0m [32m0.1/2.1 MB[0m [31m617.7 kB/s[0m eta [36m0:00:04[0m[2K   [38;5;197m━━[0m[38;5;197m╸[0m[38;5;237m━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━[0m [32m0.2/2.1 MB[0m [31m614.2 kB/s[0m eta [36m0:00:04[0m[2K   [38;5;197m━━━[0m[38;5;197m╸[0m[38;5;237m━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━[0m [32m0.2/2.1 MB[0m [31m698.8 kB/s[0m eta [36m0:00:03[0m[2K   [38;5;197m━━━━[0m[38;5;197m╸[0m[38;5;237m━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━[0m [32m0.3/2.1 MB[0m [31m839.0 kB/s[0m eta [36m0:00:03[0m[2K   [38;5;197m━━━━━[0m[38;5;197m╸[0m[38;5;237m━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━[0m [32m0.3/2.1 MB[0m [31m828.4 kB/s[0m eta [36m0:00:03[0m[2K   [38;5;197m━━━━━━━[0m[38;5;237m╺[0m[38;5;237m━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━[0m [32m0.4/2.1 MB[0m [31m960.6 kB/s[0m eta [36m0:00:02[0m[2K   [38;5;197m━━━━━━━━[0m[38;5;197m╸[0m[38;5;237m━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━[0m [32m0.5/2.1 MB[0m [31m1.0 MB/s[0m eta [36m0:00:02[0m[2K   [38;5;197m━━━━━━━━━━[0m[38;5;237m╺[0m[38;5;237m━━━━━━━━━━━━━━━━━━━━━━━━━━━━━[0m [32m0.5/2.1 MB[0m [31m1.1 MB/s[0m eta [36m0:00:02[0m[2K   [38;5;197m━━━━━━━━━━[0m[38;5;237m╺[0m[38;5;237m━━━━━━━━━━━━━━━━━━━━━━━━━━━━━[0m [32m0.5/2.1 MB[0m [31m1.1 MB/s[0m eta [36m0:00:02[0m[2K   [38;5;197m━━━━━━━━━━[0m[38;5;237m╺[0m[38;5;237m━━━━━━━━━━━━━━━━━━━━━━━━━━━━━[0m [32m0.5/2.1 MB[0m [31m1.1 MB/s[0m eta [36m0:00:02[0m[2K   [38;5;197m━━━━━━━━━━[0m[38;5;237m╺[0m[38;5;237m━━━━━━━━━━━━━━━━━━━━━━━━━━━━━[0m [32m0.5/2.1 MB[0m [31m1.1 MB/s[0m eta [36m0:00:02[0m[2K   [38;5;197m━━━━━━━━━━[0m[38;5;237m╺[0m[38;5;237m━━━━━━━━━━━━━━━━━━━━━━━━━━━━━[0m [32m0.5/2.1 MB[0m [31m1.1 MB/s[0m eta [36m0:00:02[0m[2K   [38;5;197m━━━━━━━━━━[0m[38;5;237m╺[0m[38;5;237m━━━━━━━━━━━━━━━━━━━━━━━━━━━━━[0m [32m0.5/2.1 MB[0m [31m1.1 MB/s[0m eta [36m0:00:02[0m[2K   [38;5;197m━━━━━━━━━━━[0m[38;5;237m╺[0m[38;5;237m━━━━━━━━━━━━━━━━━━━━━━━━━━━━[0m [32m0.6/2.1 MB[0m [31m783.4 kB/s[0m eta [36m0:00:02[0m[2K   [38;5;197m━━━━━━━━━━━━━━━━━━━━[0m[38;5;237m╺[0m[38;5;237m━━━━━━━━━━━━━━━━━━━[0m [32m1.1/2.1 MB[0m [31m1.4 MB/s[0m eta [36m0:00:01[0m[2K   [38;5;197m━━━━━━━━━━━━━━━━━━━━━[0m[38;5;197m╸[0m[38;5;237m━━━━━━━━━━━━━━━━━━[0m [32m1.1/2.1 MB[0m [31m1.4 MB/s[0m eta [36m0:00:01[0m[2K   [38;5;197m━━━━━━━━━━━━━━━━━━━━━━━[0m[38;5;197m╸[0m[38;5;237m━━━━━━━━━━━━━━━━[0m [32m1.2/2.1 MB[0m [31m1.5 MB/s[0m eta [36m0:00:01[0m[2K   [38;5;197m━━━━━━━━━━━━━━━━━━━━━━━━━━[0m[38;5;237m╺[0m[38;5;237m━━━━━━━━━━━━━[0m [32m1.4/2.1 MB[0m [31m1.5 MB/s[0m eta [36m0:00:01[0m[2K   [38;5;197m━━━━━━━━━━━━━━━━━━━━━━━━━━━━━[0m[38;5;237m╺[0m[38;5;237m━━━━━━━━━━[0m [32m1.5/2.1 MB[0m [31m1.6 MB/s[0m eta [36m0:00:01[0m[2K   [38;5;197m━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━[0m[38;5;197m╸[0m[38;5;237m━━━━━━━━[0m [32m1.7/2.1 MB[0m [31m1.7 MB/s[0m eta [36m0:00:01[0m[2K   [38;5;197m━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━[0m[38;5;197m╸[0m[38;5;237m━━━━━━[0m [32m1.8/2.1 MB[0m [31m1.7 MB/s[0m eta [36m0:00:01[0m[2K   [38;5;197m━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━[0m[38;5;197m╸[0m[38;5;237m━━━[0m [32m1.9/2.1 MB[0m [31m1.8 MB/s[0m eta [36m0:00:01[0m[2K   [38;5;197m━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━[0m[38;5;237m╺[0m [32m2.1/2.1 MB[0m [31m1.9 MB/s[0m eta [36m0:00:01[0m[2K   [38;5;197m━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━[0m[38;5;197m╸[0m [32m2.1/2.1 MB[0m [31m1.9 MB/s[0m eta [36m0:00:01[0m[2K   [38;5;197m━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━[0m[38;5;197m╸[0m [32m2.1/2.1 MB[0m [31m1.9 MB/s[0m eta [36m0:00:01[0m[2K   [38;5;70m━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━[0m [32m2.1/2.1 MB[0m [31m1.7 MB/s[0m eta [36m0:00:00[0m
+[?25hInstalling collected packages: pip
+  Attempting uninstall: pip
+    Found existing installation: pip 23.3.2
+    Uninstalling pip-23.3.2:
+      Successfully uninstalled pip-23.3.2
+Successfully installed pip-23.3.2
+[33mWARNING: Running pip as the 'root' user can result in broken permissions and conflicting behaviour with the system package manager. It is recommended to use a virtual environment instead: https://pip.pypa.io/warnings/venv[0m[33m
+[0m
+ cd /usr/lib/python3.11 
+
+
+ sudo rm EXTERNALLY-MANAGED 
+
+rm: cannot remove 'EXTERNALLY-MANAGED': No such file or directory
+
+ pip3 install --upgrade packages pip 
+
+Requirement already satisfied: setuptools in /usr/local/lib/python3.11/dist-packages (67.8.0)
+Collecting setuptools
+  Using cached setuptools-69.0.3-py3-none-any.whl.metadata (6.3 kB)
+Requirement already satisfied: pip in /usr/local/lib/python3.11/dist-packages (23.3.2)
+Using cached setuptools-69.0.3-py3-none-any.whl (819 kB)
+Installing collected packages: setuptools
+  Attempting uninstall: setuptools
+    Found existing installation: setuptools 67.8.0
+    Uninstalling setuptools-67.8.0:
+      Successfully uninstalled setuptools-67.8.0
+Successfully installed setuptools-69.0.3
+[33mWARNING: Running pip as the 'root' user can result in broken permissions and conflicting behaviour with the system package manager. It is recommended to use a virtual environment instead: https://pip.pypa.io/warnings/venv[0m[33m
+[0m
+ pip3 install --upgrade setuptools 
+
+Requirement already satisfied: setuptools in /usr/local/lib/python3.11/dist-packages (69.0.3)
+[33mWARNING: Running pip as the 'root' user can result in broken permissions and conflicting behaviour with the system package manager. It is recommended to use a virtual environment instead: https://pip.pypa.io/warnings/venv[0m[33m
+[0m
+ pip3 install -r /home/robot/deploy/requirements.txt 
+
+Requirement already satisfied: Pillow~=10.0.1 in /usr/local/lib/python3.11/dist-packages (from -r /home/robot/deploy/requirements.txt (line 4)) (10.0.1)
+Requirement already satisfied: RPi.GPIO~=0.7.1 in /usr/local/lib/python3.11/dist-packages (from -r /home/robot/deploy/requirements.txt (line 5)) (0.7.1)
+Requirement already satisfied: adafruit-circuitpython-led-animation~=2.8.0 in /usr/local/lib/python3.11/dist-packages (from -r /home/robot/deploy/requirements.txt (line 6)) (2.8.0)
+Requirement already satisfied: adafruit-circuitpython-neopixel~=6.3.11 in /usr/local/lib/python3.11/dist-packages (from -r /home/robot/deploy/requirements.txt (line 7)) (6.3.11)
+Requirement already satisfied: adafruit-circuitpython-pcf8574~=1.0.8 in /usr/local/lib/python3.11/dist-packages (from -r /home/robot/deploy/requirements.txt (line 8)) (1.0.8)
+Requirement already satisfied: adafruit-circuitpython-servokit~=1.3.17 in /usr/local/lib/python3.11/dist-packages (from -r /home/robot/deploy/requirements.txt (line 9)) (1.3.17)
+Requirement already satisfied: args~=0.1.0 in /usr/local/lib/python3.11/dist-packages (from -r /home/robot/deploy/requirements.txt (line 10)) (0.1.0)
+Requirement already satisfied: board~=1.0 in /usr/local/lib/python3.11/dist-packages (from -r /home/robot/deploy/requirements.txt (line 11)) (1.0)
+Requirement already satisfied: colorlog~=6.7.0 in /usr/local/lib/python3.11/dist-packages (from -r /home/robot/deploy/requirements.txt (line 12)) (6.7.0)
+Requirement already satisfied: filetype~=1.2.0 in /usr/local/lib/python3.11/dist-packages (from -r /home/robot/deploy/requirements.txt (line 13)) (1.2.0)
+Requirement already satisfied: gTTS~=2.2.4 in /usr/local/lib/python3.11/dist-packages (from -r /home/robot/deploy/requirements.txt (line 14)) (2.2.4)
+Requirement already satisfied: imageio~=2.30.0 in /usr/local/lib/python3.11/dist-packages (from -r /home/robot/deploy/requirements.txt (line 15)) (2.30.0)
+Requirement already satisfied: numpy~=1.26.0 in /usr/local/lib/python3.11/dist-packages (from -r /home/robot/deploy/requirements.txt (line 16)) (1.26.3)
+Requirement already satisfied: openai~=0.27.8 in /usr/local/lib/python3.11/dist-packages (from -r /home/robot/deploy/requirements.txt (line 17)) (0.27.10)
+Requirement already satisfied: pip~=23.3.2 in /usr/local/lib/python3.11/dist-packages (from -r /home/robot/deploy/requirements.txt (line 18)) (23.3.2)
+Requirement already satisfied: playsound~=1.2.2 in /usr/local/lib/python3.11/dist-packages (from -r /home/robot/deploy/requirements.txt (line 19)) (1.2.2)
+Requirement already satisfied: psutil~=5.9.5 in /usr/local/lib/python3.11/dist-packages (from -r /home/robot/deploy/requirements.txt (line 20)) (5.9.7)
+Requirement already satisfied: pycairo~=1.25.1 in /usr/local/lib/python3.11/dist-packages (from -r /home/robot/deploy/requirements.txt (line 21)) (1.25.1)
+Requirement already satisfied: pydub~=0.25.1 in /usr/local/lib/python3.11/dist-packages (from -r /home/robot/deploy/requirements.txt (line 22)) (0.25.1)
+Requirement already satisfied: pygobject~=3.46.0 in /usr/lib/python3/dist-packages (from -r /home/robot/deploy/requirements.txt (line 23)) (3.46.0)
+Requirement already satisfied: pyttsx3~=2.90 in /usr/local/lib/python3.11/dist-packages (from -r /home/robot/deploy/requirements.txt (line 24)) (2.90)
+Requirement already satisfied: rpi_ws281x~=5.0.0 in /usr/local/lib/python3.11/dist-packages (from -r /home/robot/deploy/requirements.txt (line 25)) (5.0.0)
+Collecting setuptools~=67.8.0 (from -r /home/robot/deploy/requirements.txt (line 26))
+  Using cached setuptools-67.8.0-py3-none-any.whl.metadata (6.2 kB)
+Requirement already satisfied: simpleaudio~=1.0.4 in /usr/local/lib/python3.11/dist-packages (from -r /home/robot/deploy/requirements.txt (line 27)) (1.0.4)
+Requirement already satisfied: uvloop~=0.17.0 in /usr/local/lib/python3.11/dist-packages (from -r /home/robot/deploy/requirements.txt (line 28)) (0.17.0)
+Requirement already satisfied: watchdog~=3.0.0 in /usr/local/lib/python3.11/dist-packages (from -r /home/robot/deploy/requirements.txt (line 29)) (3.0.0)
+Requirement already satisfied: websockets~=11.0.2 in /usr/local/lib/python3.11/dist-packages (from -r /home/robot/deploy/requirements.txt (line 30)) (11.0.3)
+Requirement already satisfied: websocket~=0.2.1 in /usr/local/lib/python3.11/dist-packages (from -r /home/robot/deploy/requirements.txt (line 31)) (0.2.1)
+Requirement already satisfied: whisper~=1.1.10 in /usr/local/lib/python3.11/dist-packages (from -r /home/robot/deploy/requirements.txt (line 32)) (1.1.10)
+Requirement already satisfied: Adafruit-Blinka in /usr/local/lib/python3.11/dist-packages (from adafruit-circuitpython-led-animation~=2.8.0->-r /home/robot/deploy/requirements.txt (line 6)) (8.30.0)
+Requirement already satisfied: adafruit-circuitpython-pixelbuf in /usr/local/lib/python3.11/dist-packages (from adafruit-circuitpython-neopixel~=6.3.11->-r /home/robot/deploy/requirements.txt (line 7)) (2.0.4)
+Requirement already satisfied: adafruit-circuitpython-busdevice in /usr/local/lib/python3.11/dist-packages (from adafruit-circuitpython-pcf8574~=1.0.8->-r /home/robot/deploy/requirements.txt (line 8)) (5.2.6)
+Requirement already satisfied: adafruit-circuitpython-pca9685 in /usr/local/lib/python3.11/dist-packages (from adafruit-circuitpython-servokit~=1.3.17->-r /home/robot/deploy/requirements.txt (line 9)) (3.4.14)
+Requirement already satisfied: adafruit-circuitpython-motor in /usr/local/lib/python3.11/dist-packages (from adafruit-circuitpython-servokit~=1.3.17->-r /home/robot/deploy/requirements.txt (line 9)) (3.4.13)
+Requirement already satisfied: adafruit-circuitpython-register in /usr/local/lib/python3.11/dist-packages (from adafruit-circuitpython-servokit~=1.3.17->-r /home/robot/deploy/requirements.txt (line 9)) (1.9.18)
+Requirement already satisfied: six in /usr/lib/python3/dist-packages (from gTTS~=2.2.4->-r /home/robot/deploy/requirements.txt (line 14)) (1.16.0)
+Requirement already satisfied: click in /usr/lib/python3/dist-packages (from gTTS~=2.2.4->-r /home/robot/deploy/requirements.txt (line 14)) (8.1.6)
+Requirement already satisfied: requests in /usr/lib/python3/dist-packages (from gTTS~=2.2.4->-r /home/robot/deploy/requirements.txt (line 14)) (2.31.0)
+Requirement already satisfied: tqdm in /usr/local/lib/python3.11/dist-packages (from openai~=0.27.8->-r /home/robot/deploy/requirements.txt (line 17)) (4.66.1)
+Requirement already satisfied: aiohttp in /usr/local/lib/python3.11/dist-packages (from openai~=0.27.8->-r /home/robot/deploy/requirements.txt (line 17)) (3.9.1)
+Requirement already satisfied: gevent in /usr/local/lib/python3.11/dist-packages (from websocket~=0.2.1->-r /home/robot/deploy/requirements.txt (line 31)) (23.9.1)
+Requirement already satisfied: greenlet in /usr/local/lib/python3.11/dist-packages (from websocket~=0.2.1->-r /home/robot/deploy/requirements.txt (line 31)) (3.0.3)
+Requirement already satisfied: Adafruit-PlatformDetect>=3.53.0 in /usr/local/lib/python3.11/dist-packages (from Adafruit-Blinka->adafruit-circuitpython-led-animation~=2.8.0->-r /home/robot/deploy/requirements.txt (line 6)) (3.58.0)
+Requirement already satisfied: Adafruit-PureIO>=1.1.7 in /usr/local/lib/python3.11/dist-packages (from Adafruit-Blinka->adafruit-circuitpython-led-animation~=2.8.0->-r /home/robot/deploy/requirements.txt (line 6)) (1.1.11)
+Requirement already satisfied: pyftdi>=0.40.0 in /usr/local/lib/python3.11/dist-packages (from Adafruit-Blinka->adafruit-circuitpython-led-animation~=2.8.0->-r /home/robot/deploy/requirements.txt (line 6)) (0.55.0)
+Requirement already satisfied: adafruit-circuitpython-typing in /usr/local/lib/python3.11/dist-packages (from Adafruit-Blinka->adafruit-circuitpython-led-animation~=2.8.0->-r /home/robot/deploy/requirements.txt (line 6)) (1.9.6)
+Requirement already satisfied: typing-extensions~=4.0 in /usr/local/lib/python3.11/dist-packages (from adafruit-circuitpython-register->adafruit-circuitpython-servokit~=1.3.17->-r /home/robot/deploy/requirements.txt (line 9)) (4.9.0)
+Requirement already satisfied: adafruit-circuitpython-requests in /usr/local/lib/python3.11/dist-packages (from adafruit-circuitpython-typing->Adafruit-Blinka->adafruit-circuitpython-led-animation~=2.8.0->-r /home/robot/deploy/requirements.txt (line 6)) (2.0.4)
+Requirement already satisfied: attrs>=17.3.0 in /usr/lib/python3/dist-packages (from aiohttp->openai~=0.27.8->-r /home/robot/deploy/requirements.txt (line 17)) (23.1.0)
+Requirement already satisfied: multidict<7.0,>=4.5 in /usr/local/lib/python3.11/dist-packages (from aiohttp->openai~=0.27.8->-r /home/robot/deploy/requirements.txt (line 17)) (6.0.4)
+Requirement already satisfied: yarl<2.0,>=1.0 in /usr/local/lib/python3.11/dist-packages (from aiohttp->openai~=0.27.8->-r /home/robot/deploy/requirements.txt (line 17)) (1.9.4)
+Requirement already satisfied: frozenlist>=1.1.1 in /usr/local/lib/python3.11/dist-packages (from aiohttp->openai~=0.27.8->-r /home/robot/deploy/requirements.txt (line 17)) (1.4.1)
+Requirement already satisfied: aiosignal>=1.1.2 in /usr/local/lib/python3.11/dist-packages (from aiohttp->openai~=0.27.8->-r /home/robot/deploy/requirements.txt (line 17)) (1.3.1)
+Requirement already satisfied: zope.event in /usr/local/lib/python3.11/dist-packages (from gevent->websocket~=0.2.1->-r /home/robot/deploy/requirements.txt (line 31)) (5.0)
+Requirement already satisfied: zope.interface in /usr/lib/python3/dist-packages (from gevent->websocket~=0.2.1->-r /home/robot/deploy/requirements.txt (line 31)) (5.5.2)
+Requirement already satisfied: pyusb!=1.2.0,>=1.0.0 in /usr/local/lib/python3.11/dist-packages (from pyftdi>=0.40.0->Adafruit-Blinka->adafruit-circuitpython-led-animation~=2.8.0->-r /home/robot/deploy/requirements.txt (line 6)) (1.2.1)
+Requirement already satisfied: pyserial>=3.0 in /usr/lib/python3/dist-packages (from pyftdi>=0.40.0->Adafruit-Blinka->adafruit-circuitpython-led-animation~=2.8.0->-r /home/robot/deploy/requirements.txt (line 6)) (3.5)
+Requirement already satisfied: idna>=2.0 in /usr/lib/python3/dist-packages (from yarl<2.0,>=1.0->aiohttp->openai~=0.27.8->-r /home/robot/deploy/requirements.txt (line 17)) (3.3)
+Using cached setuptools-67.8.0-py3-none-any.whl (1.1 MB)
+Installing collected packages: setuptools
+  Attempting uninstall: setuptools
+    Found existing installation: setuptools 69.0.3
+    Uninstalling setuptools-69.0.3:
+      Successfully uninstalled setuptools-69.0.3
+Successfully installed setuptools-67.8.0
+[33mWARNING: Running pip as the 'root' user can result in broken permissions and conflicting behaviour with the system package manager. It is recommended to use a virtual environment instead: https://pip.pypa.io/warnings/venv[0m[33m
+[0mbash: line 30: set-bashrc.sh: No such file or directory
+bash: line 33: set-vimrc.sh: No such file or directory
+bash: line 36: install-service.sh: No such file or directory
+[0;36mOnly read param[0;36m
+/home/dadou/Nextcloud/Didier/python/dadou_utils/scripts/deploy/params.sh
+
+[4;31mDEPLOY dadourobot IN /home/robot/deploy[0;32m
+
+rsync -auvzrL --delete-after --exclude-from='/home/dadou/Nextcloud/Didier/python/dadou_utils/scripts/deploy/exclude_me.txt' /home/dadou/Nextcloud/Didier/python/dadou_robot/* ros:/home/robot/deploy
+building file list ... done
+conf/rpi/
+scripts/
+scripts/out
+deleting conf/rpi/project.service
+deleting conf/rpi/global_bash
+deleting conf/rpi/bashrc
+deleting conf/rpi/asoundrc
+deleting conf/rpi/alsa-blacklist.conf
+deleting scripts/set-vimrc.sh
+deleting scripts/set-usb-audio.sh
+deleting scripts/set-bashrc.sh
+deleting scripts/run.sh
+deleting scripts/remote-install.sh
+deleting scripts/params.sh
+deleting scripts/needrestart.sh
+deleting scripts/local-install.sh
+deleting scripts/install-service.sh
+deleting scripts/install-lib.sh
+deleting scripts/install-autostart.sh
+deleting scripts/get-pip.py
+deleting scripts/exclude_me.txt
+deleting scripts/deploy.sh
+deleting scripts/deploy-utils.sh
+deleting scripts/deploy-all.sh
+deleting scripts/colors.sh
+deleting scripts/check-power.sh
+deleting scripts/check-internet.sh
+deleting scripts/activate-i2c.sh
+
+sent 21.367 bytes  received 58 bytes  8.570,00 bytes/sec
+total size is 197.834.910  speedup is 9.233,83
+rsync -auvzrL --delete-after --exclude-from='/home/dadou/Nextcloud/Didier/python/dadou_utils/scripts/deploy/exclude_me.txt' /home/dadou/Nextcloud/Didier/python/dadou_utils ros:/home/robot/deploy
+building file list ... done
+
+sent 2.554 bytes  received 11 bytes  1.710,00 bytes/sec
+total size is 19.729.942  speedup is 7.691,99
+rsync -u /home/dadou/Nextcloud/Didier/python/dadou_utils/scripts/deploy/* ros:/home/robot/deploy/scripts
+rsync -u /home/dadou/Nextcloud/Didier/python/dadou_utils/conf/rpi/* ros:/home/robot/deploy/conf/rpi
+ros-root chmod +x /home/robot/deploy/scripts/*
+
+
+[4;31mREBOOT[0;36m
+
+
+Broadcast message from root@ros2 on pts/1 (Thu 2024-01-18 11:42:27 CET):
+
+The system will reboot now!
+
