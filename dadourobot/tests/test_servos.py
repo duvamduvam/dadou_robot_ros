@@ -35,7 +35,7 @@ class ServosTests(unittest.TestCase):
         logging.debug("start test neck")
 
         for i in range(3):
-            self.neck.update({NECK: 0})
+            self.neck.update({NECK: 180})
             time.sleep(5)
             self.neck.update({NECK: 80})
             time.sleep(5)

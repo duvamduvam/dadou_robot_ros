@@ -1,6 +1,7 @@
 {
     "keys": "H2",
     "duration": 5000,
+    "types": ["little move"],
     "neck": [
         [
             0.2,

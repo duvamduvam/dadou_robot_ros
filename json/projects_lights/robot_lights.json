@@ -33,5 +33,12 @@
         "duration": "0",
         "keys": "None",
         "sequences": {}
-    }
+    },
+    "devil": {
+        "loop": true,
+        "duration": 10000,
+        "keys": "None",
+        "sequences": {
+            "solid red": 0
+        }
 }
