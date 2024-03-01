@@ -5,6 +5,9 @@ import board
 import busio
 import pwmio
 
+import rclpy
+from rclpy.node import Node
+
 from dadou_utils.misc import Misc
 from dadou_utils.utils.time_utils import TimeUtils
 from dadou_utils.utils_static import ANGLO, WHEEL_RIGHT, WHEEL_LEFT, WHEELS, KEY, \
@@ -45,14 +48,13 @@ class Wheel:
     test_direction = 0
     last_move = 0
 
-    def __init__(self, config, receiver):
+    def __init__(self, config):
 
         self.config = config
 
         self.max_pwm_l = MAX_PWM_L
         self.max_pwm_r = MAX_PWM_R
 
-        self.receiver = receiver
         self.enabled = self.config[I2C_ENABLED] or self.config[PWM_CHANNELS_ENABLED]
         if not self.enabled:
             logging.warning("i2c pwm disabled")
@@ -256,3 +258,9 @@ class Wheel:
 
     def send_to_due(self, left, right):
         self.due.send_msg(left+right, True)
+
+def main(args=None):
+    rclpy.init(args=args)
+    node = AddTwoIntsServerNode()
+    rclpy.spin(node)
+    rclpy.shutdown()

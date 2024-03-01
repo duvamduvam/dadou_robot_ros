@@ -35,10 +35,9 @@ class AudioManager(AbstractJsonActions):
     fondu_last_time = 0
     stopping = False
 
-    def __init__(self, config, global_receiver, json_manager):
+    def __init__(self, config, json_manager):
         super().__init__(config=config, json_manager=json_manager, json_file=config[JSON_AUDIOS], action_type=AUDIO)
         self.config = config
-        self.global_receiver = global_receiver
         self.json_manager = json_manager
         self.recorded_audio_data = self.json_manager.open_json(self.config[JSON_AUDIOS_DATAS])
 

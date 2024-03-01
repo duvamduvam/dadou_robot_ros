@@ -1,0 +1,27 @@
+version: '3'
+services:
+  dadou-robot-x86:
+    container_name: dadou-robot-container-x86
+    build: .
+    #environment:
+    #  - DISPLAY=${DISPLAY}
+    image: dadouuu/dadou-robot-x86:latest
+    ports:
+      - "4421:4421"
+    volumes:
+      - ./src/dadou_utils:/home/src/dadou_utils
+      - ./src/dadourobot:/home/src/dadourobot
+      - ./src/robot_bringup:/home/src/robot_bringup
+      - ./src/robot_interfaces:/home/src/robot_interfaces
+      - ./audios:/home/audios
+      - ./src/json:/home/src/json
+      - ./src/logs:/home/logs
+      - ./src/visuals:/home/visuals
+      - ./src/scripts:/home/scripts
+    #  - /tmp/.X11-unix:/tmp/.X11-unix
+    #  - /dev/:/dev
+    #  - /dev/null:/folder/fileToBeExcluded
+    #accès device ACMO gpio serial by id disque etc ...
+    privileged: true
+ #   devices:
+ #    - /dev

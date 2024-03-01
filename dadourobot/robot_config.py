@@ -50,11 +50,11 @@ config[CALIBRATION] = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 252, 255, 251, 255, 1
 
 
 #if Misc.is_raspberrypi():
-config[SHUTDOWN_PIN] = board.D16
-config[RESTART_PIN] = board.D20
-config[STATUS_LED_PIN] = board.D12
+#config[SHUTDOWN_PIN] = board.D16
+#config[RESTART_PIN] = board.D20
+#config[STATUS_LED_PIN] = board.D12
 
-config[LIGHTS_PIN] = board.D18
+#config[LIGHTS_PIN] = board.D18
 config[LIGHTS_LED_COUNT] = 1000
 config[LIGHTS_START_LED] = 513
 config[LIGHTS_END_LED] = 673
@@ -94,8 +94,8 @@ config[LOGGING_CONFIG_FILE] = config[BASE_PATH] + '/conf/logging.conf'
 config[LOGGING_TEST_FILE_NAME] = '../../logs/robot-test.log'
 config[LOGGING_FILE_NAME] = 'logs/robot.log'
 config[LOGGING_TEST_FILE_NAME] = '../../logs/robot-test.log'
-config[JSON_DIRECTORY] = '/json/'
-config[AUDIOS_DIRECTORY] = config[BASE_PATH] + '/audios/'
+config[JSON_DIRECTORY] = '/src/json/'
+config[AUDIOS_DIRECTORY] = config[BASE_PATH] + '/src/audios/'
 
 ############### JSON FILES ###############
 

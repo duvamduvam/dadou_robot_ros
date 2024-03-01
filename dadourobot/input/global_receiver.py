@@ -10,7 +10,7 @@ from json import JSONDecodeError
 from dadou_utils.com.input_messages_list import InputMessagesList
 # from dadou_utils.com.lora_radio import LoraRadio
 # from dadou_utils.com.serial_device import SerialDevice
-from dadou_utils.com.ws_server import WsServer
+from src.dadou_utils.com.ws_server import WsServer
 from dadou_utils.utils.time_utils import TimeUtils
 from dadou_utils.utils_static import INPUT_MESSAGE_FILE, RANDOM, MAIN_THREAD, TYPES, INPUT_LOCK, SINGLE_THREAD, KEY, \
     DURATION, BANNED_HOST, IP
