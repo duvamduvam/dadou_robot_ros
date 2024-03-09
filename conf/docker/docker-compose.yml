@@ -10,7 +10,7 @@ services:
       - "4421:4421"
     volumes:
       - ./src/dadou_utils:/home/src/dadou_utils
-      - ./src/dadourobot:/home/src/dadourobot
+      - ./src/robot:/home/src/robot
       - ./src/robot_bringup:/home/src/robot_bringup
       - ./src/robot_interfaces:/home/src/robot_interfaces
       - ./audios:/home/audios

@@ -15,7 +15,7 @@ gTTS~=2.2.4
 imageio~=2.30.0
 numpy~=1.26.0
 openai~=0.27.8
-pip~=23.3.2
+pip>=24.0
 playsound~=1.2.2
 psutil~=5.9.5
 pycairo~=1.25.1
@@ -23,7 +23,8 @@ pydub~=0.25.1
 pygobject~=3.46.0
 pyttsx3~=2.90
 rpi_ws281x~=5.0.0
-setuptools~=58.2.0
+#setuptools version to make ros2 humble word
+setuptools==58.2.0
 simpleaudio~=1.0.4
 uvloop~=0.17.0
 watchdog~=3.0.0

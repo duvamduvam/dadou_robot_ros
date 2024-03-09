@@ -3,7 +3,7 @@ set -x
 
 ####################### PROJECT PARAMS #############################
 
-export PROJECT_NAME="dadourobot"
+export PROJECT_NAME="robot"
 export PROJECT_PATH=~/Nextcloud/Didier/python/dadou_robot_ros
 export UTILS_PROJECT=~/Nextcloud/Didier/python/dadou_utils_ros
 

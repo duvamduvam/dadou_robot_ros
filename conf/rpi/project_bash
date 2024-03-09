@@ -1,1 +1,8 @@
 ################# PROJECT PARAMS ###################
+
+alias s='source ~/.bashrc'
+alias b='cd ~/ros2_ws && colcon build && s'
+
+alias start='service robot start'
+alias stop='service robot stop'
+alias restart='stop && start'
