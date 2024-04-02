@@ -88,7 +88,7 @@ config[MAIN_LOOP_SLEEP] = 0.001
 config[STOP_ANIMATION_KEYS] = ['x']
 
 #config[BASE_PATH] = os.getcwd()
-config[BASE_PATH] = "/root/ros2_ws/"
+config[BASE_PATH] = "/home/ros2_ws/"
 config[BASE_PATH] = config[BASE_PATH].replace('/tests', '')
 config[SRC_DIRECTORY] = config[BASE_PATH] + "src/"
 config[PROJECT_DIRECTORY] = config[SRC_DIRECTORY] + "robot/"
@@ -107,7 +107,7 @@ config[LOGGING_CONFIG_TEST_FILE] = config[LOGGING_DIRECTORY] + 'logging-test.con
 config[LOGGING_CONFIG_FILE] = config[LOGGING_DIRECTORY] + 'logging.conf'
 
 config[LOGGING_TEST_FILE_NAME] = '../../logs/robot-test.log'
-config[LOGGING_FILE_NAME] = '/root/ros2_ws/log/robot.log'
+config[LOGGING_FILE_NAME] = config[BASE_PATH] + 'log/robot.log'
 config[LOGGING_TEST_FILE_NAME] = '../../logs/robot-test.log'
 
 config[MOUTH_VISUALS_PATH] = config[VISUAL_DIRECTORY] + "mouth"

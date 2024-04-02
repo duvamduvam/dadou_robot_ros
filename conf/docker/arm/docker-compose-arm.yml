@@ -1,0 +1,27 @@
+services:
+  dadou-control:
+    container_name: dadou-robot-container
+    image: dadouuu/dadou-robot-arm:latest
+    build:
+      context: ../../..
+      dockerfile: conf/docker/arm/Dockerfile-arm
+    environment:
+      - DISPLAY=${DISPLAY}
+    #ports:
+    #  - "80:80"
+    #  - "8000-9000:8000-9000"
+    network_mode: "host"
+
+    volumes:
+      - /tmp/.X11-unix:/tmp/.X11-unix
+      - ../../../conf:/home/ros2_ws/src/robot/conf
+      - ../../../robot:/home/ros2_ws/src/robot/robot
+      - ../../../dadou_utils:/home/ros2_ws/src/robot/dadou_utils
+      - ../../../json:/home/ros2_ws/src/robot/json
+      - ../../../medias:/home/ros2_ws/src/robot/medias
+    #  - /dev/:/dev
+    #  - /dev/null:/folder/fileToBeExcluded
+    #accès device ACMO gpio serial by id disque etc ...
+    privileged: true
+ #   devices:
+ #    - /dev

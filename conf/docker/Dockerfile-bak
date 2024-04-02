@@ -1,12 +1,12 @@
 #BUILD
 #docker build -t nodes-helloworld .
 
-# sudo apt-get install python3-dev python3-arm.gpio
+# sudo apt-get install python3-dev python3-rpi.gpio
 
 
 
 
-FROM ros:iron-ros-core
+FROM ros:humble-ros-base
 LABEL authors="dadouuu"
 WORKDIR /home
 # Copier le fichier requirements.txt dans le conteneur
@@ -18,18 +18,20 @@ WORKDIR /home
 
 
 # Installer Python 3 et pip
-RUN apt-get update && apt-get install -y python3 python3-pip
+#RUN apt-get update && apt-get install -y python3 python3-pip
 
 EXPOSE 4421
 
 #COPY packages.txt /home/packages.txt
 #COPY requirements.txt /home/requirements.txt
-COPY ../.. /home/
+RUN mkdir ros2_ws
+COPY . /home/src/
 #RUN git clone https://github.com/duvamduvam/DadouUtils.git
 #RUN mv DadouUtils dadou_utils
 
 #RUN apt-get update && cat /tmp/packages.txt | xargs apt-get install -y
-RUN apt-get install -y \
+RUN apt-get update && apt-get install -y \
+    ffmpeg \
     python3 \
     python3-pip \
     libcairo2-dev \
@@ -38,9 +40,18 @@ RUN apt-get install -y \
     libgirepository1.0-dev \
     libasound2-dev
 
+ENV PYTHONPATH "${PYTHONPATH}:/home/src"
+#RUN python3 -m venv /home/venv
+#ENV PATH "/home/venv/bin:$PATH"
+
 # Installer les bibliothèques Python à partir du fichier requirements.txt
-RUN pip3 install -r /home/requirements.txt
+RUN pip3 install -r /home/src/requirements.txt
+
+RUN /bin/bash -c "source /opt/ros/humble/setup.bash"
+#RUN cd src
+#RUN /bin/bash -c "colcon build"
+
 #COPY hello-nodes.py /home/
 #CMD ["python3", "hello-nodes.py"]
-CMD ["python3", "main.py"]
+CMD ["python3", "src/run.py"]
 #ENTRYPOINT ["top", "-b"]

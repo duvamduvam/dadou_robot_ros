@@ -3,7 +3,7 @@ import logging
 import adafruit_pca9685
 import board
 import busio
-import pwmio
+#import pwmio
 
 from dadou_utils.misc import Misc
 from dadou_utils.utils.time_utils import TimeUtils
@@ -241,17 +241,17 @@ class Wheels:
             logging.error("9dof not set")
         return False
 
-    def update_pwm(self, target, pwm: pwmio.PWMOut):
-        if pwm.duty_cycle < target:
-            if (target - pwm.duty_cycle) < self.PWM_STEP:
-                pwm.duty_cycle = target
-            else:
-                pwm.duty_cycle += self.PWM_STEP
-        else:
-            if (pwm.duty_cycle - target) < self.PWM_STEP:
-                pwm.duty_cycle = target
-            else:
-                pwm.duty_cycle -= self.PWM_STEP
+#    def update_pwm(self, target, pwm: pwmio.PWMOut):
+#        if pwm.duty_cycle < target:
+#            if (target - pwm.duty_cycle) < self.PWM_STEP:
+#                pwm.duty_cycle = target
+#            else:
+#                pwm.duty_cycle += self.PWM_STEP
+#        else:
+#            if (pwm.duty_cycle - target) < self.PWM_STEP:
+#                pwm.duty_cycle = target
+#            else:
+#                pwm.duty_cycle -= self.PWM_STEP
 
     def send_to_due(self, left, right):
         self.due.send_msg(left+right, True)

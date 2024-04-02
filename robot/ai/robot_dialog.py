@@ -1,3 +1,4 @@
+import configparser
 import logging
 
 import openai
@@ -15,11 +16,13 @@ from dadou_utils.utils_static import FACE, ANIMATION, STOP
 class RobotDialog:
 
 
-
     def __init__(self, global_receiver):
-        key_file = open('../../conf/chatgpt-key.txt', 'r')
-        key = key_file.read()
-        key_file.close()
+
+        config_parser = configparser.ConfigParser()
+        config_parser.read('../../conf/secret')
+        #key_file = open('../../conf/secret', 'r')
+        key = config_parser['DEFAULT']['chatgpt_key']
+        #key_file.close()
         openai.api_key = key
         self.recognizer = sr.Recognizer()
         self.global_receiver = global_receiver

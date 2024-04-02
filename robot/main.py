@@ -22,11 +22,11 @@ from dadou_utils.utils_static import ANIMATION, LIGHTS, SHUTDOWN_PIN, RESTART_PI
     SINGLE_THREAD, LOGGING_FILE_NAME, MULTI_THREAD, PROCESS_NAME, LEFT_EYE, RIGHT_EYE, HEAD_PWM_NB, \
     LEFT_EYE_NB, RIGHT_EYE_NB, LEFT_ARM_NB, RIGHT_ARM_NB, I2C_ENABLED, PWM_CHANNELS_ENABLED, ROBOT, JSON_LIGHTS, \
     LIGHTS_START_LED, LIGHTS_END_LED, BRIGHTNESS, ROBOT_LIGHTS
-from robot.actions import AudioManager
-from robot.actions import Face
-from robot.actions import Lights
-from robot.actions import RelaysManager
-from robot.actions import Servo
+from robot.actions.audio_manager import AudioManager
+from robot.actions.face import Face
+from robot.actions.lights import Lights
+from robot.actions.relays import RelaysManager
+from robot.actions.servo import Servo
 #from robot.actions.wheel import Wheel
 from robot.files.robot_json_manager import RobotJsonManager
 from robot.input.global_receiver import GlobalReceiver
