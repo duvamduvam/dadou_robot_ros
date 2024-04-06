@@ -4,13 +4,13 @@ import unittest
 import logging
 import logging.config
 
-from dadou_utils.com.input_messages_list import InputMessagesList
-from dadou_utils.utils.time_utils import TimeUtils
+from dadou_utils_ros.com.input_messages_list import InputMessagesList
+from dadou_utils_ros.utils.time_utils import TimeUtils
 
 from robot.actions import LeftArm
 from robot.actions import Neck
 
-from dadou_utils.utils_static import NECK, ANIMATION, KEY
+from dadou_utils_ros.utils_static import NECK, ANIMATION, KEY
 
 from robot.actions import RightArm
 from robot.input.global_receiver import GlobalReceiver

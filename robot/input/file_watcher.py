@@ -6,8 +6,9 @@ from json import JSONDecodeError
 
 from watchdog.events import FileSystemEventHandler
 
-from dadou_utils.static_value import StaticValue
-from dadou_utils.utils_static import INPUT_MESSAGE_FILE, NEW_DATA
+from dadou_utils_ros.static_value import StaticValue
+from dadou_utils_ros.utils_static import INPUT_MESSAGE_FILE, NEW_DATA
+
 
 
 class FileWatcher(FileSystemEventHandler):

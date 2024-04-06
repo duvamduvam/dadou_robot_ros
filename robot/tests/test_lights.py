@@ -1,7 +1,7 @@
 import logging
 import os
 
-from dadou_utils.utils.time_utils import TimeUtils
+from dadou_utils_ros.utils.time_utils import TimeUtils
 from robot.actions import Lights
 from robot.files.robot_json_manager import RobotJsonManager
 from robot.robot_config import JSON_DIRECTORY, JSON_CONFIG

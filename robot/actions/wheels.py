@@ -5,9 +5,9 @@ import board
 import busio
 #import pwmio
 
-from dadou_utils.misc import Misc
-from dadou_utils.utils.time_utils import TimeUtils
-from dadou_utils.utils_static import ANGLO, WHEEL_RIGHT, WHEEL_LEFT, WHEELS, KEY, \
+from dadou_utils_ros.misc import Misc
+from dadou_utils_ros.utils.time_utils import TimeUtils
+from dadou_utils_ros.utils_static import ANGLO, WHEEL_RIGHT, WHEEL_LEFT, WHEELS, KEY, \
     CMD_FORWARD, CMD_BACKWARD, CMD_LEFT, CMD_RIGHT, I2C_ENABLED, PWM_CHANNELS_ENABLED, \
     WHEEL_LEFT_PWM, WHEEL_RIGHT_PWM, WHEEL_LEFT_DIR, WHEEL_RIGHT_DIR, STRAIGHT, ANIMATION, STOP, FORWARD, BACKWARD, \
     LEFT, RIGHT, INCLINO, SPEED, JOYSTICK, X, Y

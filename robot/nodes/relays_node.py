@@ -5,7 +5,7 @@ import time
 import rclpy
 from rclpy.node import Node
 
-from dadou_utils.utils_static import RELAYS
+from dadou_utils_ros.utils_static import RELAY
 from robot.actions.relays import RelaysManager
 from robot.files.robot_json_manager import RobotJsonManager
 from robot.nodes.abstract_subscriber import SubscriberNode
@@ -16,7 +16,7 @@ class RelaysNode(SubscriberNode):
     def __init__(self):
         robot_json_manager = RobotJsonManager(config)
         self.relays = RelaysManager(config, robot_json_manager)
-        super().__init__(RELAYS, RELAYS, self.relays)
+        super().__init__(RELAY, RELAY, self.relays)
 
 
 def main(args=None):

@@ -15,8 +15,8 @@ COPY json/ /home/ros2_ws/src/robot/json/
 COPY medias/ /home/ros2_ws/src/robot/medias/
 
 COPY dadou_utils.tar.gz /home/ros2_ws/src/robot/
-RUN tar -xzhf /home/ros2_ws/src/robot/dadou_utils.tar.gz -C /home/ros2_ws/src/robot/ && \
-    rm /home/ros2_ws/src/robot/dadou_utils.tar.gz
+RUN tar -xzhf /home/ros2_ws/src/robot/dadou_utils_ros.tar.gz -C /home/ros2_ws/src/robot/ && \
+    rm /home/ros2_ws/src/robot/dadou_utils_ros.tar.gz
 
 COPY conf/ros2_dependencies/ /home/ros2_ws/src/
 

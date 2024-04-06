@@ -3,10 +3,12 @@ import random
 
 from adafruit_servokit import ServoKit
 
-from dadou_utils.misc import Misc
-from dadou_utils.utils.time_utils import TimeUtils
-from dadou_utils.utils_static import NORMAL, RANDOM, RANDOM_MOVE_MAX, RANDOM_MOVE_MIN, RANDOM_TIME_MAX, RANDOM_TIME_MIN, \
+from dadou_utils_ros.misc import Misc
+from dadou_utils_ros.utils.time_utils import TimeUtils
+from dadou_utils_ros.utils_static import NORMAL, RANDOM, RANDOM_MOVE_MAX, RANDOM_MOVE_MIN, RANDOM_TIME_MAX, RANDOM_TIME_MIN, \
     RANDOM_DURATION, MODE, ANIMATION, UP, DOWN
+
+
 
 INPUT_MIN = 0
 INPUT_MAX = 99

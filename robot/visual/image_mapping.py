@@ -1,6 +1,8 @@
 import copy
 import logging
 
+
+
 class ImageMapping:
 
     def __init__(self, start_pixel, global_width, global_height, matrix_width, matrix_height, matrix_width_nb, matrix_height_nb):

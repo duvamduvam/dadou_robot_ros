@@ -14,11 +14,14 @@ services:
 
     volumes:
       - /tmp/.X11-unix:/tmp/.X11-unix
-      - ../../../conf:/home/ros2_ws/src/robot/conf
-      - ../../../robot:/home/ros2_ws/src/robot/robot
-      - ../../../dadou_utils:/home/ros2_ws/src/robot/dadou_utils
-      - ../../../json:/home/ros2_ws/src/robot/json
-      - ../../../medias:/home/ros2_ws/src/robot/medias
+      - /root/ros2_ws/src/robot/conf:/home/ros2_ws/src/robot/conf
+      - /root/ros2_ws/src/robot/robot:/home/ros2_ws/src/robot/robot
+      - /root/ros2_ws/src/robot/dadou_utils_ros:/home/ros2_ws/src/robot/dadou_utils_ros
+      - /root/ros2_ws/src/robot/json:/home/ros2_ws/src/robot/json
+      - /root/ros2_ws/src/robot/medias:/home/ros2_ws/src/robot/medias
+      - /root/ros2_ws/src/robot_bringup:/home/ros2_ws/src/robot_bringup
+      - /root/ros2_ws/log:/home/ros2_ws/log
+      - /root/ros2_ws/src/robot/setup.py:/home/ros2_ws/src/robot/setup.py
     #  - /dev/:/dev
     #  - /dev/null:/folder/fileToBeExcluded
     #accès device ACMO gpio serial by id disque etc ...

@@ -5,8 +5,8 @@ import time
 import rclpy
 from rclpy.node import Node
 
-from dadou_utils.utils.status import Status
-from dadou_utils.utils_static import RELAYS, SHUTDOWN_PIN, STATUS_LED_PIN, RESTART_PIN, SYSTEM
+from dadou_utils_ros.utils.status import Status
+from dadou_utils_ros.utils_static import RELAYS, SHUTDOWN_PIN, STATUS_LED_PIN, RESTART_PIN, SYSTEM
 from robot.nodes.abstract_subscriber import SubscriberNode
 from robot.robot_config import config
 

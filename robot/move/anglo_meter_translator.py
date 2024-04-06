@@ -1,7 +1,7 @@
 import logging
 import math
 
-from dadou_utils.misc import Misc
+from dadou_utils_ros.misc import Misc
 from robot.robot_config import MAX_PWM_R
 
 MIN_JOYSTICK = -99

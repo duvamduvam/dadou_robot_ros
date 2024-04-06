@@ -14,9 +14,9 @@ import time
 #import neopixel
 from adafruit_led_animation.helper import PixelMap, PixelSubset
 
-from dadou_utils.logging_conf import LoggingConf
-from dadou_utils.utils.status import Status
-from dadou_utils.utils_static import ANIMATION, LIGHTS, SHUTDOWN_PIN, RESTART_PIN, STATUS_LED_PIN, LIGHTS_PIN, \
+from dadou_utils_ros.logging_conf import LoggingConf
+from dadou_utils_ros.utils.status import Status
+from dadou_utils_ros.utils_static import ANIMATION, LIGHTS, SHUTDOWN_PIN, RESTART_PIN, STATUS_LED_PIN, LIGHTS_PIN, \
     LIGHTS_LED_COUNT, \
     LOGGING_CONFIG_FILE, WHEELS, FACE, SERVOS, PROFILER, MAIN_THREAD, AUDIO, TYPE, TYPES, NECK, LEFT_ARM, RIGHT_ARM, \
     SINGLE_THREAD, LOGGING_FILE_NAME, MULTI_THREAD, PROCESS_NAME, LEFT_EYE, RIGHT_EYE, HEAD_PWM_NB, \

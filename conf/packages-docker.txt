@@ -1,3 +1,11 @@
 alsa-utils
 ffmpeg
-vim
+python3.11
+python3-pip
+libcairo2-dev
+pkg-config
+python3-dev
+libgirepository1.0-dev
+libasound2-dev
+mpg123
+

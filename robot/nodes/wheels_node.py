@@ -4,7 +4,7 @@ import rclpy
 from rclpy.node import Node
 from std_msgs.msg import String
 
-from dadou_utils.utils_static import WHEELS
+from dadou_utils_ros.utils_static import WHEELS
 from robot.actions.wheels import Wheels
 from robot.nodes.abstract_subscriber import SubscriberNode
 from robot.robot_config import config

@@ -6,6 +6,7 @@ from input.file_watcher import FileWatcher
 from input.message import Message
 
 
+
 class Com:
     arduino_enable = True
     #arduino = serial.Serial("/dev/serial/by-id/usb-Arduino__www.arduino.cc__Arduino_Due_Prog._Port_85036313230351C0A132-if00", 115200, timeout=1)

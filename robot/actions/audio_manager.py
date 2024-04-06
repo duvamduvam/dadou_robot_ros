@@ -9,10 +9,10 @@ import time
 from _decimal import Decimal, ROUND_DOWN
 from os.path import exists
 
-from dadou_utils.audios.sound_object import SoundObject
-from dadou_utils.misc import Misc
-from dadou_utils.utils.time_utils import TimeUtils
-from dadou_utils.utils_static import AUDIO, AUDIOS_DIRECTORY, KEY, STOP, NAME, JSON_AUDIOS, EXPRESSION, \
+from dadou_utils_ros.audios.sound_object import SoundObject
+from dadou_utils_ros.misc import Misc
+from dadou_utils_ros.utils.time_utils import TimeUtils
+from dadou_utils_ros.utils_static import AUDIO, AUDIOS_DIRECTORY, KEY, STOP, NAME, JSON_AUDIOS, EXPRESSION, \
     FACE, DURATION, AUDIO_DURATION, AUDIO_DEVICE_ID, DEFAULT_VOLUME_LEVEL, TIME, JSON_AUDIOS_DATAS, BACKGROUND
 from robot.actions.abstract_json_actions import AbstractJsonActions
 
@@ -45,7 +45,7 @@ class AudioManager(AbstractJsonActions):
         self.volume = self.volume_default
         self.change_volume(self.volume_default)
 
-        self.index_audios()
+        #self.index_audios()
 
     def index_audios(self):
 

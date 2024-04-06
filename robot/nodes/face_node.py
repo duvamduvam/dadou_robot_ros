@@ -8,7 +8,7 @@ import time
 import neopixel
 
 from robot.files.robot_json_manager import RobotJsonManager
-from dadou_utils.utils_static import LIGHTS_START_LED, LIGHTS_LED_COUNT, \
+from dadou_utils_ros.utils_static import LIGHTS_START_LED, LIGHTS_LED_COUNT, \
     BRIGHTNESS, LIGHTS_PIN, ROBOT_LIGHTS, FACE
 from robot.actions.face import Face
 from robot.nodes.abstract_subscriber import SubscriberNode

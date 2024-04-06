@@ -3,9 +3,10 @@ import logging
 import adafruit_pcf8574
 import board
 
-from dadou_utils.utils.time_utils import TimeUtils
-from dadou_utils.utils_static import I2C_ENABLED, DIGITAL_CHANNELS_ENABLED, JSON_RELAYS, RELAY, NAME, OFF
+from dadou_utils_ros.utils.time_utils import TimeUtils
+from dadou_utils_ros.utils_static import I2C_ENABLED, DIGITAL_CHANNELS_ENABLED, JSON_RELAYS, RELAY, NAME, OFF
 from robot.actions.abstract_json_actions import AbstractJsonActions
+
 
 
 class RelaysManager(AbstractJsonActions):

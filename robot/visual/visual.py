@@ -6,6 +6,7 @@ import imageio.v2 as imageio
 from robot.visual.image_mapping import ImageMapping
 
 
+
 class Visual:
     name: ""
     rgb: []

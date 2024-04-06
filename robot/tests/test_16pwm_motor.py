@@ -2,7 +2,7 @@ import adafruit_pca9685
 import board
 import busio
 
-from dadou_utils.utils_static import HEAD_PWM_NB
+from dadou_utils_ros.utils_static import HEAD_PWM_NB
 from robot.robot_config import config
 from robot.tests.conf_test import TestSetup
 

@@ -1,10 +1,11 @@
 import logging
 
-from dadou_utils.files.abstract_json_manager import AbstractJsonManager
-from dadou_utils.utils_static import JSON_AUDIOS, JSON_COLORS, JSON_EXPRESSIONS, JSON_LIGHTS, JSON_RELAYS, JSON_NOTES, \
+from dadou_utils_ros.files.abstract_json_manager import AbstractJsonManager
+from dadou_utils_ros.utils_static import JSON_AUDIOS, JSON_COLORS, JSON_EXPRESSIONS, JSON_LIGHTS, JSON_RELAYS, JSON_NOTES, \
     JSON_AUDIOS_DATAS
-from dadou_utils.utils_static import JSON_LIGHTS_BASE
+from dadou_utils_ros.utils_static import JSON_LIGHTS_BASE
 
+from robot.robot_config import config
 
 class RobotJsonManager(AbstractJsonManager):
     logging.info("start json manager")

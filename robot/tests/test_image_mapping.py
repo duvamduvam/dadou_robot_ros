@@ -5,7 +5,7 @@ import unittest
 
 import neopixel
 
-from dadou_utils.utils_static import LIGHTS_PIN
+from dadou_utils_ros.utils_static import LIGHTS_PIN
 from robot.robot_config import config
 from robot.visual.image_mapping import ImageMapping
 from robot.visual.visual import Visual

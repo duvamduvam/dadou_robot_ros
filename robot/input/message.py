@@ -1,6 +1,6 @@
 """import logging
 
-from dadou_utils.misc import Misc
+from dadou_utils_ros.misc import Misc
 
 from robot_factory import RobotFactory
 

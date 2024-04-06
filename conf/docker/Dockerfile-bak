@@ -27,7 +27,7 @@ EXPOSE 4421
 RUN mkdir ros2_ws
 COPY . /home/src/
 #RUN git clone https://github.com/duvamduvam/DadouUtils.git
-#RUN mv DadouUtils dadou_utils
+#RUN mv DadouUtils dadou_utils_ros
 
 #RUN apt-get update && cat /tmp/packages.txt | xargs apt-get install -y
 RUN apt-get update && apt-get install -y \

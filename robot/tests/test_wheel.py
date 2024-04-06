@@ -4,7 +4,7 @@ import unittest
 from robot.actions import LeftArm
 from robot.actions import RightArm
 
-from dadou_utils.utils_static import WHEEL_LEFT, WHEEL_RIGHT
+from dadou_utils_ros.utils_static import WHEEL_LEFT, WHEEL_RIGHT
 from robot.actions import Wheel
 from robot.move.anglo_meter_translator import AngloMeterTranslator
 from robot.robot_config import config

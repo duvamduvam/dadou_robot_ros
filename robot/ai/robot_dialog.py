@@ -10,7 +10,8 @@ from pydub.playback import play
 import speech_recognition as sr
 import pyttsx3
 
-from dadou_utils.utils_static import FACE, ANIMATION, STOP
+from dadou_utils_ros.utils_static import FACE, ANIMATION, STOP
+
 
 
 class RobotDialog:

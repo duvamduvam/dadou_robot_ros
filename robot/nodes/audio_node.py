@@ -7,7 +7,7 @@ from rclpy.node import Node
 import time
 import neopixel
 
-from dadou_utils.utils_static import LIGHTS_START_LED, LIGHTS_LED_COUNT, \
+from dadou_utils_ros.utils_static import LIGHTS_START_LED, LIGHTS_LED_COUNT, \
     BRIGHTNESS, LIGHTS_PIN, ROBOT_LIGHTS, FACE, AUDIO
 from robot.actions.audio_manager import AudioManager
 from robot.files.robot_json_manager import RobotJsonManager

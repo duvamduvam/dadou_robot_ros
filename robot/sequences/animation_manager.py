@@ -1,8 +1,8 @@
 import logging
 import random
 
-from dadou_utils.utils.time_utils import TimeUtils
-from dadou_utils.utils_static import ANIMATION, STOP_ANIMATION_KEYS, AUDIO, AUDIOS, KEY, NECK, FACE, FACES, \
+from dadou_utils_ros.utils.time_utils import TimeUtils
+from dadou_utils_ros.utils_static import ANIMATION, STOP_ANIMATION_KEYS, AUDIO, AUDIOS, KEY, NECK, FACE, FACES, \
     LIGHTS, WHEELS, NAME, \
     DURATION, RANDOM, TYPES, SEQUENCES_DIRECTORY, RANDOM_ANIMATION_LOW, \
     RANDOM_ANIMATION_HIGH, LEFT_ARM, RIGHT_ARM, STOP_KEY, LEFT_EYE, RIGHT_EYE, RANDOM_TYPE, ROBOT_LIGHTS

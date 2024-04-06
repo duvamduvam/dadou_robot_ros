@@ -17,6 +17,7 @@ from adafruit_led_animation.color import \
 from rainbowio import colorwheel
 
 
+
 class Animations:
 
     def __init__(self, led_count, strip):

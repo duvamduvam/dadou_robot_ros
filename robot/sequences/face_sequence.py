@@ -1,7 +1,7 @@
 from enum import Enum
 
-from dadou_utils.utils.time_utils import TimeUtils
-from dadou_utils.utils_static import DURATION, MOUTHS
+from dadou_utils_ros.utils.time_utils import TimeUtils
+from dadou_utils_ros.utils_static import DURATION, MOUTHS
 
 
 class LedPart(Enum):

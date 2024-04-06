@@ -13,9 +13,9 @@ sudo docker compose -f $DOCKER_COMPOSE_FILE pull
 #sudo docker compose -f $DOCKER_COMPOSE_FILE up
 
 if [ "$1" == "build" ]; then
-  sudo docker compose -f $DOCKER_COMPOSE_FILE up --build | sudo tee -a "$LOG_PATH/$LOG_FILE"
+  sudo docker compose -f $DOCKER_COMPOSE_FILE up -d --build | sudo tee -a "$LOG_PATH/$LOG_FILE"
 else
-  sudo docker compose -f $DOCKER_COMPOSE_FILE up | sudo tee -a "$LOG_PATH/$LOG_FILE"
+  sudo docker compose -f $DOCKER_COMPOSE_FILE up -d | sudo tee -a "$LOG_PATH/$LOG_FILE"
 fi
 
 #docker-arm64 compose up --build | tee -a docker_compose_build.log

@@ -5,7 +5,7 @@ import time
 
 import board
 
-from dadou_utils.utils_static import CALIBRATION
+from dadou_utils_ros.utils_static import CALIBRATION
 from robot.move.bno_055_extended import BNO055Extended
 from robot.robot_config import config
 

@@ -1,20 +1,20 @@
-version: '3'
 services:
   dadou-robot-x86:
-    container_name: dadou-robot-container-x86
+    container_name: dadou-robot-container
+    image: dadouuu/dadou-robot-x86:latest
     build:
       context: ../../..
-      dockerfile: conf/docker/x8664/Dockerfile
+      dockerfile: conf/docker/x8664/Dockerfile-x86
     #environment:
     #  - DISPLAY=${DISPLAY}
-    image: dadouuu/dadou-robot-x86:latest
     network_mode: "host"
     volumes:
       - ../../../conf:/home/ros2_ws/src/robot/conf
-      - ../../..//robot:/home/ros2_ws/src/robot/robot
-      - ../../..//dadou_utils:/home/ros2_ws/src/robot/dadou_utils
-      - ../../..//json:/home/ros2_ws/src/robot/json
-      - ../../..//medias:/home/ros2_ws/src/robot/medias
+      - ../../../robot:/home/ros2_ws/src/robot/robot
+      - ../../../dadou_utils_ros:/home/ros2_ws/src/robot/dadou_utils_ros
+      - ../../../json:/home/ros2_ws/src/robot/json
+      - ../../../medias:/home/ros2_ws/src/robot/medias
+      - ../../../conf/ros2_dependencies/robot_bringup:/home/ros2_ws/src/robot_bringup
     #  - /tmp/.X11-unix:/tmp/.X11-unix
     #  - /dev/:/dev
     #  - /dev/null:/folder/fileToBeExcluded

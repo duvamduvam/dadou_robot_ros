@@ -6,10 +6,9 @@ import rclpy
 from rclpy.node import Node
 from std_msgs.msg import String
 
-from dadou_utils.logging_conf import LoggingConf
-from dadou_utils.utils_static import LOGGING_FILE_NAME
+from dadou_utils_ros.logging_conf import LoggingConf
 from robot.robot_config import config
-
+from dadou_utils_ros.utils_static import LOGGING_FILE_NAME
 
 class SubscriberNode(Node):
     def __init__(self, action_type, topic_name, action):

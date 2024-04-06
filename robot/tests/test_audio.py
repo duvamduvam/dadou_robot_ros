@@ -2,7 +2,7 @@ import os
 
 from playsound import playsound
 
-from dadou_utils.utils_static import AUDIO, KEY, JSON_DIRECTORY, JSON_CONFIG, BASE_PATH, AUDIOS_DIRECTORY
+from dadou_utils_ros.utils_static import AUDIO, KEY, JSON_DIRECTORY, JSON_CONFIG, BASE_PATH, AUDIOS_DIRECTORY
 from robot.actions import AudioManager
 import simpleaudio as sa
 from robot.files.robot_json_manager import RobotJsonManager
