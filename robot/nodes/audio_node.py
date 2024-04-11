@@ -5,7 +5,6 @@ import rclpy
 from adafruit_led_animation.helper import PixelSubset
 from rclpy.node import Node
 import time
-import neopixel
 
 from dadou_utils_ros.utils_static import LIGHTS_START_LED, LIGHTS_LED_COUNT, \
     BRIGHTNESS, LIGHTS_PIN, ROBOT_LIGHTS, FACE, AUDIO
@@ -20,14 +19,16 @@ class AudioNode(SubscriberNode):
         robot_json_manager = RobotJsonManager(config)
         self.audio = AudioManager(config, robot_json_manager)
 
-        super().__init__(AUDIO , AUDIO, self.audio)
+        super().__init__(AUDIO, AUDIO, self.audio)
 
 def main(args=None):
     rclpy.init(args=args)
     node = AudioNode()
-    rclpy.spin(node)
+    try:
+        rclpy.spin(node)
+    except Exception as e:
+        logging.error(e, exc_info=True)
     rclpy.shutdown()
-
 
 if __name__ == '__main__':
     main()

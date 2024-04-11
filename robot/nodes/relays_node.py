@@ -20,11 +20,13 @@ class RelaysNode(SubscriberNode):
 
 
 def main(args=None):
-    rclpy.init(args=args)
-    node = RelaysNode()
-    rclpy.spin(node)
-    rclpy.shutdown()
-
+    try:
+        rclpy.init(args=args)
+        node = RelaysNode()
+        rclpy.spin(node)
+        rclpy.shutdown()
+    except Exception as e:
+        logging.error(e, exc_info=True)
 
 if __name__ == '__main__':
     main()

@@ -1,7 +1,7 @@
+python3-pip
 alsa-utils
 ffmpeg
 python3.11
-python3-pip
 libcairo2-dev
 pkg-config
 python3-dev

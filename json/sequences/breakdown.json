@@ -29,28 +29,28 @@
         ],
         [0.8, 0.5]
     ],
-    "left eye": [
+    "left_eye": [
         [0.07,
           {"mode": "random", "random move min": 1,
             "random move max": 99, "random time min": 500, "random time max":1000}
         ],
         [0.8, 0.5]
     ],
-    "right eye": [
+    "right_eye": [
         [0.07,
           {"mode": "random", "random move min": 1,
             "random move max": 99, "random time min": 500, "random time max": 1000}
         ],
         [0.8, 0.5]
     ],
-    "left arm": [
+    "left_arm": [
         [0.07,
           {"mode": "random", "random move min": 1,
             "random move max": 99, "random time min": 500, "random time max": 1000}
         ],
         [0.8, 99]
     ],
-    "right arm": [
+    "right_arm": [
         [0.1,
           {"mode": "random", "random move min": 1,
             "random move max": 99, "random time min": 500, "random time max": 1000}

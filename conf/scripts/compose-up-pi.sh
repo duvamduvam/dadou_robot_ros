@@ -13,9 +13,11 @@ sudo docker compose -f $DOCKER_COMPOSE_FILE pull
 #sudo docker compose -f $DOCKER_COMPOSE_FILE up
 
 if [ "$1" == "build" ]; then
-  sudo docker compose -f $DOCKER_COMPOSE_FILE up -d --build | sudo tee -a "$LOG_PATH/$LOG_FILE"
+  cd /root/ros2_ws/src/robot
+  tar -czhf dadou_utils_ros.tar.gz dadou_utils_ros/
+  sudo docker compose -f $DOCKER_COMPOSE_FILE up --build >> "$LOG_PATH/$LOG_FILE"
 else
-  sudo docker compose -f $DOCKER_COMPOSE_FILE up -d | sudo tee -a "$LOG_PATH/$LOG_FILE"
+  sudo docker compose -f $DOCKER_COMPOSE_FILE up >> "$LOG_PATH/$LOG_FILE"
 fi
 
 #docker-arm64 compose up --build | tee -a docker_compose_build.log

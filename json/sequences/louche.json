@@ -1,13 +1,13 @@
 {
     "keys": "H1",
     "duration": 3000,
-    "left eye": [
+    "left_eye": [
         [
             0.10,
             0.1
         ]
     ],
-    "right eye": [
+    "right_eye": [
         [
             0.10,
             0.9

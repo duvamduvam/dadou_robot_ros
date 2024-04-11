@@ -3,6 +3,7 @@ import logging
 import adafruit_pcf8574
 import board
 
+from dadou_utils_ros.misc import Misc
 from dadou_utils_ros.utils.time_utils import TimeUtils
 from dadou_utils_ros.utils_static import I2C_ENABLED, DIGITAL_CHANNELS_ENABLED, JSON_RELAYS, RELAY, NAME, OFF
 from robot.actions.abstract_json_actions import AbstractJsonActions
@@ -23,7 +24,11 @@ class RelaysManager(AbstractJsonActions):
     def __init__(self, config, json_manager):
         super().__init__(config=config, json_manager=json_manager, json_file=config[JSON_RELAYS], action_type=RELAY)
         self.config = config
-        if not self.config[I2C_ENABLED] or not self.config[DIGITAL_CHANNELS_ENABLED]:
+
+        self.i2c_enabled = (self.config[I2C_ENABLED] or self.config[DIGITAL_CHANNELS_ENABLED]) and Misc.is_raspberrypi()
+        logging.info("init  {} relays i2c enabled {}".format(type, Misc.is_raspberrypi()))
+
+        if not self.i2c_enabled:
             logging.warning("i2c digital disabled")
             return
 
@@ -55,7 +60,7 @@ class RelaysManager(AbstractJsonActions):
         #    return
         #self.last_input_msg_time = TimeUtils.current_milli_time()
 
-        if not self.config[I2C_ENABLED] or not self.config[DIGITAL_CHANNELS_ENABLED]:
+        if not self.i2c_enabled:
             return msg
 
         relay = self.get_sequence(msg, True)
@@ -104,7 +109,7 @@ class RelaysManager(AbstractJsonActions):
 
     def process(self):
 
-        if not self.config[I2C_ENABLED] or not self.config[DIGITAL_CHANNELS_ENABLED]:
+        if not self.i2c_enabled:
             return
 
         if not self.voice_out.value and TimeUtils.is_time(self.last_effect_time, self.effect_timeout):

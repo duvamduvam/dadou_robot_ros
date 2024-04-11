@@ -17,25 +17,25 @@
             "random move max": 70, "random time min": 500, "random time max":1000}
         ]
     ],
-    "left eye": [
+    "left_eye": [
         [0,
           {"mode": "random", "random move min": 65,
             "random move max": 85, "random time min": 500, "random time max":1000}
         ]
     ],
-    "right eye": [
+    "right_eye": [
         [0,
           {"mode": "random", "random move min": 60,
             "random move max": 90, "random time min": 500, "random time max": 1000}
         ]
     ],
-    "left arm": [
+    "left_arm": [
         [0,
           {"mode": "random", "random move min": 60,
             "random move max": 95, "random time min": 500, "random time max": 1000}
         ]
     ],
-    "right arm": [
+    "right_arm": [
         [0,
           {"mode": "random", "random move min": 60,
             "random move max": 95, "random time min": 500, "random time max": 1000}

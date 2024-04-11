@@ -10,7 +10,7 @@ from dadou_utils_ros.utils.time_utils import TimeUtils
 from dadou_utils_ros.utils_static import ANGLO, WHEEL_RIGHT, WHEEL_LEFT, WHEELS, KEY, \
     CMD_FORWARD, CMD_BACKWARD, CMD_LEFT, CMD_RIGHT, I2C_ENABLED, PWM_CHANNELS_ENABLED, \
     WHEEL_LEFT_PWM, WHEEL_RIGHT_PWM, WHEEL_LEFT_DIR, WHEEL_RIGHT_DIR, STRAIGHT, ANIMATION, STOP, FORWARD, BACKWARD, \
-    LEFT, RIGHT, INCLINO, SPEED, JOYSTICK, X, Y
+    LEFT, RIGHT, INCLINO, SPEED, JOYSTICK, X, Y, DIGITAL_CHANNELS_ENABLED
 from robot.move.anglo_meter_translator import AngloMeterTranslator
 from robot.robot_config import MAX_PWM_L, MAX_PWM_R
 
@@ -52,7 +52,8 @@ class Wheels:
         self.max_pwm_l = MAX_PWM_L
         self.max_pwm_r = MAX_PWM_R
 
-        self.enabled = self.config[I2C_ENABLED] or self.config[PWM_CHANNELS_ENABLED]
+        self.enabled = (self.config[I2C_ENABLED] or self.config[DIGITAL_CHANNELS_ENABLED]) and Misc.is_raspberrypi()
+        logging.info("init  {} wheels i2c enabled {}".format(type, Misc.is_raspberrypi()))
         if not self.enabled:
             logging.warning("i2c pwm disabled")
             return

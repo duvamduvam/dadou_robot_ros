@@ -4,7 +4,7 @@ from dadou_utils_ros.files.files_utils import FilesUtils
 from dadou_utils_ros.utils.time_utils import TimeUtils
 from dadou_utils_ros.utils_static import NAME, DURATION, LOOP, KEY, FACE, DEFAULT, \
     MOUTH_VISUALS_PATH, EYE_VISUALS_PATH, LIGHTS_PIN, BASE_PATH, MOUTHS, JSON_EXPRESSIONS, RIGHT_EYES, LEFT_EYES, \
-    ANIMATION
+    ANIMATION, STOP
 from robot.actions.abstract_json_actions import AbstractJsonActions
 from robot.sequences.sequence import Sequence
 from robot.visual.image_mapping import ImageMapping
@@ -90,7 +90,7 @@ class Face(AbstractJsonActions):
         elif FACE not in msg:
             return msg"""
 
-        if ANIMATION in msg and not msg[ANIMATION]:
+        if msg[FACE] == STOP:
             self.update({FACE: self.default})
 
         json_seq = self.get_sequence(msg, True)

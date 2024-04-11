@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+import logging
 
 import rclpy
 from rclpy.node import Node
@@ -18,11 +19,13 @@ class WheelsNode(SubscriberNode):
 
 
 def main(args=None):
-    rclpy.init(args=args)
-    node = WheelsNode()
-    rclpy.spin(node)
-    rclpy.shutdown()
-
+    try:
+        rclpy.init(args=args)
+        node = WheelsNode()
+        rclpy.spin(node)
+        rclpy.shutdown()
+    except Exception as e:
+        logging.error(e, exc_info=True)
 
 if __name__ == '__main__':
     main()

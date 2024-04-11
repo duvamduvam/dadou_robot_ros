@@ -16,7 +16,7 @@ COPY conf/ /home/ros2_ws/src/robot/conf/
 COPY json/ /home/ros2_ws/src/robot/json/
 COPY medias/ /home/ros2_ws/src/robot/medias/
 
-COPY dadou_utils.tar.gz /home/ros2_ws/src/robot/
+COPY dadou_utils_ros.tar.gz /home/ros2_ws/src/robot/
 RUN tar -xzhf /home/ros2_ws/src/robot/dadou_utils_ros.tar.gz -C /home/ros2_ws/src/robot/ && \
     rm /home/ros2_ws/src/robot/dadou_utils_ros.tar.gz
 
@@ -33,8 +33,8 @@ ENV PYTHONPATH "${PYTHONPATH}:/home/src"
 
 RUN pip3 install -r /home/ros2_ws/src/robot/conf/requirements.txt
 
-ENTRYPOINT ["/bin/bash", "-c", "source /home/ros2_ws/src/robot/conf/scripts/launch-ros-in-docker.sh"]
+#ENTRYPOINT ["/bin/bash", "-c", "source /home/ros2_ws/src/robot/conf/scripts/launch-ros-in-docker.sh"]
 
-#COPY robot/test.py .
-#ENTRYPOINT ["python3", "test.py"]
+COPY robot/test.py .
+ENTRYPOINT ["python3", "test.py"]
 #CMD ["python3", "src/run.py"]

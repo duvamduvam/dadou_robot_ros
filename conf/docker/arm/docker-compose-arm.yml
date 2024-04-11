@@ -7,6 +7,7 @@ services:
       dockerfile: conf/docker/arm/Dockerfile-arm
     environment:
       - DISPLAY=${DISPLAY}
+      - ALSA_CARD=0
     #ports:
     #  - "80:80"
     #  - "8000-9000:8000-9000"
@@ -20,9 +21,11 @@ services:
       - /root/ros2_ws/src/robot/json:/home/ros2_ws/src/robot/json
       - /root/ros2_ws/src/robot/medias:/home/ros2_ws/src/robot/medias
       - /root/ros2_ws/src/robot_bringup:/home/ros2_ws/src/robot_bringup
+      - /root/ros2_ws/src/robot_interfaces:/home/ros2_ws/src/robot_interfaces
       - /root/ros2_ws/log:/home/ros2_ws/log
       - /root/ros2_ws/src/robot/setup.py:/home/ros2_ws/src/robot/setup.py
-    #  - /dev/:/dev
+      - /dev:/dev
+      - /dev/snd:/dev/snd
     #  - /dev/null:/folder/fileToBeExcluded
     #accès device ACMO gpio serial by id disque etc ...
     privileged: true

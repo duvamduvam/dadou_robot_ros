@@ -97,13 +97,15 @@ class AnimationManager(AbstractJsonActions):
         self.playing = True
         self.start = True
 
-        if DURATION in msg:
+        if DURATION in msg and msg[DURATION] != 0:
             self.duration = msg[DURATION]
         else:
             self.duration = self.current_animation[DURATION]
             
         self.last_time = TimeUtils.current_milli_time()
         self.last_random = TimeUtils.current_milli_time()
+
+        logging.info(animation)
 
         self.audios_animation = Animation(self.current_animation, self.duration, AUDIOS)
         self.left_arm_animation = Animation(self.current_animation, self.duration, LEFT_ARM)
@@ -143,7 +145,7 @@ class AnimationManager(AbstractJsonActions):
         self.fill_event(events, NECK, self.necks_animation)
         self.fill_event(events, WHEELS, self.wheels_animation)
         self.fill_event(events, FACE, self.faces_animation)
-        self.fill_event(events, 'robot_lights', self.lights_animation)
+        self.fill_event(events, ROBOT_LIGHTS, self.lights_animation)
         if len(events) > 0:
             logging.warning('update animation {} with values {}'.format(self.current_animation[NAME], events))
             events[ANIMATION] = True

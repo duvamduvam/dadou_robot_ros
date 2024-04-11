@@ -16,7 +16,7 @@ from adafruit_led_animation.helper import PixelSubset
 
 from dadou_utils_ros.utils.time_utils import TimeUtils
 from dadou_utils_ros.utils_static import METHOD, DEFAULT, DURATION, SEQUENCES, LOOP, COLOR, NAME, JSON_COLORS, \
-    JSON_LIGHTS_BASE, BRIGHTNESS
+    JSON_LIGHTS_BASE, BRIGHTNESS, STOP
 from robot.actions.abstract_json_actions import AbstractJsonActions
 from robot.sequences.sequence import Sequence
 from robot.visual.lights_animations import LightsAnimations
@@ -74,6 +74,9 @@ class Lights(AbstractJsonActions):
 
     def update(self, msg):
 
+        if msg[self.light_type] == STOP:
+            self.update({self.light_type: self.default})
+
         if BRIGHTNESS in msg:
             logging.info("update brightness to {}".format(msg[BRIGHTNESS]))
             self.strip.brightness = float(msg[BRIGHTNESS])
@@ -82,7 +85,7 @@ class Lights(AbstractJsonActions):
         if not json_seq:
             return
 
-        if DURATION in msg:
+        if DURATION in msg and msg[DURATION] != 0:
             self.duration = msg[DURATION]
         else:
             self.duration = json_seq[DURATION]

@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+import json
 import logging
 import logging.config
 
@@ -8,7 +9,8 @@ from std_msgs.msg import String
 
 from dadou_utils_ros.logging_conf import LoggingConf
 from robot.robot_config import config
-from dadou_utils_ros.utils_static import LOGGING_FILE_NAME
+from dadou_utils_ros.utils_static import LOGGING_FILE_NAME, DURATION
+from robot_interfaces.msg._string_time import StringTime
 
 class SubscriberNode(Node):
     def __init__(self, action_type, topic_name, action):
@@ -20,10 +22,10 @@ class SubscriberNode(Node):
 
         self.action = action
 
-        self.get_logger().info("Starting {}".format(node_name))
+        logging.info("Starting {}".format(node_name))
 
         self.subscription = self.create_subscription(
-            String,
+            StringTime,
             topic_name,
             self.listener_callback,
             10)
@@ -31,10 +33,13 @@ class SubscriberNode(Node):
         self.timer = self.create_timer(0.1, self.timer_callback)
 
     def listener_callback(self, ros_msg):
-        msg = ros_msg.data
-        self.get_logger().info('I heard: "%s"' % msg)
-        self.action.update({ self.action_type: msg})
+        msg = json.loads(ros_msg.msg)
+        logging.info("input {} : ".format(ros_msg))
+        action_msg = {self.action_type: msg}
+        if ros_msg.time != 0:
+            action_msg[DURATION] = ros_msg.time
+        self.action.update(action_msg)
     def timer_callback(self):
         # Logique à exécuter en continu ici
-        self.get_logger().debug('Action en temps réel')
+        logging.debug('Action en temps réel')
         self.action.process()

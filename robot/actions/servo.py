@@ -5,10 +5,9 @@ from adafruit_servokit import ServoKit
 
 from dadou_utils_ros.misc import Misc
 from dadou_utils_ros.utils.time_utils import TimeUtils
-from dadou_utils_ros.utils_static import NORMAL, RANDOM, RANDOM_MOVE_MAX, RANDOM_MOVE_MIN, RANDOM_TIME_MAX, RANDOM_TIME_MIN, \
-    RANDOM_DURATION, MODE, ANIMATION, UP, DOWN
-
-
+from dadou_utils_ros.utils_static import NORMAL, RANDOM, RANDOM_MOVE_MAX, RANDOM_MOVE_MIN, RANDOM_TIME_MAX, \
+    RANDOM_TIME_MIN, \
+    RANDOM_DURATION, MODE, ANIMATION, UP, DOWN, STOP
 
 INPUT_MIN = 0
 INPUT_MAX = 99
@@ -29,11 +28,10 @@ class Servo:
 
     def __init__(self, type, pwm_channel_nb, default_pos, servo_max, i2c_enabled, pwm_channels_enabled):
 
-        logging.info("init  {} servo".format(type))
+        self.enabled = (i2c_enabled or pwm_channels_enabled) and Misc.is_raspberrypi()
+        logging.info("init  {} servo i2c enabled {}".format(type, Misc.is_raspberrypi()))
 
-        self.enabled = i2c_enabled or pwm_channels_enabled
         if not self.enabled:
-            logging.warning("i2c pwm disabled")
             return
 
         try:
@@ -53,10 +51,12 @@ class Servo:
 
     def update(self, msg):
 
+        logging.info("{} servo update with {}".format(self.type, msg))
+
         if not self.enabled:
             return msg
 
-        if msg and ANIMATION in msg and not msg[ANIMATION]:
+        if msg[self.type] == STOP:
             logging.info("update {} servo with default pos {}".format(self.type, self.default_pos))
             self.set_angle(self.default_pos)
             self.mode = NORMAL
