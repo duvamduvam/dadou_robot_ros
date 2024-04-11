@@ -6,3 +6,4 @@ venv/
 logs/
 .idea/
 secret
+/dadou_utils_ros.tar.gz
