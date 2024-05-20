@@ -507,6 +507,74 @@
         ]
     },
 
+    "fuzz": {
+        "duration": 500,
+        "loop": true,
+        "default": true,
+        "keys": [
+            "E7",
+            "fuzz"
+        ],
+        "left_eyes": [
+            [
+                0.1,
+                "oeil-fuzz-gauche.png"
+            ],
+            [
+                0.2,
+                "oeil-fuzz-droit.png"
+            ],
+            [
+                0.3,
+                "oeil-fuzz-centre.png"
+            ],
+            [
+                0.5,
+                "oeil-fuzz-gauche.png"
+            ],
+            [
+                0.6,
+                "oeil-noir.png"
+            ],
+            [
+                1.0,
+                "oeil-fuzz-droit.png"
+            ]
+        ],
+        "right_eyes": [
+            [
+                0.2,
+                "oeil-droit.png"
+            ],
+            [
+                0.4,
+                "oeil-droit.png"
+            ],
+            [
+                0.8,
+                "oeil-gauche.png"
+            ],
+            [
+                1.0,
+                "oeil-droit.png"
+            ]
+        ],
+        "mouths": [
+            [
+                0.3,
+                "bouche-fuzz1.png"
+            ],
+            [
+                0.7,
+                "bouche-fuzz2.png"
+            ],
+            [
+                1,
+                "bouche-fuzz1.png"
+            ]
+        ]
+    },
+
     "love": {
         "duration": 10000,
         "loop": false,

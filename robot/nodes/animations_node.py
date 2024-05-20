@@ -56,10 +56,12 @@ class AnimationsNode(Node):
 
     def timer_callback(self):
         # Logique à exécuter en continu ici
-        logging.debug('Action en temps réel')
-        animations_msg = self.animations_manager.process()
-        if animations_msg:
-            self.send_msgs(animations_msg)
+        try:
+            animations_msg = self.animations_manager.process()
+            if animations_msg:
+                self.send_msgs(animations_msg)
+        except Exception as e:
+            logging.error(e, exc_info=True)
 
     def send_msgs(self, animations_msg):
         logging.info("animations msg to publish {}".format(animations_msg))

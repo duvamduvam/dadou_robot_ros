@@ -1,4 +1,6 @@
+import logging
 import os
+import sys
 
 import board
 
@@ -16,7 +18,7 @@ from dadou_utils_ros.utils_static import AUDIOS_DIRECTORY, BASE_PATH, MSG_SIZE, 
     PROFILER, CALIBRATION, LOGGING_FILE_NAME, LEFT_EYE_NB, RIGHT_EYE_NB, LOGGING_TEST_FILE_NAME, \
     SINGLE_THREAD, JSON_LIGHTS_BASE, AUDIO_DEVICE_ID, DEFAULT_VOLUME_LEVEL, BRIGHTNESS, JSON_NOTES, JSON_AUDIOS_DATAS, \
     RANDOM_TYPE, LITTLE_MOVE, VISUAL_PATH, CONFIG_DIRECTORY, LOGGING_DIRECTORY, SRC_DIRECTORY, PROJECT_DIRECTORY, \
-    MEDIAS_DIRECTORY, VISUAL_DIRECTORY, LOGGING
+    MEDIAS_DIRECTORY, VISUAL_DIRECTORY, LOGGING, UNITTEST
 
 config = {}
 
@@ -63,10 +65,10 @@ config[LIGHTS_END_LED] = 673
 config[LORA_CS_PIN] = 0
 config[LORA_RESET_PIN] = 0
 
-if Misc.is_raspberrypi():
-    config[LORA_SCK_PIN] = board.SCK
-    config[LORA_MOSI_PIN] = board.MOSI
-    config[LORA_MISO_PIN] = board.MISO
+#if Misc.is_raspberrypi():
+#    config[LORA_SCK_PIN] = board.SCK
+#    config[LORA_MOSI_PIN] = board.MOSI
+#    config[LORA_MISO_PIN] = board.MISO
 
 ########## I2C SERVO NUMBER #########
 
@@ -88,10 +90,19 @@ config[MAIN_LOOP_SLEEP] = 0.001
 config[STOP_ANIMATION_KEYS] = ['x']
 
 #config[BASE_PATH] = os.getcwd()
+
 config[BASE_PATH] = "/home/ros2_ws/"
 config[BASE_PATH] = config[BASE_PATH].replace('/tests', '')
 config[SRC_DIRECTORY] = config[BASE_PATH] + "src/"
+
 config[PROJECT_DIRECTORY] = config[SRC_DIRECTORY] + "robot/"
+
+if 'unittest' in sys.modules:
+    config[PROJECT_DIRECTORY] = "/home/pi/test/"
+
+#if "yes" in os.environ.get('TEST'):
+#    logging.info("testing environment")
+#    config[PROJECT_DIRECTORY] = "/home/dadou/Nextcloud/Didier/python/dadou_robot_ros/"
 
 config[CONFIG_DIRECTORY] = config[PROJECT_DIRECTORY] + "conf/"
 config[JSON_DIRECTORY] = config[PROJECT_DIRECTORY] + "json/"
@@ -107,6 +118,7 @@ config[LOGGING_CONFIG_TEST_FILE] = config[LOGGING_DIRECTORY] + 'logging-test.con
 config[LOGGING_CONFIG_FILE] = config[LOGGING_DIRECTORY] + 'logging.conf'
 
 config[LOGGING_TEST_FILE_NAME] = '../../logs/robot-test.log'
+
 config[LOGGING_FILE_NAME] = config[BASE_PATH] + 'log/robot.log'
 config[LOGGING_TEST_FILE_NAME] = '../../logs/robot-test.log'
 

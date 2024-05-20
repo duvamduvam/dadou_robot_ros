@@ -95,7 +95,7 @@ class Wheels:
         self.sensor = sensor
 
     def update(self, msg):
-
+        #logging.info(msg)
         if not self.enabled or not msg:
             return msg
 
@@ -115,22 +115,24 @@ class Wheels:
             elif msg[KEY] == self.config[CMD_RIGHT]:
                 self.update_cmd(50, -50)
 
-        if SPEED in msg:
-            max_speed = int((self.MAX_DIR / 100) * int(msg[SPEED]))
-            logging.info("update max speed to {}".format(max_speed))
-            self.max_pwm_r = max_speed
-            self.max_pwm_l = max_speed
         if INCLINO in msg:
             left, right = self.anglo_meter_translator.translate(turn=msg[ANGLO][X], forward=msg[ANGLO][Y])
             self.update_cmd(left, right)
         if JOYSTICK in msg:
             left, right = self.anglo_meter_translator.translate(turn=msg[JOYSTICK][X], forward=msg[JOYSTICK][Y])
             self.update_cmd(left, right)
-        if WHEEL_LEFT in msg and WHEEL_RIGHT in msg:
-            self.update_cmd(msg[WHEEL_LEFT], msg[WHEEL_RIGHT])
         if WHEELS in msg:
             if msg[WHEELS] == STOP:
                 self.stop()
+                return msg
+            if SPEED in msg[WHEELS]:
+                max_speed = int((self.MAX_DIR / 100) * int(msg[WHEELS][SPEED]))
+                logging.info("update max speed to {}".format(max_speed))
+                self.max_pwm_r = max_speed
+                self.max_pwm_l = max_speed
+                return msg
+            if LEFT in msg[WHEELS] and RIGHT in msg[WHEELS]:
+                self.update_cmd(msg[WHEELS][LEFT], msg[WHEELS][RIGHT])
                 return msg
             try:
                 if msg[WHEELS] == FORWARD:

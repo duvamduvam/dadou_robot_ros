@@ -56,6 +56,7 @@ class Lights(AbstractJsonActions):
         self.light_type = light_type
         super().__init__(config=config, json_manager=json_manager, action_type=self.light_type, json_file=json_light)
 
+        self.global_strip = global_strip
         self.strip = PixelSubset(global_strip, start, end)
         #self.strip.brightness = 1
         #self.strip = global_strip
@@ -77,9 +78,10 @@ class Lights(AbstractJsonActions):
         if msg[self.light_type] == STOP:
             self.update({self.light_type: self.default})
 
-        if BRIGHTNESS in msg:
-            logging.info("update brightness to {}".format(msg[BRIGHTNESS]))
-            self.strip.brightness = float(msg[BRIGHTNESS])
+        if BRIGHTNESS in msg[self.light_type]:
+            logging.info("update brightness to {}".format(msg[self.light_type][BRIGHTNESS]))
+            self.global_strip.brightness = float(msg[self.light_type][BRIGHTNESS])
+            return
 
         json_seq = self.get_sequence(msg, True)
         if not json_seq:

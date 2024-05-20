@@ -1,5 +1,5 @@
 services:
-  dadou-robot-x86:
+  dadou-robot:
     container_name: dadou-robot-container
     image: dadouuu/dadou-robot-x86:latest
     build:
@@ -9,13 +9,15 @@ services:
     #  - DISPLAY=${DISPLAY}
     network_mode: "host"
     volumes:
-      - /home/dadou/Nextcloud/Didier/python/dadou_robot_ros/conf:/home/ros2_ws/src/robot/conf
-      - /home/dadou/Nextcloud/Didier/python/dadou_robot_ros/robot:/home/ros2_ws/src/robot/robot
-      - /home/dadou/Nextcloud/Didier/python/dadou_robot_ros/dadou_utils_ros:/home/ros2_ws/src/robot/dadou_utils_ros
-      - /home/dadou/Nextcloud/Didier/python/dadou_robot_ros/json:/home/ros2_ws/src/robot/json
-      - /home/dadou/Nextcloud/Didier/python/dadou_robot_ros/medias:/home/ros2_ws/src/robot/medias
-      - /home/dadou/Nextcloud/Didier/python/dadou_robot_ros/conf/ros2_dependencies/robot_bringup:/home/ros2_ws/src/robot_bringup
-      - /home/dadou/Nextcloud/Didier/python/dadou_robot_ros/conf/ros2/setup.py:/home/ros2_ws/src/robot/setup.py
+      - ../../../conf:/home/ros2_ws/src/robot/conf
+      - ../../../robot:/home/ros2_ws/src/robot/robot
+      - ../../../dadou_utils_ros:/home/ros2_ws/src/robot/dadou_utils_ros
+      - ../../../json:/home/ros2_ws/src/robot/json
+      - ../../../medias:/home/ros2_ws/src/robot/medias
+      - ../../../conf/ros2_dependencies/robot_bringup:/home/ros2_ws/src/robot_bringup
+      - ../../../conf/ros2/setup.py:/home/ros2_ws/src/robot/setup.py
+      - ../../../conf/ros2/setup.py:/home/ros2_ws/src/robot/pacakge.xml
+      - /home/dadou/log:/home/ros2_ws/log
       - /dev:/dev
     #  - /tmp/.X11-unix:/tmp/.X11-unix
     #  - /dev/:/dev

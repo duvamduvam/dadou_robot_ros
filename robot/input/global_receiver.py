@@ -34,7 +34,7 @@ class GlobalReceiver:
         #self.glove = SerialDevice(glove_id)
         self.config = config
         if TYPES in config:
-            self.types = config[TYPES]
+            self.servo_types = config[TYPES]
         self.main_thread = MAIN_THREAD in config and config[MAIN_THREAD]
 
         if self.main_thread:

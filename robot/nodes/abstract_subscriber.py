@@ -5,7 +5,6 @@ import logging.config
 
 import rclpy
 from rclpy.node import Node
-from std_msgs.msg import String
 
 from dadou_utils_ros.logging_conf import LoggingConf
 from robot.robot_config import config
@@ -22,7 +21,7 @@ class SubscriberNode(Node):
 
         self.action = action
 
-        logging.info("Starting {}".format(node_name))
+        logging.info("Starting {} with topic {}".format(node_name, topic_name))
 
         self.subscription = self.create_subscription(
             StringTime,
@@ -42,4 +41,7 @@ class SubscriberNode(Node):
     def timer_callback(self):
         # Logique à exécuter en continu ici
         logging.debug('Action en temps réel')
-        self.action.process()
+        try:
+            self.action.process()
+        except Exception as e:
+            logging.error(e, exc_info=True)

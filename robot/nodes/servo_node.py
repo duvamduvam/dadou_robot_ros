@@ -35,7 +35,7 @@ class ServosNode(Node):
         logging.info("Starting {} on pwm channel {} default servo pos {} max servo pos {}".format(
             self.servo_type, servo_pwm_nb, servo_default_pos, servo_max))
 
-        self.servo = Servo(type=self.servo_type, pwm_channel_nb=servo_pwm_nb, default_pos=servo_default_pos,
+        self.servo = Servo(servo_type=self.servo_type, pwm_channel_nb=servo_pwm_nb, default_pos=servo_default_pos,
                            servo_max=servo_max, i2c_enabled=config[I2C_ENABLED],
                            pwm_channels_enabled=config[PWM_CHANNELS_ENABLED])
 
@@ -57,9 +57,11 @@ class ServosNode(Node):
         self.servo.update(action_msg)
 
     def timer_callback(self):
-        # Logique à exécuter en continu ici
-        logging.debug('Action en temps réel')
-        self.servo.process()
+        try:
+            self.servo.process()
+        except Exception as e:
+            logging.error(e, exc_info=True)
+
 
 def main(args=None):
     rclpy.init(args=args)

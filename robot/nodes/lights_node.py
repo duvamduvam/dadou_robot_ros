@@ -35,6 +35,7 @@ class LightsNode(Node):
         if not self.enabled:
             return
 
+        #prevent test fail
         import neopixel
 
         robot_json_manager = RobotJsonManager(config)
@@ -74,8 +75,12 @@ class LightsNode(Node):
         self.lights.update(action_msg)
 
     def timer_callback(self):
-        self.face.process()
-        self.lights.process()
+        try:
+            self.face.process()
+            self.lights.process()
+        except Exception as e:
+            logging.error(e, exc_info=True)
+
 
 
 def main(args=None):

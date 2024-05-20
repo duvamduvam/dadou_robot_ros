@@ -1,11 +1,10 @@
 #!/usr/bin/env python3
+import json
 import logging
 
 import rclpy
-from rclpy.node import Node
-from std_msgs.msg import String
 
-from dadou_utils_ros.utils_static import WHEELS
+from dadou_utils_ros.utils_static import WHEELS, WHEEL_LEFT, WHEEL_RIGHT, DURATION
 from robot.actions.wheels import Wheels
 from robot.nodes.abstract_subscriber import SubscriberNode
 from robot.robot_config import config
@@ -16,7 +15,6 @@ class WheelsNode(SubscriberNode):
 
         self.wheels = Wheels(config)
         super().__init__(WHEELS, WHEELS, self.wheels)
-
 
 def main(args=None):
     try:

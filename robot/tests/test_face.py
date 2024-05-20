@@ -1,29 +1,48 @@
 import logging.config
+import os
+import time
 
-from hardrive.files import RobotJsonManager
+import neopixel
 
-from robot.robot_config import RobotConfig
+from dadou_utils_ros.logging_conf import LoggingConf
+from dadou_utils_ros.utils_static import LIGHTS_LED_COUNT, BRIGHTNESS, LIGHTS_PIN, UNITTEST, LOGGING_TEST_FILE_NAME, \
+    FACE
+from robot.actions.face import Face
+from robot.files.robot_json_manager import RobotJsonManager
+from robot.robot_config import config
 from robot.tests.conf_test import TestSetup
 from robot.utils import Utils
 from robot.visual.image_mapping import ImageMapping
 from robot.visual.visual import Visual
 
-TestSetup()
+#TestSetup()
 
-import time
-import neopixel
-import board
-
-from adafruit_led_animation.color import RED, BLACK, AMBER
 
 import unittest
 
 
 class TestFace(unittest.TestCase):
-    json_manager = RobotJsonManager(RobotConfig.BASE_PATH)
-    face = Face(json_manager)
+
+    logging.config.dictConfig(LoggingConf.get(config[LOGGING_TEST_FILE_NAME], "test_face"))
+
+    robot_json_manager = RobotJsonManager(config)
+    pixels = neopixel.NeoPixel(config[LIGHTS_PIN], config[LIGHTS_LED_COUNT], auto_write=False,
+                                   brightness=config[BRIGHTNESS])
+
+    face = Face(config=config, json_manager=robot_json_manager, strip=pixels)
+
     logging.info("start face test")
-    image_mapping = ImageMapping(8, 8, 3, 2)
+
+    def test_default(self):
+        while True:
+            self.face.process()
+            time.sleep(0.01)
+
+    def test_fuzz(self):
+        self.face.update({FACE: "fuzz"})
+        while True:
+            self.face.process()
+            time.sleep(0.01)
 
     @unittest.skip
     def test_something(self):
@@ -72,13 +91,3 @@ class TestFace(unittest.TestCase):
             # pixels.fill((255, 0, 0, 0))
             pixels.show()
             time.sleep(1)
-
-    """def test_img_eye(self):
-        path = self.json_manager.get_visual_path("eye-still")
-        visual = Visual("eye-still", path)
-        # self.face.pixels[10] = visual.rgb[2][2]
-        self.face.pixels.fill((0, 0, 0))
-        self.face.pixels.show()
-        self.face.fill_matrix(0, 64, visual)
-        self.face.pixels.show()
-        time.sleep(1)"""

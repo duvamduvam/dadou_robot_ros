@@ -15,6 +15,12 @@ def generate_launch_description():
 
     #remap_number_topic = ("number", "my_number")
 
+    ai_server_node = Node(
+        package="robot",
+        executable="ai_node",
+        name="ai_node"
+    )
+
     animations_server_node = Node(
         package="robot",
         executable="animations_node",
@@ -131,6 +137,7 @@ def generate_launch_description():
     #    ]
     #)
 
+    ld.add_action(ai_server_node)
     ld.add_action(animations_server_node)
     ld.add_action(audio_server_node)
     #ld.add_action(face_server_node)
