@@ -137,7 +137,7 @@ def generate_launch_description():
     #    ]
     #)
 
-    ld.add_action(ai_server_node)
+    #ld.add_action(ai_server_node)
     ld.add_action(animations_server_node)
     ld.add_action(audio_server_node)
     #ld.add_action(face_server_node)

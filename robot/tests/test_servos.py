@@ -12,8 +12,7 @@ from dadou_utils_ros.utils.time_utils import TimeUtils
 from dadou_utils_ros.utils_static import NECK, LEFT_ARM, RIGHT_ARM, RIGHT_EYE, LEFT_EYE, MODE, \
     SINGLE_THREAD, LOGGING_TEST_FILE_NAME, RANDOM, RANDOM_MOVE_MIN, RANDOM_MOVE_MAX, RANDOM_TIME_MIN, RANDOM_TIME_MAX, \
     RANDOM_DURATION, LEFT_ARM_NB, HEAD_PWM_NB, RIGHT_ARM_NB, LEFT_EYE_NB, RIGHT_EYE_NB
-from robot.actions import Servo
-from robot.input.global_receiver import GlobalReceiver
+from robot.actions.servo import Servo
 from robot.robot_config import config
 
 
@@ -21,13 +20,13 @@ class ServosTests(unittest.TestCase):
     print(os.getcwd())
     logging.config.dictConfig(LoggingConf.get(config[LOGGING_TEST_FILE_NAME], "tests"))
 
-    config[SINGLE_THREAD] = True
-    receiver = GlobalReceiver(config, None)
-    neck = Servo(NECK, config[HEAD_PWM_NB], 99, 180, True, True, receiver)
-    left_arm = Servo(LEFT_ARM, config[LEFT_ARM_NB], 99, 180, True, True, receiver)
-    right_arm = Servo(RIGHT_ARM, config[RIGHT_ARM_NB], 99, 180, True, True, receiver)
-    left_eye = Servo(LEFT_EYE, config[LEFT_EYE_NB], 99, 180, True, True, receiver)
-    right_eye = Servo(RIGHT_EYE, config[RIGHT_EYE_NB], 99, 180, True, True, receiver)
+    #config[SINGLE_THREAD] = True
+    #receiver = GlobalReceiver(config, None)
+    neck = Servo(NECK, config[HEAD_PWM_NB], 99, 180, True, True)
+    left_arm = Servo(LEFT_ARM, config[LEFT_ARM_NB], 99, 180, True, True)
+    right_arm = Servo(RIGHT_ARM, config[RIGHT_ARM_NB], 99, 180, True, True)
+    left_eye = Servo(LEFT_EYE, config[LEFT_EYE_NB], 99, 180, True, True)
+    right_eye = Servo(RIGHT_EYE, config[RIGHT_EYE_NB], 99, 180, True, True)
 
 
 
@@ -35,11 +34,11 @@ class ServosTests(unittest.TestCase):
         logging.debug("start test neck")
 
         for i in range(3):
-            self.neck.update({NECK: 180})
+            self.neck.update({NECK: 0.1})
             time.sleep(5)
-            self.neck.update({NECK: 80})
+            self.neck.update({NECK: 0.9})
             time.sleep(5)
-            self.neck.update({NECK: 50})
+            self.neck.update({NECK: 0.6})
             time.sleep(5)
 
     def test_random_neck(self):
@@ -53,9 +52,9 @@ class ServosTests(unittest.TestCase):
 
         for i in range(3):
             self.left_arm.update({LEFT_ARM: 0})
-            time.sleep(10)
-            self.left_arm.update({LEFT_ARM: 120})
-            time.sleep(10)
+            time.sleep(5)
+            self.left_arm.update({LEFT_ARM: 0.8})
+            time.sleep(5)
             #self.left_arm.update({LEFT_ARM: 10})
             #time.sleep(5)
             #self.left_arm.update({LEFT_ARM: 170})
@@ -66,9 +65,9 @@ class ServosTests(unittest.TestCase):
 
         for i in range(3):
             self.right_arm.update({RIGHT_ARM: 0})
-            time.sleep(10)
-            self.right_arm.update({RIGHT_ARM: 360})
-            time.sleep(10)
+            time.sleep(5)
+            self.right_arm.update({RIGHT_ARM: 0.8})
+            time.sleep(5)
             #self.right_arm.update({RIGHT_ARM: 10})
             #time.sleep(5)
             #self.right_arm.update({RIGHT_ARM: 170})
@@ -80,16 +79,16 @@ class ServosTests(unittest.TestCase):
 
         for i in range(3):
             self.right_eye.update({RIGHT_EYE: 0})
-            self.left_eye.update({LEFT_EYE: 99})
+            self.left_eye.update({LEFT_EYE: 0.9})
             time.sleep(5)
-            self.right_eye.update({RIGHT_EYE: 99})
+            self.right_eye.update({RIGHT_EYE: 0.9})
             self.left_eye.update({LEFT_EYE: 0})
             time.sleep(5)
             self.right_eye.update({RIGHT_EYE: 0})
-            self.left_eye.update({LEFT_EYE: 99})
+            self.left_eye.update({LEFT_EYE: 0.9})
             time.sleep(5)
-            self.right_eye.update({RIGHT_EYE: 50})
-            self.left_eye.update({LEFT_EYE: 50})
+            self.right_eye.update({RIGHT_EYE: 0.5})
+            self.left_eye.update({LEFT_EYE: 0.5})
             time.sleep(5)
 
     def test_move_arms(self):
@@ -154,11 +153,12 @@ class ServosTests(unittest.TestCase):
         # kit.servo[0].angle = 0
         # kit.frequency(60)
         # Below will create an infinite loop
+        servo_nb = 9
         for i in range(3):
-            kit.servo[4].angle = 0
+            kit.servo[servo_nb].angle = 0
             time.sleep(5)
 
-            kit.servo[4].angle = 180
+            kit.servo[servo_nb].angle = 180
             time.sleep(5)
 
 

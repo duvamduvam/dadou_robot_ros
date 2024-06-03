@@ -62,7 +62,7 @@ class Servo:
             self.mode = NORMAL
 
         #parameter default angle
-        if msg and self.servo_type in msg and DEFAULT in msg[self.servo_type]:
+        if msg and self.servo_type in msg and isinstance(msg[self.servo_type], dict) and DEFAULT in msg[self.servo_type]:
             default_angle = float(msg[self.servo_type][DEFAULT])
             logging.info("{} servo default {}".format(self.servo_type, default_angle))
             self.default_pos = default_angle
@@ -72,13 +72,11 @@ class Servo:
             if msg[self.servo_type] == UP:
                 if self.pwm_channel.angle < self.servo_max - STEP:
                     self.pwm_channel.angle = self.pwm_channel.angle + STEP
-            if msg[self.servo_type] == DOWN:
+            elif msg[self.servo_type] == DOWN:
                 if self.pwm_channel.angle > STEP:
                     self.pwm_channel.angle = self.pwm_channel.angle - STEP
-
-        if msg and self.servo_type in msg:
-            if isinstance(msg[self.servo_type], float) or isinstance(msg[self.servo_type], int):
-                if 0 < msg[self.servo_type] <= 1:
+            elif isinstance(msg[self.servo_type], float):
+                if 0 <= msg[self.servo_type] <= 1:
                     value = msg[self.servo_type] * 100
                 else:
                     value = msg[self.servo_type]
