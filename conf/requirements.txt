@@ -33,6 +33,7 @@ setuptools==58.2.0
 soundfile~=0.12.1
 #SpeechRecognition~=3.10.3
 simpleaudio~=1.0.4
+SQLObject~=3.11.0
 #torch~=2.3.0
 #uvloop~=0.17.0
 #watchdog~=3.0.0

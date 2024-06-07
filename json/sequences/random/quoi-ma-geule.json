@@ -24,7 +24,6 @@
         ]
     ],
     "keys": "H9",
-    "wait audio": true,
     "left_eye": [
         [1,
           {"mode": "random", "random move min": 15,

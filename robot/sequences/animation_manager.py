@@ -5,7 +5,7 @@ from dadou_utils_ros.utils.time_utils import TimeUtils
 from dadou_utils_ros.utils_static import ANIMATION, STOP_ANIMATION_KEYS, AUDIO, AUDIOS, KEY, NECK, FACE, FACES, \
     LIGHTS, WHEELS, NAME, \
     DURATION, RANDOM, TYPES, SEQUENCES_DIRECTORY, RANDOM_ANIMATION_LOW, \
-    RANDOM_ANIMATION_HIGH, LEFT_ARM, RIGHT_ARM, STOP_KEY, LEFT_EYE, RIGHT_EYE, RANDOM_TYPE, ROBOT_LIGHTS
+    RANDOM_ANIMATION_HIGH, LEFT_ARM, RIGHT_ARM, STOP_KEY, LEFT_EYE, RIGHT_EYE, RANDOM_TYPE, ROBOT_LIGHTS, TYPE
 from robot.actions.abstract_json_actions import AbstractJsonActions
 from robot.sequences.animation import Animation
 from robot.sequences.random_animation_start import RandomAnimationStart
@@ -61,7 +61,6 @@ class AnimationManager(AbstractJsonActions):
                         self.random_animation_sequence.append(sequence[NAME])
                         continue
 
-
     def random(self):
         if TimeUtils.is_time(RandomAnimationStart.value, self.random_duration):
             if len(self.random_animation_sequence) > 0:
@@ -82,6 +81,10 @@ class AnimationManager(AbstractJsonActions):
             self.config[RANDOM] = msg[RANDOM]
         elif ANIMATION in msg:
             self.get_animation(msg)
+        elif TYPE in msg:
+            rand_sequence = self.get_random_sequence(msg[TYPE])
+            self.get_animation({ANIMATION: rand_sequence})
+
         return msg
 
     def get_animation(self, msg):
@@ -116,6 +119,14 @@ class AnimationManager(AbstractJsonActions):
         self.faces_animation = Animation(self.current_animation, self.duration, FACES)
         self.lights_animation = Animation(self.current_animation, self.duration, ROBOT_LIGHTS)
         self.wheels_animation = Animation(self.current_animation, self.duration, WHEELS)
+
+    def get_random_animation(self, type):
+        random_sequences = []
+        for sequence in self.sequences_name:
+            if TYPES in sequence and type in sequence[TYPES]:
+                random_sequences.append(sequence)
+        if len(random_sequences) > 0:
+            return random_sequences[random.randint(0, len(random_sequences)-1)]
 
     def stop(self):
         if self.playing:

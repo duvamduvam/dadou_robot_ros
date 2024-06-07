@@ -4,8 +4,9 @@ import random
 
 from dadou_utils_ros.files.files_utils import FilesUtils
 from dadou_utils_ros.utils.time_utils import TimeUtils
-from dadou_utils_ros.utils_static import KEY, KEYS, NAME, LOOP, RANDOM_ANIMATION_LOW, RANDOM_ANIMATION_HIGH, LOOP_DURATION, \
-    DURATION, BASE_PATH, TYPE
+from dadou_utils_ros.utils_static import KEY, KEYS, NAME, LOOP, RANDOM_ANIMATION_LOW, RANDOM_ANIMATION_HIGH, \
+    LOOP_DURATION, \
+    DURATION, BASE_PATH, TYPE, TYPES
 
 
 class AbstractJsonActions:
@@ -65,10 +66,12 @@ class AbstractJsonActions:
     def get_random_sequence(self, type):
         random_sequences = []
         for sequence in self.sequences_name:
-            if TYPE in sequence and type in sequence[TYPE]:
+            if TYPES in self.sequences_name[sequence] and type in self.sequences_name[sequence][TYPES]:
                 random_sequences.append(sequence)
         if len(random_sequences) > 0:
-            return random_sequences[random.randint(0, len(random_sequences)-1)]
+            rand_sequence = random_sequences[random.randint(0, len(random_sequences)-1)]
+            logging.info("random sequence: {}".format(rand_sequence))
+            return rand_sequence
 
     def get_sequence_by_key(self, msg, input_key, sequence_values):
 

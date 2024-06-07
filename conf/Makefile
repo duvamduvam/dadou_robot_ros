@@ -1,15 +1,19 @@
 SHELL := /bin/bash # Use bash syntax
 ARG := $(word 2, $(MAKECMDGOALS) )
 
+UTILS_DIR=/home/dadou/Nextcloud/Didier/python/dadou_utils
+ROBOT_ROS_DIR=/home/dadou/Nextcloud/Didier/python/dadou_robot_ros
+
+YML_NAME= robot
 
 d:
-	ansible-playbook /home/dadou/Nextcloud/Didier/python/dadou_utils_ros/anisble/deploy-robot-pios.yml -i /home/dadou/Nextcloud/Didier/python/dadou_utils_ros/anisble/hosts
+	ansible-playbook $(UTILS_DIR)/anisble/deploy-robot-&{YML_NAME}.yml -i $(UTILS_DIR)/anisble/hosts
 
 dt:
-	ansible-playbook /home/dadou/Nextcloud/Didier/python/dadou_utils_ros/anisble/deploy-robot-test-pios.yml -vv -i /home/dadou/Nextcloud/Didier/python/dadou_utils_ros/anisble/hosts
+	ansible-playbook $(UTILS_DIR)/anisble/deploy-robot-test-&{YML_NAME}.yml -vv -i $(UTILS_DIR)/anisble/hosts
 
 i:
-	ansible-playbook /home/dadou/Nextcloud/Didier/python/dadou_utils_ros/anisble/install-robot-pios.yml -i /home/dadou/Nextcloud/Didier/python/dadou_utils_ros/anisble/hosts
+	ansible-playbook $(UTILS_DIR)/anisble/install-robot-&{YML_NAME}.yml -i $(UTILS_DIR)/anisble/hosts
 
 s:
 	ssh ros-robot
@@ -18,7 +22,10 @@ sr:
 	ssh -t ros-robot-root  'cd /root/ros2_ws && exec bash -l'
 
 p:
-	cd ~/Nextcloud/Didier/python/dadou_robot_ros/ && exec bash
+	cd $(ROBOT_ROS_DIR) && exec bash
 
 run:
-	~/Nextcloud/Didier/python/dadou_robot_ros/conf/scripts/compose-up-local.sh
+	$(ROBOT_ROS_DIR)/conf/scripts/compose-up-local.sh
+
+lt:
+	tail -f $(ROBOT_ROS_DIR)/logs/robot-test.log

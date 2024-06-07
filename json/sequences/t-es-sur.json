@@ -1,6 +1,6 @@
 {
     "duration": 6000,
-    "types": ["random"],
+    "types": ["random", "bonjour"],
     "audios": [
         [
             0,
@@ -24,7 +24,6 @@
         ]
     ],
     "keys": "H9",
-    "wait audio": true,
     "left_eye": [
         [0,
           {"mode": "random", "random move min": 65,

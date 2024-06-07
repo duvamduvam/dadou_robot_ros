@@ -3,7 +3,6 @@
   "stop_key": "Db",
   "mouth_visuals_path": "../visuals/mouth",
   "eye_visuals_path": "../visuals/eye",
-  "_comment": "main loop sleep to reduce cpu usage // 0 to disable",
   "main_loop_sleep": 0.001,
   "random_animation": 60000,
   "stop animation key": [

@@ -16,7 +16,7 @@ from dadou_utils_ros.utils_static import AUDIOS_DIRECTORY, BASE_PATH, MSG_SIZE, 
     PROFILER, CALIBRATION, LOGGING_FILE_NAME, LEFT_EYE_NB, RIGHT_EYE_NB, LOGGING_TEST_FILE_NAME, \
     SINGLE_THREAD, JSON_LIGHTS_BASE, AUDIO_DEVICE_ID, DEFAULT_VOLUME_LEVEL, BRIGHTNESS, JSON_NOTES, JSON_AUDIOS_DATAS, \
     RANDOM_TYPE, LITTLE_MOVE, CONFIG_DIRECTORY, LOGGING_DIRECTORY, SRC_DIRECTORY, PROJECT_DIRECTORY, \
-    MEDIAS_DIRECTORY, VISUAL_DIRECTORY, LOGGING
+    MEDIAS_DIRECTORY, VISUAL_DIRECTORY, LOGGING, DB_DIRECTORY, AUDIOS_DB, SEQUENCES_DB
 
 config = {}
 
@@ -96,11 +96,15 @@ config[SRC_DIRECTORY] = config[BASE_PATH] + "src/"
 config[PROJECT_DIRECTORY] = config[SRC_DIRECTORY] + "robot/"
 
 if 'unittest' in sys.modules:
-    config[PROJECT_DIRECTORY] = "/home/pi/test/"
+    if Misc.is_raspberrypi():
+        config[PROJECT_DIRECTORY] = "/home/pi/test/"
+    else:
+        config[PROJECT_DIRECTORY] = "/home/dadou/Nextcloud/Didier/python/dadou_robot_ros/"
 
 config[CONFIG_DIRECTORY] = config[PROJECT_DIRECTORY] + "conf/"
 config[JSON_DIRECTORY] = config[PROJECT_DIRECTORY] + "json/"
 config[MEDIAS_DIRECTORY] = config[PROJECT_DIRECTORY] + 'medias/'
+config[DB_DIRECTORY] = config[PROJECT_DIRECTORY] + 'db/'
 
 config[AUDIOS_DIRECTORY] = config[MEDIAS_DIRECTORY] + 'audios/'
 config[VISUAL_DIRECTORY] = config[MEDIAS_DIRECTORY] + 'visuals/'
@@ -115,12 +119,16 @@ config[LOGGING_FILE_NAME] = config[BASE_PATH] + 'log/robot.log'
 if Misc.is_raspberrypi():
     config[LOGGING_TEST_FILE_NAME] = '/home/pi/test/logs/robot-test.log'
 else:
-    config[LOGGING_TEST_FILE_NAME] = '../../logs/robot-test.log'
+    config[LOGGING_TEST_FILE_NAME] = '/home/dadou/Nextcloud/Didier/python/dadou_robot_ros/logs/robot-test.log'
 
 config[MOUTH_VISUALS_PATH] = config[VISUAL_DIRECTORY] + "mouth"
 config[EYE_VISUALS_PATH] = config[VISUAL_DIRECTORY] + "eye"
 
 config[LOGGING] = None
+
+############### DB FILES ###############
+config[AUDIOS_DB] = 'audios.db'
+config[SEQUENCES_DB] = 'sequences.db'
 
 ############### JSON FILES ###############
 

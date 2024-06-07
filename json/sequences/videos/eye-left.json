@@ -1,7 +1,6 @@
 {
     "keys": "H1",
     "duration": 2000,
-    "wait audio": true,
     "types": ["little move"],
     "left_eye": [
         [0,100],
