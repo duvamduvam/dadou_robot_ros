@@ -132,17 +132,13 @@ config[SEQUENCES_DB] = 'sequences.db'
 
 ############### JSON FILES ###############
 
-config[JSON_CONFIG] = 'robot_config.json'
 config[JSON_AUDIOS] = 'audios.json'
 config[JSON_AUDIOS_DATAS] = 'audios-data.json'
-#config[JSON_AUDIO_SEQUENCE] = 'audio_sequence.json'
 config[JSON_COLORS] = 'colors.json'
 config[JSON_EXPRESSIONS] = 'expressions.json'
-config[JSON_FACE_SEQUENCE] = 'face_sequence.json'
 config[JSON_LIGHTS] = 'robot_lights.json'
 config[JSON_LIGHTS_BASE] = 'lights_base.json'
 config[JSON_LIGHTS_SEQUENCE] = 'lights_sequence.json'
-config[JSON_MAPPINGS] = 'mappings.json'
 config[JSON_NOTES] = 'piano.json'
 config[JSON_RELAYS] = 'relays.json'
 #config[JSON_VISUALS] = 'visuals.json'

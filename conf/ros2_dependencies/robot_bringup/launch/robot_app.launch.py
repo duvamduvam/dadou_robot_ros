@@ -70,7 +70,7 @@ def generate_launch_description():
         parameters=[
             {NAME: NECK},
             {HEAD_PWM_NB: config[HEAD_PWM_NB]},
-            {DEFAULT_POS: 70},
+            {DEFAULT_POS: 55},
             {MAX_POS: 180}
         ]
     )

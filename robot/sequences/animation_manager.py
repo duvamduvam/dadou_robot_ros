@@ -72,6 +72,7 @@ class AnimationManager(AbstractJsonActions):
                 logging.info('random animation {}'.format(self.random_animation_sequence[random_index]))
 
     def update(self, msg):
+        logging.info("incoming msg {}".format(msg))
         if msg and KEY in msg and msg[KEY] in self.config[STOP_KEY]:
             return msg.update(self.stop())
         elif ANIMATION in msg and not msg[ANIMATION]:
@@ -79,11 +80,12 @@ class AnimationManager(AbstractJsonActions):
         elif RANDOM in msg:
             logging.info("activate random {}".format(msg[RANDOM]))
             self.config[RANDOM] = msg[RANDOM]
+        elif ANIMATION in msg and isinstance(msg[ANIMATION], dict) and TYPE in msg[ANIMATION]:
+            logging.info("random animation {}".format(msg[ANIMATION][TYPE]))
+            rand_sequence = self.get_random_sequence(msg[ANIMATION][TYPE])
+            self.get_animation({ANIMATION: rand_sequence})
         elif ANIMATION in msg:
             self.get_animation(msg)
-        elif TYPE in msg:
-            rand_sequence = self.get_random_sequence(msg[TYPE])
-            self.get_animation({ANIMATION: rand_sequence})
 
         return msg
 

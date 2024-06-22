@@ -14,6 +14,8 @@ connection = builder()(filename=db_file)
 class AudioDB(SQLObject):
     _connection = connection
 
-    name = StringCol()
+    name = StringCol(unique=True)
+    keys = StringCol(default=None)
     path = StringCol()
-    length = IntCol()
+    length = IntCol(default=None)
+    expression = StringCol(default=None)

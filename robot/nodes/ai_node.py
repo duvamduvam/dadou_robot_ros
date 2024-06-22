@@ -21,13 +21,19 @@ class AINode(SubscriberNode):
 
 
 def main(args=None):
+
+    rclpy.init(args=args)
+    node = AINode()
     try:
-        rclpy.init(args=args)
-        node = AINode()
-        rclpy.spin(node)
-        rclpy.shutdown()
+        while rclpy.ok():
+            try:
+                rclpy.spin_once(node)
+            except Exception as e:
+                logging.error(e, exc_info=True)
     except Exception as e:
         logging.error(e, exc_info=True)
+    finally:
+        rclpy.shutdown()
 
 
 if __name__ == '__main__':

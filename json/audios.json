@@ -1,6 +1,7 @@
 {
   "stop":{
-    "keys": ["H&", "Aa", "A&"]
+    "keys": ["H&", "Aa", "A&"],
+    "path": ""
   },
   "upgrade":{
     "keys": ["C9"],

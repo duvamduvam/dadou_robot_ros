@@ -25,10 +25,15 @@ def main(args=None):
     rclpy.init(args=args)
     node = AudioNode()
     try:
-        rclpy.spin(node)
+        while rclpy.ok():
+            try:
+                rclpy.spin_once(node)
+            except Exception as e:
+                logging.error(e, exc_info=True)
     except Exception as e:
         logging.error(e, exc_info=True)
-    rclpy.shutdown()
+    finally:
+        rclpy.shutdown()
 
 if __name__ == '__main__':
     main()

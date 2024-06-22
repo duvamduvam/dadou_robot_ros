@@ -17,13 +17,18 @@ class WheelsNode(SubscriberNode):
         super().__init__(WHEELS, WHEELS, self.wheels)
 
 def main(args=None):
+    rclpy.init(args=args)
+    node = WheelsNode()
     try:
-        rclpy.init(args=args)
-        node = WheelsNode()
-        rclpy.spin(node)
-        rclpy.shutdown()
+        while rclpy.ok():
+            try:
+                rclpy.spin_once(node)
+            except Exception as e:
+                logging.error(e, exc_info=True)
     except Exception as e:
         logging.error(e, exc_info=True)
+    finally:
+        rclpy.shutdown()
 
 if __name__ == '__main__':
     main()

@@ -1,3 +1,4 @@
+import json
 import logging
 import os
 
@@ -10,29 +11,58 @@ from sqlalchemy import String as sqla_String
 
 from dadou_utils_ros.files.files_utils import FilesUtils
 from dadou_utils_ros.utils_static import NAME
-from robot.db.sequences_db2 import SequencesDB2
 
 
 class DBManager:
 
-    tables = [SequencesDB2]
+    #tables = [SequencesDB]
 
-    def create(self, table, fields):
-        table = self.get_table(table)
-        row = table(fields)
-        row.session.add(row)
-        row.session.commit()
+    @staticmethod
+    def print(row):
+        # Log the values of all fields dynamically
+        for field, col in row.sqlmeta.columns.items():
+            logging.info(f"{field}: {getattr(row, field)}")
 
-    def get_by_name(self, table, value):
-        table = self.get_table(table)
-        return table.session.query(table).filter_by(name=value).first()
+    def get_by_field(self, cls, key, value):
+        res = cls.select(key == value)
+        if res.count() > 0:
+            return res[0]
 
-    def get_table(self, name):
-        for table in self.tables:
-            if table.table_name == name:
-                return table
 
-    def json_import(self, table, file_path, create=False):
+
+    @staticmethod
+    def create_table(cls, create):
+        if not cls.tableExists():
+            cls.create_table()
+
+        if create:
+            cls.dropTable()
+            cls.create_table()
+    @staticmethod
+    def insert(cls, db_data):
+        db_fields = {}
+        for k, v in db_data.items():
+            if isinstance(v, dict) or isinstance(v, list):
+                db_fields[k] = json.dumps(v)
+            else:
+                db_fields[k] = v
+        try:
+            cls(**db_fields)
+            logging.info(f"Inserted entry: {db_fields[NAME]}")
+        except Exception as e:
+            logging.error("Error adding {} => {}".format(db_fields, e))
+
+    @staticmethod
+    def multi_json_import(cls, json_files, create=False):
+        logging.info("import json in db")
+
+        for file_path in json_files:
+            DBManager.json_import(cls, file_path, create)
+            create = False
+
+    def json_import(self, cls, file_path, create=False):
+
+        self.create_table(cls, create)
 
         file = FilesUtils.open_json(file_path, 'r')
         logging.info(file)
@@ -40,11 +70,18 @@ class DBManager:
         file[NAME] = os.path.basename(file_path).replace(".json", "")
 
         # Création de l'objet SequencesDB avec les champs conditionnels
-        self.create(table, file)
+        DBManager.insert(cls, db_data=file)
 
-    def jsons_import(self, table, json_files, create=False):
-        logging.info("import json in db")
+    def json_import_keys(self, cls, file_path, create=False):
 
-        for file_path in json_files:
-            self.json_import(table, file_path, create)
-            create = False
+        self.create_table(cls, create)
+
+        file = FilesUtils.open_json(file_path, 'r')
+        logging.info(file)
+
+        datas = {}
+        for k, v in file.items():
+            v[NAME] = k
+            DBManager.insert(cls, db_data=v)
+
+        # Création de l'objet SequencesDB avec les champs conditionnels
