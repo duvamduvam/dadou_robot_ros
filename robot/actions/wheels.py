@@ -95,14 +95,10 @@ class Wheels:
         self.sensor = sensor
 
     def update(self, msg):
-        #logging.info(msg)
         if not self.enabled or not msg:
             return msg
 
-        if ANIMATION in msg and not msg[ANIMATION]:
-            self.animation_ongoing = False
-
-        if ANIMATION in msg and ((WHEEL_LEFT in msg and WHEEL_RIGHT in msg) or (WHEELS in msg)):
+        if ANIMATION in msg:
             self.animation_ongoing = msg[ANIMATION]
 
         if KEY in msg and (msg[KEY] == self.config[FORWARD] or msg[KEY] == self.config[BACKWARD] or msg[KEY] == self.config[LEFT] or msg[KEY] == self.config[RIGHT]):
@@ -122,6 +118,7 @@ class Wheels:
             left, right = self.anglo_meter_translator.translate(turn=msg[JOYSTICK][X], forward=msg[JOYSTICK][Y])
             self.update_cmd(left, right)
         if WHEELS in msg:
+            logging.info(" wheels input {}".format(msg[WHEELS]))
             if msg[WHEELS] == STOP:
                 self.stop()
                 return msg
@@ -133,6 +130,10 @@ class Wheels:
                 return msg
             if LEFT in msg[WHEELS] and RIGHT in msg[WHEELS]:
                 self.update_cmd(msg[WHEELS][LEFT], msg[WHEELS][RIGHT])
+                return msg
+            if (hasattr(msg[WHEELS], "__len__") and len(msg[WHEELS]) == 2 and
+                    0 <= msg[WHEELS][0] <= 1 and 0 <= msg[WHEELS][1] <= 1):
+                self.update_cmd(int(msg[WHEELS][0]*100), int(msg[WHEELS][1]*100))
                 return msg
             try:
                 if msg[WHEELS] == FORWARD:
@@ -256,11 +257,3 @@ class Wheels:
 #            else:
 #                pwm.duty_cycle -= self.PWM_STEP
 
-    def send_to_due(self, left, right):
-        self.due.send_msg(left+right, True)
-
-def main(args=None):
-    rclpy.init(args=args)
-    node = AddTwoIntsServerNode()
-    rclpy.spin(node)
-    rclpy.shutdown()

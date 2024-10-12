@@ -70,7 +70,7 @@ def generate_launch_description():
         parameters=[
             {NAME: NECK},
             {HEAD_PWM_NB: config[HEAD_PWM_NB]},
-            {DEFAULT_POS: 55},
+            {DEFAULT_POS: 62},
             {MAX_POS: 180}
         ]
     )
@@ -82,7 +82,7 @@ def generate_launch_description():
         parameters=[
             {NAME: LEFT_ARM},
             {HEAD_PWM_NB: config[LEFT_ARM_NB]},
-            {DEFAULT_POS: 70},
+            {DEFAULT_POS: 90},
             {MAX_POS: 180}
         ]
     )
@@ -94,7 +94,7 @@ def generate_launch_description():
         parameters=[
             {NAME: RIGHT_ARM},
             {HEAD_PWM_NB: config[RIGHT_ARM_NB]},
-            {DEFAULT_POS: 160},
+            {DEFAULT_POS: 180},
             {MAX_POS: 180}
         ]
     )

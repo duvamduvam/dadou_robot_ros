@@ -5,5 +5,6 @@
   "voice_out": {"keys":["D7", "D8"]},
   "octaver": {"keys":["D3", "D4"]},
   "hf_receiver": {"keys":["D5", "D6"]},
+  "klaxon": {"keys":["Z5", "Z66"]},
   "off": {"keys":["a"]}
 }

@@ -13,7 +13,7 @@ from robot.actions.abstract_json_actions import AbstractJsonActions
 class RelaysManager(AbstractJsonActions):
 
     SWITCH = "switch"
-    OCTAVER = "octaver"
+    KLAXON = "klaxon"
     HF_RECEIVER = "hf_receiver"
     EFFECT = "effect_on"
     VOICE_OUT = "voice_out"
@@ -39,8 +39,8 @@ class RelaysManager(AbstractJsonActions):
 
         self.power_hf = pcf.get_pin(3)
         self.power_hf.value = True
-        self.power_effect = pcf.get_pin(2)
-        self.power_effect.value = True
+        self.klaxon = pcf.get_pin(2)
+        self.klaxon.value = True
         self.effect = pcf.get_pin(1)
         self.effect.value = True
         self.voice_out = pcf.get_pin(0)
@@ -50,6 +50,9 @@ class RelaysManager(AbstractJsonActions):
 
         self.last_effect_time = 0
         self.effect_timeout = 2000
+
+        self.last_klaxon_time = 0
+        self.klaxon_timeout = 1000
 
         #self.last_input_msg_time = 0
         #self.input_msg_timeout = 300
@@ -72,9 +75,10 @@ class RelaysManager(AbstractJsonActions):
             if relay[NAME] == self.NORMAL_VOICE:
                 self.normal_voice()
 
-            if relay[NAME] == self.OCTAVER:
-                self.power_effect.value = not self.power_effect.value
-                logging.info("switch octaver {}".format(self.power_effect.value))
+            if relay[NAME] == self.KLAXON:
+                self.klaxon.value = False
+                self.last_klaxon_time = TimeUtils.current_milli_time()
+                logging.info("klaxon {}".format(self.klaxon.value))
 
             if relay[NAME] == self.HF_RECEIVER:
                 self.power_hf.value = not self.power_hf.value
@@ -116,3 +120,7 @@ class RelaysManager(AbstractJsonActions):
             #self.effect.value = False
             self.voice_out.value = True
             logging.info("effect off")
+
+        if not self.klaxon.value and TimeUtils.is_time(self.last_klaxon_time, self.klaxon_timeout):
+            self.klaxon.value = True
+            logging.info("klaxon off")

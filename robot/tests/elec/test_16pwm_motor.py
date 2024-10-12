@@ -2,6 +2,7 @@ import adafruit_pca9685
 import board
 import busio
 
+#from rpi_python_drv8825.stepper import StepperMotor
 from dadou_utils_ros.utils_static import HEAD_PWM_NB
 from robot.robot_config import config
 from robot.tests.conf_test import TestSetup
@@ -21,7 +22,8 @@ class PWMMotorTest(unittest.TestCase):
     #kit.servo[14].set_pulse_width_range(1000, 2000)
     #kit.frequency = 60
 
-    MAX = 65535
+    #MAX = 65535
+    MAX = 0xffff
     i2c = busio.I2C(board.SCL, board.SDA)
     pca9685 = adafruit_pca9685.PCA9685(i2c)
     pca9685.frequency = 60
@@ -77,34 +79,65 @@ class PWMMotorTest(unittest.TestCase):
         for i in range(25000, 5000, -2):
             pwm.duty_cycle = i
 
-        #for w in range(0, 4):
 
-            #self.pwm_motor1.duty_cycle = 10000
-            #self.dir_motor1.duty_cycle = 0
-            #time.sleep(5)
+    def test_init(self):
+        step = self.pca9685.channels[0]
+        step.duty_cycle = self.MAX
 
-            #self.pwm_motor1.duty_cycle = 10000
-            #self.dir_motor1.duty_cycle = 0
-            #self.pwm_motor2.duty_cycle = 10000
-            #self.dir_motor2.duty_cycle = 0
-            #time.sleep(5)
+        dir = self.pca9685.channels[1]
+        dir.duty_cycle = self.MAX
 
-            #self.pwm_motor1.duty_cycle = 30000
-            #self.dir_motor1.duty_cycle = self.MAX
-            #self.pwm_motor2.duty_cycle = 30000
-            #self.dir_motor2.duty_cycle = self.MAX
-            #time.sleep(5)
+        enable = self.pca9685.channels[2]
+        enable.duty_cycle = self.MAX
 
-            #self.pwm_motor1.duty_cycle = 0
-            #self.pwm_motor2.duty_cycle = 0
 
-            # Increase brightness:
-            #for i in range(20000):
-            #    self.pwm_motor1.duty_cycle = i
+    def test_stepper(self):
 
-        #    # Decrease brightness:
-            #for i in range(20000, 0, -1):
-            #    self.pwm_motor1.duty_cycle = i
+        durationFwd = 5000  # This is the duration of the motor spinning. used for forward direction
+        durationBwd = 5000  # This is the duration of the motor spinning. used for reverse direction
+        #
+        delay = 0.001  # This is actualy a delay between PUL pulses - effectively sets the mtor rotation speed.
+        print('Speed set to ' + str(delay))
+        #
+        cycles = 1000  # This is the number of cycles to be run once program is started.
+        cyclecount = 0  # This is the iteration of cycles to be run once program is started.
+        print('number of Cycles to Run set to ' + str(cycles))
+
+        step = self.pca9685.channels[0]
+        step.duty_cycle = 0
+
+        dir = self.pca9685.channels[1]
+        dir.duty_cycle = self.MAX
+
+        enable = self.pca9685.channels[2]
+        enable.duty_cycle = 0
+
+        #
+        time.sleep(.5)  # pause due to a possible change direction
+
+
+        print('DIR set to LOW - Moving Forward at ' + str(delay))
+        print('Controller PUL being driven.')
+        for x in range(durationFwd):
+            step.duty_cycle = 0
+            time.sleep(.0001)
+            step.duty_cycle = self.MAX
+            time.sleep(.05)
+
+
+        enable.duty_cycle = self.MAX
+        time.sleep(.5)  #
+
+        #for i in range(3):
+        #    step.duty_cycle = self.MAX
+        #    time.sleep(0.208)
+        #    step.duty_cycle = 0
+        #    time.sleep(1)
+        #step.duty_cycle = 500
+
+        #time.sleep()
+
+
 
 
 if __name__ == '__main__':

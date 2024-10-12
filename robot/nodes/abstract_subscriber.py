@@ -8,7 +8,7 @@ from rclpy.node import Node
 
 from dadou_utils_ros.logging_conf import LoggingConf
 from robot.robot_config import config
-from dadou_utils_ros.utils_static import LOGGING_FILE_NAME, DURATION
+from dadou_utils_ros.utils_static import LOGGING_FILE_NAME, DURATION, ANIMATION
 from robot_interfaces.msg._string_time import StringTime
 
 class SubscriberNode(Node):
@@ -35,6 +35,7 @@ class SubscriberNode(Node):
         msg = json.loads(ros_msg.msg)
         logging.info("input {} : ".format(ros_msg))
         action_msg = {self.action_type: msg}
+        action_msg[ANIMATION] = ros_msg.anim
         if ros_msg.time != 0:
             action_msg[DURATION] = ros_msg.time
         self.action.update(action_msg)

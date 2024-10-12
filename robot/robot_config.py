@@ -70,15 +70,25 @@ config[LORA_RESET_PIN] = 0
 
 ########## I2C SERVO NUMBER #########
 
-config[HEAD_PWM_NB] = 5
+config[HEAD_PWM_NB] = 4
 config[WHEEL_LEFT_PWM] = 1
 config[WHEEL_RIGHT_PWM] = 2
 config[WHEEL_LEFT_DIR] = 0
 config[WHEEL_RIGHT_DIR] = 3
-config[LEFT_ARM_NB] = 4
+config[LEFT_ARM_NB] = 5
 config[RIGHT_ARM_NB] = 15
 config[LEFT_EYE_NB] = 7
 config[RIGHT_EYE_NB] = 8
+
+#config[HEAD_PWM_NB] = 5
+#config[WHEEL_LEFT_PWM] = 1
+#config[WHEEL_RIGHT_PWM] = 2
+#config[WHEEL_LEFT_DIR] = 0
+#config[WHEEL_RIGHT_DIR] = 3
+#config[LEFT_ARM_NB] = 4
+#config[RIGHT_ARM_NB] = 15
+#config[LEFT_EYE_NB] = 7
+#config[RIGHT_EYE_NB] = 8
 
 base = "robot/"
 

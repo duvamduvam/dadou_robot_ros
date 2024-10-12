@@ -21,9 +21,28 @@ class TestRelays(unittest.TestCase):
             relay_on = not relay_on
             time.sleep(5)
 
+    def test_kalxon(self):
+        i2c = board.I2C()  # uses board.SCL and board.SDA
+        pcf = adafruit_pcf8574.PCF8574(i2c, address=0x21)
+        self.test_reset()
+
+        klaxon = pcf.get_pin(2)
+
+        klaxon.value = False
+        time.sleep(10)
+        klaxon.value = True
+
+
+    def test_reset(self):
+        i2c = board.I2C()  # uses board.SCL and board.SDA
+        pcf = adafruit_pcf8574.PCF8574(i2c, address=0x21)
+
+        for x in range(0, 4):
+            pcf.get_pin(x).value = True
+
     def test_i2c(self):
         i2c = board.I2C()  # uses board.SCL and board.SDA
-        pcf = adafruit_pcf8574.PCF8574(i2c, address=0x20)
+        pcf = adafruit_pcf8574.PCF8574(i2c, address=0x21)
 
         relay = pcf.get_pin(0)
 

@@ -11,7 +11,7 @@ from std_msgs.msg import String
 from dadou_utils_ros.logging_conf import LoggingConf
 from dadou_utils_ros.utils_static import RELAYS, AUDIO, FACE, ROBOT_LIGHTS, NECK, LEFT_EYE, RIGHT_EYE, LEFT_ARM, \
     RIGHT_ARM, \
-    ANIMATION, LOGGING_FILE_NAME, DURATION, STOP
+    ANIMATION, LOGGING_FILE_NAME, DURATION, STOP, WHEELS
 from robot.files.robot_json_manager import RobotJsonManager
 from robot.nodes.abstract_subscriber import SubscriberNode
 from robot.robot_config import config
@@ -19,7 +19,7 @@ from robot.sequences.animation_manager import AnimationManager
 from robot_interfaces.msg._string_time import StringTime
 
 
-PUBLISHER_LIST = [AUDIO, FACE, ROBOT_LIGHTS, RELAYS, NECK, LEFT_EYE, RIGHT_EYE, LEFT_ARM, RIGHT_ARM]
+PUBLISHER_LIST = [AUDIO, FACE, ROBOT_LIGHTS, RELAYS, NECK, LEFT_EYE, RIGHT_EYE, LEFT_ARM, RIGHT_ARM, WHEELS]
 
 
 class AnimationsNode(Node):
@@ -78,8 +78,9 @@ class AnimationsNode(Node):
             for k, v in animations_msg.items():
                 if k in self.action_publishers:
                     logging.info("publish {} in {}".format(v, k))
-
                     msg = StringTime()
+                    if ANIMATION in animations_msg:
+                        msg.anim = animations_msg[ANIMATION]
                     msg.msg = json.dumps(v)
                     if DURATION in animations_msg and animations_msg[DURATION] != 0:
                         msg.time = animations_msg[DURATION]

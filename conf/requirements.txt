@@ -16,9 +16,9 @@ filetype~=1.2.0
 #gTTS~=2.2.4
 imageio~=2.30.0
 numpy~=1.26.0
-#openai~=1.25.1
+openai~=1.35.12
 #openai-whisper
-pip>=24.0
+pip>=24.1
 playsound~=1.2.2
 psutil~=5.9.5
 #pycairo~=1.25.1
@@ -26,12 +26,13 @@ PyAudio~=0.2.14
 pydub~=0.25.1
 #pygobject~=3.46.0
 #pyttsx3~=2.90
-#rpi_ws281x~=5.0.0
-#setuptools version to make ros2 humble word
+#rpi_python_drv8825
+rpi_ws281x~=5.0.0
 requests~=2.31.0
-setuptools==58.2.0
+#setuptools version to make ros2 humble work (58.2.0) changed to 70.1.1 the 26/06/2024 still seeams to work
+setuptools==70.1.1
 soundfile~=0.12.1
-#SpeechRecognition~=3.10.3
+SpeechRecognition~=3.10.4
 simpleaudio~=1.0.4
 SQLObject~=3.11.0
 #torch~=2.3.0

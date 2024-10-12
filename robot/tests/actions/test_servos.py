@@ -14,6 +14,7 @@ from dadou_utils_ros.utils_static import NECK, LEFT_ARM, RIGHT_ARM, RIGHT_EYE, L
     RANDOM_DURATION, LEFT_ARM_NB, HEAD_PWM_NB, RIGHT_ARM_NB, LEFT_EYE_NB, RIGHT_EYE_NB
 from robot.actions.servo import Servo
 from robot.robot_config import config
+from robot.tests.conf_test import TestSetup
 
 
 class ServosTests(unittest.TestCase):
@@ -93,17 +94,17 @@ class ServosTests(unittest.TestCase):
 
     def test_move_arms(self):
         for i in range(3):
-            self.right_arm.update({RIGHT_ARM: 99})
-            self.left_arm.update({LEFT_ARM: 99})
-            time.sleep(10)
-            self.right_arm.update({RIGHT_ARM: 70})
-            self.left_arm.update({LEFT_ARM: 70})
+            self.right_arm.update({RIGHT_ARM: 0.2})
+            self.left_arm.update({LEFT_ARM: 0.2})
             time.sleep(5)
-            self.right_arm.update({RIGHT_ARM: 60})
-            self.left_arm.update({LEFT_ARM: 60})
+            self.right_arm.update({RIGHT_ARM: 0.9})
+            self.left_arm.update({LEFT_ARM: 0.9})
             time.sleep(5)
-            self.right_arm.update({RIGHT_ARM: 50})
-            self.left_arm.update({LEFT_ARM: 50})
+            self.right_arm.update({RIGHT_ARM: 0.3})
+            self.left_arm.update({LEFT_ARM: 0.3})
+            time.sleep(5)
+            self.right_arm.update({RIGHT_ARM: 0.8})
+            self.left_arm.update({LEFT_ARM: 0.8})
             time.sleep(5)
             self.right_arm.update({RIGHT_ARM: 0})
             self.left_arm.update({LEFT_ARM: 0})
@@ -155,10 +156,13 @@ class ServosTests(unittest.TestCase):
         # Below will create an infinite loop
         servo_nb = 9
         for i in range(3):
-            kit.servo[servo_nb].angle = 0
-            time.sleep(5)
 
-            kit.servo[servo_nb].angle = 180
+            for j in range(16):
+                kit.servo[j].angle = 0
+            time.sleep(5)
+            for j in range(16):
+                kit.servo[j].angle = 100
+
             time.sleep(5)
 
 

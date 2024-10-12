@@ -29,6 +29,9 @@ COPY conf/ros2/resource/ /home/ros2_ws/src/robot/resource/
 
 RUN apt-get update && cat /home/ros2_ws/src/robot/conf/packages-docker.txt | xargs apt-get install -y
 
+RUN ln -fs /usr/share/zoneinfo/Europe/Paris /etc/localtime && \
+    dpkg-reconfigure -f noninteractive tzdata
+
 ENV PYTHONPATH "${PYTHONPATH}:/home/ros2_ws"
 
 RUN pip3 install -r /home/ros2_ws/src/robot/conf/requirements.txt

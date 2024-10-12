@@ -75,6 +75,7 @@ class AInteractions:
         config_parser.read(config[CONFIG_DIRECTORY]+'secret')
 
         self.chatgpt_key = config_parser['DEFAULT']['chatgpt_key']
+        self.google_cloud_key = config_parser['DEFAULT']['google_cloud']
 
         openai.api_key = self.chatgpt_key
         self.recognizer = sr.Recognizer()
@@ -84,7 +85,7 @@ class AInteractions:
 
         self.assistant.moderations.create(input=AI_MODERATION)
 
-        self.model = "gpt-4"
+        self.model = "GPT-4o"
         self.max_tokens = 4069
         self.message_history = []
 
@@ -164,36 +165,48 @@ class AInteractions:
         return msg[0:start-1]
 
     def listen_to_text(self):
+        recognizer = sr.Recognizer()
+        with sr.Microphone() as source:
+            print("Parle maintenant...")
+            recognizer.adjust_for_ambient_noise(source)
+            audio = recognizer.listen(source)
+
+            try:
+                texte = recognizer.recognize_google(audio, language="fr-FR")
+                print(f"Tu as dit : {texte}")
+                return texte
+            except sr.UnknownValueError:
+                print("Je n'ai pas compris l'audio.")
+            except sr.RequestError as e:
+                print(f"Erreur de service Google Speech Recognition; {e}")
+
+        return None
+
+    def listen_to_text2(self):
         # Exception handling to handle
         # exceptions at the runtime
-        try:
-            # use the microphone as source for input.
-            with sr.Microphone() as source:
-
-                # wait for a second to let the recognizer
-                # adjust the energy threshold based on
-                # the surrounding noise level
-                self.recognizer.adjust_for_ambient_noise(source, duration=0.2)
-
-                # listens for the user's input
-                audio = self.recognizer.listen(source)
-
-                # Using google to recognize audio
-                text = self.recognizer.recognize_google(audio, language="fr-FR").lower()
-
-                logging.info("audio recognise text : {}".format(text))
+        with sr.Microphone() as source:
+            print("Écoute en cours...")
+            audio = self.recognizer.listen(source)
+            try:
+                print("Reconnaissance vocale...")
+                #text = self.recognizer.recognize_google(audio, language='fr-FR')
+                #text = self.recognizer.recognize_whisper(audio, language='french')
+                text = self.recognizer.recognize_google_cloud(audio, language='french')
+                self.recognizer.recognize_google_cloud(credentials_json=
+                print(f"Vous avez dit: {text}")
                 return text
 
-        except sr.RequestError as e:
-            logging.error("Could not request results; {0}".format(e))
+            except sr.RequestError as e:
+                logging.error("Could not request results; {0}".format(e))
 
-        except sr.UnknownValueError as e:
-            logging.error("unknown error occurred {0}".format(e))
+            except sr.UnknownValueError as e:
+                logging.error("unknown error occurred {0}".format(e), exc_info=True)
 
     def process(self, test=False):
         question = self.listen_to_text()
 
-        logging.info("ai question {}".format(question))
+        logging.info("ai question : {}".format(question))
 
         if not question:
             if self.blank_question_count > 5:

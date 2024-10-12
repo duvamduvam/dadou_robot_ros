@@ -18,6 +18,11 @@ class TestChatgpt(unittest.TestCase):
     logging.config.dictConfig(LoggingConf.get(config[LOGGING_TEST_FILE_NAME], "test_chat_gpt"))
     robot_dialog = AInteractions(None)
 
+    def test_assistant_listen_speak(self):
+        for i in range(1, 6):
+            logging.info("test")
+            self.robot_dialog.process()
+
     def test_chatgpt_models(self):
         logging.info(self.robot_dialog.check_models())
 
@@ -39,16 +44,10 @@ class TestChatgpt(unittest.TestCase):
         self.robot_dialog.text_to_audio(response.choices[0].message.content)
 
     def test_assistant_listen(self):
-
         for i in range(1, 11):
             logging.info("test")
             question = self.robot_dialog.listen_to_text()
             logging.info(question)
-
-    def test_assistant_listen_speak(self):
-        for i in range(1, 6):
-            logging.info("test")
-            self.robot_dialog.process()
 
     def test_simple_request_google_audio(self):
         self.robot_dialog.request_to_audio("c'est l'histoire dans la révolutino francaise en 5 lignes?", "google")
