@@ -14,8 +14,8 @@ import adafruit_led_animation.color as color
     # todo check thread2 : https://riptutorial.com/python/example/4691/communicating-between-threads
 from adafruit_led_animation.helper import PixelSubset
 
-from dadou_utils_ros.utils.time_utils import TimeUtils
-from dadou_utils_ros.utils_static import METHOD, DEFAULT, DURATION, SEQUENCES, LOOP, COLOR, NAME, JSON_COLORS, \
+from dadou_utils.utils.time_utils import TimeUtils
+from dadou_utils.utils_static import METHOD, DEFAULT, DURATION, SEQUENCES, LOOP, COLOR, NAME, JSON_COLORS, \
     JSON_LIGHTS_BASE, BRIGHTNESS, STOP
 from robot.actions.abstract_json_actions import AbstractJsonActions
 from robot.sequences.sequence import Sequence
@@ -55,6 +55,8 @@ class Lights(AbstractJsonActions):
     def __init__(self, config, start, end, json_manager, global_strip, light_type, json_light):
         self.light_type = light_type
         super().__init__(config=config, json_manager=json_manager, action_type=self.light_type, json_file=json_light)
+
+        logging.info("starting lights")
 
         self.global_strip = global_strip
         self.strip = PixelSubset(global_strip, start, end)

@@ -3,9 +3,9 @@ import logging.config
 import os
 import platform
 
-from dadou_utils_ros.logging_conf import LoggingConf
-from dadou_utils_ros.utils_static import RPI_TYPE, LOGGING_TEST_FILE_NAME
-from robot.robot_config import config
+from dadou_utils.logging_conf import LoggingConf
+from dadou_utils.utils_static import RPI_TYPE, LOGGING_TEST_FILE_NAME
+from vision.vision_config import config
 
 
 class TestSetup:

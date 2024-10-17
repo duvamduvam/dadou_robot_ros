@@ -4,7 +4,7 @@
 source /opt/ros/humble/setup.sh
 cd /home/ros2_ws/
 
-CHANGE_FILE=/home/ros2_ws/src/robot/robot/change
+CHANGE_FILE=/home/ros2_ws/src/robot/hardrive
 
 source /opt/ros/humble/setup.sh
 
@@ -22,11 +22,6 @@ else
 #    # Print message indicating the file was not found
     echo "$CHANGE_FILE file not found. Skipping colcon build."
 fi
- # if [ -f "/home/ros2_ws/src/robot/robot/change" ]; then
- #   printf "colcon build \n"
- #   colcon build
- #   rm /home/ros2_ws/src/robot/robot/change
- # fi
 
 source /home/ros2_ws/install/setup.bash
 ros2 launch robot_bringup robot_app.launch.py

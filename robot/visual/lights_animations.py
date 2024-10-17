@@ -18,7 +18,7 @@ from adafruit_led_animation.color import \
     BLACK, ORANGE, MAGENTA, TEAL
 from rainbowio import colorwheel
 
-from dadou_utils_ros.utils_static import COLOR
+from dadou_utils.utils_static import COLOR
 
 
 

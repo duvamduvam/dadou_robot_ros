@@ -11,7 +11,7 @@ sudo docker compose -f $DOCKER_COMPOSE_FILE pull
 
 if [ "$1" == "build" ]; then
   printf "build robot docker \n"
-  tar -czhf ~/ros2_ws/src/robot/dadou_utils_ros.tar.gz ~/ros2_ws/src/robot/dadou_utils_ros/
+  tar -czhf ~/ros2_ws/src/hardrive/dadou_utils_ros.tar.gz ~/ros2_ws/src/hardrive/dadou_utils_ros/
   sudo docker compose -f $DOCKER_COMPOSE_FILE up --build
 else
   printf "start robot docker \n"

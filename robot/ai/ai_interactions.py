@@ -193,8 +193,8 @@ class AInteractions:
                 #text = self.recognizer.recognize_google(audio, language='fr-FR')
                 #text = self.recognizer.recognize_whisper(audio, language='french')
                 text = self.recognizer.recognize_google_cloud(audio, language='french')
-                self.recognizer.recognize_google_cloud(credentials_json=
-                print(f"Vous avez dit: {text}")
+                #self.recognizer.recognize_google_cloud(credentials_json=
+                #print(f"Vous avez dit: {text}")
                 return text
 
             except sr.RequestError as e:
