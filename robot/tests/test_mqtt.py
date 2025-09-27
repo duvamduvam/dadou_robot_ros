@@ -1,7 +1,7 @@
 import time
 import unittest
 
-from src.dadou_utils.com.mqtt_client import MQTT_client
+from src.dadou_utils_ros.com.mqtt_client import MQTT_client
 
 class MQTTTest(unittest.TestCase):
 

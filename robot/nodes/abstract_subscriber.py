@@ -7,14 +7,14 @@ import rclpy
 from rclpy.node import Node
 
 from dadou_utils_ros.logging_conf import LoggingConf
-from robot.robot_config import config
 from dadou_utils_ros.utils_static import LOGGING_FILE_NAME, DURATION, ANIMATION
 from robot_interfaces.msg._string_time import StringTime
 
 class SubscriberNode(Node):
-    def __init__(self, action_type, topic_name, action):
+    def __init__(self, config, action_type, topic_name, action):
         self.action_type = action_type
         node_name = action_type + "_node"
+        print(config[LOGGING_FILE_NAME])
         logging.config.dictConfig(LoggingConf.get(config[LOGGING_FILE_NAME], node_name))
 
         super().__init__(node_name)

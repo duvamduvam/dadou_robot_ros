@@ -16,7 +16,7 @@ class RelaysNode(SubscriberNode):
     def __init__(self):
         robot_json_manager = RobotJsonManager(config)
         self.relays = RelaysManager(config, robot_json_manager)
-        super().__init__(RELAY, RELAY, self.relays)
+        super().__init__(config, RELAY, RELAY, self.relays)
 
 
 def main(args=None):

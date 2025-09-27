@@ -2,13 +2,6 @@ import json
 import logging
 import os
 
-import sqlalchemy as db
-
-from sqlalchemy import Column as sqla_Column
-
-from sqlalchemy import Integer as sqla_Integer
-from sqlalchemy import String as sqla_String
-
 from dadou_utils_ros.files.files_utils import FilesUtils
 from dadou_utils_ros.utils_static import NAME
 
@@ -47,8 +40,8 @@ class DBManager:
             else:
                 db_fields[k] = v
         try:
-            cls(**db_fields)
-            logging.info(f"Inserted entry: {db_fields[NAME]}")
+            logging.info(f"Inserted entry: {db_fields}")
+            return cls(**db_fields)
         except Exception as e:
             logging.error("Error adding {} => {}".format(db_fields, e))
 

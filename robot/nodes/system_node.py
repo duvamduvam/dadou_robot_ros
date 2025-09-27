@@ -16,7 +16,7 @@ class SystemNode(SubscriberNode):
     def __init__(self):
         self.system = Status(config)
 
-        super().__init__(SYSTEM, SYSTEM, self.system)
+        super().__init__(config, SYSTEM, SYSTEM, self.system)
 
 
 def main(args=None):

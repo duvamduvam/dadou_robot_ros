@@ -14,7 +14,7 @@ class WheelsNode(SubscriberNode):
     def __init__(self):
 
         self.wheels = Wheels(config)
-        super().__init__(WHEELS, WHEELS, self.wheels)
+        super().__init__(config, WHEELS, WHEELS, self.wheels)
 
 def main(args=None):
     rclpy.init(args=args)

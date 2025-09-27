@@ -19,7 +19,7 @@ class AudioNode(SubscriberNode):
         robot_json_manager = RobotJsonManager(config)
         self.audio = AudioManager(config, robot_json_manager)
 
-        super().__init__(AUDIO, AUDIO, self.audio)
+        super().__init__(config, AUDIO, AUDIO, self.audio)
 
 def main(args=None):
     rclpy.init(args=args)
