@@ -3,14 +3,6 @@
 import logging
 import vlc
 
-#from sound_player import Sound, Playlist, SoundPlayer
-
-from dadou_utils_ros.utils_static import DELAY, NAME, SEQUENCE
-
-from robot.path_time import PathTime
-
-
-
 class VlCAudio:
 
     silence = "audios/silence.wav"

@@ -5,13 +5,13 @@ import time
 import neopixel
 
 from dadou_utils_ros.logging_conf import LoggingConf
+from dadou_utils_ros.utils.time_utils import TimeUtils
 from dadou_utils_ros.utils_static import LIGHTS_LED_COUNT, BRIGHTNESS, LIGHTS_PIN, UNITTEST, LOGGING_TEST_FILE_NAME, \
     FACE
 from robot.actions.face import Face
 from robot.files.robot_json_manager import RobotJsonManager
 from robot.robot_config import config
 from robot.tests.conf_test import TestSetup
-from robot.utils import Utils
 from robot.visual.image_mapping import ImageMapping
 from robot.visual.visual import Visual
 
@@ -74,8 +74,8 @@ class TestFace(unittest.TestCase):
     def test_face2(self):
         logging.info("animate face A1")
         self.face.update("default")
-        start_time = Utils.current_milli_time()
-        while not Utils.is_time(start_time, 10000):
+        start_time =TimeUtils.current_milli_time()
+        while not TimeUtils.is_time(start_time, 10000):
             # logging.info("animate")
             self.face.animate()
 
