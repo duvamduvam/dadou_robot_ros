@@ -23,7 +23,7 @@ PyAudio~=0.2.14
 playsound~=1.2.2
 simpleaudio~=1.0.4
 #setuptools version to make ros2 humble work (58.2.0) changed to 70.1.1 the 26/06/2024 still seeams to work
-setuptools==70.1.1
+setuptools==58.2.0
 SpeechRecognition~=3.10.4
 SQLObject~=3.11.0
 #torch~=2.3.0
