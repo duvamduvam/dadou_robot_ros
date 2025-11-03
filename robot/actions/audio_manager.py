@@ -1,3 +1,12 @@
+"""Audio manager action.
+
+Responsibilities:
+ - keep track of the current audio being played and its metadata (duration, background flag);
+ - map high-level bus messages to JSON-defined audio sequences;
+ - apply volume changes/fades through ALSA (`amixer`);
+ - ensure the audio library playlists/index stay in sync with the filesystem.
+"""
+
 # pip3 install sound-player
 # https://github.com/Krozark/sound-player/blob/master/example.py
 import glob
@@ -39,6 +48,7 @@ class AudioManager(AbstractJsonActions):
         super().__init__(config=config, json_manager=json_manager, json_file=config[JSON_AUDIOS], action_type=AUDIO)
         self.config = config
         self.json_manager = json_manager
+        # `audios-data.json` stores metadata (duration/background flag) computed offline.
         self.recorded_audio_data = self.json_manager.open_json(self.config[JSON_AUDIOS_DATAS])
 
         self.volume_default = config[DEFAULT_VOLUME_LEVEL]
@@ -48,7 +58,7 @@ class AudioManager(AbstractJsonActions):
         #self.index_audios()
 
     def index_audios(self):
-
+        """Scan the audio directory and reconcile metadata (add/remove entries)."""
         audio_datas = []
         for subdir, dirs, files in os.walk(self.config[AUDIOS_DIRECTORY]):
             files.sort()
@@ -190,5 +200,4 @@ class AudioManager(AbstractJsonActions):
                     self.global_receiver.write_values({AUDIO_DURATION: duration})
 
         return msg
-
 

@@ -1,13 +1,23 @@
+# Core Python tooling inside the container
 python3-pip
+
+# Audio stack (playback, ALSA headers, decoding, speech)
 alsa-utils
 ffmpeg
-python3.11
-libcairo2-dev
-pkg-config
-python3-dev
-libgirepository1.0-dev
 libasound2-dev
 portaudio19-dev
 mpg123
+
+# Graphics/GUI bindings required by PyGObject/Pillow
+libcairo2-dev
+libgirepository1.0-dev
+
+# Build helpers
+pkg-config
+python3-dev
+
+# Timezone info for consistent logs
 tzdata
 
+# ROS tutorials used for URDF demos (rviz launchers)
+ros-jazzy-urdf-tutorial

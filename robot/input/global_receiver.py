@@ -1,3 +1,11 @@
+"""Unified message receiver for the robot control plane.
+
+The robot accepts commands from various inputs (websocket, files, LoRa, etc.).
+GlobalReceiver normalises all of them and exposes a simple `multi_get()` method
+used by the main loop. It also mirrors messages to disk when the worker runs in
+multi-process mode so that individual processes can replay the events safely.
+"""
+
 import asyncio
 import copy
 import json
@@ -38,6 +46,8 @@ class GlobalReceiver:
         self.main_thread = MAIN_THREAD in config and config[MAIN_THREAD]
 
         if self.main_thread:
+            # The websocket server publishes browser inputs; keep it only on the coordinator
+            # process to avoid conflicts on the port.
             self.clean_msg()
             WsServer().start()
         #self.lora_radio = LoraRadio(self.config)
@@ -106,6 +116,7 @@ class GlobalReceiver:
                     self.last_msg_file_modif = new_modif
 
     def multi_get(self):
+        """Return the next message depending on process role (main vs worker)."""
         if self.main_thread:
             msg = self.get_msg()
             if msg:
@@ -217,5 +228,3 @@ class GlobalReceiver:
             return msg
     #def filter_msg(self, m):
     #    return self.msg.set(m)
-
-

@@ -1,35 +1,23 @@
-#SHELL := /bin/bash # Use bash syntax
-#ARG := $(word 2, $(MAKECMDGOALS) )
+include /home/dadou/Nextcloud/Didier/python/dadou_utils_ros/ansible/templates/Makefile  # Shared ansible targets.
 
-#UTILS_DIR=/home/dadou/Nextcloud/Didier/python/dadou_utils_ros
-#ROBOT_ROS_DIR=/home/dadou/Nextcloud/Didier/python/dadou_robot_ros
 
-#SERVER ?= ros-robot
-#ANSIBLE ?= robot
 
-#LOCAL_TEST_LOG=/logs/robot-test.log
+# Build test orchestrators for desktop robot stack.
 
-include /home/dadou/Nextcloud/Didier/python/dadou_utils_ros/ansible/templates/Makefile
-
-#s:
-#	ssh $(SERVER)
-
-#d:
-#	echo "change" > $(ROBOT_ROS_DIR)/robot/change
-#	ansible-playbook $(UTILS_DIR)/ansible/deploy-${ANSIBLE}-pios.yml -i $(UTILS_DIR)/ansible/hosts
-
-#dt:
-#	ansible-playbook $(UTILS_DIR)/ansible/deploy-${ANSIBLE}-test-pios.yml -vv -i $(UTILS_DIR)/ansible/hosts
-
-#i:
-#	echo "change" > $(ROBOT_ROS_DIR)/robot/change
-#	ansible-playbook $(UTILS_DIR)/ansible/install-${ANSIBLE}-pios.yml -i $(UTILS_DIR)/ansible/hosts
-
-#p:
-#	cd $(ROBOT_ROS_DIR) && exec bash
-
+# Run stack without rebuilding image (expects tarball up-to-date).
 run:
-	$(ROBOT_ROS_DIR)/conf/scripts/compose-up-local.sh
+	DISPLAY=$$DISPLAY XAUTHORITY=$$XAUTHORITY DOCKER_XAUTHORITY=/tmp/.docker.xauth $(PROJECT_DIR)/conf/scripts/compose-up-local.sh
+
+# Rebuild image then run stack (handles xhost permissions automatically).
+build:
+	xhost +local:root
+	echo "change" > $(PROJECT_DIR)/robot/change
+	sudo DISPLAY=$$DISPLAY XAUTHORITY=$$XAUTHORITY DOCKER_XAUTHORITY=/tmp/.docker.xauth $(PROJECT_DIR)/conf/scripts/compose-up-local.sh build
+	xhost -local:root
+
+# Open interactive shell inside running robot container.
+in:
+	sudo docker exec -it dadou-robot-container /bin/bash
 
 #lt:
 #	tail -f $(ROBOT_ROS_DIR)$(LOCAL_TEST_LOG)

@@ -7,7 +7,7 @@ colorlog
 # pycairo~=1.24.0
 #pycairo libs => sudo apt-get install libcairo2-dev libjpeg-dev libgif-dev
 #pygobject => sudo apt install libgirepository1.0-dev
-Pillow~=10.0.1
+#Pillow~=10.0.1
 RPi.GPIO~=0.7.1
 adafruit-circuitpython-led-animation~=2.8.0
 adafruit-circuitpython-neopixel~=6.3.11

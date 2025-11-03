@@ -1,3 +1,15 @@
+"""Central configuration dictionary for the Dadou robot runtime.
+
+This module populates the shared `config` object with:
+ - hardware capabilities (I2C/SPI pins, servo indexes, audio card id, etc.);
+ - behavioural flags (random animations, profiler mode, threading);
+ - filesystem layout (paths to JSON definitions, databases, logs, medias);
+ - device registry metadata (name/type/default JSON mapping).
+
+The rest of the codebase imports `config` to access runtime settings instead of
+hard-coding constants.
+"""
+
 import sys
 
 import board
@@ -25,11 +37,13 @@ config[PWM_CHANNELS_ENABLED] = True
 config[DIGITAL_CHANNELS_ENABLED] = True
 config[SINGLE_THREAD] = False
 
+# LED strip default brightness (0..1 range supported by NeoPixel helper).
 config[BRIGHTNESS] = 0.5
 
 MAX_PWM_L = 39318
 MAX_PWM_R = 39318
 
+# Random behaviours (animations / subtle moves) configuration.
 config[RANDOM] = False
 config[RANDOM_TYPE] = [LITTLE_MOVE]
 config[RANDOM_ANIMATION_LOW] = 50000
@@ -37,9 +51,11 @@ config[RANDOM_ANIMATION_HIGH] = 100000
 
 config[PROFILER] = False
 
+# Audio hardware defaults (ALSA device id + volume ramp).
 config[AUDIO_DEVICE_ID] = 6
 config[DEFAULT_VOLUME_LEVEL] = 50
 
+# Mapping of keyboard shortcuts to movement commands.
 config[CMD_FORWARD] = "g"
 config[CMD_BACKWARD] = "h"
 config[CMD_LEFT] = "b"
@@ -51,6 +67,7 @@ config[CALIBRATION] = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 252, 255, 251, 255, 1
 
 print("is raspberry {}".format(Misc.is_raspberrypi()))
 if Misc.is_raspberrypi():
+    # Physical GPIO pins only exist on the Pi, skip them during development on laptops.
     config[SHUTDOWN_PIN] = board.D16
     config[RESTART_PIN] = board.D20
     config[STATUS_LED_PIN] = board.D12
@@ -106,6 +123,8 @@ config[SRC_DIRECTORY] = config[BASE_PATH] + "src/"
 config[PROJECT_DIRECTORY] = config[SRC_DIRECTORY] + "robot/"
 
 if 'unittest' in sys.modules:
+    # When pytest/unittest imports the module we point to local checkouts instead of the
+    # default container paths so fixtures can access fixtures/assets easily.
     if Misc.is_raspberrypi():
         config[PROJECT_DIRECTORY] = "/home/pi/test/"
     else:

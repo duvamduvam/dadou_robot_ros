@@ -1,5 +1,18 @@
+"""Main entry point for the Dadou robot.
+
+This script is responsible for:
+ - bootstrapping the Python path so the monorepo packages resolve correctly;
+ - configuring logging/profiling according to the shared `config` dictionary;
+ - spawning the hardware sub-processes (audio/lights/servos/wheels) when running in
+   multi-process mode;
+ - running the main coordination loop that polls the global message bus and dispatches
+   updates to every registered component.
+"""
+
 import sys
 
+# Extend sys.path so that packages located higher in the monorepo can be imported when
+# the module is executed directly (e.g. `python3 robot/main.py` inside the container).
 sys.path.append('')
 sys.path.append('..')
 sys.path.append('../..')
@@ -10,9 +23,7 @@ import subprocess
 
 import time
 
-#import board
-#import neopixel
-from adafruit_led_animation.helper import PixelMap, PixelSubset
+#from adafruit_led_animation.helper import PixelMap, PixelSubset
 
 from dadou_utils_ros.logging_conf import LoggingConf
 from dadou_utils_ros.utils.status import Status
@@ -24,7 +35,7 @@ from dadou_utils_ros.utils_static import ANIMATION, LIGHTS, SHUTDOWN_PIN, RESTAR
     LIGHTS_START_LED, LIGHTS_END_LED, BRIGHTNESS, ROBOT_LIGHTS
 from robot.actions.audio_manager import AudioManager
 from robot.actions.face import Face
-from robot.actions.lights import Lights
+#from robot.actions.lights import Lights
 from robot.actions.relays import RelaysManager
 from robot.actions.servo import Servo
 #from robot.actions.wheel import Wheel
@@ -130,11 +141,15 @@ for component in input_components:
 while True:
 
     try:
+        # The GlobalReceiver exposes a multi-queues interface (MQTT/serial/etc.).
+        # Dequeue at most one message each iteration and let the components mutate it.
         msg = receiver.multi_get()
         if msg:
             for component in components:
                 msg = component.update(msg)
 
+        # Once the message has been handled, give each component a chance to run
+        # its periodic logic (e.g. animation progression, audio fade, status LEDs).
         for component in components:
             component.process()
 

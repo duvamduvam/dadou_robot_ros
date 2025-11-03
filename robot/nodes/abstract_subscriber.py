@@ -1,4 +1,6 @@
 #!/usr/bin/env python3
+"""Base ROS 2 subscriber that bridges StringTime messages to action objects."""
+
 import json
 import logging
 import logging.config
@@ -39,6 +41,7 @@ class SubscriberNode(Node):
         if ros_msg.time != 0:
             action_msg[DURATION] = ros_msg.time
         self.action.update(action_msg)
+
     def timer_callback(self):
         # Logique à exécuter en continu ici
         logging.debug('Action en temps réel')

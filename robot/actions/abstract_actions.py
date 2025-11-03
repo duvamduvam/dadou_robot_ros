@@ -1,3 +1,5 @@
+"""Shared helpers for JSON-driven actions (audio, animations, lights, ...)."""
+
 import logging
 import random
 
@@ -21,6 +23,7 @@ class ActionsAbstract:
             self.load_sequences(json_key)
 
     def load_sequences(self, json_key):
+        """Cache JSON sequences so we can retrieve them quickly at runtime."""
         sequences = self.json_manager.open_json(json_key)
         for seq in sequences:
             if KEYS in seq.keys():
@@ -29,6 +32,12 @@ class ActionsAbstract:
             self.sequences_name[seq[NAME]] = seq
 
     def get_sequence(self, msg, sequence_key, animation_loop):
+        """Return the sequence referenced by a bus message.
+
+        The message can either provide a shortcut key (quick triggering) or a
+        sequence name. When `animation_loop` is True the sequence is configured
+        to repeat for the provided duration.
+        """
         if msg and KEY in msg and msg[KEY] in self.sequences_key.keys():
             return self.sequences_key[msg[KEY]]
         if msg and sequence_key in msg and msg[sequence_key] in self.sequences_name.keys():
