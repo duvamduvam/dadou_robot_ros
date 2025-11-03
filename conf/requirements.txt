@@ -12,7 +12,6 @@ board~=1.0
 #gTTS~=2.2.4
 imageio~=2.30.0
 openai~=1.35.12
-#openai-whisper
 pip>=24.1
 #pycairo~=1.25.1
 PyAudio~=0.2.14
