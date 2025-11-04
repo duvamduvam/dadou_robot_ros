@@ -8,7 +8,6 @@ TestSetup()
 
 
 class JenkinsTestCase(unittest.TestCase):
-    com = Com()
 
     def test_upper(self):
         self.assertEqual('foo'.upper(), 'FOO')
