@@ -10,11 +10,10 @@ from adafruit_servokit import ServoKit
 from dadou_utils_ros.logging_conf import LoggingConf
 from dadou_utils_ros.utils.time_utils import TimeUtils
 from dadou_utils_ros.utils_static import NECK, LEFT_ARM, RIGHT_ARM, RIGHT_EYE, LEFT_EYE, MODE, \
-    SINGLE_THREAD, LOGGING_TEST_FILE_NAME, RANDOM, RANDOM_MOVE_MIN, RANDOM_MOVE_MAX, RANDOM_TIME_MIN, RANDOM_TIME_MAX, \
+    LOGGING_TEST_FILE_NAME, RANDOM, RANDOM_MOVE_MIN, RANDOM_MOVE_MAX, RANDOM_TIME_MIN, RANDOM_TIME_MAX, \
     RANDOM_DURATION, LEFT_ARM_NB, HEAD_PWM_NB, RIGHT_ARM_NB, LEFT_EYE_NB, RIGHT_EYE_NB
 from robot.actions.servo import Servo
 from robot.robot_config import config
-from robot.tests.conf_test import TestSetup
 
 
 class ServosTests(unittest.TestCase):

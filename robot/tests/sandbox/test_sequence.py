@@ -15,7 +15,7 @@ from dadou_utils_ros.utils_static import NECK, ANIMATION, KEY
 from robot.actions import RightArm
 from robot.input.global_receiver import GlobalReceiver
 from robot.robot_factory import RobotFactory
-from robot.tests.conf_test import TestSetup
+from robot.tests.sandbox.conf_test import TestSetup
 TestSetup()
 
 

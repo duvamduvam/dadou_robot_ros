@@ -2,11 +2,10 @@ import logging
 import time
 import unittest
 
-from dadou_utils_ros.utils_static import WHEEL_LEFT, WHEEL_RIGHT, WHEELS, LEFT, RIGHT, STOP, FORWARD, BACKWARD
+from dadou_utils_ros.utils_static import WHEELS, LEFT, RIGHT, FORWARD, BACKWARD
 from robot.actions.wheels import Wheels
-from robot.move.anglo_meter_translator import AngloMeterTranslator
 from robot.robot_config import config
-from robot.tests.conf_test import TestSetup
+from robot.tests.sandbox.conf_test import TestSetup
 
 
 class WheelTest(unittest.TestCase):

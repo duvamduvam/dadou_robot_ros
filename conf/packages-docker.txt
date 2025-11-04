@@ -20,4 +20,4 @@ python3-dev
 tzdata
 
 # ROS tutorials used for URDF demos (rviz launchers)
-ros-jazzy-urdf-tutorial
+ros-humble-urdf-tutorial

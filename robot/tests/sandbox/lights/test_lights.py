@@ -5,11 +5,10 @@ from dadou_utils_ros.utils.time_utils import TimeUtils
 from robot.actions.lights import Lights
 from robot.files.robot_json_manager import RobotJsonManager
 from robot.robot_config import JSON_DIRECTORY, JSON_CONFIG
-from robot.tests.conf_test import TestSetup
+from robot.tests.sandbox.conf_test import TestSetup
 
 TestSetup()
 
-import time
 import unittest
 
 

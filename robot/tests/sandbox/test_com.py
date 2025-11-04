@@ -10,5 +10,7 @@ TestSetup()
 class MyTestCase(unittest.TestCase):
     com = Com()
 
-    def test_upper(self):
-        self.assertEqual('foo'.upper(), 'FOO')
+    def test_com(self):
+        start_time = Utils.current_milli_time()
+        while True:
+            self.com.pop_msg()

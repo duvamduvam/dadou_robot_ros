@@ -1,18 +1,15 @@
 import logging.config
-import os
 import time
 
 import neopixel
 
 from dadou_utils_ros.logging_conf import LoggingConf
 from dadou_utils_ros.utils.time_utils import TimeUtils
-from dadou_utils_ros.utils_static import LIGHTS_LED_COUNT, BRIGHTNESS, LIGHTS_PIN, UNITTEST, LOGGING_TEST_FILE_NAME, \
+from dadou_utils_ros.utils_static import LIGHTS_LED_COUNT, BRIGHTNESS, LIGHTS_PIN, LOGGING_TEST_FILE_NAME, \
     FACE
 from robot.actions.face import Face
 from robot.files.robot_json_manager import RobotJsonManager
 from robot.robot_config import config
-from robot.tests.conf_test import TestSetup
-from robot.visual.image_mapping import ImageMapping
 from robot.visual.visual import Visual
 
 #TestSetup()
