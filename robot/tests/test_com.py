@@ -7,7 +7,7 @@ from tests import TestSetup
 TestSetup()
 
 
-class MyTestCase(unittest.TestCase):
+class JenkinsTestCase(unittest.TestCase):
     com = Com()
 
     def test_upper(self):
