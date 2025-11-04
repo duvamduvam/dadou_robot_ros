@@ -22,6 +22,10 @@ COPY medias/ /home/ros2_ws/src/robot/medias/
 # Shared utilities fetched separately by the CI script.
 COPY dadou_utils_ros/ /home/ros2_ws/src/robot/dadou_utils_ros/
 
+# Test-specific entrypoint helper.
+COPY conf/docker/scripts/entrypoint-tests.sh /usr/local/bin/robot-tests-entrypoint
+RUN chmod +x /usr/local/bin/robot-tests-entrypoint
+
 # ROS 2 metadata and setup files.
 COPY conf/ros2_dependencies/ /home/ros2_ws/src/
 COPY conf/ros2/setup.py /home/ros2_ws/src/robot/
@@ -41,5 +45,5 @@ ENV PYTHONPATH=/home/ros2_ws
 # Install Python requirements for the robot stack.
 RUN pip3 install --no-cache-dir --ignore-installed -r /home/ros2_ws/src/robot/conf/requirements.txt
 
-# Entry point used in production containers.
+# Default entrypoint still launches the ROS runtime; tests can override with robot-tests-entrypoint.
 ENTRYPOINT ["/bin/bash", "-c", "source /home/ros2_ws/src/robot/conf/scripts/launch-ros-in-docker.sh"]
