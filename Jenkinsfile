@@ -69,5 +69,15 @@ pipeline {
     always {
       cleanWs()
     }
+    success {
+      script {
+        githubNotify context: 'Jenkins CI', status: 'SUCCESS', description: 'Build succeeded', targetUrl: env.BUILD_URL
+      }
+    }
+    failure {
+      script {
+        githubNotify context: 'Jenkins CI', status: 'FAILURE', description: 'Build failed', targetUrl: env.BUILD_URL
+      }
+    }
   }
 }
