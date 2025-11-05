@@ -21,7 +21,14 @@ pipeline {
           env.TEST_COMMAND = env.TEST_COMMAND?.trim() ?: 'pytest -q'
           env.WORKSPACE_ROOT = env.WORKSPACE_ROOT?.trim() ?: '/home/pi/jenkins-workspace'
           env.KEEP_WORKDIR = env.KEEP_WORKDIR?.trim() ?: '1'
-          env.CI_SCRIPT_PATH = env.CI_SCRIPT_PATH?.trim() ?: '/home/pi/jenkins/scripts/run_ci_pipeline.sh'
+          def rawScriptPath = env.CI_SCRIPT_PATH?.trim()
+          if (!rawScriptPath || rawScriptPath.isEmpty()) {
+            env.CI_SCRIPT_PATH = '/home/pi/jenkins/scripts/run_ci_pipeline.sh'
+          } else if (rawScriptPath == '/var/jenkins_home/scripts/run_ci_pipeline.sh') {
+            env.CI_SCRIPT_PATH = '/home/pi/jenkins/scripts/run_ci_pipeline.sh'
+          } else {
+            env.CI_SCRIPT_PATH = rawScriptPath
+          }
           env.DOCKER_PUSH_ENABLED = env.DOCKER_PUSH_ENABLED?.trim() ?: 'false'
         }
       }
