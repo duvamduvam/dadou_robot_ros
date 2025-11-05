@@ -67,17 +67,18 @@ pipeline {
 
   post {
     always {
+      script {
+        def notify = null
+        try {
+          notify = steps.getProperty('githubNotify')
+        } catch (MissingPropertyException ignored) {
+          echo 'githubNotify step unavailable; skipping GitHub commit status update.'
+        }
+        if (notify) {
+          notify context: 'Jenkins CI', status: currentBuild.currentResult, description: "Build ${currentBuild.currentResult.toLowerCase()}", targetUrl: env.BUILD_URL
+        }
+      }
       cleanWs()
-    }
-    success {
-      script {
-        githubNotify context: 'Jenkins CI', status: 'SUCCESS', description: 'Build succeeded', targetUrl: env.BUILD_URL
-      }
-    }
-    failure {
-      script {
-        githubNotify context: 'Jenkins CI', status: 'FAILURE', description: 'Build failed', targetUrl: env.BUILD_URL
-      }
     }
   }
 }
