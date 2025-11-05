@@ -42,8 +42,9 @@ RUN apt-get update && \
 # Ensure Python finds the ROS 2 workspace packages.
 ENV PYTHONPATH=/home/ros2_ws
 
-# Install Python requirements for the robot stack.
-RUN pip3 install --no-cache-dir --ignore-installed -r /home/ros2_ws/src/robot/conf/requirements.txt
+# Install Python requirements for the robot stack and test suite.
+RUN pip3 install --no-cache-dir --ignore-installed -r /home/ros2_ws/src/robot/conf/requirements.txt && \
+    pip3 install --no-cache-dir --ignore-installed -r /home/ros2_ws/src/robot/conf/tests/requirements.txt
 
 # Default entrypoint still launches the ROS runtime; tests can override with robot-tests-entrypoint.
 ENTRYPOINT ["/bin/bash", "-c", "source /home/ros2_ws/src/robot/conf/scripts/launch-ros-in-docker.sh"]

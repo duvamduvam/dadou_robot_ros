@@ -42,3 +42,4 @@ watchdog~=3.0.0
 websockets~=11.0.2
 websocket~=0.2.1
 whisper~=1.1.10
+pytest~=7.4.4
