@@ -22,4 +22,3 @@ simpleaudio~=1.0.4
 setuptools==58.2.0
 SpeechRecognition~=3.10.4
 SQLObject~=3.11.0
-#torch~=2.3.0
