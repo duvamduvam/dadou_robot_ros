@@ -2,11 +2,17 @@
 
 set -euo pipefail
 
-# ROS setup scripts reference optional environment variables that may not be defined
-# when running with `set -u`, so temporarily relax nounset while sourcing them.
-set +u
 source /opt/ros/humble/setup.bash
-source /home/ros2_ws/src/robot/conf/scripts/setup-robot-env.sh
-set -u
+
+TEST_ENV_SCRIPT="/home/ros2_ws/src/robot/conf/scripts/setup-robot-env.sh"
+if [[ -f "${TEST_ENV_SCRIPT}" ]]; then
+  # ROS helper may reference undefined variables; relax nounset temporarily.
+  set +u
+  # shellcheck disable=SC1090
+  source "${TEST_ENV_SCRIPT}"
+  set -u
+else
+  echo "[CI] ${TEST_ENV_SCRIPT} not found, continuing without additional robot env setup."
+fi
 
 exec "$@"
