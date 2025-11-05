@@ -24,4 +24,3 @@ SpeechRecognition~=3.10.4
 SQLObject~=3.11.0
 #torch~=2.3.0
 #websockets~=11.0.2
-#whisper~=1.1.10
