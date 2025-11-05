@@ -25,5 +25,4 @@ SQLObject~=3.11.0
 #torch~=2.3.0
 #watchdog~=3.0.0
 #websockets~=11.0.2
-#websocket~=0.2.1
 #whisper~=1.1.10
