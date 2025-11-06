@@ -84,10 +84,15 @@ pipeline {
             description: "Build ${githubStatus.toLowerCase()}",
             targetUrl: env.BUILD_URL
           )
-        } catch (org.jenkinsci.plugins.workflow.steps.MissingStepException ignored) {
-          echo 'githubNotify step unavailable; skipping GitHub commit status update.'
         } catch (hudson.AbortException e) {
           echo "githubNotify failed: ${e.message}"
+        } catch (Exception e) {
+          def reason = e.toString()
+          if (reason.contains('MissingStepException') || reason.contains('MissingMethodException')) {
+            echo 'githubNotify step unavailable; skipping GitHub commit status update.'
+          } else {
+            echo "githubNotify failed: ${e.message}"
+          }
         }
       }
       cleanWs()
