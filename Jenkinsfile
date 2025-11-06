@@ -77,13 +77,37 @@ pipeline {
           'NOT_BUILT': 'PENDING'
         ]
         def githubStatus = statusMap.get(rawStatus, 'ERROR')
+        def repoSlug = ''
+        if (env.GIT_URL) {
+          repoSlug = env.GIT_URL
+            .replaceFirst('^.+github.com[:/]', '')
+            .replaceFirst(/\.git$/, '')
+        }
+        def slugParts = repoSlug ? repoSlug.tokenize('/') : []
+        def githubOwner = (slugParts.size() >= 2) ? slugParts[-2] : ''
+        def githubRepo = (slugParts.size() >= 1) ? slugParts[-1] : ''
+        def commitSha = env.GIT_COMMIT?.trim()
+        if (!commitSha) {
+          try {
+            commitSha = sh(script: 'git rev-parse HEAD', returnStdout: true).trim()
+          } catch (Exception ignored) {
+            commitSha = ''
+          }
+        }
         try {
-          githubNotify(
-            context: 'Jenkins CI',
-            status: githubStatus,
-            description: "Build ${githubStatus.toLowerCase()}",
-            targetUrl: env.BUILD_URL
-          )
+          if (githubOwner && githubRepo && commitSha) {
+            githubNotify(
+              context: 'Jenkins CI',
+              status: githubStatus,
+              description: "Build ${githubStatus.toLowerCase()}",
+              targetUrl: env.BUILD_URL,
+              account: githubOwner,
+              repo: githubRepo,
+              sha: commitSha
+            )
+          } else {
+            echo 'Missing git metadata (owner/repo/sha); skipping GitHub commit status update.'
+          }
         } catch (hudson.AbortException e) {
           echo "githubNotify failed: ${e.message}"
         } catch (Exception e) {
