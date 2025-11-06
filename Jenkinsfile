@@ -77,15 +77,27 @@ pipeline {
           'NOT_BUILT': 'PENDING'
         ]
         def githubStatus = statusMap.get(rawStatus, 'ERROR')
-        def repoSlug = ''
-        if (env.GIT_URL) {
-          repoSlug = env.GIT_URL
+        def extractRepoSlug = { rawUrl ->
+          if (!rawUrl) {
+            return ''
+          }
+          return rawUrl
             .replaceFirst('^.+github.com[:/]', '')
             .replaceFirst(/\.git$/, '')
         }
+        def repoSlug = extractRepoSlug(env.GIT_URL)
+        if (!repoSlug) {
+          repoSlug = extractRepoSlug(env.REPO_URL)
+        }
         def slugParts = repoSlug ? repoSlug.tokenize('/') : []
-        def githubOwner = (slugParts.size() >= 2) ? slugParts[-2] : ''
-        def githubRepo = (slugParts.size() >= 1) ? slugParts[-1] : ''
+        def githubOwner = ''
+        def githubRepo = ''
+        if (slugParts.size() >= 2) {
+          githubOwner = slugParts[0]
+          githubRepo = slugParts[1]
+        } else if (slugParts.size() == 1) {
+          githubRepo = slugParts[0]
+        }
         def commitSha = env.GIT_COMMIT?.trim()
         if (!commitSha) {
           try {
@@ -96,6 +108,7 @@ pipeline {
         }
         try {
           if (githubOwner && githubRepo && commitSha) {
+            echo "githubNotify metadata -> owner: ${githubOwner}, repo: ${githubRepo}, sha: ${commitSha}"
             githubNotify(
               context: 'Jenkins CI',
               status: githubStatus,
