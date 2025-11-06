@@ -68,14 +68,26 @@ pipeline {
   post {
     always {
       script {
-        def notify = null
+        def rawStatus = (currentBuild.currentResult ?: 'SUCCESS').toString()
+        def statusMap = [
+          'SUCCESS': 'SUCCESS',
+          'FAILURE': 'FAILURE',
+          'UNSTABLE': 'FAILURE',
+          'ABORTED': 'ERROR',
+          'NOT_BUILT': 'PENDING'
+        ]
+        def githubStatus = statusMap.get(rawStatus, 'ERROR')
         try {
-          notify = steps.getProperty('githubNotify')
-        } catch (MissingPropertyException ignored) {
+          githubNotify(
+            context: 'Jenkins CI',
+            status: githubStatus,
+            description: "Build ${githubStatus.toLowerCase()}",
+            targetUrl: env.BUILD_URL
+          )
+        } catch (org.jenkinsci.plugins.workflow.steps.MissingStepException ignored) {
           echo 'githubNotify step unavailable; skipping GitHub commit status update.'
-        }
-        if (notify) {
-          notify context: 'Jenkins CI', status: currentBuild.currentResult, description: "Build ${currentBuild.currentResult.toLowerCase()}", targetUrl: env.BUILD_URL
+        } catch (hudson.AbortException e) {
+          echo "githubNotify failed: ${e.message}"
         }
       }
       cleanWs()
