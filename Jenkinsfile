@@ -21,6 +21,7 @@ pipeline {
           env.TEST_COMMAND = env.TEST_COMMAND?.trim() ?: 'pytest -q /home/ros2_ws/src/robot/robot/tests --ignore=/home/ros2_ws/src/robot/robot/tests/sandbox'
           env.WORKSPACE_ROOT = env.WORKSPACE_ROOT?.trim() ?: '/home/pi/jenkins-workspace'
           env.KEEP_WORKDIR = env.KEEP_WORKDIR?.trim() ?: '1'
+          env.GITHUB_NOTIFY_CREDENTIALS_ID = env.GITHUB_NOTIFY_CREDENTIALS_ID?.trim() ?: ''
           def rawScriptPath = env.CI_SCRIPT_PATH?.trim()
           if (!rawScriptPath || rawScriptPath.isEmpty()) {
             env.CI_SCRIPT_PATH = '/home/pi/jenkins/scripts/run_ci_pipeline.sh'
@@ -106,18 +107,23 @@ pipeline {
             commitSha = ''
           }
         }
+        def githubCreds = env.GITHUB_NOTIFY_CREDENTIALS_ID?.trim()
         try {
           if (githubOwner && githubRepo && commitSha) {
             echo "githubNotify metadata -> owner: ${githubOwner}, repo: ${githubRepo}, sha: ${commitSha}"
-            githubNotify(
-              context: 'Jenkins CI',
-              status: githubStatus,
+            def notifyArgs = [
+              context    : 'Jenkins CI',
+              status     : githubStatus,
               description: "Build ${githubStatus.toLowerCase()}",
-              targetUrl: env.BUILD_URL,
-              account: githubOwner,
-              repo: githubRepo,
-              sha: commitSha
-            )
+              targetUrl  : env.BUILD_URL,
+              account    : githubOwner,
+              repo       : githubRepo,
+              sha        : commitSha
+            ]
+            if (githubCreds) {
+              notifyArgs.credentialsId = githubCreds
+            }
+            githubNotify(notifyArgs)
           } else {
             echo 'Missing git metadata (owner/repo/sha); skipping GitHub commit status update.'
           }
