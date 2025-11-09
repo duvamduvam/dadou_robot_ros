@@ -15,13 +15,18 @@ pipeline {
         stage('SonarQube Analysis') {
             steps {
                 withSonarQubeEnv('SonarQube') {
-                    sh """
-                        ${SONAR_HOME}/bin/sonar-scanner \
-                        -Dsonar.projectKey=dadou_robot_ros \
-                        -Dsonar.sources=. \
-                        -Dsonar.python.coverage.reportPaths=coverage.xml \
-                        -Dsonar.python.xunit.reportPath=test-results.xml
-                    """
+                    withEnv([
+                        'JAVA_HOME=/opt/java/openjdk',
+                        'PATH+JAVA=/opt/java/openjdk/bin'
+                    ]) {
+                        sh """
+                            ${SONAR_HOME}/bin/sonar-scanner \
+                            -Dsonar.projectKey=dadou_robot_ros \
+                            -Dsonar.sources=. \
+                            -Dsonar.python.coverage.reportPaths=coverage.xml \
+                            -Dsonar.python.xunit.reportPath=test-results.xml
+                        """
+                    }
                 }
             }
         }

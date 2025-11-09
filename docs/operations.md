@@ -30,3 +30,7 @@
 ## Troubleshooting
 - See `docs/interfaces.md` for topic mapping references.
 - Review shared troubleshooting steps in `dadou_control_ros/docs/testing.md` and `dadou_utils_ros/docs/deployment.md`.
+- Jenkins/Sonar pipeline:
+  - The Jenkins container already incl. OpenJDK 21. If SonarScanner complains about `java`, install/refreh it via `sudo docker exec --user root jenkins bash -lc "apt-get update && apt-get install -y openjdk-21-jre-headless"` and remove the bundled `jre` in the scanner directory so it falls back to `/opt/java/openjdk/bin/java`.
+  - Configure Jenkins (Manage Jenkins → Configure System → Global properties) with `JAVA_HOME=/opt/java/openjdk` and `PATH+JAVA=/opt/java/openjdk/bin` to avoid the JENKINS-41339 warning.
+  - After redeploying Jenkins via Ansible, relaunch `dadou_robot_sonar`.
