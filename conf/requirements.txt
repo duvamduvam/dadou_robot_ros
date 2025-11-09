@@ -1,6 +1,6 @@
 #pycairo libs => sudo apt-get install libcairo2-dev libjpeg-dev libgif-dev
 #pygobject => sudo apt install libgirepository1.0-dev
-#RPi.GPIO~=0.7.1
+RPi.GPIO~=0.7.1
 adafruit-circuitpython-led-animation~=2.8.0
 adafruit-circuitpython-neopixel~=6.3.11
 adafruit-circuitpython-pcf8574~=1.0.8

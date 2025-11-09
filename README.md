@@ -67,6 +67,11 @@ The `bt` and `run` make targets wrap the helper scripts in `conf/scripts/` (nota
 - Document new sequences or hardware modules under `docs/`.
 - Run unit tests (and hardware tests when possible) located in `robot/tests/`.
 
+## Integration test
+- ansible deployement of jenkins and sonar
+- jenkins : http://jenkins.local:8080/
+- sonar : http://jenkins.local:9000/
+
 ## For AI Assistants
 - Deployment workflow and remote commands: [`docs/operations.md`](docs/operations.md)
 - Hardware reference when answering integration questions: [`docs/hardware/overview.md`](docs/hardware/overview.md)
