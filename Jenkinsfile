@@ -21,7 +21,10 @@ pipeline {
           env.TEST_COMMAND = env.TEST_COMMAND?.trim() ?: 'pytest -q /home/ros2_ws/src/robot/robot/tests --ignore=/home/ros2_ws/src/robot/robot/tests/sandbox'
           env.WORKSPACE_ROOT = env.WORKSPACE_ROOT?.trim() ?: '/home/pi/jenkins-workspace'
           env.KEEP_WORKDIR = env.KEEP_WORKDIR?.trim() ?: '1'
-          env.GITHUB_NOTIFY_CREDENTIALS_ID = env.GITHUB_NOTIFY_CREDENTIALS_ID?.trim() ?: ''
+          env.GITHUB_NOTIFY_ENABLED = env.GITHUB_NOTIFY_ENABLED?.trim() ?: 'true'
+          env.GITHUB_NOTIFY_ACCOUNT = env.GITHUB_NOTIFY_ACCOUNT?.trim() ?: 'duvamduvam'
+          env.GITHUB_NOTIFY_REPO = env.GITHUB_NOTIFY_REPO?.trim() ?: 'dadou_robot_ros'
+          env.GITHUB_NOTIFY_CREDENTIALS_ID = env.GITHUB_NOTIFY_CREDENTIALS_ID?.trim() ?: 'github-token4'
           def rawScriptPath = env.CI_SCRIPT_PATH?.trim()
           if (!rawScriptPath || rawScriptPath.isEmpty()) {
             env.CI_SCRIPT_PATH = '/home/pi/jenkins/scripts/run_ci_pipeline.sh'
@@ -71,13 +74,14 @@ pipeline {
       script {
         def rawStatus = (currentBuild.currentResult ?: 'SUCCESS').toString()
         def statusMap = [
-          'SUCCESS': 'SUCCESS',
-          'FAILURE': 'FAILURE',
-          'UNSTABLE': 'FAILURE',
-          'ABORTED': 'ERROR',
-          'NOT_BUILT': 'PENDING'
+          'SUCCESS': 'success',
+          'FAILURE': 'failure',
+          'UNSTABLE': 'failure',
+          'ABORTED': 'error',
+          'NOT_BUILT': 'pending'
         ]
-        def githubStatus = statusMap.get(rawStatus, 'ERROR')
+        def githubStatus = statusMap.get(rawStatus, 'error')
+
         def extractRepoSlug = { rawUrl ->
           if (!rawUrl) {
             return ''
@@ -86,19 +90,17 @@ pipeline {
             .replaceFirst('^.+github.com[:/]', '')
             .replaceFirst(/\.git$/, '')
         }
+
         def repoSlug = extractRepoSlug(env.GIT_URL)
         if (!repoSlug) {
           repoSlug = extractRepoSlug(env.REPO_URL)
         }
         def slugParts = repoSlug ? repoSlug.tokenize('/') : []
-        def githubOwner = ''
-        def githubRepo = ''
-        if (slugParts.size() >= 2) {
-          githubOwner = slugParts[0]
-          githubRepo = slugParts[1]
-        } else if (slugParts.size() == 1) {
-          githubRepo = slugParts[0]
-        }
+        def derivedOwner = slugParts.size() >= 1 ? slugParts[0] : ''
+        def derivedRepo = slugParts.size() >= 2 ? slugParts[1] : (slugParts ? slugParts[0] : '')
+
+        def githubOwner = env.GITHUB_NOTIFY_ACCOUNT?.trim()?.takeIf { !it.isEmpty() } ?: derivedOwner
+        def githubRepo = env.GITHUB_NOTIFY_REPO?.trim()?.takeIf { !it.isEmpty() } ?: derivedRepo
         def commitSha = env.GIT_COMMIT?.trim()
         if (!commitSha) {
           try {
@@ -108,34 +110,26 @@ pipeline {
           }
         }
         def githubCreds = env.GITHUB_NOTIFY_CREDENTIALS_ID?.trim()
-        try {
-          if (githubOwner && githubRepo && commitSha) {
-            echo "githubNotify metadata -> owner: ${githubOwner}, repo: ${githubRepo}, sha: ${commitSha}"
-            def notifyArgs = [
-              context    : 'Jenkins CI',
-              status     : githubStatus,
-              description: "Build ${githubStatus.toLowerCase()}",
-              targetUrl  : env.BUILD_URL,
-              account    : githubOwner,
-              repo       : githubRepo,
-              sha        : commitSha
-            ]
-            if (githubCreds) {
-              notifyArgs.credentialsId = githubCreds
-            }
-            githubNotify(notifyArgs)
-          } else {
-            echo 'Missing git metadata (owner/repo/sha); skipping GitHub commit status update.'
+        def notifyEnabled = env.GITHUB_NOTIFY_ENABLED?.toBoolean()
+
+        if (notifyEnabled && githubOwner && githubRepo && commitSha && githubCreds) {
+          echo "GitHub notify metadata -> owner: ${githubOwner}, repo: ${githubRepo}, sha: ${commitSha}"
+          withCredentials([string(credentialsId: githubCreds, variable: 'GITHUB_TOKEN')]) {
+            sh label: 'GitHub status update', script: """#!/usr/bin/env bash
+set -euo pipefail
+curl -sSf -X POST https://api.github.com/repos/${githubOwner}/${githubRepo}/statuses/${commitSha} \\
+  -H 'Authorization: Bearer '"\${GITHUB_TOKEN}" \\
+  -H 'Accept: application/vnd.github+json' \\
+  -d '{
+    "state": "${githubStatus}",
+    "target_url": "${env.BUILD_URL}",
+    "description": "Build ${githubStatus}",
+    "context": "Jenkins CI"
+  }'
+"""
           }
-        } catch (hudson.AbortException e) {
-          echo "githubNotify failed: ${e.message}"
-        } catch (Exception e) {
-          def reason = e.toString()
-          if (reason.contains('MissingStepException') || reason.contains('MissingMethodException')) {
-            echo 'githubNotify step unavailable; skipping GitHub commit status update.'
-          } else {
-            echo "githubNotify failed: ${e.message}"
-          }
+        } else {
+          echo 'Skipping GitHub status update (disabled or missing metadata/credentials).'
         }
       }
       cleanWs()
