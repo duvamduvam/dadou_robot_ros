@@ -99,8 +99,14 @@ pipeline {
         def derivedOwner = slugParts.size() >= 1 ? slugParts[0] : ''
         def derivedRepo = slugParts.size() >= 2 ? slugParts[1] : (slugParts ? slugParts[0] : '')
 
-        def githubOwner = env.GITHUB_NOTIFY_ACCOUNT?.trim()?.takeIf { !it.isEmpty() } ?: derivedOwner
-        def githubRepo = env.GITHUB_NOTIFY_REPO?.trim()?.takeIf { !it.isEmpty() } ?: derivedRepo
+        def githubOwner = env.GITHUB_NOTIFY_ACCOUNT?.trim()
+        if (!githubOwner) {
+          githubOwner = derivedOwner
+        }
+        def githubRepo = env.GITHUB_NOTIFY_REPO?.trim()
+        if (!githubRepo) {
+          githubRepo = derivedRepo
+        }
         def commitSha = env.GIT_COMMIT?.trim()
         if (!commitSha) {
           try {
