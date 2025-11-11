@@ -19,8 +19,13 @@ COPY conf/ /home/ros2_ws/src/robot/conf/
 COPY json/ /home/ros2_ws/src/robot/json/
 COPY medias/ /home/ros2_ws/src/robot/medias/
 
-# Shared utilities fetched separately by the CI script.
-COPY dadou_utils_ros/ /home/ros2_ws/src/robot/dadou_utils_ros/
+# Shared utilities fetched from Git to avoid depending on host filesystem layout.
+ARG DADOU_UTILS_REPO_URL="https://github.com/duvamduvam/dadou_utils_ros.git"
+ARG DADOU_UTILS_REPO_BRANCH="main"
+RUN apt-get update && \
+    apt-get install -y git && \
+    rm -rf /var/lib/apt/lists/* && \
+    git clone --depth=1 --branch "${DADOU_UTILS_REPO_BRANCH}" "${DADOU_UTILS_REPO_URL}" /home/ros2_ws/src/robot/dadou_utils_ros
 
 # Test-specific entrypoint helper.
 COPY conf/docker/scripts/entrypoint-tests.sh /usr/local/bin/robot-tests-entrypoint
