@@ -9,7 +9,7 @@ adafruit-blinka
 
 board~=1.0
 imageio~=2.30.0
-openai~=1.35.12
+#openai~=1.35.12
 pip>=24.1
 PyAudio~=0.2.14
 #pygobject~=3.46.0
@@ -18,5 +18,5 @@ playsound~=1.2.2
 simpleaudio~=1.0.4
 #setuptools version to make ros2 humble work (58.2.0) changed to 70.1.1 the 26/06/2024 still seeams to work
 setuptools==58.2.0
-SpeechRecognition~=3.10.4
+#SpeechRecognition~=3.10.4
 SQLObject~=3.11.0
