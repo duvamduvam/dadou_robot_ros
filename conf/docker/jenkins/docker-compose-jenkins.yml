@@ -17,7 +17,6 @@ services:
     volumes:
       - ../../../conf:/home/ros2_ws/src/robot/conf
       - ../../../robot:/home/ros2_ws/src/robot/robot
-      - ../../../dadou_utils_ros:/home/ros2_ws/src/robot/dadou_utils_ros
       - ../../../json:/home/ros2_ws/src/robot/json
       - ../../../medias:/home/ros2_ws/src/robot/medias
       - ../../../../robot_bringup:/home/ros2_ws/src/robot_bringup
