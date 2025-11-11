@@ -26,6 +26,7 @@ RUN apt-get update && \
     apt-get install -y git && \
     rm -rf /var/lib/apt/lists/* && \
     git clone --depth=1 --branch "${DADOU_UTILS_REPO_BRANCH}" "${DADOU_UTILS_REPO_URL}" /home/ros2_ws/src/robot/dadou_utils_ros
+RUN touch /home/ros2_ws/src/robot/change
 
 # Test-specific entrypoint helper.
 COPY conf/docker/scripts/entrypoint-tests.sh /usr/local/bin/robot-tests-entrypoint
