@@ -4,7 +4,7 @@
 source /opt/ros/humble/setup.sh
 cd /home/ros2_ws/
 
-CHANGE_FILE=/home/ros2_ws/src/robot/change
+CHANGE_FILE=/home/ros2_ws/src/robot/robot/change
 
 source /opt/ros/humble/setup.sh
 
