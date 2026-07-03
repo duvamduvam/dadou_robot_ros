@@ -10,7 +10,7 @@ from dadou_utils_ros.utils.time_utils import TimeUtils
 from dadou_utils_ros.utils_static import ANGLO, WHEEL_RIGHT, WHEEL_LEFT, WHEELS, KEY, \
     CMD_FORWARD, CMD_BACKWARD, CMD_LEFT, CMD_RIGHT, I2C_ENABLED, PWM_CHANNELS_ENABLED, \
     WHEEL_LEFT_PWM, WHEEL_RIGHT_PWM, WHEEL_LEFT_DIR, WHEEL_RIGHT_DIR, STRAIGHT, ANIMATION, STOP, FORWARD, BACKWARD, \
-    LEFT, RIGHT, INCLINO, SPEED, JOYSTICK, X, Y, DIGITAL_CHANNELS_ENABLED
+    LEFT, RIGHT, INCLINO, SPEED, JOYSTICK, X, Y, DIGITAL_CHANNELS_ENABLED, DURATION
 from robot.move.anglo_meter_translator import AngloMeterTranslator
 from robot.robot_config import MAX_PWM_L, MAX_PWM_R
 
@@ -25,6 +25,12 @@ class Wheels:
     TIME_STEP = 50
     move_time = 0
     MOVE_TIMEOUT = 400
+    # Pendant une animation le deadman 400ms est remplacé par une échéance absolue :
+    # temps restant annoncé par animations_node + marge. Si aucun temps restant n'est
+    # reçu, un plafond de secours borne quand même le mouvement.
+    ANIMATION_STOP_MARGIN = 2000
+    ANIMATION_FALLBACK_TIMEOUT = 30000
+    animation_deadline = 0
     MIN_PWM = 5000
     MAX_DIR = 65530
     FREQUENCY = 500
@@ -100,6 +106,9 @@ class Wheels:
 
         if ANIMATION in msg:
             self.animation_ongoing = msg[ANIMATION]
+            if self.animation_ongoing:
+                remaining = msg[DURATION] if DURATION in msg else self.ANIMATION_FALLBACK_TIMEOUT
+                self.animation_deadline = TimeUtils.current_milli_time() + remaining + self.ANIMATION_STOP_MARGIN
 
         if KEY in msg and (msg[KEY] == self.config[FORWARD] or msg[KEY] == self.config[BACKWARD] or msg[KEY] == self.config[LEFT] or msg[KEY] == self.config[RIGHT]):
             if msg[KEY] == self.config[CMD_FORWARD]:
@@ -190,8 +199,15 @@ class Wheels:
         if not self.enabled:
             return
 
-        if not self.animation_ongoing and self.left_pwm.duty_cycle != 0 and self.right_pwm.duty_cycle != 0 \
-                and TimeUtils.is_time(last_time=self.move_time, time_out=self.MOVE_TIMEOUT):
+        if self.left_pwm.duty_cycle == 0 and self.right_pwm.duty_cycle == 0:
+            return
+
+        if self.animation_ongoing:
+            if TimeUtils.current_milli_time() > self.animation_deadline:
+                logging.warning("wheels deadman: animation deadline exceeded, stopping wheels")
+                self.stop()
+                self.animation_ongoing = False
+        elif TimeUtils.is_time(last_time=self.move_time, time_out=self.MOVE_TIMEOUT):
             self.stop()
 
     def process(self):

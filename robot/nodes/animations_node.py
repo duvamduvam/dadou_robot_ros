@@ -9,7 +9,7 @@ from rclpy.node import Node
 from std_msgs.msg import String
 
 from dadou_utils_ros.logging_conf import LoggingConf
-from dadou_utils_ros.utils_static import RELAYS, AUDIO, FACE, ROBOT_LIGHTS, NECK, LEFT_EYE, RIGHT_EYE, LEFT_ARM, \
+from dadou_utils_ros.utils_static import RELAY, AUDIO, FACE, ROBOT_LIGHTS, NECK, LEFT_EYE, RIGHT_EYE, LEFT_ARM, \
     RIGHT_ARM, \
     ANIMATION, LOGGING_FILE_NAME, DURATION, STOP, WHEELS
 from robot.files.robot_json_manager import RobotJsonManager
@@ -19,7 +19,7 @@ from robot.sequences.animation_manager import AnimationManager
 from robot_interfaces.msg._string_time import StringTime
 
 
-PUBLISHER_LIST = [AUDIO, FACE, ROBOT_LIGHTS, RELAYS, NECK, LEFT_EYE, RIGHT_EYE, LEFT_ARM, RIGHT_ARM, WHEELS]
+PUBLISHER_LIST = [AUDIO, FACE, ROBOT_LIGHTS, RELAY, NECK, LEFT_EYE, RIGHT_EYE, LEFT_ARM, RIGHT_ARM, WHEELS]
 
 
 class AnimationsNode(Node):
@@ -84,6 +84,10 @@ class AnimationsNode(Node):
                     msg.msg = json.dumps(v)
                     if DURATION in animations_msg and animations_msg[DURATION] != 0:
                         msg.time = animations_msg[DURATION]
+                    # Les roues ont besoin du temps restant pour armer leur deadman :
+                    # sans lui, un crash de ce node en pleine animation les laisserait tourner.
+                    if k == WHEELS and msg.anim:
+                        msg.time = self.animations_manager.remaining_ms()
                     self.action_publishers[k].publish(msg)
 
 

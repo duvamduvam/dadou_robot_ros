@@ -102,7 +102,7 @@ def generate_launch_description():
     left_eye_server_node = Node(
         package="robot",
         executable="servo_node",
-        name="{}_node".format(NECK),
+        name="{}_node".format(LEFT_EYE),
         parameters=[
             {NAME: LEFT_EYE},
             {HEAD_PWM_NB: config[LEFT_EYE_NB]},

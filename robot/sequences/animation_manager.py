@@ -136,6 +136,12 @@ class AnimationManager(AbstractJsonActions):
             self.playing = False
         return {ANIMATION: False}
 
+    def remaining_ms(self):
+        if not self.playing:
+            return 0
+        elapsed = TimeUtils.current_milli_time() - self.last_time
+        return max(0, int(self.duration - elapsed))
+
     def process(self):
         if self.playing and TimeUtils.is_time(self.last_time, self.duration):
             return self.stop()
