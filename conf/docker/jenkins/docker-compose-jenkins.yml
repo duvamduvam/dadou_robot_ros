@@ -12,7 +12,7 @@ services:
       - /dev/i2c-1:/dev/i2c-1
       - /dev/gpiomem:/dev/gpiomem
     environment:
-      - ROS_DOMAIN_ID=0
+      - ROS_DOMAIN_ID=${ROS_DOMAIN_ID:-42}
       - RUN_IN_JENKINS=1
     volumes:
       - ../../../conf:/home/ros2_ws/src/robot/conf

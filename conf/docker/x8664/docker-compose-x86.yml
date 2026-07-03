@@ -12,6 +12,7 @@ services:
       - DISPLAY=${DISPLAY}
       - QT_X11_NO_MITSHM=1
       - XAUTHORITY=${XAUTHORITY:-/tmp/.docker.xauth}
+      - ROS_DOMAIN_ID=${ROS_DOMAIN_ID:-42}
     network_mode: "host"
     volumes:
       # Sync configs, assets, and give access to host X11 + logs.

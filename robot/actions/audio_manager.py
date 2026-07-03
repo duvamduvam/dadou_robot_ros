@@ -22,7 +22,7 @@ from dadou_utils_ros.audios.sound_object import SoundObject
 from dadou_utils_ros.misc import Misc
 from dadou_utils_ros.utils.time_utils import TimeUtils
 from dadou_utils_ros.utils_static import AUDIO, AUDIOS_DIRECTORY, KEY, STOP, NAME, JSON_AUDIOS, EXPRESSION, \
-    FACE, DURATION, AUDIO_DURATION, AUDIO_DEVICE_ID, DEFAULT_VOLUME_LEVEL, TIME, JSON_AUDIOS_DATAS, BACKGROUND
+    FACE, DURATION, AUDIO_DEVICE_ID, DEFAULT_VOLUME_LEVEL, TIME, JSON_AUDIOS_DATAS, BACKGROUND
 from robot.actions.abstract_json_actions import AbstractJsonActions
 
 #TODO check : https://maelfabien.github.io/machinelearning/Speech8/#iv2a-noise-reduction
@@ -186,7 +186,9 @@ class AudioManager(AbstractJsonActions):
                         face = audio_param[EXPRESSION]
                         duration = self.current_audio.duration * 1000
                         msg[DURATION] = duration
-                        self.global_receiver.write_values({FACE: face, DURATION: duration})
+                        # La propagation expression->visage passait par GlobalReceiver (legacy) ;
+                        # non câblée en mode ROS, il faudra un publisher face dans audio_node.
+                        logging.warning("expression '{}' non propagée vers le visage (non câblé)".format(face))
 
         if msg and AUDIO in msg:
             if msg[AUDIO] == STOP:
@@ -197,7 +199,6 @@ class AudioManager(AbstractJsonActions):
                 if FACE in msg:
                     duration = self.current_audio.duration * 1000
                     msg[DURATION] = duration
-                    self.global_receiver.write_values({AUDIO_DURATION: duration})
 
         return msg
 
