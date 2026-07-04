@@ -35,7 +35,7 @@ COPY conf/docker/docker_bashrc /tmp/docker_bashrc
 RUN cat /tmp/docker_bashrc >> /root/.bashrc && rm /tmp/docker_bashrc
 
 # System dependencies needed by the robot stack
-RUN apt-get update && cat /home/ros2_ws/src/robot/conf/packages-docker.txt | xargs apt-get install -y
+RUN apt-get update && grep -vE '^\s*(#|$)' /home/ros2_ws/src/robot/conf/packages-docker.txt | xargs apt-get install -y
 
 # Ensure Python sees the project sources
 ENV PYTHONPATH "${PYTHONPATH}:/home/src"
