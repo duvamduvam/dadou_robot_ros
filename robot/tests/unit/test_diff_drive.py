@@ -1,0 +1,56 @@
+"""Tests de la cinématique différentielle Twist -> roues (REP 103)."""
+
+import pytest
+
+from robot.move.diff_drive import DiffDrive
+
+SEPARATION = 0.42
+MAX_SPEED = 1.0
+
+
+@pytest.fixture
+def kinematics():
+    return DiffDrive(wheel_separation=SEPARATION, max_wheel_speed=MAX_SPEED)
+
+
+def test_straight_line(kinematics):
+    assert kinematics.twist_to_wheels(0.5, 0.0) == (0.5, 0.5)
+    assert kinematics.twist_to_wheels(-0.5, 0.0) == (-0.5, -0.5)
+
+
+def test_stop(kinematics):
+    assert kinematics.twist_to_wheels(0.0, 0.0) == (0.0, 0.0)
+
+
+def test_spin_in_place_positive_is_counter_clockwise(kinematics):
+    left, right = kinematics.twist_to_wheels(0.0, 1.0)
+    assert left < 0 < right                      # rotation vers la gauche (REP 103)
+    assert left == -right
+
+
+def test_turn_left_right_wheel_faster(kinematics):
+    left, right = kinematics.twist_to_wheels(0.5, 1.0)
+    assert right > left > 0
+
+
+def test_saturation_preserves_curvature(kinematics):
+    left, right = kinematics.twist_to_wheels(2.0, 1.0)   # demande > max
+    assert max(abs(left), abs(right)) == 1.0             # saturé à 1
+    # le ratio gauche/droite (donc le rayon de courbure) est préservé
+    raw_left = 2.0 - 1.0 * SEPARATION / 2
+    raw_right = 2.0 + 1.0 * SEPARATION / 2
+    assert left / right == pytest.approx(raw_left / raw_right)
+
+
+def test_output_always_in_range(kinematics):
+    for v in (-3.0, -1.0, 0.0, 1.0, 3.0):
+        for w in (-5.0, -1.0, 0.0, 1.0, 5.0):
+            left, right = kinematics.twist_to_wheels(v, w)
+            assert -1.0 <= left <= 1.0 and -1.0 <= right <= 1.0
+
+
+def test_invalid_parameters_rejected():
+    with pytest.raises(ValueError):
+        DiffDrive(wheel_separation=0, max_wheel_speed=1)
+    with pytest.raises(ValueError):
+        DiffDrive(wheel_separation=0.4, max_wheel_speed=-1)

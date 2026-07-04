@@ -1,0 +1,232 @@
+<?xml version="1.0"?>
+<!--
+  URDF du robot de théâtre Dadou (Didier).
+
+  Architecture d'après les photos (https://duvam.net/didier/) :
+   - base tricycle : 2 roues motrices pneumatiques + 1 roue folle arrière sur flèche ;
+   - torse en bois (caisse de planches) portant le haut-parleur "bouche" ;
+   - épaules en haut du torse (1 ddl par bras, pales en bois) ;
+   - tête = tambour cylindrique central (servo neck en rotation panoramique) ;
+   - 2 yeux en cloches grises sur tiges, fixés à l'arche au-dessus du torse.
+
+  Les joints portent les MÊMES noms que les topics/servos du code
+  (neck, left_arm, right_arm, left_eye, right_eye) : le mapping vers
+  ros2_control / JointTrajectory sera direct.
+
+  Dimensions estimées depuis les photos — à affiner depuis les plans
+  FreeCAD/Fusion (~/Nextcloud/dev/didier/plans). Tout est regroupé ici.
+-->
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro" name="dadou_robot">
+
+  <!-- ======== Dimensions à mesurer (mètres, kilogrammes) ======== -->
+  <xacro:property name="base_length" value="0.55"/>
+  <xacro:property name="base_width" value="0.55"/>
+  <xacro:property name="base_height" value="0.20"/>
+  <xacro:property name="base_mass" value="35.0"/>
+
+  <xacro:property name="wheel_radius" value="0.13"/>
+  <xacro:property name="wheel_width" value="0.075"/>
+  <xacro:property name="wheel_separation" value="0.58"/>
+  <xacro:property name="wheel_mass" value="1.5"/>
+
+  <!-- Roue folle arrière sur flèche déportée -->
+  <xacro:property name="caster_offset_x" value="-0.45"/>
+  <xacro:property name="caster_radius" value="0.10"/>
+
+  <xacro:property name="torso_length" value="0.40"/>
+  <xacro:property name="torso_width" value="0.32"/>
+  <xacro:property name="torso_height" value="0.75"/>
+  <xacro:property name="torso_mass" value="10.0"/>
+
+  <!-- Tête = tambour cylindrique (axe vertical) -->
+  <xacro:property name="head_radius" value="0.12"/>
+  <xacro:property name="head_height" value="0.16"/>
+  <xacro:property name="head_mass" value="1.5"/>
+
+  <!-- Pales de bras en bois -->
+  <xacro:property name="arm_length" value="0.45"/>
+  <xacro:property name="arm_radius" value="0.035"/>
+  <xacro:property name="arm_mass" value="0.8"/>
+
+  <!-- Yeux : cloches grises sur tiges au-dessus du torse -->
+  <xacro:property name="eye_radius" value="0.05"/>
+  <xacro:property name="eye_mass" value="0.12"/>
+  <xacro:property name="eye_offset_y" value="0.18"/>
+  <xacro:property name="eye_offset_z" value="0.28"/>
+
+  <!-- Course des servos : 0..180° matériel, centrée dans le modèle -->
+  <xacro:property name="servo_lower" value="${-pi/2}"/>
+  <xacro:property name="servo_upper" value="${pi/2}"/>
+
+  <material name="wood"><color rgba="0.72 0.55 0.30 1"/></material>
+  <material name="red_metal"><color rgba="0.55 0.12 0.12 1"/></material>
+  <material name="black"><color rgba="0.10 0.10 0.10 1"/></material>
+  <material name="grey"><color rgba="0.55 0.55 0.55 1"/></material>
+  <material name="blue_drum"><color rgba="0.15 0.20 0.35 1"/></material>
+
+  <!-- ======== Macros d'inertie ======== -->
+  <xacro:macro name="box_inertial" params="m x y z">
+    <inertial>
+      <mass value="${m}"/>
+      <inertia ixx="${m*(y*y+z*z)/12}" iyy="${m*(x*x+z*z)/12}" izz="${m*(x*x+y*y)/12}"
+               ixy="0" ixz="0" iyz="0"/>
+    </inertial>
+  </xacro:macro>
+
+  <xacro:macro name="cylinder_inertial" params="m r h">
+    <inertial>
+      <mass value="${m}"/>
+      <inertia ixx="${m*(3*r*r+h*h)/12}" iyy="${m*(3*r*r+h*h)/12}" izz="${m*r*r/2}"
+               ixy="0" ixz="0" iyz="0"/>
+    </inertial>
+  </xacro:macro>
+
+  <xacro:macro name="sphere_inertial" params="m r">
+    <inertial>
+      <mass value="${m}"/>
+      <inertia ixx="${2*m*r*r/5}" iyy="${2*m*r*r/5}" izz="${2*m*r*r/5}"
+               ixy="0" ixz="0" iyz="0"/>
+    </inertial>
+  </xacro:macro>
+
+  <!-- ======== Base tricycle ======== -->
+  <link name="base_link">
+    <visual>
+      <geometry><box size="${base_length} ${base_width} ${base_height}"/></geometry>
+      <material name="red_metal"/>
+    </visual>
+    <collision>
+      <geometry><box size="${base_length} ${base_width} ${base_height}"/></geometry>
+    </collision>
+    <xacro:box_inertial m="${base_mass}" x="${base_length}" y="${base_width}" z="${base_height}"/>
+  </link>
+
+  <xacro:macro name="drive_wheel" params="side y_sign">
+    <link name="wheel_${side}_link">
+      <visual>
+        <origin rpy="${pi/2} 0 0"/>
+        <geometry><cylinder radius="${wheel_radius}" length="${wheel_width}"/></geometry>
+        <material name="black"/>
+      </visual>
+      <collision>
+        <origin rpy="${pi/2} 0 0"/>
+        <geometry><cylinder radius="${wheel_radius}" length="${wheel_width}"/></geometry>
+      </collision>
+      <xacro:cylinder_inertial m="${wheel_mass}" r="${wheel_radius}" h="${wheel_width}"/>
+    </link>
+    <joint name="wheel_${side}_joint" type="continuous">
+      <parent link="base_link"/>
+      <child link="wheel_${side}_link"/>
+      <origin xyz="0.1 ${y_sign*wheel_separation/2} ${-base_height/2}"/>
+      <axis xyz="0 1 0"/>
+    </joint>
+  </xacro:macro>
+  <xacro:drive_wheel side="left" y_sign="1"/>
+  <xacro:drive_wheel side="right" y_sign="-1"/>
+
+  <!-- Roue folle arrière sur sa flèche (modélisée en sphère glissante) -->
+  <link name="caster_rear_link">
+    <visual>
+      <geometry><sphere radius="${caster_radius}"/></geometry>
+      <material name="black"/>
+    </visual>
+    <collision>
+      <geometry><sphere radius="${caster_radius}"/></geometry>
+    </collision>
+    <xacro:sphere_inertial m="1.0" r="${caster_radius}"/>
+  </link>
+  <joint name="caster_rear_joint" type="fixed">
+    <parent link="base_link"/>
+    <child link="caster_rear_link"/>
+    <origin xyz="${caster_offset_x} 0 ${-base_height/2 - wheel_radius + caster_radius}"/>
+  </joint>
+
+  <!-- ======== Torse (caisse en bois) ======== -->
+  <link name="torso_link">
+    <visual>
+      <origin xyz="0 0 ${torso_height/2}"/>
+      <geometry><box size="${torso_length} ${torso_width} ${torso_height}"/></geometry>
+      <material name="wood"/>
+    </visual>
+    <collision>
+      <origin xyz="0 0 ${torso_height/2}"/>
+      <geometry><box size="${torso_length} ${torso_width} ${torso_height}"/></geometry>
+    </collision>
+    <xacro:box_inertial m="${torso_mass}" x="${torso_length}" y="${torso_width}" z="${torso_height}"/>
+  </link>
+  <joint name="torso_joint" type="fixed">
+    <parent link="base_link"/>
+    <child link="torso_link"/>
+    <origin xyz="0 0 ${base_height/2}"/>
+  </joint>
+
+  <!-- ======== Tête : tambour central (servo neck, rotation panoramique) ======== -->
+  <link name="head_link">
+    <visual>
+      <origin xyz="0 0 ${head_height/2}"/>
+      <geometry><cylinder radius="${head_radius}" length="${head_height}"/></geometry>
+      <material name="blue_drum"/>
+    </visual>
+    <collision>
+      <origin xyz="0 0 ${head_height/2}"/>
+      <geometry><cylinder radius="${head_radius}" length="${head_height}"/></geometry>
+    </collision>
+    <xacro:cylinder_inertial m="${head_mass}" r="${head_radius}" h="${head_height}"/>
+  </link>
+  <joint name="neck" type="revolute">
+    <parent link="torso_link"/>
+    <child link="head_link"/>
+    <origin xyz="0 0 ${torso_height}"/>
+    <axis xyz="0 0 1"/>
+    <limit lower="${servo_lower}" upper="${servo_upper}" effort="2.0" velocity="3.0"/>
+  </joint>
+
+  <!-- ======== Bras : pales en bois pivotant aux épaules ======== -->
+  <xacro:macro name="arm" params="side y_sign">
+    <link name="${side}_arm_link">
+      <visual>
+        <origin xyz="0 0 ${-arm_length/2}"/>
+        <geometry><cylinder radius="${arm_radius}" length="${arm_length}"/></geometry>
+        <material name="wood"/>
+      </visual>
+      <collision>
+        <origin xyz="0 0 ${-arm_length/2}"/>
+        <geometry><cylinder radius="${arm_radius}" length="${arm_length}"/></geometry>
+      </collision>
+      <xacro:cylinder_inertial m="${arm_mass}" r="${arm_radius}" h="${arm_length}"/>
+    </link>
+    <joint name="${side}_arm" type="revolute">
+      <parent link="torso_link"/>
+      <child link="${side}_arm_link"/>
+      <origin xyz="0 ${y_sign*(torso_width/2 + arm_radius)} ${torso_height - 0.06}"/>
+      <axis xyz="0 1 0"/>
+      <limit lower="${servo_lower}" upper="${servo_upper}" effort="2.0" velocity="3.0"/>
+    </joint>
+  </xacro:macro>
+  <xacro:arm side="left" y_sign="1"/>
+  <xacro:arm side="right" y_sign="-1"/>
+
+  <!-- ======== Yeux : cloches sur tiges, fixées à l'arche au-dessus du torse ======== -->
+  <xacro:macro name="eye" params="side y_sign">
+    <link name="${side}_eye_link">
+      <visual>
+        <geometry><sphere radius="${eye_radius}"/></geometry>
+        <material name="grey"/>
+      </visual>
+      <collision>
+        <geometry><sphere radius="${eye_radius}"/></geometry>
+      </collision>
+      <xacro:sphere_inertial m="${eye_mass}" r="${eye_radius}"/>
+    </link>
+    <joint name="${side}_eye" type="revolute">
+      <parent link="torso_link"/>
+      <child link="${side}_eye_link"/>
+      <origin xyz="0 ${y_sign*eye_offset_y} ${torso_height + eye_offset_z}"/>
+      <axis xyz="0 1 0"/>
+      <limit lower="${servo_lower}" upper="${servo_upper}" effort="0.5" velocity="5.0"/>
+    </joint>
+  </xacro:macro>
+  <xacro:eye side="left" y_sign="1"/>
+  <xacro:eye side="right" y_sign="-1"/>
+
+</robot>
