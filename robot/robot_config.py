@@ -10,9 +10,8 @@ The rest of the codebase imports `config` to access runtime settings instead of
 hard-coding constants.
 """
 
+import os
 import sys
-
-import board
 
 from dadou_utils_ros.misc import Misc
 from dadou_utils_ros.utils_static import AUDIOS_DIRECTORY, BASE_PATH, MSG_SIZE, NAME, SERIAL_ID, TYPE, NONE, \
@@ -67,7 +66,9 @@ config[CALIBRATION] = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 252, 255, 251, 255, 1
 
 print("is raspberry {}".format(Misc.is_raspberrypi()))
 if Misc.is_raspberrypi():
-    # Physical GPIO pins only exist on the Pi, skip them during development on laptops.
+    # Physical GPIO pins only exist on the Pi; the board module (Adafruit-Blinka)
+    # is only importable there, hence the local import.
+    import board
     config[SHUTDOWN_PIN] = board.D16
     config[RESTART_PIN] = board.D20
     config[STATUS_LED_PIN] = board.D12
@@ -123,12 +124,9 @@ config[SRC_DIRECTORY] = config[BASE_PATH] + "src/"
 config[PROJECT_DIRECTORY] = config[SRC_DIRECTORY] + "robot/"
 
 if 'unittest' in sys.modules:
-    # When pytest/unittest imports the module we point to local checkouts instead of the
-    # default container paths so fixtures can access fixtures/assets easily.
-    if Misc.is_raspberrypi():
-        config[PROJECT_DIRECTORY] = "/home/pi/test/"
-    else:
-        config[PROJECT_DIRECTORY] = "/home/dadou/Nextcloud/Didier/python/dadou_robot_ros/"
+    # When pytest/unittest imports the module we point to the repo checkout instead of
+    # the container paths, wherever the repo happens to live.
+    config[PROJECT_DIRECTORY] = os.path.dirname(os.path.dirname(os.path.abspath(__file__))) + "/"
 
 config[CONFIG_DIRECTORY] = config[PROJECT_DIRECTORY] + "conf/"
 config[JSON_DIRECTORY] = config[PROJECT_DIRECTORY] + "json/"
@@ -145,10 +143,7 @@ config[LOGGING_CONFIG_TEST_FILE] = config[LOGGING_DIRECTORY] + 'logging-test.con
 config[LOGGING_CONFIG_FILE] = config[LOGGING_DIRECTORY] + 'logging.conf'
 
 config[LOGGING_FILE_NAME] = config[BASE_PATH] + 'log/robot.log'
-if Misc.is_raspberrypi():
-    config[LOGGING_TEST_FILE_NAME] = '/home/pi/test/logs/robot-test.log'
-else:
-    config[LOGGING_TEST_FILE_NAME] = '/home/dadou/Nextcloud/Didier/python/dadou_robot_ros/logs/robot-test.log'
+config[LOGGING_TEST_FILE_NAME] = os.path.dirname(os.path.dirname(os.path.abspath(__file__))) + '/logs/robot-test.log'
 
 config[MOUTH_VISUALS_PATH] = config[VISUAL_DIRECTORY] + "mouth"
 config[EYE_VISUALS_PATH] = config[VISUAL_DIRECTORY] + "eye"
