@@ -23,6 +23,9 @@ services:
       - ../../../medias:/home/ros2_ws/src/robot/medias
       - ../../../../robot_bringup:/home/ros2_ws/src/robot_bringup
       - ../../../../robot_interfaces:/home/ros2_ws/src/robot_interfaces
+      # Chaîne cmd_vel (bridge/mux/deadman) — rsyncée sur le Pi par la tâche
+      # ansible "ros2_dependencies -> src/", comme robot_bringup/robot_interfaces.
+      - ../../../../robot_drive:/home/ros2_ws/src/robot_drive
       - ../../../../../build:/home/ros2_ws/build
       - ../../../../../install:/home/ros2_ws/install
       - ../../../../../log:/home/ros2_ws/log
