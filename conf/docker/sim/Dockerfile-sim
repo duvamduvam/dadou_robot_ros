@@ -27,4 +27,10 @@ COPY conf/ros2_dependencies/robot_interfaces /home/ros2_ws/src/robot_interfaces
 COPY conf/ros2_dependencies/robot_drive /home/ros2_ws/src/robot_drive
 COPY conf/scripts/launch-sim-in-docker.sh /home/ros2_ws/
 
+# json/ : robot_lights.json, lights_base.json, colors.json lus par leds_sim_node
+# (mêmes fichiers que le vrai robot, cf. robot/robot_config.py) pour que la visu
+# LED en sim résolve les mêmes séquences/couleurs. Monté aussi en volume par le
+# compose (itération sans rebuild), comme les paquets ros2_dependencies.
+COPY json/ /home/ros2_ws/json/
+
 ENTRYPOINT ["/bin/bash", "-c", "/home/ros2_ws/launch-sim-in-docker.sh"]

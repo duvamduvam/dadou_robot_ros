@@ -10,3 +10,7 @@ sys.path.insert(0, ROOT)
 # de dev) : on l'ajoute au path pour que les tests fassent
 # `from robot_drive... import ...` comme si le package était sourcé.
 sys.path.insert(0, os.path.join(ROOT, "conf", "ros2_dependencies", "robot_drive"))
+
+# Même logique pour robot_sim_lib (logique pure du node leds_sim_node,
+# paquet robot_sim) : `from robot_sim_lib... import ...` sans colcon build.
+sys.path.insert(0, os.path.join(ROOT, "conf", "ros2_dependencies", "robot_sim"))

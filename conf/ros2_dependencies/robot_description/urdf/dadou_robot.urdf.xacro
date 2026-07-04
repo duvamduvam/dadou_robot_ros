@@ -54,6 +54,20 @@
   <xacro:property name="eye_offset_y" value="0.18"/>
   <xacro:property name="eye_offset_z" value="0.28"/>
 
+  <!-- Ruban LED "corps" (zone 513-673 du ruban physique) : boîte fine plaquée
+       sur la face avant du torse, ~80% de la hauteur, ~60% de la largeur. -->
+  <xacro:property name="body_leds_height" value="${0.8*torso_height}"/>
+  <xacro:property name="body_leds_width" value="${0.6*torso_width}"/>
+  <xacro:property name="body_leds_thickness" value="0.01"/>
+  <xacro:property name="body_leds_mass" value="0.05"/>
+
+  <!-- Matrice LED "bouche" (LED 0-384) : petite boîte en haut de la face avant,
+       au-dessus du ruban corps. -->
+  <xacro:property name="mouth_leds_width" value="0.12"/>
+  <xacro:property name="mouth_leds_height" value="0.08"/>
+  <xacro:property name="mouth_leds_thickness" value="0.01"/>
+  <xacro:property name="mouth_leds_mass" value="0.05"/>
+
   <!-- Course des servos : 0..180° matériel, centrée dans le modèle -->
   <xacro:property name="servo_lower" value="${-pi/2}"/>
   <xacro:property name="servo_upper" value="${pi/2}"/>
@@ -63,6 +77,9 @@
   <material name="black"><color rgba="0.10 0.10 0.10 1"/></material>
   <material name="grey"><color rgba="0.55 0.55 0.55 1"/></material>
   <material name="blue_drum"><color rgba="0.15 0.20 0.35 1"/></material>
+  <!-- LED éteintes par défaut (couleur réelle pilotée en runtime par leds_sim_node
+       en sim, via matériaux émissifs gz ; sur le vrai robot ce sont des NeoPixel). -->
+  <material name="leds_off"><color rgba="0.05 0.05 0.05 1"/></material>
 
   <!-- ======== Macros d'inertie ======== -->
   <xacro:macro name="box_inertial" params="m x y z">
@@ -228,5 +245,38 @@
   </xacro:macro>
   <xacro:eye side="left" y_sign="1"/>
   <xacro:eye side="right" y_sign="-1"/>
+
+  <!-- ======== LED : visualisation des rubans réels (couleur pilotée en runtime) ========
+       Purement visuel : pas de <collision>, masse négligeable, joints FIXES sur le
+       torse. Le +x est la face avant (cf. disposition roues/caisson ci-dessus). -->
+
+  <!-- Ruban "corps" : de la base du torse jusqu'à 80% de sa hauteur. -->
+  <link name="body_leds_link">
+    <visual>
+      <geometry><box size="${body_leds_thickness} ${body_leds_width} ${body_leds_height}"/></geometry>
+      <material name="leds_off"/>
+    </visual>
+    <xacro:box_inertial m="${body_leds_mass}" x="${body_leds_thickness}" y="${body_leds_width}" z="${body_leds_height}"/>
+  </link>
+  <joint name="body_leds_joint" type="fixed">
+    <parent link="torso_link"/>
+    <child link="body_leds_link"/>
+    <origin xyz="${torso_length/2 + body_leds_thickness/2} 0 ${0.4*torso_height}"/>
+  </joint>
+
+  <!-- Matrice "bouche" : au-dessus du ruban corps, avec une marge sous le sommet
+       du torse pour ne pas chevaucher visuellement les deux zones. -->
+  <link name="mouth_leds_link">
+    <visual>
+      <geometry><box size="${mouth_leds_thickness} ${mouth_leds_width} ${mouth_leds_height}"/></geometry>
+      <material name="leds_off"/>
+    </visual>
+    <xacro:box_inertial m="${mouth_leds_mass}" x="${mouth_leds_thickness}" y="${mouth_leds_width}" z="${mouth_leds_height}"/>
+  </link>
+  <joint name="mouth_leds_joint" type="fixed">
+    <parent link="torso_link"/>
+    <child link="mouth_leds_link"/>
+    <origin xyz="${torso_length/2 + mouth_leds_thickness/2} 0 ${0.9*torso_height}"/>
+  </joint>
 
 </robot>

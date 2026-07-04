@@ -29,3 +29,6 @@ services:
       - ../../ros2_dependencies/robot_interfaces:/home/ros2_ws/src/robot_interfaces
       - ../../ros2_dependencies/robot_drive:/home/ros2_ws/src/robot_drive
       - ../../scripts/launch-sim-in-docker.sh:/home/ros2_ws/launch-sim-in-docker.sh
+      # json/ : mêmes fichiers de séquences/couleurs LED que le vrai robot,
+      # lus par leds_sim_node (params robot_lights_json/lights_base_json/colors_json).
+      - ../../../json:/home/ros2_ws/json

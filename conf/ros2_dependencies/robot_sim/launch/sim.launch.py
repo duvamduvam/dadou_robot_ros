@@ -77,4 +77,14 @@ def generate_launch_description():
             }],
             output="screen",
         ),
+
+        # Visualisation LED (matériaux émissifs gz, cf. robot_sim_lib/leds_logic.py) :
+        # écoute robot_lights/face côté ROS, publie /material_color (bridgé vers
+        # /world/stage/material_color, système gz UserCommands du monde `stage`).
+        Node(
+            package="robot_sim",
+            executable="leds_sim_node",
+            parameters=[{"use_sim_time": True}],
+            output="screen",
+        ),
     ])

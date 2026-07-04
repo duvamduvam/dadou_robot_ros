@@ -64,3 +64,17 @@
   ros_type_name: "std_msgs/msg/Float64"
   gz_type_name: "gz.msgs.Double"
   direction: ROS_TO_GZ
+
+# LED (leds_sim_node, package robot_sim) : le monde `stage` charge le système
+# gz UserCommands, qui expose /world/stage/material_color en écriture. Publier
+# dessus change en direct le matériau (diffuse/emissive/ambient) d'un visual
+# nommé de la scène -- pas besoin de republier le SDF ni de plugin dédié.
+# entity_match=FIRST + entity.name=<link>_visual ciblent un visual précis
+# (voir dadou_robot_gz.urdf.xacro : preserveFixedJoint sur les joints LED fixes
+# pour garder ce nom stable, sinon la conversion URDF->SDF les fusionne dans
+# torso_link_visual).
+- ros_topic_name: "/material_color"
+  gz_topic_name: "/world/stage/material_color"
+  ros_type_name: "ros_gz_interfaces/msg/MaterialColor"
+  gz_type_name: "gz.msgs.MaterialColor"
+  direction: ROS_TO_GZ
