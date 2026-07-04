@@ -26,9 +26,15 @@ FAIT et validé en sim (tout est commité/poussé, CI verte, 123 tests unitaires
   VALEUR de la clé wheels) → `twist_mux` (remote 100 > anim 10, verrou `e_stop` latché,
   `use_stamped: false` obligatoire en Jazzy) → `twist_deadman` (zéros à 20 Hz si silence
   > 400 ms) → `/cmd_vel`.
-- **wheels_node bi-mode** : legacy StringTime (défaut) ou `/cmd_vel` selon le drapeau.
+- **wheels_node bi-mode** : legacy StringTime ou `/cmd_vel` selon le drapeau.
   En mode cmd_vel : deadman local 400 ms conservé (ultime rempart), twist nul → `stop()`
-  franc (le plancher MIN_PWM d'`update_cmd(0,0)` ferait ramper les roues).
+  franc (le plancher MIN_PWM d'`update_cmd(0,0)` ferait ramper les roues), appelé une
+  seule fois par arrêt (le twist_deadman inonde de zéros à 20 Hz au repos → spam log sinon).
+- **BASCULE FAITE ET VALIDÉE sur le robot le 2026-07-04** : `WHEELS_CMD_VEL_ENABLED=True`
+  est la config officielle. Protocole caméra 4/4 (roues hors sol) : forward 50 %,
+  slider vitesse 50 %→25 %, e-stop étanche, kill de la chaîne en plein mouvement →
+  arrêt local en 440 ms. Protocole rejouable : `conf/scripts/validate-cmdvel-protocol.sh`
+  (à exécuter dans le conteneur robot). Rollback : drapeau à False + sentinelle + restart.
 
 ## Commandes
 
@@ -49,16 +55,16 @@ docker exec -it dadou-sim-container bash -c 'source /opt/ros/$ROS_DISTRO/setup.s
 
 ## Prochaines étapes (dans l'ordre)
 
-1. **Protocole caméra — bascule cmd_vel** (roues hors sol, filmé) : passer
-   `WHEELS_CMD_VEL_ENABLED=True`, déployer, puis vérifier : boutons télécommande
-   (forward/back/left/right), slider vitesse (50 % → demi-vitesse), séquence avec roues
-   (moon-walk), **kill de la chaîne en plein mouvement → arrêt < 1 s**, e-stop
-   (`ros2 topic pub /e_stop std_msgs/msg/Bool "{data: true}"` — latché, publier false pour
-   déverrouiller). En cas de doute : remettre le drapeau à False (retour legacy immédiat).
+1. **Test scénique en conditions réelles** : roues AU SOL, télécommande physique en main
+   (boutons, slider, gants), une séquence de spectacle complète — première fois que le
+   mode cmd_vel roule au sol. Vérifier aussi le sens de rotation gauche/droite (le
+   protocole roues hors sol ne l'a validé qu'en marche avant symétrique).
 2. Calibrer `max_wheel_speed` réel (m/s à consigne 1.0) — mesurable à la caméra, distance/temps.
 3. Action ROS 2 `PlayAnimation` (les pistes roues des séquences passeront par cmd_vel_anim).
 4. Source unique des séquences JSON (côté robot, la télécommande interroge par service).
 5. Affiner l'URDF depuis les plans FreeCAD (~/Nextcloud/dev/didier/plans).
+6. Quirk latent à vérifier caméra un jour : en legacy, une paire [0,0] de séquence passe
+   par update_cmd(0,0) → PWM au plancher MIN_PWM=5000 (rampage lent possible).
 
 ## Méthode de travail
 
