@@ -76,8 +76,10 @@ class LightsAnimations:
         time.sleep(0.5)
 
     def random(self, params):
-        # red = 0x100000
-        i = random.randint(513, 600)
+        # self.strip est un PixelSubset indexé de 0 à LED_COUNT-1 (zone corps).
+        # L'ancien randint(513, 600) était une plage absolue du ruban global :
+        # hors bornes du sous-ensemble → IndexError. On tire dans la zone locale.
+        i = random.randint(0, self.LED_COUNT - 1)
 
         red = random.randint(0, 255)
         green = random.randint(0, 255)

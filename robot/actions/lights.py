@@ -9,7 +9,6 @@ import logging.config
 # todo check thread2 : https://riptutorial.com/python/example/4691/communicating-between-threads
 import logging.config
 
-import adafruit_led_animation.color as color
     # todo check thread : https://www.geeksforgeeks.org/python-communicating-between-threads-set-1/
     # todo check thread2 : https://riptutorial.com/python/example/4691/communicating-between-threads
 from adafruit_led_animation.helper import PixelSubset
@@ -39,9 +38,9 @@ from robot.visual.lights_animations import LightsAnimations
 
 
 class Lights(AbstractJsonActions):
-    # LED strip configuration:
-    LED_COUNT = 782 # Number of LED pixels.
-    FIRST_STRIP_LED = 513
+    # Le nombre de LED et les bornes de la zone « corps » viennent du config
+    # (LIGHTS_LED_COUNT / LIGHTS_START_LED / LIGHTS_END_LED), passés à __init__.
+    # Ne PAS recoder de constantes de longueur ici : le ruban physique peut changer.
 
     # TODO check examples : https://www.digikey.fr/en/maker/projects/circuitpython-led-animations/d15c769c6f6d411297657c35f0166958
 
@@ -98,18 +97,18 @@ class Lights(AbstractJsonActions):
         if DEFAULT in json_seq:
             self.default = json_seq[NAME]
 
+        # Chaque entrée de séquence = {nom_de_brique: position_relative_0..1}.
+        # La couleur n'est PAS portée à ce niveau : elle vient de lights_base.json,
+        # résolue en RGB par load_light_base() puis appliquée à l'animation Adafruit
+        # dans load_light_method(). L'ancienne branche de « surcharge couleur » a été
+        # retirée : son test (COLOR dans une liste [position, LightAnimation]) était
+        # toujours faux et l'indexation animation[COLOR] aurait levé une TypeError.
         sequences = []
-        for lights_base, duration in json_seq[SEQUENCES].items():
-            animation = [duration, LightAnimation(lights_base, duration)]
-            #color_name = self.json_manager.get_attribut(s, COLOR)
-            if COLOR in animation and COLOR in self.colors:
-                #TODO pourquoi animation 1 ?
-                animation[1].color = self.colors[animation[COLOR]]
-            sequences.append(animation)
+        for brick_name, position in json_seq[SEQUENCES].items():
+            sequences.append([position, LightAnimation(brick_name, position)])
         self.sequence = Sequence(json_seq[DURATION], json_seq[LOOP], sequences, 0)
 
-        #TODO animation parameters not working
-        #Initiate light method
+        # Charge la première brique d'animation de la séquence.
         self.load_light_method(self.sequence.current_element.method)
 
         #self.sequence.start_time = TimeUtils.current_milli_time()
@@ -132,7 +131,7 @@ class Lights(AbstractJsonActions):
         if color_name in self.colors:
             return self.colors[color_name][0], self.colors[color_name][1], self.colors[color_name][2]
         else:
-            logging.error("color {} not defined".format(color))
+            logging.error("color {} not defined".format(color_name))
 
     def process(self):
         if not self.loop and TimeUtils.is_time(self.start_time, self.duration):
@@ -148,7 +147,6 @@ class Lights(AbstractJsonActions):
 
 
 class LightAnimation:
-    color = ()
     duration = 0
     start_time = TimeUtils.current_milli_time()
 
@@ -156,6 +154,3 @@ class LightAnimation:
         logging.debug("add animation method : " + method + " duration : " + str(duration))
         self.method = method
         self.duration = duration
-
-    def set_color(self, color):
-        self.color = color
