@@ -211,8 +211,12 @@ class Wheels:
 
         # Twist nul -> coupure franche : update_cmd(0, 0) remonterait le PWM à
         # MIN_PWM (les roues avanceraient au ralenti), il faut donc passer par stop().
+        # Mais UNE seule fois : au repos, le twist_deadman amont inonde /cmd_vel de
+        # zéros à 20 Hz — marteler stop() noierait robot.log (constaté au protocole
+        # caméra du 2026-07-04 : une ligne "wheels stopped" toutes les 50 ms).
         if left_pct == 0 and right_pct == 0:
-            self.stop()
+            if self.left_pwm.duty_cycle != 0 or self.right_pwm.duty_cycle != 0:
+                self.stop()
             return
 
         self.update_cmd(left_pct, right_pct)

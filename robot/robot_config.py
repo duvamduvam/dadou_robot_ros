@@ -39,10 +39,12 @@ config[SINGLE_THREAD] = False
 # Drapeau roues : False = chemin legacy STRICTEMENT inchangé (wheels_node
 # consomme le StringTime legacy et pilote directement le PWM). True = wheels_node
 # s'abonne à /cmd_vel (chaîne twist_mux -> twist_deadman -> cmd_vel).
-# À activer SEULEMENT après validation physique caméra : des incidents roues ont
-# déjà eu lieu, la bascule change le dernier maillon de la commande roues.
+# Validation physique caméra FAITE le 2026-07-04, roues hors sol : bouton forward
+# (PWM 50), slider vitesse 50% (PWM 25), e-stop (0 commande passée), kill de la
+# chaîne en plein mouvement -> arrêt local en 440 ms (deadman 400 ms conservé).
+# Protocole rejouable : conf/scripts/validate-cmdvel-protocol.sh.
 WHEELS_CMD_VEL_ENABLED = "wheels_cmd_vel_enabled"
-config[WHEELS_CMD_VEL_ENABLED] = False
+config[WHEELS_CMD_VEL_ENABLED] = True
 
 # LED strip default brightness (0..1 range supported by NeoPixel helper).
 config[BRIGHTNESS] = 0.5

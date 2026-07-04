@@ -172,3 +172,16 @@ def test_new_wheel_event_rearms_animation_deadline(wheels, clock):
     clock["now"] = T0 + 10000 + wheels.ANIMATION_STOP_MARGIN + 1
     wheels.process()
     assert not moving(wheels)
+
+
+def test_apply_twist_zero_stops_only_once(wheels, monkeypatch):
+    """Au repos le twist_deadman inonde de zéros à 20 Hz : stop() ne doit être
+    appelé qu'à la transition mouvement->arrêt, pas à chaque zéro (spam log)."""
+    calls = []
+    original_stop = wheels.stop
+    monkeypatch.setattr(wheels, "stop", lambda: (calls.append(1), original_stop())[1])
+    wheels.apply_twist(0.3, 0.0)   # roule
+    wheels.apply_twist(0.0, 0.0)   # premier zéro -> stop
+    wheels.apply_twist(0.0, 0.0)   # zéros suivants -> silence
+    wheels.apply_twist(0.0, 0.0)
+    assert len(calls) == 1
