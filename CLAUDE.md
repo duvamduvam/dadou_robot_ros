@@ -59,8 +59,15 @@ docker exec -it dadou-sim-container bash -c 'source /opt/ros/$ROS_DISTRO/setup.s
    (boutons, slider, gants), une séquence de spectacle complète — première fois que le
    mode cmd_vel roule au sol. Vérifier aussi le sens de rotation gauche/droite (le
    protocole roues hors sol ne l'a validé qu'en marche avant symétrique).
-2. Calibrer `max_wheel_speed` réel (m/s à consigne 1.0) — mesurable à la caméra, distance/temps.
-3. Action ROS 2 `PlayAnimation` (les pistes roues des séquences passeront par cmd_vel_anim).
+2. **Protocole caméra du cou (gaze V1)** : la chaîne webcam→/vision/person (Pi 5, tourne
+   en prod, validée personne réelle 16 Hz) → gaze_follower (55676b6, validé sim, OFF par
+   défaut, lancé À LA MAIN — pas dans robot_bringup) est prête. À valider sur le vrai
+   robot : `direction_sign` (sens azimut→cou INCONNU), amplitude (gain=20 ≈ ±37°),
+   sortie StringTime `neck` jamais exercée en réel, arbitrage animations↔gaze (les deux
+   écrivent `neck` — en attendant : gaze OFF pendant les séquences). Toggle : topic
+   StringTime `gaze` "on"/"off".
+3. Calibrer `max_wheel_speed` réel (m/s à consigne 1.0) — mesurable à la caméra, distance/temps.
+4. Action ROS 2 `PlayAnimation` (les pistes roues des séquences passeront par cmd_vel_anim).
 4. Source unique des séquences JSON (côté robot, la télécommande interroge par service).
 5. Affiner l'URDF depuis les plans FreeCAD (~/Nextcloud/dev/didier/plans).
 6. Quirk latent à vérifier caméra un jour : en legacy, une paire [0,0] de séquence passe
