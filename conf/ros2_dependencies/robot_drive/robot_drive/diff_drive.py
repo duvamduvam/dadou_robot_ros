@@ -1,9 +1,9 @@
-"""Cinématique différentielle : Twist ROS -> consignes roues normalisées [-1, 1].
+"""Cinématique différentielle : Twist ROS <-> consignes roues normalisées [-1, 1].
 
 Convention REP 103 : x vers l'avant, z vers le haut, vitesse angulaire
 positive = rotation anti-horaire (vers la gauche) vue de dessus.
-C'est le pont entre le futur topic cmd_vel (geometry_msgs/Twist) et la
-commande PWM actuelle des roues (paire [gauche, droite] dans [-1, 1]).
+C'est le pont entre le topic cmd_vel (geometry_msgs/Twist) et la
+commande PWM des roues (paire [gauche, droite] dans [-1, 1]).
 """
 
 
@@ -34,3 +34,15 @@ class DiffDrive:
             right /= overshoot
 
         return left, right
+
+    def wheels_to_twist(self, left, right):
+        """(gauche, droite) dans [-1, 1] -> (linear_x m/s, angular_z rad/s).
+
+        Inverse de twist_to_wheels, sans reconstruction de la saturation
+        (une paire déjà saturée donne juste le Twist correspondant à cette
+        paire, pas à la commande d'origine avant écrêtage).
+        """
+        linear_x = (left + right) / 2 * self.max_wheel_speed
+        angular_z = (right - left) * self.max_wheel_speed / self.wheel_separation
+
+        return linear_x, angular_z

@@ -26,4 +26,6 @@ services:
       # Sources montées par-dessus la copie de l'image : itération sans rebuild.
       - ../../ros2_dependencies/robot_description:/home/ros2_ws/src/robot_description
       - ../../ros2_dependencies/robot_sim:/home/ros2_ws/src/robot_sim
+      - ../../ros2_dependencies/robot_interfaces:/home/ros2_ws/src/robot_interfaces
+      - ../../ros2_dependencies/robot_drive:/home/ros2_ws/src/robot_drive
       - ../../scripts/launch-sim-in-docker.sh:/home/ros2_ws/launch-sim-in-docker.sh

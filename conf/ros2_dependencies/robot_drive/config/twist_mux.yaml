@@ -1,0 +1,21 @@
+twist_mux:
+  ros__parameters:
+    # Jazzy : twist_mux s'abonne en TwistStamped par défaut — toute notre
+    # chaîne (bridge, deadman, plugin DiffDrive gz) parle Twist simple.
+    # Migration TwistStamped à considérer avec ros2_control (Phase 2).
+    use_stamped: false
+    topics:
+      remote:
+        topic: cmd_vel_remote
+        timeout: 0.5
+        priority: 100
+      anim:
+        topic: cmd_vel_anim
+        timeout: 0.5
+        priority: 10
+
+    locks:
+      e_stop:
+        topic: e_stop
+        timeout: 0.0
+        priority: 255

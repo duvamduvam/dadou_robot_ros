@@ -1,8 +1,8 @@
-"""Tests de la cinématique différentielle Twist -> roues (REP 103)."""
+"""Tests de la cinématique différentielle Twist <-> roues (REP 103)."""
 
 import pytest
 
-from robot.move.diff_drive import DiffDrive
+from robot_drive.diff_drive import DiffDrive
 
 SEPARATION = 0.42
 MAX_SPEED = 1.0
@@ -54,3 +54,27 @@ def test_invalid_parameters_rejected():
         DiffDrive(wheel_separation=0, max_wheel_speed=1)
     with pytest.raises(ValueError):
         DiffDrive(wheel_separation=0.4, max_wheel_speed=-1)
+
+
+def test_wheels_to_twist_straight_line(kinematics):
+    assert kinematics.wheels_to_twist(0.5, 0.5) == (0.5, 0.0)
+    assert kinematics.wheels_to_twist(-0.5, -0.5) == (-0.5, 0.0)
+
+
+def test_wheels_to_twist_spin_in_place(kinematics):
+    linear_x, angular_z = kinematics.wheels_to_twist(-0.5, 0.5)
+    assert linear_x == 0.0
+    assert angular_z > 0                         # rotation vers la gauche (REP 103)
+
+
+def test_wheels_to_twist_stop(kinematics):
+    assert kinematics.wheels_to_twist(0.0, 0.0) == (0.0, 0.0)
+
+
+def test_round_trip_twist_wheels_twist_without_saturation(kinematics):
+    # Cas sans saturation : l'aller-retour twist -> roues -> twist est fidèle.
+    for linear_x, angular_z in [(0.3, 0.5), (-0.2, -0.8), (0.1, 0.0), (0.0, 1.0)]:
+        left, right = kinematics.twist_to_wheels(linear_x, angular_z)
+        round_trip_linear, round_trip_angular = kinematics.wheels_to_twist(left, right)
+        assert round_trip_linear == pytest.approx(linear_x)
+        assert round_trip_angular == pytest.approx(angular_z)
