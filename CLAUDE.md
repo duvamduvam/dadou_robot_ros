@@ -64,6 +64,12 @@ docker exec -it dadou-sim-container bash -c 'source /opt/ros/$ROS_DISTRO/setup.s
 
 - Découpage modèles : conception/revue = modèle fort ; implémentation sur spec fermée =
   Agent Sonnet ; code sécurité = Agent Opus minimum ; mécanique = Haiku.
+- Niveau d'effort en session Fable : **medium par défaut** (architecture, specs, revues,
+  orchestration — le volume de raisonnement utile est modeste sur ce projet). Monter en
+  **high** ponctuellement pour : conception d'un sous-système neuf (ros2_control,
+  exécutif py_trees), débogage vraiment retors, revue finale d'un changement du chemin
+  roues. `low` n'a pas d'intérêt : si la tâche est simple, autant basculer la session
+  en Opus (moins cher que Fable bridé).
 - La vérification doit exécuter le MÊME code que la prod (pas de reproduction approximative).
 - CI GitHub Actions minimale (le repo est public : jamais de secrets, historique déjà purgé).
 - Mémoire de session détaillée dans ~/.claude/projects/.../memory/ (chargée automatiquement).
