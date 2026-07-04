@@ -2,7 +2,7 @@
     "keys": "C2",
     "duration": 1000,
     "audio_name": "applause.mp3",
-    "audio_path": "/home/dadou/Nextcloud/Didier/audios/",
+    "audio_path": "/home/dadou/Nextcloud/dev/didier/audios/",
     "faces": [
         [
             0.5,

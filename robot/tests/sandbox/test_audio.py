@@ -42,10 +42,10 @@ class AudioTests(unittest.TestCase):
         self.audio.stop_sound()
 
     def test_simpleaudio(self):
-        #sound_object = sa.WaveObject.from_wave_file("/home/dadou/Nextcloud/Didier/python/dadou_robot/audios/speak/aie.wav")
+        #sound_object = sa.WaveObject.from_wave_file("/home/dadou/Nextcloud/dev/didier/python/dadou_robot/audios/speak/aie.wav")
         #play_obj = sound_object.play()
         #play_obj.wait_done()
-        playsound('/home/dadou/Nextcloud/Didier/python/dadou_robot/audios/speak/aie.wav', block=False)
+        playsound('/home/dadou/Nextcloud/dev/didier/python/dadou_robot/audios/speak/aie.wav', block=False)
 
     def test_load(self):
         self.audio.index_audios()

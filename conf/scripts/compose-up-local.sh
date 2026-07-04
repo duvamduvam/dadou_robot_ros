@@ -47,22 +47,22 @@ else
   echo -e "${RED}La commande xauth est introuvable. Les applications X11 peuvent échouer.${NC}"
 fi
 
-cd /home/dadou/Nextcloud/Didier/python/dadou_robot_ros/
+cd /home/dadou/Nextcloud/dev/didier/python/dadou_robot_ros/
 
 # Refresh tarball so Docker build sees latest shared libs.
 tar -czhf dadou_utils_ros.tar.gz dadou_utils_ros/
 
-#sudo rm -rf /home/dadou/Nextcloud/Didier/python/dadou_utils_ros /home/dadou/Nextcloud/Didier/python/dadou_control_ros/dadou_utils2
-#sudo cp -rf /home/dadou/Nextcloud/Didier/python/dadou_utils_ros /home/dadou/Nextcloud/Didier/python/dadou_control_ros/dadou_utils2
+#sudo rm -rf /home/dadou/Nextcloud/dev/didier/python/dadou_utils_ros /home/dadou/Nextcloud/dev/didier/python/dadou_control_ros/dadou_utils2
+#sudo cp -rf /home/dadou/Nextcloud/dev/didier/python/dadou_utils_ros /home/dadou/Nextcloud/dev/didier/python/dadou_control_ros/dadou_utils2
 
 #sudo docker compose -f $DOCKER_COMPOSE_FILE up
 
 if [ "$1" == "build" ]; then
     # Si oui, inclut l'option --build dans la commande docker compose up
-    sudo DISPLAY=$DISPLAY XAUTHORITY=$XAUTHORITY QT_X11_NO_MITSHM=1 docker compose -f /home/dadou/Nextcloud/Didier/python/dadou_robot_ros/conf/docker/x8664/docker-compose-x86.yml up --build
+    sudo DISPLAY=$DISPLAY XAUTHORITY=$XAUTHORITY QT_X11_NO_MITSHM=1 docker compose -f /home/dadou/Nextcloud/dev/didier/python/dadou_robot_ros/conf/docker/x8664/docker-compose-x86.yml up --build
 else
     # Sinon, exécute sans l'option --build
-    sudo DISPLAY=$DISPLAY XAUTHORITY=$XAUTHORITY QT_X11_NO_MITSHM=1 docker compose -f /home/dadou/Nextcloud/Didier/python/dadou_robot_ros/conf/docker/x8664/docker-compose-x86.yml up
+    sudo DISPLAY=$DISPLAY XAUTHORITY=$XAUTHORITY QT_X11_NO_MITSHM=1 docker compose -f /home/dadou/Nextcloud/dev/didier/python/dadou_robot_ros/conf/docker/x8664/docker-compose-x86.yml up
 fi
 
 #docker-arm64 compose up --build | tee -a docker_compose_build.log
