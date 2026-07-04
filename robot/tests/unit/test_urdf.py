@@ -65,3 +65,49 @@ def test_links_have_positive_mass(urdf):
         inertial = link.find("inertial")
         if inertial is not None:
             assert float(inertial.find("mass").get("value")) > 0, link.get("name")
+
+
+# ======== Extension Gazebo (dadou_robot_gz.urdf.xacro) ========
+
+GZ_XACRO_PATH = os.path.join(REPO_ROOT, "conf", "ros2_dependencies", "robot_description",
+                             "urdf", "dadou_robot_gz.urdf.xacro")
+
+
+@pytest.fixture(scope="module")
+def gz_urdf():
+    return ET.fromstring(xacro.process_file(GZ_XACRO_PATH).toxml())
+
+
+def _gz_plugins(gz_urdf):
+    return [p for g in gz_urdf.findall("gazebo") for p in g.findall("plugin")]
+
+
+def test_gz_xacro_includes_full_robot(gz_urdf):
+    """L'include relatif ramène bien tout le modèle nominal."""
+    links = {l.get("name") for l in gz_urdf.findall("link")}
+    assert {"base_link", "torso_link", "head_link"} <= links
+
+
+def test_gz_diff_drive_matches_wheel_joints(gz_urdf):
+    """Le plugin DiffDrive référence les vrais joints de roues."""
+    plugins = {p.get("name"): p for p in _gz_plugins(gz_urdf)}
+    dd = plugins.get("gz::sim::systems::DiffDrive")
+    assert dd is not None, "plugin DiffDrive absent"
+    joints = {j.get("name") for j in gz_urdf.findall("joint")}
+    assert dd.find("left_joint").text in joints
+    assert dd.find("right_joint").text in joints
+    # Géométrie cohérente avec le modèle (propriétés xacro partagées)
+    assert float(dd.find("wheel_separation").text) == pytest.approx(0.58)
+    assert float(dd.find("wheel_radius").text) == pytest.approx(0.13)
+
+
+def test_gz_one_position_controller_per_servo(gz_urdf):
+    """Chaque servo du code a son contrôleur gz, topic /<servo>/position."""
+    controllers = {
+        p.find("joint_name").text: p
+        for p in _gz_plugins(gz_urdf)
+        if p.get("name") == "gz::sim::systems::JointPositionController"
+    }
+    assert set(controllers) == SERVO_JOINTS
+    for name, plugin in controllers.items():
+        assert plugin.find("topic").text == "/{}/position".format(name)

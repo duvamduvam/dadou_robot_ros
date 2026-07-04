@@ -1,0 +1,29 @@
+# Simulation Gazebo sur le PC de dev.
+#
+# SÉCURITÉ : ROS_DOMAIN_ID=43 par défaut — domaine DÉDIÉ à la simulation
+# (le vrai robot est sur 42). Aucune commande envoyée à la sim ne peut
+# atteindre Didier, même allumé sur le même réseau. Pour piloter la sim
+# avec la télécommande, lancer celle-ci avec ROS_DOMAIN_ID=43.
+services:
+  dadou-sim:
+    container_name: dadou-sim-container
+    image: dadouuu/dadou-sim-x86:latest
+    build:
+      context: ../../..
+      dockerfile: conf/docker/sim/Dockerfile-sim
+    environment:
+      - DISPLAY=${DISPLAY}
+      - QT_X11_NO_MITSHM=1
+      - XAUTHORITY=${XAUTHORITY:-/tmp/.docker.xauth}
+      - ROS_DOMAIN_ID=${ROS_DOMAIN_ID:-43}
+      - HEADLESS=${HEADLESS:-false}
+    network_mode: "host"
+    volumes:
+      - /tmp/.X11-unix:/tmp/.X11-unix:rw
+      - ${XAUTHORITY:-/tmp/.docker.xauth}:${XAUTHORITY:-/tmp/.docker.xauth}:rw
+      # Accès GPU pour le rendu de la GUI Gazebo (Intel/AMD).
+      - /dev/dri:/dev/dri
+      # Sources montées par-dessus la copie de l'image : itération sans rebuild.
+      - ../../ros2_dependencies/robot_description:/home/ros2_ws/src/robot_description
+      - ../../ros2_dependencies/robot_sim:/home/ros2_ws/src/robot_sim
+      - ../../scripts/launch-sim-in-docker.sh:/home/ros2_ws/launch-sim-in-docker.sh

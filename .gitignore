@@ -3,6 +3,7 @@ chatgpt-key.txt
 response.mp3
 
 venv/
+.venv/
 logs/
 .idea/
 secret
