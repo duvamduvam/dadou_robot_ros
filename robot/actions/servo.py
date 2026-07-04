@@ -75,7 +75,7 @@ class Servo:
             elif msg[self.servo_type] == DOWN:
                 if self.pwm_channel.angle > STEP:
                     self.pwm_channel.angle = self.pwm_channel.angle - STEP
-            elif isinstance(msg[self.servo_type], float):
+            elif isinstance(msg[self.servo_type], (int, float)) and not isinstance(msg[self.servo_type], bool):
                 if 0 <= msg[self.servo_type] <= 1:
                     value = msg[self.servo_type] * 100
                 else:
