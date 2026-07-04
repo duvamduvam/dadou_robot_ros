@@ -6,7 +6,8 @@ from dadou_utils_ros.utils_static import ANGLO, WHEEL_RIGHT, WHEEL_LEFT, WHEELS,
     CMD_FORWARD, CMD_BACKWARD, CMD_LEFT, CMD_RIGHT, I2C_ENABLED, PWM_CHANNELS_ENABLED, \
     WHEEL_LEFT_PWM, WHEEL_RIGHT_PWM, WHEEL_LEFT_DIR, WHEEL_RIGHT_DIR, STRAIGHT, ANIMATION, STOP, FORWARD, BACKWARD, \
     LEFT, RIGHT, INCLINO, SPEED, JOYSTICK, X, Y, DIGITAL_CHANNELS_ENABLED, DURATION
-from robot.move.anglo_meter_translator import AngloMeterTranslator
+from robot_drive.diff_drive import DiffDrive
+from robot_drive.joystick_mixer import translate
 from robot.robot_config import MAX_PWM_L, MAX_PWM_R
 
 
@@ -30,6 +31,12 @@ class Wheels:
     MAX_DIR = 65530
     FREQUENCY = 500
 
+    # Cinématique différentielle du mode /cmd_vel : mêmes défauts que le
+    # wheels_bridge (robot_drive) pour que sim et vrai robot partagent la même
+    # conversion Twist -> paire roues.
+    WHEEL_SEPARATION = 0.58
+    MAX_WHEEL_SPEED = 1.0
+
     starting_angle_x = 0
     target_pos_x = 0
     half_turn = False
@@ -52,6 +59,13 @@ class Wheels:
 
         self.max_pwm_l = MAX_PWM_L
         self.max_pwm_r = MAX_PWM_R
+
+        # Convertisseur Twist -> paire roues du mode /cmd_vel (voir apply_twist).
+        # Pur (stdlib), créé même si le PWM est désactivé : inoffensif hors mode.
+        self.cmd_vel_diff_drive = DiffDrive(
+            wheel_separation=self.WHEEL_SEPARATION,
+            max_wheel_speed=self.MAX_WHEEL_SPEED,
+        )
 
         # Un pca9685 injecté (faux matériel en test, futur hardware_interface
         # ros2_control) court-circuite la détection Raspberry Pi.
@@ -98,8 +112,6 @@ class Wheels:
         #self.dir_right = pwmio.PWMOut(Pin(config.RIGHT_DIR_PIN))
         #self.due = None
 
-        self.anglo_meter_translator = AngloMeterTranslator()
-
     def set_9dof(self, sensor):
         self.sensor = sensor
 
@@ -124,10 +136,10 @@ class Wheels:
                 self.update_cmd(50, -50)
 
         if INCLINO in msg:
-            left, right = self.anglo_meter_translator.translate(turn=msg[ANGLO][X], forward=msg[ANGLO][Y])
+            left, right = translate(turn=msg[ANGLO][X], forward=msg[ANGLO][Y])
             self.update_cmd(left, right)
         if JOYSTICK in msg:
-            left, right = self.anglo_meter_translator.translate(turn=msg[JOYSTICK][X], forward=msg[JOYSTICK][Y])
+            left, right = translate(turn=msg[JOYSTICK][X], forward=msg[JOYSTICK][Y])
             self.update_cmd(left, right)
         if WHEELS in msg:
             logging.info(" wheels input {}".format(msg[WHEELS]))
@@ -179,6 +191,31 @@ class Wheels:
         logging.info("cmd left {} duty cycle {} direction {} // cmd right {} duty cycle {} direction {}".
                         format(left_wheel, self.left_pwm.duty_cycle, self.dir_left.duty_cycle, right_wheel, self.right_pwm.duty_cycle, self.dir_right.duty_cycle))
 
+
+    def apply_twist(self, linear_x, angular_z):
+        """Consomme un Twist /cmd_vel (mode WHEELS_CMD_VEL_ENABLED) : cinématique
+        différentielle -> paire roues [-1, 1] -> PWM (update_cmd attend des pourcents).
+
+        Le deadman check_stop() 400 ms reste ACTIF ici : c'est le dernier rempart
+        local si toute la chaîne ROS amont (twist_mux + twist_deadman) meurt (plus
+        de Twist -> coupure PWM locale). La logique animation_deadline ne s'active
+        pas dans ce mode : animation_ongoing reste False (le mux + le deadman amont
+        arbitrent déjà remote/animation), donc check_stop applique le deadman 400 ms.
+        """
+        if not self.enabled:
+            return
+
+        left, right = self.cmd_vel_diff_drive.twist_to_wheels(linear_x, angular_z)
+        left_pct = int(left * 100)
+        right_pct = int(right * 100)
+
+        # Twist nul -> coupure franche : update_cmd(0, 0) remonterait le PWM à
+        # MIN_PWM (les roues avanceraient au ralenti), il faut donc passer par stop().
+        if left_pct == 0 and right_pct == 0:
+            self.stop()
+            return
+
+        self.update_cmd(left_pct, right_pct)
 
     def set_direction(self, cmd_dir, pwm_dir):
         if cmd_dir >= 0:

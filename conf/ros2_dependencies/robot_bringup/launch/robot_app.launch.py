@@ -1,5 +1,9 @@
 from launch import LaunchDescription
+from launch.actions import IncludeLaunchDescription
+from launch.launch_description_sources import PythonLaunchDescriptionSource
+from launch.substitutions import PathJoinSubstitution
 from launch_ros.actions import Node
+from launch_ros.substitutions import FindPackageShare
 
 from dadou_utils_ros.utils_static import NAME, NECK, HEAD_PWM_NB, DEFAULT_POS, MAX_POS, LEFT_ARM, LEFT_ARM_NB, \
     RIGHT_ARM, RIGHT_ARM_NB, LEFT_EYE, LEFT_EYE_NB, RIGHT_EYE, RIGHT_EYE_NB
@@ -137,6 +141,16 @@ def generate_launch_description():
     #    ]
     #)
 
+    # Chaîne de commande roues (twist_mux -> twist_deadman -> cmd_vel + wheels_bridge).
+    # Inoffensive en mode legacy : personne ne consomme /cmd_vel tant que
+    # WHEELS_CMD_VEL_ENABLED est False. Nécessaire en mode /cmd_vel pour alimenter
+    # wheels_node depuis la télécommande / les animations.
+    drive_launch = IncludeLaunchDescription(
+        PythonLaunchDescriptionSource(
+            PathJoinSubstitution([FindPackageShare("robot_drive"), "launch", "drive.launch.py"])
+        )
+    )
+
     #ld.add_action(ai_server_node)
     ld.add_action(animations_server_node)
     ld.add_action(audio_server_node)
@@ -150,4 +164,5 @@ def generate_launch_description():
     ld.add_action(right_arm_server_node)
     ld.add_action(left_eye_server_node)
     ld.add_action(right_eye_server_node)
+    ld.add_action(drive_launch)
     return ld

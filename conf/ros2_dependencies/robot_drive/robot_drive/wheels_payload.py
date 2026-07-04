@@ -56,4 +56,30 @@ def payload_to_pair(payload: dict) -> tuple | str | None:
     if wheels == RIGHT:
         return 0.5, -0.5
 
+    # Formats vus sur le topic mais non pilotables ici :
+    #   - {WHEELS: {SPEED: pct}} -> réglage vitesse, voir payload_to_speed.
+    #   - "UP" / "down" (D-pad manette, boutons UP/DOWN de la télécommande) : le
+    #     robot legacy ne les traite pas non plus, on ne les invente pas ici.
+    return None
+
+
+def payload_to_speed(payload: dict) -> float | None:
+    """msg JSON ré-emballé {WHEELS: valeur} -> facteur de vitesse 0..1, ou None.
+
+    Format réel de la télécommande : {WHEELS: {SPEED: pct}} (pct entier 0..100,
+    slider "vitesse"). Côté legacy ce message règle le plafond PWM (max_pwm) à
+    pct% de la course ; ici on renvoie ce pourcentage en facteur 0..1 que le
+    bridge applique en multiplicateur sur les Twist sortants.
+    """
+    if WHEELS not in payload:
+        return None
+
+    wheels = payload[WHEELS]
+    if isinstance(wheels, dict) and SPEED in wheels:
+        try:
+            pct = float(wheels[SPEED])
+        except (TypeError, ValueError):
+            return None
+        return max(0.0, min(1.0, pct / 100))
+
     return None

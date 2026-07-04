@@ -115,6 +115,50 @@ def test_animation_stop_message_restores_manual_deadman(wheels, clock):
     assert not moving(wheels)
 
 
+def test_apply_twist_forward(wheels):
+    # Mode /cmd_vel : Twist avant pur -> les deux roues en avant, même vitesse.
+    wheels.apply_twist(0.5, 0.0)
+    assert wheels.left_pwm.duty_cycle == wheels.right_pwm.duty_cycle > 0
+    assert wheels.dir_left.duty_cycle == 0 and wheels.dir_right.duty_cycle == 0
+
+
+def test_apply_twist_backward(wheels):
+    wheels.apply_twist(-0.5, 0.0)
+    assert wheels.left_pwm.duty_cycle == wheels.right_pwm.duty_cycle > 0
+    assert wheels.dir_left.duty_cycle == wheels.MAX_DIR
+    assert wheels.dir_right.duty_cycle == wheels.MAX_DIR
+
+
+def test_apply_twist_pivot(wheels):
+    # angular_z > 0 = rotation vers la gauche (REP 103) : roue gauche en arrière,
+    # roue droite en avant, vitesses symétriques.
+    wheels.apply_twist(0.0, 1.0)
+    assert wheels.dir_left.duty_cycle == wheels.MAX_DIR      # gauche en arrière
+    assert wheels.dir_right.duty_cycle == 0                  # droite en avant
+    assert wheels.left_pwm.duty_cycle == wheels.right_pwm.duty_cycle > 0
+
+
+def test_apply_twist_zero_stops_pwm(wheels):
+    wheels.apply_twist(0.5, 0.0)
+    assert moving(wheels)
+    wheels.apply_twist(0.0, 0.0)          # Twist nul -> coupure franche (pas de MIN_PWM)
+    assert not moving(wheels)
+
+
+def test_apply_twist_manual_deadman_still_active(wheels, clock):
+    # Dernier rempart : si la chaîne ROS amont se tait, le deadman 400 ms coupe.
+    wheels.apply_twist(0.5, 0.0)
+    assert wheels.animation_ongoing is False   # pas de logique animation en mode cmd_vel
+
+    clock["now"] = T0 + 399
+    wheels.process()
+    assert moving(wheels)
+
+    clock["now"] = T0 + 401
+    wheels.process()
+    assert not moving(wheels)
+
+
 def test_new_wheel_event_rearms_animation_deadline(wheels, clock):
     wheels.update({WHEELS: [0.6, 0.6], ANIMATION: True, DURATION: 10000})
 

@@ -36,6 +36,14 @@ config[PWM_CHANNELS_ENABLED] = True
 config[DIGITAL_CHANNELS_ENABLED] = True
 config[SINGLE_THREAD] = False
 
+# Drapeau roues : False = chemin legacy STRICTEMENT inchangé (wheels_node
+# consomme le StringTime legacy et pilote directement le PWM). True = wheels_node
+# s'abonne à /cmd_vel (chaîne twist_mux -> twist_deadman -> cmd_vel).
+# À activer SEULEMENT après validation physique caméra : des incidents roues ont
+# déjà eu lieu, la bascule change le dernier maillon de la commande roues.
+WHEELS_CMD_VEL_ENABLED = "wheels_cmd_vel_enabled"
+config[WHEELS_CMD_VEL_ENABLED] = False
+
 # LED strip default brightness (0..1 range supported by NeoPixel helper).
 config[BRIGHTNESS] = 0.5
 
