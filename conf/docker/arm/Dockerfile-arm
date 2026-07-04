@@ -1,4 +1,4 @@
-FROM ros:humble-ros-base
+FROM ros:jazzy-ros-base
 LABEL authors="dadouuu"
 WORKDIR /home
 
@@ -32,7 +32,10 @@ RUN ln -fs /usr/share/zoneinfo/Europe/Paris /etc/localtime && \
 
 ENV PYTHONPATH "${PYTHONPATH}:/home/ros2_ws"
 
-RUN pip3 install -r /home/ros2_ws/src/robot/conf/requirements.txt
+# Ubuntu 24.04 (Jazzy) : pip refuse d'écrire dans l'environnement système sans ce flag.
+ENV PIP_BREAK_SYSTEM_PACKAGES=1
+
+RUN pip3 install --no-cache-dir --ignore-installed -r /home/ros2_ws/src/robot/conf/requirements.txt
 
 ENTRYPOINT ["/bin/bash", "-c", "source /home/ros2_ws/src/robot/conf/scripts/launch-ros-in-docker.sh"]
 

@@ -1,15 +1,10 @@
 #!/bin/bash
 
-#exit
-source /opt/ros/humble/setup.sh
+# ROS_DISTRO est fourni par l'image de base (humble, jazzy...) : ne pas coder la distro en dur.
+source /opt/ros/${ROS_DISTRO}/setup.sh
 cd /home/ros2_ws/
 
 CHANGE_FILE=/home/ros2_ws/src/robot/robot/change
-
-source /opt/ros/humble/setup.sh
-
-#le fihcier n'est pas trouvé alors qu'il existe
-#source /opt/ros/humble/setup.sh
 if [ -f "$CHANGE_FILE" ]; then
 #    # Print message indicating the file was found and build is starting
     echo "CHANGE file found. Running colcon build..."

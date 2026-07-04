@@ -1,4 +1,4 @@
-FROM ros:humble-ros-base
+FROM ros:jazzy-ros-base
 
 LABEL authors="dadouuu"
 
@@ -48,6 +48,7 @@ RUN apt-get update && \
 # Ensure Python finds the ROS 2 workspace packages.
 ENV PYTHONPATH=/home/ros2_ws
 
+ENV PIP_BREAK_SYSTEM_PACKAGES=1
 # Install Python requirements for the robot stack and test suite.
 RUN pip3 install --no-cache-dir --ignore-installed -r /home/ros2_ws/src/robot/conf/requirements.txt && \
     pip3 install --no-cache-dir --ignore-installed -r /home/ros2_ws/src/robot/conf/tests/requirements.txt
