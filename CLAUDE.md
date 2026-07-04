@@ -62,6 +62,11 @@ docker exec -it dadou-sim-container bash -c 'source /opt/ros/$ROS_DISTRO/setup.s
 
 ## Méthode de travail
 
+- **Commenter chaque action en travaillant** (le quoi ET le pourquoi) : narration des
+  étapes dans la conversation, commentaires français dans code/scripts/configs
+  (les contraintes et pièges, pas la paraphrase), commits détaillés, découvertes
+  consignées immédiatement. Raison : le projet doit pouvoir continuer avec un autre
+  modèle (Opus) à tout moment — une action non expliquée est un fil perdu.
 - Découpage modèles : conception/revue = modèle fort ; implémentation sur spec fermée =
   Agent Sonnet ; code sécurité = Agent Opus minimum ; mécanique = Haiku.
 - Niveau d'effort en session Fable : **medium par défaut** (architecture, specs, revues,
