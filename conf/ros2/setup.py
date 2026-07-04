@@ -24,6 +24,9 @@ setup(
             "animations_node = robot.nodes.animations_node:main",
             "audio_node = robot.nodes.audio_node:main",
             #face_node = robot.nodes.face_node:main",
+            # Suivi du regard (cou seulement, jamais les roues). Lancé À LA MAIN
+            # tant que le sens du cou n'est pas validé caméra (pas dans le bringup).
+            "gaze_follower = robot.nodes.gaze_follower_node:main",
             "lights_node = robot.nodes.lights_node:main",
             "relays_node = robot.nodes.relays_node:main",
             "servo_node = robot.nodes.servo_node:main",
