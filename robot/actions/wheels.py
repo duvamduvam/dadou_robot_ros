@@ -1,10 +1,5 @@
 import logging
 
-import adafruit_pca9685
-import board
-import busio
-#import pwmio
-
 from dadou_utils_ros.misc import Misc
 from dadou_utils_ros.utils.time_utils import TimeUtils
 from dadou_utils_ros.utils_static import ANGLO, WHEEL_RIGHT, WHEEL_LEFT, WHEELS, KEY, \
@@ -51,27 +46,35 @@ class Wheels:
     test_direction = 0
     last_move = 0
 
-    def __init__(self, config):
+    def __init__(self, config, pca9685=None):
 
         self.config = config
 
         self.max_pwm_l = MAX_PWM_L
         self.max_pwm_r = MAX_PWM_R
 
-        self.enabled = (self.config[I2C_ENABLED] or self.config[DIGITAL_CHANNELS_ENABLED]) and Misc.is_raspberrypi()
+        # Un pca9685 injecté (faux matériel en test, futur hardware_interface
+        # ros2_control) court-circuite la détection Raspberry Pi.
+        self.enabled = pca9685 is not None or \
+            ((self.config[I2C_ENABLED] or self.config[DIGITAL_CHANNELS_ENABLED]) and Misc.is_raspberrypi())
         logging.info("init  {} wheels i2c enabled {}".format(type, Misc.is_raspberrypi()))
         if not self.enabled:
             logging.warning("i2c pwm disabled")
             return
 
-        try:
-            i2c = busio.I2C(board.SCL, board.SDA)
-            pca9685 = adafruit_pca9685.PCA9685(i2c)
-            pca9685.frequency = 60
-        except ValueError as err:
-            logging.error("can't connect to to i2c")
-            self.enabled = False
-            return
+        if pca9685 is None:
+            # Les libs Adafruit ne sont importables que sur le Pi.
+            import adafruit_pca9685
+            import board
+            import busio
+            try:
+                i2c = busio.I2C(board.SCL, board.SDA)
+                pca9685 = adafruit_pca9685.PCA9685(i2c)
+                pca9685.frequency = 60
+            except ValueError:
+                logging.error("can't connect to to i2c")
+                self.enabled = False
+                return
 
         #self.left_pwm = pwmio.PWMOut(Pin(config.LEFT_PWM_PIN))
         #self.right_pwm = pwmio.PWMOut(Pin(config.RIGHT_PWM_PIN))
