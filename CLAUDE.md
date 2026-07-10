@@ -41,8 +41,11 @@ FAIT et validé en sim (tout est commité/poussé, CI verte, 123 tests unitaires
 ```bash
 .venv/bin/pytest -q                 # tests unitaires (host, sans ROS ni matériel)
 
-# Simulation (GUI ; HEADLESS=true pour serveur seul) :
-cd conf/docker/sim && docker compose -f docker-compose-sim.yml up -d
+# Simulation (GUI ; HEADLESS=true pour serveur seul ; ANIMATIONS=true = animations_node en sim) :
+cd conf/docker/sim && ANIMATIONS=true docker compose -f docker-compose-sim.yml up -d
+# Jouer une animation en sim (bras/yeux/cou via servos_sim_node — validé 2026-07-11) :
+docker exec dadou-sim-container bash -c 'source /opt/ros/$ROS_DISTRO/setup.sh && source /home/ros2_ws/install/setup.bash && ros2 topic pub --once animation robot_interfaces/msg/StringTime "{msg: \"\\\"parle\\\"\", time: 45000, anim: false}"'
+# Arrêt d'animation : msg: "false" (booléen JSON — PAS "stop", qui serait cherché comme nom de séquence).
 # Chaîne roues dans la sim :
 docker exec -d dadou-sim-container bash -c 'source /opt/ros/$ROS_DISTRO/setup.sh && source /home/ros2_ws/install/setup.bash && ros2 launch robot_drive drive.launch.py use_sim_time:=true'
 # Conduite clavier (publie /cmd_vel_remote via remap, prioritaire) :
@@ -55,6 +58,16 @@ docker exec -it dadou-sim-container bash -c 'source /opt/ros/$ROS_DISTRO/setup.s
 
 ## Prochaines étapes (dans l'ordre)
 
+0. **Protocole physique chat_node V2 (conversation)** : le code est COMPLET et commité
+   (nuit du 10 au 11/07 : ~15 commits sur les 3 dépôts, validé en sim — bras+yeux bougent
+   sur l'animation « parle », vu par David dans Gazebo). Côté vision : chat_node
+   (chat_enabled:=true, défaut false), pipeline VAD→whisper→OpenRouter→piper→mixette,
+   didascalies/émotions → topics face+animation. Côté robot : fix MODE (dadou_utils_ros
+   5aefdf1 — le mode random servo était mort depuis sept. 2025), expression « parle »,
+   séquence didier/parle.json. À faire sur le vrai matériel : rebuild image ARM vision
+   (voix piper + whisper préchargés), Pi 5 avec ALIM 27 W (crash constaté sur USB-C PC),
+   sentinelles robot/change + vision/CHANGE, dérouler une conversation complète au casque,
+   vérifier gestes/bouche/arrêts propres (caméra à l'appui).
 1. **Test scénique en conditions réelles** : roues AU SOL, télécommande physique en main
    (boutons, slider, gants), une séquence de spectacle complète — première fois que le
    mode cmd_vel roule au sol. Vérifier aussi le sens de rotation gauche/droite (le
