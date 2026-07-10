@@ -27,8 +27,12 @@ class ImageMapping:
                 if y > self.matrix_height - 1:
                     matrix += self.matrix_width * self.matrix_height * self.matrix_width_nb
 
-                ypos = (y * self.matrix_width)  # % (self.matrix_height * self.matrix_width)
-                if ypos > (self.matrix_height * self.matrix_width):
+                ypos = (y * self.matrix_width)
+                # >= et non > : à y=8 (première ligne des matrices du bas) ypos vaut
+                # exactement 64 et doit repartir à 0. Avec >, toute la ligne 8 était
+                # décalée de 64 LED — la 3e matrice débordait dans l'œil droit
+                # (indices 384-391) et les LED 192-199 ne recevaient jamais l'image.
+                if ypos >= (self.matrix_height * self.matrix_width):
                     ypos -= self.matrix_height * self.matrix_width
 
                 index = xpos + matrix + ypos
@@ -121,8 +125,9 @@ class ImageMapping:
                 if y > self.matrix_height - 1:
                     matrix += self.matrix_width * self.matrix_height * self.matrix_width_nb
 
-                ypos = (y * self.matrix_width)  # % (self.matrix_height * self.matrix_width)
-                if ypos > (self.matrix_height * self.matrix_width):
+                ypos = (y * self.matrix_width)
+                # même correction de borne que dans mapping() (>= et non >)
+                if ypos >= (self.matrix_height * self.matrix_width):
                     ypos -= self.matrix_height * self.matrix_width
 
                 index = xpos + matrix + ypos

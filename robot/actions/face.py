@@ -116,8 +116,22 @@ class Face(AbstractJsonActions):
         self.mouth = Sequence(self.element_duration, self.loop, json_seq[MOUTHS], 0)
         self.leye = Sequence(self.element_duration, self.loop, json_seq[LEFT_EYES], 385) #385
         self.reye = Sequence(self.element_duration, self.loop, json_seq[RIGHT_EYES], 448) #448
+        self.show_first_frames()
 
         return msg
+
+    def show_first_frames(self):
+        # Dessine tout de suite la première frame de chaque partie : sans ça,
+        # une frame n'apparaît qu'à son premier time_to_switch() — les yeux d'une
+        # piste à frame unique restaient sur l'expression PRÉCÉDENTE pendant
+        # toute la durée de la séquence (2 à 8 s de visage périmé à chaque bascule).
+        for seq in (self.mouth, self.leye, self.reye):
+            if not seq.elements:
+                continue
+            visual = self.get_visual(seq.get_current_element()[1])
+            if visual is not None:
+                self.mouth_image_mapping.mapping(self.strip, visual.rgb, seq.start_pixel)
+        self.strip.show()
 
     def animate_part(self, seq: Sequence):
         change = False
