@@ -6,8 +6,8 @@ from adafruit_led_animation.helper import PixelSubset
 from rclpy.node import Node
 import time
 
-from dadou_utils_ros.utils_static import LIGHTS_START_LED, LIGHTS_LED_COUNT, \
-    BRIGHTNESS, LIGHTS_PIN, ROBOT_LIGHTS, FACE, AUDIO
+from robot.robot_static import LIGHTS_START_LED, LIGHTS_LED_COUNT, LIGHTS_PIN
+from dadou_utils_ros.utils_static import BRIGHTNESS, ROBOT_LIGHTS, FACE, AUDIO
 from robot.actions.audio_manager import AudioManager
 from robot.files.robot_json_manager import RobotJsonManager
 from robot.nodes.abstract_subscriber import SubscriberNode

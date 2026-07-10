@@ -9,9 +9,10 @@ from sqlobject import StringCol
 
 from dadou_utils_ros.files.files_utils import FilesUtils
 from dadou_utils_ros.logging_conf import LoggingConf
-from dadou_utils_ros.utils_static import SEQUENCES_DIRECTORY, NAME, KEYS, DURATION, TYPES, FACES, ROBOT_LIGHTS, \
-    LEFT_EYE, RIGHT_EYE, LEFT_ARM, RIGHT_ARM, NECK, LOGGING_TEST_FILE_NAME, SEQUENCES, JSON_DIRECTORY, AUDIOS_DB, \
-    JSON_AUDIOS
+from robot.robot_static import TYPES, AUDIOS_DB
+from dadou_utils_ros.utils_static import SEQUENCES_DIRECTORY, NAME, KEYS, DURATION, FACES, \
+    ROBOT_LIGHTS, LEFT_EYE, RIGHT_EYE, LEFT_ARM, RIGHT_ARM, NECK, LOGGING_TEST_FILE_NAME, \
+    SEQUENCES, JSON_DIRECTORY, JSON_AUDIOS
 from robot.db.audio_db import AudioDB
 from robot.db.sequences_db import SequencesDB
 from robot.db.db_manager import DBManager

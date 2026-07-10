@@ -14,9 +14,10 @@ from robot_interfaces.msg._string_time import StringTime
 
 from dadou_utils_ros.misc import Misc
 from robot.files.robot_json_manager import RobotJsonManager
-from dadou_utils_ros.utils_static import LIGHTS_START_LED, LIGHTS_LED_COUNT, \
-    BRIGHTNESS, LIGHTS_PIN, ROBOT_LIGHTS, FACE, LIGHTS_END_LED, JSON_LIGHTS, LIGHTS, LOGGING_FILE_NAME, I2C_ENABLED, \
-    DIGITAL_CHANNELS_ENABLED, DURATION
+from robot.robot_static import LIGHTS_START_LED, LIGHTS_LED_COUNT, LIGHTS_PIN, LIGHTS_END_LED, \
+    I2C_ENABLED, DIGITAL_CHANNELS_ENABLED
+from dadou_utils_ros.utils_static import BRIGHTNESS, ROBOT_LIGHTS, FACE, JSON_LIGHTS, LIGHTS, \
+    LOGGING_FILE_NAME, DURATION
 from robot.actions.face import Face
 from robot.actions.lights import Lights
 from robot.robot_config import config

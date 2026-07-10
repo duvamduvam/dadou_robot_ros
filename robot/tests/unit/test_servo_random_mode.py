@@ -27,7 +27,7 @@ _fake_adafruit_servokit = types.ModuleType("adafruit_servokit")
 _fake_adafruit_servokit.ServoKit = object  # jamais instancié : Servo est construit via object.__new__
 sys.modules.setdefault("adafruit_servokit", _fake_adafruit_servokit)
 
-from dadou_utils_ros.utils_static import MODE, NECK, NORMAL, RANDOM  # noqa: E402
+from dadou_utils_ros.utils_static import MODE, NECK, NORMAL, RANDOM
 from robot.actions.servo import Servo  # noqa: E402
 
 REPO_ROOT = os.path.dirname(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))))

@@ -2,9 +2,10 @@ import logging.config
 
 from dadou_utils_ros.files.files_utils import FilesUtils
 from dadou_utils_ros.utils.time_utils import TimeUtils
-from dadou_utils_ros.utils_static import NAME, DURATION, LOOP, KEY, FACE, DEFAULT, \
-    MOUTH_VISUALS_PATH, EYE_VISUALS_PATH, LIGHTS_PIN, BASE_PATH, MOUTHS, JSON_EXPRESSIONS, RIGHT_EYES, LEFT_EYES, \
-    ANIMATION, STOP
+from robot.robot_static import MOUTH_VISUALS_PATH, EYE_VISUALS_PATH, LIGHTS_PIN, MOUTHS, \
+    RIGHT_EYES, LEFT_EYES
+from dadou_utils_ros.utils_static import NAME, DURATION, LOOP, KEY, FACE, DEFAULT, BASE_PATH, \
+    JSON_EXPRESSIONS, ANIMATION, STOP
 from robot.actions.abstract_json_actions import AbstractJsonActions
 from robot.sequences.sequence import Sequence
 from robot.visual.image_mapping import ImageMapping

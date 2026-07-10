@@ -9,8 +9,9 @@ from rclpy.node import Node
 from robot_interfaces.msg._string_time import StringTime
 
 from dadou_utils_ros.logging_conf import LoggingConf
-from dadou_utils_ros.utils_static import NECK, HEAD_PWM_NB, DEFAULT_POS, I2C_ENABLED, PWM_CHANNELS_ENABLED, \
-    SERVOS, MAX_POS, SERVO, NAME, LOGGING_FILE_NAME, DURATION
+from robot.robot_static import HEAD_PWM_NB, DEFAULT_POS, I2C_ENABLED, PWM_CHANNELS_ENABLED, \
+    SERVOS, MAX_POS, SERVO
+from dadou_utils_ros.utils_static import NECK, NAME, LOGGING_FILE_NAME, DURATION
 from robot.actions.servo import Servo
 from robot.robot_config import config
 

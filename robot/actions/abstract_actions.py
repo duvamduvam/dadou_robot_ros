@@ -4,7 +4,8 @@ import logging
 import random
 
 from dadou_utils_ros.utils.time_utils import TimeUtils
-from dadou_utils_ros.utils_static import KEY, KEYS, NAME, LOOP, RANDOM_ANIMATION_LOW, RANDOM_ANIMATION_HIGH, LOOP_DURATION
+from robot.robot_static import RANDOM_ANIMATION_LOW, RANDOM_ANIMATION_HIGH, LOOP_DURATION
+from dadou_utils_ros.utils_static import KEY, KEYS, NAME, LOOP
 
 
 class ActionsAbstract:

@@ -5,7 +5,8 @@ from sqlobject import SQLObject, StringCol, IntCol, PickleCol, BoolCol
 from sqlobject.dberrors import DuplicateEntryError
 from sqlobject.sqlite import builder
 
-from dadou_utils_ros.utils_static import DB_DIRECTORY, SEQUENCES_DB, NAME, SEQUENCES
+from robot.robot_static import DB_DIRECTORY, SEQUENCES_DB
+from dadou_utils_ros.utils_static import NAME, SEQUENCES
 from robot.robot_config import config
 
 # Connexion à une base de données SQLite persistante

@@ -2,10 +2,11 @@ import logging
 import random
 
 from dadou_utils_ros.utils.time_utils import TimeUtils
-from dadou_utils_ros.utils_static import ANIMATION, STOP_ANIMATION_KEYS, AUDIO, AUDIOS, KEY, NECK, FACE, FACES, \
-    LIGHTS, WHEELS, NAME, \
-    DURATION, RANDOM, TYPES, SEQUENCES_DIRECTORY, RANDOM_ANIMATION_LOW, \
-    RANDOM_ANIMATION_HIGH, LEFT_ARM, RIGHT_ARM, STOP_KEY, LEFT_EYE, RIGHT_EYE, RANDOM_TYPE, ROBOT_LIGHTS, TYPE
+from robot.robot_static import STOP_ANIMATION_KEYS, TYPES, RANDOM_ANIMATION_LOW, \
+    RANDOM_ANIMATION_HIGH, STOP_KEY, RANDOM_TYPE
+from dadou_utils_ros.utils_static import ANIMATION, AUDIO, AUDIOS, KEY, NECK, FACE, FACES, \
+    LIGHTS, WHEELS, NAME, DURATION, RANDOM, SEQUENCES_DIRECTORY, LEFT_ARM, RIGHT_ARM, LEFT_EYE, \
+    RIGHT_EYE, ROBOT_LIGHTS, TYPE
 from robot.actions.abstract_json_actions import AbstractJsonActions
 from robot.sequences.animation import Animation
 from robot.sequences.random_animation_start import RandomAnimationStart

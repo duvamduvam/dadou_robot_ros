@@ -8,8 +8,9 @@ import random
 
 from dadou_utils_ros.files.files_utils import FilesUtils
 from dadou_utils_ros.logging_conf import LoggingConf
-from dadou_utils_ros.utils_static import SEQUENCES_DIRECTORY, NAME, KEYS, DURATION, TYPES, FACES, ROBOT_LIGHTS, \
-    LEFT_EYE, RIGHT_EYE, LEFT_ARM, RIGHT_ARM, NECK, LOGGING_TEST_FILE_NAME
+from robot.robot_static import TYPES
+from dadou_utils_ros.utils_static import SEQUENCES_DIRECTORY, NAME, KEYS, DURATION, FACES, \
+    ROBOT_LIGHTS, LEFT_EYE, RIGHT_EYE, LEFT_ARM, RIGHT_ARM, NECK, LOGGING_TEST_FILE_NAME
 from robot.db.sequences_db import SequencesDB
 from robot.files.robot_json_manager import RobotJsonManager
 from robot.robot_config import config
@@ -32,8 +33,9 @@ class TestDbExpression(unittest.TestCase):
 
     from dadou_utils_ros.files.files_utils import FilesUtils
     from dadou_utils_ros.logging_conf import LoggingConf
-    from dadou_utils_ros.utils_static import SEQUENCES_DIRECTORY, NAME, KEYS, DURATION, TYPES, FACES, ROBOT_LIGHTS, \
-        LEFT_EYE, RIGHT_EYE, LEFT_ARM, RIGHT_ARM, NECK, LOGGING_TEST_FILE_NAME
+    from robot.robot_static import TYPES
+    from dadou_utils_ros.utils_static import SEQUENCES_DIRECTORY, NAME, KEYS, DURATION, FACES, \
+        ROBOT_LIGHTS, LEFT_EYE, RIGHT_EYE, LEFT_ARM, RIGHT_ARM, NECK, LOGGING_TEST_FILE_NAME
     from robot.db.sequences_db import SequencesDB
     from robot.robot_config import config
 

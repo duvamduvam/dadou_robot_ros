@@ -7,7 +7,8 @@ robot/actions/wheels.py (voir wheels_payload.py pour la correspondance).
 import ast
 import pathlib
 
-from dadou_utils_ros.utils_static import ANIMATION, BACKWARD, FORWARD, LEFT, RIGHT, SPEED, STOP, WHEELS
+from dadou_utils_ros.utils_static import ANIMATION, BACKWARD, FORWARD, LEFT, RIGHT, SPEED, STOP, \
+    WHEELS
 from robot_drive import wheels_payload
 from robot_drive.wheels_payload import payload_to_pair, payload_to_speed
 

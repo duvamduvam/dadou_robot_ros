@@ -14,8 +14,9 @@ import logging.config
 from adafruit_led_animation.helper import PixelSubset
 
 from dadou_utils_ros.utils.time_utils import TimeUtils
-from dadou_utils_ros.utils_static import METHOD, DEFAULT, DURATION, SEQUENCES, LOOP, COLOR, NAME, JSON_COLORS, \
-    JSON_LIGHTS_BASE, BRIGHTNESS, STOP
+from robot.robot_static import JSON_COLORS
+from dadou_utils_ros.utils_static import METHOD, DEFAULT, DURATION, SEQUENCES, LOOP, COLOR, \
+    NAME, JSON_LIGHTS_BASE, BRIGHTNESS, STOP
 from robot.actions.abstract_json_actions import AbstractJsonActions
 from robot.sequences.sequence import Sequence
 from robot.visual.lights_animations import LightsAnimations

@@ -3,7 +3,7 @@ import board
 import busio
 
 #from rpi_python_drv8825.stepper import StepperMotor
-from dadou_utils_ros.utils_static import HEAD_PWM_NB
+from robot.robot_static import HEAD_PWM_NB
 from robot.robot_config import config
 from robot.tests.sandbox.conf_test import TestSetup
 

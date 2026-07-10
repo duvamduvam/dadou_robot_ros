@@ -2,10 +2,11 @@ import logging
 
 from dadou_utils_ros.misc import Misc
 from dadou_utils_ros.utils.time_utils import TimeUtils
-from dadou_utils_ros.utils_static import ANGLO, WHEEL_RIGHT, WHEEL_LEFT, WHEELS, KEY, \
-    CMD_FORWARD, CMD_BACKWARD, CMD_LEFT, CMD_RIGHT, I2C_ENABLED, PWM_CHANNELS_ENABLED, \
-    WHEEL_LEFT_PWM, WHEEL_RIGHT_PWM, WHEEL_LEFT_DIR, WHEEL_RIGHT_DIR, STRAIGHT, ANIMATION, STOP, FORWARD, BACKWARD, \
-    LEFT, RIGHT, INCLINO, SPEED, JOYSTICK, X, Y, DIGITAL_CHANNELS_ENABLED, DURATION
+from robot.robot_static import CMD_FORWARD, CMD_BACKWARD, CMD_LEFT, CMD_RIGHT, I2C_ENABLED, \
+    PWM_CHANNELS_ENABLED, WHEEL_LEFT_PWM, WHEEL_RIGHT_PWM, WHEEL_LEFT_DIR, WHEEL_RIGHT_DIR, \
+    STRAIGHT, DIGITAL_CHANNELS_ENABLED
+from dadou_utils_ros.utils_static import ANGLO, WHEEL_RIGHT, WHEEL_LEFT, WHEELS, KEY, ANIMATION, \
+    STOP, FORWARD, BACKWARD, LEFT, RIGHT, INCLINO, SPEED, JOYSTICK, X, Y, DURATION
 from robot_drive.diff_drive import DiffDrive
 from robot_drive.joystick_mixer import translate
 from robot.robot_config import MAX_PWM_L, MAX_PWM_R

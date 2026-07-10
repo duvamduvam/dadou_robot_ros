@@ -4,9 +4,8 @@ import random
 
 from dadou_utils_ros.files.files_utils import FilesUtils
 from dadou_utils_ros.utils.time_utils import TimeUtils
-from dadou_utils_ros.utils_static import KEY, KEYS, NAME, LOOP, RANDOM_ANIMATION_LOW, RANDOM_ANIMATION_HIGH, \
-    LOOP_DURATION, \
-    DURATION, BASE_PATH, TYPE, TYPES
+from robot.robot_static import RANDOM_ANIMATION_LOW, RANDOM_ANIMATION_HIGH, LOOP_DURATION, TYPES
+from dadou_utils_ros.utils_static import KEY, KEYS, NAME, LOOP, DURATION, BASE_PATH, TYPE
 
 
 class AbstractJsonActions:

@@ -4,7 +4,8 @@ import time
 import unittest
 
 from dadou_utils_ros.audios.piano_player import PianoPlayer
-from dadou_utils_ros.utils_static import JSON_DIRECTORY, JSON_CONFIG, NOTE, BASE_PATH, AUDIOS_DIRECTORY
+from robot.robot_static import NOTE
+from dadou_utils_ros.utils_static import JSON_DIRECTORY, JSON_CONFIG, BASE_PATH, AUDIOS_DIRECTORY
 from robot.files.robot_json_manager import RobotJsonManager
 from robot.robot_config import config
 

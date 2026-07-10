@@ -9,9 +9,8 @@ from rclpy.node import Node
 from std_msgs.msg import String
 
 from dadou_utils_ros.logging_conf import LoggingConf
-from dadou_utils_ros.utils_static import RELAY, AUDIO, FACE, ROBOT_LIGHTS, NECK, LEFT_EYE, RIGHT_EYE, LEFT_ARM, \
-    RIGHT_ARM, \
-    ANIMATION, LOGGING_FILE_NAME, DURATION, STOP, WHEELS
+from dadou_utils_ros.utils_static import RELAY, AUDIO, FACE, ROBOT_LIGHTS, NECK, LEFT_EYE, \
+    RIGHT_EYE, LEFT_ARM, RIGHT_ARM, ANIMATION, LOGGING_FILE_NAME, DURATION, STOP, WHEELS
 from robot.files.robot_json_manager import RobotJsonManager
 from robot.nodes.abstract_subscriber import SubscriberNode
 from robot.robot_config import config

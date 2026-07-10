@@ -5,8 +5,8 @@ import neopixel
 
 from dadou_utils_ros.logging_conf import LoggingConf
 from dadou_utils_ros.utils.time_utils import TimeUtils
-from dadou_utils_ros.utils_static import LIGHTS_LED_COUNT, BRIGHTNESS, LIGHTS_PIN, LOGGING_TEST_FILE_NAME, \
-    FACE
+from robot.robot_static import LIGHTS_LED_COUNT, LIGHTS_PIN
+from dadou_utils_ros.utils_static import BRIGHTNESS, LOGGING_TEST_FILE_NAME, FACE
 from robot.actions.face import Face
 from robot.files.robot_json_manager import RobotJsonManager
 from robot.robot_config import config
