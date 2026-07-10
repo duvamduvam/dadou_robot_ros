@@ -6,10 +6,17 @@ robot_description, robot_state_publisher et le bridge ros_gz.
     ros2 launch robot_sim sim.launch.py            # avec GUI
     ros2 launch robot_sim sim.launch.py headless:=true
 
+    # Rejeu des séquences JSON (animations_node, package "robot" -- OFF par
+    # défaut, comme gaze_follower : lancement explicite requis) :
+    ros2 launch robot_sim sim.launch.py animations:=true
+    # puis, dans un autre terminal (même domaine ROS que la sim, 43) :
+    #   ros2 topic pub -1 animation robot_interfaces/msg/StringTime '{msg: "\\"parle\\""}'
+
 Tout tourne en use_sim_time (horloge /clock bridgée depuis gz).
 """
 from launch import LaunchDescription
 from launch.actions import DeclareLaunchArgument, IncludeLaunchDescription
+from launch.conditions import IfCondition
 from launch.launch_description_sources import PythonLaunchDescriptionSource
 from launch.substitutions import Command, LaunchConfiguration, PathJoinSubstitution, PythonExpression
 from launch_ros.actions import Node
@@ -23,6 +30,7 @@ SPAWN_Z = "0.24"
 
 def generate_launch_description():
     headless = LaunchConfiguration("headless")
+    animations = LaunchConfiguration("animations")
 
     robot_description = ParameterValue(
         Command([
@@ -45,6 +53,10 @@ def generate_launch_description():
     return LaunchDescription([
         DeclareLaunchArgument("headless", default_value="false",
                               description="true = serveur gz seul, sans GUI"),
+        DeclareLaunchArgument("animations", default_value="false",
+                              description="true = lance animations_node (paquet robot, rejeu des"
+                                           " séquences JSON) -- OFF par défaut, même prudence que"
+                                           " gaze_follower : activation explicite requise"),
 
         IncludeLaunchDescription(
             PythonLaunchDescriptionSource(
@@ -86,5 +98,32 @@ def generate_launch_description():
             executable="leds_sim_node",
             parameters=[{"use_sim_time": True}],
             output="screen",
+        ),
+
+        # Rejeu des servos (neck/left_arm/right_arm/left_eye/right_eye, cf.
+        # robot_sim_lib/servos_logic.py) : écoute les 5 topics StringTime,
+        # publie /<servo>/position (radians) sur les JointPositionController gz.
+        Node(
+            package="robot_sim",
+            executable="servos_sim_node",
+            parameters=[{"use_sim_time": True}],
+            output="screen",
+        ),
+
+        # Rejeu des séquences JSON (paquet "robot", le VRAI code du robot --
+        # PAS un paquet robot_sim, cf. Dockerfile-sim/docker-compose-sim.yml
+        # pour comment il est construit dans le conteneur sim). OFF par défaut
+        # (animations:=false) : même prudence que gaze_follower, activation
+        # explicite. LIMITE ASSUMÉE : AnimationManager/Animation utilisent
+        # TimeUtils.current_milli_time() (horloge MURALE partout, jamais
+        # get_clock()) -- comme sur le vrai robot, donc pas une régression,
+        # mais le rejeu ne suit PAS l'horloge simulée (use_sim_time n'aurait
+        # aucun effet ici ; on ne le passe donc pas, contrairement aux autres
+        # nodes de ce fichier).
+        Node(
+            package="robot",
+            executable="animations_node",
+            output="screen",
+            condition=IfCondition(animations),
         ),
     ])
