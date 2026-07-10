@@ -1512,5 +1512,49 @@
                 "chargement4.png"
             ]
         ]
+    },
+    "parle": {
+        "name": "parle",
+        "duration": 800,
+        "loop": true,
+        "keys": [],
+        "left_eyes": [
+            [
+                0.5,
+                "oeil-neon-centre.png"
+            ],
+            [
+                1.0,
+                "oeil-neon-droit.png"
+            ]
+        ],
+        "right_eyes": [
+            [
+                0.5,
+                "oeil-neon-centre.png"
+            ],
+            [
+                1.0,
+                "oeil-neon-gauche.png"
+            ]
+        ],
+        "mouths": [
+            [
+                0.25,
+                "parle-neon-petit.png"
+            ],
+            [
+                0.5,
+                "parle-neon-grand.png"
+            ],
+            [
+                0.75,
+                "parle-neon-moyen.png"
+            ],
+            [
+                1.0,
+                "parle-neon-ferme.png"
+            ]
+        ]
     }
 }

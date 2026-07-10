@@ -455,6 +455,39 @@ def gen_reflechit():
     return eyes, mouths
 
 
+def gen_parle():
+    """Bouches « articulation » pour l'expression parle : cycle petit→grand→moyen→fermé
+    qui mime l'ouverture de bouche pendant la synthèse vocale (cf. NEW_EXPRESSIONS["parle"]).
+
+    Pas de nouveaux yeux : l'expression réutilise oeil-neon-*.png (le regard "repos
+    neon" existant suffit, seule la bouche doit bouger en rythme avec l'audio).
+    """
+    mouths = {}
+
+    # Bouche fermée : simple ligne cyan (même esprit que sourire-neon1 : trait +
+    # lisière CYAN_DIM en dessous pour donner de l'épaisseur sans un 2e pixel plein).
+    ferme = blank(MW, MH)
+    for x in range(3, 21):
+        put(ferme, x, 8, CYAN)
+        put(ferme, x, 9, CYAN_DIM)
+    mouths["parle-neon-ferme.png"] = ferme
+
+    # Bouches ouvertes : ellipse centrée (11.5, 8), une par taille d'ouverture.
+    # Une seule équation ((x-cx)/rx)²+((y-cy)/ry)² pour intérieur ET contour :
+    # plus simple et plus régulier qu'une 2e ellipse rétrécie de 1 px, qui serait
+    # discontinue sur les petits rayons (rx=4 pour "petit").
+    for name, (rx, ry) in (("petit", (4, 2)), ("moyen", (6, 4)), ("grand", (8, 5.5))):
+        g = blank(MW, MH)
+        cx, cy = 11.5, 8
+        for y in range(MH):
+            for x in range(MW):
+                d = ((x - cx) / rx) ** 2 + ((y - cy) / ry) ** 2
+                if d <= 1:
+                    g[y][x] = CYAN if d >= 0.75 else BLEU_NUIT  # anneau proche du bord = contour
+        mouths["parle-neon-{}.png".format(name)] = g
+    return mouths
+
+
 def calib_expr(leye, reye, mouth):
     """Expression une-frame pour mire (8 s, boucle, à lire sur une capture)."""
     return {
@@ -582,6 +615,15 @@ NEW_EXPRESSIONS = {
         "mouths": [[0.12, "coeur.png"], [0.20, "coeur-mini.png"],
                    [0.32, "coeur.png"], [1.0, "coeur-mini.png"]],
     },
+    "parle": {
+        # Boucle courte (800 ms) : bouche qui articule pendant la synthèse vocale,
+        # regard neon repos discret (pas de nouveaux yeux, voir gen_parle).
+        "duration": 800, "loop": True, "keys": [],
+        "left_eyes":  [[0.5, "oeil-neon-centre.png"], [1.0, "oeil-neon-droit.png"]],
+        "right_eyes": [[0.5, "oeil-neon-centre.png"], [1.0, "oeil-neon-gauche.png"]],
+        "mouths": [[0.25, "parle-neon-petit.png"], [0.5, "parle-neon-grand.png"],
+                   [0.75, "parle-neon-moyen.png"], [1.0, "parle-neon-ferme.png"]],
+    },
 }
 
 
@@ -594,6 +636,7 @@ def main():
     refl_eyes, refl_mouths = gen_reflechit()
     eyes.update(refl_eyes)
     mouths.update(refl_mouths)
+    mouths.update(gen_parle())  # pas d'yeux nouveaux, cf. gen_parle
     for name, g in eyes.items():
         save(g, EYE_DIR, name)
     for name, g in mouths.items():
