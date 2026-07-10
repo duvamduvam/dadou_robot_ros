@@ -5,8 +5,11 @@ from launch.substitutions import PathJoinSubstitution
 from launch_ros.actions import Node
 from launch_ros.substitutions import FindPackageShare
 
-from dadou_utils_ros.utils_static import NAME, NECK, HEAD_PWM_NB, DEFAULT_POS, MAX_POS, LEFT_ARM, LEFT_ARM_NB, \
-    RIGHT_ARM, RIGHT_ARM_NB, LEFT_EYE, LEFT_EYE_NB, RIGHT_EYE, RIGHT_EYE_NB
+# Contrat inter-machines (noms des topics servo) : reste sur la lib partagée.
+from dadou_utils_ros.utils_static import NAME, NECK, LEFT_ARM, RIGHT_ARM, LEFT_EYE, RIGHT_EYE
+# Constantes internes au robot (numéros PWM, bornes servo) : rapatriées (cf. robot_static).
+from robot.robot_static import HEAD_PWM_NB, DEFAULT_POS, MAX_POS, LEFT_ARM_NB, \
+    RIGHT_ARM_NB, LEFT_EYE_NB, RIGHT_EYE_NB
 from robot.robot_config import config
 
 
