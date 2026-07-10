@@ -394,6 +394,89 @@ def gen_mouths():
     return n
 
 
+# ------------------------------------------------- MIRES ZONE-PAR-ZONE
+# La webcam de vérification (Creality, focus fixe) ne résout PAS les pixels de
+# la mire calib : impossible de lire « 123 » ou le « E ». En revanche elle
+# résout la POSITION GROSSIÈRE d'un blob lumineux. D'où ces mires binaires :
+# une seule zone allumée par expression, une capture = une réponse oui/non.
+# Objectif : établir le câblage réel (yeux 385/448 croisés ?, ordre et
+# orientation de la rangée basse de la bouche, frontière 448/449).
+
+def zone(w, h, x0, x1, y0, y1, color=BLANC):
+    """Rectangle plein [x0..x1] x [y0..y1] (bornes incluses), le reste éteint."""
+    g = blank(w, h)
+    for y in range(y0, y1 + 1):
+        for x in range(x0, x1 + 1):
+            g[y][x] = color
+    return g
+
+
+def gen_calib_zones():
+    eyes, mouths = {}, {}
+    eyes["oeil-noir.png"] = blank(EW, EH)
+    eyes["oeil-plein.png"] = zone(EW, EH, 0, 7, 0, 7)
+    # Un seul pixel : le DERNIER index écrit par la piste (start + 63).
+    # Pour la piste à start=385 il tombe sur l'index 448, pile la frontière
+    # ambiguë entre les deux yeux (448 vs 449) : l'œil où il s'allume tranche.
+    eyes["oeil-px-dernier.png"] = zone(EW, EH, 7, 7, 7, 7)
+    mouths["bouche-noire.png"] = blank(MW, MH)
+    mouths["calib-bouche-haut.png"] = zone(MW, MH, 0, MW - 1, 0, 7)        # bande haute entière
+    mouths["calib-bouche-haut-gauche.png"] = zone(MW, MH, 0, 7, 0, 7)      # 1re matrice du haut
+    mouths["calib-bouche-bas-gauche.png"] = zone(MW, MH, 0, 7, 8, 15)      # 1re matrice du bas
+    mouths["calib-bouche-ligne-basse.png"] = zone(MW, MH, 0, MW - 1, 15, 15)  # dernière ligne
+    return eyes, mouths
+
+
+def gen_reflechit():
+    """Visuels « réfléchit » : regard qui cherche en l'air + barre de chargement.
+
+    Sert d'état d'attente pendant le pipeline STT→LLM du mode conversation
+    (latence jouée : le robot « pense » au lieu de sembler planté).
+    """
+    eyes, mouths = {}, {}
+    # Pupille en haut (regard pensif) qui balaie gauche→centre→droite.
+    for name, pos in (("hg", (1, 1)), ("hc", (3, 0)), ("hd", (5, 1))):
+        eyes["oeil-reflechit-{}.png".format(name)] = eye_disk(CYAN, BLEU_NUIT, pos)
+
+    # Barre de progression 4 frames : cadre discret, remplissage cyan.
+    # Géométrie : cadre x2..21 / y6..9, remplissage 18 cases utiles (x3..20).
+    for i, cells in enumerate((4, 9, 13, 18), start=1):
+        g = blank(MW, MH)
+        for x in range(2, 22):                       # lisières haut/bas du cadre
+            put(g, x, 6, CYAN_DIM)
+            put(g, x, 9, CYAN_DIM)
+        for y in (7, 8):                             # montants gauche/droit
+            put(g, 2, y, CYAN_DIM)
+            put(g, 21, y, CYAN_DIM)
+        for x in range(3, 3 + cells):                # remplissage progressif
+            put(g, x, 7, CYAN)
+            put(g, x, 8, CYAN)
+        mouths["chargement{}.png".format(i)] = g
+    return eyes, mouths
+
+
+def calib_expr(leye, reye, mouth):
+    """Expression une-frame pour mire (8 s, boucle, à lire sur une capture)."""
+    return {
+        "duration": 8000, "loop": True, "keys": [],
+        "left_eyes": [[1.0, leye]],
+        "right_eyes": [[1.0, reye]],
+        "mouths": [[1.0, mouth]],
+    }
+
+
+# Une expression par question de câblage (voir gen_calib_zones).
+CALIB_ZONE_EXPRESSIONS = {
+    "calib-og": calib_expr("oeil-plein.png", "oeil-noir.png", "bouche-noire.png"),
+    "calib-od": calib_expr("oeil-noir.png", "oeil-plein.png", "bouche-noire.png"),
+    "calib-448": calib_expr("oeil-px-dernier.png", "oeil-noir.png", "bouche-noire.png"),
+    "calib-bh": calib_expr("oeil-noir.png", "oeil-noir.png", "calib-bouche-haut.png"),
+    "calib-bhg": calib_expr("oeil-noir.png", "oeil-noir.png", "calib-bouche-haut-gauche.png"),
+    "calib-bbg": calib_expr("oeil-noir.png", "oeil-noir.png", "calib-bouche-bas-gauche.png"),
+    "calib-blb": calib_expr("oeil-noir.png", "oeil-noir.png", "calib-bouche-ligne-basse.png"),
+}
+
+
 # ------------------------------------------------------------- EXPRESSIONS
 
 # Rappel sémantique Sequence : frame [t, image] affichée jusqu'à t*duration
@@ -478,6 +561,17 @@ NEW_EXPRESSIONS = {
         "mouths": [[0.25, "glitch-total1.png"], [0.5, "glitch-total2.png"],
                    [0.75, "glitch-total3.png"], [1.0, "glitch-total4.png"]],
     },
+    "reflechit": {
+        # État d'attente conversation : le regard cherche, la bouche « charge ».
+        # 1,6 s en boucle = la barre se remplit ~3x pendant un tour de pipeline.
+        "duration": 1600, "loop": True, "keys": [],
+        "left_eyes": [[0.33, "oeil-reflechit-hg.png"], [0.66, "oeil-reflechit-hc.png"],
+                      [1.0, "oeil-reflechit-hd.png"]],
+        "right_eyes": [[0.33, "oeil-reflechit-hg.png"], [0.66, "oeil-reflechit-hc.png"],
+                       [1.0, "oeil-reflechit-hd.png"]],
+        "mouths": [[0.25, "chargement1.png"], [0.5, "chargement2.png"],
+                   [0.75, "chargement3.png"], [1.0, "chargement4.png"]],
+    },
     "amour neon": {
         "duration": 1800, "loop": True, "keys": [],
         "left_eyes": [[0.12, "oeil-coeur.png"], [0.20, "oeil-coeur-petit.png"],
@@ -494,6 +588,12 @@ NEW_EXPRESSIONS = {
 def main():
     eyes = gen_eyes()
     mouths = gen_mouths()
+    zone_eyes, zone_mouths = gen_calib_zones()
+    eyes.update(zone_eyes)
+    mouths.update(zone_mouths)
+    refl_eyes, refl_mouths = gen_reflechit()
+    eyes.update(refl_eyes)
+    mouths.update(refl_mouths)
     for name, g in eyes.items():
         save(g, EYE_DIR, name)
     for name, g in mouths.items():
@@ -503,7 +603,7 @@ def main():
     with open(EXPR_JSON) as f:
         expressions = json.load(f)
     added = []
-    for name, expr in NEW_EXPRESSIONS.items():
+    for name, expr in {**NEW_EXPRESSIONS, **CALIB_ZONE_EXPRESSIONS}.items():
         if name not in expressions:  # ne jamais écraser l'existant
             expressions[name] = {"name": name, **expr}
             added.append(name)

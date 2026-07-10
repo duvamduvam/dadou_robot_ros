@@ -1292,5 +1292,225 @@
                 "calib-bouche.png"
             ]
         ]
+    },
+    "calib-og": {
+        "name": "calib-og",
+        "duration": 8000,
+        "loop": true,
+        "keys": [],
+        "left_eyes": [
+            [
+                1.0,
+                "oeil-plein.png"
+            ]
+        ],
+        "right_eyes": [
+            [
+                1.0,
+                "oeil-noir.png"
+            ]
+        ],
+        "mouths": [
+            [
+                1.0,
+                "bouche-noire.png"
+            ]
+        ]
+    },
+    "calib-od": {
+        "name": "calib-od",
+        "duration": 8000,
+        "loop": true,
+        "keys": [],
+        "left_eyes": [
+            [
+                1.0,
+                "oeil-noir.png"
+            ]
+        ],
+        "right_eyes": [
+            [
+                1.0,
+                "oeil-plein.png"
+            ]
+        ],
+        "mouths": [
+            [
+                1.0,
+                "bouche-noire.png"
+            ]
+        ]
+    },
+    "calib-448": {
+        "name": "calib-448",
+        "duration": 8000,
+        "loop": true,
+        "keys": [],
+        "left_eyes": [
+            [
+                1.0,
+                "oeil-px-dernier.png"
+            ]
+        ],
+        "right_eyes": [
+            [
+                1.0,
+                "oeil-noir.png"
+            ]
+        ],
+        "mouths": [
+            [
+                1.0,
+                "bouche-noire.png"
+            ]
+        ]
+    },
+    "calib-bh": {
+        "name": "calib-bh",
+        "duration": 8000,
+        "loop": true,
+        "keys": [],
+        "left_eyes": [
+            [
+                1.0,
+                "oeil-noir.png"
+            ]
+        ],
+        "right_eyes": [
+            [
+                1.0,
+                "oeil-noir.png"
+            ]
+        ],
+        "mouths": [
+            [
+                1.0,
+                "calib-bouche-haut.png"
+            ]
+        ]
+    },
+    "calib-bhg": {
+        "name": "calib-bhg",
+        "duration": 8000,
+        "loop": true,
+        "keys": [],
+        "left_eyes": [
+            [
+                1.0,
+                "oeil-noir.png"
+            ]
+        ],
+        "right_eyes": [
+            [
+                1.0,
+                "oeil-noir.png"
+            ]
+        ],
+        "mouths": [
+            [
+                1.0,
+                "calib-bouche-haut-gauche.png"
+            ]
+        ]
+    },
+    "calib-bbg": {
+        "name": "calib-bbg",
+        "duration": 8000,
+        "loop": true,
+        "keys": [],
+        "left_eyes": [
+            [
+                1.0,
+                "oeil-noir.png"
+            ]
+        ],
+        "right_eyes": [
+            [
+                1.0,
+                "oeil-noir.png"
+            ]
+        ],
+        "mouths": [
+            [
+                1.0,
+                "calib-bouche-bas-gauche.png"
+            ]
+        ]
+    },
+    "calib-blb": {
+        "name": "calib-blb",
+        "duration": 8000,
+        "loop": true,
+        "keys": [],
+        "left_eyes": [
+            [
+                1.0,
+                "oeil-noir.png"
+            ]
+        ],
+        "right_eyes": [
+            [
+                1.0,
+                "oeil-noir.png"
+            ]
+        ],
+        "mouths": [
+            [
+                1.0,
+                "calib-bouche-ligne-basse.png"
+            ]
+        ]
+    },
+    "reflechit": {
+        "name": "reflechit",
+        "duration": 1600,
+        "loop": true,
+        "keys": [],
+        "left_eyes": [
+            [
+                0.33,
+                "oeil-reflechit-hg.png"
+            ],
+            [
+                0.66,
+                "oeil-reflechit-hc.png"
+            ],
+            [
+                1.0,
+                "oeil-reflechit-hd.png"
+            ]
+        ],
+        "right_eyes": [
+            [
+                0.33,
+                "oeil-reflechit-hg.png"
+            ],
+            [
+                0.66,
+                "oeil-reflechit-hc.png"
+            ],
+            [
+                1.0,
+                "oeil-reflechit-hd.png"
+            ]
+        ],
+        "mouths": [
+            [
+                0.25,
+                "chargement1.png"
+            ],
+            [
+                0.5,
+                "chargement2.png"
+            ],
+            [
+                0.75,
+                "chargement3.png"
+            ],
+            [
+                1.0,
+                "chargement4.png"
+            ]
+        ]
     }
 }

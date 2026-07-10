@@ -47,7 +47,9 @@ WHEELS_CMD_VEL_ENABLED = "wheels_cmd_vel_enabled"
 config[WHEELS_CMD_VEL_ENABLED] = True
 
 # LED strip default brightness (0..1 range supported by NeoPixel helper).
-config[BRIGHTNESS] = 0.5
+# 0.05 : minimum validé caméra le 2026-07-10 (0.5 éblouissant en intérieur ;
+# ajustable à chaud via le topic robot_lights {"brightness": X}).
+config[BRIGHTNESS] = 0.05
 
 MAX_PWM_L = 39318
 MAX_PWM_R = 39318
