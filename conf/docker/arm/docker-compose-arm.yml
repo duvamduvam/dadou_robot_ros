@@ -5,6 +5,11 @@ services:
     build:
       context: ../../..
       dockerfile: conf/docker/arm/Dockerfile-arm
+    # Supervision par le DÉMON Docker (assainissement 2026-07-11) : relance
+    # sur crash et au boot, sauf arrêt volontaire (docker stop / systemctl
+    # stop robot). robot.service n'est plus qu'un interrupteur up -d / stop —
+    # plus de client compose attaché qui devient orphelin au premier recreate.
+    restart: unless-stopped
     environment:
       #- DISPLAY=${DISPLAY}
       - ALSA_CARD=0

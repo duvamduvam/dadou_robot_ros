@@ -91,12 +91,13 @@ Déploiement (fait le 2026-07-11 — pont web actif sur le robot) :
 2. Déploiement habituel : Ansible depuis `../dadou_utils_ros` (rsync du
    checkout — `robot_web` part avec `conf/ros2_dependencies/`), sentinelle
    `robot/change` pour déclencher le colcon build au redémarrage.
-3. ⚠️ **Redémarrer via `sudo systemctl restart robot.service`, JAMAIS par un
-   `docker compose up` manuel** : le service systemd supervise le conteneur
-   avec un `compose up` attaché (Restart=always). Un recreate manuel lui
-   retire le conteneur sous les pieds — son client compose reste orphelin et
-   plus personne ne relancerait le conteneur en cas de crash (vécu le
-   2026-07-11 : « deux programmes en parallèle »).
+3. **Supervision (assainie le 2026-07-11)** : le conteneur est relancé par le
+   **démon Docker** (`restart: unless-stopped` dans le compose — crashs et
+   boot couverts, vérifié par crash-test `docker kill`) ; `robot.service`
+   n'est plus qu'un interrupteur `up -d` / `stop`. Porte d'entrée habituelle :
+   `sudo systemctl restart robot.service` — mais un `docker compose` manuel
+   ne casse plus la supervision (l'ancien montage à `compose up` attaché +
+   Restart=always laissait un client orphelin au premier recreate manuel).
 4. Vérif : `http://192.168.1.2:8765` répond, badge ROUGE, un clic « visage »
    s'affiche sur le vrai visage LED, et le journal `robot.log` trace la
    commande (`cmd web id=... topic=face`).
