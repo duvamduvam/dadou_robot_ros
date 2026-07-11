@@ -16,15 +16,17 @@ from robot.visual.visual import Visual
 
 class Face(AbstractJsonActions):
     visuals = {}
-    mouth_image_mapping = ImageMapping(start_pixel=0, global_width=24, global_height=16, matrix_width=8,
-                                       matrix_height=8, matrix_width_nb=3, matrix_height_nb=2)
+    mouth_image_mapping = ImageMapping.mouth()
+    eye_image_mapping = ImageMapping.eye()
 
-    mouth_start = 0
-    mouth_end = 384
-    reye_start = 385
-    reye_end = 448
-    leye_start = 449
-    leye_end = 512
+    # Zones du strip (source unique). Yeux nommés VU DE FACE (spectateur) :
+    # la mire couleurs du 2026-07-11 a montré que la piste à 448 allume l'œil
+    # GAUCHE et celle à 385 l'œil DROIT — les pistes left/right étaient
+    # croisées. Off-by-one possible (« œil décalé d'un pixel ») : 448 vs 449
+    # à trancher à la mire colonne, ajuster d'UN cran si besoin.
+    MOUTH_START = 0
+    LEYE_START = 448
+    REYE_START = 385
 
     mouth = None
     leye = None
@@ -59,12 +61,8 @@ class Face(AbstractJsonActions):
         mouth_names = FilesUtils.get_folder_files(self.config[MOUTH_VISUALS_PATH])
         eye_names = FilesUtils.get_folder_files(self.config[EYE_VISUALS_PATH])
 
-        for visual_path in mouth_names:
-            visual = Visual(visual_path, True)
-            self.visuals[visual.name] = visual
-
-        for visual_path in eye_names:
-            visual = Visual(visual_path, False)
+        for visual_path in mouth_names + eye_names:
+            visual = Visual(visual_path)
             self.visuals[visual.name] = visual
 
     def get_visual(self, name):
@@ -73,15 +71,12 @@ class Face(AbstractJsonActions):
         else:
             logging.error("no visual name : " + name)
 
-    #TODO record matrix array
-    def fill_matrix(self, start, end, visual):
-        i = start
-        for x in range(0, len(visual.rgb)):
-            for y in range(0, len(visual.rgb[x])):
-                logging.debug(
-                    "fill_matrix self.pixels[" + str(i) + "] = visual.rgb[" + str(x) + "][" + str(y) + "]")
-                self.strip[i] = visual.rgb[x][y]
-                i += 1
+    def parts(self):
+        # Chaque partie rend avec SA table : la bouche (serpentin 6 matrices)
+        # et les yeux (matrice unique) n'ont pas le même câblage.
+        return ((self.mouth, self.mouth_image_mapping),
+                (self.leye, self.eye_image_mapping),
+                (self.reye, self.eye_image_mapping))
 
     def update(self, msg):
         logging.info("incoming msg {}".format(msg))
@@ -114,9 +109,9 @@ class Face(AbstractJsonActions):
             self.default = json_seq[NAME]
         self.element_duration = json_seq[DURATION]
         self.start_time = TimeUtils.current_milli_time()
-        self.mouth = Sequence(self.element_duration, self.loop, json_seq[MOUTHS], 0)
-        self.leye = Sequence(self.element_duration, self.loop, json_seq[LEFT_EYES], 385) #385
-        self.reye = Sequence(self.element_duration, self.loop, json_seq[RIGHT_EYES], 448) #448
+        self.mouth = Sequence(self.element_duration, self.loop, json_seq[MOUTHS], self.MOUTH_START)
+        self.leye = Sequence(self.element_duration, self.loop, json_seq[LEFT_EYES], self.LEYE_START)
+        self.reye = Sequence(self.element_duration, self.loop, json_seq[RIGHT_EYES], self.REYE_START)
         self.show_first_frames()
 
         return msg
@@ -126,23 +121,22 @@ class Face(AbstractJsonActions):
         # une frame n'apparaît qu'à son premier time_to_switch() — les yeux d'une
         # piste à frame unique restaient sur l'expression PRÉCÉDENTE pendant
         # toute la durée de la séquence (2 à 8 s de visage périmé à chaque bascule).
-        for seq in (self.mouth, self.leye, self.reye):
+        for seq, mapping in self.parts():
             if not seq.elements:
                 continue
             visual = self.get_visual(seq.get_current_element()[1])
             if visual is not None:
-                self.mouth_image_mapping.mapping(self.strip, visual.rgb, seq.start_pixel)
+                mapping.mapping(self.strip, visual.rgb, seq.start_pixel)
         self.strip.show()
 
-    def animate_part(self, seq: Sequence):
+    def animate_part(self, seq: Sequence, mapping: ImageMapping):
         change = False
         if seq.time_to_switch():
             frame = seq.get_current_element()
             logging.debug("seq.current_time : {} current element {} duration {}".format(seq.start_time, seq.current_element, seq.element_duration))
             visual = self.get_visual(frame[1])
-            logging.debug("update part : " + visual.name)
-            self.mouth_image_mapping.mapping(self.strip, visual.rgb, seq.start_pixel)
-            #logging.debug("next sequences[" + str(seq.current_frame) + "] total : " + str(len(seq.frames)))
+            if visual is not None:
+                mapping.mapping(self.strip, visual.rgb, seq.start_pixel)
             seq.next()
             change = True
         return change
@@ -163,7 +157,12 @@ class Face(AbstractJsonActions):
         #        self.speak_duration = 0
         #        self.loop = False
 
-        if self.animate_part(self.mouth) or self.animate_part(self.leye) or self.animate_part(self.reye):
+        # PAS de court-circuit : chaque partie doit avancer à chaque tick,
+        # d'où le or bit à bit sur les trois résultats.
+        change = False
+        for seq, mapping in self.parts():
+            change |= self.animate_part(seq, mapping)
+        if change:
             self.strip.show()
 
 

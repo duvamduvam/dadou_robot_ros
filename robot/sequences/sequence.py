@@ -17,7 +17,10 @@ class Sequence:
         if len(self.elements) == 1:
             self.element_duration = self.duration
         else:
-            self.element_duration = (elements[1][0] * self.duration) - (elements[0][0] * self.duration)
+            # Sémantique : la frame [t, image] s'affiche JUSQU'À t*duration ;
+            # la première va donc de 0 à t0 (même formule que next() au wrap —
+            # l'ancien (t1-t0) donnait à la frame 0 la durée de la frame 1).
+            self.element_duration = int(elements[0][0] * self.duration)
         self.current_element = elements[self.pos][1]
         self.start_time = TimeUtils.current_milli_time()
         #self.started = True

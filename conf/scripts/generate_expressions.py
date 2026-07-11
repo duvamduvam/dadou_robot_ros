@@ -2,7 +2,8 @@
 """Générateur des visuels d'expressions « néon » (repos + émotions + glitch).
 
 Produit des PNG RGB aux formats EXACTS attendus par robot/actions/face.py :
- - bouche : 24x16 (3x2 matrices 8x8, l'inversion bas est gérée par ImageMapping) ;
+ - bouche : 24x16 (3x2 matrices 8x8 ; le câblage serpentin réel est encodé
+   dans la table d'ImageMapping, les PNG se dessinent TELS QUE VUS de face) ;
  - œil    : 8x8.
 Le nom de visuel référencé dans expressions.json = nom de fichier AVEC extension
 (Face.load_visuals indexe par basename), et le dictionnaire visuals est PARTAGÉ
@@ -488,6 +489,29 @@ def gen_parle():
     return mouths
 
 
+def gen_calib_couleurs():
+    """Mire « une couleur par cellule » : 6 carrés de couleur, un par matrice.
+    C'est elle qui a établi le câblage serpentin le 2026-07-11 (lecture humaine).
+    Depuis le refactoring d'ImageMapping, le fichier doit s'afficher TEL QUEL :
+    haut = rouge/vert/bleu, bas = blanc/jaune/magenta, de gauche à droite.
+    Toute divergence à l'affichage = régression de la table de câblage.
+    """
+    eyes, mouths = {}, {}
+    g = blank(MW, MH)
+    for x0, col in ((0, ROUGE), (8, VERT), (16, BLEU)):
+        for y in range(0, 8):
+            for x in range(x0, x0 + 8):
+                g[y][x] = col
+    for x0, col in ((0, BLANC), (8, JAUNE), (16, MAGENTA)):
+        for y in range(8, 16):
+            for x in range(x0, x0 + 8):
+                g[y][x] = col
+    mouths["calib-couleurs.png"] = g
+    eyes["oeil-rouge.png"] = zone(EW, EH, 0, 7, 0, 7, ROUGE)
+    eyes["oeil-vert.png"] = zone(EW, EH, 0, 7, 0, 7, VERT)
+    return eyes, mouths
+
+
 def calib_expr(leye, reye, mouth):
     """Expression une-frame pour mire (8 s, boucle, à lire sur une capture)."""
     return {
@@ -500,6 +524,10 @@ def calib_expr(leye, reye, mouth):
 
 # Une expression par question de câblage (voir gen_calib_zones).
 CALIB_ZONE_EXPRESSIONS = {
+    # Permutation des 6 matrices en une lecture : bloc d'index -> couleur.
+    # 0-63 ROUGE, 64-127 VERT, 128-191 BLEU, 192-255 BLANC, 256-319 JAUNE,
+    # 320-383 MAGENTA. Yeux : piste left_eyes ROUGE, right_eyes VERT.
+    "calib-couleurs": calib_expr("oeil-rouge.png", "oeil-vert.png", "calib-couleurs.png"),
     "calib-og": calib_expr("oeil-plein.png", "oeil-noir.png", "bouche-noire.png"),
     "calib-od": calib_expr("oeil-noir.png", "oeil-plein.png", "bouche-noire.png"),
     "calib-448": calib_expr("oeil-px-dernier.png", "oeil-noir.png", "bouche-noire.png"),
@@ -633,6 +661,9 @@ def main():
     zone_eyes, zone_mouths = gen_calib_zones()
     eyes.update(zone_eyes)
     mouths.update(zone_mouths)
+    couleur_eyes, couleur_mouths = gen_calib_couleurs()
+    eyes.update(couleur_eyes)
+    mouths.update(couleur_mouths)
     refl_eyes, refl_mouths = gen_reflechit()
     eyes.update(refl_eyes)
     mouths.update(refl_mouths)

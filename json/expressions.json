@@ -1556,5 +1556,29 @@
                 "parle-neon-ferme.png"
             ]
         ]
+    },
+    "calib-couleurs": {
+        "name": "calib-couleurs",
+        "duration": 8000,
+        "loop": true,
+        "keys": [],
+        "left_eyes": [
+            [
+                1.0,
+                "oeil-rouge.png"
+            ]
+        ],
+        "right_eyes": [
+            [
+                1.0,
+                "oeil-vert.png"
+            ]
+        ],
+        "mouths": [
+            [
+                1.0,
+                "calib-couleurs.png"
+            ]
+        ]
     }
 }
