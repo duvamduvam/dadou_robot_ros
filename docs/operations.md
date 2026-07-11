@@ -61,10 +61,15 @@
 
 ## Web interface on the REAL robot (sim → réel)
 
-**Même console, autre adresse** : `http://192.168.1.2:8765` (le Pi robot). Le
-bandeau passe en **rouge « ROBOT RÉEL (domain 42) »** — c'est LE repère : vert
-= sim, rouge = les commandes partent sur le vrai Didier (sons réels, servos
-réels, relais réels).
+**Une seule console, un sélecteur de cible** : la page (ouverte depuis
+n'importe quel pont, typiquement la sim sur le PC) choisit la machine qu'elle
+contrôle via le menu du bandeau — « Sim locale » / « Didier réel »
+(192.168.1.2:8765, bascule confirmée) / « Autre adresse… ». On peut aussi
+ouvrir directement `http://192.168.1.2:8765`. Dans tous les cas le bandeau
+reflète la machine RÉELLEMENT connectée : **vert SIMULATION** = Gazebo,
+**rouge ROBOT RÉEL (domain 42)** = les commandes partent sur le vrai Didier
+(sons réels, servos réels, relais réels). Le libellé du sélecteur n'est
+jamais la vérité, le badge oui.
 
 Différences avec la sim, voulues :
 - **Pas de pilotage** : `robot_app.launch.py` ne passe pas `drive_enabled` →

@@ -27,6 +27,17 @@
        "on doit TOUJOURS savoir à qui on parle". -->
   <header id="bandeau">
     <span class="marque">Didier</span>
+    <!-- Cible : la page (servie par n'importe quel pont) peut se connecter au
+         pont de la SIM ou à celui du VRAI robot -- une seule console sur le
+         PC, un sélecteur. La vérité du mode reste le hello du serveur
+         connecté (badge vert/rouge), jamais le libellé du sélecteur. -->
+    <select id="cible" title="Machine contrôlée par cette page"
+            aria-label="Machine contrôlée par cette page">
+      <option value="">Cette machine (page)</option>
+      <option value="http://localhost:8765">Sim locale</option>
+      <option value="http://192.168.1.2:8765">Didier réel</option>
+      <option value="autre">Autre adresse…</option>
+    </select>
     <span id="badge-mode" class="badge badge-inconnu">INCONNU</span>
     <span id="badge-connexion" class="badge badge-off">déconnecté</span>
     <span id="rtt">RTT -- ms</span>

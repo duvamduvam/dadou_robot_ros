@@ -83,11 +83,29 @@ function flash(element, ok) {
   setTimeout(() => element.classList.remove(classe), 400);
 }
 
+// --- Cible : quel pont cette page contrôle ------------------------------------
+// La page est UNIQUE (elle peut être servie par n'importe quel pont) et choisit
+// sa cible : "" = même origine que la page, sinon une base http://hôte:port.
+// Persistée en localStorage pour retrouver sa cible au rechargement. La vérité
+// du mode (SIMULATION/ROBOT RÉEL) reste le hello du serveur connecté.
+
+function cibleBase() {
+  return localStorage.getItem("cible") || "";
+}
+
+function urlHttp(chemin) {
+  return cibleBase() + chemin;
+}
+
 // --- Connexion WebSocket + reconnexion auto ---------------------------------
 
 function urlWebSocket() {
-  const protocole = location.protocol === "https:" ? "wss://" : "ws://";
-  return protocole + location.host + "/ws";
+  const base = cibleBase();
+  if (base === "") {
+    const protocole = location.protocol === "https:" ? "wss://" : "ws://";
+    return protocole + location.host + "/ws";
+  }
+  return base.replace(/^http/, "ws") + "/ws";
 }
 
 function connecter() {
@@ -522,7 +540,7 @@ let videoRetryTimer = null;
 function chargerVideo() {
   // Cache-buster : force une nouvelle requête (le flux précédent peut être en
   // 503 depuis, ou figé). Le serveur répond 503 si aucune frame -> onerror.
-  $("video").src = "/video?ts=" + Date.now();
+  $("video").src = urlHttp("/video?ts=" + Date.now());
 }
 
 function installerVideo() {
@@ -635,7 +653,7 @@ function construireServos() {
 }
 
 function chargerCatalogue() {
-  fetch("/api/catalog")
+  fetch(urlHttp("/api/catalog"))
     .then((r) => r.json())
     .then((catalogue) => {
       state.catalog = catalogue;
@@ -729,9 +747,64 @@ function afficherEtat(msg) {
       + (msg.writer_present ? "détenue" : "libre");
 }
 
+// --- Sélecteur de cible --------------------------------------------------------
+
+function installerCible() {
+  const select = $("cible");
+  const base = cibleBase();
+  // Cible mémorisée hors presets (saisie « Autre adresse… ») : on l'ajoute
+  // au menu pour qu'elle soit affichable/re-sélectionnable.
+  if (base && !Array.from(select.options).some((o) => o.value === base)) {
+    const opt = document.createElement("option");
+    opt.value = base;
+    opt.textContent = base.replace(/^https?:\/\//, "");
+    select.insertBefore(opt, select.querySelector('option[value="autre"]'));
+  }
+  select.value = base;
+
+  select.addEventListener("change", () => {
+    let nouvelle = select.value;
+    if (nouvelle === "autre") {
+      nouvelle = (prompt("Adresse du pont à contrôler (http://hôte:port)", "http://") || "").trim();
+      if (!/^https?:\/\/.+/.test(nouvelle)) {
+        select.value = cibleBase(); // saisie annulée/invalide : on ne bouge pas
+        return;
+      }
+    }
+    // Garde-fou : basculer vers le VRAI Didier se confirme. Le badge rouge du
+    // hello reste la seule vérité, mais on évite le clic réflexe.
+    if (nouvelle.includes("192.168.1.2")
+        && !confirm("Basculer cette console sur le VRAI Didier (192.168.1.2) ?")) {
+      select.value = cibleBase();
+      return;
+    }
+    localStorage.setItem("cible", nouvelle);
+    basculerCible();
+  });
+}
+
+function basculerCible() {
+  // Repart à neuf sur la nouvelle cible : badges neutres tant que le hello de
+  // la nouvelle machine n'est pas arrivé, catalogue + vidéo rechargés, socket
+  // fermée (son close déclenche la reconnexion auto, qui lit la nouvelle
+  // base). Côté ancienne cible, la déconnexion libère l'écriture et publie le
+  // zéro drive (comportements serveur déjà en place).
+  majBadgeMode("INCONNU", "?");
+  state.isWriter = false;
+  majBadgeEcriture();
+  chargerCatalogue();
+  chargerVideo();
+  if (state.ws && state.ws.readyState !== WebSocket.CLOSED) {
+    state.ws.close();
+  }
+  // Socket déjà fermée : le timer de reconnexion en cours utilisera la
+  // nouvelle base tout seul (urlWebSocket() la lit à chaque tentative).
+}
+
 // --- Démarrage ------------------------------------------------------------------
 
 construireServos();
+installerCible();
 chargerCatalogue();
 installerPad();
 installerVideo();

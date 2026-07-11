@@ -60,6 +60,9 @@ DRIVE_TICK_S = 0.05
 # Une frame vidéo plus vieille que ce délai = "flux tari" : l'endpoint /video
 # répond 503 (l'UI affiche "pas de vidéo") au lieu de servir une image figée.
 VIDEO_STALE_S = 2.0
+# Raison de refus commune aux messages qui exigent l'écriture (cmd/drive/stop) :
+# l'UI s'en sert telle quelle dans son journal d'erreurs.
+ERR_LECTURE_SEULE = "écriture non détenue"
 
 
 class WebBridgeNode(Node):
@@ -309,7 +312,13 @@ async def _send_json_safe(ws: web.WebSocketResponse, payload: dict) -> None:
 
 async def catalog_handler(request: web.Request) -> web.Response:
     node = request.app["node"]
-    return web.json_response(build_catalog(node.json_dir))
+    # CORS ouvert : la console est UNE page (souvent servie par le pont de la
+    # sim sur le PC) qui peut viser un AUTRE pont via son sélecteur de cible --
+    # le fetch du catalogue est alors cross-origin. Les WebSocket et <img>
+    # n'y sont pas soumis ; seul ce fetch l'exige. Pas de donnée sensible ici
+    # (liste de noms), l'écriture reste protégée par la session WS.
+    return web.json_response(build_catalog(node.json_dir),
+                             headers={"Access-Control-Allow-Origin": "*"})
 
 
 async def _handle_auth(node, app, client_id, ws, msg):
@@ -346,7 +355,7 @@ async def _handle_take_control(node, app, client_id, ws, msg):
 async def _handle_stop_all(node, app, client_id, ws, msg):
     if not node.sessions.is_writer(client_id):
         node.get_logger().warning("stop_all refusé (lecture seule) id={}".format(client_id))
-        await _send_json_safe(ws, build_err("écriture non détenue"))
+        await _send_json_safe(ws, build_err(ERR_LECTURE_SEULE))
         return
     for topic, value in stop_all_commands():
         node.publish_cmd(topic, value)
@@ -361,7 +370,7 @@ async def _handle_cmd(node, app, client_id, ws, msg):
     if not node.sessions.is_writer(client_id):
         node.get_logger().warning("cmd web refusée (lecture seule) id={} topic={}".format(
             client_id, msg["topic"]))
-        await _send_json_safe(ws, build_err("écriture non détenue"))
+        await _send_json_safe(ws, build_err(ERR_LECTURE_SEULE))
         return
     node.publish_cmd(msg["topic"], msg["value"], msg["time"])
     node.get_logger().info("cmd web id={} topic={} payload={!r}".format(
@@ -377,7 +386,7 @@ async def _handle_drive(node, app, client_id, ws, msg):
     et l'UI affiche localement la consigne qu'elle envoie."""
     if not node.sessions.is_writer(client_id):
         node.get_logger().warning("drive web refusé (lecture seule) id={}".format(client_id))
-        await _send_json_safe(ws, build_err("écriture non détenue"))
+        await _send_json_safe(ws, build_err(ERR_LECTURE_SEULE))
         return
     if not node.drive_enabled:
         await _send_json_safe(ws, build_err("pilotage désactivé"))
