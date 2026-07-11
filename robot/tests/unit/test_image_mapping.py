@@ -8,10 +8,7 @@ test sans re-passer la mire sur le robot.
 """
 import unittest
 
-from robot.visual.image_mapping import (
-    ImageMapping, MATRIX, MOUTH_WIDTH, MOUTH_HEIGHT,
-    MOUTH_FLIP_ROWS, MOUTH_FLIP_COLS, EYE_FLIP_ROWS, EYE_FLIP_COLS,
-)
+from robot.visual.image_mapping import ImageMapping, MATRIX, MOUTH_WIDTH, MOUTH_HEIGHT
 
 
 def render(mapping, width, height, start=0, strip_len=600):
@@ -49,11 +46,12 @@ class TestMouthMapping(unittest.TestCase):
                              "bloc {} != cellule image {}".format(offset, (cx, cy)))
 
     def test_orientation_interne(self):
-        # Le pixel image (16, 8) est le coin haut-gauche de la cellule
-        # bas-droite (bloc 0) : sa position dans le bloc suit les drapeaux FLIP.
-        r = 7 if MOUTH_FLIP_ROWS else 0
-        c = 7 if MOUTH_FLIP_COLS else 0
-        self.assertEqual(self.strip[0 + r * MATRIX + c], (16, 8))
+        # Mire calib 2026-07-11 : rangée haute montée à l'endroit, rangée
+        # basse tête-bêche (rot180). Coin haut-gauche de la cellule
+        # haut-gauche (bloc 192, à l'endroit) = 1er pixel du bloc ; coin
+        # haut-gauche de la cellule bas-droite (bloc 0, rot180) = DERNIER.
+        self.assertEqual(self.strip[192], (0, 0))
+        self.assertEqual(self.strip[63], (16, 8))
 
     def test_image_mauvaise_taille_refusee(self):
         strip = [None] * 600
@@ -65,15 +63,17 @@ class TestMouthMapping(unittest.TestCase):
 class TestEyeMapping(unittest.TestCase):
 
     def test_couvre_64_leds_a_partir_du_start(self):
-        strip = render(ImageMapping.eye(), MATRIX, MATRIX, start=448)
+        # 449 = start réel de l'œil gauche (mire : 448 donnait un œil
+        # « décalé d'un pixel » — les index 384 et 448 sont des trous).
+        strip = render(ImageMapping.eye(), MATRIX, MATRIX, start=449)
         ecrits = [i for i, v in enumerate(strip) if v is not None]
-        self.assertEqual(ecrits, list(range(448, 512)))
+        self.assertEqual(ecrits, list(range(449, 513)))
 
     def test_orientation_interne(self):
+        # Matrices d'yeux montées tête-bêche (rot180) : le coin haut-gauche
+        # de l'image s'écrit sur le DERNIER index du bloc.
         strip = render(ImageMapping.eye(), MATRIX, MATRIX, start=0)
-        r = 7 if EYE_FLIP_ROWS else 0
-        c = 7 if EYE_FLIP_COLS else 0
-        self.assertEqual(strip[r * MATRIX + c], (0, 0))
+        self.assertEqual(strip[63], (0, 0))
 
 
 if __name__ == "__main__":

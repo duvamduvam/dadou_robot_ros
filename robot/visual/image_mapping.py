@@ -18,10 +18,11 @@ humaine sur le vrai robot, tout est décrit VU DE FACE par le spectateur) :
   (constaté à la mire : œil gauche vert = piste right_eyes d'alors).
   Les starts sont portés par face.py, la table est relative (0..63).
 
-- Orientation interne des matrices : FLIP_ROWS / FLIP_COLS ci-dessous.
-  Hypothèse en attente de calage à la mire « calib » (F/E/123 lisibles à
-  l'endroit) : lignes inversées, colonnes droites. Si la mire montre encore
-  « à l'envers » -> basculer *_FLIP_ROWS ; « en miroir » -> *_FLIP_COLS.
+- Orientation interne des matrices (calée à la mire « calib » du 2026-07-11 :
+  123 tête en bas quand le haut était flippé, E et F en miroir) : les matrices
+  de la rangée HAUTE de la bouche sont montées À L'ENDROIT, celles de la
+  rangée BASSE et des YEUX sont montées TÊTE-BÊCHE (rotation 180°) — logique
+  de câblage en serpentin, le connecteur ressort du bon côté.
 """
 
 MATRIX = 8  # matrices carrées 8x8
@@ -34,10 +35,10 @@ MOUTH_CELL_OFFSETS = {
 }
 MOUTH_WIDTH = 24
 MOUTH_HEIGHT = 16
-MOUTH_FLIP_ROWS = True
-MOUTH_FLIP_COLS = False
-EYE_FLIP_ROWS = True
-EYE_FLIP_COLS = False
+# Rotation 180° du contenu d'une matrice, par zone (montage tête-bêche).
+MOUTH_TOP_ROT180 = False
+MOUTH_BOTTOM_ROT180 = True
+EYE_ROT180 = True
 
 
 class ImageMapping:
@@ -53,8 +54,10 @@ class ImageMapping:
         for y in range(MOUTH_HEIGHT):
             for x in range(MOUTH_WIDTH):
                 offset = MOUTH_CELL_OFFSETS[(y // MATRIX, x // MATRIX)]
-                r = (MATRIX - 1 - y % MATRIX) if MOUTH_FLIP_ROWS else y % MATRIX
-                c = (MATRIX - 1 - x % MATRIX) if MOUTH_FLIP_COLS else x % MATRIX
+                rot180 = MOUTH_BOTTOM_ROT180 if y >= MATRIX else MOUTH_TOP_ROT180
+                r, c = y % MATRIX, x % MATRIX
+                if rot180:
+                    r, c = MATRIX - 1 - r, MATRIX - 1 - c
                 table[y][x] = offset + r * MATRIX + c
         return cls(table)
 
@@ -63,8 +66,7 @@ class ImageMapping:
         table = [[0] * MATRIX for _ in range(MATRIX)]
         for y in range(MATRIX):
             for x in range(MATRIX):
-                r = (MATRIX - 1 - y) if EYE_FLIP_ROWS else y
-                c = (MATRIX - 1 - x) if EYE_FLIP_COLS else x
+                r, c = (MATRIX - 1 - y, MATRIX - 1 - x) if EYE_ROT180 else (y, x)
                 table[y][x] = r * MATRIX + c
         return cls(table)
 
