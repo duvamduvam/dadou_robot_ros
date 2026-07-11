@@ -6,9 +6,10 @@ from dadou_utils_ros.files.files_utils import FilesUtils
 from dadou_utils_ros.utils.time_utils import TimeUtils
 from robot.robot_static import RANDOM_ANIMATION_LOW, RANDOM_ANIMATION_HIGH, LOOP_DURATION, TYPES
 from dadou_utils_ros.utils_static import KEY, KEYS, NAME, LOOP, DURATION, BASE_PATH, TYPE
+from robot.actions.action import Action
 
 
-class AbstractJsonActions:
+class AbstractJsonActions(Action):
 
     def __init__(self, config, json_manager, json_file=None, action_type=None, sequence_dir=None):
         # État par instance (était au niveau classe = partagé entre toutes les

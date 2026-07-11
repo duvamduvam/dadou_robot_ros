@@ -7,6 +7,7 @@ from dadou_utils_ros.utils.time_utils import TimeUtils
 from robot.robot_static import RANDOM_MOVE_MAX, RANDOM_MOVE_MIN, RANDOM_TIME_MAX, \
     RANDOM_TIME_MIN, RANDOM_DURATION
 from dadou_utils_ros.utils_static import NORMAL, RANDOM, MODE, ANIMATION, UP, DOWN, STOP, DEFAULT
+from robot.actions.action import Action
 
 INPUT_MIN = 0
 INPUT_MAX = 99
@@ -15,7 +16,7 @@ SERVO_MIN = 0
 STEP = 5
 
 
-class Servo:
+class Servo(Action):
     random_time_min = 0
     random_time_max = 0
     random_move_min = 0

@@ -10,9 +10,10 @@ from dadou_utils_ros.utils_static import ANGLO, WHEEL_RIGHT, WHEEL_LEFT, WHEELS,
 from robot_drive.diff_drive import DiffDrive
 from robot_drive.joystick_mixer import translate
 from robot.robot_config import MAX_PWM_L, MAX_PWM_R
+from robot.actions.action import Action
 
 
-class Wheels:
+class Wheels(Action):
     left = 0
     right = 0
     mode = None
