@@ -31,6 +31,8 @@ const state = {
   rttSamples: [],           // fenêtre glissante (ms)
   hbTimer: null,
   catalog: null,
+  attenteAck: {},           // topic -> bouton cliqué, flashé à l'ack (pas au clic)
+  dernierBouton: null,      // dernier bouton cliqué, flashé rouge sur "err"
 };
 
 // --- Utilitaires DOM ---------------------------------------------------------
@@ -46,7 +48,7 @@ function logErreur(message) {
   ul.prepend(li);
   // Garde les 5 dernières seulement (spec §5).
   while (ul.children.length > 5) {
-    ul.removeChild(ul.lastChild);
+    ul.lastChild.remove();
   }
 }
 
@@ -123,13 +125,14 @@ function traiterMessageServeur(msg) {
       traiterHbAck(msg);
       break;
     case "ack":
-      // Pas de ciblage fin élément-par-élément en W0 : un flash discret sur
-      // le bandeau d'écriture suffit à confirmer que la commande est passée.
-      flash($("badge-ecriture"), true);
+      // Le flash arrive à l'ACK serveur, pas au clic : un bouton qui flashe
+      // vert = la commande est vraiment partie sur le topic ROS.
+      flash(state.attenteAck[msg.topic] || $("badge-ecriture"), true);
+      delete state.attenteAck[msg.topic];
       break;
     case "err":
       logErreur(msg.reason);
-      flash($("badge-ecriture"), false);
+      flash(state.dernierBouton || $("badge-ecriture"), false);
       break;
     case "state":
       afficherEtat(msg);
@@ -179,6 +182,9 @@ const CLASSE_BADGE_PAR_MODE = {
 function majBadgeMode(mode, domainId) {
   const badge = $("badge-mode");
   badge.textContent = mode + " (domain " + domainId + ")";
+  // En sim, prévenir que les sons sont muets (pas d'audio_node dans le
+  // conteneur) : sans ça, un clic "Sons" semble juste ne rien faire.
+  $("note-sim").hidden = (mode !== "SIMULATION");
   // Parenthèse indispensable : "+" est plus prioritaire que "||" en JS, sans
   // elle "badge " + undefined donne "badge undefined" (chaîne non vide donc
   // TRUTHY) et le fallback badge-inconnu ne se déclenche jamais.
@@ -218,7 +224,7 @@ function arreterHeartbeat() {
 // --- Envoi de commandes -------------------------------------------------------
 
 function envoyer(objet) {
-  if (state.ws && state.ws.readyState === WebSocket.OPEN) {
+  if (state.ws?.readyState === WebSocket.OPEN) {
     state.ws.send(JSON.stringify(objet));
   }
 }
@@ -286,7 +292,10 @@ document.addEventListener("click", (event) => {
   const btn = event.target.closest(".bouton-catalogue");
   if (btn) {
     envoyerCmd(btn.dataset.topic, btn.dataset.value);
-    flash(btn, true);
+    // Pas de flash ici : il viendra de l'ack serveur (traiterMessageServeur),
+    // sinon un clic "réussi" visuellement peut n'avoir rien publié du tout.
+    state.attenteAck[btn.dataset.topic] = btn;
+    state.dernierBouton = btn;
   }
 });
 
@@ -382,7 +391,51 @@ function chargerCatalogue() {
 
 // --- Panneau « état » (dernier message "state") -------------------------------
 
+// Topics affichés dans le bandeau "reçu par le robot" (onglet Spectacle) et
+// surlignés dans leur grille. Source : les broadcasts "state" (donc les topics
+// ROS réels), PAS nos clics -- si rien ne s'affiche, rien n'est parti.
+const STATUT_DIRECT = [
+  ["animation", "Animation", "grille-animations"],
+  ["face", "Visage", "grille-faces"],
+  ["audio", "Son", "grille-audios"],
+  ["robot_lights", "Lumières", "grille-robot-lights"],
+];
+
+function libelleValeur(valeur) {
+  if (valeur === false) {
+    return "arrêtée";           // animation: false = stop d'animation
+  }
+  return typeof valeur === "string" ? valeur : JSON.stringify(valeur);
+}
+
+function majStatutDirect(topics) {
+  const conteneur = $("statut-direct");
+  conteneur.replaceChildren();
+  STATUT_DIRECT.forEach(([topic, libelle, grilleId]) => {
+    const info = topics[topic];
+
+    const item = document.createElement("span");
+    item.className = "statut-item";
+    const nom = document.createElement("span");
+    nom.className = "statut-nom";
+    nom.textContent = libelle;
+    const valeur = document.createElement("span");
+    valeur.className = "statut-valeur" + (info ? "" : " statut-vide");
+    valeur.textContent = info ? libelleValeur(info.msg) + " · " + info.age_s + " s" : "—";
+    item.append(nom, valeur);
+    conteneur.appendChild(item);
+
+    // Surbrillance du contenu actif dans sa grille (comparaison en chaîne :
+    // dataset.* est toujours une chaîne côté DOM).
+    const attendu = info ? String(info.msg) : null;
+    document.querySelectorAll("#" + grilleId + " .bouton-catalogue").forEach((btn) => {
+      btn.classList.toggle("en-cours", attendu !== null && btn.dataset.value === attendu);
+    });
+  });
+}
+
 function afficherEtat(msg) {
+  majStatutDirect(msg.topics);
   // Construction en DOM + textContent (jamais innerHTML avec les payloads) :
   // le contenu vient des topics ROS, donc potentiellement de n'importe quel
   // publieur du graphe -- un payload contenant du HTML ne doit pas pouvoir

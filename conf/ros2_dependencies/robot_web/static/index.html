@@ -45,6 +45,15 @@
 
       <button id="btn-stop-contenus" type="button">■ STOP CONTENUS</button>
 
+      <!-- Retour direct : ce que le robot a RÉELLEMENT reçu (alimenté par les
+           broadcasts "state" du serveur, donc par les topics ROS -- pas par
+           nos clics). Si une valeur ne s'affiche pas ici, le robot ne l'a pas
+           reçue : c'est LE feedback opérateur, il marche même sans Gazebo. -->
+      <div id="statut-direct"></div>
+      <p id="note-sim" hidden>Mode SIMULATION : les sons ne jouent pas (pas
+        d'audio_node en sim) et les mouvements/LED sont visibles dans la
+        fenêtre Gazebo, pas ici.</p>
+
       <section class="groupe">
         <h2>Animations</h2>
         <div id="grille-animations" class="grille"></div>

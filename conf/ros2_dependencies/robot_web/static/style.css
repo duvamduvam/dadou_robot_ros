@@ -169,6 +169,42 @@ main {
 .flash-ok  { outline: 2px solid #2e9e44; }
 .flash-err { outline: 2px solid #d81f1f; }
 
+/* Contenu actuellement actif sur le robot (d'après les topics, pas les clics). */
+.bouton-catalogue.en-cours {
+  border-color: #2e9e44;
+  background: #1e3a26;
+}
+
+/* --- Bandeau "reçu par le robot" (onglet Spectacle) ----------------------- */
+
+#statut-direct {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem 1.2rem;
+  margin-bottom: 0.4rem;
+  font-size: 0.9rem;
+}
+
+.statut-nom {
+  color: #9aa0a6;
+  margin-right: 0.4rem;
+}
+
+.statut-valeur {
+  font-weight: 600;
+}
+
+.statut-vide {
+  color: #565c66;
+  font-weight: 400;
+}
+
+#note-sim {
+  font-size: 0.85rem;
+  color: #b48a18;
+  margin: 0 0 1rem;
+}
+
 /* --- État (panneau technique) -------------------------------------------- */
 
 #etat-topics table {
