@@ -16,6 +16,14 @@
     <plugin filename="gz-sim-physics-system" name="gz::sim::systems::Physics"/>
     <plugin filename="gz-sim-user-commands-system" name="gz::sim::systems::UserCommands"/>
     <plugin filename="gz-sim-scene-broadcaster-system" name="gz::sim::systems::SceneBroadcaster"/>
+    <!-- Système Sensors : indispensable au rendu de la caméra embarquée
+         (camera_link, cf. dadou_robot_gz.urdf.xacro) -- sans lui aucune image
+         n'est publiée. Le monde peut alors demander un moteur de rendu même en
+         headless (ogre2 off-screen) : le retour vidéo du pont web fonctionne
+         donc aussi sans GUI Gazebo. -->
+    <plugin filename="gz-sim-sensors-system" name="gz::sim::systems::Sensors">
+      <render_engine>ogre2</render_engine>
+    </plugin>
 
     <light type="directional" name="sun">
       <cast_shadows>true</cast_shadows>

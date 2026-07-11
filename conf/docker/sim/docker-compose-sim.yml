@@ -28,6 +28,12 @@ services:
       # PC de dev est vite arrivée (8088 était pris par Superset -- vécu).
       - WEB=${WEB:-false}
       - WEB_PORT=${WEB_PORT:-8765}
+      # SÉCURITÉ (SIM-ONLY) : pilotage roues du pont web. OFF par défaut. Même
+      # activé (WEB_DRIVE=true), la sim domain=43 ne peut PAS atteindre le vrai
+      # Didier (domain 42) ; et il faut EN PLUS lancer la chaîne roues à la main
+      # (drive.launch.py) dans le conteneur pour que cmd_vel_web bouge Gazebo
+      # (voir operations.md). Rien de ce lot ne s'active sur le vrai robot.
+      - WEB_DRIVE=${WEB_DRIVE:-false}
     network_mode: "host"
     volumes:
       - /tmp/.X11-unix:/tmp/.X11-unix:rw

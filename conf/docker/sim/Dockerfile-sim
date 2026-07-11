@@ -15,6 +15,7 @@ RUN apt-get update && apt-get install -y \
     ros-jazzy-twist-mux \
     python3-pip \
     python3-aiohttp \
+    python3-pil \
     && rm -rf /var/lib/apt/lists/*
 
 RUN mkdir -p /home/ros2_ws/src

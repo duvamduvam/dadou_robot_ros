@@ -35,6 +35,12 @@ def generate_launch_description():
     # ParameterValue(value_type=int) obligatoire : une LaunchConfiguration est
     # une chaîne, or le node déclare web_port comme entier.
     web_port = ParameterValue(LaunchConfiguration("web_port"), value_type=int)
+    # Idem en bool : "false"/"true" -> False/True (coercition launch). SÉCURITÉ :
+    # ce drapeau active le PILOTAGE ROUES du pont web (publisher cmd_vel_web),
+    # défaut false. La chaîne roues (drive.launch.py) n'est PAS lancée ici : la
+    # conduite en sim demande de la lancer À LA MAIN dans le conteneur (cf.
+    # operations.md) -- on ne veut pas de mouvement automatique au démarrage.
+    web_drive = ParameterValue(LaunchConfiguration("web_drive"), value_type=bool)
 
     robot_description = ParameterValue(
         Command([
@@ -69,6 +75,12 @@ def generate_launch_description():
         DeclareLaunchArgument("web_port", default_value="8765",
                               description="Port HTTP/WebSocket du pont web (8088 évité : défaut"
                                            " Superset, collision vue sur le PC de dev)"),
+        DeclareLaunchArgument("web_drive", default_value="false",
+                              description="SÉCURITÉ (SIM-ONLY) : true = pilotage roues du pont web"
+                                           " actif (publisher cmd_vel_web, twist_mux prio 50). Défaut"
+                                           " false. La chaîne roues (drive.launch.py) doit être"
+                                           " lancée À LA MAIN pour conduire en sim (voir operations.md)."
+                                           " Rien ici ne s'active sur le vrai robot (protocole caméra)."),
 
         IncludeLaunchDescription(
             PythonLaunchDescriptionSource(
@@ -151,7 +163,9 @@ def generate_launch_description():
             executable="web_bridge",
             name="web_bridge_node",
             output="screen",
-            parameters=[{"web_port": web_port}],
+            # drive_enabled = web_drive : SIM-ONLY, défaut false. camera_topic
+            # laissé au défaut du node ("camera/image_raw", bridgé depuis gz).
+            parameters=[{"web_port": web_port, "drive_enabled": web_drive}],
             condition=IfCondition(web),
         ),
     ])

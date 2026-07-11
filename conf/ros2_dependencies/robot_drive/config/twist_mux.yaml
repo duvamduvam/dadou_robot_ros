@@ -9,6 +9,15 @@ twist_mux:
         topic: cmd_vel_remote
         timeout: 0.5
         priority: 100
+      # Pilotage web (W3, partie sim) : entre la télécommande physique (100) et
+      # les animations (10). La télécommande garde donc STRUCTURELLEMENT la main
+      # sur le web ; source = web_bridge_node, publiée UNIQUEMENT si son paramètre
+      # drive_enabled est vrai (défaut false). Validé en sim ; usage sur le vrai
+      # robot conditionné au protocole caméra (plan §5-6 etude-interface-web.md).
+      web:
+        topic: cmd_vel_web
+        timeout: 0.5
+        priority: 50
       anim:
         topic: cmd_vel_anim
         timeout: 0.5

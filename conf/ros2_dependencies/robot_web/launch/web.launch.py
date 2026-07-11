@@ -12,9 +12,18 @@ from launch import LaunchDescription
 from launch.actions import DeclareLaunchArgument
 from launch.substitutions import LaunchConfiguration
 from launch_ros.actions import Node
+from launch_ros.parameter_descriptions import ParameterValue
 
 
 def generate_launch_description():
+    # ParameterValue(value_type=...) obligatoire : une LaunchConfiguration est
+    # une chaîne, or le node déclare web_port en int et drive_enabled en bool
+    # ("false"/"true" -> False/True via la coercition launch).
+    web_port = ParameterValue(LaunchConfiguration("web_port"), value_type=int)
+    drive_enabled = ParameterValue(LaunchConfiguration("drive_enabled"), value_type=bool)
+    max_linear = ParameterValue(LaunchConfiguration("max_linear"), value_type=float)
+    max_angular = ParameterValue(LaunchConfiguration("max_angular"), value_type=float)
+
     return LaunchDescription([
         DeclareLaunchArgument("web_port", default_value="8765",
                               description="Port HTTP/WebSocket du pont web (8088 évité : défaut"
@@ -23,15 +32,29 @@ def generate_launch_description():
                               description="Token d'auth ; vide = accès libre (dev/sim)"),
         DeclareLaunchArgument("json_dir", default_value="/home/ros2_ws/json",
                               description="Dossier json/ (catalogue faces/audios/animations/relais/lights)"),
+        # SÉCURITÉ : pilotage roues. Défauts SÛRS : désactivé, plafonds prudents.
+        DeclareLaunchArgument("drive_enabled", default_value="false",
+                              description="SÉCURITÉ : true = pilotage roues actif (publisher"
+                                           " cmd_vel_web). Défaut false -- rien ne bouge sans."),
+        DeclareLaunchArgument("max_linear", default_value="0.5",
+                              description="Plafond DUR vitesse linéaire (m/s) appliqué serveur"),
+        DeclareLaunchArgument("max_angular", default_value="1.0",
+                              description="Plafond DUR vitesse angulaire (rad/s) appliqué serveur"),
+        DeclareLaunchArgument("camera_topic", default_value="camera/image_raw",
+                              description="Topic sensor_msgs/Image de la caméra embarquée (retour vidéo)"),
 
         Node(
             package="robot_web",
             executable="web_bridge",
             name="web_bridge_node",
             parameters=[{
-                "web_port": LaunchConfiguration("web_port"),
+                "web_port": web_port,
                 "token": LaunchConfiguration("token"),
                 "json_dir": LaunchConfiguration("json_dir"),
+                "drive_enabled": drive_enabled,
+                "max_linear": max_linear,
+                "max_angular": max_angular,
+                "camera_topic": LaunchConfiguration("camera_topic"),
             }],
         ),
     ])

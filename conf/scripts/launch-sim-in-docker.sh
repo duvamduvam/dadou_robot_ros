@@ -12,4 +12,4 @@ cd /home/ros2_ws/
 colcon build --packages-select robot_description robot_sim robot_interfaces robot_drive robot_web robot
 source /home/ros2_ws/install/setup.bash
 
-ros2 launch robot_sim sim.launch.py headless:=${HEADLESS:-false} animations:=${ANIMATIONS:-false} web:=${WEB:-false} web_port:=${WEB_PORT:-8765}
+ros2 launch robot_sim sim.launch.py headless:=${HEADLESS:-false} animations:=${ANIMATIONS:-false} web:=${WEB:-false} web_port:=${WEB_PORT:-8765} web_drive:=${WEB_DRIVE:-false}

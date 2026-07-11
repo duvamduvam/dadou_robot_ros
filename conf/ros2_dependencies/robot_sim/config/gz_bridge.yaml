@@ -65,6 +65,17 @@
   gz_type_name: "gz.msgs.Double"
   direction: ROS_TO_GZ
 
+# Caméra embarquée (SIM-ONLY, retour vidéo du pont web) : le capteur gz
+# (dadou_robot_gz.urdf.xacro) publie son image sur le topic gz EXPLICITE
+# `camera/image_raw` (pas de scope /world/stage/... : on a fixé <topic> dans le
+# SDF justement pour éviter ce nom auto-généré). web_bridge_node s'y abonne côté
+# ROS (paramètre camera_topic, défaut "camera/image_raw") et l'encode en JPEG.
+- ros_topic_name: "camera/image_raw"
+  gz_topic_name: "camera/image_raw"
+  ros_type_name: "sensor_msgs/msg/Image"
+  gz_type_name: "gz.msgs.Image"
+  direction: GZ_TO_ROS
+
 # LED (leds_sim_node, package robot_sim) : le monde `stage` charge le système
 # gz UserCommands, qui expose /world/stage/material_color en écriture. Publier
 # dessus change en direct le matériau (diffuse/emissive/ambient) d'un visual

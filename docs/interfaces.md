@@ -38,11 +38,18 @@ Other inputs: `/vision/person` (`PointStamped`, from the vision Pi) feeds
 
 ```
 wheels (StringTime) -> wheels_bridge -> cmd_vel_anim ┐
-cmd_vel_remote (teleop/controller) ------------------┤ twist_mux (remote 100 > anim 10,
+cmd_vel_web (web_bridge_node, SIM-ONLY) -------------┤ twist_mux (remote 100 >
+cmd_vel_remote (teleop/controller) ------------------┤  web 50 > anim 10,
                                                      ┘  e_stop lock 255)
         -> cmd_vel_mux -> twist_deadman (zeros at 20 Hz after 400 ms silence)
         -> cmd_vel -> wheels_node (local 400 ms deadman, hard stop on zero twist)
 ```
+
+`cmd_vel_web` (priority **50**, timeout 0.5 s) is the web drive input, between the
+physical remote (100, always wins) and animations (10). It is published ONLY when
+`web_bridge_node` runs with `drive_enabled:=true` (default false, **SIM-ONLY** —
+real-robot use is gated on the wheels camera protocol). Frozen contract verified
+by `test_twist_mux_contract.py`.
 
 ⚠️ The `e_stop` lock is declared in `twist_mux.yaml` but **no node publishes on
 `e_stop` yet** (neither robot nor controller, checked 2026-07-11). The actual
@@ -55,10 +62,12 @@ Pont HTTP + WebSocket (`robot_web` package, autonome façon `robot_drive`, node
 `web_bridge_node`) exposant un SOUS-ENSEMBLE des topics ci-dessus pour une UI
 navigateur. Implémentée le 2026-07-11 (sim), voir
 [`etude-interface-web.md`](etude-interface-web.md) pour le plan complet
-(phases W1-W5). **W0 = supervision + contenus + panneau technique. AUCUN accès
-roues (`wheels`/`cmd_vel_*`) ni verrou `e_stop`** — ces topics n'existent nulle
-part dans la whitelist ni dans l'UI ; ils arriveront avec W1 (e-stop) et W3
-(roues web).
+(phases W1-W5). **W0 = supervision + contenus + panneau technique. La whitelist
+`cmd` n'expose NI roues (`wheels`/`cmd_vel_*`) NI verrou `e_stop`** — garantie
+inchangée. Le pilotage roues (W3, partie sim) passe par un canal `drive`
+SÉPARÉ (message `drive` → `cmd_vel_web`), **SIM-ONLY, derrière `drive_enabled`
+(défaut false)** : voir le bloc pilotage plus bas. Le verrou `e_stop` reste sans
+source (W1 à venir).
 
 - **Port** : paramètre ROS `web_port` (défaut `8765` — 8088 évité, c'est le
   défaut Superset et la collision a été vécue sur le PC de dev en réseau
@@ -67,7 +76,10 @@ part dans la whitelist ni dans l'UI ; ils arriveront avec W1 (e-stop) et W3
   `http://localhost:8765`.
 - **Endpoints HTTP** : `GET /` (page UI), `GET /static/*` (assets), `GET
   /api/catalog` (catalogue JSON pour les boutons — faces/audios/animations/
-  relais/robot_lights, construit depuis `json/`).
+  relais/robot_lights, construit depuis `json/`), `GET /video` (flux MJPEG
+  `multipart/x-mixed-replace` de la caméra embarquée, servi à `video_fps` ;
+  **503 "pas de vidéo"** si aucune frame fraîche depuis 2 s — l'UI affiche alors
+  un placeholder).
 - **WebSocket** : `GET /ws`. Le `msg` publié sur les topics ROS est sérialisé
   EXACTEMENT comme la télécommande (`msg.msg = json.dumps(valeur)`, pas de
   ré-emballage `{topic: valeur}` sur le fil).
@@ -84,11 +96,33 @@ part dans la whitelist ni dans l'UI ; ils arriveront avec W1 (e-stop) et W3
 | `hb` | `t: int` (ms client) | Heartbeat du writer ; répond `hb_ack` avec le même `t` (mesure RTT côté client). |
 | `cmd` | `topic: str` (whitelist), `value: any`, `time: int` (ms, défaut 0) | Publie sur le topic ROS (writer seulement). |
 | `take_control` | — | Reprise d'écriture explicite (toujours autorisée pour un client authentifié). |
-| `stop_all` | — | Bouton STOP CONTENUS : publie dans l'ordre `animation=false`, `audio="stop"`, `face="stop"`, puis `stop` sur les 5 servos. |
+| `stop_all` | — | Bouton STOP : publie dans l'ordre `animation=false`, `audio="stop"`, `face="stop"`, `stop` sur les 5 servos, ET un Twist nul sur `cmd_vel_web`. |
+| `drive` | `x: float`, `z: float` (∈ [-1, 1]) | **SIM-ONLY.** Consigne de pilotage roues normalisée (x = linéaire avant/arrière, z = angulaire). Voir bloc pilotage ci-dessous. |
+
+**Pilotage roues (`drive`, SIM-ONLY, W3)** — canal SÉPARÉ des `cmd` (ne passe
+PAS par la whitelist ; `cmd_vel_web` n'y figure jamais) :
+- **Format** : `{"type":"drive","x":<float>,"z":<float>}`, émis ~15 Hz par le pad
+  ou la manette. `x`/`z` non-numériques (bool exclu), NaN ou inf → **refusés**
+  (`err`) ; débordement de [-1, 1] → **clampé SILENCIEUSEMENT** (pas de spam à
+  15 Hz sur 1 % de dépassement).
+- **Plafonds SERVEUR (durs)** : `drive_to_twist` applique `|lin| ≤ max_linear`
+  (défaut 0.5 m/s) et `|ang| ≤ max_angular` (défaut 1.0 rad/s) — un navigateur
+  bugué/compromis ne peut pas les outrepasser. Le facteur "vitesse %" de l'UI ne
+  fait que réduire davantage.
+- **Zéro automatique** : après `DRIVE_TIMEOUT_S = 0.3 s` de silence de drive, le
+  node publie UN Twist nul (arrêt franc), une seule fois par arrêt (anti-spam,
+  motif `DriveFlow`). Zéro immédiat aussi sur : relâchement du pad, déconnexion
+  du writer, perte d'écriture (timeout heartbeat / `take_control`) et `stop_all`.
+- **`drive_enabled`** : paramètre node (défaut **false**). À false, le publisher
+  `cmd_vel_web` N'EXISTE PAS (aucun mouvement possible) et un `drive` reçu est
+  refusé (`err "pilotage désactivé"`). L'UI grise alors le pad. Réel = protocole
+  caméra d'abord (SIM-ONLY).
 
 **Messages serveur → client** : `hello` (`domain_id`, `mode`:
 `SIMULATION`/`ROBOT RÉEL`/`INCONNU` selon `ROS_DOMAIN_ID` 43/42/autre,
-`writer`, `token_required`), `hb_ack` (`t` échoté), `ack` (`topic`), `err`
+`writer`, `token_required`, + `drive_enabled`, `max_linear`, `max_angular` pour
+que l'UI verrouille le pad et affiche les plafonds), `hb_ack` (`t` échoté),
+`ack` (`topic` — non émis pour `drive` : 15 Hz spammerait le fil), `err`
 (`reason` — connexion JAMAIS fermée sur un message invalide, motif du
 décodage StringTime commun), `state` (toutes les 2 s : dernier payload +
 âge par topic, liste des nodes ROS vivants, nombre de clients, écriture

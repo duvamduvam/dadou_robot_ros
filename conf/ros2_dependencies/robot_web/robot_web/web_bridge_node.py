@@ -1,8 +1,11 @@
 #!/usr/bin/env python3
-"""Node rclpy + serveur aiohttp (HTTP + WebSocket) du pont web W0 : supervision,
-contenus (animation/face/audio/robot_lights), panneau technique (servos/relais/
-gaze/system). AUCUN accès roues ni verrou e_stop -- la whitelist qui le garantit
-vit dans web_protocol.py (import unique de vérité, testé en isolation).
+"""Node rclpy + serveur aiohttp (HTTP + WebSocket) du pont web : supervision,
+contenus (animation/face/audio/robot_lights), panneau technique, retour vidéo
+MJPEG (/video) et pilotage roues W3 SIM-ONLY (message "drive" -> Twist sur
+cmd_vel_web, UNIQUEMENT si drive_enabled=true -- défaut false, publisher non
+créé sinon). Toujours AUCUN verrou e_stop (W1). La whitelist des contenus vit
+dans web_protocol.py (import unique de vérité, testé en isolation) ; le drive
+est un canal séparé, hors whitelist, avec plafond dur drive_to_twist.
 
 PIÈGE DEUX BOUCLES D'ÉVÉNEMENTS : rclpy.spin() est une boucle bloquante propre
 à rclpy ; aiohttp a besoin de SA PROPRE boucle asyncio pour servir les
@@ -24,6 +27,7 @@ handlers WS + le timer de diffusion y tournent) : pas besoin de le protéger.
 """
 
 import asyncio
+import io
 import json
 import logging
 import os
@@ -35,18 +39,27 @@ import uuid
 import rclpy
 from aiohttp import web, WSMsgType
 from ament_index_python.packages import get_package_share_directory
+from geometry_msgs.msg import Twist
+from PIL import Image as PILImage
 from rclpy.node import Node
+from sensor_msgs.msg import Image
 
 from robot_interfaces.msg import StringTime
 from robot_web.web_catalog import build_catalog
 from robot_web.web_protocol import (
-    WHITELIST, WRITE_TIMEOUT_S, ProtocolError, SessionManager,
-    build_ack, build_err, build_hb_ack, build_hello, build_state,
-    parse_client_message, stop_all_commands,
+    DRIVE_TIMEOUT_S, WHITELIST, WRITE_TIMEOUT_S, DriveFlow, ProtocolError,
+    SessionManager, build_ack, build_err, build_hb_ack, build_hello,
+    build_state, drive_to_twist, parse_client_message, stop_all_commands,
 )
 
 STATE_PERIOD_S = 2.0  # cadence de diffusion du message "state" à tous les clients
 NODES_REFRESH_PERIOD_S = 5.0  # get_node_names_and_namespaces() : évite de le refaire à 2 Hz
+# Boucle de zéro pilotage : 20 Hz, comme le twist_deadman des roues -- assez
+# fin pour publier l'arrêt franc peu après DRIVE_TIMEOUT_S (0.3 s) de silence.
+DRIVE_TICK_S = 0.05
+# Une frame vidéo plus vieille que ce délai = "flux tari" : l'endpoint /video
+# répond 503 (l'UI affiche "pas de vidéo") au lieu de servir une image figée.
+VIDEO_STALE_S = 2.0
 
 
 class WebBridgeNode(Node):
@@ -60,10 +73,29 @@ class WebBridgeNode(Node):
         self.declare_parameter("web_port", 8765)
         self.declare_parameter("token", "")
         self.declare_parameter("json_dir", "/home/ros2_ws/json")
+        # SÉCURITÉ (SIM-ONLY) : le pilotage roues est derrière ce drapeau, FALSE
+        # par défaut. Sans lui, le publisher cmd_vel_web n'est même pas créé --
+        # aucune ligne de code ne PEUT publier de mouvement (même garantie
+        # structurelle que la whitelist pour les topics de contenu).
+        self.declare_parameter("drive_enabled", False)
+        # Plafonds DURS appliqués côté serveur (drive_to_twist) : un navigateur
+        # bugué/compromis ne peut pas les outrepasser. Valeurs prudentes par
+        # défaut ; à caler après calibration max_wheel_speed (feuille de route §3).
+        self.declare_parameter("max_linear", 0.5)
+        self.declare_parameter("max_angular", 1.0)
+        # Retour vidéo (caméra embarquée) : topic sensor_msgs/Image et cadence
+        # max d'encodage JPEG (le Pi ne doit pas encoder plus vite que servi).
+        self.declare_parameter("camera_topic", "camera/image_raw")
+        self.declare_parameter("video_fps", 10)
 
         self.web_port = self.get_parameter("web_port").value
         self.json_dir = self.get_parameter("json_dir").value
         token = self.get_parameter("token").value or None
+        self.drive_enabled = bool(self.get_parameter("drive_enabled").value)
+        self.max_linear = float(self.get_parameter("max_linear").value)
+        self.max_angular = float(self.get_parameter("max_angular").value)
+        self.camera_topic = self.get_parameter("camera_topic").value
+        self.video_fps = max(1, int(self.get_parameter("video_fps").value))
 
         # ROS_DOMAIN_ID n'est pas exposé comme paramètre de node par rclpy :
         # c'est une variable d'environnement du PROCESSUS, lue une fois au
@@ -88,9 +120,37 @@ class WebBridgeNode(Node):
         for topic in sorted(WHITELIST):
             self.create_subscription(StringTime, topic, self._make_listener(topic), 10)
 
+        # --- Pilotage roues (SIM-ONLY, W3) --------------------------------------
+        # Le publisher cmd_vel_web N'EXISTE que si drive_enabled : quand il vaut
+        # None, publish_twist() est un no-op -- aucun mouvement possible, quoi
+        # que fasse un client. DriveFlow décide quand publier l'arrêt franc.
+        self.twist_pub = self.create_publisher(Twist, "cmd_vel_web", 10) \
+            if self.drive_enabled else None
+        self.drive_flow = DriveFlow()
+        self._drive_active = False  # salve en cours ? (log INFO début/fin une seule fois)
+
+        # --- Retour vidéo (caméra embarquée) ------------------------------------
+        # Dernière frame JPEG déjà encodée + son horodatage monotone, sous lock
+        # (écrite par le callback caméra thread spin, lue par l'endpoint /video
+        # thread asyncio). _last_encode_s throttle l'encodage AVANT de le faire.
+        self.video_lock = threading.Lock()
+        self.last_jpeg = None
+        self.last_jpeg_at = 0.0
+        self._last_encode_s = 0.0
+        self.create_subscription(Image, self.camera_topic, self._on_camera, 10)
+
         self.get_logger().info(
-            "web_bridge_node prêt : port={} domain_id={} token_required={} json_dir={}".format(
-                self.web_port, self.domain_id, self.sessions.token_required, self.json_dir))
+            "web_bridge_node prêt : port={} domain_id={} token_required={} json_dir={}"
+            " drive_enabled={} max_linear={} max_angular={} camera_topic={} video_fps={}".format(
+                self.web_port, self.domain_id, self.sessions.token_required, self.json_dir,
+                self.drive_enabled, self.max_linear, self.max_angular,
+                self.camera_topic, self.video_fps))
+        if self.drive_enabled:
+            # Trace explicite au démarrage : le pilotage roues est ACTIF (sim).
+            self.get_logger().warning(
+                "PILOTAGE ROUES WEB ACTIF (drive_enabled=true) -- cmd_vel_web publié,"
+                " plafonds lin={} m/s ang={} rad/s. SIM-ONLY : protocole caméra requis"
+                " avant tout usage sur le vrai robot.".format(self.max_linear, self.max_angular))
 
     def _make_listener(self, topic):
         """Une closure par topic : le callback doit savoir sous quelle clé
@@ -118,6 +178,63 @@ class WebBridgeNode(Node):
         ros_msg.anim = False
         self.publishers_by_topic[topic].publish(ros_msg)
 
+    # --- Pilotage roues (SIM-ONLY) ------------------------------------------
+
+    def publish_twist(self, lin_x: float, ang_z: float) -> None:
+        """Publie un Twist sur cmd_vel_web. No-op si le publisher n'existe pas
+        (drive_enabled=false) : garantie structurelle qu'aucun mouvement ne
+        peut partir tant que le pilotage n'est pas explicitement activé."""
+        if self.twist_pub is None:
+            return
+        msg = Twist()
+        msg.linear.x = float(lin_x)
+        msg.angular.z = float(ang_z)
+        self.twist_pub.publish(msg)
+
+    def on_drive_received(self, x: float, z: float, now_s: float) -> None:
+        """Applique une consigne de drive : plafonne (drive_to_twist), publie,
+        et arme le zéro. Log INFO SEULEMENT au premier drive d'une salve (15 Hz
+        de messages -> pas de log par message, motif anti-spam wheels_node)."""
+        lin, ang = drive_to_twist(x, z, self.max_linear, self.max_angular)
+        self.publish_twist(lin, ang)
+        if not self._drive_active:
+            self._drive_active = True
+            self.get_logger().info("pilotage web : début de mouvement")
+        self.drive_flow.on_drive(now_s)
+
+    def publish_drive_zero(self) -> None:
+        """Publie UN Twist nul (arrêt franc) et clôt la salve. Idempotent :
+        appelé par la boucle 20 Hz (fin de salve) ET par les chemins d'arrêt
+        immédiat (déconnexion/perte d'écriture/take_control/STOP). Le log de fin
+        et le reset ne se produisent qu'une fois par salve."""
+        self.publish_twist(0.0, 0.0)
+        self.drive_flow.reset()
+        if self._drive_active:
+            self._drive_active = False
+            self.get_logger().info("pilotage web : fin de mouvement")
+
+    # --- Retour vidéo (caméra embarquée) ------------------------------------
+
+    def _on_camera(self, msg: Image) -> None:
+        """Callback abonnement caméra (thread spin). Throttle AVANT encodage :
+        le Pi ne doit pas encoder de JPEG pour des frames qui seront jetées
+        (au plus video_fps encodages/s). Garde la dernière frame JPEG sous lock."""
+        now = time.monotonic()
+        if now - self._last_encode_s < 1.0 / self.video_fps:
+            return  # frame excédentaire : jetée AVANT tout encodage
+        self._last_encode_s = now
+        jpeg = _encode_jpeg(msg)
+        if jpeg is None:
+            return
+        with self.video_lock:
+            self.last_jpeg = jpeg
+            self.last_jpeg_at = now
+
+    def snapshot_jpeg(self) -> tuple:
+        """(bytes JPEG | None, horodatage monotone) de la dernière frame."""
+        with self.video_lock:
+            return self.last_jpeg, self.last_jpeg_at
+
     def snapshot_topics(self) -> dict:
         """Copie protégée de last_topics, âge recalculé à l'instant présent."""
         now = time.monotonic()
@@ -133,8 +250,48 @@ class WebBridgeNode(Node):
             name for name, _namespace in self.get_node_names_and_namespaces())
 
     def hello_message(self, client_id: str) -> dict:
-        return build_hello(self.domain_id, writer=self.sessions.is_writer(client_id),
-                            token_required=self.sessions.token_required)
+        return self._hello(writer=self.sessions.is_writer(client_id))
+
+    def hello_readonly(self) -> dict:
+        """hello forcé en lecture seule -- pour notifier un client qui vient de
+        PERDRE l'écriture (ancien writer supplanté, ou libéré par timeout)."""
+        return self._hello(writer=False)
+
+    def _hello(self, writer: bool) -> dict:
+        return build_hello(self.domain_id, writer=writer,
+                           token_required=self.sessions.token_required,
+                           drive_enabled=self.drive_enabled,
+                           max_linear=self.max_linear, max_angular=self.max_angular)
+
+
+# --- Encodage vidéo (JPEG) : fonction pure, hors du node -------------------
+
+def _encode_jpeg(msg: Image) -> bytes | None:
+    """sensor_msgs/Image (rgb8 ou bgr8) -> bytes JPEG qualité 70, ou None si
+    l'encodage échoue (encodage non géré, taille incohérente...) -- l'endpoint
+    /video répond alors 503, l'UI affiche "pas de vidéo", rien ne plante.
+
+    bgr8 : on s'appuie sur le décodeur brut de PIL avec le rawmode "BGR"
+    (frombytes(..., "raw", "BGR")) -- il lit des octets ordonnés B,G,R dans une
+    image RGB, c'est la voie la plus simple ET correcte (pas de recopie octet à
+    octet). On suppose des lignes JOINTIVES (step == width*3), ce que fournit la
+    caméra gz ; sinon la taille ne correspondrait pas et on renvoie None."""
+    if msg.encoding == "rgb8":
+        rawmode = "RGB"
+    elif msg.encoding == "bgr8":
+        rawmode = "BGR"
+    else:
+        return None
+    if len(msg.data) < msg.width * msg.height * 3:
+        return None
+    try:
+        img = PILImage.frombytes("RGB", (msg.width, msg.height),
+                                 bytes(msg.data), "raw", rawmode)
+        buf = io.BytesIO()
+        img.save(buf, format="JPEG", quality=70)
+        return buf.getvalue()
+    except (ValueError, OSError):
+        return None
 
 
 # --- Serveur HTTP / WebSocket (thread asyncio) ------------------------------
@@ -155,73 +312,104 @@ async def catalog_handler(request: web.Request) -> web.Response:
     return web.json_response(build_catalog(node.json_dir))
 
 
+async def _handle_auth(node, app, client_id, ws, msg):
+    if not node.sessions.authenticate(client_id, msg["token"], time.monotonic()):
+        node.get_logger().warning("auth web refusée id={} (mauvais token)".format(client_id))
+        await _send_json_safe(ws, build_err("token invalide"))
+        return
+    node.get_logger().info("auth web acceptée id={} writer={}".format(
+        client_id, node.sessions.is_writer(client_id)))
+    await _send_json_safe(ws, node.hello_message(client_id))
+
+
+async def _handle_hb(node, app, client_id, ws, msg):
+    node.sessions.heartbeat(client_id, time.monotonic())
+    await _send_json_safe(ws, build_hb_ack(msg["t"]))
+
+
+async def _handle_take_control(node, app, client_id, ws, msg):
+    previous_writer = node.sessions.writer_id
+    if not node.sessions.take_control(client_id, time.monotonic()):
+        await _send_json_safe(ws, build_err("non authentifié"))
+        return
+    node.get_logger().info("prise de main écriture id={}".format(client_id))
+    # Passation d'écriture = perte d'écriture pour l'ancien writer : on coupe
+    # tout mouvement web en cours par prudence (cf. spec §3, "zéro immédiat").
+    node.publish_drive_zero()
+    await _send_json_safe(ws, node.hello_message(client_id))
+    # L'ancien writer (autre onglet/opérateur) doit voir son bandeau repasser
+    # en lecture seule sans attendre le prochain "state".
+    if previous_writer and previous_writer != client_id and previous_writer in app["clients"]:
+        await _send_json_safe(app["clients"][previous_writer], node.hello_readonly())
+
+
+async def _handle_stop_all(node, app, client_id, ws, msg):
+    if not node.sessions.is_writer(client_id):
+        node.get_logger().warning("stop_all refusé (lecture seule) id={}".format(client_id))
+        await _send_json_safe(ws, build_err("écriture non détenue"))
+        return
+    for topic, value in stop_all_commands():
+        node.publish_cmd(topic, value)
+    # STOP CONTENUS coupe aussi le mouvement web (le Twist nul, en plus des
+    # StringTime de stop_all_commands qui ne touchent QUE les contenus).
+    node.publish_drive_zero()
+    node.get_logger().info("STOP CONTENUS déclenché id={}".format(client_id))
+    await _send_json_safe(ws, build_ack("stop_all"))
+
+
+async def _handle_cmd(node, app, client_id, ws, msg):
+    if not node.sessions.is_writer(client_id):
+        node.get_logger().warning("cmd web refusée (lecture seule) id={} topic={}".format(
+            client_id, msg["topic"]))
+        await _send_json_safe(ws, build_err("écriture non détenue"))
+        return
+    node.publish_cmd(msg["topic"], msg["value"], msg["time"])
+    node.get_logger().info("cmd web id={} topic={} payload={!r}".format(
+        client_id, msg["topic"], msg["value"]))
+    await _send_json_safe(ws, build_ack(msg["topic"]))
+
+
+async def _handle_drive(node, app, client_id, ws, msg):
+    """Consigne de pilotage roues (SIM-ONLY). Refusée si non-writer (WARNING) ou
+    si le pilotage est désactivé (err "pilotage désactivé"). PAS d'ack ni de log
+    par message : 15 Hz de drive spammeraient le journal ET la WebSocket -- le
+    node log seulement début/fin de salve (on_drive_received/publish_drive_zero),
+    et l'UI affiche localement la consigne qu'elle envoie."""
+    if not node.sessions.is_writer(client_id):
+        node.get_logger().warning("drive web refusé (lecture seule) id={}".format(client_id))
+        await _send_json_safe(ws, build_err("écriture non détenue"))
+        return
+    if not node.drive_enabled:
+        await _send_json_safe(ws, build_err("pilotage désactivé"))
+        return
+    node.on_drive_received(msg["x"], msg["z"], time.monotonic())
+
+
+# Dispatch par type : chaque handler applique et répond son propre message.
+# Table plutôt qu'une cascade if/elif -- garde handle_client_message sous le
+# seuil de complexité et isole chaque règle (motif de web_protocol._PARSERS).
+_HANDLERS = {
+    "auth": _handle_auth,
+    "hb": _handle_hb,
+    "take_control": _handle_take_control,
+    "stop_all": _handle_stop_all,
+    "cmd": _handle_cmd,
+    "drive": _handle_drive,
+}
+
+
 async def handle_client_message(node: WebBridgeNode, app: web.Application,
                                  client_id: str, ws: web.WebSocketResponse, raw: str) -> None:
-    """Décode puis applique un message client. Chaque commande acceptée est
-    logguée en INFO (topic + payload + id client, journal exigé par le plan) ;
-    chaque refus (parsing, écriture non détenue, auth) en WARNING -- motif du
-    décodage StringTime commun : refus loggué, jamais une perte silencieuse."""
+    """Décode puis applique un message client. Refus de parsing loggué en
+    WARNING + err renvoyé (connexion JAMAIS fermée -- motif du décodage
+    StringTime commun) ; l'application est déléguée au handler du type."""
     try:
         msg = parse_client_message(raw)
     except ProtocolError as e:
         node.get_logger().warning("message web rejeté id={} : {}".format(client_id, e.raison))
         await _send_json_safe(ws, build_err(e.raison))
         return
-
-    msg_type = msg["type"]
-
-    if msg_type == "auth":
-        now_s = time.monotonic()
-        if not node.sessions.authenticate(client_id, msg["token"], now_s):
-            node.get_logger().warning("auth web refusée id={} (mauvais token)".format(client_id))
-            await _send_json_safe(ws, build_err("token invalide"))
-            return
-        node.get_logger().info("auth web acceptée id={} writer={}".format(
-            client_id, node.sessions.is_writer(client_id)))
-        await _send_json_safe(ws, node.hello_message(client_id))
-        return
-
-    if msg_type == "hb":
-        node.sessions.heartbeat(client_id, time.monotonic())
-        await _send_json_safe(ws, build_hb_ack(msg["t"]))
-        return
-
-    if msg_type == "take_control":
-        previous_writer = node.sessions.writer_id
-        if not node.sessions.take_control(client_id, time.monotonic()):
-            await _send_json_safe(ws, build_err("non authentifié"))
-            return
-        node.get_logger().info("prise de main écriture id={}".format(client_id))
-        await _send_json_safe(ws, node.hello_message(client_id))
-        # L'ancien writer (autre onglet/opérateur) doit voir son bandeau
-        # repasser en lecture seule sans attendre le prochain "state".
-        if previous_writer and previous_writer != client_id and previous_writer in app["clients"]:
-            await _send_json_safe(app["clients"][previous_writer],
-                                   build_hello(node.domain_id, writer=False,
-                                               token_required=node.sessions.token_required))
-        return
-
-    if msg_type == "stop_all":
-        if not node.sessions.is_writer(client_id):
-            node.get_logger().warning("stop_all refusé (lecture seule) id={}".format(client_id))
-            await _send_json_safe(ws, build_err("écriture non détenue"))
-            return
-        for topic, value in stop_all_commands():
-            node.publish_cmd(topic, value)
-        node.get_logger().info("STOP CONTENUS déclenché id={}".format(client_id))
-        await _send_json_safe(ws, build_ack("stop_all"))
-        return
-
-    if msg_type == "cmd":
-        if not node.sessions.is_writer(client_id):
-            node.get_logger().warning("cmd web refusée (lecture seule) id={} topic={}".format(
-                client_id, msg["topic"]))
-            await _send_json_safe(ws, build_err("écriture non détenue"))
-            return
-        node.publish_cmd(msg["topic"], msg["value"], msg["time"])
-        node.get_logger().info("cmd web id={} topic={} payload={!r}".format(
-            client_id, msg["topic"], msg["value"]))
-        await _send_json_safe(ws, build_ack(msg["topic"]))
+    await _HANDLERS[msg["type"]](node, app, client_id, ws, msg)
 
 
 async def websocket_handler(request: web.Request) -> web.WebSocketResponse:
@@ -247,6 +435,10 @@ async def websocket_handler(request: web.Request) -> web.WebSocketResponse:
     finally:
         released = node.sessions.remove_client(client_id)
         request.app["clients"].pop(client_id, None)
+        # Déconnexion du writer -> arrêt franc immédiat du mouvement web (ne pas
+        # attendre le zéro par timeout DriveFlow : le lien est déjà rompu).
+        if released:
+            node.publish_drive_zero()
         node.get_logger().info("client web déconnecté id={} (écriture libérée: {})".format(
             client_id, released))
 
@@ -276,9 +468,10 @@ async def _state_loop(app: web.Application) -> None:
             node.get_logger().warning(
                 "écriture libérée par timeout heartbeat (> {:.1f}s) id={}".format(
                     WRITE_TIMEOUT_S, released_id))
+            # Perte d'écriture (heartbeat mort) -> arrêt franc du mouvement web.
+            node.publish_drive_zero()
             if released_id in app["clients"]:
-                await _send_json_safe(app["clients"][released_id], build_hello(
-                    node.domain_id, writer=False, token_required=node.sessions.token_required))
+                await _send_json_safe(app["clients"][released_id], node.hello_readonly())
 
         if now_s - last_nodes_refresh > NODES_REFRESH_PERIOD_S:
             node.refresh_node_names()
@@ -292,12 +485,58 @@ async def _state_loop(app: web.Application) -> None:
         ))
 
 
-async def _state_loop_ctx(app: web.Application):
-    """cleanup_ctx aiohttp : démarre la boucle de fond au premier `up`, la
-    coupe proprement au `cleanup` (sinon la task fuit au redémarrage/reload)."""
-    task = asyncio.ensure_future(_state_loop(app))
+async def _drive_zero_loop(app: web.Application) -> None:
+    """Boucle 20 Hz (SIM-ONLY) : publie l'arrêt franc quand une salve de drive
+    se tait au-delà de DRIVE_TIMEOUT_S. Distincte de _state_loop (2 Hz, bien
+    trop lente pour un arrêt roues) mais même motif cleanup_ctx. No-op tant
+    qu'aucun drive n'a été reçu (should_zero renvoie False)."""
+    node = app["node"]
+    while True:
+        await asyncio.sleep(DRIVE_TICK_S)
+        if node.drive_flow.should_zero(time.monotonic()):
+            node.publish_drive_zero()
+
+
+async def _background_loops_ctx(app: web.Application):
+    """cleanup_ctx aiohttp : démarre les boucles de fond au premier `up`, les
+    coupe proprement au `cleanup` (sinon les tasks fuient au redémarrage)."""
+    tasks = [asyncio.ensure_future(_state_loop(app)),
+             asyncio.ensure_future(_drive_zero_loop(app))]
     yield
-    task.cancel()
+    for task in tasks:
+        task.cancel()
+
+
+async def video_handler(request: web.Request) -> web.StreamResponse:
+    """GET /video : flux MJPEG (multipart/x-mixed-replace) de la dernière frame
+    caméra, servi à video_fps. Aucune frame fraîche (ou flux tari > VIDEO_STALE_S)
+    -> 503, l'UI affiche "pas de vidéo". Chaque client a son propre rythme
+    d'envoi ; l'encodage, lui, est mutualisé (fait une seule fois par frame dans
+    le callback caméra, cf. _on_camera)."""
+    node = request.app["node"]
+    interval = 1.0 / node.video_fps
+
+    jpeg, at_s = node.snapshot_jpeg()
+    if jpeg is None or (time.monotonic() - at_s) > VIDEO_STALE_S:
+        return web.Response(status=503, text="pas de vidéo")
+
+    resp = web.StreamResponse(status=200, headers={
+        "Content-Type": "multipart/x-mixed-replace; boundary=frame",
+        "Cache-Control": "no-cache",
+    })
+    await resp.prepare(request)
+    try:
+        while True:
+            jpeg, at_s = node.snapshot_jpeg()
+            if jpeg is None or (time.monotonic() - at_s) > VIDEO_STALE_S:
+                break  # flux tari : on ferme, le client réessaiera (bouton ⟳)
+            await resp.write(
+                b"--frame\r\nContent-Type: image/jpeg\r\nContent-Length: "
+                + str(len(jpeg)).encode() + b"\r\n\r\n" + jpeg + b"\r\n")
+            await asyncio.sleep(interval)
+    except (ConnectionResetError, asyncio.CancelledError):
+        pass  # client parti en cours de flux : normal, rien à logger
+    return resp
 
 
 def build_app(node: WebBridgeNode) -> web.Application:
@@ -313,9 +552,10 @@ def build_app(node: WebBridgeNode) -> web.Application:
     app.router.add_get("/", index_handler)
     app.router.add_get("/api/catalog", catalog_handler)
     app.router.add_get("/ws", websocket_handler)
+    app.router.add_get("/video", video_handler)
     app.router.add_static("/static/", static_dir)
 
-    app.cleanup_ctx.append(_state_loop_ctx)
+    app.cleanup_ctx.append(_background_loops_ctx)
     return app
 
 

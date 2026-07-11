@@ -86,9 +86,14 @@ complet cadré le 2026-07-11 — `docs/etude-interface-web.md`). **W0 FAITE et v
 en sim le 2026-07-11** : package `robot_web` autonome (node rclpy+aiohttp, whitelist
 sans roues/e_stop, session exclusive + heartbeat, UI vanilla), 511 tests, protocole
 WS validé de bout en bout dans le conteneur sim (`WEB=true`, port 8765 — 8088 =
-Superset sur le PC de dev). Suite : W1 (source e_stop + coup-de-poing) ; les roues
-via web (W3) restent conditionnées au test scénique au sol (priorité 1) et à un
-protocole caméra dédié.
+Superset sur le PC de dev). **Console + W3-sim FAITES le même jour** : refonte UI
+(console de régie : vidéo + pad + recherche), caméra gz sur le robot simulé →
+MJPEG `/video`, pilotage pad/manette → `cmd_vel_web` (twist_mux prio 50, plafond
+dur 0,5 m/s backend, zéro unique à l'arrêt — vérifié e2e jusqu'à `/cmd_vel`).
+`WEB_DRIVE=true` requis (défaut false) + chaîne roues lancée à la main (voir
+docs/operations.md). Suite : W1 (source e_stop + coup-de-poing) ; le passage des
+roues web au ROBOT RÉEL reste conditionné au test scénique au sol (priorité 1)
+et à un protocole caméra dédié.
 
 0. **Protocole physique chat_node V2 (conversation)** : le code est COMPLET et commité
    (nuit du 10 au 11/07 : ~15 commits sur les 3 dépôts, validé en sim — bras+yeux bougent

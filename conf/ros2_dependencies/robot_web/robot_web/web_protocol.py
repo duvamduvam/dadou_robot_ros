@@ -16,6 +16,7 @@ TwistDeadman.is_expired(now_ms) dans robot_drive.deadman).
 """
 
 import json
+import math
 
 # --- Whitelist des topics publiables --------------------------------------
 # Chaînes littérales dupliquées volontairement (pas d'import dadou_utils_ros.
@@ -32,6 +33,14 @@ WHITELIST = WHITELIST_SPECTACLE | WHITELIST_TECHNIQUE
 WRITE_TIMEOUT_S = 3.0
 # Cadence attendue du heartbeat client (exportée pour que l'UI s'y cale).
 HEARTBEAT_PERIOD_S = 1.0
+
+# Pilotage roues (W3, SIM-ONLY) : silence de commande de drive au-delà de ce
+# délai -> le node publie UN Twist nul (arrêt franc). Distinct du deadman
+# twist_mux (0.5 s) et du deadman local wheels_node (400 ms) : c'est un rempart
+# APPLICATIF côté pont, propre au flux web (le pad relâché doit s'arrêter net,
+# même si le navigateur cesse d'émettre sans fermer la WebSocket). 0.3 s < 0.5 s :
+# le zéro web arrive avant que le timeout twist_mux ne coupe la source `web`.
+DRIVE_TIMEOUT_S = 0.3
 
 
 class ProtocolError(Exception):
@@ -52,6 +61,23 @@ def _is_plain_int(value) -> bool:
     # peut pas être True/False, on l'exclut explicitement partout où on
     # attend un entier (hb.t, cmd.time).
     return isinstance(value, int) and not isinstance(value, bool)
+
+
+def _clamp(value: float, low: float, high: float) -> float:
+    return low if value < low else high if value > high else value
+
+
+def _finite_number(value):
+    """Renvoie un float fini pour un int/float JSON, sinon None. bool exclu
+    (sous-classe d'int : True/False n'est pas une consigne de joystick),
+    NaN/inf refusés (math.isfinite) -- une consigne roues NON finie ne doit
+    jamais atteindre le calcul de Twist."""
+    if isinstance(value, bool) or not isinstance(value, (int, float)):
+        return None
+    number = float(value)
+    if not math.isfinite(number):
+        return None
+    return number
 
 
 def _parse_auth(msg: dict) -> dict:
@@ -86,6 +112,35 @@ def _parse_cmd(msg: dict) -> dict:
     return {"type": "cmd", "topic": topic, "value": msg["value"], "time": time_ms}
 
 
+def _parse_drive(msg: dict) -> dict:
+    """Consigne de pilotage roues (SIM-ONLY, W3). x = linéaire avant/arrière,
+    z = angulaire, tous deux normalisés [-1, 1]. Clamp SILENCIEUX (un joystick
+    qui déborde de 1% ne doit pas spammer d'erreurs -- 15 Hz de messages) ;
+    en revanche, un type non-numérique / NaN / inf est REFUSÉ (bug ou attaque,
+    pas un simple débordement). Ce message ne passe PAS par la whitelist :
+    c'est un canal séparé, publié en Twist par le node UNIQUEMENT si son
+    paramètre drive_enabled est vrai (défaut false)."""
+    x = _finite_number(msg.get("x"))
+    z = _finite_number(msg.get("z"))
+    if x is None:
+        raise ProtocolError("drive.x doit être un nombre fini")
+    if z is None:
+        raise ProtocolError("drive.z doit être un nombre fini")
+    return {"type": "drive", "x": _clamp(x, -1.0, 1.0), "z": _clamp(z, -1.0, 1.0)}
+
+
+def drive_to_twist(x: float, z: float, max_linear: float, max_angular: float) -> tuple:
+    """Consignes normalisées [-1, 1] -> (linéaire m/s, angulaire rad/s)
+    PLAFONNÉES. C'EST le plafond de sécurité du plan ("clamp dans le backend",
+    etude-interface-web.md §2.3) : quelles que soient les entrées, |lin| <=
+    max_linear et |ang| <= max_angular. Le clamp est refait ici même si le
+    parsing l'a déjà fait -- un navigateur bugué ou compromis ne peut pas
+    l'outrepasser, c'est le dernier calcul avant publication du Twist."""
+    lin = _clamp(x, -1.0, 1.0) * max_linear
+    ang = _clamp(z, -1.0, 1.0) * max_angular
+    return (lin, ang)
+
+
 # Dispatch par type : chaque entrée valide/normalise son propre message
 # (dict -> dict), les types sans champ additionnel se contentent de le
 # renvoyer tel quel. Table plutôt qu'une cascade de if/elif : c'est ce qui
@@ -95,6 +150,7 @@ _PARSERS = {
     "auth": _parse_auth,
     "hb": _parse_hb,
     "cmd": _parse_cmd,
+    "drive": _parse_drive,
     "take_control": lambda msg: {"type": "take_control"},
     "stop_all": lambda msg: {"type": "stop_all"},
 }
@@ -153,13 +209,21 @@ def mode_from_domain_id(domain_id: int) -> str:
 
 # --- Messages serveur -> client (constructeurs purs) ------------------------
 
-def build_hello(domain_id: int, writer: bool, token_required: bool) -> dict:
+def build_hello(domain_id: int, writer: bool, token_required: bool,
+                drive_enabled: bool, max_linear: float, max_angular: float) -> dict:
+    # drive_enabled/max_linear/max_angular : l'UI affiche les plafonds et
+    # VERROUILLE le pad de pilotage si drive_enabled=false (WEB_DRIVE=false),
+    # elle n'a donc pas à les deviner. Le plafond DUR reste appliqué serveur
+    # (drive_to_twist) -- l'UI ne fait que refléter et éviter d'émettre pour rien.
     return {
         "type": "hello",
         "domain_id": domain_id,
         "mode": mode_from_domain_id(domain_id),
         "writer": writer,
         "token_required": token_required,
+        "drive_enabled": drive_enabled,
+        "max_linear": max_linear,
+        "max_angular": max_angular,
     }
 
 
@@ -276,3 +340,43 @@ class SessionManager:
 
     def client_count(self) -> int:
         return len(self._sessions)
+
+
+# --- Flux de pilotage roues : décide QUAND publier un zéro (SIM-ONLY) --------
+
+class DriveFlow:
+    """Logique PURE d'arrêt du pilotage web (horloge injectée, motif
+    SessionManager). Le pad relâché ou un navigateur qui cesse d'émettre sans
+    fermer la WebSocket doivent produire UN Twist nul -- mais un seul, pas un
+    flot (motif anti-spam de wheels_node : le twist_deadman inonde déjà de zéros
+    à 20 Hz au repos, republier en continu ne ferait qu'encombrer les logs).
+
+    Le node appelle on_drive() à chaque consigne reçue, puis should_zero()
+    périodiquement (boucle 20 Hz) : celui-ci renvoie True UNE SEULE FOIS quand
+    un drive a été reçu puis que le silence dépasse DRIVE_TIMEOUT_S."""
+
+    def __init__(self):
+        self._last_drive_s = None   # horloge du dernier on_drive(), None si aucun
+        self._zero_pending = False  # un zéro reste à émettre après la salve courante
+
+    def on_drive(self, now_s: float) -> None:
+        """Mémorise une consigne de drive reçue (réarme l'échéance du zéro)."""
+        self._last_drive_s = now_s
+        self._zero_pending = True
+
+    def should_zero(self, now_s: float) -> bool:
+        """True UNE SEULE FOIS quand une salve de drive s'est tue depuis plus de
+        DRIVE_TIMEOUT_S. Consomme l'état (les appels suivants renvoient False
+        jusqu'au prochain on_drive)."""
+        if (self._zero_pending and self._last_drive_s is not None
+                and (now_s - self._last_drive_s) > DRIVE_TIMEOUT_S):
+            self._zero_pending = False
+            return True
+        return False
+
+    def reset(self) -> None:
+        """Oublie toute salve en cours : plus aucun zéro à émettre. À appeler
+        quand le zéro a DÉJÀ été publié par un autre chemin (déconnexion du
+        writer, perte d'écriture, STOP) -- évite un double zéro/double log."""
+        self._last_drive_s = None
+        self._zero_pending = False

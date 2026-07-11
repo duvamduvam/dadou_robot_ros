@@ -13,10 +13,11 @@ import pytest
 
 from robot_web import web_catalog, web_protocol
 from robot_web.web_protocol import (
-    HEARTBEAT_PERIOD_S, WHITELIST, WHITELIST_SPECTACLE, WHITELIST_TECHNIQUE,
-    WRITE_TIMEOUT_S, ProtocolError, SessionManager, build_ack, build_err,
-    build_hb_ack, build_hello, build_state, mode_from_domain_id,
-    parse_client_message, stop_all_commands,
+    DRIVE_TIMEOUT_S, HEARTBEAT_PERIOD_S, WHITELIST, WHITELIST_SPECTACLE,
+    WHITELIST_TECHNIQUE, WRITE_TIMEOUT_S, DriveFlow, ProtocolError,
+    SessionManager, build_ack, build_err, build_hb_ack, build_hello,
+    build_state, drive_to_twist, mode_from_domain_id, parse_client_message,
+    stop_all_commands,
 )
 
 
@@ -208,9 +209,21 @@ def test_mode_from_domain_id_inconnu(domain_id):
 # --- Constructeurs de messages serveur --------------------------------------
 
 def test_build_hello():
-    assert build_hello(43, writer=True, token_required=False) == {
+    assert build_hello(43, writer=True, token_required=False,
+                       drive_enabled=False, max_linear=0.5, max_angular=1.0) == {
         "type": "hello", "domain_id": 43, "mode": "SIMULATION",
-        "writer": True, "token_required": False}
+        "writer": True, "token_required": False,
+        "drive_enabled": False, "max_linear": 0.5, "max_angular": 1.0}
+
+
+def test_build_hello_expose_les_plafonds_et_l_etat_pilotage():
+    """L'UI verrouille le pad et affiche les limites depuis ces champs :
+    drive_enabled=true doit passer tel quel, avec ses plafonds."""
+    hello = build_hello(42, writer=False, token_required=True,
+                        drive_enabled=True, max_linear=0.3, max_angular=0.8)
+    assert hello["drive_enabled"] is True
+    assert hello["max_linear"] == 0.3
+    assert hello["max_angular"] == 0.8
 
 
 def test_build_hb_ack_echo_t():
@@ -349,3 +362,126 @@ def test_constante_heartbeat_period_inferieure_au_timeout():
     plusieurs fois avant expiration, sinon la moindre latence réseau ferait
     perdre l'écriture en continu."""
     assert HEARTBEAT_PERIOD_S < WRITE_TIMEOUT_S
+
+
+# --- Pilotage roues : parsing du message drive (SIM-ONLY) -------------------
+
+def test_parse_drive_valide():
+    assert parse_client_message('{"type":"drive","x":0.5,"z":-0.3}') == {
+        "type": "drive", "x": 0.5, "z": -0.3}
+
+
+def test_parse_drive_entiers_acceptes():
+    # 0/1 entiers sont des nombres finis valides (convertis en float).
+    msg = parse_client_message('{"type":"drive","x":1,"z":0}')
+    assert msg["x"] == 1.0 and msg["z"] == 0.0
+
+
+def test_parse_drive_clamp_silencieux():
+    """Un joystick qui déborde de [-1, 1] est ramené SANS lever d'erreur (pas de
+    spam à 15 Hz sur un dépassement de 1 %)."""
+    msg = parse_client_message('{"type":"drive","x":1.4,"z":-2.0}')
+    assert msg["x"] == 1.0
+    assert msg["z"] == -1.0
+
+
+@pytest.mark.parametrize("payload", [
+    '{"type":"drive","x":true,"z":0}',       # bool exclu (sous-classe d'int)
+    '{"type":"drive","x":0,"z":false}',
+    '{"type":"drive","x":"0.5","z":0}',      # chaîne refusée
+    '{"type":"drive","x":0}',                # z manquant
+    '{"type":"drive","z":0}',                # x manquant
+    '{"type":"drive","x":null,"z":0}',       # null refusé
+])
+def test_parse_drive_types_invalides_leves(payload):
+    with pytest.raises(ProtocolError):
+        parse_client_message(payload)
+
+
+@pytest.mark.parametrize("valeur", ["NaN", "Infinity", "-Infinity"])
+def test_parse_drive_non_fini_refuse(valeur):
+    """NaN/inf (que json.loads accepte hélas) : une consigne roues non finie ne
+    doit JAMAIS atteindre le calcul de Twist -- refus explicite."""
+    with pytest.raises(ProtocolError):
+        parse_client_message('{{"type":"drive","x":{},"z":0}}'.format(valeur))
+
+
+# --- drive_to_twist : plafond de sécurité (clamp backend) -------------------
+
+def test_drive_to_twist_plafonne():
+    # Consignes à fond -> pile les plafonds, jamais au-delà.
+    lin, ang = drive_to_twist(1.0, 1.0, max_linear=0.5, max_angular=1.0)
+    assert lin == 0.5
+    assert ang == 1.0
+
+
+def test_drive_to_twist_signes_conserves():
+    lin, ang = drive_to_twist(-1.0, 0.5, max_linear=0.4, max_angular=2.0)
+    assert lin == -0.4
+    assert ang == 1.0
+
+
+def test_drive_to_twist_clamp_meme_hors_bornes():
+    """C'EST le rempart : même une entrée hors [-1, 1] (navigateur bugué qui
+    court-circuite le parsing) ne peut pas dépasser les plafonds."""
+    lin, ang = drive_to_twist(5.0, -9.0, max_linear=0.5, max_angular=1.0)
+    assert lin == 0.5
+    assert ang == -1.0
+
+
+def test_drive_to_twist_zero_reste_zero():
+    assert drive_to_twist(0.0, 0.0, 0.5, 1.0) == (0.0, 0.0)
+
+
+# --- DriveFlow : zéro publié une seule fois par arrêt -----------------------
+
+def test_driveflow_pas_de_zero_sans_drive():
+    flow = DriveFlow()
+    assert flow.should_zero(now_s=100.0) is False
+
+
+def test_driveflow_zero_apres_silence():
+    flow = DriveFlow()
+    flow.on_drive(now_s=0.0)
+    # Toujours dans la fenêtre d'activité : pas de zéro.
+    assert flow.should_zero(now_s=DRIVE_TIMEOUT_S) is False
+    # Silence dépassé : UN zéro.
+    assert flow.should_zero(now_s=DRIVE_TIMEOUT_S + 0.01) is True
+
+
+def test_driveflow_zero_une_seule_fois():
+    """Le coeur du contrat anti-spam : un seul True par arrêt, horloge avancée
+    à la main."""
+    flow = DriveFlow()
+    flow.on_drive(now_s=0.0)
+    assert flow.should_zero(now_s=1.0) is True
+    # Toujours silence, mais le zéro a déjà été émis : plus rien.
+    assert flow.should_zero(now_s=2.0) is False
+    assert flow.should_zero(now_s=3.0) is False
+
+
+def test_driveflow_reprend_apres_nouveau_drive():
+    flow = DriveFlow()
+    flow.on_drive(now_s=0.0)
+    assert flow.should_zero(now_s=1.0) is True
+    # Nouvelle salve : un nouveau zéro sera dû après son propre silence.
+    flow.on_drive(now_s=2.0)
+    assert flow.should_zero(now_s=2.1) is False
+    assert flow.should_zero(now_s=2.0 + DRIVE_TIMEOUT_S + 0.01) is True
+
+
+def test_driveflow_reset_annule_le_zero_pendant():
+    """reset() = le zéro a déjà été publié par un autre chemin (déconnexion,
+    STOP...) : DriveFlow ne doit pas en émettre un second."""
+    flow = DriveFlow()
+    flow.on_drive(now_s=0.0)
+    flow.reset()
+    assert flow.should_zero(now_s=100.0) is False
+
+
+def test_drive_reste_hors_whitelist_cmd():
+    """drive est un canal SÉPARÉ (Twist), pas un cmd : cmd_vel_web n'est jamais
+    dans la whitelist, la garantie de sécurité W0 tient toujours."""
+    assert "cmd_vel_web" not in WHITELIST
+    with pytest.raises(ProtocolError):
+        parse_client_message('{"type":"cmd","topic":"cmd_vel_web","value":[1,1]}')

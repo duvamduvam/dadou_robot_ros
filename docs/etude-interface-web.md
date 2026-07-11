@@ -150,6 +150,14 @@ télécommande physique) **restent devant**. Le web démarre en parallèle :
   Validation : protocole caméra hors sol (façon `validate-cmdvel-protocol.sh`,
   étendu : coupure WebSocket en plein mouvement, commande périmée jetée, clamp
   vitesse), puis roues au sol en local.
+  - **W3 (partie sim) entamée le 2026-07-11** : entrée twist_mux `cmd_vel_web`
+    (prio 50, entre remote 100 et anim 10 ; contrat gelé testé par
+    `test_twist_mux_contract.py`), canal protocole `drive` (clamp serveur
+    `drive_to_twist`, zéro auto `DriveFlow` 0.3 s, `drive_enabled` défaut false),
+    pad web + manette + retour vidéo caméra (gz → `camera/image_raw` → MJPEG
+    `/video`), le tout validé en sim (SIM-ONLY, `WEB_DRIVE=false` par défaut).
+    Le passage robot réel reste conditionné au test scénique au sol (priorité 1)
+    PUIS au protocole caméra roues hors sol.
 - **W4 — mouvement à distance** : mêmes commandes à travers 4G + Headscale, robot
   SANS public (atelier/autre pièce, puis autre lieu). Mesure du RTT réel, fixation
   du seuil de gel, boucle d'attente scénique branchée et testée en coupant le lien

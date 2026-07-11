@@ -28,16 +28,31 @@
   (it overwrites `face` on any ambient noise):
   `ssh pi@192.168.1.151 'sudo docker restart dadou-vision-container'` restores it.
 
-## Web interface in sim (W0)
+## Web interface in sim (W0 + W3 sim)
 - `cd conf/docker/sim && WEB=true docker compose -f docker-compose-sim.yml up -d`
   then open `http://localhost:8765` (`WEB_PORT` overrides it — the container
   runs on host networking, 8088 was already taken by Superset on the dev PC).
   Add `ANIMATIONS=true` alongside `WEB=true`
   to also trigger sequences from the UI's "Animations" grid (otherwise
   `animation` publishes but nothing replays it).
-- W0 = supervision + contents (animation/face/audio/robot_lights) + technical
-  panel (servos/relay/gaze/system). No wheels, no e_stop — see
-  [`interfaces.md`](interfaces.md) §"API web (W0)" for the full protocol.
+- Console = colonne DIRECT (vidéo caméra embarquée + pad de pilotage + manette +
+  STOP) et colonne CONTENUS (recherche + animation/face/audio/lumières, panneau
+  technique servos/relais/gaze/système/calibration). La whitelist `cmd` n'expose
+  ni roues ni e_stop — voir [`interfaces.md`](interfaces.md) §"API web".
+- **Conduire dans Gazebo (SIM-ONLY, W3)** — deux conditions, dans cet ordre :
+  1. Lancer la console AVEC le pilotage : `WEB=true WEB_DRIVE=true docker compose
+     -f docker-compose-sim.yml up -d`. `WEB_DRIVE` active le publisher
+     `cmd_vel_web` (twist_mux prio 50) ; sans lui le pad reste grisé.
+  2. Lancer la chaîne roues À LA MAIN dans le conteneur (elle n'est PAS démarrée
+     par le launch sim, par prudence — pas de mouvement automatique) :
+     `docker exec -d dadou-sim-container bash -c 'source /opt/ros/$ROS_DISTRO/setup.sh
+     && source /home/ros2_ws/install/setup.bash && ros2 launch robot_drive
+     drive.launch.py use_sim_time:=true'`. Le pad/la manette bougent alors Didier
+     dans Gazebo (la télécommande physique, prio 100, garderait la main).
+- ⚠️ **SIM-ONLY** : rien de ce chemin ne s'active sur le vrai robot. Le passage
+  au réel (roues au sol) reste conditionné au test scénique au sol (feuille de
+  route §1) PUIS au protocole caméra roues hors sol (etude-interface-web.md §6,
+  W3). `ROS_DOMAIN_ID=43` isole la sim du vrai Didier (domain 42).
 
 ## Pre-show checklist
 1. Inspect hardware (wheels locked, arms secure, LED strips intact).

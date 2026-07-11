@@ -34,6 +34,56 @@
     <preserveFixedJoint>true</preserveFixedJoint>
   </gazebo>
 
+  <!-- ======== Caméra embarquée (SIM-ONLY, retour vidéo du pont web W3) ========
+       Petit link fixe à l'avant de la tête (tambour neck), regardant vers +x
+       (l'avant du robot) : la caméra suit donc le regard du cou, comme le fera
+       la webcam vision sur le vrai robot. preserveFixedJoint pour que camera_link
+       ne soit PAS fusionné dans head_link à la conversion URDF vers SDF (même
+       piège que les LED) ; sinon la référence gazebo du capteur ne trouverait
+       plus son link et la caméra ne serait pas montée. -->
+  <link name="camera_link">
+    <visual>
+      <geometry><box size="0.03 0.05 0.03"/></geometry>
+      <material name="black"/>
+    </visual>
+    <xacro:box_inertial m="0.05" x="0.03" y="0.05" z="0.03"/>
+  </link>
+  <joint name="camera_joint" type="fixed">
+    <parent link="head_link"/>
+    <child link="camera_link"/>
+    <!-- Devant la tête (rayon du tambour + demi-épaisseur), à mi-hauteur. -->
+    <origin xyz="${head_radius + 0.015} 0 ${head_height/2}"/>
+  </joint>
+  <gazebo reference="camera_joint">
+    <preserveFixedJoint>true</preserveFixedJoint>
+  </gazebo>
+
+  <!-- Capteur caméra gz. La caméra gz regarde le long de +x du link : orientée
+       vers l'avant sans rotation. <topic> EXPLICITE (camera/image_raw) pour ne
+       PAS dépendre du nom auto-généré scoppé sur le monde/modèle
+       (/world/stage/model/.../sensor/.../image) ; le bridge (gz_bridge.yaml)
+       s'y abonne tel quel. NB : le rendu caméra exige le système gz Sensors,
+       ajouté au monde stage.sdf (sans lui, aucune image n'est publiée). -->
+  <gazebo reference="camera_link">
+    <sensor name="camera" type="camera">
+      <camera>
+        <horizontal_fov>1.047</horizontal_fov>
+        <image>
+          <width>640</width>
+          <height>480</height>
+          <format>R8G8B8</format>
+        </image>
+        <clip>
+          <near>0.1</near>
+          <far>100.0</far>
+        </clip>
+      </camera>
+      <always_on>1</always_on>
+      <update_rate>15</update_rate>
+      <topic>camera/image_raw</topic>
+    </sensor>
+  </gazebo>
+
   <!-- Roue folle : elle est modélisée en sphère fixe, elle doit glisser. -->
   <gazebo reference="caster_rear_link">
     <mu1>0.05</mu1>
