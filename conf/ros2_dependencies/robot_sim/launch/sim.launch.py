@@ -31,6 +31,10 @@ SPAWN_Z = "0.24"
 def generate_launch_description():
     headless = LaunchConfiguration("headless")
     animations = LaunchConfiguration("animations")
+    web = LaunchConfiguration("web")
+    # ParameterValue(value_type=int) obligatoire : une LaunchConfiguration est
+    # une chaîne, or le node déclare web_port comme entier.
+    web_port = ParameterValue(LaunchConfiguration("web_port"), value_type=int)
 
     robot_description = ParameterValue(
         Command([
@@ -57,6 +61,14 @@ def generate_launch_description():
                               description="true = lance animations_node (paquet robot, rejeu des"
                                            " séquences JSON) -- OFF par défaut, même prudence que"
                                            " gaze_follower : activation explicite requise"),
+        DeclareLaunchArgument("web", default_value="false",
+                              description="true = lance web_bridge_node (paquet robot_web, pont"
+                                           " HTTP/WebSocket W0 -- supervision + contenus + panneau"
+                                           " technique, AUCUN accès roues/e_stop) -- OFF par défaut,"
+                                           " même prudence que animations/gaze_follower"),
+        DeclareLaunchArgument("web_port", default_value="8765",
+                              description="Port HTTP/WebSocket du pont web (8088 évité : défaut"
+                                           " Superset, collision vue sur le PC de dev)"),
 
         IncludeLaunchDescription(
             PythonLaunchDescriptionSource(
@@ -125,5 +137,21 @@ def generate_launch_description():
             executable="animations_node",
             output="screen",
             condition=IfCondition(animations),
+        ),
+
+        # Pont web W0 (paquet robot_web, autonome façon robot_drive). Pas de
+        # use_sim_time (voir web.launch.py) : les timeouts de session sont en
+        # horloge murale. json_dir par défaut ("/home/ros2_ws/json") est déjà
+        # le bon montage en sim (docker-compose-sim.yml), pas de param à passer.
+        # web_port surchargable (WEB_PORT côté compose) : le conteneur est en
+        # réseau host, une collision de port avec le PC de dev est vite arrivée
+        # (vécue avec 8088, pris par Superset).
+        Node(
+            package="robot_web",
+            executable="web_bridge",
+            name="web_bridge_node",
+            output="screen",
+            parameters=[{"web_port": web_port}],
+            condition=IfCondition(web),
         ),
     ])

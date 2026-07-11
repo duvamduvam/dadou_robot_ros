@@ -136,6 +136,9 @@ télécommande physique) **restent devant**. Le web démarre en parallèle :
 - **W0 — fondations (démarre maintenant)** : `web_bridge_node` supervision +
   contenus + panneau technique, UI, token, heartbeat, session exclusive.
   Développé et validé 100 % en sim (domain 43). Puis LAN robot réel.
+  **Implémentée le 2026-07-11 (sim)** — voir [`interfaces.md`](interfaces.md)
+  §"API web (W0)" pour le protocole complet (endpoints, whitelist, messages
+  WS, session/heartbeat).
 - **W1 — e-stop** : source logicielle du verrou `e_stop` (validation sim puis
   protocole caméra roues hors sol). En parallèle : spec + achat + intégration du
   coup-de-poing sans fil (chantier élec).

@@ -21,6 +21,13 @@ services:
       # "robot" plus bas) : OFF par défaut, comme gaze_follower -- un lancement
       # explicite (ANIMATIONS=true docker compose ... up) est requis.
       - ANIMATIONS=${ANIMATIONS:-false}
+      # web_bridge_node (pont HTTP/WebSocket W0, paquet robot_web) : même
+      # prudence qu'ANIMATIONS -- OFF par défaut, activation explicite
+      # (WEB=true docker compose ... up). http://localhost:8765 une fois lancé.
+      # WEB_PORT : conteneur en réseau host, une collision avec un service du
+      # PC de dev est vite arrivée (8088 était pris par Superset -- vécu).
+      - WEB=${WEB:-false}
+      - WEB_PORT=${WEB_PORT:-8765}
     network_mode: "host"
     volumes:
       - /tmp/.X11-unix:/tmp/.X11-unix:rw
@@ -32,6 +39,7 @@ services:
       - ../../ros2_dependencies/robot_sim:/home/ros2_ws/src/robot_sim
       - ../../ros2_dependencies/robot_interfaces:/home/ros2_ws/src/robot_interfaces
       - ../../ros2_dependencies/robot_drive:/home/ros2_ws/src/robot_drive
+      - ../../ros2_dependencies/robot_web:/home/ros2_ws/src/robot_web
       - ../../scripts/launch-sim-in-docker.sh:/home/ros2_ws/launch-sim-in-docker.sh
       # json/ : mêmes fichiers de séquences/couleurs LED que le vrai robot,
       # lus par leds_sim_node (params robot_lights_json/lights_base_json/colors_json).

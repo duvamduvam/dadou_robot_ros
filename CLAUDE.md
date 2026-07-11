@@ -82,10 +82,13 @@ docker exec -it dadou-sim-container bash -c 'source /opt/ros/$ROS_DISTRO/setup.s
 ## Prochaines étapes (dans l'ordre)
 
 En parallèle des priorités 0-1 : **chantier interface web / télé-présence** (plan
-complet cadré le 2026-07-11 — `docs/etude-interface-web.md`). Phase W0 (backend
-`web_bridge_node` supervision+contenus, validée en sim d'abord) peut démarrer tout
-de suite ; les roues via web sont conditionnées au test scénique au sol (priorité 1)
-et à un protocole caméra dédié.
+complet cadré le 2026-07-11 — `docs/etude-interface-web.md`). **W0 FAITE et vérifiée
+en sim le 2026-07-11** : package `robot_web` autonome (node rclpy+aiohttp, whitelist
+sans roues/e_stop, session exclusive + heartbeat, UI vanilla), 511 tests, protocole
+WS validé de bout en bout dans le conteneur sim (`WEB=true`, port 8765 — 8088 =
+Superset sur le PC de dev). Suite : W1 (source e_stop + coup-de-poing) ; les roues
+via web (W3) restent conditionnées au test scénique au sol (priorité 1) et à un
+protocole caméra dédié.
 
 0. **Protocole physique chat_node V2 (conversation)** : le code est COMPLET et commité
    (nuit du 10 au 11/07 : ~15 commits sur les 3 dépôts, validé en sim — bras+yeux bougent

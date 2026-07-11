@@ -1,0 +1,204 @@
+/* Page sombre, utilisable au téléphone comme au PC (§5 de la spec). Pas de
+   framework CSS : quelques règles simples, flexbox/grid natifs. */
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: system-ui, -apple-system, "Segoe UI", sans-serif;
+  background: #14161a;
+  color: #e6e6e6;
+}
+
+h2 {
+  font-size: 0.95rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: #9aa0a6;
+  margin: 0 0 0.5rem;
+}
+
+button {
+  font: inherit;
+  cursor: pointer;
+  border: 1px solid #3a3f47;
+  background: #23262c;
+  color: #e6e6e6;
+  border-radius: 6px;
+  padding: 0.6rem 0.9rem;
+}
+
+button:hover {
+  background: #2c3038;
+}
+
+button:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+input {
+  font: inherit;
+  background: #1c1e23;
+  border: 1px solid #3a3f47;
+  color: #e6e6e6;
+  border-radius: 6px;
+  padding: 0.5rem;
+}
+
+/* --- Bandeau permanent ----------------------------------------------- */
+
+#bandeau {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.6rem;
+  align-items: center;
+  padding: 0.6rem 1rem;
+  background: #1a1c21;
+  border-bottom: 1px solid #2c3038;
+}
+
+.badge {
+  padding: 0.3rem 0.7rem;
+  border-radius: 999px;
+  font-weight: 600;
+  font-size: 0.85rem;
+}
+
+/* Sécurité n°1 : le mode doit sauter aux yeux (vert sim, rouge robot réel). */
+.badge-simulation { background: #1e5e2b; color: #d7ffe0; }
+.badge-robot-reel  { background: #7a1414; color: #ffe0e0; }
+.badge-inconnu     { background: #7a5a14; color: #fff2d7; }
+
+.badge-on  { background: #1e5e2b; color: #d7ffe0; }
+.badge-off { background: #3a3f47; color: #c7c7c7; }
+
+#rtt {
+  font-variant-numeric: tabular-nums;
+  color: #9aa0a6;
+}
+
+#btn-prendre-main {
+  margin-left: auto;
+}
+
+/* --- Onglets ----------------------------------------------------------- */
+
+#onglets {
+  display: flex;
+  gap: 0.4rem;
+  padding: 0.6rem 1rem 0;
+}
+
+.onglet-btn.actif {
+  background: #2c3038;
+  border-color: #565c66;
+}
+
+.onglet {
+  display: none;
+}
+
+.onglet.actif {
+  display: block;
+}
+
+main {
+  padding: 1rem;
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+.groupe {
+  margin: 1.2rem 0;
+}
+
+.grille {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+/* --- Boutons spéciaux ---------------------------------------------------- */
+
+#btn-stop-contenus {
+  display: block;
+  width: 100%;
+  margin-bottom: 1.2rem;
+  padding: 1rem;
+  font-size: 1.3rem;
+  font-weight: 700;
+  background: #b41818;
+  border-color: #ff4d4d;
+  color: #fff;
+}
+
+#btn-stop-contenus:hover {
+  background: #d81f1f;
+}
+
+#btn-system-restart, #btn-system-shutdown {
+  border-color: #b48a18;
+}
+
+/* --- Servos (panneau technique) ----------------------------------------- */
+
+.servo-ligne {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 0.5rem;
+}
+
+.servo-ligne label {
+  width: 6rem;
+  flex-shrink: 0;
+}
+
+.servo-ligne input[type="number"] {
+  width: 5rem;
+}
+
+/* --- Feedback visuel ack/err --------------------------------------------- */
+
+.flash-ok  { outline: 2px solid #2e9e44; }
+.flash-err { outline: 2px solid #d81f1f; }
+
+/* --- État (panneau technique) -------------------------------------------- */
+
+#etat-topics table {
+  border-collapse: collapse;
+  width: 100%;
+  font-size: 0.85rem;
+}
+
+#etat-topics td, #etat-topics th {
+  text-align: left;
+  padding: 0.2rem 0.5rem;
+  border-bottom: 1px solid #2c3038;
+}
+
+#etat-nodes {
+  margin-top: 0.6rem;
+  font-size: 0.85rem;
+  color: #9aa0a6;
+}
+
+/* --- Journal d'erreurs ---------------------------------------------------- */
+
+footer {
+  padding: 1rem;
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+#journal-erreurs {
+  font-size: 0.85rem;
+  color: #ff9a9a;
+  padding-left: 1.2rem;
+}

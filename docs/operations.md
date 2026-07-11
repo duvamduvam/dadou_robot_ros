@@ -28,6 +28,17 @@
   (it overwrites `face` on any ambient noise):
   `ssh pi@192.168.1.151 'sudo docker restart dadou-vision-container'` restores it.
 
+## Web interface in sim (W0)
+- `cd conf/docker/sim && WEB=true docker compose -f docker-compose-sim.yml up -d`
+  then open `http://localhost:8765` (`WEB_PORT` overrides it — the container
+  runs on host networking, 8088 was already taken by Superset on the dev PC).
+  Add `ANIMATIONS=true` alongside `WEB=true`
+  to also trigger sequences from the UI's "Animations" grid (otherwise
+  `animation` publishes but nothing replays it).
+- W0 = supervision + contents (animation/face/audio/robot_lights) + technical
+  panel (servos/relay/gaze/system). No wheels, no e_stop — see
+  [`interfaces.md`](interfaces.md) §"API web (W0)" for the full protocol.
+
 ## Pre-show checklist
 1. Inspect hardware (wheels locked, arms secure, LED strips intact).
 2. Power on robot and remote controller (Pi 5 vision needs the 27 W PSU).
