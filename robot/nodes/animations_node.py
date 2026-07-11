@@ -2,7 +2,6 @@
 import json
 import logging
 import logging.config
-import time
 
 import rclpy
 from rclpy.node import Node
@@ -12,7 +11,6 @@ from dadou_utils_ros.logging_conf import LoggingConf
 from dadou_utils_ros.utils_static import RELAY, AUDIO, FACE, ROBOT_LIGHTS, NECK, LEFT_EYE, \
     RIGHT_EYE, LEFT_ARM, RIGHT_ARM, ANIMATION, LOGGING_FILE_NAME, DURATION, STOP, WHEELS
 from robot.files.robot_json_manager import RobotJsonManager
-from robot.nodes.abstract_subscriber import SubscriberNode
 from robot.robot_config import config
 from robot.sequences.animation_manager import AnimationManager
 from robot_interfaces.msg._string_time import StringTime

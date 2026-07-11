@@ -1,16 +1,5 @@
-    # linux arm install : sudo pip3 install Adafruit-Blinka
-# sudo pip3 install rpi_ws281x adafruit-circuitpython-neopixel
-# sudo python3 -m pip install --force-reinstall adafruit-blinka
-# sudo pip3 install adafruit-circuitpython-led-animation
-
 import logging.config
 
-    # todo check thread : https://www.geeksforgeeks.org/python-communicating-between-threads-set-1/
-# todo check thread2 : https://riptutorial.com/python/example/4691/communicating-between-threads
-import logging.config
-
-    # todo check thread : https://www.geeksforgeeks.org/python-communicating-between-threads-set-1/
-    # todo check thread2 : https://riptutorial.com/python/example/4691/communicating-between-threads
 from adafruit_led_animation.helper import PixelSubset
 
 from dadou_utils_ros.utils.time_utils import TimeUtils
@@ -60,8 +49,6 @@ class Lights(AbstractJsonActions):
 
         self.global_strip = global_strip
         self.strip = PixelSubset(global_strip, start, end)
-        #self.strip.brightness = 1
-        #self.strip = global_strip
         self.colors = json_manager.get_json_file(config[JSON_COLORS])
         self.lights_base = self.load_light_base(config, json_manager)
         self.animations_methods = LightsAnimations(end - start, self.strip)
@@ -112,7 +99,6 @@ class Lights(AbstractJsonActions):
         # Charge la première brique d'animation de la séquence.
         self.load_light_method(self.sequence.current_element.method)
 
-        #self.sequence.start_time = TimeUtils.current_milli_time()
         self.start_time = TimeUtils.current_milli_time()
         logging.info("update lights {} sequences to {}".format(self.light_type, json_seq[NAME]))
 
@@ -140,9 +126,7 @@ class Lights(AbstractJsonActions):
 
         if self.sequence.time_to_switch():
             self.sequence.next()
-            #self.sequence.current_element.start_time = TimeUtils.current_milli_time()
             self.load_light_method(self.sequence.current_element.method)
-            #self.sequence.current_element.start_time = TimeUtils.current_milli_time()"""
 
         self.current_animation.animate()
 

@@ -57,8 +57,6 @@ class AudioManager(AbstractJsonActions):
         self.volume = self.volume_default
         self.change_volume(self.volume_default)
 
-        #self.index_audios()
-
     def index_audios(self):
         """Scan the audio directory and reconcile metadata (add/remove entries)."""
         audio_datas = []
@@ -83,7 +81,6 @@ class AudioManager(AbstractJsonActions):
         #add new audio to file
         for audio_path in audio_datas:
             if not audio_path in self.recorded_audio_data:
-                #audio = SoundObject(os.path.join(self.config[AUDIOS_DIRECTORY], audio_path))
                 duration = SoundObject.get_duration(self.config[AUDIOS_DIRECTORY]+"/"+audio_path)
                 logging.info("new audio {} with duration {}".format(audio_path, duration))
                 self.recorded_audio_data[audio_path] = {DURATION: float(duration)}
@@ -118,20 +115,6 @@ class AudioManager(AbstractJsonActions):
         else:
             logging.error("audio {} don't exist".format(self.config[AUDIOS_DIRECTORY]+audio))
             return False
-
-    #def play_sounds(self, audios):
-    #    for audio in audios:
-    #        logging.info("enqueue: " + audio.get_path())
-    #        if not self.current_audio_name in audio.get_path:
-    #            sound = SoundObject(self.config[AUDIOS_DIRECTORY]+audio.get_path())
-    #            if self.volume != self.volume_default:
-    #                self.change_volume(self.volume_default)
-    #            self.playlist.append(sound)
-    #        #self.player.enqueue(Sound(audio.get_path()), 1)
-    #        #for s in range(int(audio.get_time())):
-    #        #    self.player.enqueue(Sound(self.silence), 1)
-    #            sound.play()
-    #    #self.player.play()
 
     def stop_sound(self):
         if self.current_audio:

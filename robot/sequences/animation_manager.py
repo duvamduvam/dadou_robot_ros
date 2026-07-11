@@ -63,6 +63,8 @@ class AnimationManager(AbstractJsonActions):
                         continue
 
     def random(self):
+        # Non branché — futur mode autonome : déclenche une animation aléatoire
+        # au bout d'un délai. Aucun node ne l'appelle pour l'instant.
         if TimeUtils.is_time(RandomAnimationStart.value, self.random_duration):
             if len(self.random_animation_sequence) > 0:
                 random_index = random.randint(0, len(self.random_animation_sequence)-1)
@@ -122,14 +124,6 @@ class AnimationManager(AbstractJsonActions):
         self.faces_animation = Animation(self.current_animation, self.duration, FACES)
         self.lights_animation = Animation(self.current_animation, self.duration, ROBOT_LIGHTS)
         self.wheels_animation = Animation(self.current_animation, self.duration, WHEELS)
-
-    def get_random_animation(self, type):
-        random_sequences = []
-        for sequence in self.sequences_name:
-            if TYPES in sequence and type in sequence[TYPES]:
-                random_sequences.append(sequence)
-        if len(random_sequences) > 0:
-            return random_sequences[random.randint(0, len(random_sequences)-1)]
 
     def stop(self):
         if self.playing:

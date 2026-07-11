@@ -94,11 +94,6 @@ config[LIGHTS_END_LED] = 673
 config[LORA_CS_PIN] = 0
 config[LORA_RESET_PIN] = 0
 
-#if Misc.is_raspberrypi():
-#    config[LORA_SCK_PIN] = board.SCK
-#    config[LORA_MOSI_PIN] = board.MOSI
-#    config[LORA_MISO_PIN] = board.MISO
-
 ########## I2C SERVO NUMBER #########
 
 config[HEAD_PWM_NB] = 4
@@ -111,15 +106,7 @@ config[RIGHT_ARM_NB] = 15
 config[LEFT_EYE_NB] = 7
 config[RIGHT_EYE_NB] = 8
 
-#config[HEAD_PWM_NB] = 5
-#config[WHEEL_LEFT_PWM] = 1
-#config[WHEEL_RIGHT_PWM] = 2
-#config[WHEEL_LEFT_DIR] = 0
-#config[WHEEL_RIGHT_DIR] = 3
-#config[LEFT_ARM_NB] = 4
-#config[RIGHT_ARM_NB] = 15
-#config[LEFT_EYE_NB] = 7
-#config[RIGHT_EYE_NB] = 8
+# Ancien calibrage servos (numéros PWM I2C) : voir git.
 
 base = "robot/"
 
@@ -127,8 +114,6 @@ config[STOP_KEY] = "L"
 config[MAIN_LOOP_SLEEP] = 0.001
 
 config[STOP_ANIMATION_KEYS] = ['x']
-
-#config[BASE_PATH] = os.getcwd()
 
 config[BASE_PATH] = "/home/ros2_ws/"
 config[BASE_PATH] = config[BASE_PATH].replace('/tests', '')
@@ -178,7 +163,6 @@ config[JSON_LIGHTS_BASE] = 'lights_base.json'
 config[JSON_LIGHTS_SEQUENCE] = 'lights_sequence.json'
 config[JSON_NOTES] = 'piano.json'
 config[JSON_RELAYS] = 'relays.json'
-#config[JSON_VISUALS] = 'visuals.json'
 
 ############## DEVICES ####################
 

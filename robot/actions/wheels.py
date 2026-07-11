@@ -91,27 +91,10 @@ class Wheels:
                 self.enabled = False
                 return
 
-        #self.left_pwm = pwmio.PWMOut(Pin(config.LEFT_PWM_PIN))
-        #self.right_pwm = pwmio.PWMOut(Pin(config.RIGHT_PWM_PIN))
-        #self.dir_left = digitalio.DigitalInOut(Pin(config.LEFT_DIR_PIN))
-        #self.dir_left.direction = digitalio.Direction.OUTPUT
-        #self.dir_right = digitalio.DigitalInOut(Pin(config.RIGHT_DIR_PIN))
-        #self.dir_right.direction = digitalio.Direction.OUTPUT
-
-        #i2c = busio.I2C(board.SCL, board.SDA)
-        #pca9685 = adafruit_pca9685.PCA9685(i2c)
-        #pca9685.frequency = 60
-
         self.left_pwm = pca9685.channels[self.config[WHEEL_LEFT_PWM]]
         self.right_pwm = pca9685.channels[self.config[WHEEL_RIGHT_PWM]]
         self.dir_left = pca9685.channels[self.config[WHEEL_LEFT_DIR]]
         self.dir_right = pca9685.channels[self.config[WHEEL_RIGHT_DIR]]
-
-        #self.dir_left = pwmio.PWMOut(board.D6)
-        #self.dir_right = pwmio.PWMOut(board.D5)
-        #self.dir_left = pwmio.PWMOut(Pin(config.LEFT_DIR_PIN))
-        #self.dir_right = pwmio.PWMOut(Pin(config.RIGHT_DIR_PIN))
-        #self.due = None
 
     def set_9dof(self, sensor):
         self.sensor = sensor
@@ -179,8 +162,6 @@ class Wheels:
     def update_cmd(self, left_wheel, right_wheel):
         self.left = left_wheel
         self.right = right_wheel
-
-        #logging.info("update wheel with left : " + str(left_wheel) + " right : " + str(right_wheel))
 
         self.left_pwm.duty_cycle = Misc.mapping(abs(left_wheel), 0, 100, self.MIN_PWM, self.max_pwm_l)
         self.right_pwm.duty_cycle = Misc.mapping(abs(right_wheel), 0, 100, self.MIN_PWM, self.max_pwm_r)
@@ -305,16 +286,4 @@ class Wheels:
         else:
             logging.error("9dof not set")
         return False
-
-#    def update_pwm(self, target, pwm: pwmio.PWMOut):
-#        if pwm.duty_cycle < target:
-#            if (target - pwm.duty_cycle) < self.PWM_STEP:
-#                pwm.duty_cycle = target
-#            else:
-#                pwm.duty_cycle += self.PWM_STEP
-#        else:
-#            if (pwm.duty_cycle - target) < self.PWM_STEP:
-#                pwm.duty_cycle = target
-#            else:
-#                pwm.duty_cycle -= self.PWM_STEP
 

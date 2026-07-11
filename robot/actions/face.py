@@ -40,9 +40,6 @@ class Face(AbstractJsonActions):
 
     current_face = ""
 
-    #speak_duration = 0
-    #start_speak_time = 0
-
     def __init__(self, config, json_manager,  strip):
         super().__init__(config=config, json_manager=json_manager, json_file=config[JSON_EXPRESSIONS], action_type=FACE)
         logging.debug("start face with pin " + str(config[LIGHTS_PIN]))
@@ -50,12 +47,6 @@ class Face(AbstractJsonActions):
         self.strip = strip
         self.load_visuals()
         self.update({FACE: self.default})
-
-    def get_expressions_sequence(self, msg):
-        if msg and KEY in msg and msg[KEY] in self.sequences_key.keys():
-            return self.sequences_key[msg[KEY]]
-        if msg and FACE in msg and msg[FACE] in self.sequences_name.keys():
-            return self.sequences_name[msg[FACE]]
 
     def load_visuals(self):
 
@@ -81,11 +72,6 @@ class Face(AbstractJsonActions):
 
     def update(self, msg):
         logging.info("incoming msg {}".format(msg))
-        #TODO improve this
-        """if KEY not in msg and msg and ANIMATION in msg and not msg[ANIMATION] and not self.loop:
-            self.update({FACE: self.DEFAULT})
-        elif FACE not in msg:
-            return msg"""
 
         if msg[FACE] == STOP:
             self.update({FACE: self.default})
@@ -142,8 +128,6 @@ class Face(AbstractJsonActions):
             change = True
         return change
 
-    #def
-
     def process(self):
         if not self.loop:
             if self.global_duration != 0:
@@ -153,10 +137,6 @@ class Face(AbstractJsonActions):
             else:
                 if self.start_time != 0 and TimeUtils.is_time(self.start_time, self.element_duration):
                     self.update({FACE: DEFAULT})
-        #if self.speak_duration != 0:
-        #    if TimeUtils.is_time(self.start_speak_time, self.speak_duration):
-        #        self.speak_duration = 0
-        #        self.loop = False
 
         # PAS de court-circuit : chaque partie doit avancer à chaque tick,
         # d'où le or bit à bit sur les trois résultats.
@@ -165,11 +145,4 @@ class Face(AbstractJsonActions):
             change |= self.animate_part(seq, mapping)
         if change:
             self.strip.show()
-
-
-#class Frame:
-
-#    def __init__(self, t, name):
-#        self.duration = t
-#        self.name = name
 

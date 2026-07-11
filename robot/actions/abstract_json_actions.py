@@ -71,19 +71,3 @@ class AbstractJsonActions:
             rand_sequence = random_sequences[random.randint(0, len(random_sequences)-1)]
             logging.info("random sequence: {}".format(rand_sequence))
             return rand_sequence
-
-    def get_sequence_by_key(self, msg, input_key, sequence_values):
-
-        if msg and input_key in msg.keys():
-            if msg[input_key] in sequence_values.keys():
-                return sequence_values[msg[input_key]]
-
-
-    """def get_sequence_from_input(self, msg, sequence_key):
-        if not msg:
-            return
-        if KEY in msg and msg[KEY] in self.sequences_key.keys():
-            return self.sequences_key[msg[KEY]]
-        if sequence_key in msg and msg[sequence_key] in self.sequences_name.keys():
-            logging.error("no {} in ".format(msg[sequence_key], sequence_key))
-            return self.sequences_name[msg[sequence_key]]"""
