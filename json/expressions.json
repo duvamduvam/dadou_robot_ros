@@ -1580,5 +1580,29 @@
                 "calib-couleurs.png"
             ]
         ]
+    },
+    "calib-bords": {
+        "name": "calib-bords",
+        "duration": 8000,
+        "loop": true,
+        "keys": [],
+        "left_eyes": [
+            [
+                1.0,
+                "oeil-bordure.png"
+            ]
+        ],
+        "right_eyes": [
+            [
+                1.0,
+                "oeil-bordure.png"
+            ]
+        ],
+        "mouths": [
+            [
+                1.0,
+                "bouche-bordure.png"
+            ]
+        ]
     }
 }

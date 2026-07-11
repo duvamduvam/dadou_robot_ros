@@ -20,13 +20,14 @@ class Face(AbstractJsonActions):
     eye_image_mapping = ImageMapping.eye()
 
     # Zones du strip (source unique). Yeux nommés VU DE FACE (spectateur) :
-    # la mire couleurs du 2026-07-11 a montré que l'œil GAUCHE suit la bouche
-    # après un saut, et l'œil DROIT est à 385 — les pistes left/right étaient
-    # croisées. Le start gauche est 449 (PAS 448 : constaté « œil décalé d'un
-    # pixel » à la mire — les LED 384 et 448 sont des trous du câblage).
+    # la mire couleurs du 2026-07-11 a montré que les pistes left/right
+    # étaient croisées. Câblage CONTIGU, sans trous (mire bordure) :
+    # bouche 0-383, œil droit 384-447, œil gauche 448-511. Les anciens
+    # starts 385/449 décalaient tout le contenu d'une LED (« animations
+    # 6x6 collées à gauche »).
     MOUTH_START = 0
-    LEYE_START = 449
-    REYE_START = 385
+    LEYE_START = 448
+    REYE_START = 384
 
     mouth = None
     leye = None

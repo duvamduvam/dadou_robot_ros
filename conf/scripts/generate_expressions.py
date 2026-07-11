@@ -509,6 +509,23 @@ def gen_calib_couleurs():
     mouths["calib-couleurs.png"] = g
     eyes["oeil-rouge.png"] = zone(EW, EH, 0, 7, 0, 7, ROUGE)
     eyes["oeil-vert.png"] = zone(EW, EH, 0, 7, 0, 7, VERT)
+
+    # Mires « bordure » : anneau sur le pourtour exact de chaque zone.
+    # Le moindre décalage d'index (start ±1) casse l'anneau de façon flagrante
+    # (bord éteint d'un côté, pixels orphelins de l'autre). C'est la mire qui
+    # a établi le câblage contigu des yeux (384/448, sans trous).
+    def bordure(w, h, color):
+        g = blank(w, h)
+        for x in range(w):
+            g[0][x] = color
+            g[h - 1][x] = color
+        for y in range(h):
+            g[y][0] = color
+            g[y][w - 1] = color
+        return g
+
+    eyes["oeil-bordure.png"] = bordure(EW, EH, CYAN)
+    mouths["bouche-bordure.png"] = bordure(MW, MH, JAUNE)
     return eyes, mouths
 
 
@@ -528,6 +545,8 @@ CALIB_ZONE_EXPRESSIONS = {
     # 0-63 ROUGE, 64-127 VERT, 128-191 BLEU, 192-255 BLANC, 256-319 JAUNE,
     # 320-383 MAGENTA. Yeux : piste left_eyes ROUGE, right_eyes VERT.
     "calib-couleurs": calib_expr("oeil-rouge.png", "oeil-vert.png", "calib-couleurs.png"),
+    # Anneaux sur le pourtour de chaque zone : tout décalage de start saute aux yeux.
+    "calib-bords": calib_expr("oeil-bordure.png", "oeil-bordure.png", "bouche-bordure.png"),
     "calib-og": calib_expr("oeil-plein.png", "oeil-noir.png", "bouche-noire.png"),
     "calib-od": calib_expr("oeil-noir.png", "oeil-plein.png", "bouche-noire.png"),
     "calib-448": calib_expr("oeil-px-dernier.png", "oeil-noir.png", "bouche-noire.png"),
