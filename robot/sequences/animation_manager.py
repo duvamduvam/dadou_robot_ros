@@ -8,7 +8,7 @@ from dadou_utils_ros.utils_static import ANIMATION, AUDIO, AUDIOS, KEY, NECK, FA
     LIGHTS, WHEELS, NAME, DURATION, RANDOM, SEQUENCES_DIRECTORY, LEFT_ARM, RIGHT_ARM, LEFT_EYE, \
     RIGHT_EYE, ROBOT_LIGHTS, TYPE
 from robot.actions.abstract_json_actions import AbstractJsonActions
-from robot.sequences.animation import Animation
+from robot.sequences.track import Track
 from robot.sequences.random_animation_start import RandomAnimationStart
 
 
@@ -114,15 +114,19 @@ class AnimationManager(AbstractJsonActions):
 
         logging.info(animation)
 
-        self.audios_animation = Animation(self.current_animation, self.duration, AUDIOS)
-        self.left_arm_animation = Animation(self.current_animation, self.duration, LEFT_ARM)
-        self.right_arm_animation = Animation(self.current_animation, self.duration, RIGHT_ARM)
-        self.left_eye_animation = Animation(self.current_animation, self.duration, LEFT_EYE)
-        self.right_eye_animation = Animation(self.current_animation, self.duration, RIGHT_EYE)
-        self.necks_animation = Animation(self.current_animation, self.duration, NECK)
-        self.faces_animation = Animation(self.current_animation, self.duration, FACES)
-        self.lights_animation = Animation(self.current_animation, self.duration, ROBOT_LIGHTS)
-        self.wheels_animation = Animation(self.current_animation, self.duration, WHEELS)
+        # Track.emissions : la piste est la liste de keyframes sous la clé du
+        # dict d'animation (current_animation.get(KEY)). Clé absente/vide ->
+        # emissions([]) -> has_data False (exactement l'ancien Animation).
+        now = TimeUtils.current_milli_time()
+        self.audios_animation = Track.emissions(self.current_animation.get(AUDIOS), self.duration, now)
+        self.left_arm_animation = Track.emissions(self.current_animation.get(LEFT_ARM), self.duration, now)
+        self.right_arm_animation = Track.emissions(self.current_animation.get(RIGHT_ARM), self.duration, now)
+        self.left_eye_animation = Track.emissions(self.current_animation.get(LEFT_EYE), self.duration, now)
+        self.right_eye_animation = Track.emissions(self.current_animation.get(RIGHT_EYE), self.duration, now)
+        self.necks_animation = Track.emissions(self.current_animation.get(NECK), self.duration, now)
+        self.faces_animation = Track.emissions(self.current_animation.get(FACES), self.duration, now)
+        self.lights_animation = Track.emissions(self.current_animation.get(ROBOT_LIGHTS), self.duration, now)
+        self.wheels_animation = Track.emissions(self.current_animation.get(WHEELS), self.duration, now)
 
     def stop(self):
         if self.playing:
@@ -164,9 +168,14 @@ class AnimationManager(AbstractJsonActions):
             events[ANIMATION] = True
         return events
 
-    def fill_event(self, events, key, animation):
-        if not animation or not animation.has_data:
+    def fill_event(self, events, key, track):
+        if not track or not track.has_data:
             return
-        event_action = animation.next()
+        event_action = track.poll(TimeUtils.current_milli_time())
+        # `if event_action:` (et non `is not None`) : on conserve exactement le
+        # comportement historique — une valeur falsy (servo 0.0, roues [0, 0])
+        # n'est PAS transmise. C'est le « quirk latent » consigné dans CLAUDE.md
+        # (une paire [0, 0] passait au plancher MIN_PWM) : le refactoring ne doit
+        # rien changer à la sémantique, seulement au moteur temporel.
         if event_action:
             events[key] = event_action

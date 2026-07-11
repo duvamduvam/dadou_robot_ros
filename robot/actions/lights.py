@@ -6,7 +6,7 @@ from robot.robot_static import JSON_COLORS
 from dadou_utils_ros.utils_static import METHOD, DEFAULT, DURATION, SEQUENCES, LOOP, COLOR, \
     NAME, JSON_LIGHTS_BASE, BRIGHTNESS, STOP
 from robot.actions.abstract_json_actions import AbstractJsonActions
-from robot.sequences.sequence import Sequence
+from robot.sequences.track import Track
 from robot.visual.lights_animations import LightsAnimations
 
 """
@@ -97,12 +97,13 @@ class Lights(AbstractJsonActions):
         sequences = []
         for brick_name, position in json_seq[SEQUENCES].items():
             sequences.append([position, LightAnimation(brick_name, position)])
-        self.sequence = Sequence(json_seq[DURATION], json_seq[LOOP], sequences, 0)
-
-        # Charge la première brique d'animation de la séquence.
-        self.load_light_method(self.sequence.current_element.method)
-
         self.start_time = TimeUtils.current_milli_time()
+        # Lights « affiche jusqu'à t » : brique i active jusqu'à t_i*duration.
+        # Un poll immédiat charge la 1re brique juste après (activation à 0).
+        self.sequence = Track.frames(sequences, json_seq[DURATION], json_seq[LOOP], self.start_time)
+        first = self.sequence.poll(self.start_time)
+        if first:
+            self.load_light_method(first.method)
         logging.info("update lights {} sequences to {}".format(self.light_type, json_seq[NAME]))
 
     def load_light_method(self, light_name):
@@ -127,9 +128,12 @@ class Lights(AbstractJsonActions):
         if not self.loop and TimeUtils.is_time(self.start_time, self.duration):
             self.update({self.light_type: self.default})
 
-        if self.sequence.time_to_switch():
-            self.sequence.next()
-            self.load_light_method(self.sequence.current_element.method)
+        # poll : la brique suivante sort quand son instant est atteint (une par
+        # tick). Rien à changer tant que poll rend None (on rejoue l'animation
+        # Adafruit courante). Boucle gérée par Track.
+        value = self.sequence.poll(TimeUtils.current_milli_time())
+        if value:
+            self.load_light_method(value.method)
 
         self.current_animation.animate()
 

@@ -7,7 +7,7 @@ from robot.robot_static import MOUTH_VISUALS_PATH, EYE_VISUALS_PATH, LIGHTS_PIN,
 from dadou_utils_ros.utils_static import NAME, DURATION, LOOP, KEY, FACE, DEFAULT, BASE_PATH, \
     JSON_EXPRESSIONS, ANIMATION, STOP
 from robot.actions.abstract_json_actions import AbstractJsonActions
-from robot.sequences.sequence import Sequence
+from robot.sequences.track import Track
 from robot.visual.image_mapping import ImageMapping
 from robot.visual.visual import Visual
 
@@ -67,11 +67,13 @@ class Face(AbstractJsonActions):
             logging.error("no visual name : " + name)
 
     def parts(self):
-        # Chaque partie rend avec SA table : la bouche (serpentin 6 matrices)
-        # et les yeux (matrice unique) n'ont pas le même câblage.
-        return ((self.mouth, self.mouth_image_mapping),
-                (self.leye, self.eye_image_mapping),
-                (self.reye, self.eye_image_mapping))
+        # Triplets (piste, start_pixel, table). Le start_pixel ne vit plus dans
+        # la piste (Track est générique) : il est réassocié ici. Chaque partie
+        # rend avec SA table : la bouche (serpentin 6 matrices) et les yeux
+        # (matrice unique) n'ont pas le même câblage.
+        return ((self.mouth, self.MOUTH_START, self.mouth_image_mapping),
+                (self.leye, self.LEYE_START, self.eye_image_mapping),
+                (self.reye, self.REYE_START, self.eye_image_mapping))
 
     def update(self, msg):
         logging.info("incoming msg {}".format(msg))
@@ -99,37 +101,41 @@ class Face(AbstractJsonActions):
             self.default = json_seq[NAME]
         self.element_duration = json_seq[DURATION]
         self.start_time = TimeUtils.current_milli_time()
-        self.mouth = Sequence(self.element_duration, self.loop, json_seq[MOUTHS], self.MOUTH_START)
-        self.leye = Sequence(self.element_duration, self.loop, json_seq[LEFT_EYES], self.LEYE_START)
-        self.reye = Sequence(self.element_duration, self.loop, json_seq[RIGHT_EYES], self.REYE_START)
+        # Sémantique documentée (generate_expressions.py) : la frame [t, image]
+        # est affichée JUSQU'À t*duration, la première de 0 à t0. L'ancien
+        # moteur émettait chaque frame À SON propre t (un cran de retard) :
+        # le « rire » de joie ne s'affichait qu'un éclair en fin de cycle.
+        self.mouth = Track.frames(json_seq[MOUTHS], self.element_duration, self.loop, self.start_time)
+        self.leye = Track.frames(json_seq[LEFT_EYES], self.element_duration, self.loop, self.start_time)
+        self.reye = Track.frames(json_seq[RIGHT_EYES], self.element_duration, self.loop, self.start_time)
         self.show_first_frames()
 
         return msg
 
     def show_first_frames(self):
-        # Dessine tout de suite la première frame de chaque partie : sans ça,
-        # une frame n'apparaît qu'à son premier time_to_switch() — les yeux d'une
-        # piste à frame unique restaient sur l'expression PRÉCÉDENTE pendant
-        # toute la durée de la séquence (2 à 8 s de visage périmé à chaque bascule).
-        for seq, mapping in self.parts():
-            if not seq.elements:
-                continue
-            visual = self.get_visual(seq.get_current_element()[1])
-            if visual is not None:
-                mapping.mapping(self.strip, visual.rgb, seq.start_pixel)
+        # Passe de poll IMMÉDIATE après construction : l'activation à t=0 (la
+        # première frame) sort au premier poll. Sans ça, une frame n'apparaît
+        # qu'à son premier poll temporisé — les yeux d'une piste à frame unique
+        # resteraient sur l'expression PRÉCÉDENTE toute la durée de la séquence
+        # (2 à 8 s de visage périmé à chaque bascule). Un seul strip.show() pour
+        # les trois parties.
+        now = TimeUtils.current_milli_time()
+        for track, start_pixel, mapping in self.parts():
+            value = track.poll(now)
+            if value is not None:
+                visual = self.get_visual(value)
+                if visual is not None:
+                    mapping.mapping(self.strip, visual.rgb, start_pixel)
         self.strip.show()
 
-    def animate_part(self, seq: Sequence, mapping: ImageMapping):
-        change = False
-        if seq.time_to_switch():
-            frame = seq.get_current_element()
-            logging.debug("seq.current_time : {} current element {} duration {}".format(seq.start_time, seq.current_element, seq.element_duration))
-            visual = self.get_visual(frame[1])
+    def animate_part(self, track, start_pixel, mapping: ImageMapping):
+        value = track.poll(TimeUtils.current_milli_time())
+        if value is not None:
+            visual = self.get_visual(value)
             if visual is not None:
-                mapping.mapping(self.strip, visual.rgb, seq.start_pixel)
-            seq.next()
-            change = True
-        return change
+                mapping.mapping(self.strip, visual.rgb, start_pixel)
+            return True
+        return False
 
     def process(self):
         if not self.loop:
@@ -144,8 +150,8 @@ class Face(AbstractJsonActions):
         # PAS de court-circuit : chaque partie doit avancer à chaque tick,
         # d'où le or bit à bit sur les trois résultats.
         change = False
-        for seq, mapping in self.parts():
-            change |= self.animate_part(seq, mapping)
+        for track, start_pixel, mapping in self.parts():
+            change |= self.animate_part(track, start_pixel, mapping)
         if change:
             self.strip.show()
 

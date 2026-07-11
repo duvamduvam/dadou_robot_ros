@@ -2,7 +2,7 @@
 ACTUEL avant le refactoring prévu des pistes de keyframes.
 
 On exerce le VRAI code de prod (vrais json/robot_lights.json + lights_base.json
-+ colors.json, vraie classe Sequence) ; seules les briques matérielles sont
++ colors.json, vraie classe Track) ; seules les briques matérielles sont
 doublées : le ruban LED (FakeGlobalStrip) et la pile d'animations Adafruit
 (FakeLightsAnimations, pour ne PAS dépendre d'adafruit_led_animation, absente
 hors Pi). Lights est construit via object.__new__ (comme bare_manager /
@@ -22,7 +22,7 @@ from robot.robot_config import config
 from robot.files.robot_json_manager import RobotJsonManager
 from robot.actions.abstract_json_actions import AbstractJsonActions
 from robot.actions.lights import Lights
-from robot.sequences.sequence import Sequence
+from robot.sequences.track import Track
 
 
 class FakeGlobalStrip:
@@ -133,7 +133,7 @@ def test_known_sequence_builds_sequence_and_loads_method(make_lights):
 
     lights.update({ROBOT_LIGHTS: "trip"})  # 5 briques, 1re = "sea colorcycle"
 
-    assert isinstance(lights.sequence, Sequence)
+    assert isinstance(lights.sequence, Track)
     # load_light_method a construit l'animation de la 1re brique (method color_cycle).
     assert isinstance(lights.current_animation, FakeAnimation)
     assert lights.current_animation.params[METHOD] == "color_cycle"
@@ -144,8 +144,8 @@ def test_stop_returns_to_default_sequence(make_lights, json_manager):
 
     lights.update({ROBOT_LIGHTS: STOP})
 
-    assert isinstance(lights.sequence, Sequence)
-    assert lights.sequence.current_element.method == default_brick_name(json_manager)
+    assert isinstance(lights.sequence, Track)
+    assert lights.sequence.last_value.method == default_brick_name(json_manager)
 
 
 # --- process() : bascule de brique dans le temps ---
@@ -154,16 +154,16 @@ def test_process_switches_brick_and_animates(make_lights, clock):
     lights, _ = make_lights()
 
     lights.update({ROBOT_LIGHTS: "trip"})  # loop, duration 50000, 1re brique à 0.2
-    first_method = lights.sequence.current_element.method
+    first_method = lights.sequence.last_value.method
     first_anim = lights.current_animation
 
     lights.process()  # pas encore l'heure de basculer -> animate() de la 1re brique
     assert first_anim.animate_calls >= 1
-    assert lights.sequence.current_element.method == first_method
+    assert lights.sequence.last_value.method == first_method
 
     # au-delà de int(0.2 * 50000) = 10000 ms : time_to_switch -> next()
     clock["now"] += 10001
     lights.process()
 
-    assert lights.sequence.current_element.method != first_method  # brique suivante
+    assert lights.sequence.last_value.method != first_method  # brique suivante
     assert isinstance(lights.current_animation, FakeAnimation)

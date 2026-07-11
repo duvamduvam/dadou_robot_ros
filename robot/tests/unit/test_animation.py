@@ -1,61 +1,48 @@
-"""Tests de la logique de timing d'Animation (robot/sequences/animation.py).
+"""Scénarios d'émission d'animation, portés sur Track.emissions.
 
-L'horloge est contrôlée en remplaçant TimeUtils.current_milli_time, dont
-dépendent à la fois Animation et TimeUtils.is_time.
+Historiquement testait la classe Animation (supprimée : fusionnée dans Track).
+AnimationManager construit désormais chaque piste avec Track.emissions(piste,
+duration, now) où `piste` est déjà extraite du dict d'animation
+(current_animation.get(clé)) — d'où le passage direct d'une liste de keyframes.
+
+Différence assumée avec l'ancien Animation : is_time utilisait `>` strict (le
+keyframe sortait au tick SUIVANT le seuil) ; Track.poll utilise `>=` (il sort
+au tick où le seuil est atteint). Tolérance explicite du refactoring.
 """
 
-import pytest
-
-from dadou_utils_ros.utils.time_utils import TimeUtils
-from robot.sequences.animation import Animation
+from robot.sequences.track import Track
 
 T0 = 1_000_000
 
 
-@pytest.fixture
-def clock(monkeypatch):
-    state = {"now": T0}
-    monkeypatch.setattr(TimeUtils, "current_milli_time", staticmethod(lambda: state["now"]))
-    return state
+def test_keyframes_fire_at_fraction_of_duration():
+    track = Track.emissions([[0, 0.1], [0.5, 0.9], [1, 0.5]], 1000, T0)
+
+    assert track.poll(T0) == 0.1            # premier keyframe (départ immédiat)
+    assert track.poll(T0 + 400) is None     # avant 50 % de 1000 ms
+    assert track.poll(T0 + 502) == 0.9      # keyframe à 50 %
+    assert track.poll(T0 + 1002) == 0.5     # keyframe final à 100 %
+    assert track.poll(T0 + 2000) is None    # plus rien après le dernier (sans boucle)
 
 
-def test_keyframes_fire_at_fraction_of_duration(clock):
-    animation = Animation({"neck": [[0, 0.1], [0.5, 0.9], [1, 0.5]]}, 1000, "neck")
+def test_first_keyframe_waits_for_start_delay():
+    track = Track.emissions([[0.5, 0.9]], 1000, T0)
 
-    assert animation.next() is None            # t=0 : le seuil est strictement dépassé, pas encore
-    clock["now"] = T0 + 1
-    assert animation.next() == 0.1             # premier keyframe (départ immédiat)
-    clock["now"] = T0 + 400
-    assert animation.next() is None            # avant 50% de 1000 ms
-    clock["now"] = T0 + 502
-    assert animation.next() == 0.9             # keyframe à 50%
-    clock["now"] = T0 + 1002
-    assert animation.next() == 0.5             # keyframe final à 100%
-    clock["now"] = T0 + 2000
-    assert animation.next() is None            # plus rien après le dernier
+    assert track.poll(T0 + 100) is None     # 0.5 × 1000 ms pas encore atteint
+    assert track.poll(T0 + 501) == 0.9
+    assert track.poll(T0 + 5000) is None     # piste épuisée
 
 
-def test_first_keyframe_waits_for_start_delay(clock):
-    animation = Animation({"neck": [[0.5, 0.9]]}, 1000, "neck")
-
-    clock["now"] = T0 + 100
-    assert animation.next() is None            # 0.5 * 1000 ms pas encore atteint
-    clock["now"] = T0 + 501
-    assert animation.next() == 0.9
-    clock["now"] = T0 + 5000
-    assert animation.next() is None            # piste épuisée
+def test_empty_track_has_no_data():
+    # Piste absente (clé non fournie par le JSON) ou vide -> has_data False.
+    # L'extraction par clé vit maintenant dans AnimationManager (.get) : Track
+    # reçoit directement None ou [].
+    assert Track.emissions(None, 1000, T0).has_data is False
+    assert Track.emissions([], 1000, T0).has_data is False
 
 
-def test_empty_track_has_no_data(clock):
-    assert Animation({}, 1000, "neck").has_data is False
-    assert Animation({"neck": []}, 1000, "neck").has_data is False
-    assert Animation({"wheels": [[0, [0.5, 0.5]]]}, 1000, "neck").has_data is False
+def test_wheels_values_pass_through():
+    track = Track.emissions([[0, [0.6, -0.6]], [1, [0, 0]]], 30000, T0)
 
-
-def test_wheels_values_pass_through(clock):
-    animation = Animation({"wheels": [[0, [0.6, -0.6]], [1, [0, 0]]]}, 30000, "wheels")
-
-    clock["now"] = T0 + 1
-    assert animation.next() == [0.6, -0.6]
-    clock["now"] = T0 + 30001
-    assert animation.next() == [0, 0]
+    assert track.poll(T0) == [0.6, -0.6]
+    assert track.poll(T0 + 30001) == [0, 0]

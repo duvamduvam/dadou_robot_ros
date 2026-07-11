@@ -114,16 +114,20 @@ def test_avancement_temporel_change_le_contenu(json_manager, clock):
     show_after_load = strip.show_calls
     snapshot_initial = snapshot(strip)  # bouche = joie-sourire.png
 
-    # 1re bascule bouche : > int(0.55 * 2000) = 1100 ms après le chargement.
+    # Sémantique documentée : la frame [t, image] est affichée JUSQU'À
+    # t*duration -> joie-rire.png (frame 2) apparaît à 0.55*2000 = 1100 ms.
+    # (L'ancien moteur l'émettait à SON t = 2000 ms : un éclair en fin de
+    # cycle au lieu de 45 % du temps — bug corrigé au refactoring Track.)
     clock["now"] += 1101
-    face.process()
-    # 2e bascule : la frame joie-rire.png (pos 1) est alors dessinée -- durée de
-    # la frame 1 = int(2000 - 1100) = 900 ms à compter de la 1re bascule.
-    clock["now"] += 1001
     face.process()
 
     assert strip.show_calls > show_after_load  # show() rappelé par process()
-    assert snapshot(strip) != snapshot_initial  # le contenu de la bouche a changé
+    assert snapshot(strip) != snapshot_initial  # la bouche est passée au rire
+
+    # Au wrap du cycle (2000 ms), la frame 1 (sourire) revient.
+    clock["now"] += 1000
+    face.process()
+    assert snapshot(strip) == snapshot_initial
 
 
 # --- d) update stop -> retour à l'expression default ---
