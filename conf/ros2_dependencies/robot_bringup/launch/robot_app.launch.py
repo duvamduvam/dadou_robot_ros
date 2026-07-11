@@ -144,6 +144,22 @@ def generate_launch_description():
     #    ]
     #)
 
+    # Pont web (robot_web) : supervision + contenus + panneau technique depuis
+    # un navigateur -- http://192.168.1.2:8765, badge rouge ROBOT RÉEL (domain 42).
+    # SÉCURITÉ : drive_enabled n'est PAS passé -> false (défaut du node), le
+    # publisher cmd_vel_web n'existe donc pas : le pilotage web reste SIM-ONLY
+    # tant que test scénique au sol + protocole caméra ne sont pas faits
+    # (docs/etude-interface-web.md §6). Sans source d'image sur le robot,
+    # /video répond 503 et l'UI affiche « pas de vidéo » (retour caméra réel =
+    # chantier à part, côté Pi vision). json_dir = structure assemblée par
+    # Ansible (json/ à plat dans src/robot/, cf. docker-compose-sim.yml).
+    web_bridge_node = Node(
+        package="robot_web",
+        executable="web_bridge",
+        name="web_bridge_node",
+        parameters=[{"json_dir": "/home/ros2_ws/src/robot/json"}],
+    )
+
     # Chaîne de commande roues (twist_mux -> twist_deadman -> cmd_vel + wheels_bridge).
     # Inoffensive en mode legacy : personne ne consomme /cmd_vel tant que
     # WHEELS_CMD_VEL_ENABLED est False. Nécessaire en mode /cmd_vel pour alimenter
@@ -167,5 +183,6 @@ def generate_launch_description():
     ld.add_action(right_arm_server_node)
     ld.add_action(left_eye_server_node)
     ld.add_action(right_eye_server_node)
+    ld.add_action(web_bridge_node)
     ld.add_action(drive_launch)
     return ld

@@ -91,9 +91,12 @@ Superset sur le PC de dev). **Console + W3-sim FAITES le même jour** : refonte 
 MJPEG `/video`, pilotage pad/manette → `cmd_vel_web` (twist_mux prio 50, plafond
 dur 0,5 m/s backend, zéro unique à l'arrêt — vérifié e2e jusqu'à `/cmd_vel`).
 `WEB_DRIVE=true` requis (défaut false) + chaîne roues lancée à la main (voir
-docs/operations.md). Suite : W1 (source e_stop + coup-de-poing) ; le passage des
-roues web au ROBOT RÉEL reste conditionné au test scénique au sol (priorité 1)
-et à un protocole caméra dédié.
+docs/operations.md). **Bringup robot câblé** (web_bridge dans robot_app.launch.py,
+contenus/supervision seulement — drive non passé donc false) : au prochain
+déploiement, REBUILD image ARM requis (python3-aiohttp + python3-pil ajoutés à
+packages-docker.txt) ; procédure sim→réel dans docs/operations.md. Suite : W1
+(source e_stop + coup-de-poing) ; le passage des roues web au ROBOT RÉEL reste
+conditionné au test scénique au sol (priorité 1) et à un protocole caméra dédié.
 
 0. **Protocole physique chat_node V2 (conversation)** : le code est COMPLET et commité
    (nuit du 10 au 11/07 : ~15 commits sur les 3 dépôts, validé en sim — bras+yeux bougent

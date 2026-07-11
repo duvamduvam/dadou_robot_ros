@@ -53,6 +53,42 @@
   au réel (roues au sol) reste conditionné au test scénique au sol (feuille de
   route §1) PUIS au protocole caméra roues hors sol (etude-interface-web.md §6,
   W3). `ROS_DOMAIN_ID=43` isole la sim du vrai Didier (domain 42).
+- ⚠️ **Ne pas fermer la fenêtre Gazebo** : elle porte AUSSI le serveur de
+  simulation (gz tourne serveur+GUI dans le même process). La fermer tue la
+  sim : plus de robot, plus de caméra (la console web affiche « pas de vidéo »
+  et réessaie toutes les 5 s). Relance : `docker compose ... up -d
+  --force-recreate` avec les mêmes variables.
+
+## Web interface on the REAL robot (sim → réel)
+
+**Même console, autre adresse** : `http://192.168.1.2:8765` (le Pi robot). Le
+bandeau passe en **rouge « ROBOT RÉEL (domain 42) »** — c'est LE repère : vert
+= sim, rouge = les commandes partent sur le vrai Didier (sons réels, servos
+réels, relais réels).
+
+Différences avec la sim, voulues :
+- **Pas de pilotage** : `robot_app.launch.py` ne passe pas `drive_enabled` →
+  le pad est grisé (« pilotage désactivé »). SIM-ONLY tant que test scénique
+  au sol + protocole caméra ne sont pas faits — ne PAS contourner en passant
+  le paramètre à la main.
+- **Pas de retour vidéo** pour l'instant : aucune source d'image ne publie sur
+  le robot (la webcam est sur le Pi vision et ne publie pas d'Image ROS) —
+  panneau « pas de vidéo », c'est normal. Chantier retour caméra réel à part.
+- Contenus/servos/relais/système : fonctionnels, mêmes payloads que la
+  télécommande physique (qui reste prioritaire sur les roues, et
+  indépendante pour le reste — deux sources peuvent se marcher dessus,
+  règle d'usage : la télécommande a raison sur scène).
+
+Déploiement (première fois — l'image ARM doit être reconstruite) :
+1. `python3-aiohttp` et `python3-pil` ont été ajoutés à
+   `conf/packages-docker.txt` le 2026-07-11 → **rebuild de l'image ARM**
+   requis une fois (sinon le node web meurt à l'import aiohttp).
+2. Déploiement habituel : Ansible depuis `../dadou_utils_ros` (rsync du
+   checkout — `robot_web` part avec `conf/ros2_dependencies/`), sentinelle
+   `robot/change` pour déclencher le colcon build au redémarrage.
+3. Vérif : `http://192.168.1.2:8765` répond, badge ROUGE, un clic « visage »
+   s'affiche sur le vrai visage LED, et le journal `robot.log` trace la
+   commande (`cmd web id=... topic=face`).
 
 ## Pre-show checklist
 1. Inspect hardware (wheels locked, arms secure, LED strips intact).

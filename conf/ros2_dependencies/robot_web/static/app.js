@@ -513,6 +513,12 @@ $("vitesse").addEventListener("input", () => {
 
 // --- Vidéo (flux MJPEG /video) -----------------------------------------------
 
+// Ré-essai automatique quand le flux est en erreur : sans lui, une page
+// ouverte AVANT que la caméra publie (ou pendant un redémarrage de la sim)
+// restait sur « pas de vidéo » jusqu'à un clic manuel sur ⟳ -- vécu, pas clair.
+const VIDEO_RETRY_MS = 5000;
+let videoRetryTimer = null;
+
 function chargerVideo() {
   // Cache-buster : force une nouvelle requête (le flux précédent peut être en
   // 503 depuis, ou figé). Le serveur répond 503 si aucune frame -> onerror.
@@ -522,8 +528,19 @@ function chargerVideo() {
 function installerVideo() {
   const img = $("video");
   const placeholder = $("video-placeholder");
-  img.addEventListener("load", () => { placeholder.hidden = true; });
-  img.addEventListener("error", () => { placeholder.hidden = false; });
+  img.addEventListener("load", () => {
+    placeholder.hidden = true;
+    if (videoRetryTimer !== null) {
+      clearInterval(videoRetryTimer);
+      videoRetryTimer = null;
+    }
+  });
+  img.addEventListener("error", () => {
+    placeholder.hidden = false;
+    if (videoRetryTimer === null) {
+      videoRetryTimer = setInterval(chargerVideo, VIDEO_RETRY_MS);
+    }
+  });
   $("btn-video-refresh").addEventListener("click", chargerVideo);
   chargerVideo();
 }
