@@ -42,7 +42,7 @@ from ament_index_python.packages import get_package_share_directory
 from geometry_msgs.msg import Twist
 from PIL import Image as PILImage
 from rclpy.node import Node
-from sensor_msgs.msg import Image
+from sensor_msgs.msg import CompressedImage, Image
 
 from robot_interfaces.msg import StringTime
 from robot_web.web_catalog import build_catalog
@@ -90,6 +90,12 @@ class WebBridgeNode(Node):
         # max d'encodage JPEG (le Pi ne doit pas encoder plus vite que servi).
         self.declare_parameter("camera_topic", "camera/image_raw")
         self.declare_parameter("video_fps", 10)
+        # true = le topic caméra porte du sensor_msgs/CompressedImage DÉJÀ en
+        # JPEG (vrai robot : person_tracker du Pi vision publie
+        # camera/image_raw/compressed, ~125 Ko/s — cf. dadou_vision_ros) :
+        # les octets sont servis TELS QUELS en MJPEG, zéro ré-encodage.
+        # false (défaut) = sensor_msgs/Image brut à encoder ici (sim : caméra gz).
+        self.declare_parameter("camera_compressed", False)
 
         self.web_port = self.get_parameter("web_port").value
         self.json_dir = self.get_parameter("json_dir").value
@@ -99,6 +105,7 @@ class WebBridgeNode(Node):
         self.max_angular = float(self.get_parameter("max_angular").value)
         self.camera_topic = self.get_parameter("camera_topic").value
         self.video_fps = max(1, int(self.get_parameter("video_fps").value))
+        self.camera_compressed = bool(self.get_parameter("camera_compressed").value)
 
         # ROS_DOMAIN_ID n'est pas exposé comme paramètre de node par rclpy :
         # c'est une variable d'environnement du PROCESSUS, lue une fois au
@@ -140,14 +147,19 @@ class WebBridgeNode(Node):
         self.last_jpeg = None
         self.last_jpeg_at = 0.0
         self._last_encode_s = 0.0
-        self.create_subscription(Image, self.camera_topic, self._on_camera, 10)
+        if self.camera_compressed:
+            self.create_subscription(
+                CompressedImage, self.camera_topic, self._on_camera_compressed, 10)
+        else:
+            self.create_subscription(Image, self.camera_topic, self._on_camera, 10)
 
         self.get_logger().info(
             "web_bridge_node prêt : port={} domain_id={} token_required={} json_dir={}"
-            " drive_enabled={} max_linear={} max_angular={} camera_topic={} video_fps={}".format(
+            " drive_enabled={} max_linear={} max_angular={} camera_topic={}"
+            " camera_compressed={} video_fps={}".format(
                 self.web_port, self.domain_id, self.sessions.token_required, self.json_dir,
                 self.drive_enabled, self.max_linear, self.max_angular,
-                self.camera_topic, self.video_fps))
+                self.camera_topic, self.camera_compressed, self.video_fps))
         if self.drive_enabled:
             # Trace explicite au démarrage : le pilotage roues est ACTIF (sim).
             self.get_logger().warning(
@@ -231,6 +243,21 @@ class WebBridgeNode(Node):
             return
         with self.video_lock:
             self.last_jpeg = jpeg
+            self.last_jpeg_at = now
+
+    def _on_camera_compressed(self, msg: CompressedImage) -> None:
+        """Callback abonnement caméra en mode camera_compressed (thread spin) :
+        le payload est DÉJÀ du JPEG (person_tracker du Pi vision, format
+        "jpeg") — on le stocke tel quel, aucun décodage/ré-encodage. Même
+        throttle que _on_camera : inutile de garder plus de frames que servies."""
+        if "jpeg" not in (msg.format or "").lower():
+            return  # format inattendu : on ignore (l'UI affichera "pas de vidéo")
+        now = time.monotonic()
+        if now - self._last_encode_s < 1.0 / self.video_fps:
+            return
+        self._last_encode_s = now
+        with self.video_lock:
+            self.last_jpeg = bytes(msg.data)
             self.last_jpeg_at = now
 
     def snapshot_jpeg(self) -> tuple:

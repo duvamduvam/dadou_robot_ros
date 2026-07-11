@@ -57,7 +57,10 @@ mouvement au-delà d'un seuil** (à fixer à la mesure, ordre de grandeur 250 ms
 ## 3. Retour opérateur (décidé)
 
 - **Caméra embarquée seule** (webcam du Pi 5 vision), diffusée en **MJPEG**
-  (`web_video_server`) à travers le VPN. Pas de plan large de salle : choix assumé —
+  à travers le VPN. **Réalisé le 2026-07-11** (variante sans `web_video_server`,
+  plus simple : person_tracker publie `camera/image_raw/compressed` JPEG 5 i/s
+  → web_bridge du Pi robot le sert tel quel sur `/video`, `camera_compressed`,
+  cf. interfaces.md). Pas de plan large de salle : choix assumé —
   la conduite se fait au flux embarqué, le **référent au téléphone est les yeux
   extérieurs** (et le son de la salle passe par cette même ligne).
 - Conséquence protocole : le référent n'est pas un simple porteur d'e-stop, il
@@ -125,7 +128,7 @@ bouton coup-de-poing sans fil ══ alim puissance roues      │ (hors logicie
                                 │ e_stop (verrou 255)
                                 ▼
                               graphe ROS existant (mux, deadman — inchangés)
-Pi vision ── web_video_server MJPEG ───────────────────────► navigateur
+Pi vision ── person_tracker JPEG 5 i/s ──► web_bridge /video MJPEG ──► navigateur
 ```
 
 ## 6. Phasage (décidé — s'insère dans la feuille de route sans la bousculer)

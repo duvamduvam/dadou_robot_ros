@@ -42,6 +42,10 @@ def generate_launch_description():
                               description="Plafond DUR vitesse angulaire (rad/s) appliqué serveur"),
         DeclareLaunchArgument("camera_topic", default_value="camera/image_raw",
                               description="Topic sensor_msgs/Image de la caméra embarquée (retour vidéo)"),
+        DeclareLaunchArgument("camera_compressed", default_value="false",
+                              description="true = camera_topic porte du CompressedImage JPEG"
+                                           " (vrai robot : flux du Pi vision), servi tel quel ;"
+                                           " false = Image brut à encoder (sim : caméra gz)"),
 
         Node(
             package="robot_web",
@@ -55,6 +59,8 @@ def generate_launch_description():
                 "max_linear": max_linear,
                 "max_angular": max_angular,
                 "camera_topic": LaunchConfiguration("camera_topic"),
+                "camera_compressed": ParameterValue(
+                    LaunchConfiguration("camera_compressed"), value_type=bool),
             }],
         ),
     ])

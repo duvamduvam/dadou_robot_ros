@@ -149,15 +149,21 @@ def generate_launch_description():
     # SÉCURITÉ : drive_enabled n'est PAS passé -> false (défaut du node), le
     # publisher cmd_vel_web n'existe donc pas : le pilotage web reste SIM-ONLY
     # tant que test scénique au sol + protocole caméra ne sont pas faits
-    # (docs/etude-interface-web.md §6). Sans source d'image sur le robot,
-    # /video répond 503 et l'UI affiche « pas de vidéo » (retour caméra réel =
-    # chantier à part, côté Pi vision). json_dir = structure assemblée par
+    # (docs/etude-interface-web.md §6). Retour vidéo (2026-07-11) : le flux
+    # vient du Pi VISION — person_tracker publie camera/image_raw/compressed
+    # (JPEG ~5 i/s, la webcam lui appartient en exclusif, cf. dadou_vision_ros)
+    # -> camera_compressed=True, les octets sont servis TELS QUELS en MJPEG
+    # (zéro ré-encodage sur le Pi robot). json_dir = structure assemblée par
     # Ansible (json/ à plat dans src/robot/, cf. docker-compose-sim.yml).
     web_bridge_node = Node(
         package="robot_web",
         executable="web_bridge",
         name="web_bridge_node",
-        parameters=[{"json_dir": "/home/ros2_ws/src/robot/json"}],
+        parameters=[{
+            "json_dir": "/home/ros2_ws/src/robot/json",
+            "camera_topic": "camera/image_raw/compressed",
+            "camera_compressed": True,
+        }],
     )
 
     # Chaîne de commande roues (twist_mux -> twist_deadman -> cmd_vel + wheels_bridge).

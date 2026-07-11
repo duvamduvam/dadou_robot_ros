@@ -80,6 +80,14 @@ source (W1 à venir).
   `multipart/x-mixed-replace` de la caméra embarquée, servi à `video_fps` ;
   **503 "pas de vidéo"** si aucune frame fraîche depuis 2 s — l'UI affiche alors
   un placeholder).
+- **Source vidéo** (paramètre `camera_compressed`, 2026-07-11) : en **sim**,
+  `camera/image_raw` (sensor_msgs/Image brut de la caméra gz, encodé JPEG par le
+  bridge) ; sur le **vrai robot**, `camera/image_raw/compressed`
+  (sensor_msgs/CompressedImage DÉJÀ en JPEG, publié ~5 i/s par le
+  `person_tracker` du **Pi vision** — seule source possible, la webcam lui
+  appartient en exclusif) servi TEL QUEL, zéro ré-encodage (~125 Ko/s réseau,
+  compatible WiFi/4G). Câblé dans `robot_app.launch.py` (robot réel) et
+  exposé en argument de `web.launch.py`.
 - **WebSocket** : `GET /ws`. Le `msg` publié sur les topics ROS est sérialisé
   EXACTEMENT comme la télécommande (`msg.msg = json.dumps(valeur)`, pas de
   ré-emballage `{topic: valeur}` sur le fil).
