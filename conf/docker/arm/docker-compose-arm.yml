@@ -26,6 +26,10 @@ services:
       # Chaîne cmd_vel (bridge/mux/deadman) — rsyncée sur le Pi par la tâche
       # ansible "ros2_dependencies -> src/", comme robot_bringup/robot_interfaces.
       - ../../../../robot_drive:/home/ros2_ws/src/robot_drive
+      # Pont web (console navigateur, contenus/supervision — drive_enabled
+      # reste false sur le robot, cf. robot_app.launch.py). Même mécanique de
+      # rsync que robot_drive.
+      - ../../../../robot_web:/home/ros2_ws/src/robot_web
       - ../../../../../build:/home/ros2_ws/build
       - ../../../../../install:/home/ros2_ws/install
       - ../../../../../log:/home/ros2_ws/log
