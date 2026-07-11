@@ -1,11 +1,10 @@
 #!/usr/bin/env python3
-import json
 import logging
 import logging.config
-import time
 
 import rclpy
 from rclpy.node import Node
+from robot.nodes.payload import decode
 from robot_interfaces.msg._string_time import StringTime
 
 from dadou_utils_ros.logging_conf import LoggingConf
@@ -49,8 +48,9 @@ class ServosNode(Node):
         self.timer = self.create_timer(0.1, self.timer_callback)
 
     def listener_callback(self, ros_msg):
-        msg = json.loads(ros_msg.msg)
-        duration = ros_msg.time
+        msg = decode(ros_msg, self.servo_type)
+        if msg is None:
+            return
         action_msg = {self.servo_type: msg}
         if ros_msg.time != 0:
             action_msg[DURATION] = ros_msg.time

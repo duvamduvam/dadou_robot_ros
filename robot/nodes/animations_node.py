@@ -11,6 +11,7 @@ from dadou_utils_ros.logging_conf import LoggingConf
 from dadou_utils_ros.utils_static import RELAY, AUDIO, FACE, ROBOT_LIGHTS, NECK, LEFT_EYE, \
     RIGHT_EYE, LEFT_ARM, RIGHT_ARM, ANIMATION, LOGGING_FILE_NAME, DURATION, STOP, WHEELS
 from robot.files.robot_json_manager import RobotJsonManager
+from robot.nodes.payload import decode
 from robot.robot_config import config
 from robot.sequences.animation_manager import AnimationManager
 from robot_interfaces.msg._string_time import StringTime
@@ -45,7 +46,10 @@ class AnimationsNode(Node):
 
     def listener_callback(self, ros_msg):
         logging.info("input : {}".format(ros_msg))
-        animation_msg = {ANIMATION: json.loads(ros_msg.msg)}
+        value = decode(ros_msg, ANIMATION)
+        if value is None:
+            return
+        animation_msg = {ANIMATION: value}
         if ros_msg.time != 0:
             animation_msg[DURATION] = ros_msg.time
         animations_msg = self.animations_manager.update(animation_msg)

@@ -20,6 +20,7 @@ from dadou_utils_ros.utils_static import BRIGHTNESS, ROBOT_LIGHTS, FACE, JSON_LI
     LOGGING_FILE_NAME, DURATION
 from robot.actions.face import Face
 from robot.actions.lights import Lights
+from robot.nodes.payload import decode
 from robot.robot_config import config
 from dadou_utils_ros.logging_conf import LoggingConf
 
@@ -56,19 +57,25 @@ class LightsNode(Node):
         self.timer = self.create_timer(0.1, self.timer_callback)
 
     def face_callback(self, ros_msg):
-        msg = json.loads(ros_msg.msg)
+        msg = decode(ros_msg, FACE)
+        if msg is None:
+            return
         duration = ros_msg.time
         logging.info('Face: "%s"' % msg)
         self.face.update({FACE: msg, DURATION: duration})
 
     def lights_callback(self, ros_msg):
-        msg = json.loads(ros_msg.msg)
+        msg = decode(ros_msg, ROBOT_LIGHTS)
+        if msg is None:
+            return
         duration = ros_msg.time
         logging.info('Lights: "%s"' % msg)
         self.lights.update({ROBOT_LIGHTS: msg, DURATION: duration})
 
     def generic_callback(self, lights_type, ros_msg):
-        msg = json.loads(ros_msg.msg)
+        msg = decode(ros_msg, lights_type)
+        if msg is None:
+            return
         action_msg = {lights_type: msg}
         if ros_msg.time != 0:
             action_msg[DURATION] = ros_msg.time
