@@ -84,14 +84,20 @@ Différences avec la sim, voulues :
   indépendante pour le reste — deux sources peuvent se marcher dessus,
   règle d'usage : la télécommande a raison sur scène).
 
-Déploiement (première fois — l'image ARM doit être reconstruite) :
-1. `python3-aiohttp` et `python3-pil` ont été ajoutés à
-   `conf/packages-docker.txt` le 2026-07-11 → **rebuild de l'image ARM**
-   requis une fois (sinon le node web meurt à l'import aiohttp).
+Déploiement (fait le 2026-07-11 — pont web actif sur le robot) :
+1. Rebuild image ARM fait (`python3-aiohttp`/`python3-pil`) ; un prochain
+   changement de `packages-docker.txt`/`requirements.txt` demandera le même
+   (`docker compose ... build` sur le Pi).
 2. Déploiement habituel : Ansible depuis `../dadou_utils_ros` (rsync du
    checkout — `robot_web` part avec `conf/ros2_dependencies/`), sentinelle
    `robot/change` pour déclencher le colcon build au redémarrage.
-3. Vérif : `http://192.168.1.2:8765` répond, badge ROUGE, un clic « visage »
+3. ⚠️ **Redémarrer via `sudo systemctl restart robot.service`, JAMAIS par un
+   `docker compose up` manuel** : le service systemd supervise le conteneur
+   avec un `compose up` attaché (Restart=always). Un recreate manuel lui
+   retire le conteneur sous les pieds — son client compose reste orphelin et
+   plus personne ne relancerait le conteneur en cas de crash (vécu le
+   2026-07-11 : « deux programmes en parallèle »).
+4. Vérif : `http://192.168.1.2:8765` répond, badge ROUGE, un clic « visage »
    s'affiche sur le vrai visage LED, et le journal `robot.log` trace la
    commande (`cmd web id=... topic=face`).
 
