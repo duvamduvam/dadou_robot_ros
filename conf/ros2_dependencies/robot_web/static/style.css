@@ -194,6 +194,15 @@ input {
   background: repeating-linear-gradient(45deg, #0c0e12, #0c0e12 12px, #101319 12px, #101319 24px);
 }
 
+/* PIÈGE (vécu 2026-07-11, « pas de vidéo » permanent sur Chrome ET Firefox
+   alors que le flux MJPEG tournait derrière) : le display:flex ci-dessus
+   ÉCRASE le display:none que le navigateur applique via l'attribut hidden
+   (une règle auteur bat toujours la feuille UA, à spécificité quelconque).
+   Cette règle rétablit le contrat hidden -> invisible. */
+.video-placeholder[hidden] {
+  display: none;
+}
+
 #btn-video-refresh {
   position: absolute;
   top: 0.4rem;
