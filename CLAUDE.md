@@ -81,6 +81,12 @@ docker exec -it dadou-sim-container bash -c 'source /opt/ros/$ROS_DISTRO/setup.s
 
 ## Prochaines étapes (dans l'ordre)
 
+En parallèle des priorités 0-1 : **chantier interface web / télé-présence** (plan
+complet cadré le 2026-07-11 — `docs/etude-interface-web.md`). Phase W0 (backend
+`web_bridge_node` supervision+contenus, validée en sim d'abord) peut démarrer tout
+de suite ; les roues via web sont conditionnées au test scénique au sol (priorité 1)
+et à un protocole caméra dédié.
+
 0. **Protocole physique chat_node V2 (conversation)** : le code est COMPLET et commité
    (nuit du 10 au 11/07 : ~15 commits sur les 3 dépôts, validé en sim — bras+yeux bougent
    sur l'animation « parle », vu par David dans Gazebo). Côté vision : chat_node
