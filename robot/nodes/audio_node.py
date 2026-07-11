@@ -2,7 +2,6 @@
 import logging
 
 import rclpy
-from adafruit_led_animation.helper import PixelSubset
 from rclpy.node import Node
 import time
 

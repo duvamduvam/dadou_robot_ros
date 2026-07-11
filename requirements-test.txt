@@ -3,3 +3,4 @@ filetype
 colorlog
 psutil
 xacro
+imageio

@@ -1,7 +1,6 @@
+# Imports matériels différés (pattern wheels.py) : le module doit s'importer sans les libs Pi.
 import logging
 import random
-
-from adafruit_servokit import ServoKit
 
 from dadou_utils_ros.misc import Misc
 from dadou_utils_ros.utils.time_utils import TimeUtils
@@ -34,6 +33,8 @@ class Servo:
         if not self.enabled:
             return
 
+        # ServoKit vient d'adafruit_servokit (I2C PCA9685), lib Pi : import différé.
+        from adafruit_servokit import ServoKit
         try:
             self.self_pwm_channels = ServoKit(channels=16)
             self.pwm_channel = self.self_pwm_channels.servo[pwm_channel_nb]

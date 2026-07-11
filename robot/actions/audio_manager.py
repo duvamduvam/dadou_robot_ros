@@ -36,18 +36,20 @@ FONDU_STEP = 2
 
 class AudioManager(AbstractJsonActions):
 
+    # Constantes (immuables) : restent au niveau classe.
     silence = "audios/silence.wav"
-    playlist = []
-    current_audio = None
-    current_audio_name = None
-    start_time = 0
     new_play_timeout = 2000
-
-    fondu_last_time = 0
-    stopping = False
 
     def __init__(self, config, json_manager):
         super().__init__(config=config, json_manager=json_manager, json_file=config[JSON_AUDIOS], action_type=AUDIO)
+        # État par instance (était au niveau classe = partagé, piège Python ;
+        # playlist=[] surtout, mutable partagé entre toutes les instances).
+        self.playlist = []
+        self.current_audio = None
+        self.current_audio_name = None
+        self.start_time = 0
+        self.fondu_last_time = 0
+        self.stopping = False
         self.config = config
         self.json_manager = json_manager
         # `audios-data.json` stores metadata (duration/background flag) computed offline.

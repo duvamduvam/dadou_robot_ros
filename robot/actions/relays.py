@@ -1,7 +1,5 @@
+# Imports matériels différés (pattern wheels.py) : le module doit s'importer sans les libs Pi.
 import logging
-
-import adafruit_pcf8574
-import board
 
 from dadou_utils_ros.misc import Misc
 from dadou_utils_ros.utils.time_utils import TimeUtils
@@ -34,6 +32,10 @@ class RelaysManager(AbstractJsonActions):
             return
 
         self.json_manager = json_manager
+
+        # Les libs Adafruit ne sont importables que sur le Pi (I2C présent).
+        import adafruit_pcf8574
+        import board
 
         i2c = board.I2C()  # uses board.SCL and board.SDA
         pcf = adafruit_pcf8574.PCF8574(i2c, address=0x21)

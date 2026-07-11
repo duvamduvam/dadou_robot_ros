@@ -1,6 +1,5 @@
+# Imports matériels différés (pattern wheels.py) : le module doit s'importer sans les libs Pi.
 import logging.config
-
-from adafruit_led_animation.helper import PixelSubset
 
 from dadou_utils_ros.utils.time_utils import TimeUtils
 from robot.robot_static import JSON_COLORS
@@ -34,20 +33,24 @@ class Lights(AbstractJsonActions):
 
     # TODO check examples : https://www.digikey.fr/en/maker/projects/circuitpython-led-animations/d15c769c6f6d411297657c35f0166958
 
-    sequence = {}
-    current_animation = {}
-    animations_methods = {}
-    default = DEFAULT
-    duration = 0
-    start_time = 0
-
     def __init__(self, config, start, end, json_manager, global_strip, light_type, json_light):
+        # État par instance (était au niveau classe = partagé entre l'éclairage
+        # corps et le visage, piège Python).
+        self.sequence = {}
+        self.current_animation = {}
+        self.animations_methods = {}
+        self.default = DEFAULT
+        self.duration = 0
+        self.start_time = 0
+
         self.light_type = light_type
         super().__init__(config=config, json_manager=json_manager, action_type=self.light_type, json_file=json_light)
 
         logging.info("starting lights")
 
         self.global_strip = global_strip
+        # PixelSubset vient d'adafruit_led_animation (lib Pi) : import différé.
+        from adafruit_led_animation.helper import PixelSubset
         self.strip = PixelSubset(global_strip, start, end)
         self.colors = json_manager.get_json_file(config[JSON_COLORS])
         self.lights_base = self.load_light_base(config, json_manager)
@@ -132,10 +135,10 @@ class Lights(AbstractJsonActions):
 
 
 class LightAnimation:
-    duration = 0
-    start_time = TimeUtils.current_milli_time()
 
     def __init__(self, method, duration: int):
         logging.debug("add animation method : " + method + " duration : " + str(duration))
         self.method = method
         self.duration = duration
+        # Était évalué À L'IMPORT du module (attribut de classe) : figé à l'instance.
+        self.start_time = TimeUtils.current_milli_time()

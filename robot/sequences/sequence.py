@@ -2,14 +2,12 @@ from dadou_utils_ros.utils.time_utils import TimeUtils
 
 
 class Sequence:
-    duration = 0
-    loop = False
-    elements = []
-    current_element = {}
-    pos = 0
-    start_time = TimeUtils.current_milli_time()
+    # État par instance : ces attributs étaient au niveau CLASSE (partagés entre
+    # toutes les Sequence, piège Python) et `start_time` était même évalué À
+    # L'IMPORT du module. Tout est désormais initialisé dans __init__.
 
     def __init__(self, duration, loop, elements, start_pixel):
+        self.pos = 0
         self.start_pixel = start_pixel
         self.duration = duration
         self.loop = loop

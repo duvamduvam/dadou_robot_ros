@@ -14,31 +14,30 @@ from robot.sequences.random_animation_start import RandomAnimationStart
 
 class AnimationManager(AbstractJsonActions):
 
-    current_key = None
-    playing = False
-    start = False
-
-    last_time = 0
-    timeout = 0
-    random_duration = 0
-    last_random = 0
-
-    datas = None
-    duration = 0
-
-    audios_animation = None
-    left_arm_animation = None
-    right_arm_animation = None
-    left_eye_animation = None
-    right_eye_animation = None
-    necks_animation = None
-    faces_animation = None
-    lights_animation = None
-    wheels_animation = None
-
-    current_animation = None
-
     def __init__(self, config, json_manager):
+        # État par instance (était au niveau classe = partagé entre instances,
+        # piège Python). Mêmes valeurs par défaut ; random_duration est réécrit
+        # plus bas avec un tirage aléatoire.
+        self.current_key = None
+        self.playing = False
+        self.start = False
+        self.last_time = 0
+        self.timeout = 0
+        self.random_duration = 0
+        self.last_random = 0
+        self.datas = None
+        self.duration = 0
+        self.audios_animation = None
+        self.left_arm_animation = None
+        self.right_arm_animation = None
+        self.left_eye_animation = None
+        self.right_eye_animation = None
+        self.necks_animation = None
+        self.faces_animation = None
+        self.lights_animation = None
+        self.wheels_animation = None
+        self.current_animation = None
+
         self.config = config
         super().__init__(config=config, json_manager=json_manager, action_type=ANIMATION, sequence_dir=self.config[SEQUENCES_DIRECTORY])
         self.stop_keys = self.config[STOP_ANIMATION_KEYS]

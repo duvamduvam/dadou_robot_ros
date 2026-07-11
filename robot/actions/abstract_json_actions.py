@@ -10,11 +10,12 @@ from dadou_utils_ros.utils_static import KEY, KEYS, NAME, LOOP, DURATION, BASE_P
 
 class AbstractJsonActions:
 
-    global_duration = 0
-    start_global_lime = 0
-    loop = False
-
     def __init__(self, config, json_manager, json_file=None, action_type=None, sequence_dir=None):
+        # État par instance (était au niveau classe = partagé entre toutes les
+        # actions filles Face/Lights/... piège Python).
+        self.global_duration = 0
+        self.start_global_lime = 0
+        self.loop = False
         self.config = config
         self.sequences_key = {}
         self.sequences_name = {}

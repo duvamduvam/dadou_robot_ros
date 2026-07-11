@@ -15,7 +15,9 @@ from robot.visual.visual import Visual
 #TODO wrong file name
 
 class Face(AbstractJsonActions):
-    visuals = {}
+    # Les tables ImageMapping sont immuables (construites une fois, jamais mutées) :
+    # elles restent au niveau classe. `visuals` (dict rempli à load_visuals) est en
+    # revanche un état mutable -> initialisé par instance dans __init__ (piège Python).
     mouth_image_mapping = ImageMapping.mouth()
     eye_image_mapping = ImageMapping.eye()
 
@@ -43,6 +45,7 @@ class Face(AbstractJsonActions):
     def __init__(self, config, json_manager,  strip):
         super().__init__(config=config, json_manager=json_manager, json_file=config[JSON_EXPRESSIONS], action_type=FACE)
         logging.debug("start face with pin " + str(config[LIGHTS_PIN]))
+        self.visuals = {}
         self.config = config
         self.strip = strip
         self.load_visuals()
