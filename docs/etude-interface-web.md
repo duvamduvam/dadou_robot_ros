@@ -212,3 +212,10 @@ le backend et le VPN s'ajoutent.
 9. **Risque résiduel assumé** : en V1, aucune détection d'obstacles embarquée — la
    déambulation publique repose sur plafond vitesse + référent + deadman. La
    détection 360° est la condition d'une déambulation sans référent, un jour.
+10. **Démarrer/arrêter la SIM depuis la console** (demande du 2026-07-11) : le
+   pont tourne DANS le conteneur sim, il ne peut pas se relancer lui-même — il
+   faudrait un mini-agent sur l'hôte (accès docker) piloté par la console, ou
+   exposer le socket Docker (à éviter). À concevoir plus tard ; en attendant,
+   la sim se pilote au `docker compose`, **headless par défaut** (vérifié le
+   2026-07-11 : la caméra gz rend hors écran, la console web EST la fenêtre —
+   Gazebo GUI seulement quand on veut voir la scène en 3D).
