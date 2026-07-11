@@ -13,8 +13,8 @@ Objectif long terme : robot autonome qui suit l'acteur, parle, simule des émoti
 - `ROS_DOMAIN_ID=42` = vrai robot, `43` = simulation. Ne jamais mélanger : une commande de
   test ne doit jamais pouvoir atteindre le vrai Didier.
 - Commiter un instantané AVANT tout refactoring.
-- `WHEELS_CMD_VEL_ENABLED` (robot/robot_config.py) reste à `False` tant que le protocole
-  caméra de la bascule cmd_vel n'a pas été exécuté (voir « Prochaines étapes »).
+- `WHEELS_CMD_VEL_ENABLED=True` est la config officielle depuis la bascule validée du
+  2026-07-04 ; tout retour en arrière ou nouvelle bascule repasse par le protocole caméra.
 
 ## État Phase 2 (2026-07-04) — migration mouvement vers les standards ROS
 
@@ -35,6 +35,29 @@ FAIT et validé en sim (tout est commité/poussé, CI verte, 123 tests unitaires
   slider vitesse 50 %→25 %, e-stop étanche, kill de la chaîne en plein mouvement →
   arrêt local en 440 ms. Protocole rejouable : `conf/scripts/validate-cmdvel-protocol.sh`
   (à exécuter dans le conteneur robot). Rollback : drapeau à False + sentinelle + restart.
+
+## État du 2026-07-11 — visage calibré, architecture assainie, temps réel
+
+- **Câblage LED du visage ÉTABLI physiquement** (mires lues par l'humain — la webcam ne
+  résout pas les motifs) et GRAVÉ dans `robot/visual/image_mapping.py` +
+  `test_image_mapping.py` : bouche en serpentin entrant en bas-droite, rangée basse et
+  yeux montés tête-bêche, œil droit 384-447 / gauche 448-511 (contigu, sans trous).
+  Ne JAMAIS « corriger » ces tests sans repasser les mires (`calib`, `calib-couleurs`,
+  `calib-bords` — voir docs/operations.md).
+- **Chantier architecture fait** : code mort purgé, décodage StringTime commun (payload
+  JSON invalide = refus loggué, plus de perte silencieuse), classe `Track` unique pour
+  les pistes de keyframes (fix au passage : les frames du visage étaient décalées d'un
+  cran), contrat `Action` (ABC), contrats de données testés (chaque visuel/audio/brique
+  référencé doit exister). **443 tests** (`.venv/bin/pytest -q`), CI verte.
+- **Temps réel fait** : `FastNeoPixel` (transmission sans le sleep de 31 ms de Blinka —
+  mesuré 32,6 → 1,3 ms bloqués par show), tick global 20 Hz (`TICK_PERIOD_S`, chaîne
+  roues non touchée), servos en rampe linéaire (`RAMP_SPEED=160`, à caler sur scène) +
+  anti-spam I2C + deadman façon roues + fix `random_duration` (le réel suit enfin la sim).
+- ⚠️ **`e_stop` n'a AUCUNE source** (verrou twist_mux déclaré, personne ne publie —
+  vérifié robot + télécommande). Le deadman 400 ms est l'arrêt d'urgence effectif.
+  À câbler côté télécommande, avec protocole roues.
+- ⚠️ **`chat_node` coupé** sur le Pi vision depuis le 11/07 (il écrase `face` au moindre
+  bruit). Relance : `ssh pi@192.168.1.151 'sudo docker restart dadou-vision-container'`.
 
 ## Commandes
 

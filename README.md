@@ -2,7 +2,9 @@
 ![Robot on stage](docs/pictures/bout-small.jpeg)
 
 This project aims to build a theatrical and street-performance robot.
-The robot can run speech and movement sequences, trigger accessories, play ambient audio, and coordinate with the handheld controller and helmet.
+The robot plays speech and movement sequences (face, arms, neck, wheels,
+lights, audio), reacts to a handheld controller and to a vision Pi, and can be
+rehearsed in a Gazebo simulation before touching the real hardware.
 
 ## Accessories
 ### Helmet
@@ -11,71 +13,68 @@ The robot can run speech and movement sequences, trigger accessories, play ambie
 ![controller](docs/pictures/controller.jpg)
 
 ## Documentation
-The runtime is written in Python on top of ROS 2 and targets a Raspberry Pi 4 plus companion RP2040 boards.
+The runtime is written in Python on top of ROS 2 **Jazzy**, containerised
+(Docker) on a Raspberry Pi 4, with a companion vision Pi 5.
 
-See [`docs/`](docs/) for detailed information:
-- [`docs/architecture.md`](docs/architecture.md): software layout and integration with other repositories.
-- [`docs/hardware/overview.md`](docs/hardware/overview.md): physical subsystems and maintenance notes.
-- [`docs/software/overview.md`](docs/software/overview.md): ROS nodes, action managers, JSON assets.
-- [`docs/interfaces.md`](docs/interfaces.md): ROS topics consumed and produced.
-- [`docs/operations.md`](docs/operations.md): deployment and rehearsal procedures.
+See [`docs/`](docs/):
+- [`docs/architecture.md`](docs/architecture.md): layers, ROS packages, sim/real boundary, safety.
+- [`docs/interfaces.md`](docs/interfaces.md): topics, the `StringTime` + JSON payload contract, drive chain.
+- [`docs/software/overview.md`](docs/software/overview.md): code structure, how to extend, tests & CI.
+- [`docs/hardware/overview.md`](docs/hardware/overview.md): physical subsystems.
+- [`docs/operations.md`](docs/operations.md): deployment, calibration patterns, rehearsal checklists.
 
 Related repositories:
-- [`../dadou_control_ros`](../dadou_control_ros) — controller inputs and GUI.
-- [`../dadou_utils_ros`](../dadou_utils_ros) — shared helpers, logging, deployment scripts.
+- [`../dadou_control_ros`](../dadou_control_ros) — remote controller.
+- [`../dadou_utils_ros`](../dadou_utils_ros) — shared helpers + Ansible deployment.
+- `../dadou_vision_ros` — vision / conversation stack (Pi 5).
 
-## Quick Start (local validation)
+## Quick start (tests, no hardware needed)
 ```bash
-git clone <repo-url> dadou_robot_ros
+git clone <repo-url> dadou_robot_ros   # + dadou_utils_ros as sibling (symlinked)
 cd dadou_robot_ros
-python3 -m venv venv
-source venv/bin/activate
-pip install -U pip
-pip install -r requirements.txt
-# Run the Python unit tests (local validation only)
-python -m unittest -v -s robot/tests
+python3 -m venv .venv
+.venv/bin/pip install -r requirements-test.txt   # same file as CI
+.venv/bin/pytest -q        # 443 unit tests, hardware imports are deferred
 ```
 
-Local execution is limited to automated tests and simulation tooling. The production robot runtime is containerised and must run on the Raspberry Pi hardware.
+## Simulation (Gazebo Harmonic, x86)
+```bash
+cd conf/docker/sim && ANIMATIONS=true docker compose -f docker-compose-sim.yml up -d
+# Play an animation in sim (arms/eyes/neck + face):
+docker exec dadou-sim-container bash -c 'source /opt/ros/$ROS_DISTRO/setup.sh && source /home/ros2_ws/install/setup.bash && ros2 topic pub --once animation robot_interfaces/msg/StringTime "{msg: \"\\\"parle\\\"\", time: 45000, anim: false}"'
+```
+`ROS_DOMAIN_ID` separates worlds: 42 = real robot, 43 = simulation.
 
-## Docker deployment on Raspberry Pi
-1. Provision the target Raspberry Pi (Raspberry Pi OS Lite, hostname `ros-robot.local`, SSH access). See [`docs/operations.md`](docs/operations.md) for network/SSH configuration and Ansible playbook usage.
-2. From your workstation, build the Docker image and push artifacts:
-   ```bash
-   cd /path/to/dadou_robot_ros
-   export ROBOT_ROS_DIR=$(pwd)
-   make -f conf/Makefile bt SERVER=<server> GUI=0
-   ```
-3. Launch the Docker services on the target (after the build has completed):
-   ```bash
-   cd /path/to/dadou_robot_ros
-   export ROBOT_ROS_DIR=$(pwd)
-   make -f conf/Makefile run SERVER=<server> GUI=0
-   ```
+## Deployment on the robot
+```bash
+cd conf && make d          # Ansible rsync of the local checkout + build marker
+ssh r 'sudo docker restart dadou-robot-container'
+```
+See [`docs/operations.md`](docs/operations.md) for the full procedure,
+calibration patterns and the wheels camera protocol.
 
-The `bt` and `run` make targets wrap the helper scripts in `conf/scripts/` (notably `compose-up-local.sh`). Adjust `SERVER`, `GUI`, and related variables to match your infrastructure.
-
-## Repository Layout
-- `robot/`: ROS 2 nodes, action handlers, configuration classes.
-- `json/`: Sequences and playlists consumed at runtime.
-- `medias/`: Audio and visual assets.
-- `conf/`: ROS 2 launch files and deployment helpers.
-- `docs/`: Operational documentation.
+## Repository layout
+- `robot/`: application — ROS nodes, actions, Track sequencer, LED wiring.
+- `conf/ros2_dependencies/`: standalone ROS 2 packages (interfaces, drive
+  chain, simulation, URDF, bringup).
+- `json/`: sequences, expressions, lights — all under data-contract tests.
+- `medias/`: audio and visual assets (face visuals are generated by
+  `conf/scripts/generate_expressions.py`).
+- `conf/`: Docker, launch, deployment helpers, scripts.
+- `docs/`: documentation.
 
 ## Contributing
-- Keep configuration values in `robot/robot_config.py` aligned with the physical robot.
-- Document new sequences or hardware modules under `docs/`.
-- Run unit tests (and hardware tests when possible) located in `robot/tests/`.
+- Safety first: any movement feature must handle its stop case; the wheels
+  path requires simulation + camera protocol before ground use.
+- Keep the code clean and AI-maintainable: no dead code, one abstraction per
+  concept, contracts tested, French comments explaining the WHY.
+- Physical acquisitions (wiring, calibration) must be locked by unit tests.
+- Run `.venv/bin/pytest -q` before any commit; CI runs it on every push.
 
-## Integration test
-- ansible deployement of jenkins and sonar
-- jenkins : http://jenkins.local:8080/
-- sonar : http://jenkins.local:9000/
-
-## For AI Assistants
-- Deployment workflow and remote commands: [`docs/operations.md`](docs/operations.md)
-- Hardware reference when answering integration questions: [`docs/hardware/overview.md`](docs/hardware/overview.md)
-- Available automated tests: [`docs/software/overview.md`](docs/software/overview.md) and `robot/tests/`
+## For AI assistants
+- Working state and next steps (French): [`CLAUDE.md`](CLAUDE.md)
+- Deployment & calibration commands: [`docs/operations.md`](docs/operations.md)
+- Topics and payload contract: [`docs/interfaces.md`](docs/interfaces.md)
 
 ## License
 To be specified by the project owner.

@@ -1,36 +1,57 @@
 # Operations & Rehearsal Checklist
 
-## Deployment
-- Use the Ansible playbooks from `dadou_utils_ros/ansible` (`install-pios-full.yml`, `deploy-pios.yml`).
-- Before deploying, update the `robot/change` marker file (see shared Makefiles) to trigger remote builds.
-- Ensure the three repositories are synchronised on the Raspberry Pi: controller, robot, utilities.
+## Deployment (workstation → robot)
+- `cd conf && make d` — creates the `robot/change` build marker and runs the
+  Ansible playbook (`dadou_utils_ros/ansible/deploy-pios.yml`, rsync of the
+  local checkout — no git on the Pi). Then restart the container:
+  `ssh r 'sudo docker restart dadou-robot-container'` (the marker triggers a
+  colcon build at startup).
+- SSH alias `r` = pi@robot (`robot.local`, 192.168.1.2 if mDNS fails). Vision
+  Pi: 192.168.1.151.
+- Application log: `/home/ros2_ws/log/robot.log` INSIDE the container.
 
-## Calibration
-- Wheels: confirm PWM limits (`MAX_PWM_L/R`) match the motor controllers.
-- Arms: run the servo calibration routine (document the script once finalised) and update `robot_config.py`.
-- LEDs: verify brightness (`BRIGHTNESS`) to suit the venue stage lighting.
+## Calibration & verification tooling
+- **Face LED patterns** (expressions, publish on `face`): `"calib"` (digits
+  123 + E + eye F — fine orientation), `"calib-couleurs"` (one colour per
+  matrix — wiring permutation), `"calib-bords"` (border rings — any start
+  offset breaks a ring, no left/right interpretation needed). The wiring is
+  locked by `test_image_mapping.py`; re-run the patterns after ANY change on
+  the face path. Publish example:
+  `ros2 topic pub --once /face robot_interfaces/msg/StringTime "{msg: '\"calib\"', time: 0, anim: false}"`
+- **Brightness** (non-persistent, default 0.05):
+  `{msg: '{"brightness": 0.15}'}` on `robot_lights` — 0.15 is comfortable to
+  read patterns, LED patterns are unreadable on webcams (fixed-focus + PWM
+  flicker): read them with human eyes.
+- **Wheels**: camera protocol replay `conf/scripts/validate-cmdvel-protocol.sh`
+  (run inside the robot container, wheels OFF the ground).
+- Before any face calibration session: **stop `chat_node`** on the vision Pi
+  (it overwrites `face` on any ambient noise):
+  `ssh pi@192.168.1.151 'sudo docker restart dadou-vision-container'` restores it.
 
-## Pre-show Checklist
-1. Inspect hardware connections (wheels locked, arms secure, LED strips intact).
-2. Power on the robot and remote controller.
-3. Launch ROS 2 core and the robot nodes (`ros2 launch robot_bringup robot_app.launch.py`).
-4. Launch the remote controller GUI and run a quick input test (eyes, mouth, wheels, audio cue).
-5. Confirm logging directories are writable (both remote and robot).
+## Pre-show checklist
+1. Inspect hardware (wheels locked, arms secure, LED strips intact).
+2. Power on robot and remote controller (Pi 5 vision needs the 27 W PSU).
+3. The robot app autostarts with the container; check
+   `ros2 topic info /face` shows a subscriber.
+4. Remote controller GUI: quick input test (eyes, mouth, wheels, audio cue).
+5. Test one full animation (`ros2 topic pub --once /animation ... '"parle"'`).
 
-## During the Show
-- Stage tech monitors the GUI for feedback messages.
-- Keep a backup USB controller ready in case of hardware failure.
-- Have manual overrides documented (e.g., disable wheels, mute audio) in this file once defined.
+## During the show
+- Stage tech monitors the GUI.
+- Wheels: remote input always overrides animations (twist_mux priority);
+  releasing all inputs stops the wheels in ≤ 400 ms (deadman). ⚠️ There is no
+  wired `e_stop` source yet — the deadman IS the emergency stop.
+- Manual overrides: `face`/`animation` `"stop"` payloads; servos return to
+  rest on animation stop or deadman.
 
 ## Post-show
-- Archive logs for diagnostics (`logs/robot-test.log` or the configured ROS logs).
-- Recharge batteries / power down equipment safely.
-- Track outstanding issues in the project management tool (link to be added).
+- Archive `/home/ros2_ws/log/robot.log` for diagnostics.
+- Recharge batteries / power down safely.
 
 ## Troubleshooting
-- See `docs/interfaces.md` for topic mapping references.
-- Review shared troubleshooting steps in `dadou_control_ros/docs/testing.md` and `dadou_utils_ros/docs/deployment.md`.
-- Jenkins/Sonar pipeline:
-  - The Jenkins container already incl. OpenJDK 21. If SonarScanner complains about `java`, install/refreh it via `sudo docker exec --user root jenkins bash -lc "apt-get update && apt-get install -y openjdk-21-jre-headless"` and remove the bundled `jre` in the scanner directory so it falls back to `/opt/java/openjdk/bin/java`.
-  - Configure Jenkins (Manage Jenkins → Configure System → Global properties) with `JAVA_HOME=/opt/java/openjdk` and `PATH+JAVA=/opt/java/openjdk/bin` to avoid the JENKINS-41339 warning.
-  - After redeploying Jenkins via Ansible, relaunch `dadou_robot_sonar`.
+- Message published but nothing happens → check the payload is JSON
+  (`'"name"'` with embedded quotes). Invalid payloads are logged as ERROR with
+  the topic name since 2026-07-11 (before: silently dropped).
+- Face changes by itself → `chat_node` (vision Pi) reacts to ambient sound.
+- mDNS `.local` may fail from some terminals: use the IPs above.
+- Topic mapping reference: [`interfaces.md`](interfaces.md).

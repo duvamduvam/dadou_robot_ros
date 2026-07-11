@@ -1,33 +1,83 @@
 # Robot Runtime Architecture
 
 ## Purpose
-`dadou_robot_ros` is the ROS 2 package deployed on the robot RPI4 body. It consumes commands from the remote controller (`dadou_control_ros`) and actuates the physical subsystems.
+`dadou_robot_ros` is the software deployed on the robot's Raspberry Pi 4
+(Docker, ROS 2 **Jazzy**). It plays authored animation sequences, reacts to the
+remote controller (`dadou_control_ros`) and to the vision Pi, and actuates the
+physical subsystems.
 
-## Main Components
-- **Nodes (`robot/nodes/`)**: Subscribers for audio, relays/lights, wheels, system tasks. Each node extends `SubscriberNode`, which wires logging and message handling.
-- **Actions (`robot/actions/`)**: Declarative JSON-driven animation and effect handlers (lights, servo sequences, etc.).
-- **Robot configuration (`robot/robot_config.py`)**: Centralised hardware constants (PWM channels, calibration, logging paths).
-- **JSON assets (`json/`)**: Pre-authored sequences, playlists, and dialogue resources used during performances.
-- **Media (`medias/`)**: Audio files and visual assets triggered by sequences.
-- **Tests (`robot/tests/`)**: Unit tests and hardware exercises (e.g., stepper motor scripts) used for validation before a show.
+## Two worlds in one repository
+- **`robot/`** — the Python application (imported as `robot.*`), coupled to the
+  shared library `dadou_utils_ros` (symlink, no versioning — protected by
+  contract tests and a cross-repo CI job).
+- **`conf/ros2_dependencies/`** — five standalone ROS 2 (ament) packages built
+  by colcon:
 
-## Interaction With Other Repositories
-- Subscribes to ROS topics published by `dadou_control_ros` (see [`interfaces.md`](interfaces.md)).
-- Imports shared utilities from `dadou_utils_ros` (logging, time utilities, deployment playbooks).
-- Deployed through the shared Ansible roles located in `dadou_utils_ros/ansible`.
+| Package | Role | Depends on |
+|---|---|---|
+| `robot_interfaces` | messages (`StringTime`, …) | nothing — the shared contract |
+| `robot_drive` | cmd_vel chain (bridge, twist_mux config, deadman, kinematics) | `robot_interfaces` only |
+| `robot_sim` | Gazebo Harmonic simulation (servos + LED logic re-implemented) | `robot_interfaces` only |
+| `robot_description` | URDF (xacro) | — |
+| `robot_bringup` | launch of the real app | `robot.*` + utils (the one assumed exception) |
 
-## Runtime Flow
+`robot_drive` and `robot_sim` import **nothing** from the application: the
+sim/real boundary is code duplication by design (documented in their
+docstrings), with mirror unit tests on both sides. Runtime isolation is doubled
+by `ROS_DOMAIN_ID` (42 = real robot, 43 = simulation) — a test command must
+never be able to reach the real Didier.
+
+## Layering inside `robot/` (strictly downward, no cycles)
+
 ```
-Controller publishes -> robot/nodes/<component> subscriber -> robot/actions/<component>
-                                      |
-                                      +-> hardware drivers / RP2040 / LED strips
+nodes/      ROS boundary: decode StringTime payloads (nodes/payload.py,
+            explicit rejection of invalid JSON), 20 Hz tick (TICK_PERIOD_S)
+  └─> actions/    one Action per subsystem (contract: robot/actions/action.py,
+                  ABC update(msg) / process()) — Face, Lights, AudioManager,
+                  Servo (linear ramp + I2C anti-spam + deadman), Wheels,
+                  RelaysManager, AnimationManager
+        └─> sequences/track.py   ONE keyframe-track class (Track), injected
+                                 clock, two named constructors for the two JSON
+                                 readings (emit-at-t / displayed-until-t)
+        └─> visual/              ImageMapping (LED wiring as a precomputed
+                                 table — the PHYSICAL truth, locked by tests),
+                                 FastNeoPixel (vendored transmit without
+                                 Blinka's 31 ms sleep: 32.6 -> 1.3 ms blocked
+                                 per show(), measured), Visual (raw PNG load)
+        └─> robot_config.py / robot_static.py   deploy constants; shared
+                                 constants stay in dadou_utils_ros/utils_static
+                                 (one-way migration rule + contract test)
 ```
 
-## Safety & Constraints
-- Movements must respect mechanical limits defined in `robot_config.py`. Update the config when changing actuators.
-- Logging is mandatory; the shared logging factory enriches entries with class names to simplify live debugging backstage.
-- Most sequences are JSON driven; avoid hardcoding timings in Python unless unavoidable.
+## Animation pipeline
+`animations_node` samples the JSON sequence tracks at 20 Hz through
+`AnimationManager` (one `Track` per track: audio, face, lights, neck, eyes,
+arms, wheels) and publishes per-track `StringTime` messages. Each consumer node
+applies them event-driven. Values are discrete; smoothing lives in consumers
+(servo linear ramp, LED frame rendering).
 
-Complementary documentation:
-- Controller stack: `../dadou_control_ros/docs/architecture.md`
-- Utilities & logging: `../dadou_utils_ros/docs/modules.md`
+**Stop & deadman**: end of sequence broadcasts `"stop"` on every track. Wheels
+AND servos also receive the remaining time (`msg.time`) while an animation
+runs, and arm an absolute stop deadline (+2 s margin): if `animations_node`
+dies mid-animation, wheels stop and servos return to rest.
+
+## Safety & constraints
+- Any movement feature MUST handle its stop case (deadman, e-stop, link loss).
+- Wheels-path changes: simulation first, then the camera protocol (wheels off
+  the ground) before any ground use. The drive chain contract is frozen.
+- `e_stop` currently has NO publisher (mux lock is declared but sourceless) —
+  the deadman is the effective safety net. See `interfaces.md`.
+- Face LED wiring (mouth serpentine entering bottom-right, eyes 384/448,
+  bottom row and eyes mounted upside down) was established physically with the
+  calibration test patterns on 2026-07-11 and is LOCKED by
+  `robot/tests/unit/test_image_mapping.py` — do not "fix" those tests without
+  re-running the patterns on the robot.
+
+## Tests
+443 unit tests (pytest, `robot/tests/unit`, no hardware — deferred hardware
+imports pattern), run by CI on every push; `dadou_utils_ros` CI re-runs the
+consumers' tests to catch shared-contract breaks. Data contracts (expressions,
+lights, sequences, referenced assets) are tested too.
+
+Complementary documentation: `interfaces.md` (topics & payload contract),
+`operations.md` (deploy & calibration), `../CLAUDE.md` (working state, French).
