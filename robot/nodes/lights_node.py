@@ -15,7 +15,7 @@ from robot_interfaces.msg._string_time import StringTime
 from dadou_utils_ros.misc import Misc
 from robot.files.robot_json_manager import RobotJsonManager
 from robot.robot_static import LIGHTS_START_LED, LIGHTS_LED_COUNT, LIGHTS_PIN, LIGHTS_END_LED, \
-    I2C_ENABLED, DIGITAL_CHANNELS_ENABLED
+    I2C_ENABLED, DIGITAL_CHANNELS_ENABLED, TICK_PERIOD_S
 from dadou_utils_ros.utils_static import BRIGHTNESS, ROBOT_LIGHTS, FACE, JSON_LIGHTS, LIGHTS, \
     LOGGING_FILE_NAME, DURATION
 from robot.actions.face import Face
@@ -37,12 +37,15 @@ class LightsNode(Node):
         if not self.enabled:
             return
 
-        #prevent test fail
-        import neopixel
+        # Import différé (lib Pi absente sur x86) : on ne touche à FastNeoPixel
+        # qu'ici, dans la branche `enabled` (donc sur le vrai robot). FastNeoPixel
+        # remplace neopixel.NeoPixel pour supprimer le time.sleep de 31 ms par
+        # show() du driver Blinka (voir robot/visual/fast_neopixel.py).
+        from robot.visual.fast_neopixel import FastNeoPixel
 
         robot_json_manager = RobotJsonManager(config)
-        pixels = neopixel.NeoPixel(config[LIGHTS_PIN], config[LIGHTS_LED_COUNT], auto_write=False,
-                                   brightness=config[BRIGHTNESS])
+        pixels = FastNeoPixel(config[LIGHTS_PIN], config[LIGHTS_LED_COUNT], auto_write=False,
+                              brightness=config[BRIGHTNESS])
 
         self.face = Face(config=config, json_manager=robot_json_manager, strip=pixels)
         self.lights = Lights(config=config, start=config[LIGHTS_START_LED], end=config[LIGHTS_END_LED],
@@ -54,7 +57,7 @@ class LightsNode(Node):
         self.face_subscription = self.create_subscription(
             StringTime, FACE, self.face_callback, 10)
 
-        self.timer = self.create_timer(0.1, self.timer_callback)
+        self.timer = self.create_timer(TICK_PERIOD_S, self.timer_callback)
 
     def face_callback(self, ros_msg):
         msg = decode(ros_msg, FACE)

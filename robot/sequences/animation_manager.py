@@ -164,7 +164,9 @@ class AnimationManager(AbstractJsonActions):
         self.fill_event(events, FACE, self.faces_animation)
         self.fill_event(events, ROBOT_LIGHTS, self.lights_animation)
         if len(events) > 0:
-            logging.warning('update animation {} with values {}'.format(self.current_animation[NAME], events))
+            # debug (et non warning) : ce log tombe à CHAQUE tick actif d'animation
+            # (20 Hz depuis TICK_PERIOD_S) -> écriture fichier sur SD en boucle chaude.
+            logging.debug('update animation {} with values {}'.format(self.current_animation[NAME], events))
             events[ANIMATION] = True
         return events
 

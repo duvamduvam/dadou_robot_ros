@@ -13,6 +13,7 @@ from dadou_utils_ros.utils_static import RELAY, AUDIO, FACE, ROBOT_LIGHTS, NECK,
 from robot.files.robot_json_manager import RobotJsonManager
 from robot.nodes.payload import decode
 from robot.robot_config import config
+from robot.robot_static import TICK_PERIOD_S
 from robot.sequences.animation_manager import AnimationManager
 from robot_interfaces.msg._string_time import StringTime
 
@@ -42,7 +43,7 @@ class AnimationsNode(Node):
             self.listener_callback,
             10)
 
-        self.timer = self.create_timer(0.1, self.timer_callback)
+        self.timer = self.create_timer(TICK_PERIOD_S, self.timer_callback)
 
     def listener_callback(self, ros_msg):
         logging.info("input : {}".format(ros_msg))
@@ -65,9 +66,11 @@ class AnimationsNode(Node):
             logging.error(e, exc_info=True)
 
     def send_msgs(self, animations_msg):
-        logging.info("animations msg to publish {}".format(animations_msg))
+        # debug : appelé à chaque tick actif (20 Hz) -> boucle chaude, écriture SD.
+        logging.debug("animations msg to publish {}".format(animations_msg))
 
         if ANIMATION in animations_msg and not animations_msg[ANIMATION]:
+            # Arrêt d'animation = événement rare : on le garde en info.
             logging.info("send animations stop")
             msg = StringTime()
             msg.msg = json.dumps(STOP)
@@ -78,7 +81,8 @@ class AnimationsNode(Node):
         if isinstance(animations_msg, dict):
             for k, v in animations_msg.items():
                 if k in self.action_publishers:
-                    logging.info("publish {} in {}".format(v, k))
+                    # debug : une ligne par piste ET par tick actif -> boucle chaude.
+                    logging.debug("publish {} in {}".format(v, k))
                     msg = StringTime()
                     if ANIMATION in animations_msg:
                         msg.anim = animations_msg[ANIMATION]

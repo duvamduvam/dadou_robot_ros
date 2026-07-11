@@ -121,6 +121,14 @@ LORA_MOSI_PIN = 'lora mosi pin'
 LORA_RESET_PIN = 'lora reset pin'
 LORA_SCK_PIN = 'lora sck pin'
 
+############### Cadence des nodes ###############
+
+# 20 Hz — le tick global des nodes ; 10 Hz plafonnait la résolution des
+# animations, tenable depuis la suppression du sleep de 31 ms du driver LED
+# (voir robot/visual/fast_neopixel.py). NE PAS appliquer à la chaîne roues
+# (wheels_node / robot_drive : périmètre gelé, cadences propres).
+TICK_PERIOD_S = 0.05
+
 ############### Boucle principale / logging ###############
 
 LITTLE_MOVE = "little move"

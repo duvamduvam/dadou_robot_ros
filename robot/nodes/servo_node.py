@@ -9,7 +9,7 @@ from robot_interfaces.msg._string_time import StringTime
 
 from dadou_utils_ros.logging_conf import LoggingConf
 from robot.robot_static import HEAD_PWM_NB, DEFAULT_POS, I2C_ENABLED, PWM_CHANNELS_ENABLED, \
-    SERVOS, MAX_POS, SERVO
+    SERVOS, MAX_POS, SERVO, TICK_PERIOD_S
 from dadou_utils_ros.utils_static import NECK, NAME, LOGGING_FILE_NAME, DURATION
 from robot.actions.servo import Servo
 from robot.robot_config import config
@@ -45,7 +45,7 @@ class ServosNode(Node):
             self.listener_callback,
             10)
 
-        self.timer = self.create_timer(0.1, self.timer_callback)
+        self.timer = self.create_timer(TICK_PERIOD_S, self.timer_callback)
 
     def listener_callback(self, ros_msg):
         msg = decode(ros_msg, self.servo_type)

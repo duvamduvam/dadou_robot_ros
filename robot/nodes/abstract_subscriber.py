@@ -9,6 +9,7 @@ from rclpy.node import Node
 
 from dadou_utils_ros.logging_conf import LoggingConf
 from dadou_utils_ros.utils_static import LOGGING_FILE_NAME, DURATION, ANIMATION
+from robot.robot_static import TICK_PERIOD_S
 from robot.nodes.payload import decode
 from robot_interfaces.msg._string_time import StringTime
 
@@ -31,7 +32,7 @@ class SubscriberNode(Node):
             self.listener_callback,
             10)
 
-        self.timer = self.create_timer(0.1, self.timer_callback)
+        self.timer = self.create_timer(TICK_PERIOD_S, self.timer_callback)
 
     def listener_callback(self, ros_msg):
         msg = decode(ros_msg, self.action_type)
