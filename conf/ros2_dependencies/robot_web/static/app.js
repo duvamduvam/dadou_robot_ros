@@ -535,22 +535,62 @@ $("vitesse").addEventListener("input", () => {
 // ouverte AVANT que la caméra publie (ou pendant un redémarrage de la sim)
 // restait sur « pas de vidéo » jusqu'à un clic manuel sur ⟳ -- vécu, pas clair.
 const VIDEO_RETRY_MS = 5000;
+// Sondage de la première frame (cf. PIÈGE Chrome dans surveillerPremiereFrame).
+const VIDEO_WATCH_MS = 500;
 let videoRetryTimer = null;
+let videoWatchTimer = null;
 
 function chargerVideo() {
   // Cache-buster : force une nouvelle requête (le flux précédent peut être en
   // 503 depuis, ou figé). Le serveur répond 503 si aucune frame -> onerror.
   $("video").src = urlHttp("/video?ts=" + Date.now());
+  surveillerPremiereFrame();
+}
+
+function surveillerPremiereFrame() {
+  // PIÈGE Chrome (vécu console « Didier réel », 2026-07-11) : sur un flux
+  // multipart/x-mixed-replace, l'événement 'load' de <img> ne se déclenche
+  // qu'à la FIN de la réponse — or un MJPEG en marche ne se termine jamais.
+  // Résultat : la vidéo tournait DERRIÈRE le placeholder jamais masqué. On
+  // détecte donc la première frame décodée par naturalWidth > 0 (remis à 0
+  // par le navigateur à chaque changement de src), en sondant à 2 Hz.
+  // Firefox, lui, déclenche 'load' par frame : le handler 'load' ci-dessous
+  // est conservé (il fait la même chose, juste plus tôt).
+  if (videoWatchTimer !== null) {
+    clearInterval(videoWatchTimer);
+  }
+  videoWatchTimer = setInterval(() => {
+    if ($("video").naturalWidth > 0) {
+      videoEnMarche();
+    }
+  }, VIDEO_WATCH_MS);
+}
+
+function videoEnMarche() {
+  // Première frame visible : placeholder masqué, timers de détection/ré-essai
+  // arrêtés (le prochain chargerVideo -- ⟳, changement de cible, erreur -- les
+  // réarmera).
+  $("video-placeholder").hidden = true;
+  if (videoWatchTimer !== null) {
+    clearInterval(videoWatchTimer);
+    videoWatchTimer = null;
+  }
+  if (videoRetryTimer !== null) {
+    clearInterval(videoRetryTimer);
+    videoRetryTimer = null;
+  }
 }
 
 function installerVideo() {
   const img = $("video");
   const placeholder = $("video-placeholder");
   img.addEventListener("load", () => {
-    placeholder.hidden = true;
-    if (videoRetryTimer !== null) {
-      clearInterval(videoRetryTimer);
-      videoRetryTimer = null;
+    // Firefox : 'load' par frame -> chemin nominal. Chrome : ne se déclenche
+    // qu'à la fermeture du flux (cf. surveillerPremiereFrame) -- une frame a
+    // alors été décodée (naturalWidth > 0), masquer le placeholder reste
+    // correct, et le flux fermé sera relancé par ⟳ ou un changement de cible.
+    if (img.naturalWidth > 0) {
+      videoEnMarche();
     }
   });
   img.addEventListener("error", () => {
