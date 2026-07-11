@@ -20,6 +20,15 @@ from robot_interfaces.msg._string_time import StringTime
 
 PUBLISHER_LIST = [AUDIO, FACE, ROBOT_LIGHTS, RELAY, NECK, LEFT_EYE, RIGHT_EYE, LEFT_ARM, RIGHT_ARM, WHEELS]
 
+# Pistes dotées d'un deadman (arrêt de secours si ce node meurt en pleine
+# animation) : elles reçoivent le temps RESTANT (remaining_ms) et non la durée
+# figée, pour armer une échéance d'arrêt absolue côté action.
+#  - WHEELS : sans ça, un crash laisserait les roues rouler (comportement
+#    historique, INCHANGÉ).
+#  - servos (cou/yeux/bras) : sans ça, un mode random tournerait pour toujours
+#    (ajout 2026-07-11 -- les servos n'avaient aucun deadman).
+DEADMAN_KEYS = (WHEELS, NECK, LEFT_EYE, RIGHT_EYE, LEFT_ARM, RIGHT_ARM)
+
 
 class AnimationsNode(Node):
     def __init__(self):
@@ -89,9 +98,11 @@ class AnimationsNode(Node):
                     msg.msg = json.dumps(v)
                     if DURATION in animations_msg and animations_msg[DURATION] != 0:
                         msg.time = animations_msg[DURATION]
-                    # Les roues ont besoin du temps restant pour armer leur deadman :
-                    # sans lui, un crash de ce node en pleine animation les laisserait tourner.
-                    if k == WHEELS and msg.anim:
+                    # Roues ET servos ont besoin du temps restant pour armer leur
+                    # deadman : sans lui, un crash de ce node en pleine animation
+                    # les laisserait tourner (roues qui roulent, random servo sans
+                    # fin). La marge d'arrêt est ajoutée côté action.
+                    if k in DEADMAN_KEYS and msg.anim:
                         msg.time = self.animations_manager.remaining_ms()
                     self.action_publishers[k].publish(msg)
 

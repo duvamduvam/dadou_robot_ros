@@ -14,20 +14,21 @@ Découpage volontaire (même philosophie que leds_logic.py / gaze_control.py) :
  - DANS le node (scripts/servos_sim_node) : uniquement les entrées/sorties ROS
    (JSON <-> StringTime, Float64 en radians).
 
-DIVERGENCE ASSUMÉE avec robot/actions/servo.py (documentée, pas un bug de ce
-module) : Servo.process() lit `self.random_duration` armé par
-`if RANDOM_DURATION in msg:` où `msg` est le dict TOP-LEVEL passé à update()
-(= {servo_type: {...}}), et non `msg[servo_type]`. Une clé "random duration"
-plaçée normalement -- DANS le dict du servo, comme le montrent les vraies
-séquences JSON et robot/tests/sandbox/actions/test_servos.py
-(`{NECK: {MODE: RANDOM, RANDOM_DURATION: 30000, ...}}`) -- n'est donc JAMAIS
-lue par le vrai code : `RANDOM_DURATION in msg` (le dict top-level, qui ne
-contient que la clé servo_type et parfois DURATION="duration", jamais
-"random duration") est toujours faux en pratique. C'est un bug dormant côté
-robot réel (aucune séquence jouée en spectacle n'utilise "random duration",
-donc jamais observé). Ici on lit la clé au bon endroit (dans le dict du
-servo) : le random_duration doit RÉELLEMENT fonctionner en sim -- c'est
-explicitement demandé (test "random duration -> sortie auto").
+DIVERGENCE RÉSOLUE (2026-07-11) avec robot/actions/servo.py : elle est
+désormais alignée sur ce module. Historique -- Servo.process() lisait
+`self.random_duration` armé par `if RANDOM_DURATION in msg:` où `msg` était le
+dict TOP-LEVEL passé à update() (= {servo_type: {...}}), et non
+`msg[servo_type]`. Une clé "random duration" placée normalement -- DANS le dict
+du servo, comme le montrent les vraies séquences JSON et
+robot/tests/sandbox/actions/test_servos.py
+(`{NECK: {MODE: RANDOM, RANDOM_DURATION: 30000, ...}}`) -- n'était donc JAMAIS
+lue par le vrai code (bug dormant : aucune séquence de spectacle n'utilisait
+"random duration"). Depuis le passage du vrai Servo à la rampe linéaire, il lit
+la clé au bon endroit (`msg[servo_type].get(RANDOM_DURATION, 0)`) et applique la
+MÊME sémantique de sortie que ce module (retour NORMAL à l'échéance, position
+laissée où le dernier tirage l'a mise). ServoSim reste la référence de
+sémantique ; les deux implémentations doivent maintenant coïncider (à la rampe
+matérielle près, absente en sim).
 """
 import math
 import random
