@@ -132,13 +132,17 @@ scp follow_control/person_follower/twist_mux.yaml/setup.py + sentinelles.
    (boutons, slider, gants), une séquence de spectacle complète — première fois que le
    mode cmd_vel roule au sol. Vérifier aussi le sens de rotation gauche/droite (le
    protocole roues hors sol ne l'a validé qu'en marche avant symétrique).
-2. **Protocole caméra du cou (gaze V1)** : la chaîne webcam→/vision/person (Pi 5, tourne
-   en prod, validée personne réelle 16 Hz) → gaze_follower (55676b6, validé sim, OFF par
-   défaut, lancé À LA MAIN — pas dans robot_bringup) est prête. À valider sur le vrai
-   robot : `direction_sign` (sens azimut→cou INCONNU), amplitude (gain=20 ≈ ±37°),
-   sortie StringTime `neck` jamais exercée en réel, arbitrage animations↔gaze (les deux
-   écrivent `neck` — en attendant : gaze OFF pendant les séquences). Toggle : topic
-   StringTime `gaze` "on"/"off".
+2. **Gaze V1 (cou + yeux) : PROTOCOLE CAMÉRA FAIT ET VALIDÉ le 2026-07-12** sur le
+   vrai robot, David en scène. Résultats gravés en défauts du node : cou
+   `direction_sign=+1` (boucle fermée AUTO-VALIDANTE : la caméra est sur la tête,
+   l'azimut converge vers 0 — un mauvais signe aurait divergé en butée), amorti
+   `ema_alpha=0.15`/`slew_max=1.5` (les valeurs initiales 0.4/3.0 oscillaient :
+   retard de phase EMA×2 + slew + rampe servo), YEUX ajoutés (2e instance de
+   GazeControl, gain 49 = plein débattement 1-99 comme les séquences,
+   `eye_direction_sign=-1` — montage MIROIR du cou, validé visuellement).
+   Toujours lancé À LA MAIN (pas dans robot_bringup), toggle topic `gaze`
+   "on"/"off". Reste ouvert : arbitrage animations↔gaze (les deux écrivent
+   neck/left_eye/right_eye — en attendant : gaze OFF pendant les séquences).
 3. Calibrer `max_wheel_speed` réel (m/s à consigne 1.0) — mesurable à la caméra, distance/temps.
 4. Action ROS 2 `PlayAnimation` (les pistes roues des séquences passeront par cmd_vel_anim).
 4. Source unique des séquences JSON (côté robot, la télécommande interroge par service).
