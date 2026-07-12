@@ -102,15 +102,21 @@ packages-docker.txt) ; procédure sim→réel dans docs/operations.md. Suite : W
 (source e_stop + coup-de-poing) ; le passage des roues web au ROBOT RÉEL reste
 conditionné au test scénique au sol (priorité 1) et à un protocole caméra dédié.
 
-**Télédiagnostic par agent IA (étude du 2026-07-12, NON tranchée)** :
+**Télédiagnostic par agent IA (étude v2 du 2026-07-12, décisions À TRANCHER)** :
 `docs/etude-telediagnostic.md` — investiguer les pannes de déambulation qu'on ne
-peut pas régler sur place. Analyse des points de lecture existants (robot.log,
-docker logs, WS `state`, introspection ROS — et le piège : le web_bridge logge
-via get_logger, PAS dans robot.log), trous identifiés (zéro rosbag, zéro topic
-santé, batterie commentée), architecture proposée (agent Opus sur le PC, JAMAIS
-sur le Pi, lecture seule stricte ; boîte noire rosbag snapshot ; bouton
-`incident` ; skill `/diag` + `collect-incident.sh`), phasage D0→D3 (D2 dépend
-de W2 Headscale). Questions ouvertes §7, candidates à un grill avant de coder.
+peut pas régler sur place. La v1 proposait l'agent côté PC via VPN ; David a
+challengé (« je veux un agent sur la RPi ») → v2 complète : l'**agent embarqué
+sur le host du Pi est FAISABLE et validé doc officielle** (ARM64 natif, headless
+`claude -p`, verrouillage lecture seule par config, plafond $/investigation,
+seul HTTPS SORTANT requis — pas de VPN, un partage 4G téléphone suffit).
+Découvertes : bouton **START libre** sur la télécommande (GPIO D21 + manette
+USB) = déclencheur naturel via topic `incident` à créer dans PUBLISHER_LIST ;
+RAM du Pi 4 non documentée (préalable : `cat /proc/meminfo`) ; RAG vectoriel
+inutile (le rsync embarque déjà docs+CLAUDE.md, sauf .git) → le vrai contexte =
+skill `/diag` + journal d'incidents cumulatif. Trous inchangés : zéro rosbag
+(boîte noire snapshot à créer), zéro topic santé, batterie commentée.
+Décisions §8 (où tourne l'agent — hybride recommandé —, modèle/budget,
+déclencheur, restitution, boîte noire, remédiations), grill en cours.
 
 **Suivi de personne AUX ROUES (2026-07-11 soir) — CODE COMPLET, VALIDÉ EN SIM 5/5** :
 chaîne `/vision/person_box` (Pi vision : azimut + HAUTEUR de silhouette = proxy de

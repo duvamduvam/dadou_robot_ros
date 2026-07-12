@@ -1,165 +1,225 @@
-# Télédiagnostic par agent IA — étude
+# Télédiagnostic par agent IA — étude complète
 
-*Analyse du 2026-07-12. Statut : **proposition argumentée, décisions non tranchées**
-(questions ouvertes en §7). Sœur de [`etude-interface-web.md`](etude-interface-web.md),
-dont elle réutilise le réseau (W2 Headscale) et le pont web.*
+*v2 du 2026-07-12 (la v1 du même jour proposait un agent côté PC via VPN ; David a
+challengé — « pourquoi du VPN, je veux un agent sur la RPi » — et demandé une étude
+complète, options comparées, avant de décider. Statut : **étude complète, décisions
+listées en §8, à trancher**.*
 
 ## 1. Le besoin
 
-En déambulation (robot au milieu du public, opérateur occupé à jouer), des problèmes
+En déambulation (robot au milieu du public, David occupé à jouer), des pannes
 surviennent qu'on ne peut pas régler sur place : visage figé, servo muet, node
-crashé, audio silencieux… Objectif : qu'un **agent IA (Opus via Claude Code)**
-puisse investiguer, à la demande, avec le moins d'intervention humaine possible.
+crashé, audio silencieux… Et elles sont souvent **fugaces** : le temps de rentrer,
+plus rien à voir. On veut qu'un **agent IA investigue** — déclenché depuis la
+télécommande (et peut-être un bouton sur le robot), avec le moins d'intervention
+possible.
 
-Deux régimes, qui n'appellent pas les mêmes moyens :
+Deux moments, deux besoins :
+- **Sur le moment** : capturer l'état au moment de la panne (sinon l'incident
+  fugace est perdu à jamais) et, si possible, investiguer tout de suite.
+- **Après coup** : reconstruire et expliquer la panne à partir des traces.
 
-- **À froid (prioritaire)** : le problème est souvent fugace — le temps de rentrer,
-  il a disparu. Il faut une **boîte noire** : des traces persistantes et assez
-  riches pour reconstruire l'incident après coup. Aujourd'hui, seule `robot.log`
-  survit.
-- **À chaud** : investiguer pendant que le spectacle continue. Exige l'accès
-  distant (LAN, puis Headscale/4G = W2) et une discipline stricte de lecture seule.
+## 2. Ce que l'agent peut lire aujourd'hui (état des lieux)
 
-## 2. État des lieux — points de lecture existants
+Inventaire du code au 2026-07-12 :
 
-Inventaire du code au 2026-07-12 (détails et références dans le corps du repo) :
+| Point de lecture | Contenu | Limite |
+|---|---|---|
+| `robot.log` (sur la carte SD du Pi, **hors conteneur** — survit à un crash du conteneur ; rotation quotidienne, 100 jours gardés) | erreurs de payload, entrées de chaque node, commandes web, alertes système (CPU > 80 %, mémoire, disque, température > 55 °C) | niveau INFO figé ; très verbeux (~16 Mo/jour) |
+| `docker logs dadou-robot-container` | la sortie ROS — dont **tout le pont web** (il logge par `get_logger()`, PAS dans robot.log) | **deux journaux séparés**, piège connu |
+| Message `state` du pont web (port 8765, toutes les 2 s) | **liste des nodes vivants** (seul moyen de voir un node crashé), dernier message + âge par topic de contenu | rien sur CPU/température/batterie, rien sur la chaîne roues |
+| Le graphe ROS en direct | `ros2 topic echo/hz/list` dans le conteneur | temps réel seulement — rien après coup |
 
-| Point de lecture | Contenu | Accès | Limite |
-|---|---|---|---|
-| `robot.log` (`/home/ros2_ws/log/robot.log`, **monté sur le host du Pi** — survit au conteneur ; rotation quotidienne, backup 100) | erreurs de payload, entrées de chaque node, commandes web (`cmd web id=…`), WARNINGs système (CPU>80 %, mem, disque, temp>55 °C via `utils/status.py`) | `ssh r` | niveau INFO figé (pas de DEBUG à chaud) ; pas lisible via le pont web |
-| `docker logs dadou-robot-container` | stdout ROS — dont **tout le `web_bridge_node`** (il logge via `get_logger()` rcutils, PAS dans robot.log) | `ssh r` | **split de journaux non documenté** : deux vérités selon le node |
-| Message WS `state` du pont web (2 Hz, port 8765) | **`nodes`** = nodes vivants du graphe (seule détection programmatique d'un node mort), `topics` = dernier payload + âge par topic whitelisté, clients/writer | HTTP/WS, token | rien sur CPU/temp/batterie, rien sur la chaîne roues (hors whitelist), pas de RTT |
-| Graphe ROS live | `ros2 topic echo/hz/list`, `ros2 node info` | `ssh r` + `docker exec` | temps réel seulement — rien après coup |
+**Les trous** (balayage complet du code) :
+1. **Zéro rosbag** dans tout le repo : aucun enregistrement des événements ROS.
+   L'incident fugace est irrécupérable. C'est LE chaînon manquant.
+2. **Zéro topic de santé** : les alertes CPU/température finissent dans le fichier
+   log et nulle part ailleurs ; la batterie n'a aucun capteur (code commenté).
+3. **Exceptions invisibles** : les nodes principaux avalent leurs exceptions (log
+   puis on continue) ; `twist_deadman`, `person_follower` et `gaze_follower`
+   **meurent** sur exception — on ne le voit que par leur absence dans `state`.
+4. Pièges pour l'agent : mDNS `.local` instable (IP : robot .2, vision .151),
+   payload non-JSON refusé, `chat_node` qui écrase `face`, deux configs de
+   logging dont une obsolète (`conf/logging/*.conf` n'est plus chargée).
 
-Pièges de diagnostic déjà connus (à transmettre à l'agent) : mDNS `.local`
-instable (IP : robot .2, vision .151) ; payload non-JSON = ERROR logguée
-(silencieux avant le 2026-07-11) ; `chat_node` du Pi vision écrase `face` au
-moindre bruit ; deux configs de logging coexistent (`conf/logging/*.conf` obsolète
-vs `LoggingConf` de dadou_utils_ros — seule la seconde est chargée).
+## 3. Où tourne l'agent — les trois options
 
-## 3. Les trous
+C'est LA décision structurante. Le malentendu de la v1 à dissiper d'abord :
+**un VPN ne sert qu'à ENTRER sur le robot depuis l'extérieur**. Un agent qui
+tourne SUR le Pi n'a besoin que de SORTIR en HTTPS vers `api.anthropic.com`
+(port 443, seul point de contact requis — vérifié doc officielle). En
+déambulation, un simple partage de connexion du téléphone suffit. Le VPN
+Headscale du chantier web reste utile pour la télé-présence (piloter à
+distance), mais **le diagnostic embarqué n'en dépend pas** — les deux chantiers
+sont découplés.
 
-1. **Zéro rosbag** dans tout le repo : aucune capture d'événements ROS, l'incident
-   fugace est irrécupérable. `validate-cmdvel-protocol.sh` injecte, ne capture pas.
-2. **Zéro topic de santé** : pas de `diagnostic_msgs`, pas de heartbeat de node,
-   batterie = code entièrement commenté dans `status.py`. La surveillance
-   CPU/temp/mem existe mais finit en WARNING dans le fichier log, invisible à
-   distance et non corrélable aux événements ROS.
-3. **Exceptions invisibles** : les nodes à boucle `spin_once` (system, wheels,
-   lights, relays, audio, animations) loggent l'exception et continuent — rien ne
-   remonte hors du fichier. Les nodes en `rclpy.spin` (`twist_deadman`,
-   `person_follower`, `gaze_follower`) **meurent** sur exception non gérée —
-   visibles uniquement par leur absence dans `state.nodes`.
-4. **Pont web aveugle sur lui-même** : pas d'endpoint `/health`, pas d'accès aux
-   logs, état limité à la whitelist de contenu.
-5. **Pas d'accès hors LAN** : W2 (Headscale + routeur 4G) est planifié, pas fait.
-   Le télédiagnostic à chaud en déambulation en dépend entièrement — c'est une
-   raison de plus de faire W2.
+### Option A — Agent embarqué sur le Pi robot (préférence exprimée)
 
-## 4. Architecture proposée
+Claude Code s'installe **sur le host du Pi, HORS du conteneur ROS** (binaire
+natif ARM64, supporté officiellement, prérequis 4 Go de RAM). Hors conteneur
+c'est voulu : **l'agent doit survivre à la mort du conteneur** — c'est
+précisément une des pannes à diagnostiquer. Depuis le host il voit robot.log
+(monté sur la SD), `docker logs`, et entre dans le conteneur par `docker exec`
+pour l'introspection ROS.
 
-### Où tourne l'agent — et où il ne tourne PAS
+- **Déclenchement** : un mini-service sur le host (systemd) guette le signal
+  (voir §5) et lance `claude -p "investigue" …` en mode non-interactif.
+  Garde-fous natifs : limite de tours, **plafond de coût en dollars par
+  investigation** (`--max-budget-usd`), timeout shell, sortie JSON.
+- **Verrouillage lecture seule PAR CONFIG** (pas par bonne volonté du modèle) :
+  liste blanche d'outils et de motifs de commandes (`tail`, `grep`,
+  `ros2 topic echo`, `docker logs`…), interdiction d'écrire des fichiers et de
+  toute commande destructrice. Défense en profondeur possible avec le sandbox.
+- **Clé API** : variable d'environnement dans un fichier du host, jamais dans le
+  repo (le rsync de déploiement n'y touche pas). Risque « vol du robot = vol de
+  la clé » → clé dédiée, plafond de dépense côté console Anthropic, révocable.
+- **Coût par investigation** (20-40 tours d'outils) : ~0,10 $ en Haiku,
+  ~0,30 $ en Sonnet, ~0,50 $ en Opus. Négligeable même à l'usage quotidien.
+- **Restitution** : rapport écrit dans un fichier du volume partagé → la console
+  web l'affiche ; et/ou le robot le **dit** (topic `audio`/TTS — en coulisse,
+  pas en jeu) ; et/ou notification téléphone.
+- **Inconnues à lever** : la **RAM du Pi 4 n'est documentée nulle part**
+  (`cat /proc/meminfo` à faire — si 2 Go, ça se discute) ; charge CPU d'une
+  investigation pendant que le tick 20 Hz tourne (à mesurer, `nice` possible) ;
+  qualité du lien 4G partagé en salle.
+- Variante plus intégrée : l'**Agent SDK Python** (`pip install
+  claude-agent-sdk`) permettrait à un node ROS de déclencher l'investigation
+  directement sur réception du topic — plus propre qu'un subprocess, mais une
+  dépendance de plus dans l'embarqué. Le CLI headless suffit pour commencer.
 
-**L'agent tourne sur le PC de David (Claude Code), jamais sur le Pi.** Raisons :
-pas de clé API embarquée (repo public, historique déjà purgé une fois), pas de
-charge IA sur le Pi 4 (tick 20 Hz à protéger), et l'outillage (SSH, docker exec,
-lecture d'artefacts) suffit. L'accès passe par le LAN aujourd'hui, par le VPN
-Headscale demain (W2) — le backend robot n'a rien à savoir du VPN.
+### Option B — Agent sur le PC, accès au robot par SSH
 
-### Sécurité de l'agent (non négociable)
+C'est le mode « atelier » : une session Claude Code sur le PC de dev, qui lit le
+Pi par SSH (`ssh r`). **Fonctionne déjà aujourd'hui en LAN, zéro déploiement.**
+En déambulation hors LAN, il faudrait le VPN (chantier web, pas fait) ET le PC
+allumé quelque part — deux dépendances que l'option A n'a pas. Avantages
+propres : l'historique git complet (le `.git` n'est pas rsyncé sur le Pi — un
+agent embarqué ne peut pas faire d'archéologie de commits), le confort d'une
+session interactive, et aucun risque pour le spectacle (rien ne tourne sur le
+robot).
 
-- **Lecture seule par défaut** : l'agent ne publie JAMAIS sur un topic de
-  mouvement (`wheels`, `cmd_vel*`, servos), domain 42 ou pas. Ses outils sont
-  `topic echo/hz/list`, la lecture de fichiers, les endpoints HTTP.
-- **Remédiations en liste blanche, avec confirmation humaine** : restart du
-  conteneur robot, restart du conteneur vision (déjà la procédure chat_node),
-  relance d'un node mort. Rien d'autre.
-- Ces règles vivent dans le skill projet (§4.4) — un agent qui ne les a pas lues
-  ne doit pas avoir les accès.
+### Option C — Hybride (recommandation)
 
-### 4.1 Boîte noire rosbag (le chaînon manquant principal)
+Les deux ne s'excluent pas et partagent les mêmes fondations (collecteur, skill,
+journal d'incidents) :
+- **Sur le terrain** : l'agent embarqué (A), déclenché de la télécommande,
+  investigation immédiate, rapport dans la console/voix.
+- **À l'atelier** : la session PC (B) pour l'analyse approfondie, les
+  correctifs, l'archéologie git.
 
-`ros2 bag record` en **snapshot mode** (natif Jazzy : buffer circulaire en RAM,
-dump sur appel de service) sur les topics **légers** : `cmd_vel*`, `e_stop`,
-`animation`, `face`, `audio`, `robot_lights`, servos, `gaze`/`follow`,
-`/vision/person*`. La caméra compressed (~150 Ko/s) est exclue par défaut
-(question ouverte §7). Ordres de grandeur : quelques Mo de RAM pour plusieurs
-minutes d'historique. Lancée par le bringup, dump déclenché par le topic
-`incident` (§5). Alternative si le crash du conteneur lui-même doit être couvert :
-segments disque de 60 s + purge (coût SD) — à trancher.
+Le surcoût du « les deux » est faible : c'est le même skill et le même format de
+rapport, seul le lieu d'exécution change.
 
-### 4.2 Topic `diagnostics` + état enrichi
+## 4. Le contexte de l'agent (réponse à la question « RAG ? »)
 
-`system_node` publie périodiquement ce qu'il logge déjà (CPU, mem, disque, temp)
-sur un topic de santé — format `StringTime` JSON maison, cohérent avec le reste
-(pas de `diagnostic_msgs` : un seul consommateur, notre pont). Le pont web
-l'ajoute au message `state` et l'expose. Bénéfice immédiat : la console web
-devient un tableau de bord de santé, pour l'humain comme pour l'agent.
+Fait vérifié : le déploiement Ansible rsync **tout le checkout** sur le Pi —
+`docs/`, `CLAUDE.md`, le code, les JSON. Un agent embarqué a donc déjà le même
+corpus que l'agent du PC (sauf `.git`). Claude Code cherche nativement par
+grep/lecture ciblée : à l'échelle de ce corpus (quelques centaines de Ko de
+docs), **un RAG vectoriel n'apporterait rien** — de l'infrastructure à
+entretenir pour un gain nul. À réévaluer seulement si le corpus change d'ordre
+de grandeur (archives de logs massives, transcriptions).
 
-### 4.3 Endpoints de lecture sur le pont web
+Ce qui manque vraiment, c'est du contexte **métier de panne**, et il se
+construit avec deux fichiers :
+1. **Le skill `/diag`** : la carte des points de lecture (§2), les commandes
+   exactes, les pièges connus, et les interdits. C'est le « briefing » que tout
+   agent (embarqué ou PC) charge avant d'investiguer.
+2. **Le journal d'incidents** (`docs/incidents/`) : chaque investigation se
+   termine par un court post-mortem (symptôme, cause, remède, date). L'agent
+   suivant les lit — c'est la mémoire de panne du robot, et c'est le vrai
+   « RAG » utile ici. Il se rsync avec le reste.
 
-- `GET /api/logs?lines=500` : tail de `robot.log` (token requis, lecture seule).
-- `GET /health` : liveness HTTP simple (le pont répond = conteneur vivant).
-- Unification des journaux : décision documentée a minima (le split
-  robot.log / docker logs est un piège), rediriger `get_logger()` du pont vers
-  robot.log si simple.
+## 5. Déclencheurs — ce que l'inventaire matériel a révélé
 
-### 4.4 Le contrat côté agent : skill `/diag` + collecteur
+Côté **télécommande** (dépôt `dadou_control_ros`), il y a de la place :
+- **Le bouton START est libre** — sur les 12 boutons GPIO de la télécommande
+  (D21, mapping explicitement vide) ET sur la manette USB (START/SELECT/MODE
+  libres tous les trois). C'est le candidat naturel : David l'a en main en
+  déambulant.
+- La **GUI** a une place immédiate dans sa barre de menu (à côté de P/K/C/M)
+  pour un bouton logiciel « incident ».
+- Dans tous les cas il faut **créer le topic `incident`** : la télécommande ne
+  publie que 14 topics whitelistés (`PUBLISHER_LIST`), il faut l'y ajouter.
+  Anti-fausse-manip : un appui bref ne déclenche rien, exiger un appui long
+  (~2 s) ou un double appui.
 
-- **`conf/scripts/collect-incident.sh`** : rassemble en un tarball horodaté —
-  tail robot.log, `docker logs --since`, `ros2 node list`, `ros2 topic list` +
-  `hz` sur les topics clés, dump du snapshot bag, `vcgencmd measure_temp`,
-  `df -h`, `free -h`, état réseau. Utile même sans IA (envoyable par mail) ;
-  c'est le **format d'entrée standard** de l'agent.
-- **Skill projet `/diag`** (`.claude/skills/`) : la carte des points de lecture
-  (§2), les commandes exactes (`ssh r`, chemins, docker exec, sourcing ROS), les
-  pièges connus, l'arbre des pannes déjà rencontrées (à enrichir à chaque
-  incident — c'est la mémoire de panne du robot), et les interdits (§ sécurité).
-  Un agent Opus frais + `/diag` + un tarball = investigation autonome.
+Côté **robot** (bouton physique sur la bête) : le mécanisme existe — le
+`system_node` lit déjà deux boutons GPIO (extinction D16, redémarrage D20) et
+en ajouter un est trivial logiciellement. MAIS **aucun GPIO libre n'est
+documenté** (les schémas sont des images sans pinout exploitable) ; à vérifier
+sur le matériel. Et un bouton accessible sur un robot au milieu du public,
+c'est aussi un bouton que le public peut presser. → possible, pas prioritaire.
 
-## 5. Déclencheurs
+Déclencheurs automatiques (capture seule, jamais de lancement d'agent
+automatique au début — trop bruyant) : node disparu du graphe (le pont web le
+voit déjà), alertes système répétées.
 
-| Déclencheur | Canal | Effet | Phase |
-|---|---|---|---|
-| **Bouton « incident »** sur la télécommande physique (en main pendant la déambulation) et la console web | topic `incident` (StringTime) | marqueur horodaté `INCIDENT` dans robot.log + dump du snapshot bag + compteur visible dans l'UI | D1 |
-| Node disparu du graphe | le pont web compare `state.nodes` d'un tick à l'autre | auto-snapshot + marquage log (capture seule — pas de lancement d'agent automatique en V1, trop bruyant) | D1 |
-| WARNINGs système répétés | `system_node` | idem | D1 |
-| Manuel après-coup | David lance `/diag` sur le PC | collecte (ou lecture d'un tarball existant) + investigation | **D0** |
-| Bouton → agent headless (`claude -p`) → rapport dans la console web | webhook à travers le VPN | investigation sans humain au clavier | D3 |
+## 6. La boîte noire (indispensable quelle que soit l'option)
 
-Le déclencheur vocal (« Didier, note le problème » via chat_node) est séduisant
-mais hors périmètre tant que chat_node V2 (priorité 0) n'est pas validé matériel.
+Sans capture, même le meilleur agent ne peut rien sur un incident fugace.
+`ros2 bag record` en **mode snapshot** (natif Jazzy) garde en permanence les
+N dernières minutes en mémoire, et ne les écrit sur disque QUE sur demande —
+le dump est déclenché par le topic `incident`. Topics enregistrés : `cmd_vel*`,
+`e_stop`, `animation`, `face`, `audio`, `robot_lights`, servos, `gaze`/`follow`,
+`/vision/person*` (légers : quelques Mo de RAM pour plusieurs minutes).
+La caméra (~9 Mo/min) est exclue par défaut — à trancher. Le même appui sur
+START écrit aussi un marqueur `INCIDENT` horodaté dans robot.log : tout est
+corrélable. En complément, `collect-incident.sh` rassemble le tout (tail des
+logs, état du graphe, températures, disque) en un tarball horodaté — le format
+d'entrée standard de toute investigation.
 
-## 6. Phasage
+Limite assumée du snapshot en RAM : il meurt avec le process qui enregistre.
+L'alternative (écrire en continu sur la SD par segments) couvre aussi le crash
+complet mais use la carte. Proposition : RAM d'abord — les pannes constatées
+sont applicatives, et robot.log (sur SD) couvre déjà le reste.
 
-- **D0 — immédiat, zéro déploiement** : `collect-incident.sh` + skill `/diag`
-  + cette étude. Dès la prochaine déambulation : retour en coulisse, `/diag`,
-  Opus investigue sur les traces existantes (robot.log + docker logs + state).
-- **D1 — boîte noire** : snapshot bag + topic `diagnostics` + bouton incident
-  (console web, puis télécommande) + `/api/logs` + `/health`. Validation en sim
-  d'abord (domain 43), comme tout.
-- **D2 — à chaud, à distance** : dépend de **W2** (Headscale + 4G, chantier web).
-  L'agent investigue pendant la représentation, depuis n'importe où.
-- **D3 — automatisation** : bouton incident → `claude -p` headless sur le PC →
-  rapport déposé dans la console web. À n'ouvrir que quand D0-D2 auront montré
-  ce que l'agent sait résoudre seul.
+## 7. Sécurité (non négociable, quelle que soit l'option)
 
-Aucune de ces phases ne touche le chemin roues ; D1 ajoute des nodes de **lecture**
-au bringup (bag, diagnostics) — revue sécurité habituelle mais pas de protocole
-caméra requis.
+- L'agent est **lecteur** : jamais de publication sur un topic de mouvement
+  (`wheels`, `cmd_vel*`, servos), jamais d'écriture de fichier, verrouillé par
+  la configuration de permissions (liste blanche de commandes), pas par la
+  consigne seule.
+- **Remédiations** en liste blanche uniquement, et jamais autonomes pendant une
+  représentation : redémarrer le conteneur robot ou vision, relancer un node —
+  sur confirmation de David (depuis la console web ou la télécommande).
+- Budget borné par investigation (`--max-budget-usd`) + timeout — un agent qui
+  boucle s'arrête tout seul.
+- Clé API dédiée au robot, plafonnée et révocable dans la console Anthropic.
+- Rien de tout ça ne touche le chemin roues ; la boîte noire et le topic
+  `incident` sont des ajouts en lecture/capture, revue sécurité habituelle mais
+  pas de protocole caméra requis.
 
-## 7. Questions ouvertes (à trancher, candidates à un grill)
+## 8. Les décisions à prendre (le grill reprend ici)
 
-1. **Snapshot RAM vs segments disque** pour la boîte noire : la RAM ne survit pas
-   à un crash du process d'enregistrement ; le disque use la SD. (Proposition :
-   RAM en V1 — les pannes vues sont applicatives, pas des crashs conteneur.)
-2. **Inclure la caméra compressed dans le bag ?** ~9 Mo/min en RAM. Précieux pour
-   « qu'est-ce que le robot voyait » ; cher. (Proposition : non en V1.)
-3. **Batterie** : aucun capteur câblé (code commenté). Chantier élec à part
-   entière — lien avec les cartes PCB en cours ?
-4. **Périmètre exact des remédiations autorisées** à l'agent (restart conteneur
-   suffit-il ? relance de node individuelle = comment, dans un launch unique ?).
-5. **Bouton incident sur la télécommande physique** : quel bouton/geste sur le
-   matériel existant (dépôt `dadou_control_ros`) ?
-6. **D3** : le PC de dev est-il allumé/joignable pendant une déambulation, ou
-   faut-il un petit serveur toujours-up (le même que Headscale §4 de l'étude web) ?
+1. **Où tourne l'agent** : embarqué (A), PC (B), hybride (C — recommandé).
+2. **Modèle et budget par défaut** de l'agent embarqué : Haiku (~0,10 $),
+   Sonnet (~0,30 $), Opus (~0,50 $) — recommandation : Sonnet par défaut,
+   Opus à la demande depuis l'atelier.
+3. **Déclencheur retenu** : START télécommande (recommandé), bouton GUI,
+   bouton physique sur le robot (GPIO libre à vérifier d'abord), combinaison.
+4. **Restitution du rapport** : console web (recommandé), voix du robot en
+   coulisse, notification téléphone.
+5. **Boîte noire** : snapshot RAM (recommandé) vs segments SD ; caméra incluse
+   ou non (recommandé : non).
+6. **Remédiations autorisées** : liste exacte et mécanisme de confirmation.
+7. **Batterie** : aucun capteur — à parquer vers le chantier élec (cartes PCB) ?
+8. **Préalables factuels** : RAM du Pi 4 (`cat /proc/meminfo`), test de charge
+   d'une investigation pendant le tick 20 Hz, qualité 4G partagée en condition.
+
+## 9. Ordre de construction proposé (après décisions)
+
+Chaque étape est utile seule ; on peut s'arrêter à n'importe laquelle :
+
+1. **Trousse d'atelier** — `collect-incident.sh` + skill `/diag` + journal
+   d'incidents. Dès la prochaine déambulation : retour, session Claude sur le
+   PC, investigation sur les traces existantes. Zéro déploiement sur le robot.
+2. **Boîte noire + bouton** — enregistreur snapshot dans le bringup, topic
+   `incident`, bouton START télécommande, marqueur dans robot.log, endpoints
+   de lecture sur le pont web (`/api/logs`, `/health`). Validé en sim d'abord.
+3. **Agent embarqué** — Claude Code sur le host du Pi, service de déclenchement,
+   permissions verrouillées, rapport dans la console web. Répétition générale
+   en atelier : provoquer une panne connue, appuyer sur START, lire le rapport.
+4. **Itinérance** — Internet sortant en déambulation (partage téléphone, puis
+   routeur 4G du flight case quand le chantier web l'apportera) ; test en
+   condition réelle.
