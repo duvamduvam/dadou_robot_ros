@@ -186,10 +186,13 @@ en représentation, quand il ne peut pas confirmer, qu'il a besoin de l'agent.
 
 Chaque étape est utile seule ; on peut s'arrêter à n'importe laquelle :
 
-1. **Trousse d'atelier** — `collect-incident.sh` + skill `/diag` + journal
-   d'incidents (`docs/incidents/`). Dès la prochaine déambulation : retour,
-   session Claude sur le PC, investigation sur les traces existantes. Zéro
-   déploiement sur le robot.
+1. **Trousse d'atelier** — **FAITE le 2026-07-12** :
+   `conf/scripts/collect-incident.sh` (testé de bout en bout contre la sim —
+   host, best-effort, retente sur `node list` vide au premier appel du daemon),
+   skill `/diag` (`.claude/skills/diag/`), journal `docs/incidents/`.
+   Dès la prochaine déambulation : retour, session Claude sur le PC,
+   investigation sur les traces existantes. Zéro déploiement sur le robot
+   (le script part avec le rsync habituel).
 2. **Boîte noire + bouton** — enregistreur par segments dans le bringup,
    purge 30 jours, topic `incident`, bouton START télécommande + boutons
    logiciels, marqueur robot.log, endpoints de lecture sur le pont web

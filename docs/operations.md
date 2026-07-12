@@ -146,8 +146,24 @@ ne tourne pas (`chat_enabled` défaut false côté vision).
   rest on animation stop or deadman.
 
 ## Post-show
-- Archive `/home/ros2_ws/log/robot.log` for diagnostics.
+- Archive `/home/ros2_ws/log/robot.log` for diagnostics — or better, run the
+  incident collector (below) which bundles it with everything else.
 - Recharge batteries / power down safely.
+
+## Incident investigation (télédiagnostic, étape « trousse d'atelier »)
+- **Collect** (on the Pi HOST, works even if the container is dead):
+  `ssh r '~/ros2_ws/src/*/conf/scripts/collect-incident.sh'` → timestamped
+  tarball in `~/incidents/` (logs tail, docker logs/inspect, ROS graph,
+  temperatures, disk, dmesg). Testable against the sim:
+  `CONTAINER=dadou-sim-container LOG_DIR=<sim logs> ./collect-incident.sh`.
+- **Investigate**: open a Claude session on the workstation and invoke
+  `/diag` (skill in `.claude/skills/diag/` — read-only rules, reading-points
+  map, known traps). Feed it the tarball.
+- **Post-mortem**: every investigation ends with a short entry in
+  [`incidents/`](incidents/README.md) — the robot's failure memory, synced to
+  the Pi for the future embedded agent.
+- Full plan: [`etude-telediagnostic.md`](etude-telediagnostic.md) (black box
+  recorder + START button + embedded agent are the next stages).
 
 ## Troubleshooting
 - Message published but nothing happens → check the payload is JSON

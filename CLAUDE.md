@@ -127,6 +127,13 @@ sauf .git) → skill `/diag` + journal `docs/incidents/`. Préalables avant
 construction : RAM du Pi 4 (`cat /proc/meminfo`, non documentée), charge
 d'une investigation vs tick 20 Hz, santé SD, 4G en salle. Ordre §9 :
 trousse d'atelier → boîte noire+bouton → agent embarqué → itinérance.
+**Étape 1 « trousse d'atelier » FAITE le 2026-07-12** :
+`conf/scripts/collect-incident.sh` (tourne sur le HOST du Pi, best-effort,
+testé de bout en bout contre la sim — piège trouvé : `ros2 node list` vide
+au premier appel du daemon → retente intégrée), skill `/diag`
+(`.claude/skills/diag/SKILL.md` — droits/interdits, carte de lecture,
+pièges), journal `docs/incidents/` (post-mortem obligatoire par
+investigation). Part sur le Pi avec le rsync habituel, rien à déployer.
 
 **Suivi de personne AUX ROUES (2026-07-11 soir) — CODE COMPLET, VALIDÉ EN SIM 5/5** :
 chaîne `/vision/person_box` (Pi vision : azimut + HAUTEUR de silhouette = proxy de
