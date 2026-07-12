@@ -35,6 +35,15 @@ WHITELIST_SPECTACLE = {"animation", "face", "audio", "robot_lights"}
 WHITELIST_TECHNIQUE = {"relay", "neck", "left_eye", "right_eye", "left_arm", "right_arm", "gaze", "chat", "persona", "system"}
 WHITELIST = WHITELIST_SPECTACLE | WHITELIST_TECHNIQUE
 
+# Topics d'ÉTAT observés en LECTURE SEULE (2026-07-13) : publiés latchés
+# (TRANSIENT_LOCAL) par chat_node sur le Pi vision — le pont s'y abonne pour
+# la surbrillance des options actives dans la console (Parole/Personnalité),
+# mais ne crée AUCUN publisher dessus : ils ne sont pas dans WHITELIST, donc
+# impossibles à publier depuis le web (un client qui forgerait un cmd
+# "chat_state" est rejeté par la validation whitelist comme n'importe quel
+# topic inconnu).
+TOPICS_LECTURE = {"chat_state", "persona_state"}
+
 # Session d'écriture : silence du writer au-delà de ce délai -> écriture
 # libérée (personne ne la récupère automatiquement, cf. §2 du protocole).
 WRITE_TIMEOUT_S = 3.0

@@ -722,6 +722,31 @@ const STATUT_DIRECT = [
   ["robot_lights", "Lumières", "grille-robot-lights"],
 ];
 
+// --- Options actives (2026-07-13) : surbrillance verte `en-cours` des
+// toggles du panneau Technique, pilotée par les topics d'ÉTAT quand ils
+// existent. [topic source, id du groupe de boutons, payload -> data-value
+// attendu]. chat_state/persona_state : latchés par chat_node (Pi vision) —
+// pas de chat_node en route = AUCUN bouton vert (honnête : un « Parole ON »
+// vert sans node derrière est exactement la confusion vécue le 13/07).
+// gaze : pas d'état publié par gaze_follower, on retombe sur le dernier
+// ORDRE vu passer (approximation documentée dans interfaces.md).
+const STATUT_TOGGLES = [
+  ["persona_state", "groupe-persona", (v) => v],
+  ["chat_state", "groupe-chat", (v) => (v === "off" ? "off" : "on")],
+  ["gaze", "groupe-gaze", (v) => v],
+];
+
+function majToggles(topics) {
+  STATUT_TOGGLES.forEach(([topic, groupeId, versValeur]) => {
+    const info = topics[topic];
+    // Comparaison en chaîne : dataset.* est toujours une chaîne côté DOM.
+    const attendu = info ? versValeur(String(info.msg)) : null;
+    document.querySelectorAll("#" + groupeId + " .bouton-catalogue").forEach((btn) => {
+      btn.classList.toggle("en-cours", attendu !== null && btn.dataset.value === attendu);
+    });
+  });
+}
+
 function libelleValeur(valeur) {
   if (valeur === false) {
     return "arrêtée";           // animation: false = stop d'animation
@@ -757,6 +782,7 @@ function majStatutDirect(topics) {
 
 function afficherEtat(msg) {
   majStatutDirect(msg.topics);
+  majToggles(msg.topics);
   // Construction en DOM + textContent (jamais innerHTML avec les payloads) :
   // le contenu vient des topics ROS, donc de n'importe quel publieur -- un
   // payload contenant du HTML ne doit pas pouvoir s'injecter dans la page.

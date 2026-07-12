@@ -166,8 +166,13 @@
 
         <section class="groupe">
           <h2>Gaze (suivi de tête, cou)</h2>
-          <button class="bouton-catalogue" data-topic="gaze" data-value="on">Gaze ON</button>
-          <button class="bouton-catalogue" data-topic="gaze" data-value="off">Gaze OFF</button>
+          <!-- id groupe-gaze : surbrillance en-cours pilotée par le DERNIER
+               ORDRE vu sur le topic `gaze` (gaze_follower ne publie pas
+               d'état propre — approximation documentée, cf. interfaces.md). -->
+          <span id="groupe-gaze">
+            <button class="bouton-catalogue" data-topic="gaze" data-value="on">Gaze ON</button>
+            <button class="bouton-catalogue" data-topic="gaze" data-value="off">Gaze OFF</button>
+          </span>
         </section>
 
         <!-- Parole IA : toggle du mode conversation (chat_node, Pi vision --
@@ -178,8 +183,15 @@
              déjà chargés). -->
         <section class="groupe">
           <h2>Parole IA (conversation, Pi vision)</h2>
-          <button class="bouton-catalogue" data-topic="chat" data-value="on">Parole ON</button>
-          <button class="bouton-catalogue" data-topic="chat" data-value="off">Parole OFF</button>
+          <!-- id groupe-chat : surbrillance pilotée par l'ÉTAT RÉEL du chat
+               (topic latché chat_state : off / listening / thinking /
+               speaking). chat_node pas lancé = aucun bouton vert — un
+               « Parole ON » vert sans node derrière serait un mensonge
+               (confusion vécue le 13/07). -->
+          <span id="groupe-chat">
+            <button class="bouton-catalogue" data-topic="chat" data-value="on">Parole ON</button>
+            <button class="bouton-catalogue" data-topic="chat" data-value="off">Parole OFF</button>
+          </span>
         </section>
 
         <!-- Personnalité de Didier (lot D3, atelier du 2026-07-13) : payload =
@@ -190,9 +202,14 @@
              au démarrage du node : bougon (config chat_persona). -->
         <section class="groupe">
           <h2>Personnalité (conversation, Pi vision)</h2>
-          <button class="bouton-catalogue" data-topic="persona" data-value="bougon">Bougon</button>
-          <button class="bouton-catalogue" data-topic="persona" data-value="naif">Naïf</button>
-          <button class="bouton-catalogue" data-topic="persona" data-value="vantard">Vantard</button>
+          <!-- id groupe-persona : surbrillance pilotée par persona_state
+               (latché, publié par chat_node : personnalité RÉELLEMENT active,
+               y compris le défaut bougon au démarrage — pas le dernier clic). -->
+          <span id="groupe-persona">
+            <button class="bouton-catalogue" data-topic="persona" data-value="bougon">Bougon</button>
+            <button class="bouton-catalogue" data-topic="persona" data-value="naif">Naïf</button>
+            <button class="bouton-catalogue" data-topic="persona" data-value="vantard">Vantard</button>
+          </span>
         </section>
 
         <!-- Visages de CALIBRATION (mires) : hors Spectacle (ils ne servent qu'à

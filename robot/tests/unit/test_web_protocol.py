@@ -69,6 +69,15 @@ def test_whitelist_est_l_union_spectacle_technique():
                                     "right_arm", "gaze", "chat", "persona", "system"}
 
 
+def test_topics_lecture_jamais_publiables():
+    # Les topics d'ÉTAT observés par le pont (surbrillance des options
+    # actives, 2026-07-13) ne doivent JAMAIS entrer dans la whitelist de
+    # publication : un client web ne peut pas forger l'état du chat.
+    from robot_web.web_protocol import TOPICS_LECTURE
+    assert TOPICS_LECTURE == {"chat_state", "persona_state"}
+    assert TOPICS_LECTURE.isdisjoint(WHITELIST)
+
+
 # --- Parsing des messages client --------------------------------------------
 
 def test_parse_auth_token_present():

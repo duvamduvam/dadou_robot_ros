@@ -42,14 +42,16 @@ from ament_index_python.packages import get_package_share_directory
 from geometry_msgs.msg import Twist
 from PIL import Image as PILImage
 from rclpy.node import Node
+from rclpy.qos import DurabilityPolicy, QoSProfile
 from sensor_msgs.msg import CompressedImage, Image
 
 from robot_interfaces.msg import StringTime
 from robot_web.web_catalog import build_catalog
 from robot_web.web_protocol import (
-    DRIVE_TIMEOUT_S, WHITELIST, WRITE_TIMEOUT_S, DriveFlow, ProtocolError,
-    SessionManager, build_ack, build_err, build_hb_ack, build_hello,
-    build_state, drive_to_twist, parse_client_message, stop_all_commands,
+    DRIVE_TIMEOUT_S, TOPICS_LECTURE, WHITELIST, WRITE_TIMEOUT_S, DriveFlow,
+    ProtocolError, SessionManager, build_ack, build_err, build_hb_ack,
+    build_hello, build_state, drive_to_twist, parse_client_message,
+    stop_all_commands,
 )
 
 STATE_PERIOD_S = 2.0  # cadence de diffusion du message "state" à tous les clients
@@ -129,6 +131,17 @@ class WebBridgeNode(Node):
         }
         for topic in sorted(WHITELIST):
             self.create_subscription(StringTime, topic, self._make_listener(topic), 10)
+
+        # Topics d'ÉTAT en lecture seule (surbrillance des options actives,
+        # 2026-07-13) : publiés LATCHÉS par chat_node (Pi vision) — l'abonné
+        # DOIT être TRANSIENT_LOCAL lui aussi, sinon un pont démarré après le
+        # chat ne verrait l'état qu'à la PROCHAINE transition (piège déjà vécu
+        # sur animation_state). Aucun publisher créé : impossibles à publier
+        # depuis le web (hors WHITELIST, cf. web_protocol.TOPICS_LECTURE).
+        for topic in sorted(TOPICS_LECTURE):
+            self.create_subscription(
+                StringTime, topic, self._make_listener(topic),
+                QoSProfile(depth=1, durability=DurabilityPolicy.TRANSIENT_LOCAL))
 
         # --- Pilotage roues (SIM-ONLY, W3) --------------------------------------
         # Le publisher cmd_vel_web N'EXISTE que si drive_enabled : quand il vaut
