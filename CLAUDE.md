@@ -108,21 +108,25 @@ contrat que `gaze`). Suite : W1 (source e_stop + coup-de-poing) ; le passage
 des roues web au ROBOT RÉEL reste conditionné au test scénique au sol
 (priorité 1) et à un protocole caméra dédié.
 
-**Télédiagnostic par agent IA (étude v2 du 2026-07-12, décisions À TRANCHER)** :
-`docs/etude-telediagnostic.md` — investiguer les pannes de déambulation qu'on ne
-peut pas régler sur place. La v1 proposait l'agent côté PC via VPN ; David a
-challengé (« je veux un agent sur la RPi ») → v2 complète : l'**agent embarqué
-sur le host du Pi est FAISABLE et validé doc officielle** (ARM64 natif, headless
-`claude -p`, verrouillage lecture seule par config, plafond $/investigation,
-seul HTTPS SORTANT requis — pas de VPN, un partage 4G téléphone suffit).
-Découvertes : bouton **START libre** sur la télécommande (GPIO D21 + manette
-USB) = déclencheur naturel via topic `incident` à créer dans PUBLISHER_LIST ;
-RAM du Pi 4 non documentée (préalable : `cat /proc/meminfo`) ; RAG vectoriel
-inutile (le rsync embarque déjà docs+CLAUDE.md, sauf .git) → le vrai contexte =
-skill `/diag` + journal d'incidents cumulatif. Trous inchangés : zéro rosbag
-(boîte noire snapshot à créer), zéro topic santé, batterie commentée.
-Décisions §8 (où tourne l'agent — hybride recommandé —, modèle/budget,
-déclencheur, restitution, boîte noire, remédiations), grill en cours.
+**Télédiagnostic par agent IA (PLAN DÉCIDÉ, grillé le 2026-07-12)** :
+`docs/etude-telediagnostic.md` — investiguer les pannes de déambulation.
+Décisions gravées (§8 du doc) : **hybride** (agent embarqué sur le HOST du Pi
+— hors conteneur, il doit survivre à sa mort — + session PC à l'atelier) ;
+**Opus sur l'abonnement Claude** (token `claude setup-token` déposé sur le Pi,
+OpenRouter écarté : pas de prompt caching → 5-10× plus cher en agentique ;
+pas de VPN requis — HTTPS sortant seul, partage 4G téléphone) ; déclencheurs
+**START télécommande (libre, GPIO D21 + manette) + boutons GUI/console** en
+V1, topic `incident` à créer dans PUBLISHER_LIST côté télécommande ; boîte
+noire **rosbag segments SD 60 s, rétention 30 j, SANS caméra** (logs texte
+alignés 30 j) ; **remédiations AUTONOMES même en représentation** (liste
+blanche de restarts — sûrs côté roues : conteneur tombé = deadman —,
+composant mort constaté seulement, anti-boucle 1 restart/incident, annonce
+vocale avant action) ; restitution console web + voix + notif téléphone ;
+batterie parquée chantier élec ; RAG inutile (le rsync embarque le corpus,
+sauf .git) → skill `/diag` + journal `docs/incidents/`. Préalables avant
+construction : RAM du Pi 4 (`cat /proc/meminfo`, non documentée), charge
+d'une investigation vs tick 20 Hz, santé SD, 4G en salle. Ordre §9 :
+trousse d'atelier → boîte noire+bouton → agent embarqué → itinérance.
 
 **Suivi de personne AUX ROUES (2026-07-11 soir) — CODE COMPLET, VALIDÉ EN SIM 5/5** :
 chaîne `/vision/person_box` (Pi vision : azimut + HAUTEUR de silhouette = proxy de
