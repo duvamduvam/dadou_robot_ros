@@ -102,6 +102,16 @@ packages-docker.txt) ; procédure sim→réel dans docs/operations.md. Suite : W
 (source e_stop + coup-de-poing) ; le passage des roues web au ROBOT RÉEL reste
 conditionné au test scénique au sol (priorité 1) et à un protocole caméra dédié.
 
+**Télédiagnostic par agent IA (étude du 2026-07-12, NON tranchée)** :
+`docs/etude-telediagnostic.md` — investiguer les pannes de déambulation qu'on ne
+peut pas régler sur place. Analyse des points de lecture existants (robot.log,
+docker logs, WS `state`, introspection ROS — et le piège : le web_bridge logge
+via get_logger, PAS dans robot.log), trous identifiés (zéro rosbag, zéro topic
+santé, batterie commentée), architecture proposée (agent Opus sur le PC, JAMAIS
+sur le Pi, lecture seule stricte ; boîte noire rosbag snapshot ; bouton
+`incident` ; skill `/diag` + `collect-incident.sh`), phasage D0→D3 (D2 dépend
+de W2 Headscale). Questions ouvertes §7, candidates à un grill avant de coder.
+
 **Suivi de personne AUX ROUES (2026-07-11 soir) — CODE COMPLET, VALIDÉ EN SIM 5/5** :
 chaîne `/vision/person_box` (Pi vision : azimut + HAUTEUR de silhouette = proxy de
 distance monoculaire, cf. dadou_vision_ros) → `person_follower` (logique pure
@@ -141,8 +151,15 @@ scp follow_control/person_follower/twist_mux.yaml/setup.py + sentinelles.
    GazeControl, gain 49 = plein débattement 1-99 comme les séquences,
    `eye_direction_sign=-1` — montage MIROIR du cou, validé visuellement).
    Toujours lancé À LA MAIN (pas dans robot_bringup), toggle topic `gaze`
-   "on"/"off". Reste ouvert : arbitrage animations↔gaze (les deux écrivent
-   neck/left_eye/right_eye — en attendant : gaze OFF pendant les séquences).
+   "on"/"off". L'arbitrage animations↔gaze (les deux écrivent
+   neck/left_eye/right_eye) est CADRÉ par l'étude du 2026-07-12
+   `docs/etude-arbitrage-actionneurs.md` — même cause que le visage LED qui
+   « déconne » avec le chat : topics-ressources sans arbitre, dernier message
+   gagne. Plan proposé : lot A (chat_node : rattrapage idle() après abandon
+   STT, stop ciblé au lieu du stop GLOBAL qui écrase tout — S2 de l'étude) +
+   lot B (topic latché `animation_state`, chat et gaze se taisent pendant une
+   séquence) ; arbitrage aval par source différé. En attendant : gaze OFF
+   pendant les séquences, chat_node coupé pendant les sessions visage.
 3. Calibrer `max_wheel_speed` réel (m/s à consigne 1.0) — mesurable à la caméra, distance/temps.
 4. Action ROS 2 `PlayAnimation` (les pistes roues des séquences passeront par cmd_vel_anim).
 4. Source unique des séquences JSON (côté robot, la télécommande interroge par service).
