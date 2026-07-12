@@ -37,18 +37,17 @@ class LightsNode(Node):
         if not self.enabled:
             return
 
-        # Import différé (lib Pi absente sur x86) : neopixel n'est importé que
-        # dans la branche `enabled` (donc sur le vrai robot). Driver Blinka
-        # STANDARD, sleep de ~31 ms par show() compris : cette pause garantit
-        # que la trame est ENTIÈREMENT sortie sur le fil avant la suivante.
-        # Sa suppression (FastNeoPixel, 2026-07-11→13) corrompait les trames à
-        # chaque rendu 20 Hz (visage « deux signaux entrelacés ») — voir
-        # docs/incidents/2026-07-13-glitch-visage-driver-led.md. Ne pas retenter.
-        import neopixel
+        # Import différé (lib Pi absente sur x86), dans la branche `enabled`
+        # uniquement. FastNeoPixel = chemin DIRECT vers _rpi_ws281x : la
+        # résolution de backend du neopixel stock est cassée dans le conteneur
+        # (ruban noir silencieux), et le sleep de fin de trame est CONSERVÉ
+        # (sa suppression corrompait les trames : « deux signaux entrelacés »).
+        # Voir docs/incidents/2026-07-13-glitch-visage-driver-led.md.
+        from robot.visual.fast_neopixel import FastNeoPixel
 
         robot_json_manager = RobotJsonManager(config)
-        pixels = neopixel.NeoPixel(config[LIGHTS_PIN], config[LIGHTS_LED_COUNT], auto_write=False,
-                                   brightness=config[BRIGHTNESS])
+        pixels = FastNeoPixel(config[LIGHTS_PIN], config[LIGHTS_LED_COUNT], auto_write=False,
+                              brightness=config[BRIGHTNESS])
 
         self.face = Face(config=config, json_manager=robot_json_manager, strip=pixels)
         self.lights = Lights(config=config, start=config[LIGHTS_START_LED], end=config[LIGHTS_END_LED],

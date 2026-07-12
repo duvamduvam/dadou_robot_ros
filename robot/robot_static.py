@@ -123,11 +123,11 @@ LORA_SCK_PIN = 'lora sck pin'
 
 ############### Cadence des nodes ###############
 
-# 20 Hz — le tick global des nodes. Le driver LED Blinka bloque ~31 ms par
-# show() (attente de fin de trame sur le fil — INDISPENSABLE : sa suppression
-# corrompait les trames, incident 2026-07-13) : lights_node s'auto-limite de
-# fait, les autres nodes (servos…) tiennent la cadence. NE PAS appliquer à la
-# chaîne roues (wheels_node / robot_drive : périmètre gelé, cadences propres).
+# 20 Hz — le tick global des nodes. Le driver LED (fast_neopixel vendorisé)
+# bloque ~31 ms par show() : attente de fin de trame INDISPENSABLE (sa
+# suppression corrompait les trames, incident 2026-07-13). lights_node
+# s'auto-limite de fait, les autres nodes (servos…) tiennent la cadence.
+# NE PAS appliquer à la chaîne roues (wheels_node / robot_drive : gelée).
 TICK_PERIOD_S = 0.05
 
 ############### Boucle principale / logging ###############

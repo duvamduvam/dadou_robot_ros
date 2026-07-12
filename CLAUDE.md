@@ -52,9 +52,10 @@ FAIT et validé en sim (tout est commité/poussé, CI verte, 123 tests unitaires
 - **Temps réel fait** : tick global 20 Hz (`TICK_PERIOD_S`, chaîne roues non touchée),
   servos en rampe linéaire (`RAMP_SPEED=160`, à caler sur scène) + anti-spam I2C +
   deadman façon roues + fix `random_duration` (le réel suit enfin la sim).
-  ⚠️ `FastNeoPixel` (show sans le sleep Blinka) RETIRÉ le 2026-07-13 : le sleep de
-  31 ms est l'attente de fin de trame, sa suppression corrompait le visage
-  (« deux signaux ») — post-mortem `docs/incidents/2026-07-13-glitch-visage-driver-led.md`.
+  ⚠️ `FastNeoPixel` conservé mais SLEEP DE FIN DE TRAME RÉTABLI le 2026-07-13 : sa
+  suppression corrompait le visage (« deux signaux »), et le neopixel stock est
+  cassé dans le conteneur (ruban noir silencieux) — post-mortem
+  `docs/incidents/2026-07-13-glitch-visage-driver-led.md`.
 - ⚠️ **`e_stop` n'a AUCUNE source** (verrou twist_mux déclaré, personne ne publie —
   vérifié robot + télécommande). Le deadman 400 ms est l'arrêt d'urgence effectif.
   À câbler côté télécommande, avec protocole roues.

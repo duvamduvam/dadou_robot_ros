@@ -41,11 +41,12 @@ nodes/      ROS boundary: decode StringTime payloads (nodes/payload.py,
                                  readings (emit-at-t / displayed-until-t)
         └─> visual/              ImageMapping (LED wiring as a precomputed
                                  table — the PHYSICAL truth, locked by tests),
-                                 Visual (raw PNG load). LED strip driven by
-                                 the STOCK Blinka driver — its ~31 ms sleep
-                                 per show() is the frame-completion wait
-                                 (removing it corrupted frames, incident
-                                 2026-07-13)
+                                 FastNeoPixel (vendored direct _rpi_ws281x
+                                 write: the stock Blinka backend resolution
+                                 is broken in the container; the ~31 ms
+                                 frame-completion sleep is KEPT — removing
+                                 it corrupted frames, incident 2026-07-13),
+                                 Visual (raw PNG load)
         └─> robot_config.py / robot_static.py   deploy constants; shared
                                  constants stay in dadou_utils_ros/utils_static
                                  (one-way migration rule + contract test)

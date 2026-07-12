@@ -30,15 +30,24 @@
   rpi-ws281x 5.0.0) : sans cette attente de fin de trame, la trame suivante
   part trop tôt, le ruban latche en cours d'émission et interprète la suite
   comme une nouvelle trame → deux « signaux » entrelacés.
-- **Remède** : retour au driver Blinka standard (`neopixel.NeoPixel`),
-  suppression de `robot/visual/fast_neopixel.py` et de son test. Le tick
-  global reste à 20 Hz : lights_node s'auto-limite (show bloquant), les autres
-  nodes ne sont pas affectés. Au passage : keyframes de l'expression `default`
-  recalées sur la sémantique « affichée jusqu'à t » (les micro-mouvements
-  étaient devenus des affichages de 2 s depuis le fix Track du 11/07).
-- **Prévention** : commentaire bloquant dans `lights_node.py` +
-  `robot_static.py` (« ne pas retenter ») ; toute optimisation du chemin LED
+- **Remède (2 temps — le 1er a échoué, instructif)** :
+  1. Tentative « retour au neopixel stock Blinka » : ÉCHEC — ruban quasi noir,
+     2 pixels égarés, AUCUNE erreur (node vivant, logs normaux). La résolution
+     de backend de Blinka est cassée dans le conteneur (script de test stock
+     suspendu > 2 min). C'est la raison d'être — non documentée jusqu'ici —
+     de l'écriture vendorisée de FastNeoPixel (accès direct `_rpi_ws281x`).
+  2. Remède FINAL : `FastNeoPixel` conservé (écriture vendorisée) avec le
+     sleep de fin de trame RÉTABLI. Le tick global reste à 20 Hz :
+     lights_node s'auto-limite (show bloquant ~31 ms), les autres nodes ne
+     sont pas affectés. Au passage : keyframes de l'expression `default`
+     recalées sur la sémantique « affichée jusqu'à t » (les micro-mouvements
+     étaient devenus des affichages de 2 s depuis le fix Track du 11/07).
+- **Prévention** : test AST inversé (le sleep de `_fast_neopixel_write` est
+  désormais OBLIGATOIRE), commentaires bloquants dans `fast_neopixel.py`,
+  `lights_node.py` et `robot_static.py` ; toute optimisation du chemin LED
   repasse par une validation caméra (mesure frame par frame, pas l'œil seul).
+  Un ruban noir SANS erreur logguée = penser au backend Blinka (stock cassé
+  dans le conteneur).
 - **Résiduel connu (hors incident)** : quelques ratés épars subsistent même à
   ~1 rendu/s — interférences électriques sur le fil de données selon David
   (« ça a toujours fait ça »). Piste matérielle (level shifter 3,3→5 V,

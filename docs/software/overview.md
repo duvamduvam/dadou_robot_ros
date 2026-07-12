@@ -7,13 +7,14 @@
 - `robot/actions/`: one `Action` (ABC `action.py`: `update(msg)` /
   `process()`) per subsystem. Servos move through a linear ramp with I2C
   anti-spam and an animation deadman; the LED strip is driven through
-  the stock Blinka `neopixel` driver (its ~31 ms sleep per `show()` is the
-  frame-completion wait — required, see incident 2026-07-13).
+  `FastNeoPixel` (vendored direct `_rpi_ws281x` write — the stock Blinka
+  backend resolution is broken in the container; the ~31 ms frame-completion
+  sleep per `show()` is KEPT, see incident 2026-07-13).
 - `robot/sequences/`: `Track` (the single keyframe-track class, injected
   clock) and `AnimationManager` (samples a JSON sequence, one Track per body
   track).
 - `robot/visual/`: `ImageMapping` (physical LED wiring as a precomputed table,
-  locked by tests), `Visual` (raw PNG loading).
+  locked by tests), `FastNeoPixel`, `Visual` (raw PNG loading).
 - `robot/tests/unit/`: the 443-test suite (see below). `robot/tests/sandbox/`
   holds manual hardware benches only (not collected).
 
