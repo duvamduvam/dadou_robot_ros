@@ -2,6 +2,7 @@
 
 This repository contains the runtime for the Dadou theatrical robot (wood/metal, ~50 kg, dual wheels, articulated arms, LED eyes and mouth).
 
+- [`chantiers.md`](chantiers.md): **live worksite dashboard** — status, next action and blockers of every ongoing effort (French). Start here to know where things stand.
 - [`architecture.md`](architecture.md): robot software overview and its integration with the shared controller/utilities.
 - [`hardware/overview.md`](hardware/overview.md): physical subsystems, sensors, and the power layout.
 - [`software/overview.md`](software/overview.md): ROS 2 nodes, action managers, and how to extend them.

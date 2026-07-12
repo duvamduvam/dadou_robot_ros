@@ -83,123 +83,23 @@ docker exec -d dadou-sim-container bash -c 'source /opt/ros/$ROS_DISTRO/setup.sh
 # Sentinelle de build : créer le fichier robot/change déclenche colcon build au (re)démarrage.
 ```
 
-## Prochaines étapes (dans l'ordre)
+## État et priorités
 
-En parallèle des priorités 0-1 : **chantier interface web / télé-présence** (plan
-complet cadré le 2026-07-11 — `docs/etude-interface-web.md`). **W0 FAITE et vérifiée
-en sim le 2026-07-11** : package `robot_web` autonome (node rclpy+aiohttp, whitelist
-sans roues/e_stop, session exclusive + heartbeat, UI vanilla), 511 tests, protocole
-WS validé de bout en bout dans le conteneur sim (`WEB=true`, port 8765 — 8088 =
-Superset sur le PC de dev). **Console + W3-sim FAITES le même jour** : refonte UI
-(console de régie : vidéo + pad + recherche), caméra gz sur le robot simulé →
-MJPEG `/video`, pilotage pad/manette → `cmd_vel_web` (twist_mux prio 50, plafond
-dur 0,5 m/s backend, zéro unique à l'arrêt — vérifié e2e jusqu'à `/cmd_vel`).
-`WEB_DRIVE=true` requis (défaut false) + chaîne roues lancée à la main (voir
-docs/operations.md). **Bringup robot câblé** (web_bridge dans robot_app.launch.py,
-contenus/supervision seulement — drive non passé donc false) : au prochain
-déploiement, REBUILD image ARM requis (python3-aiohttp + python3-pil ajoutés à
-packages-docker.txt) ; procédure sim→réel dans docs/operations.md. **Console
-enrichie le 2026-07-12 (déployé + vérifié)** : alias mDNS `didier.local`
-(service `avahi-alias-didier` sur le Pi robot, source versionnée
-`conf/systemd/`, install docs/operations.md — `/etc/avahi/hosts` ne publie PAS
-sur le réseau) + toggle **Parole IA** (topic `chat` ajouté à la whitelist
-technique, boutons ON/OFF panneau Technique → chat_node du Pi vision, même
-contrat que `gaze`). Suite : W1 (source e_stop + coup-de-poing) ; le passage
-des roues web au ROBOT RÉEL reste conditionné au test scénique au sol
-(priorité 1) et à un protocole caméra dédié.
+**Tableau de bord des chantiers : `docs/chantiers.md`** — statut, prochaine
+action et verrous de CHAQUE chantier (web, télédiagnostic, suivi de personne,
+gaze/arbitrage, fond de tiroir). C'est LÀ que l'état se met à jour à chaque
+lot — ce fichier-ci ne garde que les règles, les commandes et la tête de liste.
+Le détail des décisions vit dans les `docs/etude-*.md` de chaque chantier.
 
-**Télédiagnostic par agent IA (PLAN DÉCIDÉ, grillé le 2026-07-12)** :
-`docs/etude-telediagnostic.md` — investiguer les pannes de déambulation.
-Décisions gravées (§8 du doc) : **hybride** (agent embarqué sur le HOST du Pi
-— hors conteneur, il doit survivre à sa mort — + session PC à l'atelier) ;
-**Opus sur l'abonnement Claude** (token `claude setup-token` déposé sur le Pi,
-OpenRouter écarté : pas de prompt caching → 5-10× plus cher en agentique ;
-pas de VPN requis — HTTPS sortant seul, partage 4G téléphone) ; déclencheurs
-**START télécommande (libre, GPIO D21 + manette) + boutons GUI/console** en
-V1, topic `incident` à créer dans PUBLISHER_LIST côté télécommande ; boîte
-noire **rosbag segments SD 60 s, rétention 30 j, SANS caméra** (logs texte
-alignés 30 j) ; **remédiations AUTONOMES même en représentation** (liste
-blanche de restarts — sûrs côté roues : conteneur tombé = deadman —,
-composant mort constaté seulement, anti-boucle 1 restart/incident, annonce
-vocale avant action) ; restitution console web + voix + notif téléphone ;
-batterie parquée chantier élec ; RAG inutile (le rsync embarque le corpus,
-sauf .git) → skill `/diag` + journal `docs/incidents/`. Préalables avant
-construction : RAM du Pi 4 (`cat /proc/meminfo`, non documentée), charge
-d'une investigation vs tick 20 Hz, santé SD, 4G en salle. Ordre §9 :
-trousse d'atelier → boîte noire+bouton → agent embarqué → itinérance.
-**Étape 1 « trousse d'atelier » FAITE le 2026-07-12** :
-`conf/scripts/collect-incident.sh` (tourne sur le HOST du Pi, best-effort,
-testé de bout en bout contre la sim — piège trouvé : `ros2 node list` vide
-au premier appel du daemon → retente intégrée), skill `/diag`
-(`.claude/skills/diag/SKILL.md` — droits/interdits, carte de lecture,
-pièges), journal `docs/incidents/` (post-mortem obligatoire par
-investigation). Part sur le Pi avec le rsync habituel, rien à déployer.
+Priorités de tête (l'ordre compte) :
+0. **Protocole physique chat_node V2** — conversation complète sur le vrai
+   matériel (le code est prêt et validé sim, jamais testé en réel).
+1. **Test scénique au sol** — première fois que cmd_vel roule au sol,
+   télécommande en main. C'est LE verrou des roues web réelles et du suivi
+   de personne réel.
 
-**Suivi de personne AUX ROUES (2026-07-11 soir) — CODE COMPLET, VALIDÉ EN SIM 5/5** :
-chaîne `/vision/person_box` (Pi vision : azimut + HAUTEUR de silhouette = proxy de
-distance monoculaire, cf. dadou_vision_ros) → `person_follower` (logique pure
-`robot/move/follow_control.py` testée : deadzones, plafonds durs ABS 0,5/1,0
-bornant même les paramètres, slew, zéro franc sur perte de cible < 600 ms et sur
-OFF, marche arrière interdite par défaut) → `cmd_vel_follow` → twist_mux **prio
-20** (remote 100 > web 50 > follow 20 > anim 10, contrat gelé re-testé). Toggle
-topic `follow` "on"/"off", **OFF par défaut**, lancé À LA MAIN, PAS dans le
-bringup. Validé sim : T1 désactivé=zéro mouvement, T2 avance+rotation vers la
-personne (odom confirme le déplacement gz), T3 la télécommande écrase et le
-suivi reprend, T4 perte=zéro franc puis silence, T5 OFF=zéro unique.
-**SIM-ONLY** : usage réel conditionné au test scénique au sol (priorité 1) PUIS
-protocole caméra roues hors sol (`direction_sign` azimut→rotation inconnu,
-comme le gaze). Code DÉPLOYÉ sur les Pi au déploiement complet du 2026-07-12
-(rsync Ansible + sentinelles) — l'usage reste SIM-ONLY (toggle OFF, lancé à la
-main, jamais dans le bringup) tant que les verrous ci-dessus ne sont pas levés.
-
-0. **Protocole physique chat_node V2 (conversation)** : le code est COMPLET et commité
-   (nuit du 10 au 11/07 : ~15 commits sur les 3 dépôts, validé en sim — bras+yeux bougent
-   sur l'animation « parle », vu par David dans Gazebo). Côté vision : chat_node
-   (chat_enabled:=true, défaut false), pipeline VAD→whisper→OpenRouter→piper→mixette,
-   didascalies/émotions → topics face+animation. Côté robot : fix MODE (dadou_utils_ros
-   5aefdf1 — le mode random servo était mort depuis sept. 2025), expression « parle »,
-   séquence didier/parle.json. À faire sur le vrai matériel : rebuild image ARM vision
-   (voix piper + whisper préchargés), Pi 5 avec ALIM 27 W (crash constaté sur USB-C PC),
-   sentinelles robot/change + vision/CHANGE, dérouler une conversation complète au casque,
-   vérifier gestes/bouche/arrêts propres (caméra à l'appui).
-1. **Test scénique en conditions réelles** : roues AU SOL, télécommande physique en main
-   (boutons, slider, gants), une séquence de spectacle complète — première fois que le
-   mode cmd_vel roule au sol. Vérifier aussi le sens de rotation gauche/droite (le
-   protocole roues hors sol ne l'a validé qu'en marche avant symétrique).
-2. **Gaze V1 (cou + yeux) : PROTOCOLE CAMÉRA FAIT ET VALIDÉ le 2026-07-12** sur le
-   vrai robot, David en scène. Résultats gravés en défauts du node : cou
-   `direction_sign=+1` (boucle fermée AUTO-VALIDANTE : la caméra est sur la tête,
-   l'azimut converge vers 0 — un mauvais signe aurait divergé en butée), amorti
-   `ema_alpha=0.15`/`slew_max=1.5` (les valeurs initiales 0.4/3.0 oscillaient :
-   retard de phase EMA×2 + slew + rampe servo), YEUX ajoutés (2e instance de
-   GazeControl, gain 49 = plein débattement 1-99 comme les séquences,
-   `eye_direction_sign=-1` — montage MIROIR du cou, validé visuellement).
-   Toujours lancé À LA MAIN (pas dans robot_bringup), toggle topic `gaze`
-   "on"/"off". **ARBITRAGE AMONT FAIT le 2026-07-12** (lots A+B de
-   `docs/etude-arbitrage-actionneurs.md`, contrat + validation §8) :
-   `animations_node` publie l'état latché `animation_state` (nom ou "",
-   time=remaining_ms, TRANSIENT_LOCAL des DEUX côtés — un abonné volatile
-   raterait le latch), le gaze et le chat (Pi vision, module pur
-   `vision/ai/arbitration.py`) se TAISENT quand une séquence a la main, avec
-   PÉREMPTION façon deadman (remaining+2 s) si animations_node meurt en
-   pleine séquence. Chat : rattrapage idle() après abandon STT (fini le
-   visage coincé sur « reflechit ») + stop ciblé (fini le stop GLOBAL qui
-   tuait la séquence en cours). Validé en sim 5/5 (latch, silence pendant
-   séquence — contre-preuve sans piste neck —, reprise, redémarrage en cours
-   de séquence, péremption sur kill). Arbitrage aval par source différé
-   (étude §5.3). **DÉPLOYÉ ET VÉRIFIÉ sur les deux Pi le 2026-07-12** :
-   contrat joué en réel sur le robot ("" latché au repos → "parle"
-   time=4999 pendant une séquence de 5 s → "" au retour), module
-   arbitration + câblage péremption confirmés dans l'install du Pi vision.
-   Reste une vérif VISUELLE comportementale à la prochaine session robot :
-   gaze ON pendant une séquence (la tête ne doit plus trembler), et le gate
-   chat en conversation réelle (protocole chat_node V2, priorité 0).
-3. Calibrer `max_wheel_speed` réel (m/s à consigne 1.0) — mesurable à la caméra, distance/temps.
-4. Action ROS 2 `PlayAnimation` (les pistes roues des séquences passeront par cmd_vel_anim).
-4. Source unique des séquences JSON (côté robot, la télécommande interroge par service).
-5. Affiner l'URDF depuis les plans FreeCAD (~/Nextcloud/dev/didier/plans).
-6. Quirk latent à vérifier caméra un jour : en legacy, une paire [0,0] de séquence passe
-   par update_cmd(0,0) → PWM au plancher MIN_PWM=5000 (rampage lent possible).
+En parallèle (sans bousculer 0-1) : interface web (suite = W1 e_stop),
+télédiagnostic (suite = étape 2 boîte noire + bouton START).
 
 ## Méthode de travail
 
