@@ -28,6 +28,10 @@ setup(
             # tant que le sens du cou n'est pas validé caméra (pas dans le bringup).
             "gaze_follower = robot.nodes.gaze_follower_node:main",
             "lights_node = robot.nodes.lights_node:main",
+            # Suivi de personne AUX ROUES (cmd_vel_follow -> twist_mux prio 20).
+            # SIM-ONLY, lancé À LA MAIN : test scénique au sol + protocole caméra
+            # requis avant tout usage réel (cf. person_follower_node.py).
+            "person_follower = robot.nodes.person_follower_node:main",
             "relays_node = robot.nodes.relays_node:main",
             "servo_node = robot.nodes.servo_node:main",
             "system_node = robot.nodes.system_node:main",

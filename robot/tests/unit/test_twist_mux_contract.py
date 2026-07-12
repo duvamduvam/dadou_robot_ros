@@ -2,9 +2,11 @@
 pas depuis une copie (une divergence config/contrat serait un trou de sécurité).
 
 Priorités : remote (télécommande physique, 100) > web (pilotage web, 50) >
-anim (animations, 10). Le verrou e_stop est latché à 255. Tous les timeouts de
-topic sont à 0.5 s. C'est le contrat du plan (etude-interface-web.md §5) : le web
-ne peut JAMAIS prendre le pas sur la télécommande physique.
+follow (suivi de personne autonome, 20) > anim (animations, 10). Le verrou
+e_stop est latché à 255. Tous les timeouts de topic sont à 0.5 s. C'est le
+contrat du plan (etude-interface-web.md §5) étendu au suivi (2026-07-11) : ni
+le web ni le suivi autonome ne peuvent JAMAIS prendre le pas sur la
+télécommande physique.
 
 pyyaml est présent dans le venv de dev (vérifié) ; on parse donc le vrai fichier
 livré au twist_mux plutôt que de dupliquer les valeurs ici.
@@ -40,20 +42,28 @@ def test_use_stamped_false_obligatoire_en_jazzy():
     assert _params()["use_stamped"] is False
 
 
-def test_priorites_remote_100_web_50_anim_10():
+def test_priorites_remote_100_web_50_follow_20_anim_10():
     topics = _params()["topics"]
     assert topics["remote"]["priority"] == 100
     assert topics["web"]["priority"] == 50
+    assert topics["follow"]["priority"] == 20
     assert topics["anim"]["priority"] == 10
     # L'ordre STRUCTUREL du plan : la télécommande physique domine le web, qui
-    # domine les animations. Un web à >= 100 serait un trou de sécurité.
+    # domine le suivi autonome, qui domine les animations. Un web ou un suivi
+    # à >= 100 serait un trou de sécurité (l'autonome ne doit JAMAIS pouvoir
+    # résister à une reprise en main humaine).
     assert (topics["remote"]["priority"]
             > topics["web"]["priority"]
+            > topics["follow"]["priority"]
             > topics["anim"]["priority"])
 
 
 def test_web_ecoute_bien_cmd_vel_web():
     assert _params()["topics"]["web"]["topic"] == "cmd_vel_web"
+
+
+def test_follow_ecoute_bien_cmd_vel_follow():
+    assert _params()["topics"]["follow"]["topic"] == "cmd_vel_follow"
 
 
 def test_tous_les_timeouts_topics_a_un_demi_seconde():

@@ -18,6 +18,18 @@ twist_mux:
         topic: cmd_vel_web
         timeout: 0.5
         priority: 50
+      # Suivi de personne autonome (person_follower, 2026-07-11) : SOUS la
+      # télécommande et le web (reprendre la main écrase le suivi), AU-DESSUS
+      # des animations (le suivi est un mode EXPLICITEMENT activé — topic
+      # `follow` on/off, défaut off — quand il est actif, c'est lui qui
+      # conduit, pas une piste roues de séquence). Source = person_follower,
+      # qui ne publie RIEN tant qu'il est désactivé ou sans cible.
+      # SIM-ONLY tant que : test scénique au sol (priorité 1) + protocole
+      # caméra roues hors sol (direction_sign) ne sont pas faits.
+      follow:
+        topic: cmd_vel_follow
+        timeout: 0.5
+        priority: 20
       anim:
         topic: cmd_vel_anim
         timeout: 0.5

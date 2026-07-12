@@ -73,6 +73,10 @@ docker exec dadou-sim-container bash -c 'source /opt/ros/$ROS_DISTRO/setup.sh &&
 docker exec -d dadou-sim-container bash -c 'source /opt/ros/$ROS_DISTRO/setup.sh && source /home/ros2_ws/install/setup.bash && ros2 launch robot_drive drive.launch.py use_sim_time:=true'
 # Conduite clavier (publie /cmd_vel_remote via remap, prioritaire) :
 docker exec -it dadou-sim-container bash -c 'source /opt/ros/$ROS_DISTRO/setup.sh && ros2 run teleop_twist_keyboard teleop_twist_keyboard --ros-args -r cmd_vel:=cmd_vel_remote'
+# Suivi de personne en sim (chaîne roues requise ; toggle topic `follow` on/off, OFF par défaut) :
+docker exec -d dadou-sim-container bash -c 'source /opt/ros/$ROS_DISTRO/setup.sh && source /home/ros2_ws/install/setup.bash && ros2 run robot person_follower'
+# Perception scriptée pour le tester (personne à droite, loin, sûre) :
+docker exec -d dadou-sim-container bash -c 'source /opt/ros/$ROS_DISTRO/setup.sh && ros2 topic pub -r 16 /vision/person_box geometry_msgs/msg/PointStamped "{point: {x: 0.5, y: 0.2, z: 0.9}}"'
 
 # Déploiement robot : Ansible dans ../dadou_utils_ros (rsync du checkout local, PAS de git sur le Pi).
 # ssh alias `r` = pi@robot. Logs applicatifs : /home/ros2_ws/log/robot.log DANS le conteneur (pas stdout docker).
@@ -97,6 +101,22 @@ déploiement, REBUILD image ARM requis (python3-aiohttp + python3-pil ajoutés �
 packages-docker.txt) ; procédure sim→réel dans docs/operations.md. Suite : W1
 (source e_stop + coup-de-poing) ; le passage des roues web au ROBOT RÉEL reste
 conditionné au test scénique au sol (priorité 1) et à un protocole caméra dédié.
+
+**Suivi de personne AUX ROUES (2026-07-11 soir) — CODE COMPLET, VALIDÉ EN SIM 5/5** :
+chaîne `/vision/person_box` (Pi vision : azimut + HAUTEUR de silhouette = proxy de
+distance monoculaire, cf. dadou_vision_ros) → `person_follower` (logique pure
+`robot/move/follow_control.py` testée : deadzones, plafonds durs ABS 0,5/1,0
+bornant même les paramètres, slew, zéro franc sur perte de cible < 600 ms et sur
+OFF, marche arrière interdite par défaut) → `cmd_vel_follow` → twist_mux **prio
+20** (remote 100 > web 50 > follow 20 > anim 10, contrat gelé re-testé). Toggle
+topic `follow` "on"/"off", **OFF par défaut**, lancé À LA MAIN, PAS dans le
+bringup. Validé sim : T1 désactivé=zéro mouvement, T2 avance+rotation vers la
+personne (odom confirme le déplacement gz), T3 la télécommande écrase et le
+suivi reprend, T4 perte=zéro franc puis silence, T5 OFF=zéro unique.
+**SIM-ONLY** : usage réel conditionné au test scénique au sol (priorité 1) PUIS
+protocole caméra roues hors sol (`direction_sign` azimut→rotation inconnu,
+comme le gaze). ⚠️ PAS DÉPLOYÉ sur les Pi (éteints au moment du déploiement) :
+scp follow_control/person_follower/twist_mux.yaml/setup.py + sentinelles.
 
 0. **Protocole physique chat_node V2 (conversation)** : le code est COMPLET et commité
    (nuit du 10 au 11/07 : ~15 commits sur les 3 dépôts, validé en sim — bras+yeux bougent
