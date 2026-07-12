@@ -2,11 +2,8 @@
 import logging
 
 import rclpy
-from rclpy.node import Node
-import time
 
-from robot.robot_static import LIGHTS_START_LED, LIGHTS_LED_COUNT, LIGHTS_PIN
-from dadou_utils_ros.utils_static import BRIGHTNESS, ROBOT_LIGHTS, FACE, AUDIO
+from dadou_utils_ros.utils_static import AUDIO
 from robot.actions.audio_manager import AudioManager
 from robot.files.robot_json_manager import RobotJsonManager
 from robot.nodes.abstract_subscriber import SubscriberNode

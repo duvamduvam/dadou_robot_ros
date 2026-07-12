@@ -449,20 +449,12 @@
         ],
         "left_eyes": [
             [
-                0.1,
-                "oeil-gauche.png"
-            ],
-            [
-                0.2,
-                "oeil-gauche.png"
-            ],
-            [
                 0.3,
-                "oeil-fixe.png"
+                "oeil-gauche.png"
             ],
             [
-                0.6,
-                "oeil-gauche.png"
+                0.35,
+                "oeil-fixe.png"
             ],
             [
                 1.0,
@@ -471,15 +463,11 @@
         ],
         "right_eyes": [
             [
-                0.2,
-                "oeil-droit.png"
-            ],
-            [
-                0.4,
-                "oeil-droit.png"
-            ],
-            [
                 0.8,
+                "oeil-droit.png"
+            ],
+            [
+                0.85,
                 "oeil-gauche.png"
             ],
             [
@@ -489,15 +477,15 @@
         ],
         "mouths": [
             [
-                0.05,
+                0.5,
                 "bouche-ferme.png"
             ],
             [
-                0.5,
+                0.52,
                 "bouche-ferme-gauche.png"
             ],
             [
-                0.52,
+                0.54,
                 "bouche-ferme-droit.png"
             ],
             [

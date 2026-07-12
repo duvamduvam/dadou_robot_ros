@@ -49,10 +49,12 @@ FAIT et validé en sim (tout est commité/poussé, CI verte, 123 tests unitaires
   les pistes de keyframes (fix au passage : les frames du visage étaient décalées d'un
   cran), contrat `Action` (ABC), contrats de données testés (chaque visuel/audio/brique
   référencé doit exister). **443 tests** (`.venv/bin/pytest -q`), CI verte.
-- **Temps réel fait** : `FastNeoPixel` (transmission sans le sleep de 31 ms de Blinka —
-  mesuré 32,6 → 1,3 ms bloqués par show), tick global 20 Hz (`TICK_PERIOD_S`, chaîne
-  roues non touchée), servos en rampe linéaire (`RAMP_SPEED=160`, à caler sur scène) +
-  anti-spam I2C + deadman façon roues + fix `random_duration` (le réel suit enfin la sim).
+- **Temps réel fait** : tick global 20 Hz (`TICK_PERIOD_S`, chaîne roues non touchée),
+  servos en rampe linéaire (`RAMP_SPEED=160`, à caler sur scène) + anti-spam I2C +
+  deadman façon roues + fix `random_duration` (le réel suit enfin la sim).
+  ⚠️ `FastNeoPixel` (show sans le sleep Blinka) RETIRÉ le 2026-07-13 : le sleep de
+  31 ms est l'attente de fin de trame, sa suppression corrompait le visage
+  (« deux signaux ») — post-mortem `docs/incidents/2026-07-13-glitch-visage-driver-led.md`.
 - ⚠️ **`e_stop` n'a AUCUNE source** (verrou twist_mux déclaré, personne ne publie —
   vérifié robot + télécommande). Le deadman 400 ms est l'arrêt d'urgence effectif.
   À câbler côté télécommande, avec protocole roues.

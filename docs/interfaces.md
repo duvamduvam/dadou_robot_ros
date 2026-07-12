@@ -159,4 +159,4 @@ réseau (`robot/tests/unit/test_web_protocol.py`, `test_web_catalog.py`).
 - Application log: `/home/ros2_ws/log/robot.log` INSIDE the container (not
   docker stdout).
 - Hardware side-effects through `robot/actions/*` (PCA9685 servos/wheels PWM,
-  WS2812 strip via `FastNeoPixel`, relays).
+  WS2812 strip via the stock Blinka `neopixel` driver, relays).
