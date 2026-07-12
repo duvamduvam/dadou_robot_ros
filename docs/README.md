@@ -9,6 +9,7 @@ This repository contains the runtime for the Dadou theatrical robot (wood/metal,
 - [`interfaces.md`](interfaces.md): ROS topics and configuration exposed/consumed by the robot runtime.
 - [`etude-interface-web.md`](etude-interface-web.md): web tele-presence plan (decided 2026-07-11, French).
 - [`etude-telediagnostic.md`](etude-telediagnostic.md): AI-agent remote diagnostics study (proposal 2026-07-12, French).
+- [`etude-arbitrage-actionneurs.md`](etude-arbitrage-actionneurs.md): face LED + head servos arbitration study (analysis 2026-07-12, French).
 - [`../README.md`](../README.md): repository quickstart (tests, simulation, deployment).
 - [`../CLAUDE.md`](../CLAUDE.md): working state and next steps (French, for AI sessions).
 
