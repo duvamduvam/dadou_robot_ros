@@ -58,10 +58,12 @@ def test_whitelist_n_expose_jamais_les_roues_ni_e_stop():
 
 
 def test_whitelist_est_l_union_spectacle_technique():
+    # "chat" (2026-07-12) : toggle on/off de la parole IA (chat_node, Pi
+    # vision) -- topic de commande comme "gaze", pas un actionneur.
     assert WHITELIST == WHITELIST_SPECTACLE | WHITELIST_TECHNIQUE
     assert WHITELIST_SPECTACLE == {"animation", "face", "audio", "robot_lights"}
     assert WHITELIST_TECHNIQUE == {"relay", "neck", "left_eye", "right_eye", "left_arm",
-                                    "right_arm", "gaze", "system"}
+                                    "right_arm", "gaze", "chat", "system"}
 
 
 # --- Parsing des messages client --------------------------------------------

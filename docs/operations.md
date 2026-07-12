@@ -102,6 +102,33 @@ Déploiement (fait le 2026-07-11 — pont web actif sur le robot) :
    s'affiche sur le vrai visage LED, et le journal `robot.log` trace la
    commande (`cmd web id=... topic=face`).
 
+### Alias didier.local (fait le 2026-07-12)
+
+La console répond aussi sur `http://didier.local:8765` (alias mDNS publié par
+le Pi robot). Pratique depuis un téléphone/une tablette ; le **PC de dev a un
+mDNS cassé** → y garder l'entrée IP du sélecteur. Mécanique : service systemd
+`avahi-alias-didier.service` (source versionnée :
+`conf/systemd/avahi-alias-didier.service`) qui lance `avahi-publish` —
+`/etc/avahi/hosts` ne publie PAS sur le réseau (résolution locale seulement,
+vérifié). L'IP est relue au démarrage du service : le redémarrer si l'adresse
+du Pi change (réseau 4G de tournée). Réinstallation après reflash :
+
+```bash
+ssh r 'sudo apt-get install -y avahi-utils'
+scp conf/systemd/avahi-alias-didier.service r:/tmp/ && ssh r \
+  'sudo mv /tmp/avahi-alias-didier.service /etc/systemd/system/ \
+   && sudo systemctl daemon-reload && sudo systemctl enable --now avahi-alias-didier'
+```
+
+### Parole IA depuis la console (fait le 2026-07-12)
+
+Panneau Technique → « Parole IA » : boutons ON/OFF publient `"on"`/`"off"` sur
+le topic `chat` (whitelist technique), consommé par `chat_node` sur le Pi
+vision — même contrat que le toggle `gaze`. OFF coupe le micro et bloque les
+tours suivants sans couper une réplique en cours (Didier finit sa phrase) ;
+ON = reprise instantanée (modèles restés chargés). Sans effet si `chat_node`
+ne tourne pas (`chat_enabled` défaut false côté vision).
+
 ## Pre-show checklist
 1. Inspect hardware (wheels locked, arms secure, LED strips intact).
 2. Power on robot and remote controller (Pi 5 vision needs the 27 W PSU).

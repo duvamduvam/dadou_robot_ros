@@ -98,9 +98,15 @@ dur 0,5 m/s backend, zéro unique à l'arrêt — vérifié e2e jusqu'à `/cmd_v
 docs/operations.md). **Bringup robot câblé** (web_bridge dans robot_app.launch.py,
 contenus/supervision seulement — drive non passé donc false) : au prochain
 déploiement, REBUILD image ARM requis (python3-aiohttp + python3-pil ajoutés à
-packages-docker.txt) ; procédure sim→réel dans docs/operations.md. Suite : W1
-(source e_stop + coup-de-poing) ; le passage des roues web au ROBOT RÉEL reste
-conditionné au test scénique au sol (priorité 1) et à un protocole caméra dédié.
+packages-docker.txt) ; procédure sim→réel dans docs/operations.md. **Console
+enrichie le 2026-07-12 (déployé + vérifié)** : alias mDNS `didier.local`
+(service `avahi-alias-didier` sur le Pi robot, source versionnée
+`conf/systemd/`, install docs/operations.md — `/etc/avahi/hosts` ne publie PAS
+sur le réseau) + toggle **Parole IA** (topic `chat` ajouté à la whitelist
+technique, boutons ON/OFF panneau Technique → chat_node du Pi vision, même
+contrat que `gaze`). Suite : W1 (source e_stop + coup-de-poing) ; le passage
+des roues web au ROBOT RÉEL reste conditionné au test scénique au sol
+(priorité 1) et à un protocole caméra dédié.
 
 **Télédiagnostic par agent IA (étude v2 du 2026-07-12, décisions À TRANCHER)** :
 `docs/etude-telediagnostic.md` — investiguer les pannes de déambulation qu'on ne

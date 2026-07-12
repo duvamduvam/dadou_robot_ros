@@ -36,6 +36,10 @@
       <option value="">Cette machine (page)</option>
       <option value="http://localhost:8765">Sim locale</option>
       <option value="http://192.168.1.2:8765">Didier réel</option>
+      <!-- Alias mDNS publié par avahi sur le Pi robot (/etc/avahi/hosts).
+           Pratique depuis téléphone/tablette ; le PC de dev a un mDNS cassé
+           (cf. operations.md) -> y préférer l'entrée IP ci-dessus. -->
+      <option value="http://didier.local:8765">Didier réel (didier.local)</option>
       <option value="autre">Autre adresse…</option>
     </select>
     <span id="badge-mode" class="badge badge-inconnu">INCONNU</span>
@@ -164,6 +168,18 @@
           <h2>Gaze (suivi de tête, cou)</h2>
           <button class="bouton-catalogue" data-topic="gaze" data-value="on">Gaze ON</button>
           <button class="bouton-catalogue" data-topic="gaze" data-value="off">Gaze OFF</button>
+        </section>
+
+        <!-- Parole IA : toggle du mode conversation (chat_node, Pi vision --
+             le topic `chat` traverse le réseau, même contrat StringTime
+             "on"/"off" que le gaze). OFF ne coupe pas une réplique en cours
+             (choix scénique : Didier finit sa phrase), il coupe le micro et
+             bloque les tours suivants ; ON = reprise instantanée (modèles
+             déjà chargés). -->
+        <section class="groupe">
+          <h2>Parole IA (conversation, Pi vision)</h2>
+          <button class="bouton-catalogue" data-topic="chat" data-value="on">Parole ON</button>
+          <button class="bouton-catalogue" data-topic="chat" data-value="off">Parole OFF</button>
         </section>
 
         <!-- Visages de CALIBRATION (mires) : hors Spectacle (ils ne servent qu'à

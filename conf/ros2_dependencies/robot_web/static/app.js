@@ -813,8 +813,9 @@ function installerCible() {
     }
     // Garde-fou : basculer vers le VRAI Didier se confirme. Le badge rouge du
     // hello reste la seule vérité, mais on évite le clic réflexe.
-    if (nouvelle.includes("192.168.1.2")
-        && !confirm("Basculer cette console sur le VRAI Didier (192.168.1.2) ?")) {
+    // didier.local = alias mDNS du même Pi robot (cf. sélecteur) : même garde.
+    if ((nouvelle.includes("192.168.1.2") || nouvelle.includes("didier.local"))
+        && !confirm("Basculer cette console sur le VRAI Didier ?")) {
       select.value = cibleBase();
       return;
     }

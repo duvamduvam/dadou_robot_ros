@@ -25,7 +25,10 @@ import math
 # ABSENTS ici par construction -- c'est la garantie W0 (pas d'accès roues ni
 # verrou e_stop tant que W1/W3 ne sont pas faits, voir etude-interface-web.md).
 WHITELIST_SPECTACLE = {"animation", "face", "audio", "robot_lights"}
-WHITELIST_TECHNIQUE = {"relay", "neck", "left_eye", "right_eye", "left_arm", "right_arm", "gaze", "system"}
+# "chat" (2026-07-12) : toggle on/off de la parole IA (conversation) — consommé
+# par chat_node sur le Pi vision (même contrat StringTime "on"/"off" que
+# "gaze"). Ce n'est PAS un topic d'actionneur : aucun risque roues/e_stop.
+WHITELIST_TECHNIQUE = {"relay", "neck", "left_eye", "right_eye", "left_arm", "right_arm", "gaze", "chat", "system"}
 WHITELIST = WHITELIST_SPECTACLE | WHITELIST_TECHNIQUE
 
 # Session d'écriture : silence du writer au-delà de ce délai -> écriture
