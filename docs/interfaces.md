@@ -101,6 +101,13 @@ source (W1 à venir).
     que `gaze` ; `persona` = sélection de la personnalité de Didier, payload
     `"bougon"`/`"naif"`/`"vantard"`, cf. `vision.ai.personas` — nouvelle
     session de conversation à chaque changement)
+  - lecture seule (`TOPICS_LECTURE`, jamais publiables depuis le web) :
+    `chat_state` et `persona_state`, topics d'ÉTAT latchés publiés par
+    chat_node (Pi vision) — pilotent la surbrillance verte `en-cours` des
+    boutons Parole/Personnalité de la console (chat_node absent = aucun
+    bouton vert). Le groupe Gaze, lui, est surligné d'après le DERNIER ORDRE
+    vu sur le topic `gaze` (gaze_follower ne publie pas d'état propre —
+    approximation à remplacer si un `gaze_state` naît un jour).
 
 **Messages client → serveur** (JSON, un objet `{"type": ...}` par message) :
 | Type | Champs | Effet |
