@@ -1,14 +1,11 @@
-# Déclenchement de la conversation — détecter l'intention de communiquer
+# Conversation en déambulation — intention de communiquer, contenu, robustesse
 
-*Étude du 2026-07-12, déclenchée par le constat qu'il n'y a « très peu
-d'intelligence dans le déclenchement de la conversation » : le chat écoute en
-permanence dès qu'il est ON, sans aucun lien avec la présence ou l'attitude
-d'un passant. Statut : **PROPOSITION — plan à griller avant lancement**
-(recommandation : `/grill-me`, comme pour le télédiagnostic). Périmètre :
-perception + machine à états d'engagement + armement du micro/de la parole.
-Les ROUES ne sont PAS concernées (l'abordage actif « le robot se déplace vers
-la personne » est explicitement hors périmètre tant que les verrous roues —
-test scénique, W1 — ne sont pas levés).*
+*Étude du 2026-07-12, **GRILLÉE le jour même** (grill complet en 8 axes) :
+le plan ci-dessous est **DÉCIDÉ — ne pas re-trancher** ; les points encore
+ouverts sont explicitement listés au §8. Le périmètre initial (déclenchement
+seul) a été **élargi au grill** à toute l'intégration du chat en déambulation :
+déclenchement + contenu de la conversation + robustesse rue. Le nom du fichier
+reste `etude-declenchement-conversation.md` (liens existants).*
 
 ## 1. Le problème
 
@@ -40,7 +37,19 @@ L'objectif est déjà écrit dans la vision V3 de
 remarque quelqu'un qui entre, le suit du regard, engage la conversation »*.
 Cette étude en est la concrétisation.
 
-## 2. Ce qu'on a déjà (état des lieux 2026-07-12)
+## 2. Cadre décidé (grill du 2026-07-12)
+
+- **Situation nominale** : opérateur à vue avec la télécommande, **le robot
+  peut rouler pendant qu'il repère et interpelle** — le déclenchement doit
+  fonctionner caméra en mouvement (conséquences §5.2).
+- **Résultat visé** : Didier crédible en rue — repère qui veut lui parler,
+  invite, converse, clôt. Tout le périmètre est dedans, mais **séquencé**
+  (lots D0→D6, §7).
+- **Critère de réussite** : le test rue chiffré du lot D5 (grille §7).
+- **Échéance** : pas de date dure — chantier de fond, derrière les priorités
+  0 (protocole chat V2) et 1 (test scénique au sol).
+
+## 3. Ce qu'on a déjà (état des lieux 2026-07-12)
 
 **Signaux disponibles** :
 
@@ -60,17 +69,19 @@ une seule cible retenue à la fois (adhérence anti-saut dans
 `vision/tracking/bench_detection.py`, jamais branché en prod), détection et
 orientation du visage, trajectoire dans le temps (au-delà du lissage EMA
 frame à frame), multi-personnes, niveau micro ambiant exposé, état interne du
-chat (écoute/réfléchit/parle) publié en ROS.
+chat (écoute/réfléchit/parle) publié en ROS. **Pas d'odométrie sur le vrai
+robot** (pas d'encodeurs) — le mouvement propre ne peut se lire que sur la
+consigne `/cmd_vel`.
 
 **Atouts en place** : le gaze cou+yeux est VALIDÉ EN RÉEL (12/07) — c'est
 précisément le « signal de disponibilité » que la littérature recommande
-d'utiliser en premier (§3.2) ; l'arbitrage `animation_state` protège déjà le
+d'utiliser en premier (§4.2) ; l'arbitrage `animation_state` protège déjà le
 visage et la tête pendant les séquences ; le toggle `chat` est le canal
-d'activation naturel qu'un détecteur d'intention piloterait.
+d'activation naturel.
 
-## 3. État de l'art (recherche du 2026-07-12)
+## 4. État de l'art (recherche du 2026-07-12)
 
-### 3.1 Les zones de Hall — la grille de distances de toute la littérature
+### 4.1 Les zones de Hall — la grille de distances de toute la littérature
 
 Hall (1966), validé humain-robot par Walters et al. (2005) : intime 0–0,45 m,
 personnelle 0,45–1,2 m, **sociale 1,2–3,6 m** (interaction avec des
@@ -78,7 +89,7 @@ inconnus), publique > 3,6 m. La zone sociale est la fenêtre d'abordage :
 au-delà, un signal d'intention n'est pas lisible fiablement ; en deçà, on est
 déjà dans l'espace personnel de la personne.
 
-### 3.2 Michalowski et al. 2006 — la position statique ne suffit PAS
+### 4.2 Michalowski et al. 2006 — la position statique ne suffit PAS
 
 « A Spatial Model of Engagement for a Social Robot » (CMU Roboceptionist,
 12,5 h de vidéo annotée,
@@ -100,7 +111,7 @@ déjà dans l'espace personnel de la personne.
   tourner la tête) → *Engaged* (quasi stationnaire + visage détecté → le
   robot peut parler) → *Interacting*.
 
-### 3.3 Satake, Kanda et al. — l'abordage de passants (ATR)
+### 4.3 Satake, Kanda et al. — l'abordage de passants (ATR)
 
 « How to Approach Humans? » (HRI'09, centre commercial réel,
 [PDF](https://dl.acm.org/doi/10.1145/1514095.1514117)) :
@@ -124,7 +135,7 @@ déjà dans l'espace personnel de la personne.
   salue ou danse — et attire bien plus qu'un humain dans le même rôle
   (stop rate humain : 0,8–4,1 %).
 
-### 3.4 Rich et al. 2010 — les « connection events » et leurs durées
+### 4.4 Rich et al. 2010 — les « connection events » et leurs durées
 
 « Recognizing Engagement in HRI » (HRI'10,
 [PDF](https://dl.acm.org/doi/10.1145/1734454.1734580)) : l'engagement en
@@ -135,7 +146,7 @@ connexion (MTBCE) **5,7 s** chez l'humain, ~3 s dans leur implémentation
 robot ; timeouts calibrés 1,8–3,1 s. Un silence bien au-delà du MTBCE =
 désengagement.
 
-### 3.5 Vaufreydaz et al. 2015 — 7 features suffisent
+### 4.5 Vaufreydaz et al. 2015 — 7 features suffisent
 
 « Starting Engagement Detection Toward a Companion Robot »
 ([arXiv:1503.03732](https://arxiv.org/abs/1503.03732)) — le plus proche d'une
@@ -150,7 +161,7 @@ spec pour nous :
   localisation sonore, vitesse latérale, et **rotation des épaules**
   (métrique de Scheflen, validée là pour la première fois en HRI).
 
-### 3.6 MuMMER 2019 — le pipeline complet, et ses compromis
+### 4.6 MuMMER 2019 — le pipeline complet, et ses compromis
 
 Pepper en centre commercial ([arXiv:1909.06749](https://arxiv.org/abs/1909.06749)) :
 pose de tête via OpenHeadPose **comme proxy du regard** (le vrai eye-tracking
@@ -161,7 +172,7 @@ vient d'interagir. Perception complète à 10 fps. Limite documentée par
 ailleurs (HRI'15) : la pose de tête est un proxy dégradé du regard,
 surtout chez l'enfant.
 
-### 3.7 Spécificités rue / espace public
+### 4.7 Spécificités rue / espace public
 
 - Le robot doit **signaler sa propre disponibilité** : orientation du regard
   et du corps du robot vers la personne = l'invitation la plus lisible
@@ -175,7 +186,7 @@ surtout chez l'enfant.
   interactions majoritaires (46 % de groupes chez Michalowski ; souvent une
   personne en entraîne une autre).
 
-### Les 5 signaux au meilleur rapport fiabilité/coût (convergence des sources)
+### 4.8 Les 5 signaux au meilleur rapport fiabilité/coût (convergence)
 
 1. **Direction + vitesse d'approche** (dérivée temporelle de la boîte
    englobante — aucun modèle ML nouveau requis).
@@ -189,52 +200,138 @@ surtout chez l'enfant.
    les architectures bottom-up).
 
 La parole adressée et le geste explicite sont des signaux forts mais chers à
-détecter fiablement (attribution de locuteur = réseau de micros) : à réserver
-en **confirmation**, pas en détection primaire.
+détecter fiablement (attribution de locuteur = réseau de micros) : en
+**confirmation**, pas en détection primaire.
 
-## 4. Principes de conception pour Didier
+## 5. DÉCISIONS (grill du 2026-07-12 — ne pas re-trancher)
 
-- **P1 — L'intention se lit dans le mouvement, pas la position.** Le cœur du
-  détecteur est temporel : trajectoire de l'azimut et dérivée de la hauteur
-  de silhouette (approche/éloignement), pas des zones statiques.
-- **P2 — Escalade asymétrique.** Le regard du robot est généreux (se tourner
-  vers quiconque semble intéressé = déjà en place avec le gaze) ; la
-  **parole est conservatrice** (n'engager verbalement qu'à signaux forts
-  cumulés). Un regard raté ne coûte rien, une interpellation ratée coûte.
-- **P3 — Didier signale sa disponibilité.** L'invitation, c'est lui : gaze
-  vers la personne, expression faciale d'accueil. Théâtralement c'est aussi
-  le plus intéressant (le « robot en difficulté » de Satake 2022 attire plus
-  que celui qui salue — matière à jeu de scène).
-- **P4 — Fenêtre d'engagement = zone sociale (1,2–3,6 m), signal fort =
-  arrêt soutenu ~3 s.** Nécessite de calibrer le proxy hauteur de
-  silhouette → mètres.
-- **P5 — Le rejet est incompressible : ne jamais insister.** Pénalité
-  anti-re-sollicitation (cooldown) après un refus ou une conversation close.
-- **P6 — L'engagement définit la session.** Début de session = engagement
-  confirmé ; fin = départ de la personne ou silence ≫ MTBCE (~10-15 s sans
-  échange) → clôture propre (reset de l'historique LLM, retour au neutre).
-- **P7 — Le micro est armé par l'engagement, plus jamais seul.** Le VAD
-  passe de déclencheur permanent à **confirmateur** : il n'écoute que quand
-  quelqu'un d'engagé est là. Résout structurellement le problème « chat_node
-  répond au bruit ».
-- **P8 — Groupes et enfants sont le cas nominal, pas l'exception.** Le proxy
-  de distance par hauteur de silhouette est biaisé pour les enfants (un
-  enfant proche ≈ un adulte loin) — à garder en tête dès la calibration.
-- **P9 — Jamais les roues.** L'engagement ne publie RIEN vers la chaîne
-  cmd_vel. L'abordage mobile (aller vers la personne, façon Satake) est un
-  chantier ultérieur, conditionné aux verrous roues et à un grill dédié.
+### 5.1 Périmètre et séquencement
 
-## 5. Architecture proposée
+Tout est au périmètre du chantier, mais séquencé :
 
-### 5.1 Un node `engagement_node` (Pi vision), logique pure testée
+- **Groupe** : traité DÈS la FSM v1 en « dégradé digne » — une seule cible
+  choisie (le `target_picker` existant), les autres ignorées proprement,
+  sans panique ni saut de cible. Choix d'interlocuteur amélioré en D4.
+  (Le groupe est le cas MAJORITAIRE en rue — pas reportable.)
+- **Multi-langues** : au lot contenu (D3) — whisper détecte déjà la langue,
+  il faut une voix piper par langue.
+- **Mémoire des gens** (ré-identification) : phase finale (D6).
+- **Abordage mobile autonome** (l'engagement commande un déplacement vers la
+  personne, façon Satake) : **phase finale (D6), conditionnée aux verrous
+  roues** — test scénique au sol fait, e_stop câblé (W1), suivi de personne
+  validé en réel, protocole caméra dédié. D'ici là, rien de ce chantier ne
+  publie vers la chaîne cmd_vel.
+
+### 5.2 Déclenchement (la FSM)
+
+- **Caméra en mouvement — décision « regard roulant, micro à l'arrêt »** :
+  en roulant, seuls les états généreux vivent (PRESENT/INTERESTED → gaze,
+  expressions ; un faux positif ne coûte rien). Le passage en ENGAGED
+  (micro armé) **exige le robot à l'arrêt** — l'état de mouvement se lit sur
+  la consigne `/cmd_vel` (pas d'odométrie réelle). Pas de compensation
+  d'ego-motion (écartée : features bruitées, calibration pénible).
+- **Porte ENGAGED (armement du micro)** — robot à l'arrêt ET personne en
+  zone sociale ET l'une des deux portes :
+  - (a) quasi stationnaire depuis **≥ 3 s** (critère Satake 2022), ou
+  - (b) **parole détectée par le VAD pendant que la personne est visible en
+    zone sociale** — celui qui dit bonjour n'attend pas 3 s.
+  Le bruit sans personne visible ne déclenche JAMAIS rien.
+- **Clôture de session** : silence > **12 s** en conversation (2× le MTBCE
+  humain), ou cible perdue > **3 s**. Clôture = reset de l'historique LLM,
+  retour au neutre.
+- **Cooldown : 45 s** après une clôture ou une invitation ignorée (pénalité
+  anti-re-sollicitation, façon MuMMER).
+- Toutes ces valeurs sont **paramétriques**, à caler en rue (D5) ; ce sont
+  les valeurs de départ issues de la littérature.
+- Le toggle `chat` régie reste le **master switch** au-dessus de tout
+  (ET logique, comme le gaze avec `animation_state`).
+
+### 5.3 Abordage et théâtralité
+
+- **Réactif d'abord** : dans les lots D1→D5, Didier n'émet JAMAIS le premier
+  mot — il invite par le corps et ne parle que si on lui parle.
+  L'interpellation verbale proactive arrive en D6, sur un déclenchement déjà
+  fiabilisé (rappel : 54 % des salutations de robot restent sans réponse).
+- **L'invitation non-verbale** (états INTERESTED/ENGAGED) est faite de :
+  regard verrouillé (gaze existant) + **expressions visage dédiées**
+  (« curieux » puis « accueillant ») + **gimmick sonore non verbal** à créer
+  (signale « je t'ai vu, je suis dispo » — répond au mode d'échec *unaware*
+  de Satake) + **animation corporelle « invite »** à créer (via
+  animations_node, donc arbitrage existant).
+  Le registre « en difficulté » (Satake 2022 : attire 2× plus) est ÉCARTÉ du
+  plan — noté comme option de mise en scène future.
+- **Le rejet est encaissé en jeu** : expression brève de déception, retour au
+  neutre, cooldown. Jamais d'insistance (le ~28 % de rejet est
+  incompressible). Le râteau visible signale aussi aux autres passants que le
+  robot est vivant.
+
+### 5.4 Contenu de la conversation
+
+- **Persona à créer de zéro** : le personnage parlé n'existe pas encore —
+  atelier d'écriture dédié (David + Dadou, l'IA en brouillon) : qui est
+  Didier, son humour, ses limites, sa façon de parler aux enfants. Livrable =
+  system prompt. ⚠️ Emplacement à décider : le repo est PUBLIC (§8).
+- **Garde-fous : confiance au modèle pour l'instant** (décision du grill) —
+  pas de modération technique, pas de red-team formalisée ; le persona
+  portera naturellement quelques règles de registre. **À réévaluer après les
+  premières sorties** (sur incident).
+- **Répliques courtes et relanceuses** : 1-2 phrases max, souvent terminées
+  par une question au passant — contrainte écrite au prompt. Nourrit l'état
+  IN_CONVERSATION et évite de monopoliser le TTS.
+
+### 5.5 Audio et latence
+
+- **Micro : U20 mono conservé, on MESURE d'abord** (D0 : enregistrements en
+  conditions rue + rejeu dans le VAD ; intelligibilité du TTS mesurée au même
+  moment). Changement de matériel (directionnel, array) seulement sur échec
+  constaté.
+- **Latence cible : < 2 s entre la fin de la phrase du passant et le premier
+  son de Didier.** Moyens : streaming par phrase (en place), piper in-process
+  (acquis), modèle LLM rapide, **signal d'écoute immédiat** (expression
+  « tend l'oreille ») pour couvrir le délai restant.
+- **VAD : recalibration périodique du bruit de fond en IDLE** (la calibration
+  unique de 1 s au démarrage ne tiendra pas une rue au niveau variable).
+
+### 5.6 Perception et calcul
+
+- **Tester sur le Pi 5 d'abord** : D0 mesure le CPU réel en conversation
+  complète (détection + whisper + piper), puis on ajoute E2 (visage) et on
+  re-mesure. Accélérateur (Hailo/Coral) seulement si la mesure le condamne.
+- **Soupape identifiée : déporter whisper vers une API** (Groq/OpenAI) pour
+  libérer le CPU — la 4G est déjà une dépendance dure (LLM via OpenRouter),
+  ça n'ajoute pas de mode de panne. Idéalement bascule locale/API
+  paramétrique.
+- Extensions par coût croissant : **E1** (gratuit — trajectoire/arrêt depuis
+  `/vision/person_box`), **E2** (léger — visage frontal MediaPipe, feature
+  n°1 de Vaufreydaz), **E3** (pose de tête/épaules, seulement si E1+E2
+  montrent leurs limites en terrain).
+
+### 5.7 Données et cadre légal
+
+- **Corpus complet assumé, AVEC dispositif type tournage** : la déambulation
+  est traitée comme un tournage de rue — affichage visible « spectacle
+  filmé/enregistré » aux abords, l'opérateur propose APRÈS l'échange de
+  garder l'enregistrement ; refus ou absence de réponse = **effacement de la
+  session par défaut**.
+- Implication technique : enregistrement par session + **bouton
+  « garder / effacer » sur la console de régie** (rejoint la boîte noire du
+  chantier télédiagnostic).
+- Le texte des échanges (ChatDB, sans identité) sert à améliorer persona et
+  déclenchement.
+
+## 6. Architecture
+
+### 6.1 Un node `engagement_node` (Pi vision), logique pure testée
 
 Nouveau node à côté de `person_tracker_node`, même patron que le reste du
 projet : node = I/O, logique dans un module pur testé sans ROS
 (`vision/engagement/…`).
 
-- **Entrées** : `/vision/person_box` (azimut + hauteur + confiance), plus
-  tard les signaux E2/E3 (visage frontal, pose de tête), `animation_state`
-  (se taire pendant une séquence de spectacle), toggle régie.
+- **Entrées** : `/vision/person_box` (azimut + hauteur + confiance),
+  l'état de mouvement du robot (consigne `/cmd_vel` — gate ENGAGED),
+  `animation_state` (se taire pendant une séquence de spectacle), l'état
+  interne du chat (topic à créer, §6.2), toggle régie. Plus tard : visage
+  frontal (E2), pose (E3).
 - **Cœur** : fenêtre glissante de quelques secondes sur la cible → features
   (vitesse d'azimut, dérivée de hauteur = approche, stationnarité, temps de
   présence en zone sociale) → **machine à états** :
@@ -245,83 +342,82 @@ ABSENT → PRESENT → INTERESTED → ENGAGED → IN_CONVERSATION → COOLDOWN
 
   - PRESENT : personne détectée, loin ou en passage rapide/tangentiel →
     ne rien faire.
-  - INTERESTED : approche (hauteur croissante) OU mouvement lent en zone
-    sociale → **regard** (le gaze existant) + expression curieuse. Généreux.
-  - ENGAGED : quasi stationnaire en zone sociale ≥ ~3 s (E2 : ET visage
-    frontal) → expression d'accueil, **micro armé**. Conservateur.
+  - INTERESTED : approche OU mouvement lent en zone sociale → **regard**
+    (gaze existant) + expression curieuse + gimmick sonore. Généreux,
+    actif MÊME en roulant.
+  - ENGAGED : porte du §5.2 (arrêt 3 s OU parole en zone, robot à l'arrêt) →
+    expression accueillante, animation « invite », **micro armé**.
   - IN_CONVERSATION : le VAD confirme une parole exploitable → session
-    ouverte, l'état est tenu tant que les échanges continuent.
-  - COOLDOWN : après clôture ou non-réponse à une invitation → pas de
-    ré-engagement de la même situation pendant N s (~30-60 s).
-  - Toute perte de personne > N s → retour ABSENT + clôture de session.
+    ouverte, tenue tant que les échanges continuent.
+  - COOLDOWN : 45 s après clôture ou invitation ignorée ; rejet encaissé en
+    jeu (expression déception).
+  - Perte de personne > 3 s → clôture de session + retour ABSENT.
 
 - **Sorties** : topic `engagement` latché (état + confiance, patron
-  `animation_state`), consommé par chat_node ; à terme un topic d'intention
-  théâtrale (« invite », « accueille ») vers face/animations, en passant par
-  l'arbitrage existant.
+  `animation_state`), consommé par chat_node ; événements théâtraux
+  (« invite », « accueille », « déçu ») vers face/animations **via
+  l'arbitrage existant** ; JAMAIS rien vers cmd_vel (jusqu'à D6).
 
-### 5.2 Adaptations chat_node (Pi vision)
+### 6.2 Adaptations chat_node (Pi vision)
 
 - S'abonner à `engagement` : le VAD n'écoute qu'en ENGAGED/IN_CONVERSATION
-  (le toggle `chat` régie reste le master switch — ET logique, comme le gaze
-  avec `animation_state`).
+  (le toggle `chat` régie reste master switch — ET logique).
 - **Sessions** : ouverture/clôture pilotées par l'engagement — nouvelle
-  entrée ChatDB par session, reset de l'historique, timeout de silence
-  (~10-15 s, inspiré MTBCE), retour visage au neutre en fin de session.
+  entrée ChatDB par session, reset de l'historique, timeout de silence 12 s,
+  retour visage au neutre en fin de session.
 - Publier l'état interne (`listening`/`thinking`/`speaking`) sur un topic —
   nécessaire à l'engagement (tenir IN_CONVERSATION), utile à la régie et au
   télédiagnostic.
+- **Enregistrement par session** (corpus type tournage) : audio conservé en
+  tampon, bouton garder/effacer console, effacement par défaut.
+- Prompt : persona (D3) + contrainte « court et relanceur » + langue du
+  passant (whisper la détecte).
 
-### 5.3 Extensions perception, par coût croissant
-
-- **E1 (gratuit)** : tout depuis `/vision/person_box` existant — trajectoire,
-  approche, stationnarité. Aucun modèle nouveau.
-- **E2 (léger)** : détecteur de visage (MediaPipe face detection) sur la
-  cible → taille/position du visage = proxy « me fait face » (feature n°1 de
-  Vaufreydaz). Budget CPU à mesurer (le detector actuel prend ~24 %).
-- **E3 (plus lourd, à décider plus tard)** : pose de tête et/ou épaules
-  (MediaPipe Pose ~18 fps sur Pi 5) pour l'orientation fine ; parole
-  adressée en confirmation. Seulement si E1+E2 montrent leurs limites sur le
-  terrain.
-
-## 6. Lots proposés
+## 7. Lots D0 → D6 (décidés au grill)
 
 | Lot | Contenu | Validation |
 |---|---|---|
-| **D0 — instrumentation + calibration** | exposer l'état chat en topic ; calibrer hauteur de silhouette → mètres (personne à 1,2 / 2,4 / 3,6 m, adulte ET enfant si possible) ; rejouer des captures pour constituer un mini-corpus passage vs approche | mesures consignées ici (§8) |
-| **D1 — FSM v1, zéro perception nouvelle** | `engagement_node` (logique pure + tests), gate du VAD dans chat_node, sessions + timeout | sim d'abord (perception scriptée `/vision/person_box`, commande existante dans CLAUDE.md) : scénarios passage / approche+arrêt / départ ; puis atelier |
-| **D2 — visage frontal** | face detection sur la cible, condition ENGAGED durcie | protocole atelier : passage devant le robot sans le regarder = pas d'armement |
-| **D3 — invitation théâtrale + terrain** | expressions d'invitation via arbitrage, éventuel « bonjour » proactif (conservateur, P2), cooldown | première sortie rue encadrée, métriques façon Satake (taux d'arrêt, faux déclenchements) |
+| **D0 — Mesures & calibration** | CPU Pi 5 en conversation complète ; enregistrements rue (VAD + intelligibilité TTS) + rejeu ; calibration hauteur de silhouette → mètres (1,2 / 2,4 / 3,6 m, adulte ET enfant) ; état chat exposé en topic | mesures consignées au §9 |
+| **D1 — FSM v1 + micro gated + sessions** | `engagement_node` (logique pure + tests), signaux existants seuls (E1), gate `/cmd_vel`, groupe « dégradé digne », sessions + timeouts | sim d'abord (perception scriptée `/vision/person_box`) : passage / approche+arrêt / départ / bruit sans personne ; puis atelier |
+| **D2 — Invitation non-verbale + rejet joué** | expressions « curieux »/« accueillant »/« déçu », gimmick sonore, animation « invite » (via arbitrage) | protocole atelier : l'enchaînement se lit sans mode d'emploi |
+| **D3 — Persona & répliques** | atelier d'écriture (David + Dadou), system prompt, court-et-relanceur, multi-langues, latence < 2 s vérifiée (soupape whisper API si besoin) | conversations tests au casque + chrono latence |
+| **D4 — Visage frontal (E2)** | face detection sur la cible, porte ENGAGED durcie, choix d'interlocuteur amélioré en groupe | atelier : passer devant sans regarder = pas d'armement |
+| **D5 — Première rue chiffrée** | sortie ≥ 1 h en rue passante, dispositif corpus type tournage (affichage + bouton garder/effacer) | **grille de réussite ci-dessous** |
+| **D6 — Verrous levés** | abordage verbal proactif ; abordage mobile (⟸ test scénique + e_stop W1 + suivi réel + protocole caméra) ; mémoire des gens | protocoles dédiés, à écrire le moment venu |
 
-Chaque lot suit la méthode maison : logique pure testée → sim → réel, docs
-mises à jour dans le même lot. Verrou d'entrée : le **protocole physique
-chat_node V2** (chantier 0) doit passer d'abord — inutile de raffiner le
-déclenchement d'une conversation jamais validée en réel.
+**Grille de réussite du test rue (D5)** — sortie ≥ 1 h, filmée pour
+dépouillement :
+- (a) **ZÉRO** prise de parole sans personne en zone sociale ;
+- (b) **≥ 80 %** des conversations ouvertes jugées pertinentes à la revue
+  vidéo ;
+- (c) **≥ 10** conversations menées ET closes proprement ;
+- (d) **zéro** insistance après refus.
 
-## 7. Inconnues à lever (avant/pendant le grill)
+Méthode maison inchangée : logique pure testée → sim → réel ; docs mises à
+jour dans le même lot ; implémentation sur spec fermée déléguée (Sonnet),
+revue par modèle fort. **Verrou d'entrée global : le protocole physique
+chat_node V2 (chantier 0) doit passer d'abord.**
 
-1. **Budget CPU du Pi 5 vision** : detector actuel ~24 % à 16,7 Hz ; que
-   reste-t-il pour face detection (E2) voire pose (E3) + whisper + piper ?
-   Mesure à faire en conditions chat réelles.
-2. **Calibration distance** : fiabilité du proxy hauteur de silhouette en
-   rue (enfants, personnes assises, poussettes) — P8.
-3. **Micro en rue** : le micro caméra U20 (mono) suffit-il en environnement
-   bruyant ? Pas de localisation sonore possible avec un seul micro — la
-   « parole adressée » ne pourra être qu'une confirmation faible.
-4. **Multi-personnes / attroupement** : `target_picker` ne suit qu'une
-   cible ; comportement souhaité quand un groupe entoure Didier ?
-5. **Politique d'abordage** : Didier initie-t-il verbalement (D3) ou
-   répond-il seulement ? Décision de mise en scène autant que technique.
-6. **VAD en rue** : la calibration du bruit de fond (1 s au démarrage)
-   tiendra-t-elle dans une rue au niveau sonore variable ? Recalibration
-   périodique en IDLE à envisager.
-7. **Ré-identification** (la même personne revient) : hors périmètre —
-   c'est la « mémoire des gens » de la vision V3.
+## 8. Points encore ouverts (assumés, pas oubliés)
 
-## 8. Journal des mesures et décisions
+1. **Emplacement du prompt persona** : le repo est public — versionné et
+   lisible par tous, ou fichier déployé hors repo ? À décider au lot D3.
+2. **Mécanisme de bascule whisper local/API** (et choix du fournisseur) :
+   seulement si D0 condamne le CPU local.
+3. **Le gimmick sonore et les expressions** : à créer en répétition (D2) —
+   le plan ne fixe que leur existence, pas leur contenu.
+4. **Garde-fous LLM** : « confiance au modèle » est un choix POUR L'INSTANT —
+   réévaluer après chaque sortie (incident = retour de la question
+   modération).
+5. **Sortie son en rue** (puissance, intelligibilité) : mesurée en D0,
+   matériel à trancher seulement si insuffisant.
 
-*(à remplir au fil des lots — calibrations distance, seuils retenus,
-résultats des protocoles)*
+## 9. Journal des mesures et décisions
+
+*(à remplir au fil des lots — calibrations distance, seuils retenus, mesures
+CPU/VAD de D0, résultats des protocoles)*
+
+- 2026-07-12 : grill complet (8 axes) — toutes les décisions du §5, lots §7.
 
 ## Sources
 

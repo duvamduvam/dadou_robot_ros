@@ -20,7 +20,7 @@ journal de bord illisible).*
 | **1. Test scénique au sol** | À FAIRE — première fois que cmd_vel roule au sol | séquence de spectacle complète, télécommande en main | — (c'est LUI le verrou des autres) |
 | Interface web / télé-présence | W0 + console + W3-sim FAITS ; bringup réel actif (sans drive) | W1 : source e_stop + coup-de-poing sans fil | roues web réel ⟸ test scénique (1) + protocole caméra dédié |
 | Télédiagnostic par agent IA | plan décidé ; étape 1 « trousse d'atelier » FAITE | étape 2 : boîte noire rosbag + bouton START | étape 3 ⟸ RAM du Pi 4 à relever (`ssh r 'cat /proc/meminfo'`) |
-| Déclenchement conversation (intention de communiquer) | étude ÉCRITE, plan PROPOSÉ (pas grillé) | griller le plan (`/grill-me`) puis lot D0 | protocole physique chat_node V2 (0) d'abord |
+| Conversation en déambulation (intention + contenu) | plan DÉCIDÉ (grillé 12/07) | D0 mesures & calibration ; atelier persona (D3) lançable en parallèle | D1+ ⟸ protocole physique chat_node V2 (0) ; D6 ⟸ verrous roues |
 | Suivi de personne (roues) | validé sim 5/5, déployé, **SIM-ONLY** | — (attend ses verrous) | test scénique (1) PUIS protocole caméra (`direction_sign` inconnu) |
 | Gaze V1 + arbitrage actionneurs | validé RÉEL 12/07 ; arbitrage déployé sur les 2 Pi | vérif visuelle : gaze ON pendant une séquence (la tête ne doit plus trembler) | — |
 | Fond de tiroir | — | voir §Fond de tiroir | — |
@@ -103,25 +103,31 @@ pont web, topic santé publié par system_node. Validation en sim d'abord.
 (`ssh r 'cat /proc/meminfo'` — non documentée nulle part), charge d'une
 investigation vs tick 20 Hz, santé/espace SD, 4G partagé en salle.
 
-## Déclenchement de la conversation (intention de communiquer)
+## Conversation en déambulation (intention de communiquer + contenu)
 
-Étude : [`etude-declenchement-conversation.md`](etude-declenchement-conversation.md)
-(écrite le 2026-07-12 — état de l'art HRI chiffré + architecture proposée,
-**plan PAS ENCORE GRILLÉ**).
+Plan : [`etude-declenchement-conversation.md`](etude-declenchement-conversation.md)
+(**DÉCIDÉ, grillé le 2026-07-12** — ne pas re-trancher, décisions §5, points
+ouverts §8). Périmètre élargi au grill : déclenchement + contenu + robustesse
+rue.
 
-Le problème : le chat écoute en continu dès que le toggle est ON (VAD seul,
-aucun lien perception) — inutilisable en déambulation. La proposition :
-node `engagement_node` (Pi vision, FSM PRESENT→INTERESTED→ENGAGED→
-IN_CONVERSATION→COOLDOWN sur trajectoire + arrêt en zone sociale), micro armé
-par l'engagement, sessions de conversation avec timeout, escalade asymétrique
-(regard généreux / parole conservatrice), JAMAIS les roues. Lots D0
-(calibration distance + état chat en topic) → D1 (FSM sans perception
-nouvelle, validée sim) → D2 (visage frontal) → D3 (invitation théâtrale +
-première rue).
+Décisions clés : opérateur à vue, robot peut rouler → **regard généreux en
+roulant, micro seulement à l'arrêt** (gate `/cmd_vel`) ; ENGAGED = personne
+en zone sociale ET (arrêt ≥ 3 s OU parole détectée) — le bruit sans personne
+ne déclenche plus jamais ; sessions (clôture silence 12 s / perte 3 s,
+cooldown 45 s) ; **réactif d'abord** (invitation par le corps : regard +
+expressions + gimmick sonore + animation « invite », rejet encaissé en jeu) ;
+persona à créer de zéro (atelier d'écriture, garde-fous = confiance au modèle
+pour l'instant, répliques courtes et relanceuses) ; micro U20 et CPU Pi 5
+mesurés avant tout achat (soupape whisper API) ; latence < 2 s au premier
+son ; corpus complet type tournage (affichage + bouton garder/effacer,
+effacement par défaut). Abordage mobile, proactif verbal et mémoire des gens
+en D6, derrière les verrous roues.
 
-**Suite : griller le plan** (inconnues §7 de l'étude : CPU Pi 5 restant,
-micro mono en rue, groupes, politique d'abordage). Verrou d'entrée : le
-protocole physique chat_node V2 (chantier 0) doit passer d'abord.
+**Suite : lot D0** (mesures CPU/VAD rue + calibration distance + état chat en
+topic) ; l'**atelier persona (D3)** est lançable en parallèle (travail
+humain, zéro dépendance technique). Verrou de D1+ : protocole physique
+chat_node V2 (chantier 0). Réussite finale = grille chiffrée du test rue D5
+(§7 du plan).
 
 ## Suivi de personne aux roues
 
