@@ -418,6 +418,14 @@ chat_node V2 (chantier 0) doit passer d'abord.**
 CPU/VAD de D0, résultats des protocoles)*
 
 - 2026-07-12 : grill complet (8 axes) — toutes les décisions du §5, lots §7.
+- 2026-07-13 : **D0 outillage FAIT** (dadou_vision_ros 53c6d13, 162 tests) :
+  topic `chat_state` latché (listening/thinking/speaking/off, TRANSIENT_LOCAL
+  des deux côtés comme animation_state), rejeu VAD de PROD sur wav
+  (`python -m vision.audio.vad_replay`), scripts `enregistre-rue.sh`
+  (16 kHz mono = format exact du pipeline), `mesure-cpu-conversation.sh`,
+  `calibre-distance.sh` (protocole 1,2/2,4/3,6 m adulte ET enfant).
+  **Reste de D0 = la campagne elle-même** (robot allumé + une sortie
+  d'enregistrement) : mesures à consigner ici.
 
 ## Sources
 

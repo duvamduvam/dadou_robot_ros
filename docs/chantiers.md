@@ -20,7 +20,7 @@ journal de bord illisible).*
 | **1. Test scénique au sol** | À FAIRE — première fois que cmd_vel roule au sol | séquence de spectacle complète, télécommande en main | — (c'est LUI le verrou des autres) |
 | Interface web / télé-présence | W0 + console + W3-sim FAITS ; bringup réel actif (sans drive) | W1 : source e_stop + coup-de-poing sans fil | roues web réel ⟸ test scénique (1) + protocole caméra dédié |
 | Télédiagnostic par agent IA | plan décidé ; étape 1 « trousse d'atelier » FAITE | étape 2 : boîte noire rosbag + bouton START | étape 3 ⟸ RAM du Pi 4 à relever (`ssh r 'cat /proc/meminfo'`) |
-| Conversation en déambulation (intention + contenu) | plan DÉCIDÉ (grillé 12/07) | D0 mesures & calibration ; atelier persona (D3) lançable en parallèle | D1+ ⟸ protocole physique chat_node V2 (0) ; D6 ⟸ verrous roues |
+| Conversation en déambulation (intention + contenu) | plan DÉCIDÉ (grillé 12/07) ; D0 outillage FAIT 13/07 | campagne D0 (robot allumé) ; atelier persona (D3) lançable en parallèle | D1+ ⟸ protocole physique chat_node V2 (0) ; D6 ⟸ verrous roues |
 | Suivi de personne (roues) | validé sim 5/5, déployé, **SIM-ONLY** | — (attend ses verrous) | test scénique (1) PUIS protocole caméra (`direction_sign` inconnu) |
 | Gaze V1 + arbitrage actionneurs | validé RÉEL 12/07 ; arbitrage déployé sur les 2 Pi | vérif visuelle : gaze ON pendant une séquence (la tête ne doit plus trembler) | — |
 | Fond de tiroir | — | voir §Fond de tiroir | — |
@@ -123,8 +123,12 @@ son ; corpus complet type tournage (affichage + bouton garder/effacer,
 effacement par défaut). Abordage mobile, proactif verbal et mémoire des gens
 en D6, derrière les verrous roues.
 
-**Suite : lot D0** (mesures CPU/VAD rue + calibration distance + état chat en
-topic) ; l'**atelier persona (D3)** est lançable en parallèle (travail
+**D0 outillage FAIT le 13/07** (dadou_vision_ros 53c6d13, 162 tests) : topic
+`chat_state` latché (listening/thinking/speaking/off), rejeu VAD de prod sur
+wav (`vad_replay`), scripts `enregistre-rue.sh` / `mesure-cpu-conversation.sh`
+/ `calibre-distance.sh`. **Suite : la campagne D0 elle-même** (robot allumé :
+mesure CPU en conversation, enregistrements rue à rejouer, calibration
+distance) ; l'**atelier persona (D3)** est lançable en parallèle (travail
 humain, zéro dépendance technique). Verrou de D1+ : protocole physique
 chat_node V2 (chantier 0). Réussite finale = grille chiffrée du test rue D5
 (§7 du plan).
