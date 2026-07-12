@@ -20,6 +20,7 @@ journal de bord illisible).*
 | **1. Test scénique au sol** | À FAIRE — première fois que cmd_vel roule au sol | séquence de spectacle complète, télécommande en main | — (c'est LUI le verrou des autres) |
 | Interface web / télé-présence | W0 + console + W3-sim FAITS ; bringup réel actif (sans drive) | W1 : source e_stop + coup-de-poing sans fil | roues web réel ⟸ test scénique (1) + protocole caméra dédié |
 | Télédiagnostic par agent IA | plan décidé ; étape 1 « trousse d'atelier » FAITE | étape 2 : boîte noire rosbag + bouton START | étape 3 ⟸ RAM du Pi 4 à relever (`ssh r 'cat /proc/meminfo'`) |
+| Déclenchement conversation (intention de communiquer) | étude ÉCRITE, plan PROPOSÉ (pas grillé) | griller le plan (`/grill-me`) puis lot D0 | protocole physique chat_node V2 (0) d'abord |
 | Suivi de personne (roues) | validé sim 5/5, déployé, **SIM-ONLY** | — (attend ses verrous) | test scénique (1) PUIS protocole caméra (`direction_sign` inconnu) |
 | Gaze V1 + arbitrage actionneurs | validé RÉEL 12/07 ; arbitrage déployé sur les 2 Pi | vérif visuelle : gaze ON pendant une séquence (la tête ne doit plus trembler) | — |
 | Fond de tiroir | — | voir §Fond de tiroir | — |
@@ -101,6 +102,26 @@ pont web, topic santé publié par system_node. Validation en sim d'abord.
 **Préalables de l'étape 3 (agent embarqué)** : RAM du Pi 4
 (`ssh r 'cat /proc/meminfo'` — non documentée nulle part), charge d'une
 investigation vs tick 20 Hz, santé/espace SD, 4G partagé en salle.
+
+## Déclenchement de la conversation (intention de communiquer)
+
+Étude : [`etude-declenchement-conversation.md`](etude-declenchement-conversation.md)
+(écrite le 2026-07-12 — état de l'art HRI chiffré + architecture proposée,
+**plan PAS ENCORE GRILLÉ**).
+
+Le problème : le chat écoute en continu dès que le toggle est ON (VAD seul,
+aucun lien perception) — inutilisable en déambulation. La proposition :
+node `engagement_node` (Pi vision, FSM PRESENT→INTERESTED→ENGAGED→
+IN_CONVERSATION→COOLDOWN sur trajectoire + arrêt en zone sociale), micro armé
+par l'engagement, sessions de conversation avec timeout, escalade asymétrique
+(regard généreux / parole conservatrice), JAMAIS les roues. Lots D0
+(calibration distance + état chat en topic) → D1 (FSM sans perception
+nouvelle, validée sim) → D2 (visage frontal) → D3 (invitation théâtrale +
+première rue).
+
+**Suite : griller le plan** (inconnues §7 de l'étude : CPU Pi 5 restant,
+micro mono en rue, groupes, politique d'abordage). Verrou d'entrée : le
+protocole physique chat_node V2 (chantier 0) doit passer d'abord.
 
 ## Suivi de personne aux roues
 
