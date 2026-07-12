@@ -30,6 +30,7 @@ Invalid payloads are rejected with an explicit ERROR log naming the topic
 | `neck`, `left_eye`, `right_eye`, `left_arm`, `right_arm` | one `servo_node` each | `50`, `"up"`, `{"mode": "random", ...}`, `"stop"` | Servo targets (0-99), reached through a linear ramp; random mode self-paces. |
 | `wheels` | `wheels_bridge` (robot_drive) | `[0.5, 0.5]` pairs in [-1, 1] | Legacy wheels input, converted to Twist (see drive chain). |
 | `gaze` | `gaze_follower_node` | `"on"` / `"off"` | Enables the neck person-following (OFF by default, launched manually). |
+| `animation_state` | `animations_node` | `"parle"`, `""` (idle) | **State topic** (not an actuator track), latched (`TRANSIENT_LOCAL`, depth 1 — subscribers MUST use the same durability or they miss the latch): current sequence name or `""` at rest. Published on transition AND on every sequence (re)start (same name included) with `time = remaining_ms`, so subscribers can arm a deadman-style expiry (remaining + 2 s) in case `animations_node` dies mid-sequence. Actuator-arbitration upstream (lot B, [`etude-arbitrage-actionneurs.md`](etude-arbitrage-actionneurs.md)): `gaze_follower_node` (robot) and `chat_node` (vision Pi) subscribe and go silent on face/head while a sequence has the hand. |
 
 Other inputs: `/vision/person` (`PointStamped`, from the vision Pi) feeds
 `gaze_follower_node`.

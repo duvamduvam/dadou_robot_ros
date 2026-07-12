@@ -140,6 +140,15 @@ class AnimationManager(AbstractJsonActions):
         elapsed = TimeUtils.current_milli_time() - self.last_time
         return max(0, int(self.duration - elapsed))
 
+    def state_name(self):
+        """Nom de la séquence en cours, ou "" au repos — publié latché par le
+        node sur le topic animation_state (arbitrage amont : les comportements
+        autonomes gaze/chat se taisent tant qu'une séquence a la main,
+        cf. docs/etude-arbitrage-actionneurs.md lot B)."""
+        if not self.playing or not self.current_animation:
+            return ""
+        return self.current_animation[NAME]
+
     def process(self):
         if self.playing and TimeUtils.is_time(self.last_time, self.duration):
             return self.stop()

@@ -72,3 +72,35 @@ def test_start_animation_sets_duration_and_remaining(real_manager, clock):
     clock["now"] = T0 + 5000
     assert real_manager.remaining_ms() == real_manager.duration - 5000
     real_manager.stop()
+
+
+class TestStateName:
+    """state_name() : source de vérité du topic animation_state (lot B de
+    l'arbitrage actionneurs, docs/etude-arbitrage-actionneurs.md) — gaze/chat
+    s'y abonnent pour savoir si une séquence a la main sur visage/tête.
+    """
+
+    def test_repos_donne_chaine_vide(self, real_manager):
+        # Repos garanti par le stop() de fin de test précédent, mais on ne
+        # suppose pas l'ordre : on stoppe explicitement d'abord.
+        real_manager.stop()
+        assert real_manager.state_name() == ""
+
+    def test_animation_en_cours_donne_son_nom(self, real_manager, clock):
+        real_manager.update({ANIMATION: "moon-walk"})
+        assert real_manager.state_name() == "moon-walk"
+        real_manager.stop()
+
+    def test_stop_repasse_a_vide(self, real_manager, clock):
+        real_manager.update({ANIMATION: "moon-walk"})
+        real_manager.stop()
+        assert real_manager.state_name() == ""
+
+    def test_expiration_de_duree_repasse_a_vide(self, real_manager, clock):
+        # process() au-delà de la durée déclenche le stop() interne (comme le
+        # deadman roues) : state_name() doit suivre sans appel explicite à stop().
+        real_manager.update({ANIMATION: "moon-walk"})
+        duration = real_manager.duration
+        clock["now"] = T0 + duration + 1000
+        real_manager.process()
+        assert real_manager.state_name() == ""

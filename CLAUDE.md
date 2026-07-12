@@ -157,15 +157,23 @@ scp follow_control/person_follower/twist_mux.yaml/setup.py + sentinelles.
    GazeControl, gain 49 = plein débattement 1-99 comme les séquences,
    `eye_direction_sign=-1` — montage MIROIR du cou, validé visuellement).
    Toujours lancé À LA MAIN (pas dans robot_bringup), toggle topic `gaze`
-   "on"/"off". L'arbitrage animations↔gaze (les deux écrivent
-   neck/left_eye/right_eye) est CADRÉ par l'étude du 2026-07-12
-   `docs/etude-arbitrage-actionneurs.md` — même cause que le visage LED qui
-   « déconne » avec le chat : topics-ressources sans arbitre, dernier message
-   gagne. Plan proposé : lot A (chat_node : rattrapage idle() après abandon
-   STT, stop ciblé au lieu du stop GLOBAL qui écrase tout — S2 de l'étude) +
-   lot B (topic latché `animation_state`, chat et gaze se taisent pendant une
-   séquence) ; arbitrage aval par source différé. En attendant : gaze OFF
-   pendant les séquences, chat_node coupé pendant les sessions visage.
+   "on"/"off". **ARBITRAGE AMONT FAIT le 2026-07-12** (lots A+B de
+   `docs/etude-arbitrage-actionneurs.md`, contrat + validation §8) :
+   `animations_node` publie l'état latché `animation_state` (nom ou "",
+   time=remaining_ms, TRANSIENT_LOCAL des DEUX côtés — un abonné volatile
+   raterait le latch), le gaze et le chat (Pi vision, module pur
+   `vision/ai/arbitration.py`) se TAISENT quand une séquence a la main, avec
+   PÉREMPTION façon deadman (remaining+2 s) si animations_node meurt en
+   pleine séquence. Chat : rattrapage idle() après abandon STT (fini le
+   visage coincé sur « reflechit ») + stop ciblé (fini le stop GLOBAL qui
+   tuait la séquence en cours). Validé en sim 5/5 (latch, silence pendant
+   séquence — contre-preuve sans piste neck —, reprise, redémarrage en cours
+   de séquence, péremption sur kill). Arbitrage aval par source différé
+   (étude §5.3). ⚠️ PAS DÉPLOYÉ sur les Pi : au prochain déploiement,
+   sentinelles robot/change + vision/CHANGE, puis vérif visuelle visage/tête
+   (pas de protocole caméra roues requis — aucun chemin roues touché).
+   D'ici là : gaze OFF pendant les séquences, chat_node coupé en session
+   visage.
 3. Calibrer `max_wheel_speed` réel (m/s à consigne 1.0) — mesurable à la caméra, distance/temps.
 4. Action ROS 2 `PlayAnimation` (les pistes roues des séquences passeront par cmd_vel_anim).
 4. Source unique des séquences JSON (côté robot, la télécommande interroge par service).

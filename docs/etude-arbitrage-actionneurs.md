@@ -2,10 +2,11 @@
 
 *Étude du 2026-07-12, déclenchée par un symptôme observé sur le vrai robot : « les
 animations de la tête déconnent quand plusieurs programmes tournent en même temps ».
-Statut : **analyse complète, plan proposé** — les lots A/B sont recommandés, les
-décisions restantes sont en §7. Périmètre : visage LED (`face`) et servos de tête
-(`neck`, `left_eye`, `right_eye`). Les roues ne sont PAS concernées (elles ont déjà
-leur arbitre, `twist_mux`) mais servent de modèle de référence.*
+Statut : **lots A et B IMPLÉMENTÉS et validés en sim le jour même** (protocole
+T0-T5, §8) — reste le déploiement sur les Pi et une vérification visuelle sur le
+vrai robot. Périmètre : visage LED (`face`) et servos de tête (`neck`, `left_eye`,
+`right_eye`). Les roues ne sont PAS concernées (elles ont déjà leur arbitre,
+`twist_mux`) mais servent de modèle de référence.*
 
 ## 1. Le symptôme et le constat
 
@@ -152,34 +153,77 @@ change les contrats de 3 dépôts pour des actionneurs non critiques sécurité,
 que 5.1 + 5.2 suppriment les collisions du fonctionnement normal. À ressortir si les
 incidents persistent après le lot B, ou à fusionner dans le chantier exécutif.
 
-## 6. Plan proposé
+## 6. Plan proposé — FAIT le 2026-07-12 (lots A et B)
 
-- **Lot A — correctifs chat_node** (dépôt vision, petit) : A1 rattrapage `idle()`
-  après abandon STT (+ test mis à jour) ; A2 préparation du stop ciblé (bascule
-  complète quand `animation_state` existe).
-- **Lot B — état amont** (dépôt robot + vision) : topic latché `animation_state`
-  publié par `animations_node` ; `gaze_follower_node` et `chat_node` suspendent
-  leurs émissions visage/tête quand une animation joue ; `speaking_stop()` ne stoppe
-  que si « parle » est l'animation courante. Validation en sim (scénarios S1-S5
-  rejoués), puis sur le robot — pas de protocole caméra roues requis (aucun chemin
-  roues touché), une vérification visuelle visage/tête suffit.
-- **Lot C — arbitrage aval par source** : différé (cf. 5.3).
+- **Lot A — correctifs chat_node** (dépôt vision) : **FAIT.** A1 rattrapage
+  `idle()` après abandon STT (`conversation.run_once`, test renommé
+  `test_stt_inexploitable_publie_thinking_puis_idle`) ; A2 stop ciblé réalisé par
+  le gate du lot B (le stop `animation=False` ne part que si « parle » a la main).
+- **Lot B — état amont** (3 dépôts) : **FAIT.** Contrat gravé (§8) : topic latché
+  `animation_state` publié par `animations_node` ; `gaze_follower_node` (drapeaux
+  `_user_enabled` × `_animation_active`) et `chat_node` (module pur
+  `vision/ai/arbitration.py`, gate dans `_publish`) se taisent quand une séquence
+  a la main. Validé en sim (T0-T5, §8) ; vérification visuelle sur le vrai robot
+  au prochain déploiement — pas de protocole caméra roues requis (aucun chemin
+  roues touché).
+- **Lot C — arbitrage aval par source** : différé (cf. 5.3), inchangé.
 - **Lot D — exécutif py_trees + `PlayAnimation`** : feuille de route existante,
   absorbe A2/B à terme.
 
-En attendant les lots A/B, les règles opérationnelles restent en vigueur : chat_node
-coupé pendant les sessions visage/spectacle, gaze OFF pendant les séquences.
+Tant que les Pi n'ont pas reçu le déploiement, les règles opérationnelles restent
+en vigueur : chat_node coupé pendant les sessions visage/spectacle, gaze OFF
+pendant les séquences.
 
-## 7. Décisions à valider / inconnues
+## 7. Décisions (tranchées au lancement des lots A/B, « fait la total »)
 
-1. **Valider la règle amont** « une animation en cours a la main sur visage + tête »
-   (le chat et le gaze attendent la fin). Variante possible : le gaze reprend la main
-   sur le cou seul si la séquence n'a pas de piste `neck` — raffinement à trancher au
-   lot B, pas avant.
-2. **thinking() dès le speech_end** : on le garde (réaction honnête, choix scénique
-   documenté) — seule la sortie (rattrapage idle) change. À confirmer.
-3. Le **web** (console de régie) reste hors arbitrage amont : l'opérateur humain
-   prime, comme la télécommande pour les roues. Un clic face/servo pendant une
-   animation continuera d'entrer en concurrence — acceptable (acte volontaire) ?
-4. Forme exacte d'`animation_state` (QoS latché, contenu : nom seul ou nom+restant)
-   — à spécifier en tête du lot B.
+1. **Règle amont RETENUE** : « une animation en cours a la main sur visage + tête »
+   — le chat et le gaze attendent la fin. Le raffinement « gaze sur le cou seul si
+   la séquence n'a pas de piste neck » n'a PAS été retenu (simplicité d'abord ;
+   à rouvrir si le besoin scénique apparaît).
+2. **thinking() dès le speech_end conservé** (choix scénique documenté) ; seule la
+   sortie d'un tour abandonné change (rattrapage idle).
+3. Le **web reste hors arbitrage amont** : l'opérateur humain prime (acte
+   volontaire), comme la télécommande pour les roues.
+4. Forme d'`animation_state` : voir le contrat §8.
+
+## 8. Contrat implémenté et validation (2026-07-12)
+
+**Contrat du topic `animation_state`** (constante `ANIMATION_STATE` de
+dadou_utils_ros ; le gaze garde une constante littérale, node autonome) :
+- StringTime, **QoS latché depth=1 + durability TRANSIENT_LOCAL des DEUX côtés**
+  (piège vérifié : un abonné VOLATILE reste compatible mais ne reçoit PAS le
+  dernier état à la connexion — un node lancé à la main en cours de spectacle
+  raterait l'information) ;
+- `msg = json.dumps(nom de la séquence)` pendant une séquence, `json.dumps("")`
+  au repos ; `time = remaining_ms` quand actif ;
+- publié sur TRANSITION uniquement, SAUF (re)démarrage de séquence (même nom
+  compris : « parle » reproclamé par le chat à chaque phrase) : republié pour
+  réarmer la péremption des abonnés.
+
+**Péremption façon deadman (des deux côtés)** : un état actif est périmé à
+`remaining_ms + 2 s` — si `animations_node` meurt en pleine séquence, le `""` de
+fin ne vient jamais et gaze/chat resteraient muets pour toujours (panne
+silencieuse). Gaze : `STATE_EXPIRY_MARGIN_MS`, warn + reprise ; chat :
+`arbitration.state_expiry`/`effective_state` (logique pure testée).
+
+**Règles du gate chat** (`vision/ai/arbitration.py`, matrice testée) : état
+`None` (jamais reçu) = tout passe (dégradation douce, robot pas à jour) ; repos
+`""` = face et « parle » passent, stop REFUSÉ (un stop au repos déclencherait le
+stop GLOBAL d'animations_node — no-op nocif) ; « parle » = tout passe (le chat a
+la main) ; autre séquence = tout refusé (S1 + S2).
+
+**Validation sim (conteneur, HEADLESS, ANIMATIONS=true) — 5/5** :
+- T0 : `animation_state` latché lisible par un abonné tardif, `""` au boot ;
+- T1 : gaze actif publie `/neck/position` quand la cible bouge (22 msgs/4 s) ;
+- T2 : pendant « parle », gaze muet (log « gaze en pause : séquence 'parle' a la
+  main ») ; contre-preuve T2bis avec `little-move` (SANS piste neck) : **0**
+  message neck pendant la séquence, cible pourtant déplacée ;
+- T3 : fin de séquence → « gaze reprend », 18 msgs neck vers la nouvelle cible ;
+- T4 : gaze REDÉMARRÉ en pleine séquence → pause immédiate via le latch (le test
+  du piège QoS ci-dessus) ;
+- T5 : `animations_node` TUÉ en pleine séquence de 6 s → WARN « état animation
+  périmé » à T+8,1 s (6 s restant + 2 s de marge) et reprise du gaze.
+
+Le gate chat n'est pas exécutable en sim (Pi vision) : couvert par les tests purs
+(matrice complète + péremption), à observer sur le vrai matériel au prochain
+protocole chat_node V2.

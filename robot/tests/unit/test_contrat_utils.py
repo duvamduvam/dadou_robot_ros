@@ -24,7 +24,7 @@ from dadou_utils_ros.utils_static import (
     A, B, X, Y, UP, DOWN, LEFT, RIGHT,
     FORWARD, BACKWARD, STOP,
     ANGLO, AUDIO, AUDIOS, AUDIOS_DIRECTORY,
-    ANIMATION, FACE, FACES,
+    ANIMATION, ANIMATION_STATE, FACE, FACES,
     WHEELS, WHEEL_LEFT, WHEEL_RIGHT,
     LIGHTS, ROBOT_LIGHTS,
     NECK, LEFT_ARM, RIGHT_ARM, LEFT_EYE, RIGHT_EYE, MOUTH,
@@ -96,6 +96,11 @@ class TestContratTopicsStringTime:
         assert AUDIO == 'audio'
         assert AUDIOS == 'audios'
         assert ANIMATION == 'animation'
+        # animation_state (lot B arbitrage actionneurs, 2026-07-12) : topic
+        # latché publié par animations_node, consommé par gaze_follower_node
+        # (robot) ET chat_node (vision) -> contrat inter-repos comme les autres
+        # constantes de cette classe.
+        assert ANIMATION_STATE == 'animation_state'
 
 
 class TestContratClesPayload:
