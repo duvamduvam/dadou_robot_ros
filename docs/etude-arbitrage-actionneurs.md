@@ -2,9 +2,11 @@
 
 *Étude du 2026-07-12, déclenchée par un symptôme observé sur le vrai robot : « les
 animations de la tête déconnent quand plusieurs programmes tournent en même temps ».
-Statut : **lots A et B IMPLÉMENTÉS et validés en sim le jour même** (protocole
-T0-T5, §8) — reste le déploiement sur les Pi et une vérification visuelle sur le
-vrai robot. Périmètre : visage LED (`face`) et servos de tête (`neck`, `left_eye`,
+Statut : **lots A et B IMPLÉMENTÉS, validés en sim (T0-T5, §8) et DÉPLOYÉS sur
+les deux Pi le jour même** (contrat vérifié en réel : "" → "parle"
+time=remaining → "" ; module arbitration dans l'install vision) — reste la
+vérification visuelle comportementale (gaze pendant séquence, chat en
+conversation) à la prochaine session robot. Périmètre : visage LED (`face`) et servos de tête (`neck`, `left_eye`,
 `right_eye`). Les roues ne sont PAS concernées (elles ont déjà leur arbitre,
 `twist_mux`) mais servent de modèle de référence.*
 
@@ -170,9 +172,14 @@ incidents persistent après le lot B, ou à fusionner dans le chantier exécutif
 - **Lot D — exécutif py_trees + `PlayAnimation`** : feuille de route existante,
   absorbe A2/B à terme.
 
-Tant que les Pi n'ont pas reçu le déploiement, les règles opérationnelles restent
-en vigueur : chat_node coupé pendant les sessions visage/spectacle, gaze OFF
-pendant les séquences.
+**Déployé le 2026-07-12** (Ansible robot + vision, sentinelles, conteneurs
+relancés) et vérifié en réel : "" latché au repos lu par un abonné tardif,
+"parle" avec time=remaining pendant une séquence de 5 s, retour "" à la fin ;
+`arbitration.py` + péremption présents dans l'install du Pi vision. La règle
+opérationnelle « gaze OFF pendant les séquences » n'est plus nécessaire en
+principe — à confirmer par la vérification visuelle (gaze ON pendant une
+séquence : la tête ne doit plus trembler). « chat_node coupé en calibration
+visage » reste en vigueur (au repos, le chat a légitimement la main sur face).
 
 ## 7. Décisions (tranchées au lancement des lots A/B, « fait la total »)
 

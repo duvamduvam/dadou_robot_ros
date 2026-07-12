@@ -131,8 +131,9 @@ personne (odom confirme le déplacement gz), T3 la télécommande écrase et le
 suivi reprend, T4 perte=zéro franc puis silence, T5 OFF=zéro unique.
 **SIM-ONLY** : usage réel conditionné au test scénique au sol (priorité 1) PUIS
 protocole caméra roues hors sol (`direction_sign` azimut→rotation inconnu,
-comme le gaze). ⚠️ PAS DÉPLOYÉ sur les Pi (éteints au moment du déploiement) :
-scp follow_control/person_follower/twist_mux.yaml/setup.py + sentinelles.
+comme le gaze). Code DÉPLOYÉ sur les Pi au déploiement complet du 2026-07-12
+(rsync Ansible + sentinelles) — l'usage reste SIM-ONLY (toggle OFF, lancé à la
+main, jamais dans le bringup) tant que les verrous ci-dessus ne sont pas levés.
 
 0. **Protocole physique chat_node V2 (conversation)** : le code est COMPLET et commité
    (nuit du 10 au 11/07 : ~15 commits sur les 3 dépôts, validé en sim — bras+yeux bougent
@@ -169,11 +170,13 @@ scp follow_control/person_follower/twist_mux.yaml/setup.py + sentinelles.
    tuait la séquence en cours). Validé en sim 5/5 (latch, silence pendant
    séquence — contre-preuve sans piste neck —, reprise, redémarrage en cours
    de séquence, péremption sur kill). Arbitrage aval par source différé
-   (étude §5.3). ⚠️ PAS DÉPLOYÉ sur les Pi : au prochain déploiement,
-   sentinelles robot/change + vision/CHANGE, puis vérif visuelle visage/tête
-   (pas de protocole caméra roues requis — aucun chemin roues touché).
-   D'ici là : gaze OFF pendant les séquences, chat_node coupé en session
-   visage.
+   (étude §5.3). **DÉPLOYÉ ET VÉRIFIÉ sur les deux Pi le 2026-07-12** :
+   contrat joué en réel sur le robot ("" latché au repos → "parle"
+   time=4999 pendant une séquence de 5 s → "" au retour), module
+   arbitration + câblage péremption confirmés dans l'install du Pi vision.
+   Reste une vérif VISUELLE comportementale à la prochaine session robot :
+   gaze ON pendant une séquence (la tête ne doit plus trembler), et le gate
+   chat en conversation réelle (protocole chat_node V2, priorité 0).
 3. Calibrer `max_wheel_speed` réel (m/s à consigne 1.0) — mesurable à la caméra, distance/temps.
 4. Action ROS 2 `PlayAnimation` (les pistes roues des séquences passeront par cmd_vel_anim).
 4. Source unique des séquences JSON (côté robot, la télécommande interroge par service).
