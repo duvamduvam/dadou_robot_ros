@@ -96,9 +96,11 @@ source (W1 à venir).
 **Whitelist** (`robot_web.web_protocol.WHITELIST`, seuls topics publiables) :
   - spectacle : `animation`, `face`, `audio`, `robot_lights`
   - technique : `relay`, `neck`, `left_eye`, `right_eye`, `left_arm`,
-    `right_arm`, `gaze`, `chat`, `system` (`chat` = toggle on/off de la
-    parole IA, consommé par chat_node sur le Pi vision — même contrat que
-    `gaze`)
+    `right_arm`, `gaze`, `chat`, `persona`, `system` (`chat` = toggle on/off
+    de la parole IA, consommé par chat_node sur le Pi vision — même contrat
+    que `gaze` ; `persona` = sélection de la personnalité de Didier, payload
+    `"bougon"`/`"naif"`/`"vantard"`, cf. `vision.ai.personas` — nouvelle
+    session de conversation à chaque changement)
 
 **Messages client → serveur** (JSON, un objet `{"type": ...}` par message) :
 | Type | Champs | Effet |

@@ -129,6 +129,18 @@ tours suivants sans couper une réplique en cours (Didier finit sa phrase) ;
 ON = reprise instantanée (modèles restés chargés). Sans effet si `chat_node`
 ne tourne pas (`chat_enabled` défaut false côté vision).
 
+### Personnalité de Didier depuis la console (fait le 2026-07-13, lot D3)
+
+Panneau Technique → « Personnalité » : trois boutons (Bougon / Naïf /
+Vantard) publient le nom de variante sur le topic `persona`, consommé par
+`chat_node` (Pi vision, cf. `vision/ai/personas.py` — brouillons d'atelier à
+valider avec David). Chaque changement recompose le system prompt et ouvre
+une **nouvelle session de conversation** (l'historique de l'ancien
+personnage est abandonné — sinon Didier serait schizophrène) ; re-cliquer la
+personnalité déjà active est sans effet. Défaut au démarrage : `bougon`
+(config `chat_persona` côté vision, surchargeable par paramètre ROS
+`persona`). Nom inconnu = warning loggué avec la liste, jamais un crash.
+
 ## Pre-show checklist
 1. Inspect hardware (wheels locked, arms secure, LED strips intact).
 2. Power on robot and remote controller (Pi 5 vision needs the 27 W PSU).

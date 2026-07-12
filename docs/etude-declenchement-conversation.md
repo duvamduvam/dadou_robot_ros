@@ -270,7 +270,17 @@ Tout est au périmètre du chantier, mais séquencé :
 - **Persona à créer de zéro** : le personnage parlé n'existe pas encore —
   atelier d'écriture dédié (David + Dadou, l'IA en brouillon) : qui est
   Didier, son humour, ses limites, sa façon de parler aux enfants. Livrable =
-  system prompt. ⚠️ Emplacement à décider : le repo est PUBLIC (§8).
+  system prompt.
+  **Complément d'atelier (2026-07-13)** : pas UN personnage mais des
+  **personnalités commutables à tester** — socle commun (robot assumé qui en
+  joue, complice des enfants, esquives par opinions absurdes décalées, ne
+  sort jamais du personnage) + 3 variantes complètes : « bougon » (artiste
+  recalé de l'Eurovision), « naif » (échappé de l'usine), « vantard »
+  (ex-gloire imaginaire des Zéniths). Sélection par config au démarrage et à
+  chaud via topic `persona` (console web faite ; télécommande à câbler côté
+  dadou_control_ros). Textes : `vision/ai/personas.py`, versionnés au repo
+  (tranché : texte de spectacle assumé public, la CI garde le contrat
+  technique). Brouillons à valider avec David.
 - **Garde-fous : confiance au modèle pour l'instant** (décision du grill) —
   pas de modération technique, pas de red-team formalisée ; le persona
   portera naturellement quelques règles de registre. **À réévaluer après les
@@ -400,8 +410,9 @@ chat_node V2 (chantier 0) doit passer d'abord.**
 
 ## 8. Points encore ouverts (assumés, pas oubliés)
 
-1. **Emplacement du prompt persona** : le repo est public — versionné et
-   lisible par tous, ou fichier déployé hors repo ? À décider au lot D3.
+1. ~~**Emplacement du prompt persona**~~ **TRANCHÉ le 2026-07-13** :
+   versionné au repo public (`vision/ai/personas.py`) — texte de spectacle
+   assumé, la CI vérifie que chaque variante embarque le contrat technique.
 2. **Mécanisme de bascule whisper local/API** (et choix du fournisseur) :
    seulement si D0 condamne le CPU local.
 3. **Le gimmick sonore et les expressions** : à créer en répétition (D2) —
@@ -426,6 +437,15 @@ CPU/VAD de D0, résultats des protocoles)*
   `calibre-distance.sh` (protocole 1,2/2,4/3,6 m adulte ET enfant).
   **Reste de D0 = la campagne elle-même** (robot allumé + une sortie
   d'enregistrement) : mesures à consigner ici.
+- 2026-07-13 : **atelier persona (D3, partie écriture + commutation) FAIT** :
+  3 personnalités commutables (« bougon » défaut / « naif » / « vantard »,
+  décisions reportées au §5.4), textes dans `vision/ai/personas.py` (repo
+  public — §8.1 tranché), `StreamingBrain.reconfigure()` (nouveau prompt +
+  nouvelle session ChatDB), topic `persona` + paramètre ROS + sélecteur
+  console web (whitelist technique). 176 tests vision / 559 robot.
+  **Reste de D3** : validation des textes par David, bouton télécommande
+  (dadou_control_ros, avec le START télédiagnostic ?), multi-langues,
+  chrono latence < 2 s en réel.
 
 ## Sources
 

@@ -28,7 +28,11 @@ WHITELIST_SPECTACLE = {"animation", "face", "audio", "robot_lights"}
 # "chat" (2026-07-12) : toggle on/off de la parole IA (conversation) — consommé
 # par chat_node sur le Pi vision (même contrat StringTime "on"/"off" que
 # "gaze"). Ce n'est PAS un topic d'actionneur : aucun risque roues/e_stop.
-WHITELIST_TECHNIQUE = {"relay", "neck", "left_eye", "right_eye", "left_arm", "right_arm", "gaze", "chat", "system"}
+# "persona" (2026-07-13, lot D3) : sélection de la personnalité de Didier
+# (payload = nom de variante "bougon"/"naif"/"vantard", cf. vision.ai.personas
+# côté Pi vision) — même nature que "chat" : une commande de configuration du
+# chat_node, pas un actionneur.
+WHITELIST_TECHNIQUE = {"relay", "neck", "left_eye", "right_eye", "left_arm", "right_arm", "gaze", "chat", "persona", "system"}
 WHITELIST = WHITELIST_SPECTACLE | WHITELIST_TECHNIQUE
 
 # Session d'écriture : silence du writer au-delà de ce délai -> écriture
