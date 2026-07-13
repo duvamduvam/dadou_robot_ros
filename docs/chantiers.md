@@ -203,3 +203,11 @@ en conversation réelle (avec le chantier 0).
   lent possible).
 - Batterie : aucun capteur câblé — parqué vers le chantier élec (cartes PCB),
   décision télédiagnostic §8.
+- Caméra CSI (nappe) à la place de la webcam USB — module IMX219 130° repéré et
+  critères de tri consignés dans `hardware/overview.md` §Vision & camera
+  (2026-07-13, RIEN acheté). Gain réel : la webcam plafonne à 16,7 fps alors que
+  MediaPipe ne prend que 24 % de CPU. Trois coûts à ne pas oublier : la webcam
+  EST le micro de chat_node V2 (→ micro USB à acheter), la nappe FPC traverserait
+  le cou mobile (fatigue mécanique), et `cv2.VideoCapture` ne voit pas une CSI
+  sur Pi 5 → libcamera/Picamera2 dans le conteneur vision. Ne pas lancer avant
+  les priorités 0 et 1.
