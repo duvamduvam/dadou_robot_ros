@@ -179,6 +179,32 @@ Design constraints, established 2026-07-13 (these are the non-obvious parts):
 - **A contact bumper complements it, it does not replace it.** A lidar only sees its plane; a front
   bumper bar on a micro-switch, wired to a hard stop, catches what the plane misses.
 
+**Removable mount (designed 2026-07-13, printable):**
+`plans/supports/support-lidar-c1/support-lidar-c1.scad` in the CAD repo — chassis base plate
+(dovetail groove, front stop as the position reference, captive M4 nut) + a sled carrying the
+lidar (one vertical thumbscrew; tool-free removal in seconds, repeatable position; the lidar's
+four M2.5 stay on the sled forever). Three `assert()` guardrails, one of which already caught a
+real mistake (M2.5×8 refused: 6.6 mm engagement > the manufacturer's **4 mm hard limit** that
+physically destroys the sensor). All mount features stay below the optical turret — nothing can
+cross the scan plane. Dimensions from the Slamtec C1 datasheet v1.0 (±0.2 mm): **re-measure on
+the actual unit before printing** (nothing is purchased).
+
+**What if it finally aims lower or higher?** (established with the mount design)
+- *Tilt (pitch)* — scan plane at h = 25 cm, tilted **down** by θ: the ground itself appears as an
+  obstacle arc at d = h/tan θ → 1° = 14.3 m (beyond the 12 m range: invisible), 2° = 7.2 m,
+  5° = 2.9 m, 10° = 1.4 m. For the intended **proximity gate (stop under ~1.5 m)** down-tilt only
+  hurts from ~8-10°; print flatness + a sane chassis hold ±2° effortlessly. Tilted **up** by θ the
+  plane climbs d·tan θ (+9 cm at 1 m for 5°): still shins. Residual trim = washers under two of
+  the four chassis screws — no adjustment mechanism on a part that carries a 10 Hz rotor. A future
+  nav2 use (12 m: 1° = 21 cm at range) would justify a v2 part; the mount being removable makes
+  swapping trivial.
+- *Height* — the mount does not choose it (scan plane = fixation surface + 42.8 mm; aim 25 cm →
+  bolt at ~207 mm from the ground). **Lower** (< 15 cm) sees more low obstacles but pulls the
+  false-ground closer on any down-tilt (h = 15 cm, 5° → 1.7 m: inside the gate zone); **higher**
+  (> 40 cm) misses chairs and seated children. 20-30 cm remains the window — and whatever the
+  height, **feet and steps below the plane stay invisible by construction: that is the bumper's
+  job**, not a mounting question.
+
 **Not before priority 1** (the on-ground scenic test, remote in hand). That test is what will say
 whether the operator-on-deadman is enough for a long while. Buying earlier means designing a
 guardrail for a use nobody has observed yet.
