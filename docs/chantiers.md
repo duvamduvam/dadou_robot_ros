@@ -203,6 +203,15 @@ en conversation réelle (avec le chantier 0).
   lent possible).
 - Batterie : aucun capteur câblé — parqué vers le chantier élec (cartes PCB),
   décision télédiagnostic §8.
+- Détection d'obstacle (lidar 2D) — RPLIDAR C1 repéré (68,99 €) et contraintes de
+  conception consignées dans `hardware/overview.md` §Distance & obstacle sensing
+  (2026-07-13, RIEN acheté). Le trou n'est PAS la distance à la personne (déjà
+  résolue par la hauteur de silhouette) mais l'obstacle qui n'est pas la personne.
+  Points clés : pas besoin de 360° (arc AVANT suffit, secteur occulté à masquer),
+  plan de scan BAS, barrière d'obstacle sur le Pi 4 dans la chaîne cmd_vel (jamais
+  sur le Pi vision — une sécurité qui dépend du wifi n'en est pas une), CPU
+  négligeable hors nav2. Pas avant la priorité 1 (test au sol) : c'est lui qui
+  dira si l'opérateur au deadman suffit.
 - Caméra CSI (nappe) à la place de la webcam USB — module IMX219 130° repéré et
   critères de tri consignés dans `hardware/overview.md` §Vision & camera
   (2026-07-13, RIEN acheté). Gain réel : la webcam plafonne à 16,7 fps alors que

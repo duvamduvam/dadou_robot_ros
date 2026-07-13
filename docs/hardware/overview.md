@@ -62,6 +62,66 @@ Open points, to settle **before** any purchase or migration:
   or front+rear is realistic. It doubles the ISP/CPU load on a Pi 5 that will also carry whisper
   and piper in V2.
 
+## Distance & obstacle sensing
+
+### In service: none — and the distance we *do* have is monocular
+There is **no distance sensor on the robot**. Distance to the tracked person is a **monocular
+proxy**: `person_tracker_node` publishes the silhouette **height** [0..1] on `/vision/person_box`,
+which `person_follower` regulates against `target_height`. Lot D0 of the conversation study
+(`etude-declenchement-conversation.md`) will calibrate that proxy into metres (1.2 / 2.4 / 3.6 m —
+Hall's zones — adult *and* child). For "is the person in the social zone", this is enough and it
+is free. **Do not buy a sensor for that need — it is already solved.**
+
+The real gap is elsewhere: **nothing detects an obstacle that is not the tracked person.** Today
+the safety is the operator on the deadman, which is coherent as long as wheels only roll with the
+remote in hand (priority 1). The day the follower rolls without an operator, CLAUDE.md's
+non-negotiable rule ("every movement feature MUST handle its stop case") requires a sensor.
+
+### Evaluated 2026-07-13, not purchased: RPLIDAR C1
+
+**Slamtec RPLIDAR C1 — DTOF, 12 m, 360°, 10 Hz, ~680 points/scan, ROS1 & ROS2 — €68.99**
+<https://fr.aliexpress.com/item/1005006190309082.html>
+(The same sensor is listed elsewhere at €97.69 — check the price before ordering.)
+
+Why a 2D lidar and not the cheap alternatives:
+
+| Sensor | Verdict for Didier |
+| --- | --- |
+| Ultrasonic (HC-SR04) | **No.** ~30° cone, and clothing (wool, coats) *absorbs* ultrasound — it is blindest to exactly what it must see: people. |
+| IR ToF (VL53L1X) | **No.** Stage projectors radiate massive IR; an IR ToF collapses under stage lighting. Sunlight outdoors is worse. |
+| **2D lidar (RPLIDAR C1)** | **Yes.** Immune to ambient IR, publishes `sensor_msgs/LaserScan` natively, and would open nav2 later. |
+
+Design constraints, established 2026-07-13 (these are the non-obvious parts):
+
+- **360° coverage is NOT needed, so the robot's structure is not a blocker.** 360° serves SLAM;
+  Didier does not do SLAM. What is needed is the **forward arc** (120–180°) so as not to roll over
+  a foot. Mount the lidar **low and forward**; the body occludes the rear, which is normal for a
+  differential robot. The occluded sector **must be masked** (`laser_filters` /
+  `LaserScanAngularBoundsFilter`) or ROS reads it as a permanent obstacle glued to the robot.
+- **The design question is the scan HEIGHT, not the coverage.** A 2D lidar sees one slice. Low
+  (20–30 cm) sees legs, chair feet, steps — the actual danger of a 50 kg robot in a crowd — but
+  misses table tops and outstretched arms. High (~1 m) sees torsos but runs over feet and children.
+  **Low and forward is the right choice here.**
+- **No autonomous reverse — already enforced in code**, independently of any sensor:
+  `follow_control.py` has `allow_reverse = False` ("camera faces forward, reversing is driving
+  blind"). A front-facing lidar takes nothing away: the robot still reverses **under the remote**,
+  where a human looks behind it. A 50 kg robot reversing autonomously into a crowd is a bad idea
+  *with* a rear sensor too. If autonomous reverse is ever wanted, the answer is a **rear contact
+  bumper** (a certain safety), not a second lidar (a probable one).
+- **The obstacle gate MUST run on the robot Pi 4**, inside the `cmd_vel` chain (next to `twist_mux`
+  / `twist_deadman`) — **never on the vision Pi 5**. A safety that depends on the Wi-Fi link between
+  the two Pis is not a safety. The lidar therefore plugs into the **Pi 4** over USB.
+- **CPU cost is negligible for this use.** 680 points × 10 Hz = ~6.8 k points/s over USB serial.
+  The `rplidar_ros` driver costs a few percent of one core; a forward-cone minimum-range gate costs
+  under one percent. What *would* be expensive is nav2 (costmap + planners + localisation) — which
+  this function does not need and must not need.
+- **A contact bumper complements it, it does not replace it.** A lidar only sees its plane; a front
+  bumper bar on a micro-switch, wired to a hard stop, catches what the plane misses.
+
+**Not before priority 1** (the on-ground scenic test, remote in hand). That test is what will say
+whether the operator-on-deadman is enough for a long while. Buying earlier means designing a
+guardrail for a use nobody has observed yet.
+
 ## Devices
 All motors are driven by an I2C PCA9685 PWM board attached to the Raspberry Pi 4, reducing wiring complexity and electrical load on the Pi.
 ![PCA9685 PWM driver](../../docs/pictures/consumable-parts/PCA9685.png)
