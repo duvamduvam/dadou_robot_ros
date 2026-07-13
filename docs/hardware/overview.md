@@ -42,10 +42,46 @@ Selection criteria (use these to re-pick if the listing dies — stock was low):
 
 Open points, to settle **before** any purchase or migration:
 
-- **Ribbon length.** Modules ship with ~15 cm; head-to-body needs an official Raspberry Pi 5
-  camera cable (200 / 300 / 500 mm). Check which connector the camera board itself carries —
-  these boards are often 15-pin on the camera side and 22-pin on the Pi side, which is exactly
-  what the official Pi 5 cables are.
+- **Ribbon length is an ARCHITECTURE constraint, not a shopping detail — 500 mm is a ceiling.**
+  CSI-2 is a short-haul differential link (up to 1 Gbit/s per lane). Raspberry Pi only sells
+  200 / 300 / 500 mm, and **beyond 1 m it is reported as very unreliable, especially in
+  electrically noisy environments** — which is exactly what Didier's chassis is (two 250 W
+  brushless motors under PWM, a PA amplifier, LED strips with fast edges). CSI→HDMI→CSI extenders
+  exist but are proven for *displays*, not cameras; not a path for touring hardware.
+
+  Consequences, in order:
+  - **The USB webcam has no such limit** (3–5 m). Add this to the CSI column of costs, next to the
+    lost microphone and the libcamera migration.
+  - **The vision Pi 5 must sit in the UPPER TORSO**, as close under the neck as possible — a 30–40
+    cm run, well inside the official range. **Not in the head:** a Pi 5 plus cooler is 60–80 g of
+    mass added to the neck, and the gaze damping (0.15 / 1.5) was tuned and *validated on the real
+    robot on 2026-07-12*. Do not detune a working subsystem for a cabling reason.
+  - **Budget the slack loop.** The cable does not run straight: it crosses the neck with the slack
+    loop the mount is designed around (see the zip-tie anchors). That eats 5–10 cm.
+  - Route **away** from motor and amplifier cables; if a crossing is unavoidable, cross at **90°**,
+    never run parallel.
+
+- **The cable: buy it OFFICIAL, not on AliExpress.** The Raspberry Pi camera cable is **shielded**
+  (that is in the spec, *never* in the product name — searching for "nappe blindée" finds nothing).
+  ~€3.72 at Kubii. AliExpress clones copy the wording; the shielding cannot be verified, and a bad
+  cable does not fail cleanly — it fails **intermittently**: perfect on the bench, dropping out in
+  the street under vibration when the motors load. That is the worst possible failure mode for a
+  touring robot, and saving €3 buys a fault nobody can reproduce. **Take 300 mm, not 500** — shorter
+  is less exposed to noise.
+
+- **⚠️ TWO CABLE VARIANTS EXIST, AND THIS IS THE EASY MISTAKE.** The naming is opaque:
+  *"Standard"* = 15-way, 1 mm pitch (classic camera boards). *"Mini"* = 22-way, 0.5 mm pitch
+  (Pi 5 and Pi Zero).
+
+  | Reference | Connects |
+  | --- | --- |
+  | **Standard–Mini** | 15-pin camera board → Pi 5 |
+  | **Mini–Mini** | 22-pin camera board → Pi 5 |
+
+  The Kubii listing found on 2026-07-13 (`CSI / MIPI camera cable for Raspberry Pi 5`, €3.72) is
+  **Mini–Mini** — its own page says *"2 × 22 W, 0.5 mm pitch"* and warns that connecting to 15-way
+  connectors *"requires the use of new adapter cables"*. **Look at the connector on the camera board
+  itself before ordering.** Getting this wrong buys a cable that cannot be plugged in.
 - **Mechanics — the strongest argument for staying on USB.** An FPC ribbon is not designed for
   repeated flexing, and it would cross the *moving neck joint* (gaze pans the head). A USB cable
   with strain relief survives that; a ribbon fatigues and cracks.
