@@ -179,15 +179,19 @@ Design constraints, established 2026-07-13 (these are the non-obvious parts):
 - **A contact bumper complements it, it does not replace it.** A lidar only sees its plane; a front
   bumper bar on a micro-switch, wired to a hard stop, catches what the plane misses.
 
-**Removable mount (designed 2026-07-13, printable):**
-`plans/supports/support-lidar-c1/support-lidar-c1.scad` in the CAD repo — chassis base plate
-(dovetail groove, front stop as the position reference, captive M4 nut) + a sled carrying the
-lidar (one vertical thumbscrew; tool-free removal in seconds, repeatable position; the lidar's
-four M2.5 stay on the sled forever). Three `assert()` guardrails, one of which already caught a
-real mistake (M2.5×8 refused: 6.6 mm engagement > the manufacturer's **4 mm hard limit** that
-physically destroys the sensor). All mount features stay below the optical turret — nothing can
-cross the scan plane. Dimensions from the Slamtec C1 datasheet v1.0 (±0.2 mm): **re-measure on
-the actual unit before printing** (nothing is purchased).
+**Removable mount (designed 2026-07-13, printable, v2):**
+`plans/supports/support-lidar-c1/support-lidar-c1.scad` in the CAD repo. At 20-30 cm the robot
+only offers a **vertical face**, so: a flat 9 mm **wall plate** stays on the robot for good
+(vertical dovetail groove; vertical slots = height trim; washers behind the top or bottom screw
+row = pitch trim; captive M4 nut) and the **whole lidar bracket is the removable part** — dropped
+in from above, gravity seats it on the bottom stop, one thumbscrew locks it. Lidar off-season,
+nothing protrudes at shin height. The lidar's four M2.5 stay on the bracket forever. `assert()`
+guardrails (one already caught a real mistake: M2.5×8 refused, 6.6 mm engagement > the
+manufacturer's **4 mm hard limit** that physically destroys the sensor); back and plate are
+height-capped below the optical turret — nothing can cross the scan plane. Dimensions from the
+Slamtec C1 datasheet v1.0 (±0.2 mm): **re-measure on the actual unit before printing** (nothing
+is purchased). Beam sits 60.8 mm above the plate's bottom edge → for a 25 cm scan, mount the
+plate at ~189 mm from the ground.
 
 **What if it finally aims lower or higher?** (established with the mount design)
 - *Tilt (pitch)* — scan plane at h = 25 cm, tilted **down** by θ: the ground itself appears as an
