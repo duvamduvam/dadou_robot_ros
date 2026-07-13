@@ -179,34 +179,48 @@ Design constraints, established 2026-07-13 (these are the non-obvious parts):
 - **A contact bumper complements it, it does not replace it.** A lidar only sees its plane; a front
   bumper bar on a micro-switch, wired to a hard stop, catches what the plane misses.
 
-**Removable mount (designed 2026-07-13, printable, v2):**
+**Removable mount (designed 2026-07-13, revised 2026-07-14, printable — v3):**
 `plans/supports/support-lidar-c1/support-lidar-c1.scad` in the CAD repo. At 20-30 cm the robot
-only offers a **vertical face**, so: a flat 9 mm **wall plate** stays on the robot for good
-(vertical dovetail groove; fastened by **four captive M4 nuts in hex pockets** — the screws come
-from *inside* the robot through the panel, nothing visible on stage side; height is set when
-drilling the panel, pitch trim = washers between panel and plate behind the top or bottom row)
-and the **whole lidar bracket is the removable part** — dropped
-in from above, gravity seats it on the bottom stop, one thumbscrew locks it. Lidar off-season,
-nothing protrudes at shin height. The lidar's four M2.5 stay on the bracket forever. `assert()`
-guardrails (one already caught a real mistake: M2.5×8 refused, 6.6 mm engagement > the
-manufacturer's **4 mm hard limit** that physically destroys the sensor); back and plate are
-height-capped below the optical turret — nothing can cross the scan plane. Dimensions from the
-Slamtec C1 datasheet v1.0 (±0.2 mm): **re-measure on the actual unit before printing** (nothing
-is purchased). Beam sits 60.8 mm above the plate's bottom edge → for a 25 cm scan, mount the
-plate at ~189 mm from the ground.
+only offers a **vertical face — and that face is not plumb**, which drives the whole design.
+Three printed parts:
+- **Wall plate**, stays on the robot for good: 12 mm flat plate with a vertical dovetail groove,
+  held by **four captive M4 nuts in hex pockets on its FRONT face** — the screws come from *inside*
+  the robot through the panel, nothing visible on the stage side, and the wall face stays perfectly
+  flat (a nut pocket at the panel interface would both drop its nut during fitting and skew the
+  aim). It can be printed as a **wedge** (`panneau_angle`) if the panel leans more than the tilt
+  range.
+- **Yoke** (back + two cheeks): drops onto the dovetail **from above**, gravity seats it on the
+  bottom stop, one thumbscrew locks it.
+- **Cradle**: the lidar platform, hinged between the cheeks on a **pivot**, locked by two
+  thumbscrews riding in **arc slots — ±20° of hand-set pitch**. This is where the scan plane is
+  brought level, at fitting time, with a spirit level on the lidar's cap, robot on its wheels.
+  The two arc screws *clamp cheek against lug*: friction holds the attitude, no screw in bending —
+  same principle as the camera mount, so nothing springy sits under a 10 Hz rotor.
 
-**What if it finally aims lower or higher?** (established with the mount design)
+Yoke + cradle + lidar lift off as one block in ten seconds; off-season only the flat plate remains
+(nothing at shin height). The lidar's four M2.5 stay on the cradle forever. `assert()` guardrails,
+several of which caught real mistakes: M2.5×8 refused (6.6 mm engagement > the manufacturer's
+**4 mm hard limit**, which physically destroys the sensor); every nut pocket must keep ≥ 3 mm of
+material in front of it (the v2 plate left 0.6 mm — a skin that splits on the first firm turn);
+and **the scan plane is re-checked at BOTH ends of the tilt range** (nose-up tips the plane back
+towards the yoke — current margins: 14.5 mm over the back, 10.1 mm over the plate). Note an M4 nut
+is **7.0 mm across flats**, not 7.66 (that is across corners — a v2 error that would have let the
+nuts spin). Dimensions from the Slamtec C1 datasheet v1.0 (±0.2 mm): **re-measure on the actual
+unit before printing** (nothing is purchased). Beam sits 64.8 mm above the plate's bottom edge →
+for a 25 cm scan, mount the plate at ~185 mm from the ground.
+
+**What if it finally aims lower or higher?** (this analysis is what sizes the adjustment)
 - *Tilt (pitch)* — scan plane at h = 25 cm, tilted **down** by θ: the ground itself appears as an
   obstacle arc at d = h/tan θ → 1° = 14.3 m (beyond the 12 m range: invisible), 2° = 7.2 m,
   5° = 2.9 m, 10° = 1.4 m. For the intended **proximity gate (stop under ~1.5 m)** down-tilt only
-  hurts from ~8-10°; print flatness + a sane chassis hold ±2° effortlessly. Tilted **up** by θ the
-  plane climbs d·tan θ (+9 cm at 1 m for 5°): still shins. Residual trim = washers under two of
-  the four chassis screws — no adjustment mechanism on a part that carries a 10 Hz rotor. A future
-  nav2 use (12 m: 1° = 21 cm at range) would justify a v2 part; the mount being removable makes
-  swapping trivial.
-- *Height* — the mount does not choose it (scan plane = fixation surface + 42.8 mm; aim 25 cm →
-  bolt at ~207 mm from the ground). **Lower** (< 15 cm) sees more low obstacles but pulls the
-  false-ground closer on any down-tilt (h = 15 cm, 5° → 1.7 m: inside the gate zone); **higher**
+  hurts from ~8-10°, so aiming to **±2° is plenty** — which a hand-set arc slot achieves easily.
+  Tilted **up** by θ the plane climbs d·tan θ (+9 cm at 1 m for 5°): still shins. What this
+  tolerance does **not** cover is a mounting face that is out of plumb by 10-20°: washers cannot
+  trim that, hence the pivot. A future nav2 use (12 m: 1° = 21 cm at range) would need an aiming
+  target, not another part.
+- *Height* — the mount does not choose it (beam = plate bottom + 64.8 mm; aim 25 cm →
+  bolt the plate at ~185 mm from the ground). **Lower** (< 15 cm) sees more low obstacles but pulls
+  the false-ground closer on any down-tilt (h = 15 cm, 5° → 1.7 m: inside the gate zone); **higher**
   (> 40 cm) misses chairs and seated children. 20-30 cm remains the window — and whatever the
   height, **feet and steps below the plane stay invisible by construction: that is the bumper's
   job**, not a mounting question.
