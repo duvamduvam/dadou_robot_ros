@@ -56,6 +56,14 @@ Open points, to settle **before** any purchase or migration:
 - **Distortion.** Even at 130° there is barrel distortion: a person at the frame edge reads as
   "less off-centre" than they are. The box→heading gain must be **re-checked under the camera
   protocol**, never assumed.
+- **A printable mount already exists** (designed 2026-07-13, *not printed*):
+  `plans/supports/support-camera-csi/support-camera-csi.scad` in the CAD repo — cradle + screwed
+  base with an arc-slot tilt lock, plus a drill template to print first. Two constraints found
+  while designing it, both counter-intuitive: the tilt axis must sit **behind** the lens plane
+  (at 130° FOV the yoke uprights would otherwise enter the frame — 67.6° against a 65° half-angle),
+  and the ribbon gets **two zip-tie anchors** so that the slack loop flexes with the neck instead
+  of the connector. Its module dimensions are the *official Pi Camera v2* footprint and **must be
+  re-measured** on the actual clone before printing.
 - **Two cameras are possible.** The Pi 5 has two CSI/DSI connectors, both usable as cameras at
   once (`cam0` / `cam1`; libcamera can even software-sync their frames). Use case not decided —
   stereo depth would be a project of its own (calibration + rectification), whereas wide+narrow
