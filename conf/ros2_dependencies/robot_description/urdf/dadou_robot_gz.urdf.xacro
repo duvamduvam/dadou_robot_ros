@@ -24,13 +24,22 @@
   <!-- LED : joints fixes qu'il ne faut PAS laisser "lumper" par la conversion
        URDF->SDF (sinon leurs visuals fusionnent dans le lien parent, avec un nom
        du style "base_link_fixed_joint_lump__torso_link_visual_2" imprévisible).
-       preserveFixedJoint garde body_leds_link_visual / mouth_leds_link_visual
-       comme visuals distincts, avec un nom stable pour le bridge MaterialColor
-       (voir robot_sim/robot_sim_lib/leds_logic.py + config/gz_bridge.yaml). -->
+       preserveFixedJoint garde <link>_visual comme visual distinct, avec un nom
+       stable pour le bridge MaterialColor (voir robot_sim/scripts/leds_sim_node
+       + config/gz_bridge.yaml).
+       Les yeux ont désormais une COQUE (cloche en cylindres étagés) en plus de
+       leur matrice : leur matrice a donc son propre link, comme le corps et la
+       bouche, au lieu de compter sur "le seul visual du link œil". -->
   <gazebo reference="body_leds_joint">
     <preserveFixedJoint>true</preserveFixedJoint>
   </gazebo>
   <gazebo reference="mouth_leds_joint">
+    <preserveFixedJoint>true</preserveFixedJoint>
+  </gazebo>
+  <gazebo reference="left_eye_leds_joint">
+    <preserveFixedJoint>true</preserveFixedJoint>
+  </gazebo>
+  <gazebo reference="right_eye_leds_joint">
     <preserveFixedJoint>true</preserveFixedJoint>
   </gazebo>
 
@@ -51,8 +60,13 @@
   <joint name="camera_joint" type="fixed">
     <parent link="head_link"/>
     <child link="camera_link"/>
-    <!-- Devant la tête (rayon du tambour + demi-épaisseur), à mi-hauteur. -->
-    <origin xyz="${head_radius + 0.015} 0 ${head_height/2}"/>
+    <!-- SUR LE DESSUS de la tête, légèrement en avant : la face avant du tambour
+         est maintenant occupée par la matrice LED "bouche" (mouth_leds_link), et
+         c'est aussi là qu'est la vraie caméra du robot (posée sur la tête, cf.
+         validation du gaze du 2026-07-12). Elle regarde toujours vers +x et suit
+         donc le cou. Seul consommateur : le retour vidéo web — le suivi de
+         personne, lui, consomme /vision/person_box, pas cette image. -->
+    <origin xyz="${head_radius/2} 0 ${head_height + 0.025}"/>
   </joint>
   <gazebo reference="camera_joint">
     <preserveFixedJoint>true</preserveFixedJoint>

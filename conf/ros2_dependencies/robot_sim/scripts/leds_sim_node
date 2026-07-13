@@ -48,13 +48,16 @@ from rclpy.node import Node  # noqa: E402
 from robot_interfaces.msg import StringTime  # noqa: E402
 from ros_gz_interfaces.msg import Entity, MaterialColor  # noqa: E402
 
-# Noms des visuals dans la scène gz (cf. dadou_robot_gz.urdf.xacro : joints
-# fixes protégés par preserveFixedJoint pour garder un nom <link>_visual
-# stable ; les yeux sont sur des joints MOBILES, déjà nommés ainsi nativement).
+# Noms des visuals dans la scène gz (cf. dadou_robot_gz.urdf.xacro : joints fixes
+# protégés par preserveFixedJoint pour garder un nom <link>_visual stable).
+# Chaque zone LED a son PROPRE link, y compris les yeux : depuis que la cloche de
+# l'œil est dessinée (cylindres étagés), le link <side>_eye_link porte plusieurs
+# visuals et son premier visual n'est plus la matrice — la matrice vit donc dans
+# <side>_eye_leds_link, comme le corps et la bouche.
 BODY_LEDS_VISUAL = "body_leds_link_visual"
 MOUTH_LEDS_VISUAL = "mouth_leds_link_visual"
-LEFT_EYE_VISUAL = "left_eye_link_visual"
-RIGHT_EYE_VISUAL = "right_eye_link_visual"
+LEFT_EYE_VISUAL = "left_eye_leds_link_visual"
+RIGHT_EYE_VISUAL = "right_eye_leds_link_visual"
 
 VISUAL_ENTITY_TYPE = Entity.VISUAL  # = 4
 
