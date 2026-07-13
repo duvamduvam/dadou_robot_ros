@@ -182,8 +182,10 @@ Design constraints, established 2026-07-13 (these are the non-obvious parts):
 **Removable mount (designed 2026-07-13, printable, v2):**
 `plans/supports/support-lidar-c1/support-lidar-c1.scad` in the CAD repo. At 20-30 cm the robot
 only offers a **vertical face**, so: a flat 9 mm **wall plate** stays on the robot for good
-(vertical dovetail groove; vertical slots = height trim; washers behind the top or bottom screw
-row = pitch trim; captive M4 nut) and the **whole lidar bracket is the removable part** — dropped
+(vertical dovetail groove; fastened by **four captive M4 nuts in hex pockets** — the screws come
+from *inside* the robot through the panel, nothing visible on stage side; height is set when
+drilling the panel, pitch trim = washers between panel and plate behind the top or bottom row)
+and the **whole lidar bracket is the removable part** — dropped
 in from above, gravity seats it on the bottom stop, one thumbscrew locks it. Lidar off-season,
 nothing protrudes at shin height. The lidar's four M2.5 stay on the bracket forever. `assert()`
 guardrails (one already caught a real mistake: M2.5×8 refused, 6.6 mm engagement > the
