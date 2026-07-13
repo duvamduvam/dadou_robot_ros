@@ -57,13 +57,23 @@ Open points, to settle **before** any purchase or migration:
   "less off-centre" than they are. The box→heading gain must be **re-checked under the camera
   protocol**, never assumed.
 - **A printable mount already exists** (designed 2026-07-13, *not printed*):
-  `plans/supports/support-camera-csi/support-camera-csi.scad` in the CAD repo — cradle + screwed
-  base with an arc-slot tilt lock, plus a drill template to print first. Two constraints found
-  while designing it, both counter-intuitive: the tilt axis must sit **behind** the lens plane
-  (at 130° FOV the yoke uprights would otherwise enter the frame — 67.6° against a 65° half-angle),
-  and the ribbon gets **two zip-tie anchors** so that the slack loop flexes with the neck instead
-  of the connector. Its module dimensions are the *official Pi Camera v2* footprint and **must be
-  re-measured** on the actual clone before printing.
+  `plans/supports/support-camera-csi/support-camera-csi.scad` in the CAD repo — a protective tray
+  holding the board + a screwed base with an arc-slot tilt lock, plus a drill template to print
+  first. Three constraints found while designing it, all counter-intuitive, and all imposed by the
+  130° field of view:
+  - The **tilt axis must sit behind the lens plane**. Putting it at the optical centre (the elegant
+    choice) pushes the yoke uprights in front of the lens, and they enter the frame — 67.6° against
+    a 65° half-angle.
+  - **The board is protected by a tray, never by a front cover.** The perimeter wall stops exactly
+    at the board's front plane, so every point of it lies *behind* the lens's entrance pupil and is
+    unimageable whatever the real optics turn out to be — safe by construction rather than by
+    margin. The front stays open, as on any camera housing.
+  - The ribbon gets **two zip-tie anchors** so the slack loop flexes with the neck instead of the
+    connector — an FPC that cracks at the connector fails *silently*.
+
+  Its module dimensions are the *official Pi Camera v2* footprint and **must be re-measured** on the
+  actual clone before printing. One thing is deliberately left to be judged on a real photo rather
+  than by calculation: the M2 screw heads are the only relief standing proud of the wall.
 - **Two cameras are possible.** The Pi 5 has two CSI/DSI connectors, both usable as cameras at
   once (`cam0` / `cam1`; libcamera can even software-sync their frames). Use case not decided —
   stereo depth would be a project of its own (calibration + rectification), whereas wide+narrow
