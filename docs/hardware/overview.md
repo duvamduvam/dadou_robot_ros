@@ -46,7 +46,7 @@ Open points, to settle **before** any purchase or migration:
   CSI-2 is a short-haul differential link (up to 1 Gbit/s per lane). Raspberry Pi only sells
   200 / 300 / 500 mm, and **beyond 1 m it is reported as very unreliable, especially in
   electrically noisy environments** — which is exactly what Didier's chassis is (two 250 W
-  brushless motors under PWM, a PA amplifier, LED strips with fast edges). CSI→HDMI→CSI extenders
+  brushed motors under PWM (whose brushes arc), a PA amplifier, LED strips with fast edges). CSI→HDMI→CSI extenders
   exist but are proven for *displays*, not cameras; not a path for touring hardware.
 
   Consequences, in order:
@@ -303,7 +303,7 @@ The cased array is a ~13 × 14 × 5 cm puck, 300 g. How it is fixed decides whet
   the mic away from the neck/eye servos (the loudest structure-borne noise sources at standstill)
   and avoids yet another cable flexing across a moving joint.
 - **Decouple it mechanically. A rigid bolt-down is the classic mistake.** Screwed hard to a 50 kg
-  wood/metal frame carrying 250 W brushless motors and servos, the array picks up **structure-borne**
+  wood/metal frame carrying 250 W brushed motors and servos, the array picks up **structure-borne**
   noise — motor whine, servo gear chatter — which no beamformer can remove, because it does not
   arrive through the air. Mount on silicone/neoprene grommets or foam standoffs (a poor man's shock
   mount); nylon screws, deliberately **not** overtightened.
@@ -337,9 +337,25 @@ The PWM signal feeds a Cytron SmartDrive 40 A motor driver (10–45 V) that po
 ![Cytron SmartDrive motor driver](../../docs/pictures/consumable-parts/smartdrive.png)
 *Cytron SmartDrive DC motor driver.*
 
-Each wheel uses a 250 W brushless cycle motor.
-![Brushless cycle motor](../../docs/pictures/consumable-parts/brushless-motor.png)
-*Brushless 250 W wheel motor.*
+Each wheel uses a **MY1016Z 250 W geared cycle motor — a BRUSHED DC motor** (24 V, ~130 rpm at the
+gearbox output, two wires only). Earlier revisions of this file called it *brushless*; that was wrong,
+and the mistake is not cosmetic:
+
+- A brushed motor has **no Hall sensors**, so there is **no rotation feedback anywhere on the wheel
+  path** — nothing to tap, no free encoder. (Had it been a Hall-sensored BLDC, its commutation
+  sensors could have been read as a wheel encoder for the price of a wire. They do not exist here.)
+- The Cytron SmartDrive40 is itself a **brushed** driver (PWM + DIR) — consistent with the motor —
+  and exposes no tachometer output.
+- Consequence: **`/cmd_vel` is open loop.** The m/s we command is a PWM duty cycle in disguise; the
+  real speed drifts with battery voltage, floor, slope and load, so the robot neither goes perfectly
+  straight nor turns by a known angle. This is the blocking gap for `ros2_control`
+  (`diff_drive_controller`) and for nav2, which requires an `odom` → `base_link` transform.
+  **Wheel encoders are the enabling brick** (magnetic on the gearbox output shaft, or optical on the
+  wheel); see `docs/chantiers.md`.
+
+![MY1016Z geared brushed cycle motor](../../docs/pictures/consumable-parts/brushless-motor.png)
+*MY1016Z 250 W brushed geared wheel motor. The image file is still named `brushless-motor.png` for
+history; the label on the motor itself reads `DC MOTOR`.*
 
 ### Arms, eyes and mouth servos
 The arms and mouth are controlled by ASME-MR 380 kg·cm continuous-rotation RC servos.
