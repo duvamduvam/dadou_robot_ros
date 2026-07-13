@@ -151,13 +151,41 @@ Why an array and not a "good microphone":
 - **Distance.** The social zone is 1.2–3.6 m. A lavalier or desktop mic gives Whisper nothing
   usable at 3 m in a noisy street. This is a **far-field** array (4 mics, hardware beamforming,
   ~5 m pickup).
-- **Echo.** Hardware **AEC** — the only thing that makes barge-in possible.
 - **Speaker attribution.** The study itself says this needs a mic array. The XVF3800 exposes
   **DoA** (`AEC_AZIMUTH_VALUES` via the `respeaker/reSpeaker_XVF3800_USB_4MIC_ARRAY` host_control
   tool), to be cross-referenced with the camera's person azimuth.
 - **Zero CPU.** All DSP runs on its own XMOS chip; it presents as a plain **UAC 2.0** sound card
   (no driver, works as-is in the Docker container with `/dev/snd` already mounted). The Pi 5's CPU
   stays free for Whisper and Piper.
+
+Note that its **AEC is NOT a reason to buy it** — see below. Buy it for the far-field beamforming
+and the DoA, or do not buy it.
+
+### Echo: Didier IS the PA — half-duplex is the architecture, not a fallback
+
+The robot's chassis **is the speaker enclosure** (hexagonal body, audio deck, HF receiver, octaver;
+`pièces techniques/support-baffle` in the CAD plans). There is no "far from the speakers". This
+inverts the naive advice, and it is the single most important audio decision:
+
+- **No AEC can make a PA listen to itself being drowned.** Didier radiates on the order of 100 dB;
+  a passer-by at 3 m arrives around 60 dB. That is a 40 dB hole *before* the AEC starts, and an AEC
+  buys 20–40 dB of echo return loss. It does not close that gap. **Do not count on it.**
+- **Therefore: the mic is armed ONLY while Didier is silent.** Half-duplex is the architecture. It
+  costs nothing, needs no hardware, and dissolves the echo problem entirely — when the robot is
+  silent the enclosure is not driven, so there is neither airborne nor structure-borne echo left.
+- **Do NOT re-route the TTS through the ReSpeaker's output.** That rewiring only existed to feed the
+  AEC a reference signal, and the AEC is not load-bearing here. One trap removed.
+- **The gate must trigger on "ANY audio source is live", not on "Piper is playing".** Didier has an
+  **HF receiver + octaver**: the performer's voice goes out through the robot's body at any moment
+  during a show. The audio board already switches sources between the wireless receivers and the Pi
+  — **that** is the state to read. A gate that only watches the TTS will let the mic listen while
+  the performer is talking through the robot.
+- **Add a 300–500 ms hold-off** after audio stops before re-arming the mic, to let street
+  reverberation die out.
+- **What is genuinely lost is barge-in** (interrupting Didier mid-sentence). It is physically out of
+  reach for a robot that is a PA, and it must be accepted. The compensation is **dramaturgical, not
+  technical: give Didier SHORT utterances.** If he speaks in short bursts there is always a gap to
+  answer in, and nobody feels the need to cut him off.
 
 Traps, in order of how much they would cost to discover late:
 
@@ -167,13 +195,9 @@ Traps, in order of how much they would cost to discover late:
   CPU. €40 saved against permanent maintenance debt.
 - **Buy the right variant.** The listing also sells a **XIAO / ESP32** version — a dev board driven
   by a microcontroller, *not* meant to plug into a Pi over USB. Take the cased **USB Mic Array**.
-- **Hardware AEC needs the far-end reference signal**, which means the TTS output must go **through
-  the ReSpeaker's own output** and on to the mixing desk. Today Piper plays out via the C-Media
-  adapter. **Without that re-routing, the AEC does nothing.** This is a rewiring decision, not a
-  config flag.
-- **Half-duplex is free and must be done regardless** (mute the mic while Didier speaks). It kills
-  the "answers himself" failure mode on its own, with no hardware at all. The AEC only buys
-  *barge-in* (interrupting the robot) — a luxury, not a safety.
+- **Ignore the AEC.** Its hardware AEC would need the far-end reference signal (TTS routed *through*
+  the ReSpeaker's output), and it would still not work — see the half-duplex section above. Buying
+  this array for its AEC would be buying a function that cannot help a robot which *is* the PA.
 
 ### Mounting (design constraints, decided 2026-07-13)
 
@@ -195,8 +219,10 @@ The cased array is a ~13 × 14 × 5 cm puck, 300 g. How it is fixed decides whet
   cavity kills the beamforming and the DoA (cavity resonance). It needs to *see* the air.
 - **Note the mounting angle.** Whatever rotation you bolt it at becomes a **fixed offset** on every
   DoA reading. Measure it once, write it in the config — do not discover it during a show.
-- **As far as possible from the speakers.** Physical separation does more for echo than any
-  algorithm; the AEC then only has to clean up what is left.
+- **Forget "far from the speakers" — there is no far.** The chassis is the enclosure. Echo is not
+  solved by placement, it is solved by half-duplex (above). Placement only has to solve *motor and
+  servo* noise, which is why decoupling and body-mounting matter and distance-to-speaker does not.
+  If any part of the frame is *not* a radiating baffle panel, prefer it.
 - **Height ~1.2–1.5 m** (upper torso), aimed at people's heads, not at their knees.
 - Its **12-LED ring shows the DoA** — potentially a listening signal for the public, but the LED
   face already plays that role; do not let it contradict the face.
