@@ -203,6 +203,16 @@ en conversation réelle (avec le chantier 0).
   lent possible).
 - Batterie : aucun capteur câblé — parqué vers le chantier élec (cartes PCB),
   décision télédiagnostic §8.
+- Micro réseau (ReSpeaker XVF3800 USB, ~94 €) — repéré et consigné dans
+  `hardware/overview.md` §Microphone (2026-07-13, RIEN acheté). La décision de
+  l'étude tient : on garde le U20 et on MESURE d'abord (lot D0). Deux choses
+  rendent la question réelle quand même : la caméra CSI SUPPRIME le micro de la
+  webcam, et l'étude ne traite nulle part l'ÉCHO (Didier parle fort → il
+  s'entend et se répond ; c'est le mode de panne qui a fait couper chat_node le
+  11/07). Half-duplex à implémenter de toute façon (gratuit). Pièges : XVF3000
+  en fin de vie (prendre le 3800), jamais un HAT I2S (driver seeed-voicecard),
+  l'AEC exige de re-router le TTS PAR le ReSpeaker, montage sur le CORPS (pas la
+  tête : le repère DoA suivrait le gaze) et découplé mécaniquement.
 - Détection d'obstacle (lidar 2D) — RPLIDAR C1 repéré (68,99 €) et contraintes de
   conception consignées dans `hardware/overview.md` §Distance & obstacle sensing
   (2026-07-13, RIEN acheté). Le trou n'est PAS la distance à la personne (déjà

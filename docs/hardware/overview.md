@@ -122,6 +122,85 @@ Design constraints, established 2026-07-13 (these are the non-obvious parts):
 whether the operator-on-deadman is enough for a long while. Buying earlier means designing a
 guardrail for a use nobody has observed yet.
 
+## Microphone
+
+### In service: the webcam's microphone
+The conversation input is currently the **USB webcam's own microphone** (ALSA alias `casque_mic` →
+card U20, declared in the vision Pi's `/etc/asound.conf`). The conversation study
+(`etude-declenchement-conversation.md` §5.5) decided: **keep the U20 and MEASURE first** (lot D0:
+street-condition recordings replayed through the VAD). Hardware change *only on measured failure*.
+
+Two things make the question real anyway: **switching to the CSI camera removes this microphone**
+(a CSI module has no mic), and the study has an unaddressed **echo** problem — Didier speaks loudly
+through the mixing desk into speakers while the mic sits on him, so without echo cancellation or a
+strict half-duplex he **hears himself and answers himself**. That is exactly the failure mode that
+got `chat_node` killed on 2026-07-11.
+
+### Evaluated 2026-07-13, not purchased: ReSpeaker XVF3800 USB 4-Mic Array
+
+**Seeed reSpeaker XVF3800 USB 4-Mic Array (cased USB version) — ~€94 + shipping on AliExpress**
+<https://fr.aliexpress.com/item/1005009684208884.html> — also sold by Seeed directly and by EU
+resellers; **compare before ordering, AliExpress is not obviously the bargain here** (unlike the lidar).
+
+**Take the XVF3800, not the XVF3000 (ReSpeaker v2.0): XMOS has issued an EOL notice on the
+XVF3000** and recommends the XVF3800 for new designs. Do not build Didier's conversation on a
+dying chip.
+
+Why an array and not a "good microphone":
+
+- **Distance.** The social zone is 1.2–3.6 m. A lavalier or desktop mic gives Whisper nothing
+  usable at 3 m in a noisy street. This is a **far-field** array (4 mics, hardware beamforming,
+  ~5 m pickup).
+- **Echo.** Hardware **AEC** — the only thing that makes barge-in possible.
+- **Speaker attribution.** The study itself says this needs a mic array. The XVF3800 exposes
+  **DoA** (`AEC_AZIMUTH_VALUES` via the `respeaker/reSpeaker_XVF3800_USB_4MIC_ARRAY` host_control
+  tool), to be cross-referenced with the camera's person azimuth.
+- **Zero CPU.** All DSP runs on its own XMOS chip; it presents as a plain **UAC 2.0** sound card
+  (no driver, works as-is in the Docker container with `/dev/snd` already mounted). The Pi 5's CPU
+  stays free for Whisper and Piper.
+
+Traps, in order of how much they would cost to discover late:
+
+- **USB, NEVER an I2S HAT.** Seeed's cheaper ReSpeaker HATs (4-Mic, 6-Mic Circular) need the
+  out-of-tree `seeed-voicecard` kernel driver — historically broken at every kernel bump, and
+  especially painful on Pi 5. They also squat the GPIO header and push beamforming back onto *our*
+  CPU. €40 saved against permanent maintenance debt.
+- **Buy the right variant.** The listing also sells a **XIAO / ESP32** version — a dev board driven
+  by a microcontroller, *not* meant to plug into a Pi over USB. Take the cased **USB Mic Array**.
+- **Hardware AEC needs the far-end reference signal**, which means the TTS output must go **through
+  the ReSpeaker's own output** and on to the mixing desk. Today Piper plays out via the C-Media
+  adapter. **Without that re-routing, the AEC does nothing.** This is a rewiring decision, not a
+  config flag.
+- **Half-duplex is free and must be done regardless** (mute the mic while Didier speaks). It kills
+  the "answers himself" failure mode on its own, with no hardware at all. The AEC only buys
+  *barge-in* (interrupting the robot) — a luxury, not a safety.
+
+### Mounting (design constraints, decided 2026-07-13)
+
+The cased array is a ~13 × 14 × 5 cm puck, 300 g. How it is fixed decides whether it works at all:
+
+- **On the BODY, not the head — and this is the non-obvious one.** The array has a fixed 0°
+  reference direction, and its DoA is expressed in *its own* frame. Mounted on the head, that frame
+  **rotates with the gaze**, so every azimuth would have to be composed with the live neck angle.
+  Mounted on the torso, the frame is fixed and the DoA is directly usable. Body mounting also keeps
+  the mic away from the neck/eye servos (the loudest structure-borne noise sources at standstill)
+  and avoids yet another cable flexing across a moving joint.
+- **Decouple it mechanically. A rigid bolt-down is the classic mistake.** Screwed hard to a 50 kg
+  wood/metal frame carrying 250 W brushless motors and servos, the array picks up **structure-borne**
+  noise — motor whine, servo gear chatter — which no beamformer can remove, because it does not
+  arrive through the air. Mount on silicone/neoprene grommets or foam standoffs (a poor man's shock
+  mount); nylon screws, deliberately **not** overtightened.
+- **Clear acoustic path, mic plane roughly horizontal.** The 4 capsules sit in a circle on the top
+  face and the DoA depends on that geometry. Burying the puck behind a grille, a fabric, or in a
+  cavity kills the beamforming and the DoA (cavity resonance). It needs to *see* the air.
+- **Note the mounting angle.** Whatever rotation you bolt it at becomes a **fixed offset** on every
+  DoA reading. Measure it once, write it in the config — do not discover it during a show.
+- **As far as possible from the speakers.** Physical separation does more for echo than any
+  algorithm; the AEC then only has to clean up what is left.
+- **Height ~1.2–1.5 m** (upper torso), aimed at people's heads, not at their knees.
+- Its **12-LED ring shows the DoA** — potentially a listening signal for the public, but the LED
+  face already plays that role; do not let it contradict the face.
+
 ## Devices
 All motors are driven by an I2C PCA9685 PWM board attached to the Raspberry Pi 4, reducing wiring complexity and electrical load on the Pi.
 ![PCA9685 PWM driver](../../docs/pictures/consumable-parts/PCA9685.png)
