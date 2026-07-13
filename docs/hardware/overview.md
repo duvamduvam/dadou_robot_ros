@@ -64,16 +64,23 @@ Open points, to settle **before** any purchase or migration:
   - The **tilt axis must sit behind the lens plane**. Putting it at the optical centre (the elegant
     choice) pushes the yoke uprights in front of the lens, and they enter the frame — 67.6° against
     a 65° half-angle.
-  - **The board is protected by a tray, never by a front cover.** The perimeter wall stops exactly
-    at the board's front plane, so every point of it lies *behind* the lens's entrance pupil and is
-    unimageable whatever the real optics turn out to be — safe by construction rather than by
-    margin. The front stays open, as on any camera housing.
+  - **The board is fully enclosed — back, edges and front — and only the lens sticks out.** The
+    rule that makes a front cover safe at 130°: rays entering the lens only ever travel *up and
+    outward* from the front element, never back down, so any obstruction whose face stays **below
+    the top of the lens barrel**, with an aperture wider than the barrel, hides inside the shadow
+    the barrel already casts and cannot vignette. That is a proof, not a margin — and it is enforced
+    by an `assert(front_t + cap_lip <= barrel_h)` that has been tested to actually fire and produce
+    *no geometry*, so a vignetting cover cannot be exported. Consequence: no screw passes through
+    the board and no screw head stands in front of it (the cover's two countersunk screws sit on
+    posts outside the board's footprint).
   - The ribbon gets **two zip-tie anchors** so the slack loop flexes with the neck instead of the
     connector — an FPC that cracks at the connector fails *silently*.
 
   Its module dimensions are the *official Pi Camera v2* footprint and **must be re-measured** on the
-  actual clone before printing. One thing is deliberately left to be judged on a real photo rather
-  than by calculation: the M2 screw heads are the only relief standing proud of the wall.
+  actual clone before printing — three of them are now load-bearing: the lens-holder clearance
+  diameter, the **barrel height** (which is what authorises the cover at all), and the board
+  thickness. Every other dimension is derived from them, so correcting a measurement recomputes the
+  whole part.
 - **Two cameras are possible.** The Pi 5 has two CSI/DSI connectors, both usable as cameras at
   once (`cam0` / `cam1`; libcamera can even software-sync their frames). Use case not decided —
   stereo depth would be a project of its own (calibration + rectification), whereas wide+narrow
