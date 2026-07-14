@@ -113,9 +113,16 @@ Le châssis est électriquement hostile : deux moteurs **à balais** de 250 W (l
 **arcent** en permanence), un ampli de sono, des rubans LED à fronts raides. On n'attaque pas
 un GPIO en direct là-dedans.
 
-**Sur le PCB final : un PC847** (= quatre PC817 dans un seul DIP-16). Un composant, quatre
-canaux, ~0,30 €. Surtout **pas** un module tout fait empilé en mezzanine : deux cartes, deux
-fixations, un connecteur de plus à vibrer.
+**Quatre PC817 individuels (DIP-4), sur supports tulipe.** Le PC847 (quatre PC817 dans un seul
+DIP-16) a d'abord été retenu, puis écarté : à 7 centimes la puce (lot de 20 pour 1,33 €), des
+DIP-4 séparés se remplacent **un par un** dans une loge, sans fer à souder — même logique que le
+Pico sur supports. Un PC847 grillé, c'est trois canaux sains jetés avec le quatrième. Le seul coût
+est un peu de surface de carte : sans objet ici.
+
+Surtout **pas** un module tout fait empilé en mezzanine : deux cartes, deux fixations, un
+connecteur de plus à vibrer. Et le module d'établi devient inutile lui aussi — avec les puces
+nues, **c'est nous qui choisissons la résistance série**, donc ce qu'on valide sur l'établi est
+*exactement* ce qui partira sur le PCB. (Le module Keshy, lui, a une résistance d'entrée inconnue.)
 
 **L'ISO1540 existant n'est PAS réutilisable** (la question s'est posée). C'est un isolateur
 **I²C** bidirectionnel : ses deux canaux sont pris (SDA + SCL), ce n'est pas le bon type de
@@ -269,8 +276,12 @@ borniers, même ordre des capteurs). Ainsi le firmware et le nœud ROS écrits �
 *exactement* ceux qui tourneront sur le PCB : la vérification exécute le même code que la
 prod.
 
-Pour cette étape uniquement, le **module optocoupleur PC817 4 canaux tout fait** (~1 €,
-entrée 3,6–30 V) est le bon choix — c'est un outil de mise au point, pas une pièce du robot.
+Les composants sont les **mêmes qu'au PCB final** (PC817 nus + résistances choisies), pas un
+module tout fait : ce qu'on valide sur l'établi est alors *exactement* ce qui sera gravé.
+
+Le schéma KiCad de cette carte est fait et vérifié :
+`~/Nextcloud/dev/didier/pcb/kicad/wheel-odometry/` (ERC 0 violation, netlist contrôlée,
+plan de câblage plaque à trous dans son `DESIGN.md`).
 
 ### Étape 3 — Robot, ROUES HORS SOL, protocole caméra
 
@@ -303,19 +314,20 @@ physiquement sur le robot.
 | Pièce | Qté | Prix unitaire |
 |---|---|---|
 | Capteur inductif `LJ12A3-4-Z/BX` **NPN** (TENSTAR ROBOT) | 6 (4 + 2 rechange) | 2,35 € |
-| Module optocoupleur PC817 4 canaux, entrée 3,6–30 V (Keshy) — *mise au point seulement* | 2 | 0,92 € |
+| **PC817C DIP-4**, lot de 20 (TriArk) — sert au prototype ET au PCB | 1 lot | 1,33 € |
+| Supports tulipe DIP-4 | 4+ | qques centimes |
 | Raspberry Pi Pico | 2 | ~5 € |
 | Plaque à trous, borniers à vis 3 pôles, résistances 10 kΩ | — | qques € |
 
-⚠️ **Grouper la commande** : les capteurs et les modules viennent de vendeurs différents, donc
-deux ports (3,59 € chez Keshy — soit quatre fois le prix de la carte). Viser les seuils de
-livraison gratuite, sinon le port coûtera plus cher que les composants.
+⚠️ **Grouper la commande** : capteurs et optocoupleurs viennent de vendeurs différents, donc deux
+ports. Viser les seuils de livraison gratuite (10 € chez chacun), sinon le port coûtera plus cher
+que les composants.
 
 ### PCB final (étape 4)
 
 | Pièce | Qté |
 |---|---|
-| **PC847** (quadruple PC817, DIP-16) | 1 |
+| **PC817C** (DIP-4) + support tulipe | 4 (+ rechanges) |
 | Résistances 2,2 kΩ (série LED, calibrées 12 V) | 4 |
 | Résistances 10 kΩ (rappel vers 3,3 V) | 4 |
 | Raspberry Pi Pico + supports tulipe | 1 |
