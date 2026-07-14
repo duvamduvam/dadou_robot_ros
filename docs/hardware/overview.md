@@ -402,8 +402,10 @@ drives it directly), 4 mm sensing distance, 500 Hz. ~2.35 EUR each on AliExpress
   kill the microcontroller. Check the variant in the cart, not in the title.
 - **Measure before wiring.** On a 2 EUR part, do not bet the Pico on the datasheet: power the sensor
   alone and check with a multimeter that the black wire never rises to 24 V. Then opto-isolate anyway
-  (**PC817 module, ~2 EUR**) — two brushed 250 W motors whose brushes arc, a PA amplifier and LED
-  strips with fast edges make this chassis a hostile place for a bare GPIO.
+  (**four bare PC817C in DIP-4**, on turned-pin sockets — *not* a ready-made module: with bare chips
+  we choose the series resistor ourselves, so what is validated on the bench is *exactly* what gets
+  etched) — two brushed 250 W motors whose brushes arc, a PA amplifier and LED strips with fast
+  edges make this chassis a hostile place for a bare GPIO.
 - With a pull-up to 3.3 V, **metal detected = logic LOW**. The logic is inverted.
 - 500 Hz is ample: a 250 mm wheel with 24 slots at 1 m/s produces **30 Hz**. Factor-15 margin.
 
@@ -435,9 +437,9 @@ Bill of materials (~25 EUR plus the discs):
 
 | Part | Qty | Unit |
 |---|---|---|
-| `LJ12A3-4-Z/BX` inductive sensor, **NPN** | 6 (4 + 2 spare) | 2.35 EUR |
+| [`LJ12A3-4-Z/BX` inductive sensor, **NPN**](https://fr.aliexpress.com/item/32483279890.html) — ⚠️ the same listing also sells the **PNP** `/AX`: pick `BX` **in the cart** | 6 (4 + 2 spare) | 2.35 EUR |
 | Raspberry Pi Pico | 1 | ~5 EUR |
-| **PC817C** (DIP-4) + turned-pin socket — *on the board, not a stacked module* | 4 (+ spares) | 1.33 EUR / 20 |
+| [**PC817C** (DIP-4), pack of 20 (TriArk)](https://fr.aliexpress.com/item/1005006281381268.html) + turned-pin sockets — ⚠️ the listing's title says "DIP-8"; **it is wrong**, the photo shows a 4-pin SHARP. *On the board, never a stacked module.* | 4 (+ spares) | 1.33 EUR / 20 |
 | 10 kOhm pull-up resistors | 4 | - |
 | Laser-cut steel phonic disc, 3 mm | 2 | ~10 EUR |
 | Split shaft collar, 20 mm bore | 2 | a few EUR |

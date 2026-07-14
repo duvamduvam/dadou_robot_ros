@@ -362,7 +362,8 @@ est un peu de surface de carte : sans objet ici.
 Surtout **pas** un module tout fait empilé en mezzanine : deux cartes, deux fixations, un
 connecteur de plus à vibrer. Et le module d'établi devient inutile lui aussi — avec les puces
 nues, **c'est nous qui choisissons la résistance série**, donc ce qu'on valide sur l'établi est
-*exactement* ce qui partira sur le PCB. (Le module Keshy, lui, a une résistance d'entrée inconnue.)
+*exactement* ce qui partira sur le PCB. (Un module tout fait, lui, a une résistance d'entrée
+inconnue : on validerait sur l'établi autre chose que ce qu'on grave.)
 
 **L'ISO1540 existant n'est PAS réutilisable** (la question s'est posée). C'est un isolateur
 **I²C** bidirectionnel : ses deux canaux sont pris (SDA + SCL), ce n'est pas le bon type de
