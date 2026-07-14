@@ -42,7 +42,7 @@ Ce qu'il y a réellement, de l'extérieur vers l'intérieur :
 ```
   pneu │ jante │ COURONNE 428 │ écrou M20 │ FILETAGE NU │ ÉTRIER alu + ROULEMENT │ châssis
                                    ↑            ↑
-                        l'ENTRAÎNEUR      > 35 mm de tige filetée libre
+                        l'ENTRAÎNEUR      ~30 mm de tige filetée libre
                         (déjà en place)
 ```
 
@@ -54,14 +54,15 @@ Ce qu'il y a réellement, de l'extérieur vers l'intérieur :
   disque serré dessus n'aurait mesuré rigoureusement **rien**.
 - **La chaîne est marquée 428** → pas de **12,7 mm** confirmé (l'étude le supposait).
 - La **couronne est boulonnée à la jante par 3 boulons**, freinés au fil.
-- Il reste **plus de 35 mm de filetage nu** entre l'étrier et l'écrou de moyeu.
+- Il reste **~30 mm de filetage nu** au-delà de l'écrou de moyeu (et de la visserie peut
+  être ajoutée si besoin).
 
 Cette tige filetée n'est pas une contrainte : c'est un **cadeau**. Un filetage est une interface
 de fixation gratuite, réglable et démontable — voir §3 bis.
 
 ⚠️ **Mais le M20 coince** : un écrou M20 fait **16 mm de haut**. Serrer le disque entre deux
-écrous *ajoutés* coûterait 2 × 16 + 6 (disque) = **38 mm** — plus que les 35 disponibles. C'est
-cette cote, et elle seule, qui impose le montage en **coiffe** du §3 bis.
+écrous *ajoutés* coûterait 2 × 16 + 10 (disque) = **42 mm** — bien plus que les ~30 disponibles.
+C'est cette cote, et elle seule, qui impose le montage en **coiffe** du §3 bis.
 
 ### La garde sous la caisse : 30 mm — et le piège qu'elle tend
 
@@ -69,9 +70,9 @@ Mesuré le 14/07 : **il n'y a que 30 mm entre l'axe et le bas de caisse.** De qu
 disque mort-né (celui qu'on avait dessiné faisait 129 mm de Ø, il aurait tapé au premier tour).
 
 Sauf que **cette garde ne vaut que sous la caisse, à l'aplomb de l'étrier**. Plus loin le long
-de l'axe, côté roue, la caisse s'arrête — et **la couronne le prouve** : elle fait ~90 mm de
-rayon et elle tourne déjà librement, tous les jours. Il y a **plus de 20 mm de créneau** entre
-le bord de la caisse et la face de la couronne.
+de l'axe, côté roue, la caisse s'arrête — et **la couronne le prouve** : elle fait 55 mm de
+rayon, presque le double de la garde, et elle tourne déjà librement, tous les jours. Il y a
+**30 mm de créneau** entre le bord de la caisse et la face de la couronne.
 
 D'où la géométrie retenue, qui n'est pas intuitive et mérite d'être retenue telle quelle :
 
@@ -79,9 +80,9 @@ D'où la géométrie retenue, qui n'est pas intuitive et mérite d'être retenue
         │ caisse ▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓│
         │  30 mm ↕              │← la caisse s'arrête ici
    ─────┼───────────────────────┼──────── axe M20 ────────
-        │ contre-écrou │ COIFFE │ DISQUE R=78 │ écrou │ COURONNE R≈90
-        │   (sous la caisse :   │  (dans le créneau :   │
-        │    R=22 < 30, ça passe)│  le grand rayon y est permis)
+        │ contre-écrou │ COIFFE │ DISQUE R=78 │ écrou │ COURONNE R=55
+        │   (sous la caisse :    │ (dans le créneau de 30 :
+        │    R=22 < 30, ça passe) │  le grand rayon y est permis)
 ```
 
 **Le grand disque va du côté de la couronne, pas du côté de la caisse.** Seule la coiffe
