@@ -107,7 +107,7 @@ Roue Ø 250 mm (à confirmer), 24 lumières, 1 m/s → **30 Hz**. Le capteur tie
 d'un facteur 15 : même le capteur le moins cher est très largement assez rapide. Inutile de
 payer plus.
 
-## 5. L'isolation — DÉCIDÉ : PC847 sur la carte
+## 5. L'isolation — DÉCIDÉ : 4 PC817 sur supports, sur la carte
 
 Le châssis est électriquement hostile : deux moteurs **à balais** de 250 W (les balais
 **arcent** en permanence), un ampli de sono, des rubans LED à fronts raides. On n'attaque pas
