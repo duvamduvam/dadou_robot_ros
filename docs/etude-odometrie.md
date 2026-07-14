@@ -63,6 +63,34 @@ de fixation gratuite, réglable et démontable — voir §3 bis.
 écrous *ajoutés* coûterait 2 × 16 + 6 (disque) = **38 mm** — plus que les 35 disponibles. C'est
 cette cote, et elle seule, qui impose le montage en **coiffe** du §3 bis.
 
+### La garde sous la caisse : 30 mm — et le piège qu'elle tend
+
+Mesuré le 14/07 : **il n'y a que 30 mm entre l'axe et le bas de caisse.** De quoi croire le
+disque mort-né (celui qu'on avait dessiné faisait 129 mm de Ø, il aurait tapé au premier tour).
+
+Sauf que **cette garde ne vaut que sous la caisse, à l'aplomb de l'étrier**. Plus loin le long
+de l'axe, côté roue, la caisse s'arrête — et **la couronne le prouve** : elle fait ~90 mm de
+rayon et elle tourne déjà librement, tous les jours. Il y a **plus de 20 mm de créneau** entre
+le bord de la caisse et la face de la couronne.
+
+D'où la géométrie retenue, qui n'est pas intuitive et mérite d'être retenue telle quelle :
+
+```
+        │ caisse ▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓│
+        │  30 mm ↕              │← la caisse s'arrête ici
+   ─────┼───────────────────────┼──────── axe M20 ────────
+        │ contre-écrou │ COIFFE │ DISQUE R=78 │ écrou │ COURONNE R≈90
+        │   (sous la caisse :   │  (dans le créneau :   │
+        │    R=22 < 30, ça passe)│  le grand rayon y est permis)
+```
+
+**Le grand disque va du côté de la couronne, pas du côté de la caisse.** Seule la coiffe
+(R = 22 mm) passe sous la caisse, où elle tient sans peine dans les 30.
+
+⚠️ Conséquence à ne pas rater au montage : **rien ne doit dépasser côté couronne**. Les écrous
+des cibles sont donc **noyés dans des lamages**, et c'est ce qui fixe l'épaisseur du disque
+(10 mm). Une vis qui dépasse de ce côté-là tape la couronne.
+
 ## 3. La cible — DÉCIDÉ : roue phonique, lue par la FACE
 
 Un **disque** serré entre deux écrous sur la tige filetée de l'axe (voir §2), portant des **cibles
@@ -148,9 +176,12 @@ D'où deux remparts :
 
 Un inductif ne voit **que le métal** — le plastique lui est parfaitement transparent. Le disque
 imprimé n'est donc pas un pis-aller : c'est un **porte-cibles**. Ce que le capteur voit, ce sont
-**12 têtes de vis M8 en acier** (Ø 15 mm sur angles ≥ 3 × Sn, la règle des inductifs), montées
-tête côté capteur. Imperdables, épaisses, et elles ne se décollent pas sous vibrations — ce que
-des rondelles collées feraient tôt ou tard.
+**15 têtes de vis M8 en acier** (Ø 15 mm sur angles ≥ 3 × Sn, la règle des inductifs), montées
+tête côté capteur, **écrou noyé côté couronne**. Imperdables, épaisses, et elles ne se décollent
+pas sous vibrations — ce que des rondelles collées feraient tôt ou tard.
+
+Écrous **normaux + frein-filet**, pas des nylstop : un nylstop M8 fait 8 mm de haut et ne
+rentrerait pas dans le lamage.
 
 Conséquence heureuse : **la géométrie validée en plastique est exactement celle qu'on gravera
 dans l'acier**. Le prototype n'est pas une approximation du disque final, il en est le plan.
@@ -349,20 +380,23 @@ emballement.
 
 ## 7. Inconnues à lever
 
-Relevé du 14/07 — **quatre inconnues levées**, il en reste **trois**, dont une seule bloque :
+Relevé du 14/07 — **six inconnues levées**, il en reste **trois**, et **plus aucune ne bloque** :
 
 | Cote | Statut | Valeur |
 |---|---|---|
 | Pas de chaîne | ✅ levé (marquage 428) | 12,7 mm |
-| Ø de l'axe + écrou | ✅ **mesuré au mètre** | **tige filetée M20**, écrou 30 sur plats / 16 de haut |
+| Ø de l'axe + écrou | ✅ mesuré au mètre | **tige filetée M20**, écrou 30 sur plats / 16 de haut |
 | Filetage nu sur l'axe | ✅ mesuré | **> 35 mm** |
-| L'axe tourne-t-il avec la roue ? | ✅ **vérifié au feutre** | **oui** — postulat de tout le montage |
-| **Garde axe → châssis** | ⚠️ **BLOQUANTE** | *hypothèse 70 mm* — plafonne le rayon du disque, donc la résolution |
-| Ø extérieur du pneu | à mesurer | *hypothèse 250 mm* — sert à convertir les ticks en mètres, rien d'autre |
+| L'axe tourne-t-il avec la roue ? | ✅ vérifié au feutre | **oui** — postulat de tout le montage |
+| Garde axe → bas de caisse | ✅ mesuré | **30 mm** — ne contraint que la coiffe (R=22), pas le disque |
+| Créneau caisse ↔ couronne | ✅ relevé | **> 20 mm** — c'est là que tourne le grand disque |
+| Rayon intérieur de la chaîne | à mesurer | *hypothèse 85 mm* — le disque (R=78) doit rester **en dedans**, sinon il la fouette |
+| Ø extérieur du pneu | à mesurer | *hypothèse 250 mm* — convertit les ticks en mètres, rien d'autre |
 | Ø et entraxe des vis du châssis | à mesurer | *hypothèse M6 / 40 mm* — interface du support capteurs |
 
-Les deux dernières ne bloquent rien : le pneu n'intervient que dans une constante logicielle,
-et le support est fait de lumières oblongues justement pour absorber l'erreur.
+Aucune des trois restantes ne bloque : le pneu n'intervient que dans une constante logicielle,
+le support est fait de lumières oblongues pour absorber l'erreur, et le rayon de chaîne ne fait
+que **plafonner** le disque (on peut le réduire sans rien casser d'autre que la résolution).
 
 Contrainte de dimensionnement, inchangée : **pas de lecture ≥ 2 × le diamètre du nez** (M12 →
 ≥ 24 mm), sinon le capteur voit deux cibles à la fois et ne distingue plus rien. S'y ajoutent
@@ -370,16 +404,20 @@ deux règles d'inductif que le §3 passait sous silence : **cible ≥ 3 × Sn** 
 entre cibles ≥ 3 × Sn** — sans vide suffisant, le capteur reste collé à l'état « métal » et le
 train d'impulsions disparaît purement et simplement.
 
-Ces quatre contraintes sont **codées en `assert()`** dans `plans/odometrie/parametres.scad` :
-une géométrie fausse **refuse de compiler**, au lieu de produire un STL qu'on ne découvrirait
-mauvais que sur le robot.
+Ces contraintes — plus la garde sous la caisse, le créneau, et le rayon de chaîne — sont toutes
+**codées en `assert()`** dans `plans/odometrie/parametres.scad` : une géométrie fausse **refuse
+de compiler**, au lieu de produire un STL qu'on ne découvrirait mauvais que sur le robot.
 
-Géométrie retenue (avec les hypothèses ci-dessus) : **12 cibles à R = 52 mm**, disque Ø 129 mm,
-pas de lecture 27,2 mm (métal 15 / vide 12,2), entraxe des capteurs 37,5°.
-Après décodage ×4 : **16,4 mm de résolution au sol**. C'est moins que les 10 mm visés — la
-garde au châssis interdit un grand disque — mais cela reste largement suffisant pour nav2
-(l'EKF et le lidar corrigent) et correct pour asservir la vitesse à 20 Hz. Si la mesure #1
-donne plus de place, augmenter `R_LECTURE` et `N_CIBLES` : la résolution suit.
+**Géométrie retenue : 15 cibles à R = 65 mm**, disque **Ø 155 mm**, pas de lecture 27,2 mm
+(métal 15 / vide 12,2), entraxe des capteurs 30°.
+Après décodage ×4 : **13,1 mm de résolution au sol** — largement suffisant pour nav2 (l'EKF et
+le lidar corrigent) et correct pour asservir la vitesse à 20 Hz.
+
+Le contraste mérite d'être noté, parce qu'il justifie tout le §2 : un disque qu'on aurait
+résigné à tenir **sous** la caisse aurait été plafonné à R = 25 mm, donc à **4 cibles** — soit
+49 mm par front, avec lesquels on n'aurait même pas eu une impulsion par période de contrôle à
+20 Hz. **Inasservissable.** C'est le fait d'avoir cherché la place *ailleurs* — dans le créneau,
+là où la couronne tourne déjà — qui sauve le chantier.
 
 ## 8. Plan de mise en œuvre — par étapes, du sûr vers le risqué
 
