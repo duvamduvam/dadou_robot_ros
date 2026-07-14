@@ -371,6 +371,81 @@ and the mistake is not cosmetic:
 *MY1016Z 250 W brushed geared wheel motor. The image file is still named `brushless-motor.png` for
 history; the label on the motor itself reads `DC MOTOR`.*
 
+### Wheel odometry — chosen 2026-07-14, not yet purchased
+
+Filling the gap above. **Mechanics as they stand:** each wheel sits on a **20 mm steel axle**, driven
+by a **chain** whose sprocket is close to the wheel. That geometry rules some options in and others
+out.
+
+**The target: a phonic wheel, read on its FACE.** A steel disc, clamped on the 20 mm axle with a
+split collar, cut with radial slots; the sensor lies **horizontal, parallel to the axle**, facing the
+disc, and sees *steel / slot / steel / slot* go by. Two alternatives were rejected, and the reasons
+matter more than the conclusion:
+
+- **Reading the sprocket teeth radially** (sensor aimed at the rim from below) works and needs no new
+  part — but **the chain imposes the pitch** (12.7 mm). Such a tight pitch forces a small M8 sensor,
+  which only senses at 1.5-2 mm: a 1 mm air gap, for life, on a 50 kg machine that tours. On a disc
+  we *choose* the pitch (open it to 20-25 mm), so an M12 sensing at 4 mm fits and the gap becomes
+  forgiving. Flat-plate mounting is also far easier to align.
+- **Reading the chain itself**: same resolution (a chain advances exactly one pitch per tooth — there
+  is no free lunch), but the chain **whips** several mm against a 1.5 mm sensing range, so counts get
+  dropped. Worse, its links alternate outer/inner every *two* pitches: a sensor keyed on that pattern
+  silently halves the resolution. Fallback only, and then only on the taut run near the tangent
+  point, where the chain is geometrically pinned.
+
+**Sensor: `LJ12A3-4-Z/BX`** — M12 inductive proximity switch, **NPN NO**, 6-36 V DC (the 24 V rail
+drives it directly), 4 mm sensing distance, 500 Hz. ~2.35 EUR each on AliExpress (TENSTAR ROBOT).
+
+- **NPN, never PNP.** The `/BY` variant is PNP and hides in the same listing's colour selector. An
+  NPN open-collector output only *pulls to ground*, so a pull-up to the Pico's 3.3 V yields a clean
+  0/3.3 V signal even though the sensor runs on 24 V. A PNP would *push 24 V* into a 3.3 V GPIO and
+  kill the microcontroller. Check the variant in the cart, not in the title.
+- **Measure before wiring.** On a 2 EUR part, do not bet the Pico on the datasheet: power the sensor
+  alone and check with a multimeter that the black wire never rises to 24 V. Then opto-isolate anyway
+  (**PC817 module, ~2 EUR**) — two brushed 250 W motors whose brushes arc, a PA amplifier and LED
+  strips with fast edges make this chassis a hostile place for a bare GPIO.
+- With a pull-up to 3.3 V, **metal detected = logic LOW**. The logic is inverted.
+- 500 Hz is ample: a 250 mm wheel with 24 slots at 1 m/s produces **30 Hz**. Factor-15 margin.
+
+**Two sensors PER WHEEL, i.e. four in total.** Not one per wheel — three independent reasons, each
+sufficient on its own:
+
+- Each wheel needs its **own** count. A differential drive turns *because* the two wheels differ; one
+  shared measurement would erase exactly the information we are after.
+- **A single sensor cannot tell forward from backward.** It only sees metal go by; the pulse train is
+  identical in both directions. Two sensors offset along the read circle give **quadrature** —
+  whichever sees the slot first reveals the direction — and exploiting the four edges instead of two
+  **quadruples the resolution** for free.
+- Direction must be **measured per wheel**, never deduced from the PWM command. When Didier pivots on
+  the spot, one wheel runs *backwards* while the other runs forwards: assuming a common sign would
+  read a pivot as a straight line. And a 50 kg robot rolls back down a raked stage on its own.
+
+**Spacing gotcha:** a quarter-pitch is ~6 mm while an M12 body is 12 mm — the two sensors would
+physically collide. Space them **one pitch and a quarter**: the electrical phase is identical (it is
+a modulo), and the bodies fit.
+
+**Counting: a Raspberry Pi Pico (RP2040, ~5 EUR)**, not the Pi. Python on the Pi 4 will drop edges;
+the RP2040's PIO decodes quadrature in hardware, and the board doubles as an electrical buffer
+between a noisy 24 V chassis and the Pi. It publishes both wheels' counts over serial.
+
+Wiring: brown = +24 V, blue = ground (common with the Pico), black = signal. Route the cables **away
+from the motor and amplifier runs**; cross at 90 degrees where unavoidable.
+
+Bill of materials (~25 EUR plus the discs):
+
+| Part | Qty | Unit |
+|---|---|---|
+| `LJ12A3-4-Z/BX` inductive sensor, **NPN** | 6 (4 + 2 spare) | 2.35 EUR |
+| Raspberry Pi Pico | 1 | ~5 EUR |
+| PC817 opto-isolator module | 1 | ~2 EUR |
+| 10 kOhm pull-up resistors | 4 | - |
+| Laser-cut steel phonic disc, 3 mm | 2 | ~10 EUR |
+| Split shaft collar, 20 mm bore | 2 | a few EUR |
+
+Disc geometry (diameter, slot count, read radius, sensor spacing) is pending three measurements:
+**wheel diameter**, **free length on the axle**, **sprocket tooth count**. Study to be written up in
+`docs/etude-odometrie.md`.
+
 ### Arms, eyes and mouth servos
 The arms and mouth are controlled by ASME-MR 380 kg·cm continuous-rotation RC servos.
 ![ASME-MR servo](../../docs/pictures/consumable-parts/arm-motor.png)
