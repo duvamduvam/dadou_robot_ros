@@ -24,6 +24,7 @@ journal de bord illisible).*
 | Suivi de personne (roues) | validé sim 5/5, déployé, **SIM-ONLY** | — (attend ses verrous) | test scénique (1) PUIS protocole caméra (`direction_sign` inconnu) |
 | Gaze V1 + arbitrage actionneurs | validé RÉEL 12/07 ; arbitrage déployé sur les 2 Pi | vérif visuelle : gaze ON pendant une séquence (la tête ne doit plus trembler) | — |
 | Odométrie des roues (encodeurs) | plan DÉCIDÉ 14/07 ; **pièces 3D dessinées** ; rien acheté | commander les capteurs + imprimer le banc d'établi | **1 cote bloquante** : garde axe→châssis (§7) |
+| Chaîne de sécurité matérielle (main-carrier) | schéma révisé 14/07 ; **contrat figé en tests sur la branche `chaine-securite`** | router la bande sécurité (122 chevelus) + note de sécurité docs/ | carte non fabriquée ; encombrement 195×150 à confirmer |
 | Fond de tiroir | — | voir §Fond de tiroir | — |
 
 ## 0. Conversation — protocole physique chat_node V2
@@ -112,6 +113,36 @@ les GPIO libres sur la carte principale restent à vérifier.
 **Aval** : `ros2_control` / `diff_drive_controller`, EKF (encodeurs + IMU pour
 le yaw), nav2. Le BNO055 existe déjà dans le code (`robot/move/bno_055_extended.py`)
 mais n'est appelé nulle part en prod — vérifier s'il est encore sur le robot.
+
+## Chaîne de sécurité matérielle (carte main-carrier)
+
+**Le trou (découvert 14/07)** : l'arrêt d'urgence de Didier est 100 % logiciel.
+`wheels_node.stop()` écrit le PWM **par le bus I²C** — si le bus se fige ou si
+le node meurt, le PCA9685 garde sa dernière consigne et les roues continuent,
+pendant que le deadman 400 ms croit avoir freiné. Le protocole caméra du 04/07
+a validé la mort de la chaîne *amont*, jamais celle de `wheels_node` lui-même.
+
+**La parade (schéma main-carrier révisé 14/07, commit KiCad 4484d54)** :
+watchdog matériel 74HC123 (250 ms, réarmé par un battement GPIO26 émis
+seulement APRÈS chaque écriture I²C réussie) → ET par diodes avec la boucle
+coup-de-poing → bascule D 74HC74 à `/CLR` dominant (maintenir ARM ne réarme
+pas) → OE du PCA9685 roues. Coup-de-poing = catégorie 0 (relais 40 A,
+purement électromécanique). Les deux PCA9685 sont séparés (roues 0x40,
+servos 0x41 à venir) pour que couper les roues ne fige plus le visage.
+
+**Contrat figé en tests — branche `chaine-securite`** (la carte n'existe pas
+encore ; `main` reste le reflet du robot réel) : modèle exécutable de la carte
+(`robot/tests/unit/safety_chain_model.py`) branché sur le **vrai** code
+`Wheels`, 11 tests (`test_safety_chain.py`) couvrant mort du node, bus figé,
+`/CLR` dominant, coup-de-poing, et LE piège du réarmement : sans remise à zéro
+des registres, ARM rejoue l'ancien PWM. Les helpers `drive()`/`try_stop()` du
+fichier de tests SONT la spec du futur node. Merger la branche quand la carte
+sera fabriquée et le node écrit.
+
+**Verrous** : bande sécurité du PCB placée mais **pas routée** (122 chevelus,
+volontaire) ; encombrement 195×150 mm à confirmer dans le coffret avant
+Gerbers ; le node (battement + `/e_stop` depuis ESTOP_SENSE GPIO23) n'existe
+pas — volontaire aussi, les tests d'abord.
 
 ## Interface web / télé-présence
 
