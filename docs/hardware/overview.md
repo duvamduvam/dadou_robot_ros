@@ -437,10 +437,12 @@ Bill of materials (~25 EUR plus the discs):
 |---|---|---|
 | `LJ12A3-4-Z/BX` inductive sensor, **NPN** | 6 (4 + 2 spare) | 2.35 EUR |
 | Raspberry Pi Pico | 1 | ~5 EUR |
-| PC817 opto-isolator module | 1 | ~2 EUR |
+| **PC847** (quad PC817, DIP-16) — *on the board, not a stacked module* | 1 | ~0.30 EUR |
 | 10 kOhm pull-up resistors | 4 | - |
 | Laser-cut steel phonic disc, 3 mm | 2 | ~10 EUR |
 | Split shaft collar, 20 mm bore | 2 | a few EUR |
+
+Full study, staged rollout and PCB brief: `docs/etude-odometrie.md`.
 
 Disc geometry (diameter, slot count, read radius, sensor spacing) is pending three measurements:
 **wheel diameter**, **free length on the axle**, **sprocket tooth count**. Study to be written up in

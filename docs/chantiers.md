@@ -23,6 +23,7 @@ journal de bord illisible).*
 | Conversation en déambulation (intention + contenu) | plan DÉCIDÉ (grillé 12/07) ; D0 outillage + personas commutables FAITS 13/07 | campagne D0 (robot allumé) ; textes personas à valider avec David | D1+ ⟸ protocole physique chat_node V2 (0) ; D6 ⟸ verrous roues |
 | Suivi de personne (roues) | validé sim 5/5, déployé, **SIM-ONLY** | — (attend ses verrous) | test scénique (1) PUIS protocole caméra (`direction_sign` inconnu) |
 | Gaze V1 + arbitrage actionneurs | validé RÉEL 12/07 ; arbitrage déployé sur les 2 Pi | vérif visuelle : gaze ON pendant une séquence (la tête ne doit plus trembler) | — |
+| Odométrie des roues (encodeurs) | plan DÉCIDÉ 14/07 ; rien acheté | étape 1 : banc d'établi (réglette + rondelles) | 3 cotes à mesurer sur le robot (§7 de l'étude) |
 | Fond de tiroir | — | voir §Fond de tiroir | — |
 
 ## 0. Conversation — protocole physique chat_node V2
@@ -50,6 +51,41 @@ hors sol ne l'a validé qu'en marche avant symétrique).
 
 C'est le verrou de : roues web au réel (chantier web), suivi de personne au
 réel.
+
+## Odométrie des roues
+
+Plan : [`etude-odometrie.md`](etude-odometrie.md) (décidé 2026-07-14 — ne pas
+re-trancher §3 à §6 ; inconnues §7).
+
+**Le trou** : les roues n'ont AUCUN retour de rotation. Le moteur est un MY1016Z
+**à balais** (la fiche matériel disait « brushless » — faux, corrigé le 14/07),
+donc pas de capteurs Hall à dériver, et le SmartDrive40 n'expose aucune sortie
+tachy. Conséquence : `/cmd_vel` est en **boucle ouverte** (des m/s qui sont du
+PWM déguisé), et il n'y a pas de TF `odom` → `base_link`. C'est le verrou de
+`ros2_control` ET de nav2. Ni le lidar ni la caméra ne le comblent.
+
+**La solution retenue** : roue phonique (disque acier fendu, serré sur l'axe
+Ø 20) lue par la FACE avec deux capteurs inductifs `LJ12A3-4-Z/BX` (M12, NPN,
+12 V) par roue → quadrature → PC847 → Pico (PIO) → USB → nœud ROS. Carte montée
+**côté Pi**, pas près des roues (le signal 12 V à collecteur ouvert encaisse la
+distance ; le 3,3 V logique, non).
+
+**Prochaine action — étape 1, sans robot, zéro risque** : banc d'établi. Une
+chute de bois + des rondelles d'acier vissées tous les 25 mm, passée à la main
+devant deux capteurs. Ça valide détection, entrefer, logique inversée,
+quadrature et **le sens** (on fait aller-retour la réglette), et tout le
+firmware Pico + le nœud ROS se déboguent là.
+
+Puis : étape 2 carte à trous au brochage définitif → étape 3 robot **roues hors
+sol** + protocole caméra (on mesurera enfin la vraie vitesse pour un PWM donné,
+première mesure objective du chemin roues) → étape 4 seulement, le PCB KiCad.
+
+**Verrou** : trois cotes à mesurer avant de dimensionner le disque — diamètre
+des roues, place libre sur l'axe, nombre de dents du pignon (+ pas de chaîne).
+
+**Aval** : `ros2_control` / `diff_drive_controller`, EKF (encodeurs + IMU pour
+le yaw), nav2. Le BNO055 existe déjà dans le code (`robot/move/bno_055_extended.py`)
+mais n'est appelé nulle part en prod — vérifier s'il est encore sur le robot.
 
 ## Interface web / télé-présence
 
