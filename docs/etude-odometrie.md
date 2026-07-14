@@ -261,18 +261,47 @@ roues. Les router **loin des câbles moteur et ampli** ; croiser à 90° si iné
 Python sur le Pi 4 perdrait des fronts. Le **PIO du RP2040 décode la quadrature en
 matériel**, sans faute, et la carte sert au passage de tampon électrique.
 
-### Lien Pico ↔ Pi : USB
+### Lien Pico ↔ Pi : UART — DÉCIDÉ le 2026-07-14 (l'USB était le premier choix)
 
-Un câble USB court : alimentation et données dans le même fil, `/dev/ttyACM0` côté Pi.
+**J6, 4 broches : `+5V` · `TX` · `RX` · `GND`.** Le Pico est alimenté par le rail 5 V du robot
+via une Schottky (D13) sur `VSYS`. L'USB **reste branchable**, mais seulement pour flasher le
+Pico à l'atelier : il ne porte plus le lien opérationnel.
 
-- **Figer le nom** par une règle udev sur le numéro de série → `/dev/didier-odom`, passé au
-  conteneur robot dans le `docker-compose` (déployé par Ansible comme le reste).
-- **Prévoir 3 pastilles UART sur le PCB** : ça coûte zéro, et si l'USB s'avère capricieux en
-  tournée (le micro-USB du Pico est son point faible), on bascule sans refaire la carte.
-- **Surtout pas d'I²C** : ce bus est celui des actionneurs, il est isolé par l'ISO1540, et il
-  a déjà produit un incident (`docs/incidents/2026-07-13-glitch-visage-driver-led.md`). Y
-  ajouter un participant imposerait de repasser le protocole caméra, pour un capteur en
-  lecture seule.
+Pourquoi ce revirement : un connecteur **micro-USB sur un châssis de 50 kg qui part en tournée**
+est le point faible du montage, et le nom du périphérique (`/dev/ttyACM0` ou `1`…) est une
+loterie. L'UART donne un chemin fixe et un bornier qui ne se déboîte pas.
+
+**La Schottky D13** aiguille le 5 V : le rail du robot entre par `VSYS`, mais ne peut pas
+*remonter* dans le port USB du PC quand on flashe. Montage prescrit par la fiche du Pico ;
+vérifié sur la netlist (`VBUS` reste isolée de `VSYS`).
+
+### ⚠️ L'I²C est INTERDIT — et ce n'est pas une question de procédure
+
+La question s'est posée (« l'USB me gêne, peut-on faire de l'I²C ? »). La réponse est non, et la
+raison est un **scénario d'emballement**, pas une contrainte administrative :
+
+`wheels_node.stop()` **écrit le PWM par le bus I²C** (`robot/actions/wheels.py` → PCA9685). Un
+esclave I²C qui plante en tenant SDA à la masse **fige le bus entier**. Enchaînement :
+
+> bus mort → `stop()` ne peut plus écrire → **le PCA9685 conserve sa dernière consigne** → les
+> roues continuent de tourner.
+
+Le deadman de 400 ms s'exécuterait, croirait avoir arrêté le robot, et n'aurait rien arrêté. Le
+Pico serait le **seul composant du robot capable de tuer le frein**.
+
+Un bus I²C **dédié** (le Pi 4 sait activer `i2c-3` à `i2c-6` par dtoverlay) contiendrait le
+risque — un bus figé ne tuerait que l'odométrie. Mais il reste mauvais : le contrôleur I²C du Pi
+a un **bug documenté d'étirement d'horloge** qui mord précisément sur les esclaves *logiciels*
+(ce qu'est un RP2040 en mode esclave), et l'I²C est le bus le plus sensible aux parasites de ce
+châssis — qui a **déjà produit un incident**
+(`docs/incidents/2026-07-13-glitch-visage-driver-led.md`).
+
+### Inconnue côté Pi
+
+**Quel UART ?** Le primaire (GPIO14/15) est encombré par la console série et le Bluetooth. Un
+UART dédié activé par `dtoverlay` (`uart2`…`uart5`) donnerait un `/dev/ttyAMA*` stable — **à
+condition que ses GPIO soient libres sur la carte principale**, ce qui n'est pas encore vérifié.
+À trancher avant de câbler.
 
 ### Protocole série
 
