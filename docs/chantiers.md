@@ -65,8 +65,8 @@ PWM déguisé), et il n'y a pas de TF `odom` → `base_link`. C'est le verrou de
 `ros2_control` ET de nav2. Ni le lidar ni la caméra ne le comblent.
 
 **La solution retenue** : roue phonique lue par la FACE avec deux capteurs
-inductifs `LJ12A3-4-Z/BX` (M12, NPN, 12 V) par roue → quadrature → PC847 → Pico
-(PIO) → USB → nœud ROS. Carte montée **côté Pi**, pas près des roues (le signal
+inductifs `LJ12A3-4-Z/BX` (M12, NPN, 12 V) par roue → quadrature → PC817 → Pico
+(PIO) → **UART** → nœud ROS. Carte montée **côté Pi**, pas près des roues (le signal
 12 V à collecteur ouvert encaisse la distance ; le 3,3 V logique, non).
 
 **Fixation — décidée le 14/07 d'après photos** : le disque se serre entre **deux
@@ -92,8 +92,22 @@ Puis : étape 2 carte à trous au brochage définitif → étape 3 robot **roues
 sol** + protocole caméra (on mesurera enfin la vraie vitesse pour un PWM donné,
 première mesure objective du chemin roues) → étape 4 seulement, le PCB KiCad.
 
-**Verrou** : trois cotes à mesurer avant de dimensionner le disque — diamètre
-des roues, place libre sur l'axe, nombre de dents du pignon (+ pas de chaîne).
+**Carte électronique FAITE et vérifiée** (14/07) :
+`~/Nextcloud/dev/didier/pcb/kicad/wheel-odometry/` — schéma (ERC 0 violation,
+netlist contrôlée), PCB placé, et **implantation stripboard vérifiée PAR
+PROGRAMME**, net par net, contre la netlist. Lien vers le Pi en **UART**
+(J6 : 5V/TX/RX/GND), pas USB — le micro-USB est le point faible d'une machine
+qui part en tournée.
+
+⚠️ **L'I²C est INTERDIT sur ce chantier.** `wheels_node.stop()` écrit le PWM par
+le bus I²C : un esclave qui fige le bus empêcherait le robot de freiner (le
+PCA9685 garderait sa dernière consigne = emballement). Raisonnement complet dans
+l'étude — ne pas re-trancher.
+
+**Verrous** : (a) les 5 cotes du §7, dont la **bloquante** — la garde axe →
+châssis, qui plafonne le rayon du disque donc la résolution ; (b) **quel UART
+côté Pi** : le primaire (GPIO14/15) est pris par la console et le Bluetooth, et
+les GPIO libres sur la carte principale restent à vérifier.
 
 **Aval** : `ros2_control` / `diff_drive_controller`, EKF (encodeurs + IMU pour
 le yaw), nav2. Le BNO055 existe déjà dans le code (`robot/move/bno_055_extended.py`)

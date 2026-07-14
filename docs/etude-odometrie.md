@@ -57,7 +57,7 @@ de fixation gratuite, réglable et démontable — voir §3 bis.
 
 ## 3. La cible — DÉCIDÉ : roue phonique, lue par la FACE
 
-Un **disque d'acier** serré sur l'axe Ø 20 par une bague fendue, découpé de **lumières
+Un **disque** serré entre deux écrous sur la tige filetée de l'axe (voir §2), portant des **cibles
 radiales**. Le capteur est **couché, parallèle à l'axe**, face au disque : il voit défiler
 *acier / lumière / acier / lumière*. C'est le principe d'une couronne d'ABS automobile.
 
@@ -198,7 +198,7 @@ ne *pousse* rien : il **tire vers la masse**. C'est donc lui qui ferme le circui
    +12 V ──────┬───────────────────────────┬── IN+ ─┐
                │                           │        │
         (brun) │                           │     ┌──┴──────────┐
-          ┌────┴─────────┐                 │     │   PC847     │
+          ┌────┴─────────┐                 │     │   PC817     │
           │   CAPTEUR    │      (noir)     │     │   canal n   │
           │ LJ12A3-4-Z/BX├─────────────────┴── IN-│             │
           │     NPN      │                        │  OUT ───────┼──→ GPIO Pico
@@ -208,7 +208,7 @@ ne *pousse* rien : il **tire vers la masse**. C'est donc lui qui ferme le circui
         ◄──── domaine 12 V ────►  ┊  ◄──── domaine 3,3 V ────►
                                   ┊
                     BARRIÈRE : les deux masses ne se rejoignent NULLE PART.
-                    Sur le PCB : fente fraisée sous le PC847.
+                    Sur le PCB : fente fraisée sous les PC817.
 ```
 
 - **Alimenter les capteurs en 12 V**, pas en 24 V (le rail Mean Well 12 V existe). Ils
@@ -319,7 +319,7 @@ main par un simple `cat /dev/didier-odom`.
 
 Il lit, il compte, il rapporte. Il n'est **pas** sur le chemin de commande des roues.
 
-Conséquence à écrire noir sur blanc : **si le lien USB meurt, on perd l'odométrie — donc la
+Conséquence à écrire noir sur blanc : **si le lien série meurt, on perd l'odométrie — donc la
 navigation autonome s'arrête — mais aucun rempart de sécurité ne tombe.** Le deadman 400 ms
 de `wheels_node` reste intact. Une panne d'odométrie ne peut produire qu'un arrêt, jamais un
 emballement.
@@ -394,7 +394,7 @@ objective du chemin roues depuis le début du projet. Rejouer
 
 ### Étape 4 — PCB KiCad
 
-Seulement là, et seulement si les étapes 1–3 sont vertes. Fente fraisée sous le PC847, Pico
+Seulement là, et seulement si les étapes 1–3 sont vertes. Fente fraisée sous les PC817, Pico
 sur **supports tulipe** (un Pico grillé se change en dix secondes dans une loge, sans fer à
 souder), **une LED de diagnostic par canal** (on *voit* un capteur mort ou un câble coupé
 sans brancher d'ordinateur — utile sur un plateau, et ça alimente le chantier télédiagnostic).
