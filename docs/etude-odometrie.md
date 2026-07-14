@@ -89,7 +89,32 @@ D'où la géométrie retenue, qui n'est pas intuitive et mérite d'être retenue
 
 ⚠️ Conséquence à ne pas rater au montage : **rien ne doit dépasser côté couronne**. Les écrous
 des cibles sont donc **noyés dans des lamages**, et c'est ce qui fixe l'épaisseur du disque
-(10 mm). Une vis qui dépasse de ce côté-là tape la couronne.
+(10 mm). Une vis qui dépasse de ce côté-là tape la chaîne.
+
+### La chaîne : le disque passe DEVANT, il ne la contourne pas
+
+Mesuré le 14/07 : **la couronne ne fait que Ø 110**, donc la chaîne tourne dans un cercle de
+**55 mm de rayon**. Le disque en fait 78. **Il déborde.**
+
+Et pourtant il passe — parce qu'**un disque n'a pas à rester dans le cercle de la chaîne, il
+lui suffit d'être hors de son PLAN**. Une 428 ne déborde que de ~6 mm de la face de la couronne.
+Le disque est donc **décalé de 10 mm par une jupe** : il passe *devant* la chaîne, ne la croise
+jamais, et **garde son grand rayon — donc sa résolution**.
+
+```
+   face couronne ─┬─ chaîne (R=55, déborde de 6 mm)
+                  │        ╭── DISQUE R=78, à 10 mm : hors du plan de la chaîne
+                  │   ╭────┴──────────────╮
+   ───────────────┴───┴──── axe ──────────┴──────
+```
+
+L'alternative — réduire le disque à R = 50 pour « rentrer dans la chaîne » — aurait coûté très
+cher : 9 cibles au lieu de 15, soit ~22 mm/front, à peine une impulsion par période de contrôle
+à 20 Hz. Inasservissable, une fois de plus.
+
+⚠️ **Le créneau est désormais plein** : décalage (10) + disque (10) + tête de vis (5,3) +
+entrefer (2,5) = **27,8 mm pour 30 disponibles**. Ça passe, mais sans gras — et ce qui taperait
+la caisse, en cas d'erreur, ce serait **le nez du capteur**. Un `assert()` le vérifie.
 
 ## 3. La cible — DÉCIDÉ : roue phonique, lue par la FACE
 
@@ -386,38 +411,42 @@ Relevé du 14/07 — **six inconnues levées**, il en reste **trois**, et **plus
 |---|---|---|
 | Pas de chaîne | ✅ levé (marquage 428) | 12,7 mm |
 | Ø de l'axe + écrou | ✅ mesuré au mètre | **tige filetée M20**, écrou 30 sur plats / 16 de haut |
-| Filetage nu sur l'axe | ✅ mesuré | **> 35 mm** |
+| Filetage nu au-delà de l'écrou | ✅ mesuré | **~30 mm** (de la visserie peut être ajoutée) |
 | L'axe tourne-t-il avec la roue ? | ✅ vérifié au feutre | **oui** — postulat de tout le montage |
 | Garde axe → bas de caisse | ✅ mesuré | **30 mm** — ne contraint que la coiffe (R=22), pas le disque |
-| Créneau caisse ↔ couronne | ✅ relevé | **> 20 mm** — c'est là que tourne le grand disque |
-| Rayon intérieur de la chaîne | à mesurer | *hypothèse 85 mm* — le disque (R=78) doit rester **en dedans**, sinon il la fouette |
-| Ø extérieur du pneu | à mesurer | *hypothèse 250 mm* — convertit les ticks en mètres, rien d'autre |
-| Ø et entraxe des vis du châssis | à mesurer | *hypothèse M6 / 40 mm* — interface du support capteurs |
+| Créneau caisse ↔ couronne | ✅ mesuré | **30 mm** — et il est plein à 27,8 |
+| Ø de la couronne (donc de la chaîne) | ✅ mesuré | **Ø 110** → chaîne à R=55. Le disque déborde, mais passe **devant** (jupe de 10 mm) |
+| Écrou M20 du moyeu | ✅ vérifié | **standard, AVEC rondelle** — la rondelle est la face d'appui de la jupe |
+| Épaisseur de cette rondelle | à confirmer | *hyp. 3 mm* — fixe la hauteur de jupe, donc la position du disque |
+| Ø extérieur du pneu | à mesurer | *hyp. 250 mm* — convertit les ticks en mètres |
+| **Entraxe des deux roues** | à mesurer | `wheel_separation` — indispensable à l'odométrie différentielle |
+| Fixations sous la caisse + trajet de la chaîne | à relever | interface du support capteurs |
 
-Aucune des trois restantes ne bloque : le pneu n'intervient que dans une constante logicielle,
-le support est fait de lumières oblongues pour absorber l'erreur, et le rayon de chaîne ne fait
-que **plafonner** le disque (on peut le réduire sans rien casser d'autre que la résolution).
+Fiche de relevé : **`plans/odometrie/MESURES.md`**.
 
-Contrainte de dimensionnement, inchangée : **pas de lecture ≥ 2 × le diamètre du nez** (M12 →
-≥ 24 mm), sinon le capteur voit deux cibles à la fois et ne distingue plus rien. S'y ajoutent
-deux règles d'inductif que le §3 passait sous silence : **cible ≥ 3 × Sn** (12 mm) et **vide
-entre cibles ≥ 3 × Sn** — sans vide suffisant, le capteur reste collé à l'état « métal » et le
-train d'impulsions disparaît purement et simplement.
+Plus rien ne bloque l'impression du disque. L'épaisseur de la rondelle est la seule cote qui
+puisse encore décaler la pièce (2 mm d'erreur sont absorbables, 5 mm non). Le pneu et l'entraxe
+des roues sont les **deux seules constantes** qui convertissent les impulsions en mètres et en
+radians : fausses, l'odométrie ment silencieusement et nav2 part de travers sans se plaindre.
 
-Ces contraintes — plus la garde sous la caisse, le créneau, et le rayon de chaîne — sont toutes
-**codées en `assert()`** dans `plans/odometrie/parametres.scad` : une géométrie fausse **refuse
-de compiler**, au lieu de produire un STL qu'on ne découvrirait mauvais que sur le robot.
+Contraintes de dimensionnement, toutes **codées en `assert()`** dans
+`plans/odometrie/parametres.scad` — une géométrie fausse **refuse de compiler** :
+**pas de lecture ≥ 2 × Ø du nez** (sinon le capteur voit deux cibles à la fois), **cible ≥ 3 × Sn**,
+**vide entre cibles ≥ 3 × Sn** (sans quoi le capteur reste collé à l'état « métal » et le train
+d'impulsions disparaît), la coiffe qui passe sous la caisse, le disque hors du plan de la chaîne,
+et l'encombrement du créneau.
 
-**Géométrie retenue : 15 cibles à R = 65 mm**, disque **Ø 155 mm**, pas de lecture 27,2 mm
-(métal 15 / vide 12,2), entraxe des capteurs 30°.
-Après décodage ×4 : **13,1 mm de résolution au sol** — largement suffisant pour nav2 (l'EKF et
-le lidar corrigent) et correct pour asservir la vitesse à 20 Hz.
+**Géométrie retenue : 15 cibles à R = 65 mm**, disque **Ø 155 mm**, décalé de 10 mm, pas de
+lecture 27,2 mm (métal 15 / vide 12,2), entraxe des capteurs 30°.
+Après décodage ×4 : **13,1 mm de résolution au sol** — suffisant pour nav2 (l'EKF et le lidar
+corrigent) et correct pour asservir la vitesse à 20 Hz.
 
-Le contraste mérite d'être noté, parce qu'il justifie tout le §2 : un disque qu'on aurait
-résigné à tenir **sous** la caisse aurait été plafonné à R = 25 mm, donc à **4 cibles** — soit
-49 mm par front, avec lesquels on n'aurait même pas eu une impulsion par période de contrôle à
-20 Hz. **Inasservissable.** C'est le fait d'avoir cherché la place *ailleurs* — dans le créneau,
-là où la couronne tourne déjà — qui sauve le chantier.
+Le contraste mérite d'être noté, parce qu'il justifie deux fois le même raisonnement : un disque
+résigné à tenir **sous la caisse** aurait été plafonné à R = 25 (4 cibles, 49 mm/front) ; un
+disque résigné à rentrer **dans le cercle de la chaîne** aurait été plafonné à R = 50 (9 cibles,
+22 mm/front). Dans les deux cas, pas même une impulsion par période de contrôle à 20 Hz :
+**inasservissable**. C'est d'avoir cherché la place *à côté* — dans le créneau, puis *devant* le
+plan de la chaîne — qui sauve le chantier.
 
 ## 8. Plan de mise en œuvre — par étapes, du sûr vers le risqué
 
