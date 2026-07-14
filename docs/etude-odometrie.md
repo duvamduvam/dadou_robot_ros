@@ -604,10 +604,24 @@ physiquement sur le robot.
 | Pièce | Qté | Prix unitaire |
 |---|---|---|
 | Capteur inductif `LJ12A3-4-Z/BX` **NPN** (TENSTAR ROBOT) | 6 (4 + 2 rechange) | 2,35 € |
-| **PC817C DIP-4**, lot de 20 (TriArk) — sert au prototype ET au PCB | 1 lot | 1,33 € |
+| **PC817C DIP-4**, lot de 20 — sert au prototype ET au PCB | 1 lot | 1,33 € |
 | Supports tulipe DIP-4 | 4+ | qques centimes |
 | Raspberry Pi Pico | 2 | ~5 € |
 | Plaque à trous, borniers à vis 3 pôles, résistances 10 kΩ | — | qques € |
+
+**Liens** (consignés le 14/07 — ils avaient été donnés de vive voix puis perdus, ce qui a fait
+racheter une recherche entière) :
+
+- PC817C DIP-4, lot de 20 : <https://www.aliexpress.com/item/1005009845983606.html>
+- alternative (20 ou 50) : <https://www.aliexpress.com/item/1005007380539744.html>
+
+⚠️ **Trois pièges, tous dans le SÉLECTEUR de l'annonce, aucun dans le titre** — même mécanique
+que le piège NPN/PNP du capteur :
+
+- **DIP-4, jamais SOP-4.** Le SOP-4 est du CMS : impossible à monter sur un support tulipe, donc
+  impossible à remplacer dans une loge sans fer à souder. C'était tout l'argument du choix.
+- **PC817C**, pas A/B/D : la lettre est le gain de transfert (CTR).
+- Les annonces « **DIP-8** » ne sont pas ce composant : le PC817 est un DIP-**4**.
 
 ⚠️ **Grouper la commande** : capteurs et optocoupleurs viennent de vendeurs différents, donc deux
 ports. Viser les seuils de livraison gratuite (10 € chez chacun), sinon le port coûtera plus cher
