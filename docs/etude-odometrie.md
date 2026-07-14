@@ -638,9 +638,29 @@ le piège NPN/PNP du capteur :
   impossible à remplacer dans une loge sans fer à souder. C'était tout l'argument du choix.
 - **PC817C**, pas A/B/D : la lettre est le gain de transfert (CTR).
 
-⚠️ **Grouper la commande** : capteurs et optocoupleurs viennent de vendeurs différents, donc deux
-ports. Viser les seuils de livraison gratuite (10 € chez chacun), sinon le port coûtera plus cher
-que les composants.
+### ⚠️ DOUANE — la règle a changé le 1er juillet 2026, et elle change la façon d'acheter
+
+L'UE a **supprimé la franchise de droits** sur les envois de moins de 150 € (la règle *de
+minimis*). À la place : un **droit forfaitaire de 3 €** — **par CATÉGORIE TARIFAIRE présente dans
+le colis**, pas par article, pas par euro dépensé. Plus la TVA dessus, soit **~3,60 € par
+catégorie**.
+
+Constaté sur la commande du 14/07 : 19,18 € de marchandise (capteurs + optocoupleurs +
+condensateurs = **3 catégories**) → **10,81 € de droits**. Soit **56 %**. Non pas parce que la
+commande était grosse, mais parce qu'elle contenait **trois choses différentes**.
+
+**Conséquence, valable pour tout le projet :**
+
+| | |
+|---|---|
+| **AliExpress** | uniquement ce dont l'écart de prix justifie l'import — ici, **les capteurs** (2,80 € contre 10–20 € chez un distributeur UE). Une catégorie, 3,60 € de droits, on reste très gagnant. |
+| **Distributeur UE** (Reichelt, TME…) | **tout le reste** : résistances, LED, diodes, condensateurs, borniers, supports tulipe, plaque à bandes, Pico. Des composants standards à quelques centimes, où AliExpress n'apporte rien. **Une commande, un port, zéro douane.** |
+
+Le piège : commander les ~8 catégories restantes sur AliExpress coûterait **25 à 30 € de droits**
+pour une trentaine d'euros de composants. Ce n'est plus « moins cher », c'est le contraire.
+
+⚠️ **Seuils de port gratuit** : 10 € chez chaque vendeur AliExpress (les articles « Choice » se
+groupent). Sinon le port coûte plus cher que les composants.
 
 ### PCB final (étape 4)
 
