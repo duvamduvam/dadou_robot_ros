@@ -23,7 +23,7 @@ journal de bord illisible).*
 | Conversation en déambulation (intention + contenu) | plan DÉCIDÉ (grillé 12/07) ; D0 outillage + personas commutables FAITS 13/07 | campagne D0 (robot allumé) ; textes personas à valider avec David | D1+ ⟸ protocole physique chat_node V2 (0) ; D6 ⟸ verrous roues |
 | Suivi de personne (roues) | validé sim 5/5, déployé, **SIM-ONLY** | — (attend ses verrous) | test scénique (1) PUIS protocole caméra (`direction_sign` inconnu) |
 | Gaze V1 + arbitrage actionneurs | validé RÉEL 12/07 ; arbitrage déployé sur les 2 Pi | vérif visuelle : gaze ON pendant une séquence (la tête ne doit plus trembler) | — |
-| Odométrie des roues (encodeurs) | plan DÉCIDÉ 14/07 ; rien acheté | étape 1 : banc d'établi (réglette + rondelles) | 3 cotes à mesurer sur le robot (§7 de l'étude) |
+| Odométrie des roues (encodeurs) | plan DÉCIDÉ 14/07 ; **pièces 3D dessinées** ; rien acheté | commander les capteurs + imprimer le banc d'établi | **1 cote bloquante** : garde axe→châssis (§7) |
 | Fond de tiroir | — | voir §Fond de tiroir | — |
 
 ## 0. Conversation — protocole physique chat_node V2
@@ -64,17 +64,29 @@ tachy. Conséquence : `/cmd_vel` est en **boucle ouverte** (des m/s qui sont du
 PWM déguisé), et il n'y a pas de TF `odom` → `base_link`. C'est le verrou de
 `ros2_control` ET de nav2. Ni le lidar ni la caméra ne le comblent.
 
-**La solution retenue** : roue phonique (disque acier fendu, serré sur l'axe
-Ø 20) lue par la FACE avec deux capteurs inductifs `LJ12A3-4-Z/BX` (M12, NPN,
-12 V) par roue → quadrature → PC847 → Pico (PIO) → USB → nœud ROS. Carte montée
-**côté Pi**, pas près des roues (le signal 12 V à collecteur ouvert encaisse la
-distance ; le 3,3 V logique, non).
+**La solution retenue** : roue phonique lue par la FACE avec deux capteurs
+inductifs `LJ12A3-4-Z/BX` (M12, NPN, 12 V) par roue → quadrature → PC847 → Pico
+(PIO) → USB → nœud ROS. Carte montée **côté Pi**, pas près des roues (le signal
+12 V à collecteur ouvert encaisse la distance ; le 3,3 V logique, non).
 
-**Prochaine action — étape 1, sans robot, zéro risque** : banc d'établi. Une
-chute de bois + des rondelles d'acier vissées tous les 25 mm, passée à la main
-devant deux capteurs. Ça valide détection, entrefer, logique inversée,
-quadrature et **le sens** (on fait aller-retour la réglette), et tout le
-firmware Pico + le nœud ROS se déboguent là.
+**Fixation — décidée le 14/07 d'après photos** : le disque se serre entre **deux
+écrous sur la tige filetée** de l'axe (l'étude croyait à un rond Ø 20 lisse : c'est
+faux, §2 corrigé). On ne touche **pas** aux 3 boulons de la couronne — c'est le
+chemin de couple de la roue, et le disque ne transmet aucun couple.
+
+**Pièces 3D dessinées** (`../plans/odometrie/`, dépôt plans b8243e9) : roue phonique
+(porte-cibles PETG + 12 têtes de vis M8 en acier — l'inductif ne voit que le métal),
+support capteurs nervuré, et le banc d'établi. Géométrie sous `assert()` : une cote
+fausse refuse de compiler.
+
+**Prochaine action — étape 1, sans robot, zéro risque** : commander les capteurs
+(~15 €, cf. §9 — ⚠️ variante **NPN**, jamais PNP), imprimer le banc, passer la
+réglette à la main devant les deux capteurs. Ça valide détection, entrefer, logique
+inversée, quadrature et **le sens** (aller-retour), et tout le firmware Pico + le
+nœud ROS se déboguent là.
+
+**En parallèle, 5 mesures au pied à coulisse** (§7) — la bloquante est la **garde
+axe → châssis** : elle plafonne le rayon du disque, donc la résolution.
 
 Puis : étape 2 carte à trous au brochage définitif → étape 3 robot **roues hors
 sol** + protocole caméra (on mesurera enfin la vraie vitesse pour un PWM donné,
