@@ -40,20 +40,28 @@ du train arrière (2026-07-14) montrent tout autre chose. La conception qui en d
 Ce qu'il y a réellement, de l'extérieur vers l'intérieur :
 
 ```
-  pneu │ jante │ COURONNE 428 │ écrou+rondelle │ FILETAGE NU │ ÉTRIER alu + ROULEMENT │ châssis
-                                                      ↑
-                                       ~30 mm de tige filetée libre
+  pneu │ jante │ COURONNE 428 │ écrou M20 │ FILETAGE NU │ ÉTRIER alu + ROULEMENT │ châssis
+                                   ↑            ↑
+                        l'ENTRAÎNEUR      > 35 mm de tige filetée libre
+                        (déjà en place)
 ```
 
-- **L'axe est une TIGE FILETÉE** (Ø ~12–14, à confirmer au pied à coulisse), pas un rond lisse.
-  Elle **tourne avec la roue**, dans un roulement logé dans un **étrier alu en U** usiné, lui-même
-  boulonné au châssis.
+- **L'axe est une TIGE FILETÉE M20** — mesuré au mètre le 14/07 : l'écrou fait **30 mm sur
+  plats**. Le Ø 20 de l'étude était donc juste ; ce qui était faux, c'est qu'il soit **lisse**.
+- **Elle TOURNE avec la roue** — vérifié au feutre (trait tracé sur la tige, roue tournée à la
+  main : le trait suit). Ce n'est pas un détail de curiosité : c'est le **postulat de tout le
+  montage**. Si la tige avait été un axe mort et la roue montée sur ses propres roulements, un
+  disque serré dessus n'aurait mesuré rigoureusement **rien**.
 - **La chaîne est marquée 428** → pas de **12,7 mm** confirmé (l'étude le supposait).
 - La **couronne est boulonnée à la jante par 3 boulons**, freinés au fil.
-- Il reste **~30 mm de filetage nu** entre l'étrier et l'écrou de moyeu.
+- Il reste **plus de 35 mm de filetage nu** entre l'étrier et l'écrou de moyeu.
 
 Cette tige filetée n'est pas une contrainte : c'est un **cadeau**. Un filetage est une interface
 de fixation gratuite, réglable et démontable — voir §3 bis.
+
+⚠️ **Mais le M20 coince** : un écrou M20 fait **16 mm de haut**. Serrer le disque entre deux
+écrous *ajoutés* coûterait 2 × 16 + 6 (disque) = **38 mm** — plus que les 35 disponibles. C'est
+cette cote, et elle seule, qui impose le montage en **coiffe** du §3 bis.
 
 ## 3. La cible — DÉCIDÉ : roue phonique, lue par la FACE
 
@@ -92,11 +100,26 @@ Si le disque s'avérait impossible à loger, la chaîne reste jouable — mais *
 tendu uniquement**, à deux ou trois centimètres du point de tangence, là où les dents la
 contraignent géométriquement et où elle ne peut pas battre.
 
-## 3 bis. La FIXATION — DÉCIDÉ (2026-07-14, après photos) : deux écrous sur la tige filetée
+## 3 bis. La FIXATION — DÉCIDÉ (2026-07-14, après photos) : la COIFFE sur l'écrou de roue
 
-Le disque se serre **entre deux écrous, sur le filetage nu de l'axe**, dans le créneau de
-~30 mm qui reste entre l'étrier de palier et l'écrou de moyeu. Rien d'autre. Pas de perçage,
-pas de soudure, pas de collier, pas une seule pièce du robot démontée.
+Le disque **coiffe l'écrou M20 déjà en place** contre le moyeu de roue, et un **seul
+contre-écrou** le bloque. Rien d'autre : pas de perçage, pas de soudure, pas de collier, pas
+une seule pièce du robot démontée — et **on ne desserre jamais l'écrou existant**, on s'appuie
+dessus (le contre-écrou pousse le disque vers la roue, donc dans le sens qui le serre).
+
+### Pourquoi une coiffe, et pas simplement deux écrous
+
+C'était le plan initial, et **le M20 l'a tué** : un écrou M20 fait 16 mm de haut, donc deux
+écrous ajoutés plus le disque réclament 38 mm, pour 35 disponibles. Ça ne rentre pas.
+
+L'écrou déjà monté résout le problème en rendant **deux services d'un coup**, gratuitement :
+
+- il sert d'**entraîneur** — l'empreinte hexagonale de la coiffe s'emboîte sur ses 30 mm sur
+  plats, donc le disque est entraîné en **prise mécanique positive** ;
+- il sert d'**appui** — il ne reste plus qu'un écrou à ajouter.
+
+Bilan : **22 mm consommés** (6 de disque + 16 de contre-écrou) au lieu de 38. La coiffe, elle,
+ne coûte rien en longueur : elle enveloppe un écrou qui était déjà là.
 
 ### Pourquoi PAS sur les 3 boulons de la couronne (la piste évidente, et le piège)
 
@@ -107,17 +130,17 @@ longues, un nouveau serrage, un frein-filet refait — donc de remettre en cause
 fonctionne, pour un capteur en lecture seule. La règle du projet vaut ici comme ailleurs : on
 ne touche pas au chemin roues sans nécessité. Il n'y en a aucune.
 
-### Pourquoi le serrage par écrous suffit largement
+### Pourquoi un seul contre-écrou suffit largement
 
 Parce que **le disque ne transmet aucun couple** : il ne fait que tourner. Rien ne le freine,
 rien ne le pousse. Le seul effort est son inertie propre — quelques dizaines de grammes.
 
-Le seul vrai risque est qu'il **patine** sur la tige, et il faut le prendre au sérieux : *une
-odométrie qui patine ment sans prévenir*, et le robot croit avoir parcouru une distance qu'il
-n'a pas faite. D'où deux remparts :
+Le seul vrai risque est qu'il **patine**, et il faut le prendre au sérieux : *une odométrie qui
+patine ment sans prévenir*, et le robot croit avoir parcouru une distance qu'il n'a pas faite.
+D'où deux remparts :
 
-1. **Une empreinte hexagonale dans le moyeu**, qui vient sur un écrou de l'axe : le disque est
-   entraîné en **prise mécanique positive**, pas par la seule friction du serrage.
+1. **L'empreinte hexagonale de la coiffe** : le disque est entraîné par l'écrou lui-même, en
+   **prise mécanique positive**, pas par la seule friction d'un serrage sur du plastique.
 2. **Un repère fraisé sur la tranche** : d'un coup d'œil, roue en main, on voit si le disque a
    tourné sur son axe.
 
@@ -326,16 +349,20 @@ emballement.
 
 ## 7. Inconnues à lever
 
-Le **pas de chaîne est levé** (428 → 12,7 mm) et la **place sur l'axe** est cadrée (~30 mm de
-filetage nu). Restent **cinq cotes au pied à coulisse**, et une seule est bloquante :
+Relevé du 14/07 — **quatre inconnues levées**, il en reste **trois**, dont une seule bloque :
 
-| # | Cote | Pourquoi elle compte | Hypothèse |
-|---|---|---|---|
-| 1 | **Garde axe → châssis** (au-dessus) | ⚠️ **BLOQUANTE** : elle plafonne le rayon du disque, donc la résolution | 70 mm |
-| 2 | Ø de la tige filetée + cote sur plats de son écrou | trou central et empreinte hexagonale du moyeu | M12 / 19 mm |
-| 3 | Longueur exacte de filetage nu | le moyeu + 2 écrous doivent y tenir | 30 mm |
-| 4 | Ø extérieur du pneu | conversion ticks → mètres (rien d'autre) | 250 mm |
-| 5 | Ø et entraxe des vis du châssis | interface du support capteurs | M6 / 40 mm |
+| Cote | Statut | Valeur |
+|---|---|---|
+| Pas de chaîne | ✅ levé (marquage 428) | 12,7 mm |
+| Ø de l'axe + écrou | ✅ **mesuré au mètre** | **tige filetée M20**, écrou 30 sur plats / 16 de haut |
+| Filetage nu sur l'axe | ✅ mesuré | **> 35 mm** |
+| L'axe tourne-t-il avec la roue ? | ✅ **vérifié au feutre** | **oui** — postulat de tout le montage |
+| **Garde axe → châssis** | ⚠️ **BLOQUANTE** | *hypothèse 70 mm* — plafonne le rayon du disque, donc la résolution |
+| Ø extérieur du pneu | à mesurer | *hypothèse 250 mm* — sert à convertir les ticks en mètres, rien d'autre |
+| Ø et entraxe des vis du châssis | à mesurer | *hypothèse M6 / 40 mm* — interface du support capteurs |
+
+Les deux dernières ne bloquent rien : le pneu n'intervient que dans une constante logicielle,
+et le support est fait de lumières oblongues justement pour absorber l'erreur.
 
 Contrainte de dimensionnement, inchangée : **pas de lecture ≥ 2 × le diamètre du nez** (M12 →
 ≥ 24 mm), sinon le capteur voit deux cibles à la fois et ne distingue plus rien. S'y ajoutent
@@ -442,7 +469,7 @@ pour l'étape 3 :
 
 | Pièce | Qté |
 |---|---|
-| Écrous + rondelles larges au Ø de l'axe (M12 ?) | 6 |
+| **Écrou M20** + rondelle large M20 (le contre-écrou du disque — *un seul par roue*, l'autre est déjà sur le robot) | 2 + 2 |
 | Vis M8×16 tête H + écrous nylstop (les **cibles**) | 24 + 24 |
 | Impression PETG : 2 disques, 2 supports, 1 banc | — |
 
