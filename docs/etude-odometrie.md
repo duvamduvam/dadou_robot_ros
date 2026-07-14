@@ -251,11 +251,15 @@ Capteur de proximité **inductif** M12, **NPN NO**, 6–36 V DC, portée 4 mm, 5
 ~2,35 € pièce. Ce n'est pas un « capteur de vitesse » automobile : c'est un détecteur de métal
 industriel, et c'est exactement ce qu'il nous faut.
 
-> ### <https://fr.aliexpress.com/item/32483279890.html>
-> **⚠️ C'EST L'ANNONCE PIÉGEUSE.** Son titre vend, dans le MÊME produit, le `-Z/BX` **NPN** *et*
-> le `-Z/AX` **PNP**, en NO et NC. Les quatre variantes sont dans le **sélecteur**.
-> **Choisir `BX` — vérifier dans le PANIER, jamais dans le titre.** Voir le piège ci-dessous :
-> une variante PNP tuerait le Pico.
+> ### <https://fr.aliexpress.com/item/1005010394186100.html>
+> **`LJ12A3-4-Z/BX` NPN NO, 6–36 V, 4 mm** — vendeur DIYUSER. **3,19 € pièce, 2,80 € dès 2.**
+>
+> ✅ **Cette annonce-ci ne vend QU'UNE variante** : la NPN NO, écrite en toutes lettres dans le
+> titre. Pas de sélecteur BX/AX/BY — **le piège PNP décrit ci-dessous n'existe pas ici**, et
+> c'est précisément pourquoi c'est elle qu'on retient. (Les annonces « multi-variantes », où le
+> PNP se cache dans le sélecteur, sont à fuir : voir §4, elles tuent le Pico.)
+>
+> Prendre **6 pièces** (4 + 2 rechange) → 16,80 € : au-dessus du seuil de **port gratuit (10 €)**.
 
 ### Comment il fonctionne — et pourquoi ça explique tout le reste
 

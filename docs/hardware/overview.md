@@ -437,7 +437,7 @@ Bill of materials (~25 EUR plus the discs):
 
 | Part | Qty | Unit |
 |---|---|---|
-| [`LJ12A3-4-Z/BX` inductive sensor, **NPN**](https://fr.aliexpress.com/item/32483279890.html) — ⚠️ the same listing also sells the **PNP** `/AX`: pick `BX` **in the cart** | 6 (4 + 2 spare) | 2.35 EUR |
+| [`LJ12A3-4-Z/BX` inductive sensor, **NPN NO**](https://fr.aliexpress.com/item/1005010394186100.html) (DIYUSER) — ✅ single-variant listing: **no PNP hiding in a selector**. That is why this one. | 6 (4 + 2 spare) | 3.19 EUR (2.80 from 2) |
 | Raspberry Pi Pico | 1 | ~5 EUR |
 | [**PC817C** (DIP-4), pack of 20 (TriArk)](https://fr.aliexpress.com/item/1005006281381268.html) + turned-pin sockets — ⚠️ the listing's title says "DIP-8"; **it is wrong**, the photo shows a 4-pin SHARP. *On the board, never a stacked module.* | 4 (+ spares) | 1.33 EUR / 20 |
 | 10 kOhm pull-up resistors | 4 | - |
