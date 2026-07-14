@@ -248,8 +248,14 @@ vérifie.
 ## 4. Le capteur — DÉCIDÉ : LJ12A3-4-Z/BX
 
 Capteur de proximité **inductif** M12, **NPN NO**, 6–36 V DC, portée 4 mm, 500 Hz.
-~2,35 € pièce (AliExpress, TENSTAR ROBOT). Ce n'est pas un « capteur de vitesse » automobile :
-c'est un détecteur de métal industriel, et c'est exactement ce qu'il nous faut.
+~2,35 € pièce. Ce n'est pas un « capteur de vitesse » automobile : c'est un détecteur de métal
+industriel, et c'est exactement ce qu'il nous faut.
+
+> ### <https://fr.aliexpress.com/item/32483279890.html>
+> **⚠️ C'EST L'ANNONCE PIÉGEUSE.** Son titre vend, dans le MÊME produit, le `-Z/BX` **NPN** *et*
+> le `-Z/AX` **PNP**, en NO et NC. Les quatre variantes sont dans le **sélecteur**.
+> **Choisir `BX` — vérifier dans le PANIER, jamais dans le titre.** Voir le piège ci-dessous :
+> une variante PNP tuerait le Pico.
 
 ### Comment il fonctionne — et pourquoi ça explique tout le reste
 
