@@ -604,24 +604,28 @@ physiquement sur le robot.
 | Pièce | Qté | Prix unitaire |
 |---|---|---|
 | Capteur inductif `LJ12A3-4-Z/BX` **NPN** (TENSTAR ROBOT) | 6 (4 + 2 rechange) | 2,35 € |
-| **PC817C DIP-4**, lot de 20 — sert au prototype ET au PCB | 1 lot | 1,33 € |
+| **PC817C DIP-4**, lot de 20 (TriArk) — sert au prototype ET au PCB | 1 lot | 1,33 € |
 | Supports tulipe DIP-4 | 4+ | qques centimes |
 | Raspberry Pi Pico | 2 | ~5 € |
 | Plaque à trous, borniers à vis 3 pôles, résistances 10 kΩ | — | qques € |
 
-**Liens** (consignés le 14/07 — ils avaient été donnés de vive voix puis perdus, ce qui a fait
-racheter une recherche entière) :
+**Lien — celui-ci, et pas un autre** (vendeur **TriArk Electronic**, 4,8/5, 2000+ vendus) :
 
-- PC817C DIP-4, lot de 20 : <https://www.aliexpress.com/item/1005009845983606.html>
-- alternative (20 ou 50) : <https://www.aliexpress.com/item/1005007380539744.html>
+> ### <https://fr.aliexpress.com/item/1005006281381268.html>
+> **PC817C — lot de 20 pièces — 1,33 €** (dégressif : 1,07 € dès 2 lots, 0,80 € dès 5)
+> Livraison **gratuite dès 10 € d'achat** → à combiner avec les capteurs (cf. ci-dessous).
 
-⚠️ **Trois pièges, tous dans le SÉLECTEUR de l'annonce, aucun dans le titre** — même mécanique
-que le piège NPN/PNP du capteur :
+⚠️ **LE TITRE DE L'ANNONCE MENT : il annonce « DIP-8 ». C'est un DIP-4.** La photo montre un
+boîtier SHARP PC817 à **4 pattes**, et les 271 avis confirment. Ne pas écarter cette annonce à
+cause de son titre — l'erreur a déjà été commise une fois (le 14/07, en cherchant le lien perdu,
+elle a été rejetée pour ce motif, et il a fallu que David la retrouve lui-même).
+
+⚠️ **Les autres pièges sont, eux, dans le SÉLECTEUR** — jamais dans le titre, même mécanique que
+le piège NPN/PNP du capteur :
 
 - **DIP-4, jamais SOP-4.** Le SOP-4 est du CMS : impossible à monter sur un support tulipe, donc
   impossible à remplacer dans une loge sans fer à souder. C'était tout l'argument du choix.
 - **PC817C**, pas A/B/D : la lettre est le gain de transfert (CTR).
-- Les annonces « **DIP-8** » ne sont pas ce composant : le PC817 est un DIP-**4**.
 
 ⚠️ **Grouper la commande** : capteurs et optocoupleurs viennent de vendeurs différents, donc deux
 ports. Viser les seuils de livraison gratuite (10 € chez chacun), sinon le port coûtera plus cher
