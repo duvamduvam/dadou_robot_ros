@@ -212,6 +212,39 @@ rentrerait pas dans le lamage.
 Conséquence heureuse : **la géométrie validée en plastique est exactement celle qu'on gravera
 dans l'acier**. Le prototype n'est pas une approximation du disque final, il en est le plan.
 
+## 3 ter. Le SUPPORT — DÉCIDÉ (2026-07-14) : une bride sur le PALIER
+
+Première idée, abandonnée : boulonner le support **sous la caisse**. À l'atelier, ça ne passe
+pas — **les paliers sont dans le chemin**. Vouloir les contourner, c'est se battre contre la
+mécanique.
+
+Le support se **bride sur le palier lui-même** : deux coquilles imprimées pincent son plat comme
+un étau, serrées par 2 vis M5 qui passent de part et d'autre. **Zéro perçage** sur une pièce qui
+porte la roue.
+
+### Ce n'est pas un pis-aller, c'est mécaniquement supérieur
+
+Le palier **porte le roulement** : il bouge donc *exactement* avec l'axe, donc avec le disque.
+Un support ancré dessus tient un entrefer constant quoi qu'il arrive. Ancré sous la caisse, la
+moindre flexion du châssis fait **respirer l'entrefer** — et un entrefer qui respire, ce sont
+des impulsions perdues, donc une odométrie qui dérive **sans que personne ne s'en aperçoive**.
+
+### Deux aubaines dans la géométrie du palier
+
+C'est une **chape pendante** : un plat d'alu suspendu par une tige filetée, roulement en bas.
+
+1. **Sa face est perpendiculaire à l'axe, donc parallèle au disque** — exactement l'orientation
+   qu'il faut pour coucher les capteurs.
+2. **Le plat descend sous l'axe** : la bride pince là, et le bras des capteurs descend tout droit
+   jusqu'à 6 h. Court, donc rigide — au lieu d'un long porte-à-faux depuis la caisse.
+
+Le corps du capteur fait 60 mm : depuis le palier, il n'a qu'à **avancer d'environ 18 mm** vers
+la couronne pour venir lire le disque. Le réglage d'entrefer reste ses deux écrous.
+
+⚠️ **Les capteurs ne doivent pas remonter au-dessus de ~25°** : à R = 65, ils passeraient
+au-dessus du fond de caisse (30 mm) et leur corps de 60 mm irait taper dedans. Un `assert()` le
+vérifie.
+
 ## 4. Le capteur — DÉCIDÉ : LJ12A3-4-Z/BX
 
 Capteur de proximité **inductif** M12, **NPN NO**, 6–36 V DC, portée 4 mm, 500 Hz.
@@ -483,7 +516,7 @@ Relevé du 14/07 — **six inconnues levées**, il en reste **trois**, et **plus
 | Épaisseur de cette rondelle | à confirmer | *hyp. 3 mm* — fixe la hauteur de jupe, donc la position du disque |
 | Ø extérieur du pneu | à mesurer | *hyp. 250 mm* — convertit les ticks en mètres |
 | **Entraxe des deux roues** | à mesurer | `wheel_separation` — indispensable à l'odométrie différentielle |
-| Fixations sous la caisse + trajet de la chaîne | à relever | interface du support capteurs |
+| Plat du palier : épaisseur + largeur | à mesurer | *hyp. 12 / 32 mm* — la **bride** du support pince dessus |
 
 Fiche de relevé : **`plans/odometrie/MESURES.md`**.
 
