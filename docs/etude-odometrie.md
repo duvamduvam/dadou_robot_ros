@@ -218,6 +218,42 @@ Capteur de proximité **inductif** M12, **NPN NO**, 6–36 V DC, portée 4 mm, 5
 ~2,35 € pièce (AliExpress, TENSTAR ROBOT). Ce n'est pas un « capteur de vitesse » automobile :
 c'est un détecteur de métal industriel, et c'est exactement ce qu'il nous faut.
 
+### Comment il fonctionne — et pourquoi ça explique tout le reste
+
+Derrière son nez, une **bobine** rayonne un champ magnétique alternatif à haute fréquence.
+Quand un **métal** entre dans ce champ, celui-ci y induit des **courants de Foucault**, qui
+dissipent de l'énergie — de l'énergie que le capteur doit fournir. Son oscillation s'amortit,
+un comparateur le détecte, la sortie bascule. C'est tout.
+
+Le capteur ne détecte donc pas « un objet » : il détecte **ce qui lui pompe de l'énergie**. Seuls
+les conducteurs le font. **Le plastique, le bois, le verre, la main : parfaitement invisibles.**
+
+Trois conséquences, qui ne sont pas des règles arbitraires mais des corollaires directs :
+
+1. **Le disque imprimé marche.** Le capteur voit les têtes de vis *à travers* le PETG, comme si
+   le plastique n'existait pas. Le disque n'est pas un pis-aller, c'est un porte-cibles.
+2. **La couronne, juste derrière, ne le perturbe pas** : elle est en acier, mais à ~18 mm du
+   nez — bien au-delà des 4 mm de portée. Trop loin pour lui pomper quoi que ce soit.
+3. **Un support métallique le saturerait** (cf. le piège « non noyable » ci-dessous).
+
+### ⚠️ Quatrième piège : ACIER ZINGUÉ, jamais INOX
+
+Puisque tout repose sur les courants induits, **la portée dépend du métal de la cible**. Les
+4 mm annoncés valent pour l'**acier doux** :
+
+| Métal de la cible | Portée réelle |
+|---|---|
+| **Acier doux** | 4 mm (la référence) |
+| Inox | ~2,8 mm |
+| Laiton | ~1,6 mm |
+| Aluminium | ~1,4 mm |
+| Cuivre | ~1,2 mm |
+
+Avec des vis **inox**, la portée tombe à 2,8 mm nominale, soit **~2 mm garantis** : notre
+entrefer de 2,5 mm serait **hors de portée**, et le capteur ne verrait rien. Or l'inox A2 est
+précisément ce qu'on trouve le plus facilement en visserie du commerce. Le piège est parfait —
+la panne est incompréhensible pour qui ignore la règle.
+
 ### L'entrefer : 2,5 mm, mesuré depuis l'ACIER
 
 Pas depuis la surface du disque : depuis la **tête de vis**. Le capteur ne voit que le métal (le
@@ -564,7 +600,7 @@ pour l'étape 3 :
 | Pièce | Qté |
 |---|---|
 | **Écrou M20** + rondelle large M20 (le contre-écrou du disque — *un seul par roue*, l'autre est déjà sur le robot) | 2 + 2 |
-| Vis M8×16 tête H + écrous nylstop (les **cibles**) | 24 + 24 |
+| Vis M8×16 tête H **en ACIER ZINGUÉ — jamais inox** (les **cibles**) + écrous M8 normaux + frein-filet | 30 + 30 |
 | Impression PETG : 2 disques, 2 supports, 1 banc | — |
 
 ## 10. Pédagogie
