@@ -31,10 +31,29 @@ déplacé entre les scènes, murs longs et symétriques — c'est le pire cas du
 à 10 Hz ça ne referme jamais une boucle de vitesse. La caméra monoculaire 130°, elle,
 n'a **pas d'échelle métrique** : elle ne peut pas produire de vitesse en m/s.
 
-## 2. La contrainte mécanique
+## 2. La contrainte mécanique — RELEVÉE SUR PHOTOS le 2026-07-14
 
-Chaque roue est calée sur un **axe acier Ø 20 mm**, entraîné par une **chaîne** dont le
-pignon est proche de la roue. C'est cette géométrie qui arbitre tout ce qui suit.
+⚠️ **Correction.** Cette section affirmait « axe acier Ø 20 mm ». C'est **faux** : les photos
+du train arrière (2026-07-14) montrent tout autre chose. La conception qui en découlait — une
+**bague de serrage fendue Ø 20** en nomenclature — est **caduque**.
+
+Ce qu'il y a réellement, de l'extérieur vers l'intérieur :
+
+```
+  pneu │ jante │ COURONNE 428 │ écrou+rondelle │ FILETAGE NU │ ÉTRIER alu + ROULEMENT │ châssis
+                                                      ↑
+                                       ~30 mm de tige filetée libre
+```
+
+- **L'axe est une TIGE FILETÉE** (Ø ~12–14, à confirmer au pied à coulisse), pas un rond lisse.
+  Elle **tourne avec la roue**, dans un roulement logé dans un **étrier alu en U** usiné, lui-même
+  boulonné au châssis.
+- **La chaîne est marquée 428** → pas de **12,7 mm** confirmé (l'étude le supposait).
+- La **couronne est boulonnée à la jante par 3 boulons**, freinés au fil.
+- Il reste **~30 mm de filetage nu** entre l'étrier et l'écrou de moyeu.
+
+Cette tige filetée n'est pas une contrainte : c'est un **cadeau**. Un filetage est une interface
+de fixation gratuite, réglable et démontable — voir §3 bis.
 
 ## 3. La cible — DÉCIDÉ : roue phonique, lue par la FACE
 
@@ -72,6 +91,46 @@ Piste séduisante, et elle existe en industrie. Trois raisons de la garder en se
 Si le disque s'avérait impossible à loger, la chaîne reste jouable — mais **sur le brin
 tendu uniquement**, à deux ou trois centimètres du point de tangence, là où les dents la
 contraignent géométriquement et où elle ne peut pas battre.
+
+## 3 bis. La FIXATION — DÉCIDÉ (2026-07-14, après photos) : deux écrous sur la tige filetée
+
+Le disque se serre **entre deux écrous, sur le filetage nu de l'axe**, dans le créneau de
+~30 mm qui reste entre l'étrier de palier et l'écrou de moyeu. Rien d'autre. Pas de perçage,
+pas de soudure, pas de collier, pas une seule pièce du robot démontée.
+
+### Pourquoi PAS sur les 3 boulons de la couronne (la piste évidente, et le piège)
+
+C'était tentant : trois boulons déjà là, un grand cercle de perçage, un grand rayon de lecture
+donc une belle résolution. **Non.** Ces trois boulons sont le **chemin de couple** de la roue :
+tout ce qui fait avancer 50 kg de robot passe par eux. Y ajouter une pièce impose des vis plus
+longues, un nouveau serrage, un frein-filet refait — donc de remettre en cause une liaison qui
+fonctionne, pour un capteur en lecture seule. La règle du projet vaut ici comme ailleurs : on
+ne touche pas au chemin roues sans nécessité. Il n'y en a aucune.
+
+### Pourquoi le serrage par écrous suffit largement
+
+Parce que **le disque ne transmet aucun couple** : il ne fait que tourner. Rien ne le freine,
+rien ne le pousse. Le seul effort est son inertie propre — quelques dizaines de grammes.
+
+Le seul vrai risque est qu'il **patine** sur la tige, et il faut le prendre au sérieux : *une
+odométrie qui patine ment sans prévenir*, et le robot croit avoir parcouru une distance qu'il
+n'a pas faite. D'où deux remparts :
+
+1. **Une empreinte hexagonale dans le moyeu**, qui vient sur un écrou de l'axe : le disque est
+   entraîné en **prise mécanique positive**, pas par la seule friction du serrage.
+2. **Un repère fraisé sur la tranche** : d'un coup d'œil, roue en main, on voit si le disque a
+   tourné sur son axe.
+
+### La cible : des têtes de vis M8, pas des lumières découpées
+
+Un inductif ne voit **que le métal** — le plastique lui est parfaitement transparent. Le disque
+imprimé n'est donc pas un pis-aller : c'est un **porte-cibles**. Ce que le capteur voit, ce sont
+**12 têtes de vis M8 en acier** (Ø 15 mm sur angles ≥ 3 × Sn, la règle des inductifs), montées
+tête côté capteur. Imperdables, épaisses, et elles ne se décollent pas sous vibrations — ce que
+des rondelles collées feraient tôt ou tard.
+
+Conséquence heureuse : **la géométrie validée en plastique est exactement celle qu'on gravera
+dans l'acier**. Le prototype n'est pas une approximation du disque final, il en est le plan.
 
 ## 4. Le capteur — DÉCIDÉ : LJ12A3-4-Z/BX
 
@@ -236,23 +295,35 @@ navigation autonome s'arrête — mais aucun rempart de sécurité ne tombe.** L
 de `wheels_node` reste intact. Une panne d'odométrie ne peut produire qu'un arrêt, jamais un
 emballement.
 
-## 7. Inconnues à lever (bloquent le dimensionnement du disque)
+## 7. Inconnues à lever
 
-Trois cotes à mesurer sur le robot :
+Le **pas de chaîne est levé** (428 → 12,7 mm) et la **place sur l'axe** est cadrée (~30 mm de
+filetage nu). Restent **cinq cotes au pied à coulisse**, et une seule est bloquante :
 
-1. **Diamètre des roues** (hypothèse de travail : 250 mm).
-2. **Place libre sur l'axe** Ø 20 : entre le palier et le pignon, ou entre le pignon et la
-   roue — c'est là que le disque doit se loger, et il faut aussi la place d'une équerre.
-3. **Nombre de dents du pignon** et **pas de la chaîne** (probablement 8B / ½″ = 12,7 mm).
+| # | Cote | Pourquoi elle compte | Hypothèse |
+|---|---|---|---|
+| 1 | **Garde axe → châssis** (au-dessus) | ⚠️ **BLOQUANTE** : elle plafonne le rayon du disque, donc la résolution | 70 mm |
+| 2 | Ø de la tige filetée + cote sur plats de son écrou | trou central et empreinte hexagonale du moyeu | M12 / 19 mm |
+| 3 | Longueur exacte de filetage nu | le moyeu + 2 écrous doivent y tenir | 30 mm |
+| 4 | Ø extérieur du pneu | conversion ticks → mètres (rien d'autre) | 250 mm |
+| 5 | Ø et entraxe des vis du châssis | interface du support capteurs | M6 / 40 mm |
 
-Le disque en découlera : diamètre, nombre de lumières, rayon de lecture, entraxe des deux
-capteurs. Contrainte de dimensionnement : **pas de lecture ≥ ~2 × le diamètre du nez du
-capteur** (M12 → pas ≥ 24 mm), sinon le capteur voit deux lumières à la fois et ne distingue
-plus rien.
+Contrainte de dimensionnement, inchangée : **pas de lecture ≥ 2 × le diamètre du nez** (M12 →
+≥ 24 mm), sinon le capteur voit deux cibles à la fois et ne distingue plus rien. S'y ajoutent
+deux règles d'inductif que le §3 passait sous silence : **cible ≥ 3 × Sn** (12 mm) et **vide
+entre cibles ≥ 3 × Sn** — sans vide suffisant, le capteur reste collé à l'état « métal » et le
+train d'impulsions disparaît purement et simplement.
 
-Ordre de grandeur visé : ~24 lumières à un rayon de lecture de ~90 mm → pas de 23,5 mm, et
-après décodage ×4, **~10 mm de résolution au sol**. Largement suffisant pour nav2 (l'EKF et
-le lidar corrigent), correct pour asservir la vitesse à 20 Hz.
+Ces quatre contraintes sont **codées en `assert()`** dans `plans/odometrie/parametres.scad` :
+une géométrie fausse **refuse de compiler**, au lieu de produire un STL qu'on ne découvrirait
+mauvais que sur le robot.
+
+Géométrie retenue (avec les hypothèses ci-dessus) : **12 cibles à R = 52 mm**, disque Ø 129 mm,
+pas de lecture 27,2 mm (métal 15 / vide 12,2), entraxe des capteurs 37,5°.
+Après décodage ×4 : **16,4 mm de résolution au sol**. C'est moins que les 10 mm visés — la
+garde au châssis interdit un grand disque — mais cela reste largement suffisant pour nav2
+(l'EKF et le lidar corrigent) et correct pour asservir la vitesse à 20 Hz. Si la mesure #1
+donne plus de place, augmenter `R_LECTURE` et `N_CIBLES` : la résolution suit.
 
 ## 8. Plan de mise en œuvre — par étapes, du sûr vers le risqué
 
@@ -285,8 +356,8 @@ plan de câblage plaque à trous dans son `DESIGN.md`).
 
 ### Étape 3 — Robot, ROUES HORS SOL, protocole caméra
 
-Roue phonique provisoire (contreplaqué + rondelles, ou disque acier percé à la perceuse),
-capteurs sur équerre, **roues hors sol**, webcam USB, captures ffmpeg.
+Roue phonique et support capteurs **imprimés** (`plans/odometrie/`, cf. §3 bis), **roues hors
+sol**, webcam USB, captures ffmpeg.
 
 C'est ici qu'on mesure **enfin la vraie vitesse pour un PWM donné** — la première mesure
 objective du chemin roues depuis le début du projet. Rejouer
@@ -334,8 +405,17 @@ que les composants.
 | Bornier à vis 3 pôles (capteurs) | 4 |
 | Bornier 2 pôles + fusible réarmable + TVS (entrée 12 V) | 1 |
 | LED + résistance (diagnostic) | 4 |
-| Disque phonique acier 3 mm, découpe laser | 2 |
-| Bague de serrage fendue Ø 20 mm | 2 |
+| Disque phonique acier 3 mm, découpe laser — *même géométrie que le disque imprimé validé* | 2 |
+
+~~Bague de serrage fendue Ø 20 mm~~ — **supprimée** : il n'y a pas d'axe Ø 20 lisse (§2). Le
+disque se serre entre **deux écrous** sur la tige filetée. Ce qu'il faut acheter à la place,
+pour l'étape 3 :
+
+| Pièce | Qté |
+|---|---|
+| Écrous + rondelles larges au Ø de l'axe (M12 ?) | 6 |
+| Vis M8×16 tête H + écrous nylstop (les **cibles**) | 24 + 24 |
+| Impression PETG : 2 disques, 2 supports, 1 banc | — |
 
 ## 10. Pédagogie
 
