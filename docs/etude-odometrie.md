@@ -218,6 +218,32 @@ Capteur de proximité **inductif** M12, **NPN NO**, 6–36 V DC, portée 4 mm, 5
 ~2,35 € pièce (AliExpress, TENSTAR ROBOT). Ce n'est pas un « capteur de vitesse » automobile :
 c'est un détecteur de métal industriel, et c'est exactement ce qu'il nous faut.
 
+### L'entrefer : 2,5 mm, mesuré depuis l'ACIER
+
+Pas depuis la surface du disque : depuis la **tête de vis**. Le capteur ne voit que le métal (le
+PETG lui est transparent), mais le plastique occupe quand même la place — les têtes font saillie
+de 5,3 mm, et c'est d'elles que partent les 2,5 mm.
+
+**Pourquoi 2,5 et pas 4.** Les 4 mm sont la portée *nominale* (Sn), mesurée en usine sur une
+plaque d'acier doux à 20 °C. La portée **garantie**, tolérances de fabrication comprises, vaut
+~0,72 × Sn ≈ **2,9 mm**. Au-delà, ça marche peut-être — ou pas, selon la température et la pièce,
+et on ne le découvrira qu'en tournée. Il faut en outre de la marge de l'autre côté : le disque
+voile, le roulement a du jeu. **2,5 mm = 60 % de la portée : le compromis qui pardonne.**
+
+Réglage : le corps est fileté sur toute sa longueur → cale de 2,5 mm, deux écrous M12, on bloque.
+
+### ⚠️ Troisième piège : il est NON NOYABLE
+
+Le `LJ12A3-**4**-Z/BX` porte à 4 mm précisément parce qu'il est **non noyable** (un M12 noyable
+— le `-2-` — ne porte qu'à 2 mm). Un non-noyable **ne supporte pas d'être entouré de métal** :
+le métal environnant le sature, et il **ne voit plus rien défiler**. La LED reste allumée, tout
+a l'air normal, mais le train d'impulsions est mort.
+
+Conséquence directe sur le support : **en plastique, aucun problème** (il est transparent pour
+le capteur). Mais le repli « on redécoupe le même support dans de l'alu si le PETG plie » **ne
+marche pas tel quel** : il faudrait que le nez dépasse de la plaque d'au moins 4 mm, avec un
+dégagement autour. Piège coûteux, parce qu'il se manifeste comme une panne intermittente.
+
 **Ce qu'il ne faut PAS acheter**, parce que la recherche « capteur de vitesse » n'y mène que :
 
 - **Capteurs ABS / boîte de vitesses** : soit à réluctance variable — ils sortent une
