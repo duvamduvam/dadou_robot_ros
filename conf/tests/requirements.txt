@@ -31,7 +31,7 @@ pydub~=0.25.1
 #rpi_ws281x~=5.0.0
 #setuptools version to make ros2 humble word
 requests~=2.31.0
-setuptools==58.2.0
+setuptools==83.0.0
 soundfile~=0.12.1
 #SpeechRecognition~=3.10.3
 simpleaudio~=1.0.4
