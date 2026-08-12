@@ -243,11 +243,16 @@ through the mixing desk into speakers while the mic sits on him, so without echo
 strict half-duplex he **hears himself and answers himself**. That is exactly the failure mode that
 got `chat_node` killed on 2026-07-11.
 
-### Evaluated 2026-07-13, not purchased: ReSpeaker XVF3800 USB 4-Mic Array
+### Ordered 2026-08-12: ReSpeaker XVF3800 4-Mic Circular Array — "Standard" variant
 
-**Seeed reSpeaker XVF3800 USB 4-Mic Array (cased USB version) — ~€94 + shipping on AliExpress**
-<https://fr.aliexpress.com/item/1005009684208884.html> — also sold by Seeed directly and by EU
-resellers; **compare before ordering, AliExpress is not obviously the bargain here** (unlike the lidar).
+**Ordered:** Seeed reSpeaker XMOS XVF3800 4-Mic Circular Array, **"Standard" variant (no XIAO /
+ESP32, no case) — €66.39** (AliExpress item 1005009578368362, seller "Seeedstudio AI Hardware").
+Cheaper than the ~€94 first quoted; a body-mounted **3D-printed open support** replaces the cased
+version (design constraints below).
+
+Originally evaluated 2026-07-13 (~€94 *cased* version, item 1005009684208884, also sold by Seeed
+directly / by EU resellers). The reasoning below — why an array and not a "good microphone" — is
+unchanged.
 
 **Take the XVF3800, not the XVF3000 (ReSpeaker v2.0): XMOS has issued an EOL notice on the
 XVF3000** and recommends the XVF3800 for new designs. Do not build Didier's conversation on a
@@ -267,6 +272,27 @@ Why an array and not a "good microphone":
 
 Note that its **AEC is NOT a reason to buy it** — see below. Buy it for the far-field beamforming
 and the DoA, or do not buy it.
+
+### Confirmed from the product page (2026-08-12) — the "Standard" (non-XIAO) is the right variant
+
+The listing's own spec resolves the earlier "is USB-C enough?" doubt and pins the variant:
+
+- **USB Audio Class 2.0, driverless — confirmed.** The page states the reSpeaker XVF3800 *without*
+  XIAO ships with **factory USB-audio firmware**, and that it connects **"via USB Audio Class 2.0 …
+  no driver required"**. So the **"Standard" variant (no XIAO, no ESP32)** is the one to buy: it
+  enumerates as a UAC 2.0 sound card in the container, exactly like the current webcam mic. The USB-C
+  connector shape proves nothing — the *firmware* is what carries UAC audio, and here it does.
+- **⚠️ NEVER a XIAO / ESP32 variant.** Those ship with **I2S firmware** for MCU integration, and the
+  two firmwares are **mutually incompatible** — a XIAO board gives NO USB audio at all. This confirms
+  the I2S-HAT warning above: the only USB-audio path is the non-XIAO Standard.
+- **DoA is present** (speaker attribution stays possible — the whole reason to pick an array).
+- **16 kHz max sample rate — not a limitation, it is ideal.** Whisper wants 16 kHz mono; the array
+  outputs exactly that.
+- **Ignore, as already planned:** the on-board **AEC** (we stay half-duplex — Didier IS the PA) and
+  the board's **speaker / 3.5 mm jack output** (do not re-route the TTS through it).
+- **⚠️ Dimensions to re-measure on arrival.** The page lists "35×86 mm", which fits neither a circular
+  array nor the ~13×14 cm cased puck — likely the bare board or a spec typo. Measure the real diameter,
+  the four mic-port positions and the fixing holes before drawing the 3D support.
 
 ### Echo: Didier IS the PA — half-duplex is the architecture, not a fallback
 
@@ -321,9 +347,12 @@ The cased array is a ~13 × 14 × 5 cm puck, 300 g. How it is fixed decides whet
   noise — motor whine, servo gear chatter — which no beamformer can remove, because it does not
   arrive through the air. Mount on silicone/neoprene grommets or foam standoffs (a poor man's shock
   mount); nylon screws, deliberately **not** overtightened.
-- **Clear acoustic path, mic plane roughly horizontal.** The 4 capsules sit in a circle on the top
-  face and the DoA depends on that geometry. Burying the puck behind a grille, a fabric, or in a
-  cavity kills the beamforming and the DoA (cavity resonance). It needs to *see* the air.
+- **Clear acoustic path — and the mics are BOTTOM-firing (corrected 2026-08-12).** The product page
+  specs "bottom-firing microphones + flat PCB": the acoustic ports face **DOWN**, not up as the cased
+  puck had suggested. So the 3D support must leave an **air gap UNDER the mic ports** — hold the board
+  by its periphery, keep a clearance below it — and never press the underside flat against a surface.
+  Burying the array behind a grille, a fabric or in a cavity still kills the beamforming and the DoA
+  (cavity resonance): it needs to *see* the air, on its underside.
 - **Note the mounting angle.** Whatever rotation you bolt it at becomes a **fixed offset** on every
   DoA reading. Measure it once, write it in the config — do not discover it during a show.
 - **Forget "far from the speakers" — there is no far.** The chassis is the enclosure. Echo is not
