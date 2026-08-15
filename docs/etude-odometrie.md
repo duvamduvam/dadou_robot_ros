@@ -589,6 +589,15 @@ plan de câblage plaque à trous dans son `DESIGN.md`).
 Roue phonique et support capteurs **imprimés** (`plans/odometrie/`, cf. §3 bis), **roues hors
 sol**, webcam USB, captures ffmpeg.
 
+⚠️ **La roue phonique s'imprime en DEUX pièces** (`PIECE="disque"` + `PIECE="jupe"`), et ce
+n'est pas un confort : d'un bloc, son moyeu dépasse des deux côtés du disque — c'est une
+bobine, aucune orientation ne la pose à plat, et la couronne du Ø 155 imprimerait dans le vide
+(Cura, 15/08 : pièce entièrement en rouge, 13 h 22, support désactivé → impression vouée à
+l'échec). Coupée dans le plan de la face côté couronne, le disque se pose à plat, sans un seul
+support. La coupe ne coûte rien mécaniquement : la jupe ne transmettait déjà aucun couple, tout
+passe par l'empreinte hexagonale, et l'écrou M20 de 16 mm traverse les deux pièces empilées —
+chacune est entraînée en prise directe.
+
 ⚠️ **Le support tôle se fabrique à partir d'un PLAN PAPIER, et le papier passe AVANT le métal.**
 `plans/odometrie/plan-decoupe-metal.py` sort le développé sur une A4 à l'échelle exacte (règle
 témoin de 100 mm à vérifier au réglet — une imprimante qui « ajuste à la page » réduit de 3 à
@@ -698,7 +707,7 @@ pour l'étape 3 :
 |---|---|
 | **Écrou M20** + rondelle large M20 (le contre-écrou du disque — *un seul par roue*, l'autre est déjà sur le robot) | 2 + 2 |
 | Vis M8×16 tête H **en ACIER ZINGUÉ — jamais inox** (les **cibles**) + écrous M8 normaux + frein-filet | 30 + 30 |
-| Impression PETG : 2 disques, 2 supports, 1 banc | — |
+| Impression PETG : 2 roues phoniques (**2 pièces chacune** : disque + jupe — cf. plus bas), 2 supports, 1 banc | — |
 
 ## 10. Pédagogie
 
