@@ -23,7 +23,7 @@ journal de bord illisible).*
 | Conversation en déambulation (intention + contenu) | plan DÉCIDÉ (grillé 12/07) ; D0 outillage + personas commutables FAITS 13/07 | campagne D0 (robot allumé) ; textes personas à valider avec David | D1+ ⟸ protocole physique chat_node V2 (0) ; D6 ⟸ verrous roues |
 | Suivi de personne (roues) | validé sim 5/5, déployé, **SIM-ONLY** | — (attend ses verrous) | test scénique (1) PUIS protocole caméra (`direction_sign` inconnu) |
 | Gaze V1 + arbitrage actionneurs | validé RÉEL 12/07 ; arbitrage déployé sur les 2 Pi | vérif visuelle : gaze ON pendant une séquence (la tête ne doit plus trembler) | — |
-| Odométrie des roues (encodeurs) | plan DÉCIDÉ 14/07 ; **pièces 3D dessinées** ; rien acheté | commander les capteurs + imprimer le banc d'établi | **1 cote bloquante** : garde axe→châssis (§7) |
+| Odométrie des roues (encodeurs) | plan DÉCIDÉ 14/07 ; pièces 3D dessinées ; **plan papier 1:1 du support tôle fait 15/08** ; rien acheté | commander les capteurs + imprimer le banc d'établi ; **découper le gabarit PAPIER et le présenter sur le robot** | plus de cote bloquante ; 3 cotes de palier restent des hypothèses (elles ne bloquent que la TÔLE) |
 | Chaîne de sécurité matérielle (main-carrier) | schéma révisé 14/07 ; **contrat figé en tests sur la branche `chaine-securite`** | router la bande sécurité (122 chevelus) + note de sécurité docs/ | carte non fabriquée ; encombrement 195×150 à confirmer |
 | Fond de tiroir | — | voir §Fond de tiroir | — |
 
@@ -75,10 +75,18 @@ inductifs `LJ12A3-4-Z/BX` (M12, NPN, 12 V) par roue → quadrature → PC817 →
 faux, §2 corrigé). On ne touche **pas** aux 3 boulons de la couronne — c'est le
 chemin de couple de la roue, et le disque ne transmet aucun couple.
 
-**Pièces 3D dessinées** (`../plans/odometrie/`, dépôt plans b8243e9) : roue phonique
-(porte-cibles PETG + 12 têtes de vis M8 en acier — l'inductif ne voit que le métal),
-support capteurs nervuré, et le banc d'établi. Géométrie sous `assert()` : une cote
-fausse refuse de compiler.
+**Pièces dessinées** (`../plans/odometrie/`, dépôt plans) : roue phonique
+(porte-cibles PETG + **15** têtes de vis M8 en acier — l'inductif ne voit que le métal),
+support capteurs (version PETG **et** version tôle pliée, cette dernière retenue), et le
+banc d'établi. Géométrie sous `assert()` : une cote fausse refuse de compiler.
+
+**Plan papier 1:1 du support tôle — fait le 15/08** : `plan-decoupe-metal.py` sort une A4
+à l'échelle exacte (contour, bande de pli, croix de pointeau, cotes, règle témoin de
+100 mm) pour tracer et découper la tôle à la main. Il ne retape aucune cote — contour et
+valeurs viennent d'OpenSCAD — et il **remesure la page produite** avant de la livrer.
+Au passage, deux bugs du développé corrigés : le **retrait de pli n'était pas déduit**
+(dessin de 152,96 mm pour une cote annoncée de 144,96 — 8 mm de trop) et la **bande de pli
+rebouchait le dégagement d'axe**. Un `assert()` compare désormais le dessin à sa cote.
 
 **Prochaine action — étape 1, sans robot, zéro risque** : commander les capteurs
 (~15 €, cf. §9 — ⚠️ variante **NPN**, jamais PNP), imprimer le banc, passer la
@@ -86,8 +94,12 @@ réglette à la main devant les deux capteurs. Ça valide détection, entrefer, 
 inversée, quadrature et **le sens** (aller-retour), et tout le firmware Pico + le
 nœud ROS se déboguent là.
 
-**En parallèle, 5 mesures au pied à coulisse** (§7) — la bloquante est la **garde
-axe → châssis** : elle plafonne le rayon du disque, donc la résolution.
+**En parallèle, les mesures au pied à coulisse** (§7). Les six cotes bloquantes ont été
+levées le 14/07 (dont la garde axe → châssis, 30 mm, qui plafonnait le rayon du disque).
+Il reste **trois cotes de palier** — `D_BOULON`, `PAL_ENTRAXE`, `PAL_AXE_SEM` — qui ne
+bloquent que la **tôle** : `D_BOULON` place les trous, et fausse de 3 mm elle rend la pièce
+bonne à jeter. Le gabarit papier est fait pour ça : on le présente sur le robot avant de
+toucher au métal.
 
 Puis : étape 2 carte à trous au brochage définitif → étape 3 robot **roues hors
 sol** + protocole caméra (on mesurera enfin la vraie vitesse pour un PWM donné,

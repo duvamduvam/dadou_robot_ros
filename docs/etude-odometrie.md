@@ -589,6 +589,21 @@ plan de câblage plaque à trous dans son `DESIGN.md`).
 Roue phonique et support capteurs **imprimés** (`plans/odometrie/`, cf. §3 bis), **roues hors
 sol**, webcam USB, captures ffmpeg.
 
+⚠️ **Le support tôle se fabrique à partir d'un PLAN PAPIER, et le papier passe AVANT le métal.**
+`plans/odometrie/plan-decoupe-metal.py` sort le développé sur une A4 à l'échelle exacte (règle
+témoin de 100 mm à vérifier au réglet — une imprimante qui « ajuste à la page » réduit de 3 à
+6 %, soit 4 à 9 mm sur cette pièce). On **découpe d'abord le papier** et on le présente sur le
+robot, roue montée : c'est le seul moyen de vérifier `D_BOULON`, `PAL_ENTRAXE` et `PAL_AXE_SEM`
+avant qu'ils ne coûtent une tôle. Cf. la règle du §7 : ces cotes suffisent à imprimer, pas à
+graver de l'acier.
+
+Découverte du 2026-08-15, à ne pas reperdre : le **développé exporté était faux de 8 mm** (le
+retrait de pli n'était pas déduit), et **la bande de pli rebouchait le dégagement d'axe**. Les
+deux sont corrigés, avec un `assert()` qui compare désormais le dessin à la cote qu'il annonce
+— jusque-là, le fichier affichait 144,96 en exportant 152,96, et rien ne le contredisait. À
+retenir aussi pour le montage : **le pli traverse le dégagement d'axe**, il ne reste que deux
+bretelles de ~34 mm, à plier ensemble en une seule passe sous peine de vriller les deux ailes.
+
 C'est ici qu'on mesure **enfin la vraie vitesse pour un PWM donné** — la première mesure
 objective du chemin roues depuis le début du projet. Rejouer
 `conf/scripts/validate-cmdvel-protocol.sh` en enregistrant l'odométrie en parallèle.
