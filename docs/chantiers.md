@@ -23,7 +23,7 @@ journal de bord illisible).*
 | Conversation en déambulation (intention + contenu) | plan DÉCIDÉ (grillé 12/07) ; D0 outillage + personas commutables FAITS 13/07 | campagne D0 (robot allumé) ; textes personas à valider avec David | D1+ ⟸ protocole physique chat_node V2 (0) ; D6 ⟸ verrous roues |
 | Suivi de personne (roues) | validé sim 5/5, déployé, **SIM-ONLY** | — (attend ses verrous) | test scénique (1) PUIS protocole caméra (`direction_sign` inconnu) |
 | Gaze V1 + arbitrage actionneurs | validé RÉEL 12/07 ; arbitrage déployé sur les 2 Pi | vérif visuelle : gaze ON pendant une séquence (la tête ne doit plus trembler) | — |
-| Odométrie des roues (encodeurs) | plan DÉCIDÉ 14/07 ; **disque Ø155 CONTREDIT 16/08** (butait sur le carter, jamais mesuré) → **redimensionné Ø113, 10 cibles, 19,6 mm/front** + double empreinte hexa ; **fixation v3 = pattes sous caisse** (la tôle palier + plan papier sont morts) ; rien acheté | **réimprimer gabarit (`JEU_HEX=0.25`) → jupe → disque** + 2 porte-capteurs ; vérif visuelle chaîne/palier roue montée ; commander les capteurs + imprimer le banc | plus de cote bloquante (les 3 cotes de palier sont SANS OBJET depuis la v3) |
+| Odométrie des roues (encodeurs) | plan DÉCIDÉ 14/07 ; **disque redimensionné Ø113 le 16/08** (le Ø155 butait sur le carter) ; **fixation v4 = 4 pattes sous caisse de part et d'autre du palier, écrou de chaque côté** (tôle palier + plan papier morts) ; **capteurs LJ12A3 REÇUS 16/08** ; couronne déposée | **imprimer le banc + brancher un capteur (étape 1 débloquée)** ; réimprimer gabarit (`JEU_HEX=0.25`) → jupe → disque + 4 pattes ; re-mesurer la couronne déposée | plus de cote bloquante ; couronne à re-mesurer (réglet dit ~130-135, étude disait 110) |
 | Chaîne de sécurité matérielle (main-carrier) | schéma révisé 14/07 ; **contrat figé en tests sur la branche `chaine-securite`** | router la bande sécurité (122 chevelus) + note de sécurité docs/ | carte non fabriquée ; encombrement 195×150 à confirmer |
 | Fond de tiroir | — | voir §Fond de tiroir | — |
 
@@ -86,16 +86,21 @@ hexa des deux côtés** (tête indexée = cibles au même profil, serrage sans c
 Le gabarit a rendu son verdict au passage : `JEU_HEX` 0.4 trop libre → **0.25**, à
 revalider par le gabarit avant tout disque. Tout est régénéré, asserts verts.
 
-**16/08 aussi — fixation capteurs RE-DÉCIDÉE en v3 (proposition David)** : un
-**PORTE-CAPTEURS PETG par roue vissé sous la caisse** (`patte-capteur.scad` ×2,
-autoperceuses dans la tôle du fond — les pattes individuelles se chevauchaient, et
-la pièce double fige l'entraxe de quadrature à l'impression). C'est le Ø 113 qui le
-permet : capteurs à ~11 mm sous la caisse au lieu de 31. On ne touche plus aux boulons
-du palier, **la tôle pliée et son plan papier sont SANS OBJET** (ainsi que les 3 cotes
-de palier). Pas d'écrou à l'arrière (il ne rentre pas sous la caisse) : **corps M12×1
-taraudé dans le voile + un seul contre-écrou avant** ; chaîne à ~9 mm des corps —
-vérif visuelle roue montée avant perçage. Détail : étude §3 ter, rendus dans le
-dépôt plans (odometrie/rendus/).
+**16/08 soir — fixation capteurs en v4 (montage de David, qui a retoqué mes v3.x
+deux fois avec raison)** : **4 pattes identiques** (2/roue) vissées sous la caisse,
+un capteur **de chaque côté du palier, à hauteur d'axe** — là il y a 30 mm de place,
+donc **montage classique, un écrou M12 de chaque côté du voile** (les v3.x à 6 H
+reposaient sur une erreur de signe : l'axe est 30 mm SOUS la caisse). On ne touche
+plus aux boulons du palier, **la tôle pliée et son plan papier restent SANS OBJET**.
+⚠️ La **quadrature est un réglage vertical** : capteur B 7 mm plus bas que A (un
+quart de pas), calé aux LED — lumière verticale ±8 mm prévue pour. Détail : étude
+§3 ter, rendus dans le dépôt plans (odometrie/rendus/).
+
+**16/08 soir aussi — les capteurs LJ12A3 SONT ARRIVÉS** (photo : 2 écrous +
+rondelle livrés avec) → **l'étape 1 (banc d'établi) est débloquée**. Et la
+**couronne est déposée** : au réglet ~130-135 mm hors-tout, l'étude disait
+« Ø 110 mesuré » → à re-mesurer posée à plat (gardes chaîne à recaler ; le disque
+Ø 113 n'est pas concerné, son plafond est l'obstacle mesuré à 63 mm).
 
 **Pièces dessinées** (`../plans/odometrie/`, dépôt plans) : roue phonique
 (porte-cibles PETG + **10** têtes de vis M8 en acier — l'inductif ne voit que le métal),

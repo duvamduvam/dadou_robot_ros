@@ -214,22 +214,31 @@ rentrerait pas dans le lamage.
 Conséquence heureuse : **la géométrie validée en plastique est exactement celle qu'on gravera
 dans l'acier**. Le prototype n'est pas une approximation du disque final, il en est le plan.
 
-## 3 ter. Le SUPPORT — RE-DÉCIDÉ le 2026-08-16 : deux PATTES sous la caisse (v3)
+## 3 ter. Le SUPPORT — RE-DÉCIDÉ le 2026-08-16 au soir : une patte par capteur, DE PART ET D'AUTRE du palier (v4)
 
-**La décision du 14/07 (bride puis équerre sur le palier) est SUPPLANTÉE.** Proposition de
-David, permise par le redimensionnement Ø 113 : les capteurs remontent de R = 65 à R = 44,
-soit **~11 mm sous le bas de caisse** au lieu de 31 — la « première idée » (sous la caisse),
-écartée quand elle exigeait une échasse au milieu des paliers, devient un **moignon court et
-rigide** vissé dans la tôle du fond (2 autoperceuses), à côté du palier, plus dedans.
-`plans/odometrie/patte-capteur.scad`, en **v3.2 : UNE pièce par roue portant les DEUX
-capteurs** — les pattes individuelles se chevauchaient (capteurs à 33,7 mm, chaque patte
-exigeait > 34 mm pour ses vis) ; bénéfice : l'entraxe de quadrature est garanti par
-l'impression. **Pas d'écrou à l'arrière du voile — il ne rentre pas sous la caisse**
-(coin à 10,95 mm autour du corps, caisse à 10,65) : le voile de 10 mm est percé Ø 11,7 et
-le corps **M12×1 s'y taraude** ; entrefer réglé en tournant le corps (1 mm/tour), verrouillé
-par **un seul contre-écrou, devant, en plein accès**. Garde de la tige M20 retranchée
-paramétriquement, corps à ~9 mm au-dessus de la chaîne (asserts + vérif visuelle roue
-montée avant perçage).
+**La décision du 14/07 (bride puis équerre sur le palier) est SUPPLANTÉE, et les v3.x du
+16/08 après-midi aussi.** Montage de David : **4 pattes identiques** (2 par roue) vissées
+**sous la caisse**, un capteur de chaque côté du palier, **à hauteur d'axe** (3 H / 9 H).
+Là, 30 mm séparent l'axe de la caisse : **montage classique, un écrou M12 de chaque côté du
+voile** — la quincaillerie livrée avec le capteur. `plans/odometrie/patte-capteur.scad`,
+rendus de montage dans `plans/odometrie/rendus/`.
+
+Les v3.x (capteurs à 6 H, pièce double, puis corps taraudé faute d'écrou arrière) sont
+mortes deux fois : imposition héritée de la v2 qui ne se justifiait plus, ET une **erreur
+de signe** dans les calculs de profondeur (l'axe est 30 mm SOUS la caisse — à 6 H les
+capteurs pendraient à ~71 mm sous la caisse, pas 11). C'est David qui a vu les deux
+(« pourquoi si bas ? », « je ne peux pas mettre d'écrou »).
+
+**La quadrature est un réglage VERTICAL** : deux capteurs face à face = 180° = 5 pas de
+cible pile = déphasage nul. Il faut un quart de pas — **9°, soit ~7 mm d'arc à R = 44** :
+le capteur B se règle 7 mm plus bas que A dans la **lumière verticale (±8 mm)** de son
+voile, aux **LED intégrées** (la LED de B bascule à mi-chemin entre deux bascules de A).
+Lumières de semelle = rayon (±4 mm), écrous = entrefer (cale de 2,5).
+
+⚠️ Avant perçage : présenter roue montée (palier, bride, carter), et **re-mesurer la
+couronne déposée le 16/08** — au réglet elle fait ~130-135 mm hors-tout, l'étude disait
+« Ø 110 mesuré ». Sans effet sur le disque (l'obstacle mesuré `OBSTACLE_R = 63` reste le
+plafond), mais les gardes chaîne des asserts s'y recalent.
 
 Ce qu'on gagne : on **ne touche plus aux boulons du palier** (un organe qui porte la roue),
 plus de tôle à découper/plier, plus de plan papier, les 3 cotes de palier deviennent sans
