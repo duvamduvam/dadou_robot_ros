@@ -23,7 +23,7 @@ journal de bord illisible).*
 | Conversation en déambulation (intention + contenu) | plan DÉCIDÉ (grillé 12/07) ; D0 outillage + personas commutables FAITS 13/07 | campagne D0 (robot allumé) ; textes personas à valider avec David | D1+ ⟸ protocole physique chat_node V2 (0) ; D6 ⟸ verrous roues |
 | Suivi de personne (roues) | validé sim 5/5, déployé, **SIM-ONLY** | — (attend ses verrous) | test scénique (1) PUIS protocole caméra (`direction_sign` inconnu) |
 | Gaze V1 + arbitrage actionneurs | validé RÉEL 12/07 ; arbitrage déployé sur les 2 Pi | vérif visuelle : gaze ON pendant une séquence (la tête ne doit plus trembler) | — |
-| Odométrie des roues (encodeurs) | plan DÉCIDÉ 14/07 ; **disque Ø155 CONTREDIT 16/08** (butait sur le carter, jamais mesuré) → **redimensionné Ø113, 10 cibles, 19,6 mm/front** + double empreinte hexa ; plan papier 1:1 refait ; rien acheté | **réimprimer gabarit (`JEU_HEX=0.25`) → jupe → disque** ; commander les capteurs + imprimer le banc ; **découper le gabarit PAPIER et le présenter sur le robot** | plus de cote bloquante ; 3 cotes de palier restent des hypothèses (elles ne bloquent que la TÔLE) |
+| Odométrie des roues (encodeurs) | plan DÉCIDÉ 14/07 ; **disque Ø155 CONTREDIT 16/08** (butait sur le carter, jamais mesuré) → **redimensionné Ø113, 10 cibles, 19,6 mm/front** + double empreinte hexa ; **fixation v3 = pattes sous caisse** (la tôle palier + plan papier sont morts) ; rien acheté | **réimprimer gabarit (`JEU_HEX=0.25`) → jupe → disque** + 4 pattes ; vérif visuelle chaîne/capteurs roue montée ; commander les capteurs + imprimer le banc | plus de cote bloquante (les 3 cotes de palier sont SANS OBJET depuis la v3) |
 | Chaîne de sécurité matérielle (main-carrier) | schéma révisé 14/07 ; **contrat figé en tests sur la branche `chaine-securite`** | router la bande sécurité (122 chevelus) + note de sécurité docs/ | carte non fabriquée ; encombrement 195×150 à confirmer |
 | Fond de tiroir | — | voir §Fond de tiroir | — |
 
@@ -84,21 +84,24 @@ Recalé le jour même : **10 cibles à R = 44, Ø 113 × 12, 19,6 mm/front** (M8
 conservé : cible ≥ 3×Sn = 12 mm), garde-fou 5b désormais purement radial, et **empreinte
 hexa des deux côtés** (tête indexée = cibles au même profil, serrage sans clé à tenir).
 Le gabarit a rendu son verdict au passage : `JEU_HEX` 0.4 trop libre → **0.25**, à
-revalider par le gabarit avant tout disque. Tout est régénéré, asserts verts, plan
-papier A4 refait (122,8 × 104).
+revalider par le gabarit avant tout disque. Tout est régénéré, asserts verts.
+
+**16/08 aussi — fixation capteurs RE-DÉCIDÉE en v3 (proposition David)** : deux **pattes
+PETG par roue vissées sous la caisse** (`patte-capteur.scad`, une seule pièce ×4,
+autoperceuses dans la tôle du fond). C'est le Ø 113 qui la permet : capteurs à ~11 mm
+sous la caisse au lieu de 31. On ne touche plus aux boulons du palier, **la tôle pliée
+et son plan papier sont SANS OBJET** (ainsi que les 3 cotes de palier). Écrous M12 nus
+côté intérieur (garde de 3 mm à la tige, sous assert), chaîne à ~9 mm des corps —
+vérif visuelle roue montée avant perçage. Détail : étude §3 ter.
 
 **Pièces dessinées** (`../plans/odometrie/`, dépôt plans) : roue phonique
-(porte-cibles PETG + **15** têtes de vis M8 en acier — l'inductif ne voit que le métal),
-support capteurs (version PETG **et** version tôle pliée, cette dernière retenue), et le
-banc d'établi. Géométrie sous `assert()` : une cote fausse refuse de compiler.
+(porte-cibles PETG + **10** têtes de vis M8 en acier — l'inductif ne voit que le métal),
+pattes capteurs sous caisse (v3), et le banc d'établi. Géométrie sous `assert()` : une
+cote fausse refuse de compiler.
 
-**Plan papier 1:1 du support tôle — fait le 15/08** : `plan-decoupe-metal.py` sort une A4
-à l'échelle exacte (contour, bande de pli, croix de pointeau, cotes, règle témoin de
-100 mm) pour tracer et découper la tôle à la main. Il ne retape aucune cote — contour et
-valeurs viennent d'OpenSCAD — et il **remesure la page produite** avant de la livrer.
-Au passage, deux bugs du développé corrigés : le **retrait de pli n'était pas déduit**
-(dessin de 152,96 mm pour une cote annoncée de 144,96 — 8 mm de trop) et la **bande de pli
-rebouchait le dégagement d'axe**. Un `assert()` compare désormais le dessin à sa cote.
+~~Plan papier 1:1 du support tôle — fait le 15/08~~ — **SANS OBJET depuis la v3** (plus de
+tôle). L'outillage reste dans le dépôt plans pour mémoire : `plan-decoupe-metal.py` savait
+sortir une A4 1:1 auto-vérifiée, la méthode resservira si une pièce métal revient.
 
 **Prochaine action — étape 1, sans robot, zéro risque** : commander les capteurs
 (~15 €, cf. §9 — ⚠️ variante **NPN**, jamais PNP), imprimer le banc, passer la

@@ -214,11 +214,30 @@ rentrerait pas dans le lamage.
 Conséquence heureuse : **la géométrie validée en plastique est exactement celle qu'on gravera
 dans l'acier**. Le prototype n'est pas une approximation du disque final, il en est le plan.
 
-## 3 ter. Le SUPPORT — DÉCIDÉ (2026-07-14) : une bride sur le PALIER
+## 3 ter. Le SUPPORT — RE-DÉCIDÉ le 2026-08-16 : deux PATTES sous la caisse (v3)
+
+**La décision du 14/07 (bride puis équerre sur le palier) est SUPPLANTÉE.** Proposition de
+David, permise par le redimensionnement Ø 113 : les capteurs remontent de R = 65 à R = 44,
+soit **~11 mm sous le bas de caisse** au lieu de 31 — la « première idée » (sous la caisse),
+écartée quand elle exigeait une échasse au milieu des paliers, devient un **moignon court et
+rigide** vissé dans la tôle du fond (2 autoperceuses par patte), à côté du palier, plus dedans.
+`plans/odometrie/patte-capteur.scad` : une seule pièce pour les 4 positions, lumières de
+réglage phase (±4 mm) et rayon (±2 mm), garde de la tige M20 retranchée paramétriquement
+(écrous M12 **nus** côté intérieur — une rondelle Ø 24 mangerait la garde de 3 mm), corps du
+capteur à ~9 mm au-dessus de la chaîne (assert + vérif visuelle roue montée avant perçage).
+
+Ce qu'on gagne : on **ne touche plus aux boulons du palier** (un organe qui porte la roue),
+plus de tôle à découper/plier, plus de plan papier, les 3 cotes de palier deviennent sans
+objet, et du PETG autour du nez — le cas idéal pour un capteur non noyable. Ce qu'on concède :
+l'ancrage caisse re-couple l'entrefer à la flexion du châssis (l'argument pro-palier
+ci-dessous reste vrai) — mais sur 11 mm de bras au droit des paliers, la flexion locale est
+minime, et l'entrefer à 60 % de Sn tolère ±1 mm. La quadrature dépend du monteur (une patte
+par capteur) : se caler avec les LED des capteurs, disque monté.
+
+*Historique (v1 → v2), conservé parce que le raisonnement resservira :*
 
 Première idée, abandonnée : boulonner le support **sous la caisse**. À l'atelier, ça ne passe
-pas — **les paliers sont dans le chemin**. Vouloir les contourner, c'est se battre contre la
-mécanique.
+pas — **les paliers sont dans le chemin** (et les capteurs du Ø 155 pendaient 31 mm plus bas).
 
 Le support se **bride sur le palier lui-même** : deux coquilles imprimées pincent son plat comme
 un étau, serrées par 2 vis M5 qui passent de part et d'autre. **Zéro perçage** sur une pièce qui
@@ -619,13 +638,11 @@ verdict : à `JEU_HEX = 0.4` l'empreinte hexa entre libre avec un léger jeu —
 une **empreinte hexa côté tête** (cibles indexées, serrage sans clé à tenir), disque épaissi
 à 12 mm pour l'âme entre les deux poches.
 
-⚠️ **Le support tôle se fabrique à partir d'un PLAN PAPIER, et le papier passe AVANT le métal.**
-`plans/odometrie/plan-decoupe-metal.py` sort le développé sur une A4 à l'échelle exacte (règle
-témoin de 100 mm à vérifier au réglet — une imprimante qui « ajuste à la page » réduit de 3 à
-6 %, soit 4 à 9 mm sur cette pièce). On **découpe d'abord le papier** et on le présente sur le
-robot, roue montée : c'est le seul moyen de vérifier `D_BOULON`, `PAL_ENTRAXE` et `PAL_AXE_SEM`
-avant qu'ils ne coûtent une tôle. Cf. la règle du §7 : ces cotes suffisent à imprimer, pas à
-graver de l'acier.
+~~⚠️ Le support tôle se fabrique à partir d'un PLAN PAPIER…~~ — **SANS OBJET depuis la
+fixation v3 du 16/08** (§3 ter) : plus de tôle, plus de plan papier, plus de cotes de palier.
+Le support capteurs est désormais la **patte sous caisse** (`patte-capteur.scad`, ×4),
+vissée dans la tôle du fond — vérif visuelle chaîne/corps de capteur roue montée, puis
+2 autoperceuses par patte.
 
 Découverte du 2026-08-15, à ne pas reperdre : le **développé exporté était faux de 8 mm** (le
 retrait de pli n'était pas déduit), et **la bande de pli rebouchait le dégagement d'axe**. Les
