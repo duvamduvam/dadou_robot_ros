@@ -23,7 +23,7 @@ journal de bord illisible).*
 | Conversation en déambulation (intention + contenu) | plan DÉCIDÉ (grillé 12/07) ; D0 outillage + personas commutables FAITS 13/07 | campagne D0 (robot allumé) ; textes personas à valider avec David | D1+ ⟸ protocole physique chat_node V2 (0) ; D6 ⟸ verrous roues |
 | Suivi de personne (roues) | validé sim 5/5, déployé, **SIM-ONLY** | — (attend ses verrous) | test scénique (1) PUIS protocole caméra (`direction_sign` inconnu) |
 | Gaze V1 + arbitrage actionneurs | validé RÉEL 12/07 ; arbitrage déployé sur les 2 Pi | vérif visuelle : gaze ON pendant une séquence (la tête ne doit plus trembler) | — |
-| Odométrie des roues (encodeurs) | plan DÉCIDÉ 14/07 ; **roue phonique 1 IMPRIMÉE et montée à blanc 16/08** (gabarit+jupe+disque, PETG) ; plan papier 1:1 du support tôle fait 15/08 ; rien acheté | commander les capteurs + imprimer le banc d'établi ; roue 2 avec `JEU_HEX=0.25` via gabarit ; **découper le gabarit PAPIER et le présenter sur le robot** | plus de cote bloquante ; 3 cotes de palier restent des hypothèses (elles ne bloquent que la TÔLE) |
+| Odométrie des roues (encodeurs) | plan DÉCIDÉ 14/07 ; **disque Ø155 CONTREDIT 16/08** (butait sur le carter, jamais mesuré) → **redimensionné Ø113, 10 cibles, 19,6 mm/front** + double empreinte hexa ; plan papier 1:1 refait ; rien acheté | **réimprimer gabarit (`JEU_HEX=0.25`) → jupe → disque** ; commander les capteurs + imprimer le banc ; **découper le gabarit PAPIER et le présenter sur le robot** | plus de cote bloquante ; 3 cotes de palier restent des hypothèses (elles ne bloquent que la TÔLE) |
 | Chaîne de sécurité matérielle (main-carrier) | schéma révisé 14/07 ; **contrat figé en tests sur la branche `chaine-securite`** | router la bande sécurité (122 chevelus) + note de sécurité docs/ | carte non fabriquée ; encombrement 195×150 à confirmer |
 | Fond de tiroir | — | voir §Fond de tiroir | — |
 
@@ -76,12 +76,16 @@ positive + appui) et un seul contre-écrou serre l'empilement — deux écrous a
 rentraient pas dans les 35 mm de filetage. On ne touche **pas** aux 3 boulons de la
 couronne — c'est le chemin de couple de la roue, et le disque ne transmet aucun couple.
 
-**Roue phonique 1 IMPRIMÉE le 16/08** (CR-10, PETG gris Geeetech) : jeu complet
-gabarit + jupe + disque, dans l'ordre prévu, et **montée à blanc sur la tige M20**
-(photos : `../plans/odometrie/photos/`). Verdict d'emboîtement : à `JEU_HEX = 0.4`
-l'empreinte entre **libre avec un léger jeu en rotation** (~0,6°, ~1,3 mm au sol par
-inversion de sens — un dixième de front) : **toléré pour la roue 1**, le contre-écrou
-amortira. **Roue 2 : `JEU_HEX = 0.25`, revalidé par le gabarit avant le disque.**
+**16/08 — le disque Ø 155 CONTREDIT PAR LE RÉEL, redimensionné Ø 113.** Le premier jeu
+imprimé (gabarit → jupe → disque, PETG) butait sur le **carter du réducteur** — jamais
+mesuré — et la chaîne traverse son plan (photos de la collision :
+`../plans/odometrie/photos/`). Cote relevée : axe → obstacle = **63 mm** (`OBSTACLE_R`).
+Recalé le jour même : **10 cibles à R = 44, Ø 113 × 12, 19,6 mm/front** (M8/clé de 13
+conservé : cible ≥ 3×Sn = 12 mm), garde-fou 5b désormais purement radial, et **empreinte
+hexa des deux côtés** (tête indexée = cibles au même profil, serrage sans clé à tenir).
+Le gabarit a rendu son verdict au passage : `JEU_HEX` 0.4 trop libre → **0.25**, à
+revalider par le gabarit avant tout disque. Tout est régénéré, asserts verts, plan
+papier A4 refait (122,8 × 104).
 
 **Pièces dessinées** (`../plans/odometrie/`, dépôt plans) : roue phonique
 (porte-cibles PETG + **15** têtes de vis M8 en acier — l'inductif ne voit que le métal),

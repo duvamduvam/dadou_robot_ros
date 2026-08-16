@@ -202,8 +202,10 @@ D'où deux remparts :
 
 Un inductif ne voit **que le métal** — le plastique lui est parfaitement transparent. Le disque
 imprimé n'est donc pas un pis-aller : c'est un **porte-cibles**. Ce que le capteur voit, ce sont
-**15 têtes de vis M8 en acier** (Ø 15 mm sur angles ≥ 3 × Sn, la règle des inductifs), montées
-tête côté capteur, **écrou noyé côté couronne**. Imperdables, épaisses, et elles ne se décollent
+**10 têtes de vis M8 en acier** (Ø 15 mm sur angles ≥ 3 × Sn, la règle des inductifs — du M6 à
+10 mm serait sous le seuil), montées tête côté capteur, **écrou noyé côté couronne, tête indexée
+dans une empreinte hexa côté capteur** (ajout du 16/08 : profil identique pour toutes les
+cibles, plus rien à tenir au serrage). Imperdables, épaisses, et elles ne se décollent
 pas sous vibrations — ce que des rondelles collées feraient tôt ou tard.
 
 Écrous **normaux + frein-filet**, pas des nylstop : un nylstop M8 fait 8 mm de haut et ne
@@ -540,13 +542,22 @@ Contraintes de dimensionnement, toutes **codées en `assert()`** dans
 `plans/odometrie/parametres.scad` — une géométrie fausse **refuse de compiler** :
 **pas de lecture ≥ 2 × Ø du nez** (sinon le capteur voit deux cibles à la fois), **cible ≥ 3 × Sn**,
 **vide entre cibles ≥ 3 × Sn** (sans quoi le capteur reste collé à l'état « métal » et le train
-d'impulsions disparaît), la coiffe qui passe sous la caisse, le disque hors du plan de la chaîne,
-et l'encombrement du créneau.
+d'impulsions disparaît), la coiffe qui passe sous la caisse, le disque en dedans de l'obstacle
+carter/chaîne, et l'encombrement du créneau.
 
-**Géométrie retenue : 15 cibles à R = 65 mm**, disque **Ø 155 mm**, décalé de 10 mm, pas de
-lecture 27,2 mm (métal 15 / vide 12,2), entraxe des capteurs 30°.
-Après décodage ×4 : **13,1 mm de résolution au sol** — suffisant pour nav2 (l'EKF et le lidar
+**Géométrie retenue (recalée le 16/08) : 10 cibles à R = 44 mm**, disque **Ø 113 × 12 mm**,
+décalé de 10 mm, pas de lecture 27,6 mm (métal 15 / vide 12,6), entraxe des capteurs 45°.
+Après décodage ×4 : **19,6 mm de résolution au sol** — suffisant pour nav2 (l'EKF et le lidar
 corrigent) et correct pour asservir la vitesse à 20 Hz.
+
+⚠️ La géométrie initiale (15 cibles à R = 65, Ø 155, 13,1 mm/front) a été **contredite par le
+réel le 16/08**, disque imprimé en main : il bute sur le **carter du réducteur** — jamais
+mesuré, le modèle ne connaissait que la caisse, la couronne et le plan de la chaîne — et la
+chaîne traverse bel et bien son plan (le débord estimé était optimiste). Cote relevée disque
+en butée : **axe → obstacle le plus proche = 63 mm** (`OBSTACLE_R`, carter et chaîne
+confondus), garde retenue 6 mm. Le garde-fou « hors du plan de la chaîne » n'existe plus :
+la contrainte est purement **radiale**. Leçon consignée dans `MESURES.md` : une cote
+d'environnement vaut une cote de pièce.
 
 Le contraste mérite d'être noté, parce qu'il justifie deux fois le même raisonnement : un disque
 résigné à tenir **sous la caisse** aurait été plafonné à R = 25 (4 cibles, 49 mm/front) ; un
@@ -598,11 +609,15 @@ support. La coupe ne coûte rien mécaniquement : la jupe ne transmettait déjà
 passe par l'empreinte hexagonale, et l'écrou M20 de 16 mm traverse les deux pièces empilées —
 chacune est entraînée en prise directe.
 
-**FAIT le 2026-08-16 — roue 1 imprimée et montée à blanc** (CR-10, PETG gris Geeetech,
-gabarit → jupe → disque dans l'ordre prévu ; photos dans `plans/odometrie/photos/`).
-Emboîtement constaté à `JEU_HEX = 0.4` : **libre, léger jeu en rotation** (~0,6° soit
-~1,3 mm au sol par inversion de sens, un dixième de front) — toléré pour la roue 1, le
-contre-écrou amortit. **Roue 2 : `JEU_HEX = 0.25`, revalidé par le gabarit d'abord.**
+**16/08 — premier jeu imprimé (Ø 155)… et CONTREDIT PAR LE RÉEL** : gabarit → jupe → disque
+dans l'ordre prévu (CR-10, PETG gris Geeetech), mais le disque **bute sur le carter du
+réducteur** et la chaîne traverse son plan — il est bon pour le bac (photos de la collision
+dans `plans/odometrie/photos/`). Redimensionné le jour même : **Ø 113, 10 cibles,
+19,6 mm/front** (cf. §7, cote `OBSTACLE_R = 63` mesurée). Le gabarit, lui, a rendu son
+verdict : à `JEU_HEX = 0.4` l'empreinte hexa entre libre avec un léger jeu — passé à
+**0.25** pour viser le maillet, **à revalider par le gabarit** avant tout disque. S'ajoute
+une **empreinte hexa côté tête** (cibles indexées, serrage sans clé à tenir), disque épaissi
+à 12 mm pour l'âme entre les deux poches.
 
 ⚠️ **Le support tôle se fabrique à partir d'un PLAN PAPIER, et le papier passe AVANT le métal.**
 `plans/odometrie/plan-decoupe-metal.py` sort le développé sur une A4 à l'échelle exacte (règle
@@ -706,13 +721,13 @@ groupent). Sinon le port coûte plus cher que les composants.
 | Disque phonique acier 3 mm, découpe laser — *même géométrie que le disque imprimé validé* | 2 |
 
 ~~Bague de serrage fendue Ø 20 mm~~ — **supprimée** : il n'y a pas d'axe Ø 20 lisse (§2). Le
-disque se serre entre **deux écrous** sur la tige filetée. Ce qu'il faut acheter à la place,
-pour l'étape 3 :
+disque **coiffe l'écrou M20 existant** (§3 bis) et un seul contre-écrou serre l'empilement.
+Ce qu'il faut acheter à la place, pour l'étape 3 :
 
 | Pièce | Qté |
 |---|---|
 | **Écrou M20** + rondelle large M20 (le contre-écrou du disque — *un seul par roue*, l'autre est déjà sur le robot) | 2 + 2 |
-| Vis M8×16 tête H **en ACIER ZINGUÉ — jamais inox** (les **cibles**) + écrous M8 normaux + frein-filet | 30 + 30 |
+| Vis M8×16 tête H **en ACIER ZINGUÉ — jamais inox** (les **cibles**) + écrous M8 normaux + frein-filet | 20 + 20 |
 | Impression PETG : 2 roues phoniques (**2 pièces chacune** : disque + jupe — cf. plus bas), 2 supports, 1 banc | — |
 
 ## 10. Pédagogie
