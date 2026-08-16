@@ -220,11 +220,16 @@ dans l'acier**. Le prototype n'est pas une approximation du disque final, il en 
 David, permise par le redimensionnement Ø 113 : les capteurs remontent de R = 65 à R = 44,
 soit **~11 mm sous le bas de caisse** au lieu de 31 — la « première idée » (sous la caisse),
 écartée quand elle exigeait une échasse au milieu des paliers, devient un **moignon court et
-rigide** vissé dans la tôle du fond (2 autoperceuses par patte), à côté du palier, plus dedans.
-`plans/odometrie/patte-capteur.scad` : une seule pièce pour les 4 positions, lumières de
-réglage phase (±4 mm) et rayon (±2 mm), garde de la tige M20 retranchée paramétriquement
-(écrous M12 **nus** côté intérieur — une rondelle Ø 24 mangerait la garde de 3 mm), corps du
-capteur à ~9 mm au-dessus de la chaîne (assert + vérif visuelle roue montée avant perçage).
+rigide** vissé dans la tôle du fond (2 autoperceuses), à côté du palier, plus dedans.
+`plans/odometrie/patte-capteur.scad`, en **v3.2 : UNE pièce par roue portant les DEUX
+capteurs** — les pattes individuelles se chevauchaient (capteurs à 33,7 mm, chaque patte
+exigeait > 34 mm pour ses vis) ; bénéfice : l'entraxe de quadrature est garanti par
+l'impression. **Pas d'écrou à l'arrière du voile — il ne rentre pas sous la caisse**
+(coin à 10,95 mm autour du corps, caisse à 10,65) : le voile de 10 mm est percé Ø 11,7 et
+le corps **M12×1 s'y taraude** ; entrefer réglé en tournant le corps (1 mm/tour), verrouillé
+par **un seul contre-écrou, devant, en plein accès**. Garde de la tige M20 retranchée
+paramétriquement, corps à ~9 mm au-dessus de la chaîne (asserts + vérif visuelle roue
+montée avant perçage).
 
 Ce qu'on gagne : on **ne touche plus aux boulons du palier** (un organe qui porte la roue),
 plus de tôle à découper/plier, plus de plan papier, les 3 cotes de palier deviennent sans
