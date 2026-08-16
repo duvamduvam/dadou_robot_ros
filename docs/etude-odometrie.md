@@ -598,6 +598,12 @@ support. La coupe ne coûte rien mécaniquement : la jupe ne transmettait déjà
 passe par l'empreinte hexagonale, et l'écrou M20 de 16 mm traverse les deux pièces empilées —
 chacune est entraînée en prise directe.
 
+**FAIT le 2026-08-16 — roue 1 imprimée et montée à blanc** (CR-10, PETG gris Geeetech,
+gabarit → jupe → disque dans l'ordre prévu ; photos dans `plans/odometrie/photos/`).
+Emboîtement constaté à `JEU_HEX = 0.4` : **libre, léger jeu en rotation** (~0,6° soit
+~1,3 mm au sol par inversion de sens, un dixième de front) — toléré pour la roue 1, le
+contre-écrou amortit. **Roue 2 : `JEU_HEX = 0.25`, revalidé par le gabarit d'abord.**
+
 ⚠️ **Le support tôle se fabrique à partir d'un PLAN PAPIER, et le papier passe AVANT le métal.**
 `plans/odometrie/plan-decoupe-metal.py` sort le développé sur une A4 à l'échelle exacte (règle
 témoin de 100 mm à vérifier au réglet — une imprimante qui « ajuste à la page » réduit de 3 à
