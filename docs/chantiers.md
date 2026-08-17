@@ -86,23 +86,8 @@ diamétralement opposés, ça donne un déphasage **rigoureusement nul** (les de
 ensemble, plus de sens de rotation, et rien ne casse). Il faut les décaler **du même côté** de
 l'axe, de `R·sin(pas/8)` chacun = **3,45 mm**. Corrigé dans `patte-capteur.scad`.
 
-~~**Fixation du disque — RE-DÉCIDÉE le 16/08 au soir : SANDWICH SUR LA COURONNE (v5)**~~,
-demande de David, couronne déposée en main. Le disque se **boulonne à travers les 4 trous
-de fixation de la couronne**, plaqué contre sa face intérieure par 4 plots de 8 mm venus
-de fonderie. La coiffe sur écrou M20 est **supplantée** (§3 bis de l'étude, réécrit).
-Ce qui retourne l'objection de juillet (« on ne touche pas au chemin de couple ») : la
-couronne est **déposée**, donc l'opération ne coûte plus rien ; le couple continue de
-passer **métal sur métal** (la couronne garde son appui sur le moyeu, le disque s'ajoute
-derrière) ; en face on gagne une **prise positive** contre le patinage, et **4 hypothèses
-de cotes disparaissent** (écrou M20, rondelle, filetage nu, contre-écrou).
-⚠️ **Ce que ça coûte** : **8 cibles au lieu de 10** → **24,5 mm/front** (la géométrie
-l'impose : trous à 90° et cibles doivent avoir la même symétrie pour s'éviter), et surtout
-**20 mm de PETG entrent dans la précontrainte des vis de la couronne** — *fluage =
-sécurité roues* : 100 % de remplissage, frein-filet, **recontrôle du couple à J+7 et
-J+30**, arrêt au moindre jeu (repli : entretoises métalliques, ou disque acier).
-⚠️ **Toutes les cotes de la couronne sont lues sur PHOTO** → `gabarit` de 3 mm à imprimer
-en premier (10 min) et fiche `../plans/odometrie/MESURES.md` **§D** à remplir au pied à
-coulisse. Deux marges minces : créneau **27,8/30**, garde aux plaques **2 mm**.
+*(Le détail de la variante sandwich — pourquoi elle était séduisante, pourquoi elle
+a échoué, et comment la réveiller — est dans son `NOTE.md`. Ne pas le recopier ici.)*
 
 **16/08 — le disque Ø 155 CONTREDIT PAR LE RÉEL, redimensionné Ø 113.** Le premier jeu
 imprimé (gabarit → jupe → disque, PETG) butait sur le **carter du réducteur** — jamais
