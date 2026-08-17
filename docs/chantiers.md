@@ -23,7 +23,7 @@ journal de bord illisible).*
 | Conversation en déambulation (intention + contenu) | plan DÉCIDÉ (grillé 12/07) ; D0 outillage + personas commutables FAITS 13/07 | campagne D0 (robot allumé) ; textes personas à valider avec David | D1+ ⟸ protocole physique chat_node V2 (0) ; D6 ⟸ verrous roues |
 | Suivi de personne (roues) | validé sim 5/5, déployé, **SIM-ONLY** | — (attend ses verrous) | test scénique (1) PUIS protocole caméra (`direction_sign` inconnu) |
 | Gaze V1 + arbitrage actionneurs | validé RÉEL 12/07 ; arbitrage déployé sur les 2 Pi | vérif visuelle : gaze ON pendant une séquence (la tête ne doit plus trembler) | — |
-| Odométrie des roues (encodeurs) | plan DÉCIDÉ 14/07 ; disque Ø113 (le Ø155 butait sur le carter) ; capteurs **v4 = 4 pattes sous caisse** ; **disque v5 = SANDWICH BOULONNÉ SUR LA COURONNE, 8 cibles, 24,5 mm/front** (coiffe M20 supplantée) ; **capteurs LJ12A3 REÇUS** ; couronne déposée | **mesurer la couronne (MESURES.md §D)** → imprimer le `gabarit` (10 min) → disque + 4 pattes ; en parallèle : banc d'établi + un capteur branché (étape 1 débloquée) | **cotes couronne toutes lues sur PHOTO** ; 2 marges minces (créneau 27,8/30, plaques 2 mm) ; fluage PETG dans la précontrainte des vis de couronne (recontrôle J+7/J+30) |
+| Odométrie des roues (encodeurs) | plan DÉCIDÉ 14/07 ; **disque = COIFFE Ø113, 10 cibles, 19,6 mm/front** (variante sandwich couronne explorée puis RANGÉE le 17/08) ; capteurs **v4 = 4 pattes sous caisse** ; **capteurs LJ12A3 REÇUS** ; **4 cotes d'environnement enfin MESURÉES** (chaîne, couronne, carter) | **imprimer** : `disque-gabarit` (10 min, valide JEU_HEX sur l'écrou M20) → `disque-jupe` → `disque-disque`, x2 ; en parallèle banc d'établi + un capteur branché | plus de cote bloquante pour le disque ; restent `RONDELLE_EP` (hyp. 3 mm) et `ROUE_D` (hyp. 250) |
 | Chaîne de sécurité matérielle (main-carrier) | schéma révisé 14/07 ; **contrat figé en tests sur la branche `chaine-securite`** | router la bande sécurité (122 chevelus) + note de sécurité docs/ | carte non fabriquée ; encombrement 195×150 à confirmer |
 | Fond de tiroir | — | voir §Fond de tiroir | — |
 
@@ -70,7 +70,23 @@ inductifs `LJ12A3-4-Z/BX` (M12, NPN, 12 V) par roue → quadrature → PC817 →
 (PIO) → **UART** → nœud ROS. Carte montée **côté Pi**, pas près des roues (le signal
 12 V à collecteur ouvert encaisse la distance ; le 3,3 V logique, non).
 
-**Fixation du disque — RE-DÉCIDÉE le 16/08 au soir : SANDWICH SUR LA COURONNE (v5)**,
+**Fixation du disque — la COIFFE, confirmée le 17/08 au soir.** Une variante
+« sandwich boulonné sur la couronne » a été explorée les 16 et 17/08 puis RANGÉE
+(`../plans/odometrie/variante-sandwich-couronne/`, avec son NOTE.md) : le cercle des vis
+mesuré à Ø 77 mettait la visserie trop près des cibles, on tombait à 8 cibles / 24,5 mm/front,
+sous le seuil de 22 que l'étude §7 juge inasservissable. La coiffe donne 19,6 et elle est
+déjà imprimée. **Le détour n'a pas été perdu** : il a produit 4 cotes MESURÉES qui renforcent
+la coiffe — couronne 6 mm, chaîne 16 mm hors-tout (donc débord réel **5 mm**, contre 6
+supposés « optimistes »), et surtout **obstacle carter à ~66 mm et non 63** (disque Ø 113
+présenté : **≥ 10 mm d'air** relevés contre 6,5 au modèle). Les deux hypothèses les plus
+inquiétantes du chantier étaient donc **pessimistes**.
+⚠️ **Et une erreur trouvée au passage, qui vaut pour la coiffe aussi — la quadrature.** Toute
+la doc prescrivait « capteur B réglé 7 mm plus bas que A » : FAUX, les capteurs étant
+diamétralement opposés, ça donne un déphasage **rigoureusement nul** (les deux LED basculent
+ensemble, plus de sens de rotation, et rien ne casse). Il faut les décaler **du même côté** de
+l'axe, de `R·sin(pas/8)` chacun = **3,45 mm**. Corrigé dans `patte-capteur.scad`.
+
+~~**Fixation du disque — RE-DÉCIDÉE le 16/08 au soir : SANDWICH SUR LA COURONNE (v5)**~~,
 demande de David, couronne déposée en main. Le disque se **boulonne à travers les 4 trous
 de fixation de la couronne**, plaqué contre sa face intérieure par 4 plots de 8 mm venus
 de fonderie. La coiffe sur écrou M20 est **supplantée** (§3 bis de l'étude, réécrit).
@@ -114,10 +130,9 @@ rondelle livrés avec) → **l'étape 1 (banc d'établi) est débloquée**. Et l
 « Ø 110 mesuré » → à re-mesurer posée à plat (gardes chaîne à recaler ; le disque
 Ø 113 n'est pas concerné, son plafond est l'obstacle mesuré à 63 mm).
 
-**Pièces dessinées** (`../plans/odometrie/`, dépôt plans) : roue phonique v5
-`disque-couronne.scad` (porte-cibles PETG + **8** têtes de vis M8 en acier ZINGUÉ —
-l'inductif ne voit que le métal ; les 4 vis de fixation sont en **inox**, justement pour
-qu'il ne les voie PAS), pattes capteurs sous caisse (v4), et le banc d'établi. Géométrie
+**Pièces dessinées** (`../plans/odometrie/`, dépôt plans) : roue phonique `disque-phonique.scad`
+(coiffe, porte-cibles PETG + **10** têtes de vis M8 en acier ZINGUÉ — l'inductif ne voit que le
+métal, et surtout PAS l'inox), pattes capteurs sous caisse (v4), et le banc d'établi. Géométrie
 sous `assert()` : une cote fausse refuse de compiler.
 
 ~~Plan papier 1:1 du support tôle — fait le 15/08~~ — **SANS OBJET depuis la v3** (plus de
