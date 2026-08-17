@@ -23,7 +23,7 @@ journal de bord illisible).*
 | Conversation en déambulation (intention + contenu) | plan DÉCIDÉ (grillé 12/07) ; D0 outillage + personas commutables FAITS 13/07 | campagne D0 (robot allumé) ; textes personas à valider avec David | D1+ ⟸ protocole physique chat_node V2 (0) ; D6 ⟸ verrous roues |
 | Suivi de personne (roues) | validé sim 5/5, déployé, **SIM-ONLY** | — (attend ses verrous) | test scénique (1) PUIS protocole caméra (`direction_sign` inconnu) |
 | Gaze V1 + arbitrage actionneurs | validé RÉEL 12/07 ; arbitrage déployé sur les 2 Pi | vérif visuelle : gaze ON pendant une séquence (la tête ne doit plus trembler) | — |
-| Odométrie des roues (encodeurs) | plan DÉCIDÉ 14/07 ; **disque redimensionné Ø113 le 16/08** (le Ø155 butait sur le carter) ; **fixation v4 = 4 pattes sous caisse de part et d'autre du palier, écrou de chaque côté** (tôle palier + plan papier morts) ; **capteurs LJ12A3 REÇUS 16/08** ; couronne déposée | **imprimer le banc + brancher un capteur (étape 1 débloquée)** ; réimprimer gabarit (`JEU_HEX=0.25`) → jupe → disque + 4 pattes ; re-mesurer la couronne déposée | plus de cote bloquante ; couronne à re-mesurer (réglet dit ~130-135, étude disait 110) |
+| Odométrie des roues (encodeurs) | plan DÉCIDÉ 14/07 ; disque Ø113 (le Ø155 butait sur le carter) ; capteurs **v4 = 4 pattes sous caisse** ; **disque v5 = SANDWICH BOULONNÉ SUR LA COURONNE, 8 cibles, 24,5 mm/front** (coiffe M20 supplantée) ; **capteurs LJ12A3 REÇUS** ; couronne déposée | **mesurer la couronne (MESURES.md §D)** → imprimer le `gabarit` (10 min) → disque + 4 pattes ; en parallèle : banc d'établi + un capteur branché (étape 1 débloquée) | **cotes couronne toutes lues sur PHOTO** ; 2 marges minces (créneau 27,8/30, plaques 2 mm) ; fluage PETG dans la précontrainte des vis de couronne (recontrôle J+7/J+30) |
 | Chaîne de sécurité matérielle (main-carrier) | schéma révisé 14/07 ; **contrat figé en tests sur la branche `chaine-securite`** | router la bande sécurité (122 chevelus) + note de sécurité docs/ | carte non fabriquée ; encombrement 195×150 à confirmer |
 | Fond de tiroir | — | voir §Fond de tiroir | — |
 
@@ -70,11 +70,23 @@ inductifs `LJ12A3-4-Z/BX` (M12, NPN, 12 V) par roue → quadrature → PC817 →
 (PIO) → **UART** → nœud ROS. Carte montée **côté Pi**, pas près des roues (le signal
 12 V à collecteur ouvert encaisse la distance ; le 3,3 V logique, non).
 
-**Fixation — décidée le 14/07 d'après photos, affinée en COIFFE (§3 bis)** : le disque
-**coiffe l'écrou M20 déjà en place** (empreinte hexagonale = entraînement en prise
-positive + appui) et un seul contre-écrou serre l'empilement — deux écrous ajoutés ne
-rentraient pas dans les 35 mm de filetage. On ne touche **pas** aux 3 boulons de la
-couronne — c'est le chemin de couple de la roue, et le disque ne transmet aucun couple.
+**Fixation du disque — RE-DÉCIDÉE le 16/08 au soir : SANDWICH SUR LA COURONNE (v5)**,
+demande de David, couronne déposée en main. Le disque se **boulonne à travers les 4 trous
+de fixation de la couronne**, plaqué contre sa face intérieure par 4 plots de 8 mm venus
+de fonderie. La coiffe sur écrou M20 est **supplantée** (§3 bis de l'étude, réécrit).
+Ce qui retourne l'objection de juillet (« on ne touche pas au chemin de couple ») : la
+couronne est **déposée**, donc l'opération ne coûte plus rien ; le couple continue de
+passer **métal sur métal** (la couronne garde son appui sur le moyeu, le disque s'ajoute
+derrière) ; en face on gagne une **prise positive** contre le patinage, et **4 hypothèses
+de cotes disparaissent** (écrou M20, rondelle, filetage nu, contre-écrou).
+⚠️ **Ce que ça coûte** : **8 cibles au lieu de 10** → **24,5 mm/front** (la géométrie
+l'impose : trous à 90° et cibles doivent avoir la même symétrie pour s'éviter), et surtout
+**20 mm de PETG entrent dans la précontrainte des vis de la couronne** — *fluage =
+sécurité roues* : 100 % de remplissage, frein-filet, **recontrôle du couple à J+7 et
+J+30**, arrêt au moindre jeu (repli : entretoises métalliques, ou disque acier).
+⚠️ **Toutes les cotes de la couronne sont lues sur PHOTO** → `gabarit` de 3 mm à imprimer
+en premier (10 min) et fiche `../plans/odometrie/MESURES.md` **§D** à remplir au pied à
+coulisse. Deux marges minces : créneau **27,8/30**, garde aux plaques **2 mm**.
 
 **16/08 — le disque Ø 155 CONTREDIT PAR LE RÉEL, redimensionné Ø 113.** Le premier jeu
 imprimé (gabarit → jupe → disque, PETG) butait sur le **carter du réducteur** — jamais
@@ -102,10 +114,11 @@ rondelle livrés avec) → **l'étape 1 (banc d'établi) est débloquée**. Et l
 « Ø 110 mesuré » → à re-mesurer posée à plat (gardes chaîne à recaler ; le disque
 Ø 113 n'est pas concerné, son plafond est l'obstacle mesuré à 63 mm).
 
-**Pièces dessinées** (`../plans/odometrie/`, dépôt plans) : roue phonique
-(porte-cibles PETG + **10** têtes de vis M8 en acier — l'inductif ne voit que le métal),
-pattes capteurs sous caisse (v3), et le banc d'établi. Géométrie sous `assert()` : une
-cote fausse refuse de compiler.
+**Pièces dessinées** (`../plans/odometrie/`, dépôt plans) : roue phonique v5
+`disque-couronne.scad` (porte-cibles PETG + **8** têtes de vis M8 en acier ZINGUÉ —
+l'inductif ne voit que le métal ; les 4 vis de fixation sont en **inox**, justement pour
+qu'il ne les voie PAS), pattes capteurs sous caisse (v4), et le banc d'établi. Géométrie
+sous `assert()` : une cote fausse refuse de compiler.
 
 ~~Plan papier 1:1 du support tôle — fait le 15/08~~ — **SANS OBJET depuis la v3** (plus de
 tôle). L'outillage reste dans le dépôt plans pour mémoire : `plan-decoupe-metal.py` savait

@@ -154,7 +154,73 @@ Si le disque s'avérait impossible à loger, la chaîne reste jouable — mais *
 tendu uniquement**, à deux ou trois centimètres du point de tangence, là où les dents la
 contraignent géométriquement et où elle ne peut pas battre.
 
-## 3 bis. La FIXATION — DÉCIDÉ (2026-07-14, après photos) : la COIFFE sur l'écrou de roue
+## 3 bis. La FIXATION du DISQUE — RE-DÉCIDÉ le 2026-08-16 au soir : SANDWICH sur la COURONNE (v5)
+
+**La coiffe sur l'écrou M20 (14/07) est SUPPLANTÉE.** Demande de David, la couronne
+déposée en main : le disque se **boulonne sur la couronne**, à travers ses **4 trous de
+fixation** existants, plaqué contre sa face intérieure (côté palier) par 4 plots de 8 mm
+venus de fonderie. `plans/odometrie/disque-couronne.scad`.
+
+### Ce qui retourne l'objection de juillet
+
+Le §3 bis d'origine (conservé plus bas) écartait cette piste en une phrase : *« ces boulons
+sont le chemin de couple de la roue, on n'y touche pas pour un capteur en lecture seule »*.
+L'argument reste **entièrement valable** — et c'est précisément pour ça qu'il faut regarder
+ce qui a changé depuis :
+
+- **la couronne est DÉPOSÉE**. En juillet, « y toucher » voulait dire démonter une liaison
+  vivante sur un robot debout. Ce soir elle est sur l'établi, les 4 vis déjà sorties : le
+  coût de l'opération est tombé à zéro, et le remontage se fait au couple, pas à l'aveugle ;
+- **le couple continue de passer métal sur métal.** La couronne garde son appui direct sur
+  le moyeu ; le disque s'ajoute *derrière* elle. Rien ne s'intercale dans le chemin de
+  couple — seule la **précontrainte** des vis traverse désormais du PETG ;
+- **en face, on gagne le patinage.** La coiffe pariait sur l'emboîtement d'un hexagone
+  imprimé sur un écrou ; là, 4 vis M8 traversantes. Or *une odométrie qui patine ment sans
+  prévenir* — c'est le risque n° 1 identifié par cette étude elle-même ;
+- **quatre hypothèses de cotes disparaissent** : écrou M20, épaisseur de rondelle, filetage
+  nu, contre-écrou. Plus rien ne s'appuie dessus. Elles sont remplacées par les cotes de la
+  couronne, qui, elle, est **mesurable à plat sur l'établi**.
+
+### ⚠️ Ce que ça coûte, et qui n'est pas réglé
+
+**Le fluage du PETG est le point dur, et il est du ressort de la sécurité roues.** 20 mm de
+plastique (plot 8 + voile 12) travaillent maintenant dans la précontrainte des vis qui
+tiennent la couronne. Le PETG flue : le serrage se détend, la couronne peut prendre du jeu.
+Garde-fous imposés au montage — 100 % de remplissage, rondelles larges, frein-filet, serrage
+modéré, **recontrôle du couple à J+7 et J+30**, arrêt au moindre jeu. *Si le recontrôle
+J+7 montre quoi que ce soit, on ne discute pas : on passe au disque acier* (qui était de
+toute façon la cible de l'étape 4) **ou** on sort le PETG de la précontrainte par des
+entretoises métalliques dans les plots.
+
+Autre concession, moins grave : **8 cibles au lieu de 10**, donc **24,5 mm/front** au lieu de
+19,6. C'est la géométrie qui l'impose — avec 4 trous à 90° et un cercle de vis à R 36 contre
+un cercle de lecture à R 44, seul un nombre de cibles de **même symétrie que les trous** (8,
+pas 45°) permet de décaler les uns des autres (phase 22,5°, 17,5 mm entre centres). En 10
+cibles, les poches se rejoignent quelle que soit la phase. On reste loin des 49 mm du petit
+disque écarté au §3.
+
+Et une **cible parasite en puissance** : les 4 vis de fixation sont à R 36, le capteur lit à
+R 44 (nez Ø 12 : il voit de R 38 à R 50). Parade **double, les deux obligatoires** — visserie
+**inox A2** (quasi invisible pour un inductif : le piège du §4 retourné en atout) **et**
+quincaillerie **noyée** à ≥ 3 mm. ⚠️ Au montage : **inox pour la fixation, acier zingué pour
+les cibles**. Les intervertir donne 12 fronts par tour au lieu de 8 — faux, silencieusement.
+
+### Ce qui reste à mesurer avant d'imprimer
+
+**Toutes les cotes de la couronne sont lues sur PHOTO** (entraxe des trous : ratio photo
+0,50–0,57 × le Ø denté ~132 relevé au réglet → retenu Ø 72 ; dents : 32, à compter). D'où le
+`gabarit` de 3 mm, **10 minutes d'impression** : on le pose sur la couronne déposée, il
+répond « les 4 trous tombent ? le dégagement central passe ? » avant les heures du voile.
+Fiche `plans/odometrie/MESURES.md` **§D**. Deux marges sont **minces** et c'est la mesure qui
+tranchera : créneau 27,8 / 30 mm, et garde aux plaques de chaîne 2 mm.
+
+---
+
+## 3 bis (historique). La FIXATION — DÉCIDÉ (2026-07-14, après photos) : la COIFFE sur l'écrou de roue
+
+*Supplantée par le sandwich couronne ci-dessus. Conservée parce que les cotes qu'elle a fait
+mesurer (créneau, garde sous caisse, obstacle carter) restent le cadre de la v5, et que son
+raisonnement resservira.*
 
 Le disque **coiffe l'écrou M20 déjà en place** contre le moyeu de roue, et un **seul
 contre-écrou** le bloque. Rien d'autre : pas de perçage, pas de soudure, pas de collier, pas
