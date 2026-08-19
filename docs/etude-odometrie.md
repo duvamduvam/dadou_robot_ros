@@ -278,13 +278,18 @@ le corps du palier (chape pendante + visserie de suspension) occupe le volume so
 visé par la semelle. Troisième pièce tuée par une cote d'environnement jamais mesurée
 (après le carter et la couronne) : la v4 n'avait jamais été présentée roue montée.
 
-**Direction v5 (proposée par David, retenue)** : la patte se pince sur le **filetage libre**
-de la vis verticale qui suspend la chape du palier, entre **deux écrous à elle** — c'est le
-retour de l'ancrage-palier v2 (mécaniquement supérieur : le palier porte le roulement, donc
-l'entrefer ignore la flexion de caisse), adapté à la vraie chape. Règle inchangée : la patte
-n'entre JAMAIS dans l'empilement serré qui porte la roue (fluage PETG → serrage qui tombe).
-Cotes à prendre avant de dessiner : bloc **E** de `plans/odometrie/MESURES.md` (filetage
-libre, déports, anti-rotation). Détail : README du dossier plans, section v5.
+**v5 DESSINÉE le 20/08 — le BERCEAU** (idée d'ancrage de David, palier identifié KP004
+par sa fiche constructeur) : une pièce par roue, **pincée sur le filetage libre des 2 vis
+M8 du palier** (entraxe 80, ≥ 20 mm de filet mesurés) entre **deux écrous à elle** — c'est
+le retour de l'ancrage-palier v2 (mécaniquement supérieur : le palier porte le roulement,
+donc l'entrefer ignore la flexion de caisse), et l'empilement qui porte la roue n'est
+JAMAIS touché (fluage PETG → serrage qui tombe, sinon). Les **2 capteurs sont EN BAS à
+±49,5°** (à hauteur d'axe ils percuteraient les vis) : la quadrature est un **modulo du
+pas de cible** — un écart de 81° = 2,25 pas vaut électriquement un quart de pas, intégré
+à la pièce ; le trim fin se fait en glissant le pinçage sur le filet, aux LED. Bloc **E**
+de `plans/odometrie/MESURES.md` : tout est ✅ sauf **E4 = 25 mm (HYPOTHÈSE — axe des vis
+→ têtes de cibles, à valider au réglet avec la vue de montage AVANT impression)**.
+Détail et rendus : README du dossier plans, section v5, `rendus/berceau-v5-*.png`.
 
 Au passage le 19/08 : **impression du disque validée**, monté par David **plaqué contre la
 couronne avec rondelles en entretoise** (la visserie de la couronne empêche le contact
