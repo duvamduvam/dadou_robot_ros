@@ -9,3 +9,5 @@ logs/
 secret
 /dadou_utils_ros.tar.gz
 __pycache__
+.iadadou/
+.iaction/

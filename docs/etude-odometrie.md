@@ -271,7 +271,27 @@ rentrerait pas dans le lamage.
 Conséquence heureuse : **la géométrie validée en plastique est exactement celle qu'on gravera
 dans l'acier**. Le prototype n'est pas une approximation du disque final, il en est le plan.
 
-## 3 ter. Le SUPPORT — RE-DÉCIDÉ le 2026-08-16 au soir : une patte par capteur, DE PART ET D'AUTRE du palier (v4)
+## 3 ter. Le SUPPORT — ⚠️ v4 MORTE AU MONTAGE le 2026-08-19, direction v5 : prise sur la VIS DE SUSPENSION du palier
+
+**Essai réel du 19/08 (photos `../plans/odometrie/photos/`) : la patte v4 ne se place pas** —
+le corps du palier (chape pendante + visserie de suspension) occupe le volume sous caisse
+visé par la semelle. Troisième pièce tuée par une cote d'environnement jamais mesurée
+(après le carter et la couronne) : la v4 n'avait jamais été présentée roue montée.
+
+**Direction v5 (proposée par David, retenue)** : la patte se pince sur le **filetage libre**
+de la vis verticale qui suspend la chape du palier, entre **deux écrous à elle** — c'est le
+retour de l'ancrage-palier v2 (mécaniquement supérieur : le palier porte le roulement, donc
+l'entrefer ignore la flexion de caisse), adapté à la vraie chape. Règle inchangée : la patte
+n'entre JAMAIS dans l'empilement serré qui porte la roue (fluage PETG → serrage qui tombe).
+Cotes à prendre avant de dessiner : bloc **E** de `plans/odometrie/MESURES.md` (filetage
+libre, déports, anti-rotation). Détail : README du dossier plans, section v5.
+
+Au passage le 19/08 : **impression du disque validée**, monté par David **plaqué contre la
+couronne avec rondelles en entretoise** (la visserie de la couronne empêche le contact
+plan) — deux vigilances consignées au README plans (fluage dans l'empilement serré →
+contre-écrou + re-serrage ; faux-rond à vérifier à la LED, roue en l'air).
+
+### ~~v4 (2026-08-16)~~ : une patte par capteur, de part et d'autre du palier — conservée pour mémoire
 
 **La décision du 14/07 (bride puis équerre sur le palier) est SUPPLANTÉE, et les v3.x du
 16/08 après-midi aussi.** Montage de David : **4 pattes identiques** (2 par roue) vissées
