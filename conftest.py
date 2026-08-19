@@ -19,3 +19,9 @@ sys.path.insert(0, os.path.join(ROOT, "conf", "ros2_dependencies", "robot_sim"))
 # web_bridge_node.py lui-même n'est PAS importé par les tests -- il a besoin
 # de rclpy/aiohttp, absents de l'environnement de dev hôte).
 sys.path.insert(0, os.path.join(ROOT, "conf", "ros2_dependencies", "robot_web"))
+
+# Le firmware du Pico (odom_protocol.py) : logique PURE du décodage quadrature
+# et du protocole de trame, partagée entre le Pico (MicroPython), le futur
+# noeud ROS et les tests. main.py, lui, n'est JAMAIS importé sur l'hôte -- il
+# a besoin de machine/rp2, qui n'existent que sur le microcontrôleur.
+sys.path.insert(0, os.path.join(ROOT, "firmware", "pico_odometry"))

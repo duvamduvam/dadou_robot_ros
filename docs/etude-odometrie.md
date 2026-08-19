@@ -548,7 +548,7 @@ capteurs se rentreraient dedans. On les espace d'**un pas ET quart** : la phase 
 est rigoureusement identique (c'est un modulo — le capteur ignore combien de lumières
 entières le séparent de son voisin), et les corps ont la place.
 
-### La carte va à côté du Pi, PAS près des roues
+### ~~La carte va à côté du Pi, PAS près des roues~~ — RENVERSÉ le 2026-08-20 (voir plus haut)
 
 Contre-intuitif, et pourtant décisif. Le câble capteur porte un signal **12 V à collecteur
 ouvert** : basse impédance, forte amplitude — une brute, quasi insensible aux parasites
@@ -564,7 +564,102 @@ roues. Les router **loin des câbles moteur et ampli** ; croiser à 90° si iné
 Python sur le Pi 4 perdrait des fronts. Le **PIO du RP2040 décode la quadrature en
 matériel**, sans faute, et la carte sert au passage de tampon électrique.
 
-### Lien Pico ↔ Pi : UART — DÉCIDÉ le 2026-07-14 (l'USB était le premier choix)
+#### ⚠️ Un Arduino Nano ferait-il l'affaire ? (question de David, 2026-08-20)
+
+**Techniquement oui, largement — et pourtant on garde le Pico.** À 1 m/s chaque capteur
+ne sort que **12,7 impulsions/s** (10 cibles, roue Ø 250), soit ~51 fronts/s par roue
+après décodage ×4 : un ATmega328 à 16 MHz a trois décades de marge. L'argument « PIO qui
+décode en matériel » ci-dessus était une précaution de confort, pas une nécessité.
+
+Ce qui tranche est ailleurs, et c'est le **lien USB** (voir ci-dessous) :
+
+1. **Le numéro de série.** Une règle udev stable (`/dev/didier-odom`) s'accroche au
+   numéro de série du périphérique. Le Pico en a un, dérivé de l'ID unique de sa flash.
+   Les clones de Nano à puce **CH340 n'en ont pas** — ils annoncent tous le même
+   descripteur. La règle ne pourrait alors viser que le *chemin du port physique*, qui
+   casse dès qu'on change de prise. Sur un robot qui part en tournée, c'est une panne
+   sournoise de plus. **C'est cette raison, et elle seule, qui décide.**
+2. **Le niveau logique.** Le Nano parle en 5 V ; la broche RX du Pi ne tolère pas le
+   5 V. Un lien UART aurait exigé un pont diviseur — deux résistances, mais une de plus
+   à oublier, et l'oubli tue le Pi. (Sans objet avec l'USB.)
+3. **La carte est déjà dessinée autour du Pico** (schéma KiCad, plan de plaque à bandes,
+   nomenclature) : le garder, c'est zéro refonte.
+
+Les Nano restent bons pour un poste où le lien n'est pas un port USB nommé.
+
+#### Le firmware est en MicroPython, pas en C — et ce n'est pas de la paresse
+
+Écrit le 2026-08-20 : `firmware/pico_odometry/` (voir son README). Trois raisons :
+
+1. **Le langage ne touche pas le chemin critique.** Le comptage est fait par le **PIO**,
+   un automate matériel indépendant du CPU : cinq instructions qui surveillent les
+   broches et empilent les changements dans une FIFO de 8 mots, avec un `push()`
+   **bloquant** (on prend du retard, on ne perd jamais un pas). Le CPU ne fait que vider
+   cette file 50 fois par seconde, pour ~13 événements par roue et par seconde. Une
+   pause du ramasse-miettes est absorbée par la FIFO — plusieurs secondes de matelas.
+2. **La raison décisive : un seul décodeur, pas deux.** En C, le décodage de quadrature
+   et le CRC seraient écrits **deux fois** — une fois en C pour le Pico, une fois en
+   Python pour le nœud ROS et les tests. Deux implémentations d'une convention de signe,
+   c'est la façon canonique d'inverser une roue sans s'en apercevoir pendant six mois.
+   Ici `odom_protocol.py` est **un seul fichier**, qui tourne sur le Pico, dans le nœud
+   ROS et dans les **35 tests** du dépôt (`robot/tests/unit/test_odom_protocol.py`).
+   C'est la règle du projet : la vérification exécute le même code que la prod.
+3. **L'itération à l'établi** : éditer, copier, redémarrer. Aucune chaîne de compilation
+   croisée sur un banc où l'on tâtonne.
+
+Le C s'imposerait s'il fallait horodater chaque front à la microseconde, ou si le débit
+était cent fois supérieur. Ni l'un ni l'autre.
+
+**Deux choix du firmware qui ne vont pas de soi**, consignés pour ne pas être « corrigés » :
+
+- **Compteurs CUMULÉS, pas des deltas.** Une trame perdue ne perd alors aucune distance,
+  la suivante rattrape. Avec des deltas, chaque trame perdue effacerait pour toujours un
+  morceau de trajet — silencieusement. Corollaire : le nœud ROS **doit** passer par
+  `delta_ticks()` (bouclage 32 bits), jamais par une soustraction directe.
+- **Un compteur `illegal`** (transitions où les deux bits basculent d'un coup, donc
+  physiquement impossibles) publié sur une ligne `STAT`. C'est le **seul symptôme
+  observable** d'une odométrie qui commence à mentir : entrefer trop grand, câble
+  parasité, disque qui bat. Il doit rester à zéro.
+- ⚠️ Et **les PC817 n'inversent PAS le sens** : ils inversent les deux voies, ce qui
+  décale le cycle de Gray sans changer son ordre. Un test verrouille ce point — pour
+  empêcher une « correction » de signe faite au nom des optocoupleurs, qui serait fausse.
+
+### ⚠️ RENVERSÉ le 2026-08-20 : carte EN BAS près des roues, lien USB
+
+**Décision de David**, et elle est meilleure que le plan ci-dessous — qui reste écrit
+juste après, parce que son raisonnement est juste et qu'il faut voir pourquoi il tombe.
+
+Le plan de juillet fait porter la longue distance au signal 12 V collecteur ouvert
+(robuste) pour ne garder que 15 cm de lien logique fragile. Correct — mais il visait un
+**UART nu en 3,3 V**, un fil logique sans défense. **L'USB n'est pas ça** : c'est une
+paire différentielle blindée, conçue pour traverser plusieurs mètres d'environnement
+bruyant et qui rejette le bruit de mode commun par construction. Sur ~1,5 m dans ce
+châssis, l'USB est plus solide qu'un fil logique de 15 cm n'était fragile. Et on
+raccourcit du même coup les câbles capteurs, donc l'antenne côté sale : on gagne des
+deux côtés.
+
+Les deux motifs qui avaient fait rejeter l'USB en juillet tombent ou se traitent :
+
+- *« le nom du périphérique est une loterie »* → **règle udev sur le numéro de série**
+  du Pico (il en a un ; c'est ce qui l'a fait préférer au Nano, cf. plus haut).
+- *« le connecteur micro-USB est le point faible »* → **reste vrai**, et c'est le seul
+  vrai risque du montage. **Bridage obligatoire** : le câble collié au châssis à moins
+  de 5 cm de la prise, pour qu'aucune traction n'atteigne jamais le connecteur soudé.
+
+**Ce que la carte y gagne** : alimentée par le câble USB, elle perd le bornier J6, la
+Schottky D13 et le rail 5 V. **Ce qu'elle y perd** : l'armoire électronique était un
+environnement protégé ; en bas c'est poussière, humidité et chocs → **boîte imprimée
+fermée obligatoire**.
+
+⚠️ **On garde les 4 PC817.** La tentation sera forte de les sauter maintenant que le
+câble capteur est court : non. La barrière d'isolation vaut *encore plus* en bas, au
+milieu des moteurs à balais. Les deux masses ne se rejoignent nulle part.
+
+⚠️ **Inconnue** : le 12 V est-il disponible en bas, là où ira la carte ? (Sinon on
+descend une paire 12 V — alimentation robuste, aucun souci, mais il faut le prévoir.)
+Question posée à David le 20/08, sans réponse à ce jour.
+
+### ~~Lien Pico ↔ Pi : UART~~ — DÉCIDÉ le 2026-07-14, RENVERSÉ le 2026-08-20 (cf. ci-dessus)
 
 **J6, 4 broches : `+5V` · `TX` · `RX` · `GND`.** Le Pico est alimenté par le rail 5 V du robot
 via une Schottky (D13) sur `VSYS`. L'USB **reste branchable**, mais seulement pour flasher le

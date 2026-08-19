@@ -23,7 +23,7 @@ journal de bord illisible).*
 | Conversation en déambulation (intention + contenu) | plan DÉCIDÉ (grillé 12/07) ; D0 outillage + personas commutables FAITS 13/07 | campagne D0 (robot allumé) ; textes personas à valider avec David | D1+ ⟸ protocole physique chat_node V2 (0) ; D6 ⟸ verrous roues |
 | Suivi de personne (roues) | validé sim 5/5, déployé, **SIM-ONLY** | — (attend ses verrous) | test scénique (1) PUIS protocole caméra (`direction_sign` inconnu) |
 | Gaze V1 + arbitrage actionneurs | validé RÉEL 12/07 ; arbitrage déployé sur les 2 Pi | vérif visuelle : gaze ON pendant une séquence (la tête ne doit plus trembler) | — |
-| Odométrie des roues (encodeurs) | **disque IMPRIMÉ et monté le 19/08** (plaqué contre la couronne, rondelles — vigilances fluage/faux-rond au README plans) ; support capteurs : **v4 MORTE AU MONTAGE 19/08** (le palier occupe le volume), **direction v5 = pince sur la vis de suspension du palier** (double écrou, hors chemin d'effort) ; capteurs LJ12A3 reçus | **berceau v5 DESSINÉ 20/08** (palier KP004 identifié, bloc E rempli) → valider `E4_VIS_DISQUE` (hyp. 25 mm, réglet) + vue de montage avec David, puis **imprimer x2** + acheter 4 écrous M8 + rondelles larges | E4 hypothèse ; `PAL_BOSS_R` (21) silhouette non cotée ; restent `ROUE_D` (hyp. 250) et l'entraxe roues (C2) |
+| Odométrie des roues (encodeurs) | **disque IMPRIMÉ et monté le 19/08** (plaqué contre la couronne, rondelles — vigilances fluage/faux-rond au README plans) ; support capteurs : **v4 MORTE AU MONTAGE 19/08** (le palier occupe le volume), **direction v5 = pince sur la vis de suspension du palier** (double écrou, hors chemin d'effort) ; capteurs LJ12A3 reçus | **berceau v5 DESSINÉ 20/08** (palier KP004, bloc E rempli) + **firmware Pico ÉCRIT et testé 20/08** (`firmware/pico_odometry/`, 35 tests) → valider `E4_VIS_DISQUE` (hyp. 25 mm, réglet) + vue de montage, **imprimer x2** ; côté élec : refondre la carte (en bas, USB, sans J6/D13) puis banc d'établi | E4 hypothèse ; `PAL_BOSS_R` (21) non coté ; **12 V dispo en bas ?** ; sens de comptage à MESURER (protocole caméra) ; restent `ROUE_D` (hyp. 250) et entraxe roues (C2) |
 | Chaîne de sécurité matérielle (main-carrier) | schéma révisé 14/07 ; **contrat figé en tests sur la branche `chaine-securite`** | router la bande sécurité (122 chevelus) + note de sécurité docs/ | carte non fabriquée ; encombrement 195×150 à confirmer |
 | Fond de tiroir | — | voir §Fond de tiroir | — |
 
@@ -67,8 +67,22 @@ PWM déguisé), et il n'y a pas de TF `odom` → `base_link`. C'est le verrou de
 
 **La solution retenue** : roue phonique lue par la FACE avec deux capteurs
 inductifs `LJ12A3-4-Z/BX` (M12, NPN, 12 V) par roue → quadrature → PC817 → Pico
-(PIO) → **UART** → nœud ROS. Carte montée **côté Pi**, pas près des roues (le signal
-12 V à collecteur ouvert encaisse la distance ; le 3,3 V logique, non).
+(PIO) → **USB** → nœud ROS.
+
+⚠️ **Renversé le 20/08 (David)** : la carte va **en bas, près des roues**, et c'est
+le câble **USB** qui remonte au Pi. Le §6 plaçait la carte côté Pi avec un lien
+UART, pour ne pas faire porter la distance à un fil logique 3,3 V nu — juste, mais
+l'USB est une paire différentielle blindée, bien plus robuste que ce fil, et on
+raccourcit en prime les câbles capteurs. Le Nano (stock de David) a été écarté pour
+UNE raison : les clones CH340 n'ont pas de numéro de série, donc pas de règle udev
+stable. Conditions gravées : **bridage du câble USB à moins de 5 cm de la prise**,
+**boîte imprimée fermée**, **les 4 PC817 restent**. Inconnue : 12 V dispo en bas ?
+
+**Firmware ÉCRIT et testé le 20/08** : `firmware/pico_odometry/` (MicroPython).
+Coupure de conception : `odom_protocol.py` (décodage quadrature + CRC + trames)
+tourne à l'identique sur le Pico, dans le futur nœud ROS et dans **35 tests hôte** ;
+`main.py` ne garde que le PIO. Écrire le décodeur en C aurait imposé de l'écrire
+deux fois — le moyen canonique d'inverser un signe sans le voir.
 
 **Fixation du disque — la COIFFE, confirmée le 17/08 au soir.** Une variante
 « sandwich boulonné sur la couronne » a été explorée les 16 et 17/08 puis RANGÉE
