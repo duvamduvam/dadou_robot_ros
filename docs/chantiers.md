@@ -21,6 +21,7 @@ journal de bord illisible).*
 | Interface web / télé-présence | W0 + console + W3-sim FAITS ; bringup réel actif (sans drive) | W1 : source e_stop + coup-de-poing sans fil | roues web réel ⟸ test scénique (1) + protocole caméra dédié |
 | Télédiagnostic par agent IA | plan décidé ; étape 1 « trousse d'atelier » FAITE | étape 2 : boîte noire rosbag + bouton START | étape 3 ⟸ RAM du Pi 4 à relever (`ssh r 'cat /proc/meminfo'`) |
 | Conversation en déambulation (intention + contenu) | plan DÉCIDÉ (grillé 12/07) ; D0 outillage + personas commutables FAITS 13/07 | campagne D0 (robot allumé) ; textes personas à valider avec David | D1+ ⟸ protocole physique chat_node V2 (0) ; D6 ⟸ verrous roues |
+| Voix de Didier (ventriloquie ↔ synthèse) | OUVERT 26/08 ; cadre technique posé, **arbitrage artistique suspendu** | V0 : banc d'écoute (Pi → octaver via pad, 6 phrases, test en alternance) | V0 en atelier ; modèle de l'octaver + insert de la mixette à relever |
 | Suivi de personne (roues) | validé sim 5/5, déployé, **SIM-ONLY** | — (attend ses verrous) | test scénique (1) PUIS protocole caméra (`direction_sign` inconnu) |
 | Gaze V1 + arbitrage actionneurs | validé RÉEL 12/07 ; arbitrage déployé sur les 2 Pi | vérif visuelle : gaze ON pendant une séquence (la tête ne doit plus trembler) | — |
 | Odométrie des roues (encodeurs) | **disque IMPRIMÉ et monté le 19/08** (plaqué contre la couronne, rondelles — vigilances fluage/faux-rond au README plans) ; support capteurs : **v4 MORTE AU MONTAGE 19/08** (le palier occupe le volume), **direction v5 = pince sur la vis de suspension du palier** (double écrou, hors chemin d'effort) ; capteurs LJ12A3 reçus | **berceau v5 DESSINÉ 20/08** (palier KP004, bloc E rempli) + **firmware Pico ÉCRIT et testé 20/08** (`firmware/pico_odometry/`, 35 tests) → valider `E4_VIS_DISQUE` (hyp. 25 mm, réglet) + vue de montage, **imprimer x2** ; côté élec : refondre la carte (en bas, USB, sans J6/D13) puis banc d'établi | E4 hypothèse ; `PAL_BOSS_R` (21) non coté ; **12 V dispo en bas ?** ; sens de comptage à MESURER (protocole caméra) ; restent `ROUE_D` (hyp. 250) et entraxe roues (C2) |
@@ -291,6 +292,31 @@ campagne D0** (robot allumé : mesure CPU en conversation, enregistrements rue
 reste D3 : bouton télécommande, multi-langues, chrono latence. Verrou de
 D1+ : protocole physique chat_node V2 (chantier 0). Réussite finale = grille
 chiffrée du test rue D5 (§7 du plan).
+
+## Voix de Didier (continuité ventriloquie ↔ synthèse)
+
+Plan : [`etude-voix-didier.md`](etude-voix-didier.md) (ouvert 2026-08-26).
+
+Problème : l'IA arrive dans les réponses, mais la voix de la ventriloquie et
+celle de piper n'ont rien à voir — le personnage tombe à chaque alternance.
+
+Constat qui structure tout (câblage relevé 26/08) : **« la voix de Didier » =
+la voix de David + l'octaver**, et le **Pi ne passe pas par l'octaver** (il
+entre en direct dans la mixette). D'où le principe directeur (§3, ne pas
+re-trancher) : **cloner avant les filtres, unifier après** — la continuité
+vient du dernier étage commun, pas du clonage.
+
+**Suite = lot V0**, banc d'écoute en atelier sans modification permanente
+(sortie Pi → octaver via un pad, 6 phrases, écoute en aveugle, **test en
+alternance** — la rupture ne s'entend qu'en juxtaposition). C'est V0 qui
+débloque l'**arbitrage artistique du §5, volontairement suspendu** : cloner la
+voix de David (A) ou pousser la robotisation jusqu'à rendre la source
+indifférente (B). Ensuite V1 câblage permanent, V2 accordage (voix piper la
+plus proche + pré-transposition F0), V3 banque de répliques enregistrées par
+David (qui **est** le corpus de fine-tune), V4 fine-tune piper.
+
+Ne pas s'engager dans le clonage avant V0 : il est possible que l'octaver
+écrase assez pour que l'écart résiduel ne s'entende pas.
 
 ## Suivi de personne aux roues
 
