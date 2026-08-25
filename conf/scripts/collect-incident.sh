@@ -43,6 +43,11 @@ run meta.txt        bash -c "date; hostname; uptime; uname -a"
 run memoire.txt     free -h
 run disque.txt      df -h
 run temperature.txt vcgencmd measure_temp          # Pi uniquement (absent ailleurs)
+# ⚠️ Plus probant que la température : get_throttled est LATCHÉ (bits 16-19 =
+# sous-tension / throttling survenus depuis le boot). Une température relevée
+# après coup, robot refroidi, ne prouve rien ; ce masque, si — et c'est
+# justement le cas d'une collecte faite APRÈS l'incident, donc toujours.
+run throttling.txt  vcgencmd get_throttled
 run processus.txt   bash -c "top -bn1 | head -30"
 run reseau.txt      ip -br addr
 run dmesg.txt       bash -c "dmesg | tail -100"    # OOM-kill, USB, sous-voltage Pi

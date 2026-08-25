@@ -160,7 +160,35 @@ personnalité déjà active est sans effet. Défaut au démarrage : `bougon`
 ## Post-show
 - Archive `/home/ros2_ws/log/robot.log` for diagnostics — or better, run the
   incident collector (below) which bundles it with everything else.
+- **Read the latched throttling flag BEFORE powering down**:
+  `ssh r 'vcgencmd get_throttled'` (and the same on the vision Pi). Bits 16-19
+  mean "under-voltage / thermal throttling *has occurred* since boot". This is
+  the one measurement that still tells the truth on a cold robot — a
+  temperature read after the show does not. Non-zero ⟹ the closed chassis hit
+  its limits during the show, whatever the CPU graphs say.
 - Recharge batteries / power down safely.
+
+### Load study over a whole show (`log-charge.sh`)
+`robot.log` only records threshold *alerts* (CPU > 80 %, temp > 55 °C) and the
+incident collector is a snapshot — neither gives the **curve** needed to size
+the Pi 5 (does the TTS still fit once the vision load is there?).
+
+Start before the show, stop after (Ctrl-C):
+```bash
+ssh pi@192.168.1.151 '~/ros2_ws/src/*/conf/scripts/log-charge.sh'   # → ~/charge-<stamp>.csv
+DOCKER=1 ./conf/scripts/log-charge.sh                               # + per-container attribution
+```
+Samples every second from `/proc` only (no fork per sample — a sampler that
+perturbs its own measurement is worthless). Columns include per-core %, freq,
+temp, the latched `throttled_ever`, available RAM and load. `DOCKER=1` adds a
+second CSV attributing CPU/RAM per container — that is what answers "is it the
+vision or the speech?".
+
+⚠️ Measure with the chassis **closed** and the target vision load running: a
+run on an open bench proves nothing about a sealed body holding an amplifier,
+outdoors, in summer. Feeds lot V0b of
+[`etude-voix-didier.md`](etude-voix-didier.md) and D0 of
+[`etude-declenchement-conversation.md`](etude-declenchement-conversation.md).
 
 ## Incident investigation (télédiagnostic, étape « trousse d'atelier »)
 - **Collect** (on the Pi HOST, works even if the container is dead):

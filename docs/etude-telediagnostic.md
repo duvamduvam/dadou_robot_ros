@@ -136,6 +136,33 @@ robustesse. Topics enregistrés (légers, quelques centaines de Mo/mois) :
 proportion ; les détections `/vision/person*` suffisent à dire ce que le
 robot percevait).
 
+### Deuxième usage, apparu le 2026-08-26 : l'étude d'APRÈS-SHOW
+
+La boîte noire n'a pas été pensée que pour l'après-incident. Le chantier voix
+([`etude-voix-didier.md`](etude-voix-didier.md) §7, lot V0b) a besoin de savoir
+si le TTS tient sur le Pi 5 **une fois la charge vision présente** — donc de la
+**courbe** d'une représentation entière, pas d'un instantané. Or aujourd'hui
+`robot.log` ne trace que des dépassements de seuil et `collect-incident.sh`
+n'est qu'une photo : ni l'un ni l'autre ne répond.
+
+Ça précise le contenu du **topic santé** déjà listé ci-dessus (§2 le pointe
+comme un manque : « zéro topic de santé », les alertes finissent dans le log et
+nulle part ailleurs). À 1 Hz, il doit porter : CPU **par cœur** (un pic sur un
+cœur n'a pas le même sens qu'une charge répartie), fréquence, température,
+**masque `get_throttled`**, RAM disponible, et de quoi attribuer la charge
+(vision / parole). Un seul producteur, trois consommateurs : l'enregistrement,
+la console web et l'agent embarqué.
+
+⚠️ **`get_throttled` est latché** (bits 16-19 = sous-tension ou throttling
+survenus depuis le boot). C'est le seul indicateur qui dit encore la vérité sur
+un robot refroidi — donc dans le cas normal d'une collecte faite *après* coup.
+Il a été ajouté à `collect-incident.sh` le 26/08 ; il manquait.
+
+En attendant le topic santé, `conf/scripts/log-charge.sh` produit la même série
+temporelle en CSV depuis le host (lecture `/proc`, sans fork par échantillon).
+C'est un dépannage assumé, pas la cible : il ne voit pas les topics ROS et il
+faut le lancer à la main.
+
 L'appui sur START écrit aussi un marqueur `INCIDENT` horodaté dans robot.log :
 bags, logs et rapport sont corrélables. En complément,
 `conf/scripts/collect-incident.sh` rassemble tout (tail des logs, état du

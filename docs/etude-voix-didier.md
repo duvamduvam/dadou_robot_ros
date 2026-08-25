@@ -291,7 +291,15 @@ il supprime V3 *et* V4 d'un coup. Trois mesures, dans cet ordre :
    C'est le test que les démos de 3 s ne font jamais (§4.1).
 Échec sur (1) ou (2) ⟹ repli sur le fine-tune piper (V4), sans regret.
 
-**Budget de charge du Pi 5 — à mesurer avec D0, pas séparément.** Le lot D0 de
+**Budget de charge du Pi 5 — outil : `conf/scripts/log-charge.sh`** (série
+temporelle CSV à 1 Hz, lue dans `/proc` sans fork, plus attribution par
+conteneur avec `DOCKER=1` ; mode d'emploi dans
+[`operations.md`](operations.md#load-study-over-a-whole-show-log-chargesh)).
+Il existe parce que `robot.log` ne trace que des **dépassements de seuil** et
+que `collect-incident.sh` ne donne qu'une **photo** : ni l'un ni l'autre ne
+produit la courbe nécessaire au dimensionnement.
+
+**À mesurer avec D0, pas séparément.** Le lot D0 de
 [`etude-declenchement-conversation.md`](etude-declenchement-conversation.md)
 prévoit déjà « CPU Pi 5 en conversation complète » : V0b s'y rattache au lieu
 d'ouvrir un front. Ce qu'il faut y ajouter, et qui n'y est pas :
