@@ -21,7 +21,7 @@ journal de bord illisible).*
 | Interface web / télé-présence | W0 + console + W3-sim FAITS ; bringup réel actif (sans drive) | W1 : source e_stop + coup-de-poing sans fil | roues web réel ⟸ test scénique (1) + protocole caméra dédié |
 | Télédiagnostic par agent IA | plan décidé ; étape 1 « trousse d'atelier » FAITE | étape 2 : boîte noire rosbag + bouton START | étape 3 ⟸ RAM du Pi 4 à relever (`ssh r 'cat /proc/meminfo'`) |
 | Conversation en déambulation (intention + contenu) | plan DÉCIDÉ (grillé 12/07) ; D0 outillage + personas commutables FAITS 13/07 | campagne D0 (robot allumé) ; textes personas à valider avec David | D1+ ⟸ protocole physique chat_node V2 (0) ; D6 ⟸ verrous roues |
-| Voix de Didier (ventriloquie ↔ synthèse) | OUVERT 26/08 ; cadre technique posé, **arbitrage artistique suspendu** | V0 : banc d'écoute (Pi → octaver via pad, 6 phrases, test en alternance) | V0 en atelier ; modèle de l'octaver + insert de la mixette à relever |
+| Voix de Didier (ventriloquie ↔ synthèse) | OUVERT 26/08 ; cadre + état de l'art posés, **arbitrage artistique suspendu** | **V0** banc d'écoute (Pi → octaver via pad, test en alternance) **et V0b en parallèle** : Kyutai Pocket TTS tourne-t-il sur le Pi 5 ? | V0/V0b en atelier ; **Kyutai sur ARM = inconnue qui décide de la forme du chantier** ; ne pas lancer l'enregistrement long avant V0b |
 | Suivi de personne (roues) | validé sim 5/5, déployé, **SIM-ONLY** | — (attend ses verrous) | test scénique (1) PUIS protocole caméra (`direction_sign` inconnu) |
 | Gaze V1 + arbitrage actionneurs | validé RÉEL 12/07 ; arbitrage déployé sur les 2 Pi | vérif visuelle : gaze ON pendant une séquence (la tête ne doit plus trembler) | — |
 | Odométrie des roues (encodeurs) | **disque IMPRIMÉ et monté le 19/08** (plaqué contre la couronne, rondelles — vigilances fluage/faux-rond au README plans) ; support capteurs : **v4 MORTE AU MONTAGE 19/08** (le palier occupe le volume), **direction v5 = pince sur la vis de suspension du palier** (double écrou, hors chemin d'effort) ; capteurs LJ12A3 reçus | **berceau v5 DESSINÉ 20/08** (palier KP004, bloc E rempli) + **firmware Pico ÉCRIT et testé 20/08** (`firmware/pico_odometry/`, 35 tests) → valider `E4_VIS_DISQUE` (hyp. 25 mm, réglet) + vue de montage, **imprimer x2** ; côté élec : refondre la carte (en bas, USB, sans J6/D13) puis banc d'établi | E4 hypothèse ; `PAL_BOSS_R` (21) non coté ; **12 V dispo en bas ?** ; sens de comptage à MESURER (protocole caméra) ; restent `ROUE_D` (hyp. 250) et entraxe roues (C2) |
@@ -306,17 +306,36 @@ entre en direct dans la mixette). D'où le principe directeur (§3, ne pas
 re-trancher) : **cloner avant les filtres, unifier après** — la continuité
 vient du dernier étage commun, pas du clonage.
 
-**Suite = lot V0**, banc d'écoute en atelier sans modification permanente
-(sortie Pi → octaver via un pad, 6 phrases, écoute en aveugle, **test en
-alternance** — la rupture ne s'entend qu'en juxtaposition). C'est V0 qui
-débloque l'**arbitrage artistique du §5, volontairement suspendu** : cloner la
-voix de David (A) ou pousser la robotisation jusqu'à rendre la source
-indifférente (B). Ensuite V1 câblage permanent, V2 accordage (voix piper la
-plus proche + pré-transposition F0), V3 banque de répliques enregistrées par
-David (qui **est** le corpus de fine-tune), V4 fine-tune piper.
+**Suite = deux lots parallèles et indépendants :**
 
-Ne pas s'engager dans le clonage avant V0 : il est possible que l'octaver
-écrase assez pour que l'écart résiduel ne s'entende pas.
+- **V0 — banc d'écoute**, en atelier sans modification permanente (sortie Pi →
+  octaver via un pad, 6 phrases, écoute en aveugle, **test en alternance** : la
+  rupture ne s'entend qu'en juxtaposition). C'est V0 qui débloque
+  l'**arbitrage artistique du §5, volontairement suspendu** : cloner la voix de
+  David (A) ou pousser la robotisation jusqu'à rendre la source indifférente (B).
+- **V0b — Kyutai Pocket TTS tourne-t-il sur le Pi 5 ?** L'inconnue la plus
+  rentable du chantier (état de l'art du 26/08) : MIT, français natif, clonage
+  **zero-shot depuis ~10 s** — mais aucune mesure sur ARM n'existe. S'il passe,
+  il supprime le corpus d'une heure, le GPU loué et le fine-tune. Mesurer dans
+  l'ordre : tourne sur ARM ? RTF sur Pi chargé ? tenue sur un énoncé de 30 s ?
+
+Ensuite V1 câblage permanent (aiguillage A/B sur le relais existant), V2
+accordage (voix piper la plus proche + pré-transposition F0), V3 enregistrement
+**au dimensionnement conditionnel à V0b**, V4 fine-tune piper (filet de
+sécurité, MIT, donne le timbre pas le jeu).
+
+Deux garde-fous de séquencement :
+- **Ne rien engager en clonage avant V0** — l'octaver écrase peut-être assez
+  pour que l'écart résiduel ne s'entende pas.
+- **Ne pas faire enregistrer 1-3 h à David avant V0b** — 10 s pourraient
+  suffire. Seul le palier minimal (quelques minutes **en personnage**) est utile
+  dans tous les cas.
+
+Deux points structurants consignés dans l'étude, à ne pas perdre : l'octaver
+unifie le **timbre mais pas la prosodie** (donc la garantie s'amincit sur les
+énoncés longs, exactement là où on en a besoin), et **le corpus est le plafond
+du clone** — enregistrer en lisant proprement donne un clone plat à vie ; il
+faut jouer, pas lire.
 
 ## Suivi de personne aux roues
 

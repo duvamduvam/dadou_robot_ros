@@ -85,30 +85,95 @@ possible que l'octaver écrase assez pour que l'écart résiduel ne s'entende pa
 
 ## 4. Le clonage — les options, et celle qui gagne
 
-Toutes supposent un corpus de **voix sèche** de David (§7, lot V3).
+*État de l'art relevé par recherche web le 2026-08-26. Recherche documentaire,
+**aucun test physique** — les incertitudes sont listées en fin de section et
+ne doivent pas être lues comme des faits.*
 
-| Voie | Coût / effort | Latence | Hors-ligne | Verdict |
-|---|---|---|---|---|
-| **Fine-tune piper** sur la voix de David | ~1 h d'enregistrement + quelques € de GPU loué | inchangée | **oui** | **retenue** |
-| Conversion de voix (RVC, seed-vc, knn-vc) | ~10 min d'audio, entraînement rapide | ajoutée, lourde | non sur Pi 5 | écartée |
-| Clonage cloud (ElevenLabs, Cartesia…) | 1–3 min d'échantillon | réseau | **non** | écartée en spectacle |
-| Zero-shot local (XTTS, F5, Fish…) | 30 s d'échantillon | GPU requis | non sur Pi 5 | écartée |
+### 4.1 Le vrai axe : dérive contre platitude
 
-**Le fine-tune piper est le seul candidat compatible avec le spectacle.** Il
-produit un `.onnx` qui *remplace* la voix actuelle : même code, même latence,
-aucune dépendance réseau — ce qui est non négociable en déambulation de rue,
-où le réseau n'existe pas. Ordre de grandeur du corpus : 45 min à 1 h de
-lecture, même micro, même pièce, **aucun traitement**, segments de 3 à 10 s
-avec transcriptions ; fine-tune depuis un checkpoint français existant.
+Didier ne fait pas que des répliques courtes : une conversation demande des
+réponses de **10 à 30 s**. C'est ce régime qui départage les modèles, et il les
+départage sur un axe qu'on ne voit pas sur des démos de 3 secondes :
 
-Les autres voies gardent **un** usage, et un seul : le clonage cloud permet
-d'**entendre en une heure**, pour quelques centimes, ce que le timbre de David
-donnerait une fois cloné — donc de décider *avant* d'investir la séance
-d'enregistrement. C'est un instrument de mesure, pas une brique du spectacle.
+- **Les modèles non autorégressifs (piper / VITS) ne dérivent jamais.** Ils
+  sortent la même chose à la seconde 25 qu'à la seconde 2. Leur défaut est
+  ailleurs : ils sont **plats**. VITS n'expose aucune variable d'émotion ou de
+  style à l'inférence — plusieurs comparatifs 2026 qualifient piper de
+  *fast-and-robotic*.
+- **Les modèles autorégressifs expressifs jouent mieux et décrochent sur la
+  durée.** C'est documenté, pas théorique : dérive de timbre sur XTTS
+  (issues #4172, #3432) et Fish Speech (#597, non résolue), découpage manuel
+  obligatoire au-delà de 300–500 mots sur F5-TTS (#395, #811), et sur
+  Chatterbox une **fin d'énoncé déclenchée prématurément qui coupe en plein
+  milieu** (#519, #587).
 
-⚠️ **Licences** : si le spectacle est payant, vérifier la licence de tout
-checkpoint utilisé — plusieurs modèles de clonage réputés sont diffusés en
-non-commercial. Piper est permissif ; c'est un argument de plus pour lui.
+Autrement dit : **le besoin de Didier tombe pile dans le trou.** Les énoncés
+longs sont exactement le régime où l'expressivité coûte la fiabilité. Tout
+choix de modèle est un arbitrage sur cet axe, pas une question de qualité
+générale.
+
+### 4.2 Les candidats
+
+| Modèle | Licence commerciale | Français | Matériel | Temps réel Pi 5 | Clonage | Tenue 10-30 s |
+|---|---|---|---|---|---|---|
+| **Piper** | **MIT** — libre | voix FR officielles (`fr_FR-siwis`, `tom`) | CPU seul | **oui** (référence embarquée) | fine-tune requis | stable mais **plate** |
+| **Kyutai Pocket TTS** | **MIT** (poids) / CC-BY-4.0 | **natif EN/FR**, labo français, WER FR 3,2 % annoncé | 2 cœurs CPU, 6× temps réel annoncé | **INCONNU sur ARM** | **zero-shot ~10 s** | non documenté |
+| Chatterbox Multilingual | **MIT** | FR listé (23 langues) | GPU conseillé | non | zero-shot 5-10 s | **coupe en plein milieu** (#519) |
+| Zonos | Apache 2.0 | FR listé | ~2× temps réel sur RTX 4090 | non | zero-shot 10-30 s | émotion 8D mais « entangled » |
+| CosyVoice2-EU | Apache 2.0 (non relu) | FR via fork académique **stade précoce** | GPU | non | zero-shot 3 s | anti-répétition intégré, hallucinations résiduelles |
+| XTTS v2 | ⛔ **CPML non-commercial** | 1 des 17 langues | GPU 4-6 Go | non | zero-shot 6 s | dérive documentée |
+| F5-TTS | code MIT, ⛔ **poids CC-BY-NC** | pas de modèle FR officiel | GPU | non | zero-shot 3 s | découpage manuel requis |
+| Fish Speech / S1 | ⛔ **non-commercial** | FR revendiqué | GPU | non | zero-shot | dérive après quelques minutes |
+| ElevenLabs / Cartesia (cloud) | payant | non vérifié | réseau | — | instantané | latence 75-190 ms |
+
+⛔ **Piège de licence, décisif si le spectacle est payant.** XTTS v2, les poids
+officiels de F5-TTS et Fish Speech S1 sont **non commerciaux**. Coqui a fermé
+en janvier 2024 : pour XTTS il n'existe même plus de licence commerciale à
+acheter. Ces trois-là sont hors-jeu, quelle que soit leur qualité. Revérifier à
+chaque changement de version — les termes bougent.
+
+### 4.3 Ce que ça donne pour Didier
+
+**Aucun candidat ne coche tout** (français de qualité + clonage + temps réel
+sur Pi 5 + licence propre + tenue sur 10-30 s). D'où une cascade, pas un choix :
+
+1. **Kyutai Pocket TTS est le pari le plus intéressant** — labo français, FR
+   natif et non dilué, licence propre, et surtout **clonage zero-shot depuis
+   ~10 s** : s'il tourne sur le Pi, il supprime le corpus d'une heure, le GPU
+   loué et le fine-tune d'un coup. Mais **son fonctionnement sur ARM n'est
+   vérifié nulle part** et le « 6× temps réel » est probablement mesuré sur
+   x86. C'est l'inconnue la plus rentable du chantier : une soirée de manip
+   peut supprimer trois lots (lot V1b, §7).
+2. **Le fine-tune piper reste le filet de sécurité** : MIT sans ambiguïté,
+   temps réel quasi certain, et il produit un `.onnx` qui *remplace* la voix
+   actuelle sans toucher au code. Résultat attendu : **le timbre de David, pas
+   son jeu**. Corpus 1–3 h en partant du checkpoint FR `siwis-medium` (le
+   plancher communautaire descend à quelques minutes, la référence LJSpeech est
+   à ~24 h) ; GPU loué ~0,30 $/h, quelques heures.
+3. **Ajouter un calculateur seulement en dernier recours.** Jetson Orin Nano
+   Super : 249 $, 67 TOPS, 7-25 W. Mais les retours de terrain (forum NVIDIA,
+   05/2026) montrent que **personne n'y a encore une combinaison propre
+   « clonage + temps réel + faible latence »** : piper et Kokoro y tournent
+   facilement mais sans clonage, Chatterbox tourne avec une latence importante.
+   À traiter comme un chantier d'intégration, pas comme un achat qui résout.
+
+**Cloud écarté comme solution principale** (dépendance réseau en rue), avec une
+réserve : Cartesia publie un SDK on-device en Apache 2.0 (`cartesia-ai/edge`),
+à regarder si le Pi 5 seul échoue — support ARM non confirmé.
+
+### 4.4 Incertitudes de cette section (à ne pas prendre pour des faits)
+
+- **Aucun benchmark RTF contrôlé** comparant plusieurs moteurs sur un **même
+  Pi 5 physique** n'existe : les chiffres piper qui circulent varient d'un
+  facteur ~40 selon la source et ne sont pas comparables entre eux.
+- Le « 6× temps réel CPU » de Kyutai n'a été vérifié sur **aucun ARM**.
+- **Aucun benchmark de qualité française indépendant** (hors communication des
+  projets eux-mêmes) pour Kyutai, XTTS, Fish, Chatterbox, Zonos, CosyVoice2-EU.
+- Licence Apache 2.0 de CosyVoice2 annoncée par sources secondaires, fichier
+  LICENSE non relu.
+- Coût réel en euros d'un fine-tune piper sur 1-3 h : **extrapolé**, non sourcé.
+- Support ARM de Cartesia Edge : non confirmé.
+- Mini-PC type N100 pour du clonage temps réel : aucune donnée trouvée.
 
 ## 5. L'arbitrage artistique — SUSPENDU au lot V0
 
@@ -128,16 +193,38 @@ elle change l'arbitrage.
 
 ### Ce qui va mordre avant le timbre
 
-Deux points à garder au chaud, parce qu'aucune des deux directions ne les règle :
+Trois points que ni A ni B ne règlent :
 
-- **La prosodie, pas le timbre.** Même clone parfait, une TTS est plate ; David
-  joue. Le public lit l'intention avant la couleur. Un timbre identique sur une
-  intonation morte ne fera pas illusion plus longtemps qu'un timbre différent.
-  **Aucune solution retenue à ce stade** (§8).
+- **⚠️ La portée réelle du §3 : l'octaver unifie le TIMBRE, pas la prosodie.**
+  Il ne masque ni le rythme, ni le placement des respirations, ni l'intention.
+  Or plus l'énoncé est long, plus c'est la prosodie qui porte l'identité et
+  moins le timbre compte. **La garantie « par construction » du §3 s'amincit
+  donc exactement là où Didier en a le plus besoin** — sur les réponses de
+  conversation. Le principe reste juste, il couvre moins de terrain qu'il n'y
+  paraît. Aucune solution retenue à ce stade (§8).
+- **⚠️ Le corpus est le plafond du clone.** Un TTS reproduit le **registre** de
+  ce sur quoi il a été entraîné, pas seulement le timbre — c'est le problème
+  de désentanglement timbre/prosodie des modèles VITS. L'instinct, en
+  enregistrant un jeu de données, est de lire proprement : articulé, posé,
+  neutre. Résultat : un clone propre, posé et neutre, **définitivement**. Sur
+  3 s ça passe ; sur 20 s c'est un lecteur de gare. La séance V3 doit donc
+  capter **Didier en personnage** — adressé à un passant imaginaire, énergie de
+  la rue, hésitations, ruptures de rythme, respirations — et non David au
+  micro. Aucun modèle et aucun budget GPU ne rattrape un corpus plat.
 - **La latence.** Une réponse LLM met des secondes ; la ventriloquie est
   instantanée. La rupture de *rythme* est un signal aussi fort que la rupture
   de timbre. Déjà traité en partie côté conversation (streaming par phrase,
   piper in-process) — mais c'est le même problème de continuité.
+
+### Un levier gratuit : le texte pilote la prosodie
+
+Sur les énoncés longs, c'est le **LLM** qui écrit la réplique, et la forme du
+texte contraint la diction du TTS plus qu'on ne le croit : phrases courtes,
+ponctuation franche, pas de subordonnées à rallonge, hésitations écrites
+explicitement dans la réplique. **Contraindre le style de sortie du LLM
+améliore la diction quel que soit le modèle vocal, pour zéro euro et zéro
+latence.** Ça se joue dans le prompt système du chat (`vision/ai/personas.py`),
+pas dans la chaîne audio — donc c'est applicable avant même l'arbitrage §5.
 
 ## 6. Le câblage — faire passer le Pi par l'octaver
 
@@ -193,6 +280,17 @@ pad, la sortie du Pi dans l'entrée de l'octaver existant. Protocole :
    l'ordre, notation 1–5 sur « est-ce le même personnage ? ».
 5. Consigner au §9. **C'est ce lot qui débloque l'arbitrage §5.**
 
+**V0b — banc Kyutai Pocket TTS sur le Pi 5 réel. À MENER EN PARALLÈLE DE V0.**
+Indépendant du câblage, donc parallélisable, et c'est **l'inconnue la plus
+rentable du chantier** (§4.3) : si le zero-shot tourne en temps réel sur ARM,
+il supprime V3 *et* V4 d'un coup. Trois mesures, dans cet ordre :
+1. **Est-ce que ça tourne sur ARM ?** (question binaire, la seule qui bloque) ;
+2. **RTF réel sur le Pi 5**, mesuré sur *nos* phrases, pas sur une démo — et
+   sur le Pi chargé comme en spectacle (whisper + vision tournent aussi) ;
+3. **Tenue sur un énoncé de 30 s** : dérive de timbre ? coupure prématurée ?
+   C'est le test que les démos de 3 s ne font jamais (§4.1).
+Échec sur (1) ou (2) ⟹ repli sur le fine-tune piper (V4), sans regret.
+
 **V1 — câblage permanent** (option 1 du §6) + garde-fou bruitages non pitchés.
 
 **V2 — accordage sans clonage** : choisir la voix piper française dont la
@@ -202,18 +300,28 @@ ligne de `sox`/`rubberband`) — l'octaver suit le fondamental, donc à F0 égal
 décroche de la même façon sur les deux sources. V1 + V2 sont probablement
 l'essentiel du résultat.
 
-**V3 — banque de répliques enregistrées par David** (80 à 150 : accueils,
-esquives, « laisse-moi réfléchir », relances). Double intérêt, et c'est ce qui
-en fait le meilleur rapport effort/résultat du chantier :
-- pendant la phase où l'IA répond mal, ce sont justement ces phrases
-  passe-partout qui sortent le plus souvent — elles sortiront dans **la vraie
-  voix**, sans aucun clonage ;
-- **ce corpus EST le jeu de données du fine-tune** (V4). Un après-midi
-  d'enregistrement, deux livrables. Enregistrer donc aux exigences du §4
-  (voix sèche, même micro, même pièce, transcriptions).
+**V3 — enregistrement de la voix de David. ⚠️ Dimensionnement CONDITIONNEL à
+V0b — ne pas bloquer un après-midi avant d'avoir le résultat.** Si le zero-shot
+de Kyutai passe, **10 s de référence suffisent** là où le fine-tune demande
+1 à 3 h. Deux paliers :
 
-**V4 — fine-tune piper** sur le corpus V3. À n'engager que si V0→V2 laisse un
-écart audible que l'arbitrage §5 refuse d'absorber.
+- **Palier minimal, à faire dans tous les cas** : quelques minutes **en
+  personnage** (§5). Sert de référence zero-shot dans une branche, d'amorce de
+  corpus dans l'autre. Aucun scénario ne le rend inutile.
+- **Palier complet, seulement si on part sur le fine-tune** : banque de 80 à
+  150 répliques (accueils, esquives, « laisse-moi réfléchir », relances) —
+  1 à 3 h, voix sèche, même micro, même pièce, transcriptions, segments de
+  3 à 10 s. Double intérêt : ces phrases passe-partout sortiront dans **la
+  vraie voix** pendant que l'IA répond encore mal, **et** le corpus EST le jeu
+  de données de V4. Un après-midi, deux livrables.
+
+Dans les deux paliers, l'exigence du §5 prime sur la propreté : **jouer, pas
+lire**. C'est le plafond de tout le reste.
+
+**V4 — fine-tune piper** sur le corpus V3 (checkpoint FR `siwis-medium`, GPU
+loué). **Filet de sécurité**, à n'engager que si V0b échoue ou si V0→V2 laisse
+un écart que l'arbitrage §5 refuse d'absorber. Résultat attendu, sans
+illusion : **le timbre de David, pas son jeu** (§4.3).
 
 ## 8. Points encore ouverts (assumés, pas oubliés)
 
@@ -223,8 +331,14 @@ en fait le meilleur rapport effort/résultat du chantier :
 - **F0 moyen de la voix de ventriloquie de David** à mesurer — c'est la cible
   de la pré-transposition du lot V2.
 - **La prosodie** : aucune approche retenue (§5). À rouvrir si V0 montre que le
-  timbre n'est pas le facteur limitant.
-- **Licences** des checkpoints si le spectacle devient payant (§4).
+  timbre n'est pas le facteur limitant — ce qui est probable sur les énoncés
+  longs, puisque l'octaver n'unifie pas la prosodie.
+- **Licences** des checkpoints si le spectacle devient payant (§4.2) : XTTS,
+  poids F5-TTS et Fish Speech sont **hors-jeu** (non commerciaux).
+- **Kyutai sur ARM** : la seule question qui décide de la forme du chantier, et
+  elle n'a de réponse nulle part dans la littérature (§4.4) — d'où V0b.
+- **Toutes les données du §4 sont documentaires**, aucun banc d'essai. Les
+  incertitudes du §4.4 sont à lever par la mesure, pas par plus de lecture.
 
 ## 9. Journal des mesures et décisions
 
@@ -232,3 +346,17 @@ en fait le meilleur rapport effort/résultat du chantier :
   mixette ; **Pi → mixette en direct** (ne passe pas par l'octaver). Principe
   directeur arrêté (§3 : cloner avant les filtres, unifier après). Arbitrage
   artistique (§5) explicitement suspendu au lot V0.
+- **2026-08-26 (suite)** — David objecte, à raison, que la banque de répliques
+  ne peut pas être la destination : **le robot doit pouvoir répondre long**.
+  Trois conséquences, après recherche d'état de l'art :
+  - **Correction de la portée du §3** : l'octaver unifie le timbre, **pas la
+    prosodie** — la garantie s'amincit précisément sur les énoncés longs (§5).
+  - **Le vrai axe de choix est dérive ⟷ platitude** (§4.1), pas la qualité
+    générale : les modèles expressifs décrochent sur 10-30 s (bugs documentés),
+    piper ne décroche jamais mais ne joue pas. Le besoin de Didier tombe dans
+    le trou.
+  - **Nouveau candidat de tête : Kyutai Pocket TTS** (MIT, FR natif, zero-shot
+    ~10 s) — mais **inconnu sur ARM**. D'où le lot **V0b**, parallèle à V0 :
+    s'il passe, il supprime V3 complet et V4. V3 est donc **repassé en
+    dimensionnement conditionnel** pour ne pas faire enregistrer 3 h qui
+    seraient inutiles.
