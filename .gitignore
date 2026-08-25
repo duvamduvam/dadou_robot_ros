@@ -11,3 +11,14 @@ secret
 __pycache__
 .iadadou/
 .iaction/
+
+# Atelier voix : venv, échantillons et rendus NE SONT PAS versionnés.
+# ⚠️ Le dépôt est PUBLIC : un échantillon de la voix de David est exactement
+# ce qu'il faut à un tiers pour la cloner. Rien de sonore ne sort d'ici.
+essais/voix/.venv/
+essais/voix/audio/
+essais/voix/sorties/
+*.wav
+*.mp3
+*.flac
+*.ogg

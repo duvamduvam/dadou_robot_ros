@@ -117,7 +117,7 @@ générale.
 | Modèle | Licence commerciale | Français | Matériel | Temps réel Pi 5 | Clonage | Tenue 10-30 s |
 |---|---|---|---|---|---|---|
 | **Piper** | **MIT** — libre | voix FR officielles (`fr_FR-siwis`, `tom`) | CPU seul | **oui** (référence embarquée) | fine-tune requis | stable mais **plate** |
-| **Kyutai Pocket TTS** | **MIT** (poids) / CC-BY-4.0 | **natif EN/FR**, labo français, WER FR 3,2 % annoncé | 2 cœurs CPU, 6× temps réel annoncé | **INCONNU sur ARM** | **zero-shot ~10 s** | non documenté |
+| **Kyutai Pocket TTS** | code **MIT**, poids **CC-BY-4.0** (commercial OK avec attribution) | FR réel mais **variante `french_24l`, NON distillée, « preview »** | 2 cœurs CPU ; 6× temps réel **mesuré sur MacBook Air M4 (donc ARM)** | portages ARM communautaires + voie `sherpa-onnx` | **zero-shot** depuis un wav | à mesurer (banc V0b) |
 | Chatterbox Multilingual | **MIT** | FR listé (23 langues) | GPU conseillé | non | zero-shot 5-10 s | **coupe en plein milieu** (#519) |
 | Zonos | Apache 2.0 | FR listé | ~2× temps réel sur RTX 4090 | non | zero-shot 10-30 s | émotion 8D mais « entangled » |
 | CosyVoice2-EU | Apache 2.0 (non relu) | FR via fork académique **stade précoce** | GPU | non | zero-shot 3 s | anti-répétition intégré, hallucinations résiduelles |
@@ -137,13 +137,29 @@ chaque changement de version — les termes bougent.
 **Aucun candidat ne coche tout** (français de qualité + clonage + temps réel
 sur Pi 5 + licence propre + tenue sur 10-30 s). D'où une cascade, pas un choix :
 
-1. **Kyutai Pocket TTS est le pari le plus intéressant** — labo français, FR
-   natif et non dilué, licence propre, et surtout **clonage zero-shot depuis
-   ~10 s** : s'il tourne sur le Pi, il supprime le corpus d'une heure, le GPU
-   loué et le fine-tune d'un coup. Mais **son fonctionnement sur ARM n'est
-   vérifié nulle part** et le « 6× temps réel » est probablement mesuré sur
-   x86. C'est l'inconnue la plus rentable du chantier : une soirée de manip
-   peut supprimer trois lots (lot V1b, §7).
+1. **Kyutai Pocket TTS est le pari le plus intéressant** — labo français,
+   licence propre (code MIT, poids CC-BY-4.0 : commercial autorisé avec
+   attribution), et **clonage zero-shot depuis un simple wav**.
+
+   **Vérifié à la main le 26/08 (installé et mesuré, pas lu)** — deux
+   corrections aux craintes initiales, dans les deux sens :
+   - ✅ *Le risque ARM est plus faible que redouté.* Le modèle anglais fait
+     **100 M de paramètres** (et non 1,6 Md), ce qui vide largement l'argument
+     de la bande passante mémoire ; et le « 6× temps réel sur 2 cœurs » est
+     mesuré **sur un MacBook Air M4, donc sur de l'ARM** — le chemin de code
+     ARM existe, c'est même la mesure vitrine. Portages communautaires
+     (Raspberry Pi, Jetson) signalés, et `sherpa-onnx` offre une seconde voie
+     sans PyTorch. Reste l'écart M4 ⟷ Cortex-A76 (~3-4× en calcul, ~7× en
+     bande passante).
+   - ⛔ *Mais le français n'est PAS le modèle rapide.* Le FR n'existe qu'en
+     variante **`french_24l`**, que l'outil lui-même annonce comme *« bigger
+     models, not distilled yet and here only as preview »*. **Le « 100 M / 6×
+     temps réel » vaut pour l'anglais distillé, pas pour ce qu'on ferait
+     parler à Didier.** C'est le vrai risque du pari Kyutai, il n'apparaît dans
+     aucune communication — seulement dans l'aide de la ligne de commande.
+
+   Reste vrai, et c'est ce qui justifie le lot : s'il passe sur le Pi, il
+   supprime d'un coup le corpus d'une heure, le GPU loué et le fine-tune.
 2. **Le fine-tune piper reste le filet de sécurité** : MIT sans ambiguïté,
    temps réel quasi certain, et il produit un `.onnx` qui *remplace* la voix
    actuelle sans toucher au code. Résultat attendu : **le timbre de David, pas
@@ -280,16 +296,44 @@ pad, la sortie du Pi dans l'entrée de l'octaver existant. Protocole :
    l'ordre, notation 1–5 sur « est-ce le même personnage ? ».
 5. Consigner au §9. **C'est ce lot qui débloque l'arbitrage §5.**
 
-**V0b — banc Kyutai Pocket TTS sur le Pi 5 réel. À MENER EN PARALLÈLE DE V0.**
-Indépendant du câblage, donc parallélisable, et c'est **l'inconnue la plus
-rentable du chantier** (§4.3) : si le zero-shot tourne en temps réel sur ARM,
-il supprime V3 *et* V4 d'un coup. Trois mesures, dans cet ordre :
-1. **Est-ce que ça tourne sur ARM ?** (question binaire, la seule qui bloque) ;
-2. **RTF réel sur le Pi 5**, mesuré sur *nos* phrases, pas sur une démo — et
-   sur le Pi chargé comme en spectacle (whisper + vision tournent aussi) ;
-3. **Tenue sur un énoncé de 30 s** : dérive de timbre ? coupure prématurée ?
-   C'est le test que les démos de 3 s ne font jamais (§4.1).
-Échec sur (1) ou (2) ⟹ repli sur le fine-tune piper (V4), sans regret.
+**V0b — banc Kyutai Pocket TTS. Le lot a DEUX MOITIÉS, et une seule a besoin du
+Pi** — découpage fait le 26/08, quand il est apparu que tout le volet qualité
+se traite sur le PC. Atelier : `essais/voix/` (README, `bench.py`,
+`phrases-v0.txt`).
+
+**V0b-PC — FAIT le 2026-08-26.** Installé (`pip install pocket-tts`, torch CPU,
+Python 3.12), modèle `french_24l`, voix intégrée *Estelle*, 4 fils d'exécution
+pour approcher un Pi 5. Mesuré par `bench.py` sur les 6 phrases :
+
+| | RTF médian | TTFA | Réponse longue |
+|---|---|---|---|
+| float | 0,46 | 0,16-0,27 s | 33,8 s produits, **pas de troncature** |
+| **int8** (`--quantize`) | **0,27** | **0,10-0,14 s** | 30,2 s produits, **pas de troncature** |
+
+Trois enseignements :
+- **La quantification int8 fait gagner ~1,7×** — c'est la configuration à
+  emmener sur le Pi. (Son coût en QUALITÉ reste à écouter : le banc mesure le
+  temps, pas le timbre.)
+- **Le chargement du modèle ne coûte que 2,3 s** une fois en cache : la
+  contrainte « in-process » déjà apprise sur piper reste tenable.
+- **⚠️ Aucune coupure prématurée sur un énoncé de 30 s.** C'est le mode de
+  défaillance qui disqualifie Chatterbox (§4.1) et il ne s'est pas produit ici.
+  Le point dur des réponses longues n'est donc PAS la troncature sur ce
+  modèle — reste la monotonie, qui elle ne se mesure pas (§5).
+
+Extrapolation prudente vers le Pi 5 : un Cortex-A76 étant ~3-4× plus lent par
+cœur, RTF ≈ 0,8-1,1 — **à cheval sur le temps réel**, donc à mesurer et non à
+deviner. Le TTFA, lui, garde une marge confortable, et c'est lui qui décide du
+ressenti (§4.1).
+
+**V0b-Pi — SAMEDI.** Le même `bench.py`, sur le Pi 5, dans cet ordre :
+1. **Est-ce que ça s'installe et tourne sur ARM ?** (binaire, seule question
+   bloquante) ;
+2. **RTF et TTFA réels**, en int8, sur *nos* phrases — et sur le Pi **chargé
+   comme en spectacle** (whisper + vision tournent aussi), pas au repos ;
+3. Relever `log-charge.sh` en parallèle, châssis fermé.
+Échec sur (1) ou (2) ⟹ repli sur le fine-tune piper (V4), sans regret — et
+sans avoir enregistré 3 h de corpus pour rien (d'où V3 conditionnel).
 
 **Budget de charge du Pi 5 — outil : `conf/scripts/log-charge.sh`** (série
 temporelle CSV à 1 Hz, lue dans `/proc` sans fork, plus attribution par
@@ -380,10 +424,17 @@ illusion : **le timbre de David, pas son jeu** (§4.3).
   longs, puisque l'octaver n'unifie pas la prosodie.
 - **Licences** des checkpoints si le spectacle devient payant (§4.2) : XTTS,
   poids F5-TTS et Fish Speech sont **hors-jeu** (non commerciaux).
-- **Kyutai sur ARM** : la seule question qui décide de la forme du chantier, et
-  elle n'a de réponse nulle part dans la littérature (§4.4) — d'où V0b.
-- **Toutes les données du §4 sont documentaires**, aucun banc d'essai. Les
-  incertitudes du §4.4 sont à lever par la mesure, pas par plus de lecture.
+- **Kyutai sur ARM** : la seule question qui décide de la forme du chantier —
+  V0b-PC l'a rendue plausible (§7), V0b-Pi la tranchera samedi.
+- **⚠️ La QUALITÉ n'a été jugée par personne.** Le banc du 26/08 mesure des
+  temps ; il ne dit rien du français produit, de la ressemblance avec David, ni
+  de la monotonie sur 25 s. Aucun chiffre ne remplacera une écoute — et c'est
+  le critère qui décide, pas le RTF.
+- **Coût en qualité de la quantification int8** : gain de vitesse mesuré
+  (~1,7×), dégradation non évaluée.
+- **Le français `french_24l` est une preview non distillée.** Il progressera
+  (distillation annoncée), mais **on ne peut pas engager un spectacle sur une
+  promesse** : ce qui compte est ce qu'il vaut aujourd'hui.
 
 ## 9. Journal des mesures et décisions
 
@@ -405,3 +456,13 @@ illusion : **le timbre de David, pas son jeu** (§4.3).
     s'il passe, il supprime V3 complet et V4. V3 est donc **repassé en
     dimensionnement conditionnel** pour ne pas faire enregistrer 3 h qui
     seraient inutiles.
+- **2026-08-26 (banc V0b-PC)** — Pocket TTS installé et MESURÉ sur le PC, le
+  Pi n'étant pas disponible avant samedi. Deux de mes craintes ARM tombent
+  (modèle à 100 M et non 1,6 Md ; le « 6× temps réel » est mesuré sur un M4,
+  donc déjà sur ARM), mais une inconnue non documentée apparaît, visible
+  seulement dans l'aide de la CLI : **le français n'existe qu'en `french_24l`,
+  variante non distillée et annoncée « preview »** — le chiffre vitrine ne
+  vaut donc pas pour la langue de Didier. Mesures : RTF médian 0,46 en float,
+  **0,27 en int8**, TTFA 0,10-0,27 s, et **aucune coupure prématurée sur un
+  énoncé de 30 s**. Extrapolation Pi : RTF ≈ 0,8-1,1, à cheval — donc à
+  mesurer. **La qualité n'a été jugée par personne : ça s'écoute.**
