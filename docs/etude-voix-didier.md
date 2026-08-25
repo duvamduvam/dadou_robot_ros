@@ -291,6 +291,43 @@ il supprime V3 *et* V4 d'un coup. Trois mesures, dans cet ordre :
    C'est le test que les démos de 3 s ne font jamais (§4.1).
 Échec sur (1) ou (2) ⟹ repli sur le fine-tune piper (V4), sans regret.
 
+**Budget de charge du Pi 5 — à mesurer avec D0, pas séparément.** Le lot D0 de
+[`etude-declenchement-conversation.md`](etude-declenchement-conversation.md)
+prévoit déjà « CPU Pi 5 en conversation complète » : V0b s'y rattache au lieu
+d'ouvrir un front. Ce qu'il faut y ajouter, et qui n'y est pas :
+
+- **Le pic est `max(whisper, TTS)`, pas leur somme.** Le half-duplex
+  (overview.md §297, adopté pour l'écho) l'impose : micro armé ⟹ Didier muet,
+  Didier parle ⟹ micro désarmé. Les deux gros consommateurs sont **mutuellement
+  exclusifs** — c'est un acquis d'architecture, à ne pas perdre de vue en
+  dimensionnant.
+- **La captation micro n'est PAS le coût.** Le ReSpeaker fait beamforming et
+  DoA sur sa puce (calcul déchargé) et le VAD est à énergie. Le coût, c'est
+  whisper.
+- **Le risque est la vidéo, parce qu'elle est CONTINUE.** Parole et écoute sont
+  des rafales de quelques secondes ; la perception tourne en permanence. Une
+  charge permanente à 60 % coûte plus cher en marge thermique et en tête qu'une
+  pointe à 100 % pendant 3 s. Mesurer la charge **avec la charge vision cible**,
+  pas sur un Pi au repos.
+- **⚠️ Mesurer châssis FERMÉ.** Le Pi 5 est dans une caisse close qui contient
+  un ampli. Un banc qui passe sur un bureau ventilé peut throttler en rue, en
+  été. C'est la mesure qui compte, l'autre ne prouve rien.
+- **Mode de défaillance à surveiller — il n'est pas « c'est lent »** : c'est la
+  **boucle de gaze qui perd ses tours pendant que Didier parle**, donc la tête
+  qui se fige en pleine réplique. Scéniquement pire qu'une voix plus pauvre.
+  Parade : réserver les cœurs (parole / perception) au lieu de compter sur
+  l'ordonnanceur.
+- **Le Pi 4 est hors-jeu** pour accueillir le TTS — pas par manque de
+  puissance, mais parce qu'il porte la chaîne roues à 20 Hz. Aucune charge
+  variable et gourmande sur la machine qui tient le mouvement.
+
+Si le budget ne rentre pas : la réponse est un **troisième calculateur** (§4.3),
+avec le découpage perception / parole — pas un grignotage d'optimisations.
+Avant d'en arriver là, deux leviers gratuits côté vidéo : détecter à **5-10 Hz**
+et non 30 (largement assez pour suivre un marcheur, avec du suivi entre deux
+détections), et utiliser l'ISP et le décodage matériel du Pi 5 plutôt que de
+refaire au CPU.
+
 **V1 — câblage permanent** (option 1 du §6) + garde-fou bruitages non pitchés.
 
 **V2 — accordage sans clonage** : choisir la voix piper française dont la
