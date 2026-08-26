@@ -141,6 +141,54 @@ personnalité déjà active est sans effet. Défaut au démarrage : `bougon`
 (config `chat_persona` côté vision, surchargeable par paramètre ROS
 `persona`). Nom inconnu = warning loggué avec la liste, jamais un crash.
 
+### Alias audio du Pi 5 vision — `/etc/asound.conf` (micro changé le 2026-08-26)
+
+**⚠️ Ce fichier n'est versionné NULLE PART et le Pi vision n'est pas dans
+l'inventaire Ansible** (`../dadou_utils_ros/ansible/hosts` ne contient que `r`
+et `c` ; le rôle `usb-audio` n'écrit que `~/.asoundrc`). Il est donc recopié
+ici pour qu'un reflashage du Pi ne l'emporte pas avec lui.
+
+Les index ALSA (`card 0`, `card 1`…) dépendent de l'ordre de branchement : les
+alias ciblent les cartes **par nom**. Trois alias, sur trois cartes USB :
+
+| Alias | Carte | Rôle |
+| --- | --- | --- |
+| `mixette` | `CARD=Device` (C-Media Unitek Y-247A) | sortie audio vers la mixette du spectacle |
+| `casque_mic` | `CARD=Array` (ReSpeaker XVF3800) | **micro de conversation** — depuis le 26/08 |
+| `webcam_mic` | `CARD=U20` (webcam USB) | ancien micro, gardé pour la comparaison A/B de la campagne D0 |
+
+**Le nom `casque_mic` est un contrat, pas une description.** Il a désigné
+successivement un casque Logitech, puis la webcam (11/07 → 26/08), puis le
+ReSpeaker. `vision_config.py::chat_mic_device` le référence et les tests
+unitaires de `dadou_vision_ros` l'attendent tel quel : **on change l'esclave,
+jamais le nom.**
+
+**⚠️ Piège à l'édition : le fichier est BIND-MONTÉ (ro) dans
+`dadou-vision-container`.** Un bind-mount de *fichier* suit l'**inode**, donc
+`sed -i` ou un éditeur qui écrit-puis-renomme casse le lien en silence : le
+conteneur continuerait de voir l'ancien contenu jusqu'au prochain
+`docker restart`. Éditer **en place** (`sudo tee`, `cat >`), puis vérifier :
+
+```bash
+# depuis le PC — les deux md5 doivent être identiques
+ssh -i ~/.ssh/keys/didier pi@192.168.1.151 \
+  'md5sum /etc/asound.conf; sudo docker exec dadou-vision-container md5sum /etc/asound.conf'
+```
+
+**Vérifier qu'un alias pointe vraiment où on croit** (depuis le conteneur,
+donc par le même chemin que `chat_node`) — enregistrer et regarder quelle
+carte passe en `RUNNING`, plutôt que se fier au fichier :
+
+```bash
+sudo docker exec dadou-vision-container bash -c \
+ 'arecord -D casque_mic -f S16_LE -r 16000 -c 1 -d 4 /tmp/t.wav & sleep 2;
+  for c in Array U20; do echo "$c : $(head -1 /proc/asound/$c/pcm0c/sub0/status)"; done; wait'
+# attendu : Array : state: RUNNING   /   U20 : closed
+```
+
+Sauvegarde de la version précédente sur le Pi :
+`/etc/asound.conf.bak-20260826`.
+
 ## Pre-show checklist
 1. Inspect hardware (wheels locked, arms secure, LED strips intact).
 2. Power on robot and remote controller (Pi 5 vision needs the 27 W PSU).

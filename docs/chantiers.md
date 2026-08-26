@@ -295,9 +295,12 @@ repos, `faster-whisper base` transcrit à RTF 0,39, **et la DoA fonctionne**
 Détail et pièges dans `hardware/overview.md` §Microphone.
 
 Ce que ça change pour D0 :
-- la campagne se fera sur CE micro, pas sur le U20 ; il reste à re-pointer
-  l'alias `casque_mic` d'`/etc/asound.conf` sur `CARD=Array` (le nom d'alias
-  est un contrat avec `vision_config.py`, on garde le nom) ;
+- **FAIT le 26/08** : l'alias `casque_mic` d'`/etc/asound.conf` pointe sur
+  `CARD=Array` (nom d'alias conservé = contrat avec `vision_config.py`, donc
+  aucun code touché et `dadou_vision_ros` reste gelé), vérifié DEPUIS le
+  conteneur. Alias `webcam_mic` ajouté pour garder l'ancienne captation
+  disponible en comparaison A/B. Mode d'emploi et piège du bind-mount :
+  `operations.md` ;
 - toute mesure D0 doit **nommer le modèle Whisper utilisé** — sur la prise à
   3 m, `base` était le maillon faible, pas le micro ;
 - la DoA ouvre le recoupement micro × caméra pour l'attribution du locuteur :

@@ -358,9 +358,14 @@ either the ring stays a diagnostic instrument (blue/green, not tunable), or it b
 stage light that says nothing. David's leaning on 2026-08-26: **keep it lit** — to be re-decided
 once the array is mounted on the body and its glow can be judged against the LED face.
 
-Before `chat_node` V2 can use it, `/etc/asound.conf` on the vision Pi must re-point the
-`casque_mic` alias from `CARD=U20` to `CARD=Array` (the alias name is a contract with
-`vision_config.py::chat_mic_device` — keep the name, change the slave).
+**DONE 2026-08-26 — the array is now the conversation microphone.** `/etc/asound.conf` on the
+vision Pi re-points the `casque_mic` alias to `CARD=Array` (the alias *name* is a contract with
+`vision_config.py::chat_mic_device` — the slave changed, the name did not, so no code change and
+`dadou_vision_ros` stays frozen). A `webcam_mic` → `CARD=U20` alias was added to keep the old
+capture available for the D0 A/B comparison. Verified from *inside* the container: recording
+through `casque_mic` puts `Array` in `state: RUNNING` and leaves `U20` `closed`. Full procedure,
+and the bind-mount/inode trap that goes with editing that file, in
+[`operations.md`](../operations.md).
 
 **Take the XVF3800, not the XVF3000 (ReSpeaker v2.0): XMOS has issued an EOL notice on the
 XVF3000** and recommends the XVF3800 for new designs. Do not build Didier's conversation on a
