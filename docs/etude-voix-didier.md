@@ -426,6 +426,57 @@ n'est plus le timbre mais la **constance** (David a signalé « il y avait des
 morceaux bien », donc une qualité inégale, non encore caractérisée : début de
 bloc ? dérive de fin ? chiffres et noms propres ?).
 
+#### ⚠️ Retour de David, et les deux mesures qui l'expliquent (26/08)
+
+**« C'est ma voix NORMALE, pas la ventriloquie. »** Mesure F0 (autocorrélation,
+`essais/voix/mesure_voix.py`) :
+
+| | F0 médian | étendue p10-p90 |
+|---|---|---|
+| `reference-p1` (la prise de David) | **134,5 Hz** | 81,5 Hz |
+| clone float | 136,8 Hz | 58,0 Hz |
+| clone int8 | 139,1 Hz | 60,7 Hz |
+
+**Le clone reproduit la hauteur de la référence à ~2 % près : il est fidèle.**
+Ce n'est donc PAS un défaut du modèle — **c'est la prise de référence qui
+était en voix normale**. La séance V3 a capté « David en personnage » au sens
+du jeu (adresse, énergie, rythme) mais **pas la technique vocale de la
+ventriloquie**.
+
+**Correction du principe §3, et elle est importante** : « cloner AVANT les
+filtres » visait l'**octaver**. Mais la ventriloquie n'est pas un filtre,
+c'est une **technique vocale** — elle appartient donc au CORPUS, pas à l'aval.
+La chaîne cible est : *ventriloquie de David* → clone → octaver. On avait
+cloné un cran trop tôt. ⚠️ **Toute reprise du corpus (V3 bis, et le palier
+complet si on y va) doit être enregistrée en voix de ventriloquie.**
+
+Bénéfice collatéral : le §8 demandait « F0 moyen de la voix de ventriloquie à
+mesurer ». On tient déjà la **voix normale à 134,5 Hz** ; il manque la
+ventriloquie, que la prochaine prise donnera — et l'écart entre les deux sera
+la cible de la pré-transposition du lot V2.
+
+**« Le volume de voix est parfois inégal. »** Écart de niveau entre phrases :
+
+| | écart max entre phrases |
+|---|---|
+| clone int8 | 13,8 dB |
+| clone float | 14,9 dB |
+| **`reference-p1` (l'humain)** | **16,2 dB** |
+
+**Là encore le modèle ne dérègle rien : il reproduit fidèlement la dynamique
+naturelle de David** (qui est même un peu plus contrastée). Mais Didier joue
+DANS LA RUE et il EST la sono : une phrase 15 dB plus bas est perdue pour le
+public. C'est donc un besoin de **diffusion**, à traiter en aval — surtout pas
+en demandant à David de parler « plus régulièrement », ce qui aplatirait le
+jeu (le piège du §5).
+
+Remède écrit et vérifié : `essais/voix/nivelle.py` — découpe sur les silences,
+ramène chaque phrase à un RMS cible, gain plafonné et transitions en fondu de
+30 ms. **13,8 dB → 1,4 dB** sur la démo int8 (plafond desserré à +20 dB,
+légitime sur une source synthétique qui n'a pas de bruit de fond ; garder
++12 dB par défaut pour de l'audio capté). À intégrer au pipeline de diffusion
+côté vision, pas au corpus.
+
 Deux versions du même texte sont sur disque pour trancher le coût de l'int8 :
 `sorties/demo-texte-inedit-float.wav` (99 s, RTF 0,73) et
 `-int8.wav` (95 s, **RTF 0,42**). Génération **bloc par bloc**
