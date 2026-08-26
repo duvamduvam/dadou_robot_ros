@@ -448,12 +448,18 @@ V0b — ne pas bloquer un après-midi avant d'avoir le résultat.** Si le zero-s
 de Kyutai passe, **10 s de référence suffisent** là où le fine-tune demande
 1 à 3 h. Deux paliers :
 
-- **Palier minimal, à faire dans tous les cas** : quelques minutes **en
-  personnage** (§5). Sert de référence zero-shot dans une branche, d'amorce de
-  corpus dans l'autre. Aucun scénario ne le rend inutile. **Outillé le 26/08 :
-  pupitre `essais/voix/enregistre.py`** (Scarlett trouvée par description,
-  S32_LE 48 kHz, contrôle qualité de chaque prise — jamais le ReSpeaker, dont
-  le DSP cuirait du traitement dans un corpus qui doit rester sec).
+- **Palier minimal — ✅ FAIT le 26/08** (pupitre `essais/voix/enregistre.py` :
+  Scarlett trouvée par description, S32_LE 48 kHz, contrôle de chaque prise —
+  jamais le ReSpeaker, dont le DSP cuirait du traitement dans un corpus qui
+  doit rester sec). **5,2 min en personnage au SM58** (48 V coupé, gain réglé
+  crêtes ≈ −15 dBFS, planchers −77…−94 dBFS, zéro échantillon saturé) :
+  - `reference-p1` — 60,8 s continues, 76 % de parole, silence max 1,4 s :
+    LA référence zero-shot, validée à l'oreille par David ;
+  - les 6 phrases du banc (`phrase-1…6`) + les 4 répliques `[DAVID]` du
+    dialogue en alternance (`dialogue-1…4`) : tout le programme du README.
+  Les wav restent dans `essais/voix/audio/` (gitignoré, dépôt public). Deux
+  prises marquées TROP FAIBLE restent sur disque (réglages) — ignorer.
+  **Prochain geste (V0b-PC, qualité) : cloner sur `reference-p1` et écouter.**
 - **Palier complet, seulement si on part sur le fine-tune** : banque de 80 à
   150 répliques (accueils, esquives, « laisse-moi réfléchir », relances) —
   1 à 3 h, voix sèche, même micro, même pièce, transcriptions, segments de
