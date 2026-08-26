@@ -409,6 +409,29 @@ Enseignements, avec le niveau de confiance qui va avec :
   texte de la phrase 6 — les « troncatures » du premier run étaient du texte
   parasite, pas un défaut du modèle.
 
+#### ✅ VERDICT DE DAVID le 26/08 : « oui, c'est bien ma voix »
+
+Écouté sur les KRK. Le jalon du chantier est franchi : **le clonage zero-shot
+rend la voix de David**, et ce n'est pas un effet de reconnaissance de ses
+propres prises — la démonstration a été faite sur un **texte inédit** de
+99 s (`essais/voix/texte-demo-2min.txt`, écrit ce jour, jamais prononcé,
+truffé exprès de mots absents des prises : parapluie, boulangerie, Perpignan,
+quatre-vingt-treize). David avait justement posé la bonne question sceptique
+(« ça ne vient pas d'enregistrement préexistant ? ») : non — la référence ne
+sert que d'empreinte de timbre, l'audio est généré échantillon par échantillon.
+
+Conséquence pour l'arbitrage §5 : **la branche « synthèse clonée » est
+viable**, elle n'est plus une hypothèse. Ce qui reste à juger à l'oreille
+n'est plus le timbre mais la **constance** (David a signalé « il y avait des
+morceaux bien », donc une qualité inégale, non encore caractérisée : début de
+bloc ? dérive de fin ? chiffres et noms propres ?).
+
+Deux versions du même texte sont sur disque pour trancher le coût de l'int8 :
+`sorties/demo-texte-inedit-float.wav` (99 s, RTF 0,73) et
+`-int8.wav` (95 s, **RTF 0,42**). Génération **bloc par bloc**
+(`demo_texte.py`), comme le fera la prod qui diffuse phrase par phrase : ça
+borne la dérive autorégressive et un bloc raté ne contamine pas les suivants.
+
 **Montage d'écoute prêt** : `essais/voix/sorties/alternance-david-machine.wav`
 (40,9 s) — les répliques `[DAVID]` sont les prises réelles de la séance V3,
 les `[MACHINE]` sont dites par le clone (état 60 s), RMS égalisés, 24 kHz.
