@@ -140,9 +140,11 @@ non-negotiable rule ("every movement feature MUST handle its stop case") require
 
 ### Evaluated 2026-07-13, not purchased: RPLIDAR C1
 
-**Slamtec RPLIDAR C1 — DTOF, 12 m, 360°, 10 Hz, ~680 points/scan, ROS1 & ROS2 — €68.99**
+**Slamtec RPLIDAR C1 — DTOF, 12 m, 360°, 5 kHz sampling, 8-12 Hz, 0.72° → 500 points/scan
+at 10 Hz, min range 0.05 m, ROS1 & ROS2 — €68.99**
 <https://fr.aliexpress.com/item/1005006190309082.html>
-(The same sensor is listed elsewhere at €97.69 — check the price before ordering.)
+(The same sensor is listed elsewhere at €97.69 — check the price before ordering. Still ~€68 on
+2026-08-26.)
 
 Why a 2D lidar and not the cheap alternatives:
 
@@ -150,7 +152,23 @@ Why a 2D lidar and not the cheap alternatives:
 | --- | --- |
 | Ultrasonic (HC-SR04) | **No.** ~30° cone, and clothing (wool, coats) *absorbs* ultrasound — it is blindest to exactly what it must see: people. |
 | IR ToF (VL53L1X) | **No.** Stage projectors radiate massive IR; an IR ToF collapses under stage lighting. Sunlight outdoors is worse. |
+| Depth camera (RealSense, OAK-D) | **No** — and the reason is *where the compute sits*, not the sensor. The obstacle gate must run on the **robot Pi 4** (see below); a depth camera means USB 3 + a dense `PointCloud2` the Pi 4 cannot chew, so it would land on the vision Pi 5 — i.e. behind the Wi-Fi link, which disqualifies it as a safety. Add €150-300 vs €69, and a Pi 5 that already has to carry whisper + piper in V2. Its one real advantage over a 2D lidar (it sees a *volume*, not a plane) is answered here by the contact bumper. |
 | **2D lidar (RPLIDAR C1)** | **Yes.** Immune to ambient IR, publishes `sensor_msgs/LaserScan` natively, and would open nav2 later. |
+
+**Selection criterion that outranks the sensor itself: a MAINTAINED ROS 2 driver.** This is a safety
+function; the driver is not a detail one writes over a weekend. `rplidar_ros` is published by
+Slamtec, ROS 1 + ROS 2, used by thousands. Beware the cheaper 360° DTOFs that look identical on
+paper — see the buying trap below.
+
+**⚠️ BUYING TRAP, seen 2026-08-26.** The AliExpress listing above is titled *"SLAMTEC RPLIDAR
+**C1 / D6**"* and has two variants. The €48 price shown by default is the **D6**, whose package
+insert reads *"CHINA SCIENCE PHOTON CHIP COIN-D6"* — a Guoke Optical Core sensor, **not a Slamtec**.
+That family is not junk (its COIN-D4 is ROBOTIS's LDS-03 on the TurtleBot3, with the
+`ROBOTIS-GIT/coin_d4_driver` package), but the **D6 has no public datasheet and no maintained ROS 2
+driver** — €20 saved against writing a serial driver for an undocumented frame format, on the
+safety path of a 50 kg robot. **Select the "C1 Lidar" variant (€67.99) and check the price actually
+changes.** Also check the USB-UART adapter is included *for that variant*: the C1 is a UART sensor
+and the shipment-list photo may only document the D6 bundle.
 
 Design constraints, established 2026-07-13 (these are the non-obvious parts):
 
@@ -172,7 +190,9 @@ Design constraints, established 2026-07-13 (these are the non-obvious parts):
 - **The obstacle gate MUST run on the robot Pi 4**, inside the `cmd_vel` chain (next to `twist_mux`
   / `twist_deadman`) — **never on the vision Pi 5**. A safety that depends on the Wi-Fi link between
   the two Pis is not a safety. The lidar therefore plugs into the **Pi 4** over USB.
-- **CPU cost is negligible for this use.** 680 points × 10 Hz = ~6.8 k points/s over USB serial.
+- **CPU cost is negligible for this use.** 5 k points/s over USB serial (the datasheet sampling
+  rate; 500 points per scan at 10 Hz — an earlier revision of this page said 680, which contradicted
+  the 0.72° resolution: 360 / 0.72 = 500).
   The `rplidar_ros` driver costs a few percent of one core; a forward-cone minimum-range gate costs
   under one percent. What *would* be expensive is nav2 (costmap + planners + localisation) — which
   this function does not need and must not need.
