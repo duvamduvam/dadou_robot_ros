@@ -286,9 +286,22 @@ wav (`vad_replay`), scripts `enregistre-rue.sh` / `mesure-cpu-conversation.sh`
 commutation) : 3 personnalités commutables à tester — « bougon » (défaut) /
 « naif » / « vantard » — socle + textes dans `vision/ai/personas.py` (repo
 public, tranché §8), commutation à chaud topic `persona` (nouvelle session de
-conversation à chaque bascule), sélecteur sur la console web. **Suite : la
-campagne D0** (robot allumé : mesure CPU en conversation, enregistrements rue
-à rejouer, calibration distance) et la **validation des textes par David** ;
+conversation à chaque bascule), sélecteur sur la console web.
+
+**MICRO CHANGÉ le 26/08** : le ReSpeaker XVF3800 est reçu et **testé au banc
+sur le Pi 5** (driverless, 16 kHz, 21 dB de SNR à 3 m sur le robot au repos,
+`faster-whisper base` transcrit à RTF 0,39) — détail et restes dans
+`hardware/overview.md` §Microphone. Ce que ça change pour D0 : la campagne se
+fera sur CE micro, pas sur le U20 (**qui n'existe plus : la webcam est
+débranchée**, donc l'alias `casque_mic` d'`/etc/asound.conf` pointe dans le
+vide et la caméra manque AUSSI au gaze et au suivi de personne). Deux
+préalables à D0 : rebrancher la webcam, re-pointer `casque_mic` sur
+`CARD=Array`. Et toute mesure D0 doit désormais **nommer le modèle Whisper
+utilisé** — sur la prise à 3 m, `base` était le maillon faible, pas le micro.
+
+**Suite : la campagne D0** (robot allumé : mesure CPU en conversation,
+enregistrements rue à rejouer, calibration distance) et la **validation des
+textes par David** ;
 reste D3 : bouton télécommande, multi-langues, chrono latence. Verrou de
 D1+ : protocole physique chat_node V2 (chantier 0). Réussite finale = grille
 chiffrée du test rue D5 (§7 du plan).
@@ -403,16 +416,13 @@ en conversation réelle (avec le chantier 0).
   lent possible).
 - Batterie : aucun capteur câblé — parqué vers le chantier élec (cartes PCB),
   décision télédiagnostic §8.
-- Micro réseau (ReSpeaker XVF3800 USB, ~94 €) — repéré et consigné dans
-  `hardware/overview.md` §Microphone (2026-07-13, RIEN acheté). La décision de
-  l'étude tient : on garde le U20 et on MESURE d'abord (lot D0). Deux choses
-  rendent la question réelle quand même : la caméra CSI SUPPRIME le micro de la
-  webcam, et l'étude ne traite nulle part l'ÉCHO (Didier parle fort → il
-  s'entend et se répond ; c'est le mode de panne qui a fait couper chat_node le
-  11/07). Half-duplex à implémenter de toute façon (gratuit). Pièges : XVF3000
-  en fin de vie (prendre le 3800), jamais un HAT I2S (driver seeed-voicecard),
-  l'AEC exige de re-router le TTS PAR le ReSpeaker, montage sur le CORPS (pas la
-  tête : le repère DoA suivrait le gaze) et découplé mécaniquement.
+- ~~Micro réseau~~ — **SORTI DU FOND DE TIROIR** : ReSpeaker XVF3800 acheté
+  (66,39 €), **REÇU et testé au banc sur le Pi 5 le 26/08** (driverless UAC 2.0,
+  16 kHz natif, 21 dB de SNR à 3 m, Whisper transcrit). Mesures et restes à
+  faire : `hardware/overview.md` §Microphone. L'ÉCHO reste entier (half-duplex
+  à implémenter, c'est ce qui a fait couper chat_node le 11/07), la DoA n'est
+  pas testée, et le montage (découplage, ports acoustiques VERS LE BAS, offset
+  d'azimut) est un chantier CAO à part entière.
 - Détection d'obstacle (lidar 2D) — RPLIDAR C1 repéré (68,99 €) et contraintes de
   conception consignées dans `hardware/overview.md` §Distance & obstacle sensing
   (2026-07-13, RIEN acheté). Le trou n'est PAS la distance à la personne (déjà

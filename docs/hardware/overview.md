@@ -231,8 +231,16 @@ guardrail for a use nobody has observed yet.
 
 ## Microphone
 
-### In service: the webcam's microphone
-The conversation input is currently the **USB webcam's own microphone** (ALSA alias `casque_mic` →
+### ⚠️ Status 2026-08-26: the webcam is UNPLUGGED, the array is in
+The vision Pi no longer sees the USB webcam (`lsusb` lists only the ReSpeaker and the C-Media
+adapter; `v4l2-ctl` shows only the Pi's own ISP nodes). Two consequences, neither of them
+cosmetic: the `casque_mic` alias in `/etc/asound.conf` points at `CARD=U20`, which **no longer
+exists** — any `chat_node` V2 start would fail on device-open — and **the camera-fed subsystems
+(`person_follower`, gaze) have no input either**. Replug the webcam before any vision work, and
+re-point `casque_mic` at `CARD=Array` before any conversation work (below).
+
+### Superseded: the webcam's microphone
+The conversation input **was** the **USB webcam's own microphone** (ALSA alias `casque_mic` →
 card U20, declared in the vision Pi's `/etc/asound.conf`). The conversation study
 (`etude-declenchement-conversation.md` §5.5) decided: **keep the U20 and MEASURE first** (lot D0:
 street-condition recordings replayed through the VAD). Hardware change *only on measured failure*.
@@ -253,6 +261,40 @@ version (design constraints below).
 Originally evaluated 2026-07-13 (~€94 *cased* version, item 1005009684208884, also sold by Seeed
 directly / by EU resellers). The reasoning below — why an array and not a "good microphone" — is
 unchanged.
+
+#### RECEIVED and bench-tested on the vision Pi 5 — 2026-08-26
+
+Test run over SSH on the Pi 5 (array mounted **on the robot, robot at rest**), files kept in
+`~/pi/mic_test/` on the vision Pi. What was actually verified, and what was not:
+
+| Claim from the purchase file | Measured 2026-08-26 | Verdict |
+| --- | --- | --- |
+| Driverless UAC 2.0 | `card 0: Array [reSpeaker XVF3800 4-Mic Array]`, enumerated at boot, `snd-usb-audio`, **no driver, no config** | ✅ confirmed |
+| 16 kHz, ideal for Whisper | `hw:0,0` advertises exactly **S16_LE / 16000 Hz / 2 ch** — and *nothing else* (single format, single rate) | ✅ confirmed |
+| Far-field pickup in the social zone | Speech at **3 m**: −32 dBFS RMS / −12 dBFS peak against a **−53 dBFS** noise floor (robot at rest, chassis closed) → **≈ 21 dB SNR** | ✅ confirmed |
+| Usable by the ASR at that distance | `faster-whisper base` (int8, the model already cached in the vision container) transcribes the 3 m take in French, **RTF 0.39** (3.9 s for 10 s audio, +2.6 s model load) | ✅ usable |
+| DoA (`AEC_AZIMUTH_VALUES`) | **NOT TESTED** — the `host_control` tool is not installed on the Pi | ⬜ open |
+
+Two findings that were not in the purchase file:
+
+- **The 2 channels are two DISTINCT signals, not a duplicated mono** (cross-correlation 0.95, peak
+  at **0 sample delay** — so it is not a stereo pair carrying an inter-channel time difference,
+  which is expected: the beamforming already collapsed the array). Levels differ by ~2 dB and the
+  per-second profiles diverge. Which one is the processed beam and which is a reference is **not
+  yet identified** — settle it before wiring the ASR to a fixed channel rather than to a downmix.
+- **Whisper `base` is the weak link, not the microphone.** The 3 m take came back as
+  *"Salut dis-il !"* for « Salut Didier ! », and the second half degraded. The audio is there;
+  `base` is simply the smallest model. Try `small` before blaming the capture — and note this
+  falsifies nothing about the array, but it does mean **the D0 VAD/ASR measurements must state
+  which model they ran**.
+
+Still open after this test (none of it is a capture problem): the DoA read-out, the **mounting**
+(decoupling, bottom-firing air gap, fixed azimuth offset — see below), the **half-duplex gate**,
+and the **dimensions to re-measure** before drawing the 3D support.
+
+Before `chat_node` V2 can use it, `/etc/asound.conf` on the vision Pi must re-point the
+`casque_mic` alias from `CARD=U20` to `CARD=Array` (the alias name is a contract with
+`vision_config.py::chat_mic_device` — keep the name, change the slave).
 
 **Take the XVF3800, not the XVF3000 (ReSpeaker v2.0): XMOS has issued an EOL notice on the
 XVF3000** and recommends the XVF3800 for new designs. Do not build Didier's conversation on a
