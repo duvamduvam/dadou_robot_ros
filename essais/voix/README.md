@@ -72,9 +72,25 @@ qu'on cherche à capter.
   MP3.
 - Déposer dans `audio/` (ignoré par git).
 
+### Le pupitre : `enregistre.py` (écrit le 26/08)
+
+Ne pas utiliser `arecord` à la main : l'index de carte change avec l'ordre de
+branchement (au moment d'écrire ceci, `plughw:1,0` était la webcam du PC, pas
+la Scarlett…). Le pupitre trouve la Scarlett par sa description, enregistre en
+S32_LE 48 kHz, et **contrôle chaque prise** (crête, saturation, plancher de
+bruit) pour qu'une prise ratée se refasse dans la minute :
+
 ```bash
-arecord -D plughw:1,0 -f S16_LE -r 48000 -c 1 audio/reference.wav   # Ctrl-C pour finir
+.venv/bin/python enregistre.py gain               # régler le gain : crêtes -12…-6 dBFS
+.venv/bin/python enregistre.py prise reference    # une prise (Entrée pour arrêter)
+.venv/bin/python enregistre.py prise phrase-1     # les prises s'incrémentent : -p1, -p2…
+.venv/bin/python enregistre.py bilan              # toutes les prises + verdicts + total
 ```
+
+Rien n'est jamais écrasé : refaire une prise du même nom crée `-p2`, `-p3`…
+La meilleure gagne à l'écoute, les autres restent. ⚠️ Micro statique → penser
+au **48 V** ET au bouton **INST/LINE** de la Scarlett (en INST, un statique
+sort un signal fantômatique — le verdict « TROP FAIBLE » le détecte).
 
 ### Contenu à enregistrer
 

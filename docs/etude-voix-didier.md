@@ -450,7 +450,10 @@ de Kyutai passe, **10 s de référence suffisent** là où le fine-tune demande
 
 - **Palier minimal, à faire dans tous les cas** : quelques minutes **en
   personnage** (§5). Sert de référence zero-shot dans une branche, d'amorce de
-  corpus dans l'autre. Aucun scénario ne le rend inutile.
+  corpus dans l'autre. Aucun scénario ne le rend inutile. **Outillé le 26/08 :
+  pupitre `essais/voix/enregistre.py`** (Scarlett trouvée par description,
+  S32_LE 48 kHz, contrôle qualité de chaque prise — jamais le ReSpeaker, dont
+  le DSP cuirait du traitement dans un corpus qui doit rester sec).
 - **Palier complet, seulement si on part sur le fine-tune** : banque de 80 à
   150 répliques (accueils, esquives, « laisse-moi réfléchir », relances) —
   1 à 3 h, voix sèche, même micro, même pièce, transcriptions, segments de

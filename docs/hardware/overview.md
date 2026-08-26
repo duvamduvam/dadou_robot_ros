@@ -488,8 +488,27 @@ microphone while it was audible, then it stopped on its own (**intermittent — 
 | 2–8 kHz (where hiss would live) | −78.1 | −77.4 — **unchanged** |
 
 Energy sits on **50 Hz and its ODD harmonics** (150, 350, 450) and the treble is untouched: that is
-the signature of a **mains-related loop**, not of an amplifier that hisses. David's own hypothesis
-— the Pi's power supply — is consistent with it and is the first thing to swap.
+the signature of a **mains-related loop**, not of an amplifier that hisses.
+
+**⚠️ What this measurement does NOT say: where the noise enters.** It says the noise is
+mains-related and appears with the amp on. Nothing more. Suspects remain the Pi's PSU, the mixing
+desk's PSU, the HF receiver, or another appliance on the same circuit — and the shape (weak 50 Hz,
+strong 150/350/450) points more at a **transformer/rectifier buzz** than at pure capacitive leakage.
+
+David's fair objection, worth writing down because it is the crux: *"how can it come from the
+mains when the Pi 5's power supply hasn't changed?"* **A ground loop is a property of the CIRCUIT,
+not of one device.** Nothing changed on the Pi — the **amplifier** arrived, and it closed the loop.
+A class-II switching PSU has **Y-capacitors** between mains and its output ground; by design they
+inject a small 50 Hz leakage current into the powered device's ground. As long as that ground goes
+nowhere, it is invisible. Connect it to another earthed device *through an audio cable* and the
+current finally has a path — through the cable shield, where it becomes audible. So "the PSU has
+not changed" and "the PSU is a suspect" are both true: what changed is the **path**, not the source.
+
+**Two free tests, to run the day the hum is actually audible** (it is intermittent):
+
+1. Unplug the Pi's *audio* cable from the mixing desk, amp still on. Hum gone → it enters through
+   the Pi path. Hum stays → it is on the amp / desk / HF side.
+2. Run the Pi from a **battery**. Hum gone → the PSU is confirmed.
 
 **⚠️ Two methodological traps, both hit on the day:**
 
