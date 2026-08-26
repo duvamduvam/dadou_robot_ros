@@ -289,15 +289,26 @@ public, tranché §8), commutation à chaud topic `persona` (nouvelle session de
 conversation à chaque bascule), sélecteur sur la console web.
 
 **MICRO CHANGÉ le 26/08** : le ReSpeaker XVF3800 est reçu et **testé au banc
-sur le Pi 5** (driverless, 16 kHz, 21 dB de SNR à 3 m sur le robot au repos,
-`faster-whisper base` transcrit à RTF 0,39) — détail et restes dans
-`hardware/overview.md` §Microphone. Ce que ça change pour D0 : la campagne se
-fera sur CE micro, pas sur le U20 (**qui n'existe plus : la webcam est
-débranchée**, donc l'alias `casque_mic` d'`/etc/asound.conf` pointe dans le
-vide et la caméra manque AUSSI au gaze et au suivi de personne). Deux
-préalables à D0 : rebrancher la webcam, re-pointer `casque_mic` sur
-`CARD=Array`. Et toute mesure D0 doit désormais **nommer le modèle Whisper
-utilisé** — sur la prise à 3 m, `base` était le maillon faible, pas le micro.
+sur le Pi 5** — driverless, 16 kHz natif, 21 dB de SNR à 3 m sur le robot au
+repos, `faster-whisper base` transcrit à RTF 0,39, **et la DoA fonctionne**
+(`xvf_host` installé dans `~/xvf_host/` sur le Pi vision, build `rpi_64bit`).
+Détail et pièges dans `hardware/overview.md` §Microphone.
+
+Ce que ça change pour D0 :
+- la campagne se fera sur CE micro, pas sur le U20 ; il reste à re-pointer
+  l'alias `casque_mic` d'`/etc/asound.conf` sur `CARD=Array` (le nom d'alias
+  est un contrat avec `vision_config.py`, on garde le nom) ;
+- toute mesure D0 doit **nommer le modèle Whisper utilisé** — sur la prise à
+  3 m, `base` était le maillon faible, pas le micro ;
+- la DoA ouvre le recoupement micro × caméra pour l'attribution du locuteur :
+  prendre la valeur 1 (faisceau focalisé), **jamais la valeur 2 qui est une
+  constante à 90°**, et amortir la valeur 3 (bruitée). L'azimut absolu n'aura
+  de sens qu'une fois la carte fixée (offset de montage à relever).
+
+⚠️ Trouvé le 26/08 : **la webcam du Pi 5 était débranchée** sans que rien ne
+le signale — gaze, suivi de personne ET micro de conversation à terre en même
+temps. Rebranchée le jour même. À retenir pour la boîte noire du
+télédiagnostic : un contrôle « caméras/micros présents » coûte zéro.
 
 **Suite : la campagne D0** (robot allumé : mesure CPU en conversation,
 enregistrements rue à rejouer, calibration distance) et la **validation des
@@ -419,10 +430,11 @@ en conversation réelle (avec le chantier 0).
 - ~~Micro réseau~~ — **SORTI DU FOND DE TIROIR** : ReSpeaker XVF3800 acheté
   (66,39 €), **REÇU et testé au banc sur le Pi 5 le 26/08** (driverless UAC 2.0,
   16 kHz natif, 21 dB de SNR à 3 m, Whisper transcrit). Mesures et restes à
-  faire : `hardware/overview.md` §Microphone. L'ÉCHO reste entier (half-duplex
-  à implémenter, c'est ce qui a fait couper chat_node le 11/07), la DoA n'est
-  pas testée, et le montage (découplage, ports acoustiques VERS LE BAS, offset
-  d'azimut) est un chantier CAO à part entière.
+  faire : `hardware/overview.md` §Microphone. **DoA testée le 26/08 aussi**
+  (`xvf_host`, build `rpi_64bit`). Restent : l'ÉCHO entier (half-duplex à
+  implémenter, c'est ce qui a fait couper chat_node le 11/07) et le montage
+  (découplage, ports acoustiques VERS LE BAS, offset d'azimut) — un chantier
+  CAO à part entière.
 - Détection d'obstacle (lidar 2D) — RPLIDAR C1 repéré (68,99 €) et contraintes de
   conception consignées dans `hardware/overview.md` §Distance & obstacle sensing
   (2026-07-13, RIEN acheté). Le trou n'est PAS la distance à la personne (déjà

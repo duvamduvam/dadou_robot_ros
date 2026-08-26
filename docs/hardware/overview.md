@@ -231,13 +231,17 @@ guardrail for a use nobody has observed yet.
 
 ## Microphone
 
-### ⚠️ Status 2026-08-26: the webcam is UNPLUGGED, the array is in
-The vision Pi no longer sees the USB webcam (`lsusb` lists only the ReSpeaker and the C-Media
-adapter; `v4l2-ctl` shows only the Pi's own ISP nodes). Two consequences, neither of them
-cosmetic: the `casque_mic` alias in `/etc/asound.conf` points at `CARD=U20`, which **no longer
-exists** — any `chat_node` V2 start would fail on device-open — and **the camera-fed subsystems
-(`person_follower`, gaze) have no input either**. Replug the webcam before any vision work, and
-re-point `casque_mic` at `CARD=Array` before any conversation work (below).
+### ⚠️ Incident 2026-08-26: the webcam had been unplugged (resolved same day)
+While testing the new array, the vision Pi was found with **no USB webcam at all** — `lsusb`
+listed only the ReSpeaker and the C-Media adapter, and `v4l2-ctl` showed only the Pi's own ISP
+nodes. It had gone unnoticed because nothing was running that needed it: the `casque_mic` alias
+pointed at a `CARD=U20` that no longer existed (any `chat_node` V2 start would have failed on
+device-open), and **`person_follower` and the gaze had no input either**. David replugged it the
+same day — `/dev/video0` and `card 2: U20` are back, the alias works again.
+
+Worth keeping in mind as a failure mode: **a USB device silently disappearing degrades two
+subsystems at once here** (vision *and* conversation), and nothing reports it. The telediagnostic
+black box is the right place to notice it — a "cameras/mics present" check costs nothing.
 
 ### Superseded: the webcam's microphone
 The conversation input **was** the **USB webcam's own microphone** (ALSA alias `casque_mic` →
@@ -273,7 +277,7 @@ Test run over SSH on the Pi 5 (array mounted **on the robot, robot at rest**), f
 | 16 kHz, ideal for Whisper | `hw:0,0` advertises exactly **S16_LE / 16000 Hz / 2 ch** — and *nothing else* (single format, single rate) | ✅ confirmed |
 | Far-field pickup in the social zone | Speech at **3 m**: −32 dBFS RMS / −12 dBFS peak against a **−53 dBFS** noise floor (robot at rest, chassis closed) → **≈ 21 dB SNR** | ✅ confirmed |
 | Usable by the ASR at that distance | `faster-whisper base` (int8, the model already cached in the vision container) transcribes the 3 m take in French, **RTF 0.39** (3.9 s for 10 s audio, +2.6 s model load) | ✅ usable |
-| DoA (`AEC_AZIMUTH_VALUES`) | **NOT TESTED** — the `host_control` tool is not installed on the Pi | ⬜ open |
+| DoA (`AEC_AZIMUTH_VALUES`) | **TESTED the same day** — see the DoA section below | ✅ confirmed |
 
 Two findings that were not in the purchase file:
 
@@ -288,9 +292,51 @@ Two findings that were not in the purchase file:
   falsifies nothing about the array, but it does mean **the D0 VAD/ASR measurements must state
   which model they ran**.
 
-Still open after this test (none of it is a capture problem): the DoA read-out, the **mounting**
-(decoupling, bottom-firing air gap, fixed azimuth offset — see below), the **half-duplex gate**,
-and the **dimensions to re-measure** before drawing the 3D support.
+Still open after this test (none of it is a capture problem): the **mounting** (decoupling,
+bottom-firing air gap, fixed azimuth offset — see below), the **half-duplex gate**, and the
+**dimensions to re-measure** before drawing the 3D support.
+
+#### DoA and the LED ring — tested 2026-08-26, `xvf_host` installed on the vision Pi
+
+**Tool.** `host_control/rpi_64bit` from `respeaker/reSpeaker_XVF3800_USB_4MIC_ARRAY` — an ARM64
+build exists (the wiki page only lists win32 / linux_x86_64 / mac_arm64; the repo also ships
+`rpi_64bit` and `jetson`). Installed in `~/xvf_host/` on the vision Pi: the `xvf_host` binary plus
+`libcommand_map.so`, `libdevice_usb.so`, `libdevice_i2c.so`, `transport_config.yaml`. USB is the
+default transport, **no `--use` flag needed**; it must run as **root** (raw HID access). Firmware
+reported: `VERSION 2 0 6`.
+
+**DoA works, and here is how to read it.** `AEC_AZIMUTH_VALUES` returns **four** angles (rad and
+deg): focused beam 1, focused beam 2, free-running beam, auto-selected beam. Measured with a
+speaker standing clearly to the robot's **right**, 12 samples over ~10 s:
+
+- **value 1 (focused beam 1)** — locked at **114.4°** and stayed there: the stable read.
+- **value 2 (focused beam 2)** — **exactly 90.00°, in silence AND in speech**. It is a constant,
+  **not a measurement**. Do not consume it. (This is the trap: it looks like a plausible angle.)
+- **value 3 (free-running beam)** — hovered around 80° but threw two wild outliers (3.96°, 359.26°)
+  inside 10 s of continuous speech. **Reactive and noisy — never use raw**; it needs the same kind
+  of damping the gaze already has.
+- **value 4 (auto-selected)** — what drives the LED ring; it tracked beam 1 then switched to the
+  free beam (98–105°).
+
+Baseline in silence was 189.6 / 90.0 / 334.9 / 334.9 — so the angles genuinely moved with the
+voice. **For cross-referencing with the camera's person azimuth, take value 1 (or value 4), never
+value 2, and damp value 3.** The absolute convention (where the array's 0° points) is meaningless
+until the board is bolted down — that is the "fixed offset" warning below, still open.
+
+**The LED ring is the DoA display, and it is controllable.** Default state as shipped:
+`LED_EFFECT 4` (= DoA), `LED_COLOR 8256` (= `0x2040`, the dark blue), `LED_BRIGHTNESS 127`. The
+moving **green** LED is the auto-selected beam. Commands: `LED_EFFECT` 0–4 (off / breath / rainbow
+/ single colour / DoA), `LED_COLOR` hex, `LED_BRIGHTNESS` 0–255, `LED_SPEED`. `GPO_WRITE_VALUE 33 0`
+cuts power to the WS2812 ring entirely; `GPO_WRITE_VALUE 30 1` is the mute LED.
+
+**⚠️ Tested trade-off — the ring cannot be both custom-coloured and a DoA display.** Writing
+`LED_COLOR 0xff2000` while in `LED_EFFECT 4` changed **nothing** on the ring (verified visually):
+in DoA mode the colours are fixed (blue base, green marker). The colour only applies in *breath*
+and *single-colour* modes — switching to `LED_EFFECT 3` did turn the ring solid orange, **and the
+green DoA marker disappeared**. So the decision is binary, and it is a *dramaturgical* one:
+either the ring stays a diagnostic instrument (blue/green, not tunable), or it becomes a coloured
+stage light that says nothing. David's leaning on 2026-08-26: **keep it lit** — to be re-decided
+once the array is mounted on the body and its glow can be judged against the LED face.
 
 Before `chat_node` V2 can use it, `/etc/asound.conf` on the vision Pi must re-point the
 `casque_mic` alias from `CARD=U20` to `CARD=Array` (the alias name is a contract with
