@@ -21,7 +21,7 @@ journal de bord illisible).*
 | Interface web / télé-présence | W0 + console + W3-sim FAITS ; bringup réel actif (sans drive) | W1 : source e_stop + coup-de-poing sans fil | roues web réel ⟸ test scénique (1) + protocole caméra dédié |
 | Télédiagnostic par agent IA | plan décidé ; étape 1 « trousse d'atelier » FAITE | étape 2 : boîte noire rosbag + bouton START | étape 3 ⟸ RAM du Pi 4 à relever (`ssh r 'cat /proc/meminfo'`) |
 | Conversation en déambulation (intention + contenu) | plan DÉCIDÉ (grillé 12/07) ; D0 outillage + personas commutables FAITS 13/07 | campagne D0 (robot allumé) ; textes personas à valider avec David | D1+ ⟸ protocole physique chat_node V2 (0) ; D6 ⟸ verrous roues |
-| Voix de Didier (ventriloquie ↔ synthèse) | OUVERT 26/08 ; cadre + état de l'art posés, **arbitrage artistique suspendu** | **V0** banc d'écoute (Pi → octaver via pad, test en alternance) **et V0b en parallèle** : Kyutai Pocket TTS tourne-t-il sur le Pi 5 ? | V0/V0b en atelier ; **Kyutai sur ARM = inconnue qui décide de la forme du chantier** ; ne pas lancer l'enregistrement long avant V0b |
+| Voix de Didier (ventriloquie ↔ synthèse) | OUVERT 26/08 ; cadre + état de l'art posés, **arbitrage artistique suspendu** ; **26/08 : « l'effet robot » de prod est un ÉCRÊTEUR DUR à ±3000 (−20,8 dBFS) — facteur de crête 13,5 dB → 3,1 dB, confirmé à l'oreille** (étude §2) | **V0** banc d'écoute (Pi → octaver via pad, test en alternance) **et V0b en parallèle** : Kyutai Pocket TTS tourne-t-il sur le Pi 5 ? | V0/V0b en atelier ; **Kyutai sur ARM = inconnue qui décide de la forme du chantier** ; ne pas lancer l'enregistrement long avant V0b ; ⚠️ **le seuil d'écrêtage est ABSOLU : changer de TTS change la voix en silence** — relever le niveau d'entrée de l'effet à chaque bascule |
 | Suivi de personne (roues) | validé sim 5/5, déployé, **SIM-ONLY** | — (attend ses verrous) | test scénique (1) PUIS protocole caméra (`direction_sign` inconnu) |
 | Gaze V1 + arbitrage actionneurs | validé RÉEL 12/07 ; arbitrage déployé sur les 2 Pi | vérif visuelle : gaze ON pendant une séquence (la tête ne doit plus trembler) | — |
 | Odométrie des roues (encodeurs) | **disque IMPRIMÉ et monté le 19/08** (plaqué contre la couronne, rondelles — vigilances fluage/faux-rond au README plans) ; support capteurs : **v4 MORTE AU MONTAGE 19/08** (le palier occupe le volume), **direction v5 = pince sur la vis de suspension du palier** (double écrou, hors chemin d'effort) ; capteurs LJ12A3 reçus | **berceau v5 DESSINÉ 20/08** (palier KP004, bloc E rempli) + **firmware Pico ÉCRIT et testé 20/08** (`firmware/pico_odometry/`, 35 tests) → valider `E4_VIS_DISQUE` (hyp. 25 mm, réglet) + vue de montage, **imprimer x2** ; côté élec : refondre la carte (en bas, USB, sans J6/D13) puis banc d'établi | E4 hypothèse ; `PAL_BOSS_R` (21) non coté ; **12 V dispo en bas ?** ; sens de comptage à MESURER (protocole caméra) ; restent `ROUE_D` (hyp. 250) et entraxe roues (C2) |
@@ -312,6 +312,19 @@ Ce que ça change pour D0 :
 le signale — gaze, suivi de personne ET micro de conversation à terre en même
 temps. Rebranchée le jour même. À retenir pour la boîte noire du
 télédiagnostic : un contrôle « caméras/micros présents » coûte zéro.
+
+**ÉCHO MESURÉ le 26/08, ampli branché — le half-duplex devient LE verrou.**
+Didier a joué sa propre voix dans sa sono pendant que le micro écoutait, à
+volume MODÉRÉ (donc tous les chiffres sont des planchers) : silence −60,0 dBFS,
+Didier qui parle **−10,4 dBFS**, soit +49,5 dB — et **22 dB AU-DESSUS d'un
+humain à 3 m** (−32,4). L'entrée micro **écrête** (crête −0,0 dBFS, 65
+échantillons saturés), ce qui achève l'espoir d'un AEC utile : un AEC exige un
+chemin linéaire. Et **Whisper a transcrit Didier lui-même** (7 segments) : le
+mode de panne du 11/07 n'est plus une hypothèse, il est reproductible à la
+demande. Détail : `hardware/overview.md` §Echo. **Prochaine action du chantier
+0 : implémenter le gate half-duplex** (aucun matériel requis, que du code) —
+et il doit écouter « une source audio est vivante », pas « piper joue » (le
+récepteur HF de l'interprète sort par le même châssis).
 
 **Suite : la campagne D0** (robot allumé : mesure CPU en conversation,
 enregistrements rue à rejouer, calibration distance) et la **validation des

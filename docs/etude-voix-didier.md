@@ -55,6 +55,60 @@ Didier EST la sono, le micro n'est armé que quand Didier se tait). Donc
 **ventriloquie et synthèse ne parlent jamais en même temps** — ce qui autorise
 une commutation là où il faudrait sinon un mélangeur (§6).
 
+### ⚠️ MESURÉ le 26/08 — « l'effet robot » est un ÉCRÊTEUR DUR, et il est en prod
+
+Écoute au banc (ampli branché) : David trouve la voix « assez saturée, pas
+évidente à comprendre ». Ce n'était ni l'ampli, ni le TTS. Mesure sur les deux
+versions que le proto conserve — avant effets (`_raw`) et après (`_fx`) :
+
+| fichier | crête | RMS | **facteur de crête** |
+| --- | --- | --- | --- |
+| `say0_raw` (sortie piper brute) | −0,0 dBFS | −13,5 dBFS | **13,5 dB** |
+| `say0_fx` (après l'effet) | −4,3 dBFS | −7,4 dBFS | **3,1 dB** |
+
+Aucun échantillon écrêté dans le `_fx` : ce n'est pas une saturation numérique
+de sortie, c'est la **dynamique qui est détruite**. 3 dB de facteur de crête,
+c'est presque un signal carré. **Vérifié à l'oreille** : rejoué en `_raw` par
+la même chaîne, David répond « nettement plus propre, plus compréhensible »,
+« c'est vachement mieux ».
+
+Le code explique tout (`dadou_vision_ros`, `vision/audio/effects.py`, appelé
+par `vision/ai/tts.py::apply_robotic_effect`) :
+
+```python
+tremolo = 1.0 + depth * sin(2π · rate · t / sample_rate)   # depth=0.7, rate=35 Hz
+audio   = clip(audio * tremolo, -3000, 3000)               # ← ÉCRÊTAGE DUR
+```
+
+**Le seuil de 3000 est un ABSOLU sur une échelle de 32768, soit −20,8 dBFS.**
+Une sortie piper dont le RMS est à −13,5 dBFS (≈ 6900 LSB) passe donc
+l'essentiel de son énergie *au-dessus* du seuil : la quasi-totalité de la forme
+d'onde est mise au carré. L'« effet robot » n'est pas un trémolo avec une
+pointe de distorsion — **c'est un écrêteur, avec un trémolo devant**.
+
+Trois conséquences, dans l'ordre d'importance :
+
+1. **C'est du code de PRODUCTION, pas du proto.** Le chemin de prod appelle
+   `clip=3000, regain_to=3000` (facteur de regain = 1, donc pas de reprise de
+   niveau) ; le proto, lui, remonte ensuite à 20000. Même distorsion, niveaux
+   différents. La voix du robot en spectacle passe par cet écrêteur.
+2. **L'effet dépend du NIVEAU d'entrée, et personne ne le sait.** Le seuil
+   étant absolu, un TTS qui sort 6 dB plus fort donne un personnage plus
+   distordu, sans qu'une seule ligne de code ait changé. **C'est un piège
+   direct pour le lot V0b** (bascule vers un autre TTS) : changer de moteur
+   change la voix de Didier par un chemin que rien ne documente. Tout
+   changement de TTS doit s'accompagner d'un relevé du niveau d'entrée de
+   l'effet.
+3. **Ça pèse sur l'arbitrage artistique du §5.** Une partie de ce qu'on prend
+   pour « la voix du robot » est en réalité de la distorsion d'écrêtage — et
+   une partie de la mauvaise intelligibilité aussi. Avant de juger un clone,
+   il faut savoir ce qu'on lui fait subir en aval. Cohérent avec le principe
+   directeur du §3 : **cloner AVANT les filtres**.
+
+Rien n'est corrigé ici : c'est un constat. La décision (garder l'écrêtage comme
+signature sonore, le normaliser en relatif, ou l'adoucir) est **artistique** et
+appartient à David, avec le §5.
+
 ## 3. Le principe directeur — cloner AVANT les filtres, unifier APRÈS
 
 Réponse à la question littérale : **non, on ne clone pas la voix filtrée — et

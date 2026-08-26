@@ -409,6 +409,32 @@ The listing's own spec resolves the earlier "is USB-C enough?" doubt and pins th
 
 ### Echo: Didier IS the PA — half-duplex is the architecture, not a fallback
 
+#### ✅ MEASURED 2026-08-26 — the argument below is now a number, and it is worse than argued
+
+First test with the amplifier connected. Didier played his own recorded voice through
+`mixette` → amp while the ReSpeaker recorded, **at moderate volume** (C-Media output at 30 %,
+amp deliberately not at show level — so **every figure here is a FLOOR**):
+
+| | level at the mic |
+| --- | --- |
+| silence, amp powered on | **−60.0 dBFS** |
+| Didier speaking through his own PA | **−10.4 dBFS** |
+| *(reference)* a human speaking at 3 m | −32.4 dBFS |
+
+- **+49.5 dB of self-noise** over silence, and **22 dB ABOVE a human at 3 m** — at *moderate*
+  volume. The passer-by is not merely masked, they are 22 dB under. At show level the gap widens.
+- **The microphone input CLIPS on Didier's own voice**: peak −0.0 dBFS, 65 saturated samples.
+  This kills the "maybe the AEC helps a bit" hope for good — **an AEC needs a linear path**, and a
+  clipped input is not linear. There is nothing left to subtract.
+- **Whisper transcribed Didier himself** — 7 segments off that recording. This is not a theory
+  about a failure mode: it *is* the 2026-07-11 failure, reproduced on demand. Without the gate,
+  `chat_node` feeds itself its own speech and answers itself.
+
+**Conclusion: half-duplex is not "the prudent choice", it is the only one.** The gate is now the
+single blocking item before `chat_node` V2 can run on real hardware.
+
+The reasoning that predicted this, kept as written:
+
 The robot's chassis **is the speaker enclosure** (hexagonal body, audio deck, HF receiver, octaver;
 `pièces techniques/support-baffle` in the CAD plans). There is no "far from the speakers". This
 inverts the naive advice, and it is the single most important audio decision:
@@ -444,6 +470,53 @@ Traps, in order of how much they would cost to discover late:
 - **Ignore the AEC.** Its hardware AEC would need the far-end reference signal (TTS routed *through*
   the ReSpeaker's output), and it would still not work — see the half-duplex section above. Buying
   this array for its AEC would be buying a function that cannot help a robot which *is* the PA.
+
+### Audio chain noise — intermittent mains hum, characterised 2026-08-26
+
+David: *"il y a un gros bruit de fond de l'ampli"*, *"ça vient de temps en temps"*, and
+*"l'isolation et le bruit du son a été un vrai problème avec ce robot"*. Characterised at the
+microphone while it was audible, then it stopped on its own (**intermittent — this matters, a
+5 s capture can miss it entirely**).
+
+**It is a hum, not hiss.** With the DSP-free webcam mic, amp on vs amp off, same mic, same room:
+
+| band | amp ON | amp OFF |
+| --- | --- | --- |
+| 50 Hz | −53.2 dBFS | −64.9 dBFS |
+| **150 Hz** | **−49.8** | −74.0 |
+| 250–500 Hz (lines at 350 and 450) | ~−47 | −63.7 |
+| 2–8 kHz (where hiss would live) | −78.1 | −77.4 — **unchanged** |
+
+Energy sits on **50 Hz and its ODD harmonics** (150, 350, 450) and the treble is untouched: that is
+the signature of a **mains-related loop**, not of an amplifier that hisses. David's own hypothesis
+— the Pi's power supply — is consistent with it and is the first thing to swap.
+
+**⚠️ Two methodological traps, both hit on the day:**
+
+- **The ReSpeaker is the WRONG instrument for this.** Its DSP suppresses *stationary* noise — which
+  is exactly what a hum is. It reported −59.1 dBFS while the DSP-free webcam mic reported −40.7 on
+  the same noise: **an 18 dB blind spot**. Always cross-check chain noise with a mic that has no
+  processing (that is one reason the `webcam_mic` alias was kept).
+- **A global RMS lies when anything clicks.** The first amp-off capture read −28.6 dBFS overall
+  while every band above 45 Hz sat below −68: a switch click / handling thump, sub-45 Hz, dominated
+  the average. Use a **median of 100 ms blocks** (permanent noise) plus a p90 (peaks), and always
+  print a per-second profile. `~/mic_test/bruit.py` on the vision Pi does this.
+
+**Next step — the USB oscilloscope (David has a Hantek).** It is the right instrument: it sees the
+hum *on the wire*, before it becomes sound, and separates "noise enters the chain" from "the amp
+amplifies it". Probe, in order: (1) line level at the mixing-desk output with the Pi connected and
+silent; (2) the same with the Pi's audio cable unplugged — if the hum dies, the loop comes through
+the Pi path; (3) ripple on the Pi's 5 V supply.
+
+> **⚠️ Safety, non-negotiable.** A USB scope's ground is bonded to the PC's USB ground, hence
+> usually to **mains earth**. Clipping the probe ground onto the amp's or the Pi's ground does not
+> *measure* the ground loop — it **creates** one, and can earth a floating point through the probe.
+> Line-level signals only; never a floating chassis, never anything mains-side. If the two grounds
+> must be compared, that needs a differential probe or an isolated input, not a ground clip.
+
+Lesson recorded for a **next robot** (single star ground, isolation transformer or balanced/DI
+input between computer and amp, a clean computer PSU, and keep one DSP-free mic on board purely as
+a measuring instrument).
 
 ### Mounting (design constraints, decided 2026-07-13)
 
