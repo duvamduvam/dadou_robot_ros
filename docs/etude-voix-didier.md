@@ -380,6 +380,42 @@ cœur, RTF ≈ 0,8-1,1 — **à cheval sur le temps réel**, donc à mesurer et 
 deviner. Le TTFA, lui, garde une marge confortable, et c'est lui qui décide du
 ressenti (§4.1).
 
+**V0b-PC, volet CLONAGE — FAIT le 2026-08-26** (l'après-midi même de la séance
+V3 : la boucle enregistrement → clone a tenu dans la journée). Accès au modèle
+gated obtenu (compte HF Dave945, conditions Kyutai acceptées, jeton local).
+`bench.py --voice audio/reference-p1.wav`, trois états de voix comparés :
+
+| état de voix | RTF médian (PC) | complétude ASR (6 phrases) |
+|---|---|---|
+| référence 60 s, float | 0,88 | 4/6 — sifflantes partent en vrille, fin de la 6 avalée |
+| référence 15 s, float | 0,75 | 5/6 — une coupure sur les plosives |
+| référence 15 s, **int8** | **0,43** | **6/6** |
+
+Enseignements, avec le niveau de confiance qui va avec :
+
+- **⚠️ Le clonage coûte ~1,6× en RTF** par rapport à la voix intégrée (0,43
+  contre 0,27 en int8). L'extrapolation Pi passe de « à cheval sur le temps
+  réel » à **probablement > 1 en clonage** — la mesure V0b-Pi devient encore
+  plus décisive, et doit se faire AVEC un état de voix cloné, pas avec Estelle.
+- **La référence longue n'aide pas, elle nuit** (tendance sur 1 run) : 60 s
+  d'état de voix = RTF plus haut ET plus d'accidents que 15 s. À confirmer,
+  mais le réglage de départ est : **référence 15-30 s**, pas la totale.
+- **Ces « complétudes » sont un contrôle ASR automatique** (whisper small
+  relit les synthèses — `essais/voix/verifie_completude.py`), pas un
+  jugement de qualité : la ressemblance, la diction des chiffres (suspecte
+  dans les transcriptions) et la monotonie restent à l'oreille de David.
+- Au passage, ce contrôle a attrapé un **bug du banc** (corrigé) : les lignes
+  de continuation des répliques `[MACHINE]` multi-lignes fuyaient dans le
+  texte de la phrase 6 — les « troncatures » du premier run étaient du texte
+  parasite, pas un défaut du modèle.
+
+**Montage d'écoute prêt** : `essais/voix/sorties/alternance-david-machine.wav`
+(40,9 s) — les répliques `[DAVID]` sont les prises réelles de la séance V3,
+les `[MACHINE]` sont dites par le clone (état 60 s), RMS égalisés, 24 kHz.
+C'est le test décisif du banc V0 (§7), prêt avant même le passage par
+l'octaver. Les jeux à comparer : `sorties/clone-david-{60s,15s,15s-int8}/`
+contre `sorties/estelle/` et contre les prises réelles d'`audio/`.
+
 **V0b-Pi — SAMEDI.** Le même `bench.py`, sur le Pi 5, dans cet ordre :
 1. **Est-ce que ça s'installe et tourne sur ARM ?** (binaire, seule question
    bloquante) ;

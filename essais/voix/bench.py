@@ -61,6 +61,13 @@ def charger_phrases(chemin: Path) -> list[tuple[str, str]]:
     se monte à la main avec les prises de David."""
     items, titre, buf = [], None, []
     for ligne in chemin.read_text(encoding="utf-8").splitlines():
+        # Fin des items : le bloc dialogue. Sans ce break, les lignes de
+        # CONTINUATION des répliques [MACHINE] multi-lignes (qui ne commencent
+        # ni par # ni par [) fuyaient dans le texte de l'item 6 — bug trouvé le
+        # 26/08 par le contrôle ASR de complétude : les trois jeux de synthèse
+        # finissaient par « …mais les gens répondent », une ligne du dialogue.
+        if "DIALOGUE EN ALTERNANCE" in ligne:
+            break
         if ligne.startswith("## "):
             if titre:
                 items.append((titre, " ".join(buf).strip()))
