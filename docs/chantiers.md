@@ -313,13 +313,24 @@ Ce que ça change pour D0 :
 Trois pièces, berceau/platine séparés. Deux résultats à ne pas redécouvrir :
 le **silentbloc caoutchouc amplifierait** le bruit des servos (f0 = 159 Hz sur
 30 g → +4,7 dB à 200 Hz) — mousse souple + lest, f0 = 33 Hz ; et le **câble USB
-tendu court-circuite le découplage** en silence. Emplacement choisi par David :
-**vertical sur le torse, entre les deux petites enceintes** — l'écoute est
-intacte (21 dB de SNR), **la DoA devient inexploitable** (une antenne plane ne
-résout que dans son plan : indéterminée pile en face, mêle gauche/droite et
-hauteur). Accepté : rien ne consomme la DoA aujourd'hui, et **seule la platine
-change** si on veut revenir à l'horizontale un jour (20 g de réimpression).
-**Prochaine action : David relève les 8 cotes + photos quadrillées.**
+tendu court-circuite le découplage** en silence.
+
+**Emplacement arrêté : à plat sous l'arceau d'acier en T qui enjambe la tête.**
+Une première idée (verticale sur le torse) a été écartée, et le pourquoi sert :
+une antenne **plane** ne résout une direction que **dans son plan** — à la
+verticale, l'azimut mêle gauche/droite et hauteur, il est **indéterminé pile en
+face** et ambigu avant/arrière. Pas « moins précis » : faux tout en ayant l'air
+juste, comme la `value 2` constante à 90°. L'arceau lève les deux conditions
+d'un coup (antenne **horizontale**, repère **fixe** — c'est la tête qui pivote
+dessous) : **la DoA est préservée**, et l'anneau LED redevient un signal honnête.
+En prime : rien sous la carte (air libre 360°, les ports bottom-firing sont
+servis sans rien faire), câble qui ne traverse aucune articulation, point le plus
+éloigné des moteurs de roues. **Risque créé** : les servos des yeux sont sur la
+même barre d'acier — brider au sommet, à mi-chemin des deux, et trancher par la
+mesure.
+
+**Prochaine action : David relève les 8 cotes de la carte + le profil du T + la
+garde libre sous l'arceau tête tournée, avec photos quadrillées.**
 
 ⚠️ Trouvé le 26/08 : **la webcam du Pi 5 était débranchée** sans que rien ne
 le signale — gaze, suivi de personne ET micro de conversation à terre en même
