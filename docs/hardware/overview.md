@@ -541,6 +541,13 @@ a measuring instrument).
 
 The cased array is a ~13 × 14 × 5 cm puck, 300 g. How it is fixed decides whether it works at all:
 
+> **Design study written 2026-08-27** (we bought the *bare* board, so the support is ours to print):
+> `plans/supports/support-respeaker-xvf3800/README.md` — three parts, the decoupling worked out as a
+> number, and the 8 dimensions still to be taken with a caliper before anything is drawn.
+> **The headline finding: an off-the-shelf rubber grommet mount would AMPLIFY servo noise, not cut
+> it** (f0 = 159 Hz on a ~30 g board → +4.7 dB at 200 Hz). Soft foam + ballast, not rubber. And the
+> USB cable is a rigid bridge that silently short-circuits any decoupling unless it has a slack loop.
+
 - **On the BODY, not the head — and this is the non-obvious one.** The array has a fixed 0°
   reference direction, and its DoA is expressed in *its own* frame. Mounted on the head, that frame
   **rotates with the gaze**, so every azimuth would have to be composed with the live neck angle.
