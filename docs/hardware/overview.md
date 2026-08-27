@@ -565,7 +565,12 @@ the Pi path; (3) ripple on the Pi's 5 V supply.
 
 Lesson recorded for a **next robot** (single star ground, isolation transformer or balanced/DI
 input between computer and amp, a clean computer PSU, and keep one DSP-free mic on board purely as
-a measuring instrument).
+a measuring instrument). **Landed 2026-08-27** in the triangle concept —
+`concepts/triangle-3roues/README.md` in the CAD repo, section « Contraintes rapatriées de Didier »
+§2 — together with the rest of that day's retro-fit (mic/DoA validity conditions, the in-line
+veto + positive-heartbeat rule, the motor-inrush brown-out, and the reopened 3D-sensor question).
+Worth knowing there: that robot runs **off a battery, no earth**, so this particular loop cannot
+exist — what replaces it is switching noise from three VESCs sharing the 48 V rail.
 
 ### Mounting (design constraints, decided 2026-07-13)
 
