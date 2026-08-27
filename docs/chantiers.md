@@ -486,10 +486,19 @@ en conversation réelle (avec le chantier 0).
   (2026-07-13, RIEN acheté). Le trou n'est PAS la distance à la personne (déjà
   résolue par la hauteur de silhouette) mais l'obstacle qui n'est pas la personne.
   Points clés : pas besoin de 360° (arc AVANT suffit, secteur occulté à masquer),
-  plan de scan BAS, barrière d'obstacle sur le Pi 4 dans la chaîne cmd_vel (jamais
-  sur le Pi vision — une sécurité qui dépend du wifi n'en est pas une), CPU
-  négligeable hors nav2. Pas avant la priorité 1 (test au sol) : c'est lui qui
-  dira si l'opérateur au deadman suffit.
+  plan de scan BAS, barrière d'obstacle **appliquée EN LIGNE** sur le Pi 4 dans la
+  chaîne cmd_vel, CPU négligeable hors nav2. Pas avant la priorité 1 (test au sol) :
+  c'est lui qui dira si l'opérateur au deadman suffit.
+  ⚠️ **Argument corrigé le 27/08** : cette ligne disait « jamais sur le Pi vision —
+  une sécurité qui dépend du wifi n'en est pas une ». Prémisse FAUSSE : une fois
+  correctement câblé, **les deux Pi sont en RJ45 sur le routeur embarqué, seule la
+  télécommande est en wifi**. Ce qui compte n'est pas le média mais **la manière de
+  tomber** : un garde-fou qui est un FILTRE en ligne est fail-safe (on le tue, la
+  chaîne casse, le deadman met les zéros en 400 ms) ; un garde-fou qui se contente
+  de PUBLIER un veto ne l'est pas (on le tue, aucun veto n'arrive jamais, et le
+  robot cesse de voir les obstacles **en silence**). Règle qui survit : **exiger un
+  battement de cœur positif** (« vivant et voie libre »), jamais déduire la
+  sécurité de l'absence de veto.
 - Caméra CSI (nappe) à la place de la webcam USB — module IMX219 130° repéré et
   critères de tri consignés dans `hardware/overview.md` §Vision & camera
   (2026-07-13, RIEN acheté). Gain réel : la webcam plafonne à 16,7 fps alors que

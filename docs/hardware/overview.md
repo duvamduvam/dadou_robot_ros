@@ -152,8 +152,8 @@ Why a 2D lidar and not the cheap alternatives:
 | --- | --- |
 | Ultrasonic (HC-SR04) | **No.** ~30° cone, and clothing (wool, coats) *absorbs* ultrasound — it is blindest to exactly what it must see: people. |
 | IR ToF (VL53L1X) | **No.** Stage projectors radiate massive IR; an IR ToF collapses under stage lighting. Sunlight outdoors is worse. |
-| Depth camera (RealSense, OAK-D) | **No** — and the reason is *where the compute sits*, not the sensor. The obstacle gate must run on the **robot Pi 4** (see below); a depth camera means USB 3 + a dense `PointCloud2` the Pi 4 cannot chew, so it would land on the vision Pi 5 — i.e. behind the Wi-Fi link, which disqualifies it as a safety. Add €150-300 vs €69, and a Pi 5 that already has to carry whisper + piper in V2. Its one real advantage over a 2D lidar (it sees a *volume*, not a plane) is answered here by the contact bumper. |
-| 3D lidar (Livox Mid-360 & co.) | **No — and "the Pi 5 can't" is NOT the reason** (asked 2026-08-27). On paper a Pi 5 can drive one: an Ethernet lidar at ~200 k pts/s is only ~25 Mbit/s, and the driver is packet parsing. What kills it is the *same* argument as the depth camera, one notch harder: the point cloud lands on the **vision Pi 5**, so the obstacle gate would sit **behind the Wi-Fi link** — disqualified as a safety — and the Pi 4 cannot chew a 3D cloud at all. On top: the Pi 5 already carries whisper + TTS + vision, and 3D LIO/SLAM is not a spare-cycles workload. **The honest counter-argument, stated so nobody thinks we missed it:** a 3D lidar with a built-in IMU running FAST-LIO *does* produce 6-DoF odometry, which is precisely the gap the wheels leave. But that costs €600+ against ~€40 of wheel encoders whose firmware is **already written** (`firmware/pico_odometry`, 2026-08-20) — and Didier needs a **proximity barrier**, not SLAM. Revisit only if the encoder route actually fails. |
+| Depth camera (RealSense, OAK-D) | **Still no, but on weaker grounds than this row used to claim** (revised 2026-08-27). The old reason — "it lands on the Pi 5, i.e. behind the Wi-Fi link, which disqualifies it as a safety" — **rested on a false premise**: both Pis are RJ45 to the on-board router once properly wired. What remains is cost (€150-300 vs €69), a Pi 5 that already carries whisper + TTS + vision, and the fact that its one real advantage over a 2D lidar (it sees a *volume*, not a plane) is answered here by the contact bumper. See the in-line-enforcement + heartbeat rule below. |
+| 3D lidar (Livox Mid-360 & co.) | **No — and "the Pi 5 can't" is NOT the reason** (asked 2026-08-27). On paper a Pi 5 can drive one: an Ethernet lidar at ~200 k pts/s is only ~25 Mbit/s, and the driver is packet parsing. Nor is it "behind the Wi-Fi link" — **that premise was false and was retracted the same day**: both Pis are RJ45 to the on-board router once properly wired. What remains is the workload: the cloud lands on the **vision Pi 5** (the Pi 4 cannot chew 3D at all), and that Pi already carries whisper + TTS + vision — 3D LIO/SLAM is not a spare-cycles workload. Plus the in-line-enforcement + heartbeat rule below, which applies to any gate computed off-board. **The honest counter-argument, stated so nobody thinks we missed it:** a 3D lidar with a built-in IMU running FAST-LIO *does* produce 6-DoF odometry, which is precisely the gap the wheels leave. But that costs €600+ against ~€40 of wheel encoders whose firmware is **already written** (`firmware/pico_odometry`, 2026-08-20) — and Didier needs a **proximity barrier**, not SLAM. Revisit only if the encoder route actually fails. |
 | **2D lidar (RPLIDAR C1)** | **Yes.** Immune to ambient IR, publishes `sensor_msgs/LaserScan` natively, and would open nav2 later. |
 
 **Selection criterion that outranks the sensor itself: a MAINTAINED ROS 2 driver.** This is a safety
@@ -188,9 +188,31 @@ Design constraints, established 2026-07-13 (these are the non-obvious parts):
   where a human looks behind it. A 50 kg robot reversing autonomously into a crowd is a bad idea
   *with* a rear sensor too. If autonomous reverse is ever wanted, the answer is a **rear contact
   bumper** (a certain safety), not a second lidar (a probable one).
-- **The obstacle gate MUST run on the robot Pi 4**, inside the `cmd_vel` chain (next to `twist_mux`
-  / `twist_deadman`) — **never on the vision Pi 5**. A safety that depends on the Wi-Fi link between
-  the two Pis is not a safety. The lidar therefore plugs into the **Pi 4** over USB.
+- **The obstacle gate must be ENFORCED in-line on the robot Pi 4** — inside the `cmd_vel` chain,
+  next to `twist_mux` / `twist_deadman`. The lidar plugs into the **Pi 4** over USB.
+
+  ⚠️ **Reasoning corrected 2026-08-27, because the premise was wrong.** This bullet used to read
+  "never on the vision Pi 5 — a safety that depends on the Wi-Fi link between the two Pis is not a
+  safety". David: **once properly wired, both Pis are on RJ45 to the on-board router; only the
+  remote is Wi-Fi.** So the radio objection dissolves, and with it the *decisive* argument that had
+  been reused to reject the depth camera and the 3D lidar. What actually matters is not the medium,
+  it is **how the veto fails**:
+
+  - **A gate that is an in-line FILTER is fail-safe**: kill it and the chain breaks, `twist_deadman`
+    sees silence and zeros the wheels in 400 ms. (Measured on the real robot 2026-07-04: 440 ms.)
+  - **A gate that merely PUBLISHES a veto is not**: kill it and no veto is ever published, so the
+    robot happily keeps obeying the remote and stops seeing obstacles — **silently**. That is the
+    real trap, and it is independent of Wi-Fi versus copper.
+
+  So the rule that survives: **whatever computes the veto, the thing that enforces it sits in-line
+  on the Pi 4, and it must demand a positive heartbeat** ("alive and clear"), never infer safety
+  from the absence of a veto. Under that rule a *remote* gate on the Pi 5 becomes admissible.
+
+  Residual reasons to still prefer the sensor on the Pi 4, now honestly ranked as *lesser*:
+  the chain gains a router that shares the robot's power rails (a brown-out on 250 W motor inrush
+  reboots it), and the Pi 5 is the machine most likely to throttle or OOM since it carries whisper +
+  TTS + vision. Both failures are **nuisance stops, not accidents** — a different risk class from
+  what this bullet used to claim.
 - **CPU cost is negligible for this use.** 5 k points/s over USB serial (the datasheet sampling
   rate; 500 points per scan at 10 Hz — an earlier revision of this page said 680, which contradicted
   the 0.72° resolution: 360 / 0.72 = 500).
