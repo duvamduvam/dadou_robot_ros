@@ -547,6 +547,17 @@ The cased array is a ~13 × 14 × 5 cm puck, 300 g. How it is fixed decides whet
 > **The headline finding: an off-the-shelf rubber grommet mount would AMPLIFY servo noise, not cut
 > it** (f0 = 159 Hz on a ~30 g board → +4.7 dB at 200 Hz). Soft foam + ballast, not rubber. And the
 > USB cable is a rigid bridge that silently short-circuits any decoupling unless it has a slack loop.
+>
+> **Location chosen 2026-08-27, and it overrides two rules below — deliberately.** David wants the
+> board **vertical on the chest, between the two small speakers** (a bracket-shelf to keep it
+> horizontal would be "ugly and fragile", and he is right about fragile). So: (a) it goes ON a
+> radiating baffle panel, which the rule below says to avoid — accepted, for a *staging* reason, and
+> it makes the decoupling the load-bearing part of the design; (b) a **planar array only resolves
+> direction inside its own plane**, so a vertical mount turns the azimuth into a mix of
+> left/right and elevation, undefined dead ahead and front/back ambiguous. **Pickup is unaffected**
+> (the 21 dB SNR at 3 m stands) — what is lost is the DoA, i.e. speaker attribution. Nothing in the
+> current plans consumes it (the camera already gives person azimuth), so this is David's call, not
+> a blocker. Recorded here so nobody rediscovers in six months that "the DoA doesn't work".
 
 - **On the BODY, not the head — and this is the non-obvious one.** The array has a fixed 0°
   reference direction, and its DoA is expressed in *its own* frame. Mounted on the head, that frame
