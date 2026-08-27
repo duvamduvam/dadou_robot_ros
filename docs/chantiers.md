@@ -308,6 +308,19 @@ Ce que ça change pour D0 :
   constante à 90°**, et amortir la valeur 3 (bruitée). L'azimut absolu n'aura
   de sens qu'une fois la carte fixée (offset de montage à relever).
 
+**Support 3D — étude faite le 27/08, dessin EN ATTENTE de 8 cotes.**
+`plans/supports/support-respeaker-xvf3800/README.md` (hors dépôt, Nextcloud).
+Trois pièces, berceau/platine séparés. Deux résultats à ne pas redécouvrir :
+le **silentbloc caoutchouc amplifierait** le bruit des servos (f0 = 159 Hz sur
+30 g → +4,7 dB à 200 Hz) — mousse souple + lest, f0 = 33 Hz ; et le **câble USB
+tendu court-circuite le découplage** en silence. Emplacement choisi par David :
+**vertical sur le torse, entre les deux petites enceintes** — l'écoute est
+intacte (21 dB de SNR), **la DoA devient inexploitable** (une antenne plane ne
+résout que dans son plan : indéterminée pile en face, mêle gauche/droite et
+hauteur). Accepté : rien ne consomme la DoA aujourd'hui, et **seule la platine
+change** si on veut revenir à l'horizontale un jour (20 g de réimpression).
+**Prochaine action : David relève les 8 cotes + photos quadrillées.**
+
 ⚠️ Trouvé le 26/08 : **la webcam du Pi 5 était débranchée** sans que rien ne
 le signale — gaze, suivi de personne ET micro de conversation à terre en même
 temps. Rebranchée le jour même. À retenir pour la boîte noire du
