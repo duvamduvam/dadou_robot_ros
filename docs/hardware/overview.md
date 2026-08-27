@@ -198,6 +198,13 @@ Design constraints, established 2026-07-13 (these are the non-obvious parts):
   this function does not need and must not need.
 - **A contact bumper complements it, it does not replace it.** A lidar only sees its plane; a front
   bumper bar on a micro-switch, wired to a hard stop, catches what the plane misses.
+- **NOT on the head hoop, next to the microphone** (asked 2026-08-27, answered no). Beyond the scan
+  height above: a lidar is **a motor spinning continuously at 10 Hz**, and that hoop was chosen as
+  the *quietest fixed point on the robot* for the mic. Bolting a rotor to it would undo the whole
+  decoupling design — and note the asymmetry that makes this worse than it looks: **the mic's
+  suspension only fights structure-borne noise; against the airborne whine of a rotor 10 cm from the
+  capsules it does nothing at all.** Standing rule for that hoop: nothing that spins, nothing that
+  vibrates.
 
 **Removable mount (designed 2026-07-13, revised 2026-07-14, printable — v3):**
 `plans/supports/support-lidar-c1/support-lidar-c1.scad` in the CAD repo. At 20-30 cm the robot
