@@ -564,6 +564,14 @@ The cased array is a ~13 × 14 × 5 cm puck, 300 g. How it is fixed decides whet
 > a moving joint; and it is the point furthest from the wheel motors. **The risk it creates:** the
 > **eye servos are on that same steel bar, centimetres away** — clamp at the top of the hoop,
 > midway between them, and settle it with the §4 measurement.
+>
+> **On TOP of the crossbar, not under it** (settled 27/08): the hoop's crossbar passes level with
+> the top of the head and the **neck axle occupies the space beneath it**. Mounting on top costs
+> nothing in height — the eye pods already stand **~15 cm above the crossbar**, and the whole stack
+> is ~40 mm, so the eyes stay the robot's high point. It also lets the head pan freely. Two things
+> to watch: a rain cap becomes necessary (make it the lantern — a 360° slot lets the ring shine, and
+> here the ring means something), and **the bar now sits under the acoustic ports** — check the port
+> circle is wider than the T's flange, or the bar plugs a mic.
 
 - **On the BODY, not the head — and this is the non-obvious one.** The array has a fixed 0°
   reference direction, and its DoA is expressed in *its own* frame. Mounted on the head, that frame

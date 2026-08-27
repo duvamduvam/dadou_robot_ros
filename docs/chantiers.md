@@ -329,8 +329,14 @@ servis sans rien faire), câble qui ne traverse aucune articulation, point le pl
 même barre d'acier — brider au sommet, à mi-chemin des deux, et trancher par la
 mesure.
 
-**Prochaine action : David relève les 8 cotes de la carte + le profil du T + la
-garde libre sous l'arceau tête tournée, avec photos quadrillées.**
+Montage **SUR le dessus de la traverse** : l'axe de la tête occupe le dessous, et
+le dessus ne coûte rien en hauteur (les yeux dépassent déjà de ~15 cm, l'empilage
+fait ~40 mm). Capuchon anti-pluie obligatoire, transformé en **lanterne** (fente
+360°). À contrôler : que le cercle des ports acoustiques soit plus large que la
+semelle du T, sinon la barre bouche un micro.
+
+**Prochaine action : David relève les 8 cotes de la carte + le profil du T +
+le dépassement des yeux au-dessus de la traverse, avec photos quadrillées.**
 
 ⚠️ Trouvé le 26/08 : **la webcam du Pi 5 était débranchée** sans que rien ne
 le signale — gaze, suivi de personne ET micro de conversation à terre en même
