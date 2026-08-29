@@ -583,7 +583,11 @@ The cased array is a ~13 × 14 × 5 cm puck, 300 g. How it is fixed decides whet
 > it** (f0 = 159 Hz on a ~30 g board → +4.7 dB at 200 Hz). Soft foam + ballast, not rubber. And the
 > USB cable is a rigid bridge that silently short-circuits any decoupling unless it has a slack loop.
 >
-> **Location settled 2026-08-27: flat under the steel T-section hoop that arches over the head.**
+> **Location settled 2026-08-27: flat on the steel hoop that arches over the head.** *(Two
+> corrections made 2026-08-29, both from measuring instead of assuming: the bar is a **30 × 21
+> rectangular tube, 2 mm wall** — not the "T-section" this page claimed — and the board is
+> **Ø 99.8 mm**, not the ~70 assumed, the vendor's "35 × 86 mm" being simply wrong. Details and
+> consequences: `supports/support-respeaker-xvf3800/README.md` in the CAD repo.)*
 > A first idea — vertical on the chest, between the two small speakers — was dropped, and *why* is
 > the useful part: a **planar array only resolves direction inside its own plane**. Mounted
 > vertically the azimuth becomes a mix of left/right and elevation, **undefined dead ahead** (all
@@ -606,7 +610,13 @@ The cased array is a ~13 × 14 × 5 cm puck, 300 g. How it is fixed decides whet
 > is ~40 mm, so the eyes stay the robot's high point. It also lets the head pan freely. Two things
 > to watch: a rain cap becomes necessary (make it the lantern — a 360° slot lets the ring shine, and
 > here the ring means something), and **the bar now sits under the acoustic ports** — check the port
-> circle is wider than the T's flange, or the bar plugs a mic.
+> circle is wider than the bar, or it plugs a mic.
+>
+> **Both checks cleared 2026-08-29, by measurement.** The bar is 30 mm wide (±15 mm off centre)
+> against ports on a Ø 90.4 circle → **30.2 mm of clearance**. And the bar being a *hollow* tube
+> (30 × 21, 2 mm wall), a self-drilling screw breaks through into the void: its tip never protrudes
+> underneath, where the eye harnesses run and the head pivots. That killed the two-shell clamp — a
+> screwed-down plate is simpler, cannot slide, and pins the DoA offset for good.
 
 - **On the BODY, not the head — and this is the non-obvious one.** The array has a fixed 0°
   reference direction, and its DoA is expressed in *its own* frame. Mounted on the head, that frame
