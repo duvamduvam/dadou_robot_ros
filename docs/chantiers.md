@@ -890,3 +890,17 @@ en conversation réelle (avec le chantier 0).
   le cou mobile (fatigue mécanique), et `cv2.VideoCapture` ne voit pas une CSI
   sur Pi 5 → libcamera/Picamera2 dans le conteneur vision. Ne pas lancer avant
   les priorités 0 et 1.
+  **31/08 : un ESSAI devient possible sans rien décider.** Une carte OV5647 5 MP
+  à objectif M12 vissé était sur l'étagère (15 broches) ; nappe **SC1129
+  Standard–Mini 300 mm commandée ×2** (Gotronic, 2,95 € pièce — la 2ᵉ est la
+  rechange : un FPC casse au connecteur en donnant une panne *intermittente*).
+  Ce que l'essai tranche, et rien d'autre : libcamera monte-t-il dans le
+  conteneur vision, quelle latence, et **quel FOV réel** (l'objectif paraît très
+  bombé — si fisheye, la correspondance boîte→cap de `person_follower` cesse
+  d'être linéaire ; le M12 vissé rend ça réparable pour ~5 €). Il ne tranche PAS
+  l'achat : l'OV5647 reste le capteur écarté sur la basse lumière.
+  Protocole : compter les contacts (15 / 22), `rpicam-hello --list-cameras`,
+  puis FOV au mètre ruban (2·atan(L/2D)) — **webcam USB laissée branchée**, elle
+  est le micro. À noter : le coût « micro perdu » s'allège, le ReSpeaker XVF3800
+  est reçu et testé au banc (voir plus haut) — mais son montage et l'écho
+  restent entiers, donc ce n'est pas encore une porte ouverte.
