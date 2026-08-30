@@ -105,6 +105,14 @@ Open points, to settle **before** any purchase or migration:
   **Mini–Mini** — its own page says *"2 × 22 W, 0.5 mm pitch"* and warns that connecting to 15-way
   connectors *"requires the use of new adapter cables"*. **Look at the connector on the camera board
   itself before ordering.** Getting this wrong buys a cable that cannot be plugged in.
+
+  **This trap was walked into on 2026-08-30** — that exact Kubii page was about to be ordered for
+  the 15-pin OV5647 board above. The row that saves you is the *fourth bullet* of the listing, not
+  its title: it spells out `2 × 22 W`. Read that bullet, every time.
+
+  **The part that actually fits, verified 2026-08-30:** Raspberry Pi **SC1129**, the official
+  *Camera Cable Standard–Mini 300 mm* — 15-pin camera → Pi 5, shielded, and cheaper than the wrong
+  one. **€2.95 at Gotronic** (`art-nappe-30-cm-csi-mipi-camera-sc1129-38455`, 34 in stock).
 - **Mechanics — the strongest argument for staying on USB.** An FPC ribbon is not designed for
   repeated flexing, and it would cross the *moving neck joint* (gaze pans the head). A USB cable
   with strain relief survives that; a ribbon fatigues and cracks.
