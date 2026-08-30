@@ -722,6 +722,29 @@ navigation autonome s'arrête — mais aucun rempart de sécurité ne tombe.** L
 de `wheels_node` reste intact. Une panne d'odométrie ne peut produire qu'un arrêt, jamais un
 emballement.
 
+#### « Puisqu'on ajoute une RP2040, pourquoi ne pas y brancher aussi les moteurs ? » (David, 2026-08-30)
+
+Bonne question, et la règle ci-dessus **tient toujours** — mais pas pour la raison qu'on
+croit, et le relevé de code qu'elle a déclenché a trouvé pire que ce qu'elle visait. Le
+détail vit dans `chantiers.md` § « Chemin de commande des roues V2 » ; en trois lignes :
+
+- Le grief avancé (« l'I²C n'a pas de vrai timing ») est réel : roues et servos partagent
+  **la même puce PCA9685**, donc **la même fréquence PWM**, arbitrée par une *course au
+  démarrage* entre 50 Hz (`ServoKit`) et 60 Hz (`wheels.py:89`). On ne peut donc pas monter
+  la fréquence moteur sans dégrader les servos.
+- Mais le grief **le plus grave** est ailleurs : **le PCA9685 n'a aucun chien de garde**. Si
+  `wheels_node` meurt, la puce garde sa dernière consigne et les roues continuent — le
+  deadman 400 ms est *dans* le processus qui meurt.
+- ⚠️ **Fusionner dans CE Pico ne serait pourtant pas la bonne réponse** : ça mettrait l'USB
+  (dont le §6 dit lui-même qu'il est le seul vrai point faible du montage) sur le chemin de
+  commande, et ça ne paie vraiment que si la **boucle de vitesse** se ferme dans le Pico —
+  ce qui n'arrivera qu'à l'étape 5. Un **watchdog matériel** (second MCU) ou, mieux et moins
+  cher, une **coupure de puissance câblée** traitent le vrai problème sans renverser le §6.
+
+**Donc : le Pico d'odométrie reste en lecture seule.** Renverser cette règle est possible,
+mais c'est une décision de sécurité à prendre explicitement — jamais un effet de bord d'un
+chantier capteur.
+
 ## 7. Inconnues à lever
 
 Relevé du 14/07 — **six inconnues levées**, il en reste **trois**, et **plus aucune ne bloque** :

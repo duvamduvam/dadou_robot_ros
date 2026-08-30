@@ -26,6 +26,7 @@ journal de bord illisible).*
 | Gaze V1 + arbitrage actionneurs | validé RÉEL 12/07 ; arbitrage déployé sur les 2 Pi | vérif visuelle : gaze ON pendant une séquence (la tête ne doit plus trembler) | — |
 | Odométrie des roues (encodeurs) | **disque IMPRIMÉ et monté le 19/08** (plaqué contre la couronne, rondelles — vigilances fluage/faux-rond au README plans) ; support capteurs : **v4 MORTE AU MONTAGE 19/08** (le palier occupe le volume), **direction v5 = pince sur la vis de suspension du palier** (double écrou, hors chemin d'effort) ; capteurs LJ12A3 reçus | **berceau v5 DESSINÉ 20/08** (palier KP004, bloc E rempli) + **firmware Pico ÉCRIT et testé 20/08** (`firmware/pico_odometry/`, 35 tests) → valider `E4_VIS_DISQUE` (hyp. 25 mm, réglet) + vue de montage, **imprimer x2** ; côté élec : refondre la carte (en bas, USB, sans J6/D13) puis banc d'établi | E4 hypothèse ; `PAL_BOSS_R` (21) non coté ; **12 V dispo en bas ?** ; sens de comptage à MESURER (protocole caméra) ; restent `ROUE_D` (hyp. 250) et entraxe roues (C2) |
 | Chaîne de sécurité matérielle (main-carrier) | schéma révisé 14/07 ; **contrat figé en tests sur la branche `chaine-securite`** | router la bande sécurité (122 chevelus) + note de sécurité docs/ | carte non fabriquée ; encombrement 195×150 à confirmer |
+| Chemin de commande roues (PWM moteur) | **INSTRUIT et TRANCHÉ 30/08** — le Pico ne commandera pas ; le gain visé est déjà couvert par la chaîne de sécurité | réserver + documenter 4 GPIO sur la carte odométrie (gratuit) ; adresses I²C explicites | ⟸ routage de la bande sécurité (le vrai verrou) |
 | Fond de tiroir | — | voir §Fond de tiroir | — |
 
 ## 0. Conversation — protocole physique chat_node V2
@@ -206,6 +207,46 @@ sera fabriquée et le node écrit.
 volontaire) ; encombrement 195×150 mm à confirmer dans le coffret avant
 Gerbers ; le node (battement + `/e_stop` depuis ESTOP_SENSE GPIO23) n'existe
 pas — volontaire aussi, les tests d'abord.
+
+## Chemin de commande des roues (PWM moteur)
+
+Étude : [`etude-chemin-commande-roues.md`](etude-chemin-commande-roues.md)
+(**tranché le 2026-08-30 — ne pas re-trancher**). Pendant « commande » de
+l'étude odométrie, qui ne traite que la « mesure ».
+
+**Question de David** : puisqu'on ajoute un RP2040 pour l'odométrie, faut-il y
+mettre aussi la commande des roues (l'I²C n'ayant « pas de vrai timing ») ?
+
+**Réponse : non** — mais pas par dogme. Le bénéfice visé est **déjà obtenu** par
+la chaîne de sécurité ci-dessus : le watchdog 74HC123 → `OE` agit *sous* le
+logiciel ET *sous* l'I²C, ce qu'aucun firmware ne peut faire. Il ne resterait au
+Pico que la boucle de vitesse locale — sujet de l'étape 5 (nav2), pas
+d'aujourd'hui. Le GPIO du Pi est exclu séparément : il percerait l'**ISO1540**,
+la seule barrière galvanique protégeant le SoC du domaine actionneurs.
+
+**Deux constats neufs, relevés dans le code le 30/08** :
+
+- ⚠️ **Roues et servos sont sur la MÊME puce PCA9685** (canaux 0-3 / 4-15 ;
+  `PCA9685(i2c)` et `ServoKit(channels=16)` sans adresse → 0x40 tous les deux).
+  Donc **une seule fréquence PWM**, et elle se joue à une course au démarrage
+  entre **six** processus : `wheels_node` (60 Hz) et les **cinq** `servo_node`
+  du launch (50 Hz chacun). Personne ne l'a décidée, et on ne peut pas la monter
+  sans dégrader les servos. `FREQUENCY = 500` (`wheels.py:34`) n'est branché
+  nulle part — c'est une trace, pas du code mort.
+- ⚠️ **Danger opérationnel qui en découle** : si un `servo_node` redémarre en
+  cours de spectacle (crash, respawn), son `ServoKit` **repose silencieusement
+  la fréquence PWM des moteurs à 50 Hz**. Le comportement des roues change,
+  aucun log ne le dit. À soupçonner en premier devant une dérive des roues
+  inexpliquée — avant de démonter quoi que ce soit côté mécanique.
+- ✅ **La séparation 0x40/0x41 prévue par la chaîne de sécurité règle ça
+  gratuitement** (chaque puce retrouve sa fréquence). Bénéfice non répertorié :
+  à exploiter délibérément au câblage — lire la fiche du SmartDrive40, puis
+  **protocole caméra** (c'est le chemin roues).
+
+**Prochaine action** (gratuite, sans attendre le test au sol) : réserver 4 GPIO
+(2 PWM + 2 DIR) sur le Pico et les documenter dans le `DESIGN.md` de la carte
+odométrie — **sans router d'étage de sortie** : une sortie de commande qui ne
+passerait pas par `OE`/`/CLR` contournerait le watchdog.
 
 ## Interface web / télé-présence
 
