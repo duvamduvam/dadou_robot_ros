@@ -172,9 +172,16 @@ dans le Pico devient le sujet, avec l'intégration à la chaîne de sécurité c
 | 3 | Adresses I²C explicites dans le code (0x40 roues / 0x41 servos) | `wheels.py`, `servo.py` |
 | 4 | Régler la fréquence roues délibérément → **protocole caméra** | chemin roues |
 | 5 | Réserver + documenter les 4 GPIO du Pico | `pcb/kicad/wheel-odometry/DESIGN.md` |
+| 6 | **Le SmartDrive40 a-t-il une entrée *brake* / *enable* exploitable ?** | fiche constructeur |
 
 Rien de tout cela ne précède le **test scénique au sol** (priorité 1), sauf l'item 5 qui est
 gratuit et l'item 1 qui vit sur son propre chantier.
+
+⚠️ **L'item 6 n'est pas une curiosité** : si le driver expose une entrée de freinage câblable,
+elle offrirait à la chaîne de sécurité un **second point de coupure**, en aval du PCA9685 —
+donc indépendant de l'`OE`. Deux coupures en série sur des principes différents valent bien
+mieux qu'une seule, et cela pourrait alléger le relais 40 A. À instruire **avec** le chantier
+main-carrier, pas séparément.
 
 ## 7. Incohérence de doc relevée au passage
 
