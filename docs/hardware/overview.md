@@ -551,7 +551,70 @@ not changed" and "the PSU is a suspect" are both true: what changed is the **pat
   the average. Use a **median of 100 ms blocks** (permanent noise) plus a p90 (peaks), and always
   print a per-second profile. `~/mic_test/bruit.py` on the vision Pi does this.
 
-**Next step — the USB oscilloscope (David has a Hantek).** It is the right instrument: it sees the
+#### ✅ ANSWERED 2026-08-30 — test 2 came back positive: it IS the Pi 5's mains PSU
+
+David ran **test 2 exactly as prescribed above** — Pi 5 moved from the mains adapter to a
+**battery** — and reported: *"ça a disparu"*. **The PSU is confirmed.** The scope campaign below
+is no longer needed to answer *where it enters*; it would now only refine *how much*.
+
+What the hum had grown to, measured the same day at the mic with the **production code**
+(`vision.audio.mic.frame_rms`, 4 s capture, robot idle, nothing playing):
+
+| | RMS | peak | dominant line | hiss/hum ratio |
+| --- | --- | --- | --- | --- |
+| as found (Pi on mains) | **−21.5 dBFS** | **−0.1 dBFS — clipping** | **150 Hz** | 0.04 |
+| Pi audio output **muted** in ALSA | −26.0 dBFS | −16.3 dBFS | 150 Hz | 0.02 |
+| *reference, 2026-08-26 at rest* | *−53* | | | |
+
+**⚠️ Methodological trap hit on the day, worth as much as the result: MUTING IS NOT UNPLUGGING.**
+Muting the C-Media output in ALSA cut only **4.5 dB** of RMS, which nearly cleared the Pi as a
+suspect — wrongly. A software mute silences the *signal*; it leaves the **ground path** through the
+cable shield fully intact, and that path is the whole mechanism (cf. the Y-capacitor explanation
+above). Test 1 in the list above says *unplug the cable* for exactly this reason: it is not a
+lazier version of muting, it is a **different experiment**. The 4.5 dB it did remove, plus the
+peaks going from −0.1 to −16.3, is the part that genuinely travelled on the Pi's signal.
+
+**⚠️ And the real level is WORSE than −21.5.** That figure comes from the ReSpeaker, whose DSP has a
+documented **18 dB blind spot** on stationary noise (see the trap above). It reported −59.1 dBFS on
+the same class of noise on 26/08. That it now reports −21.5 — and that the input **clips**, which no
+downstream DSP can undo, because it happens at the ADC — means the hum had become massive.
+
+**Why this blocks `chat_node` V2, and not just as a matter of comfort:**
+
+- a human at **3 m** measures **−32.4 dBFS**. Against a −21.5 dBFS floor, the person a passer-by
+  came to talk to is **11 dB UNDER the noise**. Whisper has nothing to transcribe.
+- the `EnergyVad` threshold is `median(first 1000 ms) × 1.3`, calibrated **once per instance**: on
+  mains it latches onto the hum and Didier stays deaf for the whole session.
+- the new live-audio gate trips at −21.4 dBFS **and** on clipping — with this floor it would block
+  **100 % of frames**, permanently. The gate is not wrong; the electrical state was.
+
+**So: the conversation chain cannot be validated with the Pi 5 on its mains adapter.** This is now
+a prerequisite of chantier 0's physical protocol, ahead of everything else in it.
+
+**The fix, in the order that matters:**
+
+1. **Run the Pi 5 off the robot's own battery.** Didier is a 50 kg *mobile* robot — being tethered
+   to mains is a workshop convenience, not the operating state. A proper DC-DC (5 V / 5 A, the Pi 5
+   wants 27 W) removes the mains reference **by construction**, and with it the loop. This is the
+   structural answer, and it is also the state every audio measurement should be taken in.
+2. **For bench work that must stay on mains: a 1:1 audio isolation transformer** (ground-loop
+   isolator / DI) on the Pi → mixing-desk line. Cheap, passive, and it is the piece the "next robot"
+   lesson below already prescribes — it turns out to be needed on *this* robot too.
+3. ⚠️ **NEVER lift the amplifier's safety earth to kill the hum.** It works, and it is the classic
+   way to turn a noise problem into an electrocution risk. Not an option, at any stage.
+
+**Separate finding, do not confuse it with the hum** (relevé 2026-08-30): the C-Media output sits at
+`Speaker 11/37` = **−26.00 dB**. That is a **gain-staging fault** — the desk must then be pushed
+~26 dB harder, amplifying whatever noise exists by the same amount. It is not the *cause* of the
+hum, but it magnifies it, and it should be corrected once the hum is gone.
+⚠️ When correcting it: raise the Pi's output **and lower the desk by the same amount**, aiming at
+an unchanged loudness in the room. Otherwise everything gets 26 dB louder, the mic input clips
+harder, and the live-audio gate's thresholds — which are **absolute**, adossés aux mesures du 26/08
+— stop meaning what they were measured to mean.
+
+**Next step — the USB oscilloscope (David has a Hantek).** *(Written before the battery test above
+answered the question; kept because steps 1 and 3 remain useful to quantify the residue.)* It is
+the right instrument: it sees the
 hum *on the wire*, before it becomes sound, and separates "noise enters the chain" from "the amp
 amplifies it". Probe, in order: (1) line level at the mixing-desk output with the Pi connected and
 silent; (2) the same with the Pi's audio cable unplugged — if the hum dies, the loop comes through

@@ -16,7 +16,7 @@ journal de bord illisible).*
 
 | Chantier | Statut | Prochaine action | Verrou / condition |
 |---|---|---|---|
-| **0. Conversation (chat_node V2)** | code COMPLET, validé sim ; jamais testé matériel ; **gate « source audio vivante » FAIT le 30/08** (dernier verrou de code levé — 198 tests vision) | protocole physique complet (conversation au casque, caméra à l'appui) + les 2 cas que seul le réel tranche : David au HF pendant l'écoute, humain à 3 m toujours entendu | rebuild image ARM vision ; Pi 5 sur alim 27 W |
+| **0. Conversation (chat_node V2)** | code COMPLET, validé sim ; jamais testé matériel ; **gate « source audio vivante » FAIT le 30/08** (dernier verrou de code levé — 198 tests vision) ; ⚠️ **NOUVEAU VERROU, ÉLECTRIQUE : ronflement secteur du Pi 5** (plancher −21,5 dBFS, l'entrée écrête ; un humain à 3 m est 11 dB SOUS le bruit) | **1) alimenter le Pi 5 sur batterie** (source confirmée le 30/08), puis protocole physique complet + les 2 cas que seul le réel tranche : David au HF pendant l'écoute, humain à 3 m toujours entendu | **ronflement d'abord — rien d'audio n'est mesurable avant** ; rebuild image ARM vision ; Pi 5 sur alim 27 W |
 | **1. Test scénique au sol** | À FAIRE — première fois que cmd_vel roule au sol ; ⚠️ **lire d'abord « DANGER ACTIF — les 2 boutons du dos »** : le bouton « stop » ÉTEINT LE PI, donc **provoque un emballement** au lieu d'arrêter | étiqueter les 2 boutons, puis séquence de spectacle complète, télécommande en main | — (c'est LUI le verrou des autres) ; **quelqu'un à portée de la coupure générale** |
 | ⚠️ **Boutons du dos (stop/reset)** | **DANGER ACTIF découvert 30/08** — « stop » = `shutdown -h`, « reset » = `reboot` : aucun n'arrête les roues, les deux tuent le rempart logiciel | **étiqueter physiquement (coût nul)** puis réaffecter D16 → vrai `e_stop` (le verrou `twist_mux.yaml:39` n'attend qu'un publieur), D20 → extinction sur appui long | chemin roues ⇒ spec + protocole caméra + revue Opus |
 | Interface web / télé-présence | W0 + console + W3-sim FAITS ; bringup réel actif (sans drive) | W1 : source e_stop + coup-de-poing sans fil | roues web réel ⟸ test scénique (1) + protocole caméra dédié |
@@ -39,6 +39,34 @@ false), pipeline VAD→whisper→OpenRouter→piper→mixette, didascalies/émot
 topics face+animation. Côté robot : fix MODE (dadou_utils_ros 5aefdf1 — le
 mode random servo était mort depuis sept. 2025), expression « parle »,
 séquence didier/parle.json.
+
+### ⚠️ VERROU ÉLECTRIQUE découvert le 30/08 — le ronflement vient de l'alim du Pi 5
+
+Constaté par David (« il y a un souffle super fort »), mesuré dans la foulée avec
+le code de prod, et **tranché par David en trente secondes** : Pi 5 basculé sur
+**batterie** → le bruit disparaît. C'était le test 2 que
+`hardware/overview.md` §Audio chain noise prescrivait ; il est **positif**.
+
+Ce n'était d'ailleurs pas un souffle mais un **ronflement secteur** : raie
+dominante à **150 Hz** (3ᵉ harmonique du 50 Hz), rapport aigus/graves 0,04.
+
+Pourquoi ça bloque le chantier, et pas seulement pour le confort :
+plancher à **−21,5 dBFS** avec l'entrée qui **écrête**, alors qu'un humain à 3 m
+mesure −32,4 → **la personne venue parler est 11 dB SOUS le bruit**. Whisper n'a
+rien à transcrire, le seuil de la VAD (calibré UNE fois au démarrage) s'accroche
+au ronflement, et le gate du 30/08 bloquerait 100 % des trames. **Le gate n'est
+pas en cause : c'est l'état électrique.**
+
+⚠️ **Piège de méthode payé au passage : couper n'est pas débrancher.** Mettre la
+sortie du Pi en sourdine dans ALSA n'a retiré que **4,5 dB** — ce qui innocentait
+presque le Pi, à tort. Une sourdine coupe le *signal* ; elle laisse la **masse**
+passer par le blindage du câble, et c'est là que tout se joue.
+
+**Suite** : Pi 5 sur la batterie du robot (DC-DC 5 V/5 A, il veut 27 W) — c'est
+de toute façon l'état d'exploitation d'un robot mobile ; transformateur
+d'isolement 1:1 pour les séances d'établi qui restent sur secteur ; et **jamais**
+supprimer la terre de l'ampli pour tuer le ronflement. Détail, chiffres et
+étage de gain à corriger ensuite : `hardware/overview.md` §Audio chain noise.
 
 **À faire sur le vrai matériel** : rebuild image ARM vision (voix piper +
 whisper préchargés), Pi 5 avec ALIM 27 W (crash constaté sur USB-C PC),
