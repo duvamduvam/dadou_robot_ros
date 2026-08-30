@@ -227,6 +227,64 @@ n'est donc PAS un substitut au coup-de-poing catégorie 0 de la carte main-carri
 ci-dessous — c'est une **mesure intérimaire**, qui a le mérite de transformer un
 piège actif en garde-fou utile en attendant la carte.
 
+### Spec de réaffectation — FERMÉE le 30/08 (choix de David)
+
+Boutons **atteignables à la main sans se pencher** (confirmé par David) : D16 est donc
+un arrêt d'urgence réellement utilisable, pas un simple garde-fou de maintenance.
+
+| Geste | Effet |
+|---|---|
+| **D16, appui court** | **ARRÊT D'URGENCE**, latché. Jamais d'appui long/court sur cet organe : un arrêt d'urgence n'est **jamais** ambigu. |
+| **D20, appui court** (< 1 s) | **Réarmement** — geste explicite et *distinct* de l'arrêt. |
+| **D20, appui long** (≥ 3 s) | Extinction propre du Pi (`shutdown now -h`). |
+| ~~reboot~~ | **Supprimé** — le moins utile des trois, se fait en `ssh`. |
+
+**Chemin de l'arrêt (deux voies, volontairement redondantes)** :
+
+1. `system_node` publie `std_msgs/Bool(True)` sur `e_stop`, **latché
+   `TRANSIENT_LOCAL` des DEUX côtés** (leçon déjà payée sur `animation_state` :
+   un abonné qui démarre après le publieur rate un verrou non latché) → `twist_mux`
+   applique son verrou priorité 255.
+2. **`wheels_node` s'abonne AUSSI à `e_stop` en direct** → `wheels.stop()` immédiat,
+   et refuse toute consigne tant que le verrou est actif. C'est la voie courte : elle
+   ne dépend d'aucune sémantique de `twist_mux`.
+
+⚠️ **Interdit de réutiliser `Status.check_button` tel quel** : il contient un
+`time.sleep(1)` **bloquant** (double lecture anti-rebond). Sur un arrêt d'urgence, 1 s
+= ~1 m parcouru à 1 m/s, et le tick 20 Hz de `system_node` est gelé pendant ce temps.
+D16 doit déclencher sur le **premier front stable** (anti-rebond 2 ticks = 100 ms max).
+
+**⚠️ Le contrat de RÉARMEMENT est déjà écrit et testé** — le reprendre à l'identique
+depuis la branche `chaine-securite` (`test_safety_chain.py`), c'est le danger n°1 :
+
+- `test_rearmement_sans_remise_a_zero_rejoue_l_ancien_pwm` → **remettre les registres
+  PWM à zéro AVANT de lever le verrou**, sinon le robot rejoue l'ancienne consigne et
+  **redémarre d'un coup** au réarmement ;
+- `test_relacher_le_coup_de_poing_ne_rearme_pas` → **relâcher D16 ne réarme JAMAIS**.
+- Conséquence rassurante : un réarmement accidentel seul ne produit aucun mouvement
+  (pas de consigne = deadman = arrêt). C'est ce qui rend acceptable le court/long sur
+  D20 — l'ambiguïté est sur le bouton *non* urgent, jamais sur l'arrêt.
+
+**À VÉRIFIER EN SIM AVANT TOUT** (deux polarités, exactement le genre d'erreur
+silencieuse qui a déjà coûté cher à ce projet) :
+
+1. **Polarité du verrou `twist_mux`** : est-ce bien `true` = bloqué ?
+2. **Comportement d'un verrou périmé** : avec `timeout: 0.0` le verrou ne périme
+   jamais (voulu). Mais vérifier qu'un `e_stop` jamais publié = robot libre — c'est
+   le mode de défaillance connu (`system_node` mort = bouton muet), à assumer
+   explicitement, pas à découvrir.
+
+**Point d'attention d'implémentation** : `SHUTDOWN_PIN`/`RESTART_PIN` sont des clés de
+config définies **dans les deux dépôts** (`robot/robot_static.py:113` et
+`dadou_utils_ros/utils_static.py`) — les chaînes doivent rester identiques. Renommer
+en `E_STOP_PIN` impose donc de toucher **les deux dépôts dans le même lot** (la lib
+partagée n'a pas de versionnage — cf. chantier « diagnostic utils partagé »).
+
+**Gate obligatoire** : chemin roues ⇒ sim d'abord, **puis protocole caméra roues hors
+sol** (`conf/scripts/validate-cmdvel-protocol.sh`), et revue Opus minimum. Le nouveau
+protocole doit ajouter : appui D16 en plein mouvement → arrêt ; relâcher D16 → **pas**
+de redémarrage ; D20 court → réarmement **sans à-coup**.
+
 ### SPEC FERMÉE — arbitrée par David le 30/08 (accessibilité confirmée)
 
 David a tranché : **D16 → vrai `e_stop`, D20 → extinction sur appui long, reboot
