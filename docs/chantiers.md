@@ -326,6 +326,38 @@ sol** (`conf/scripts/validate-cmdvel-protocol.sh`), et revue Opus minimum. Le no
 protocole doit ajouter : appui D16 en plein mouvement → arrêt ; relâcher D16 → **pas**
 de redémarrage ; D20 court → réarmement **sans à-coup**.
 
+### Coup-de-poing déporté sur la paroi bois — contraintes d'achat (30/08)
+
+David juge les boutons du dos **peu accessibles** et veut un coup-de-poing sur une
+**paroi de bois de 18 mm**. Contraintes relevées, valables quel que soit le modèle :
+
+⚠️ **18 mm est TROP ÉPAIS pour un bouton 22 mm standard** — ils admettent typiquement
+**1 à 6 mm** de paroi (conçus pour de la tôle d'armoire). Deux issues : un **boîtier
+en saillie** qui se visse *sur* la paroi et ignore l'épaisseur (recommandé : aucun
+usinage, et c'est la forme la plus trouvable à l'aveugle sur un plateau), ou un
+**lamage Forstner par l'arrière** (Ø 30-35, prof. ~13 mm) ne laissant que 5 mm au
+droit du bouton, plus l'encoche anti-rotation.
+
+**Exigences non négociables** : contact **NF** (jamais NO), **à accrochage avec
+déverrouillage par rotation**, et **2 contacts** (1 NO + 1 NF, type `LA38-11ZS` ou
+`XB2-BS542`) pour servir la chaîne de puissance ET la lecture GPIO `ESTOP_SENSE`
+sans racheter le bouton. ⚠️ Le piège est **dans le sélecteur**, jamais dans le titre :
+« Latching/**Self-reset** » — le *self-reset* est momentané, inutilisable. Même
+mécanique que le piège NPN/PNP de l'étude odométrie.
+
+⚠️⚠️ **LE CONTACT NF INVERSE LA LOGIQUE DU CODE — à ne pas rater.** Les boutons
+actuels sont momentanés : repos = haut, appui = bas (`Pull.UP` + `if not
+button.value`). Avec un **NF** câblé entre GPIO et masse c'est l'exact inverse :
+**repos = BAS** (contact fermé), **appui OU FIL COUPÉ = HAUT**. Le code devra donc
+tester `if button.value`. C'est ce qui rend le montage *fail-safe* — un fil arraché
+provoque un arrêt au lieu de rendre le bouton muet — et c'est exactement le type
+d'inversion silencieuse qui a déjà coûté cher à ce projet (cf. le déphasage nul des
+capteurs d'odométrie). **Un test doit verrouiller cette polarité.**
+
+⚠️ **Le bouton ne doit JAMAIS couper le courant moteur en direct** (~20 A, et le
+continu arce bien plus que l'alternatif) : il commande la **bobine du contacteur
+40 A** de la chaîne main-carrier, câblée de sorte que **perdre la bobine = couper**.
+
 ### SPEC FERMÉE — arbitrée par David le 30/08 (accessibilité confirmée)
 
 David a tranché : **D16 → vrai `e_stop`, D20 → extinction sur appui long, reboot
