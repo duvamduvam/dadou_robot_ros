@@ -47,7 +47,15 @@ GP_GAUCHE_A = const(2)      # ODO_LA — roue gauche, capteur A
 GP_DROITE_A = const(4)      # ODO_RA — roue droite, capteur A
 # ODO_RB = GP5, contigu.
 
-GP_LED = const(25)          # LED intégrée : témoin de vie
+# ⚠️ GP25 = LED intégrée DU PICO. Sur une **RP2040-Zero** (envisagée le 30/08)
+# il n'y a PAS de LED sur GP25 : la carte porte une WS2812 RGB sur GP16.
+# Le piège est muet — `Pin(25, Pin.OUT)` ne lève aucune erreur, la broche existe
+# sur la puce, elle ne va simplement nulle part : le témoin de vie meurt sans
+# un seul message, et c'est le premier moyen de savoir si le firmware tourne
+# sans brancher d'ordinateur. Si on passe à la Zero : NE PAS importer un pilote
+# NeoPixel pour ça — la carte prévoit déjà une LED de diagnostic par canal
+# (étude §8 étape 4), en ajouter une sur un GPIO libre garde ce fichier simple.
+GP_LED = const(25)          # LED intégrée : témoin de vie (Pico uniquement)
 
 # Sens de comptage. INCONNU tant que le protocole caméra n'a pas été fait :
 # il dépend du câblage et du montage de chaque roue. On ne le devine pas, on

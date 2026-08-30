@@ -78,6 +78,41 @@ observable d'une odométrie qui commence à dériver : entrefer trop grand, câb
 parasité, disque qui bat, capteur qui décroche. **Il doit rester à zéro.** S'il
 grimpe, l'odométrie ment déjà — et rien d'autre ne le dira.
 
+## Variante RP2040-Zero (envisagée par David le 30/08) — compatible, à UNE ligne près
+
+La carte cible peut être une **Waveshare RP2040-Zero** au lieu d'un Pico. C'est
+compatible et même préférable, mais **un point casse en silence** :
+
+⚠️ **`GP_LED = 25` est la LED du Pico. La Zero n'a pas de LED sur GP25** (elle
+porte une WS2812 RGB sur GP16). `Pin(25, Pin.OUT)` **ne lèvera aucune erreur** —
+la broche existe sur la puce, elle ne va nulle part — et le témoin de vie
+mourrait sans un message. Remède retenu : **une LED ordinaire sur un GPIO libre**
+de la carte (elle prévoit déjà une LED de diagnostic par canal, étude §8 étape 4),
+plutôt qu'un pilote NeoPixel importé juste pour faire clignoter un voyant.
+
+Ce qui ne change PAS, et c'est l'essentiel :
+
+- **GP2-GP5 restent valables** et sont sur les pastilles latérales de la Zero.
+  Les paires A/B **doivent rester contiguës** (le PIO lit 2 broches à partir
+  d'une base) — c'est le cas.
+- **Même RP2040 ⇒ numéro de série unique préservé**, donc la règle udev
+  `/dev/didier-odom` tient. C'était LA raison unique du rejet de l'Arduino Nano
+  (clones CH340 sans numéro de série) — voir étude §6.
+- **Budget GPIO confortable** : 4 (odométrie) + 1 (témoin) + 4 (LED diagnostic)
+  + 4 (réserve « commande » actée le 30/08) = **13 sur ~20**.
+
+Bénéfice non recherché : la Zero est en **USB-C**, alors que l'étude §6 désigne
+le connecteur **micro-USB** comme « le seul vrai risque du montage ». ⚠️ Le
+**bridage du câble à moins de 5 cm de la prise reste obligatoire** : la carte est
+petite et légère, la traction s'y transmet d'autant mieux.
+
+⚠️ **À confronter à la fiche Waveshare avant de graver** (le brochage ci-dessus
+vient de la mémoire, pas d'une fiche relue) : écartement des deux rangées si l'on
+veut garder le **support tulipe** (étude §8 étape 4 : « un Pico grillé se change
+en dix secondes, sans fer à souder »), et le fait que les pastilles du bas sont
+**castellées uniquement**, donc non socketables — sans effet ici, GP2-GP5 étant
+sur les côtés. Règle du projet : une cote d'environnement vaut une cote de pièce.
+
 ## Brochage (définitif — identique au schéma KiCad `wheel-odometry`)
 
 | Pico | Signal | Roue |
