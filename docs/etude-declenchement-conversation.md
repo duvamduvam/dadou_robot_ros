@@ -447,6 +447,206 @@ CPU/VAD de D0, résultats des protocoles)*
   (dadou_control_ros, avec le START télédiagnostic ?), multi-langues,
   chrono latence < 2 s en réel.
 
+## 10. SPEC FERMÉE — gate « source audio vivante » (half-duplex élargi, 30/08)
+
+Arbitrée le 2026-08-30. **Ne pas re-trancher** : implémentation directe.
+Périmètre = dépôt `dadou_vision_ros` UNIQUEMENT (aucun chemin roues, aucune
+modification de la lib partagée). Verrou levé : c'est le dernier point de code
+bloquant avant le protocole physique chat_node V2 (chantier 0).
+
+### 10.1 Ce qui existe déjà, et qu'il est INTERDIT de réécrire
+
+Le relevé de code du 30/08 a corrigé le diagnostic : un demi-gate fonctionne
+déjà. `ConversationEngine.run_once` coupe le micro avant que Didier ne parle
+(`conversation.py:243`) et ne le rouvre qu'après `_player.drain()` (`:329`) ;
+`MicCapture.stop()` purge le ring buffer pour qu'un redémarrage ne puisse
+jamais faire réapparaître une trame antérieure à l'arrêt (`mic.py:95-111`,
+verrouillé par `test_mic.py:175`).
+
+Ce lot est donc un **élargissement de périmètre**, pas une implémentation
+depuis zéro. Toucher à `mic.stop()` ou à sa purge est hors sujet.
+
+### 10.2 Le principe : quatre canaux en OU
+
+Le micro n'est armé que si **aucune** source audio n'est vivante dans le
+châssis — qui EST l'enceinte (cf. `hardware/overview.md` §Echo). Un seul canal
+suffit à bloquer :
+
+| # | Canal | Source couverte | État |
+|---|---|---|---|
+| C1 | sa propre voix | TTS piper + bips | **DÉJÀ FAIT** (`mic.stop()`) |
+| C2 | queue acoustique | réverbération + tampon ALSA après `drain()` | à faire |
+| C3 | acoustique inconnue | **voix HF de David par la sono**, salle, klaxon | à faire — le cœur du lot |
+| C4 | séquence de spectacle | piste audio d'une animation en cours | à faire |
+
+C3 est le seul canal heuristique, et c'est celui qui ferme le trou réel : la
+voix de l'interprète sort par le même châssis pendant que le micro écoute, donc
+Didier transcrit David et lui répond (mode de panne du 11/07, **reproduit à la
+demande le 26/08**).
+
+### 10.3 Le module — `vision/audio/live_audio_gate.py`
+
+Logique **PURE**, stdlib uniquement, horloge injectée — même patron que
+`vision/audio/vad.py` (qui ne reçoit que des `float` déjà calculés et se teste
+donc sans micro). Le calcul sur les octets reste dans `mic.py`, avec numpy.
+
+```python
+@dataclass(frozen=True)
+class LiveAudioGateConfig:
+    loud_rms: float = 2800.0   # −21,4 dBFS — cf. 10.4
+    clip_peak: float = 32000.0 # −0,2 dBFS : l'entrée écrête sur la sono
+    hold_s: float = 1.0        # maintien après la dernière trame bruyante
+    tail_hold_s: float = 0.5   # queue acoustique après drain()
+
+class LiveAudioGate:
+    def __init__(self, config, now=time.monotonic): ...
+    def feed(self, level: float, peak: float, show_audio: bool = False) -> bool:
+        """True = BLOQUÉ, la trame doit être JETÉE."""
+    def block_for(self, seconds: float) -> None: ...
+    def arm_tail(self) -> None:   # block_for(config.tail_hold_s)
+    @property
+    def blocked(self) -> bool: ...
+```
+
+`feed` réarme le maintien jusqu'à `now + hold_s` dès que l'une des trois
+conditions est vraie (`level > loud_rms`, `peak >= clip_peak`, `show_audio`),
+et retourne `now < hold_until`. Le maintien couvre les pauses entre les mots :
+sans lui, le gate battrait au rythme de la parole de David et rattraperait des
+fragments entre ses syllabes.
+
+`mic.py` gagne une fonction PURE `frame_peak(frame) -> float` (max des
+valeurs absolues) exposée aussi en méthode liée, exactement comme `frame_rms`
+— et pour la même raison : `vad_replay` doit pouvoir rejouer un enregistrement
+de rue à travers le MÊME code que la prod.
+
+⚠️ Un échantillon isolé à pleine échelle coûtera 1 s de surdité. C'est
+**assumé** : le sens de la dégradation est le seul qui soit tolérable (cf.
+10.6).
+
+### 10.4 D'où viennent les valeurs — mesures du 26/08, pas des constantes magiques
+
+`frame_rms` rend un RMS linéaire en unités int16 (0 à 32768), donc
+`dBFS = 20·log10(rms / 32768)` :
+
+| Mesure du 26/08 | dBFS | RMS linéaire |
+|---|---|---|
+| silence, ampli allumé | −60,0 | 33 |
+| humain à 3 m | −32,4 | 786 |
+| **seuil retenu `loud_rms`** | **−21,4** | **2800** |
+| Didier par sa propre sono | −10,4 | 9897 |
+
+Le seuil est posé au **milieu géométrique** des deux cas mesurés : **11,0 dB de
+marge de chaque côté**, exactement. Ce n'est pas un réglage d'atelier, c'est le
+point qui maximise la marge sur les deux erreurs possibles.
+
+⚠️ **À recalibrer si le gain micro change** (changement de carte, d'alias ALSA,
+de réglage `xvf_host`) : ces chiffres sont adossés à une chaîne d'acquisition
+précise. Même piège que le seuil d'écrêtage de l'effet de prod (étude voix
+§2.1) : changer un étage déplace la voix **en silence**.
+
+**Conséquence acceptée** : un humain qui parle à moins de ~0,85 m dépasse le
+seuil et sera pris pour la sono (11 dB = un facteur 3,5 en distance). Didier
+ignorera donc quelqu'un qui se penche sur lui. C'est le prix de la marge, il
+est mesurable pendant la campagne D0, et la DoA du ReSpeaker le lèvera plus
+tard — mais **pas maintenant** : la carte n'est pas fixée, l'offset d'azimut
+est inconnu, et un azimut absolu faux a l'air juste (cf. la `value 2` constante
+à 90°).
+
+### 10.5 Câblage
+
+**`ConversationEngine`** : deux kwargs optionnels, `gate=None` et
+`show_audio_active=None`. **`None` = comportement historique à l'octet près**
+(les tests existants restent verts sans y toucher — c'est la clause qui rend le
+lot réversible).
+
+Dans `_listen_for_utterance`, une trame bloquée est **jetée AVANT la VAD** :
+
+1. la VAD ne doit **jamais** voir une trame bruyante. Sa calibration est à
+   usage unique (médiane des 1000 premières ms, `vad.py:100-110`) : une sono
+   vivante pendant cette fenêtre empoisonne le seuil **pour toute la vie de
+   l'instance**, et Didier devient sourd à un humain sans que rien ne le
+   signale. C'est la raison n°1 de mettre le gate en amont ;
+2. un blocage en pleine phrase **jette l'énoncé partiel** (`speech_bytes`
+   remis à vide, `in_speech` à False) — jamais de recollage d'avant/après ;
+3. le pré-roll est purgé (nouvelle méthode `MicCapture.purge_preroll()`,
+   extraite du `self._ring.clear()` de `stop()` et appelée aux deux endroits) ;
+4. la VAD est ramenée en IDLE par une méthode **publique** `EnergyVad.reset()`
+   (délègue à `_reset_to_idle`, **conserve le seuil calibré**, no-op si encore
+   en CALIBRATING). Sans ça une VAD restée en SPEECH attendrait son
+   `end_silence_ms` sur des trames qu'elle ne reçoit plus.
+
+`arm_tail()` est appelé **avant** `_mic.start()` dans les deux sorties de
+`_speak_reply` — celle du succès (après `drain()`) **et celle de l'exception**,
+où le player peut encore être en train de jouer.
+
+**`chat_node`** : construit le gate depuis la config et fournit
+`show_audio_active`. Celui-ci **réutilise** la méthode d'état effectif déjà
+présente (`arbitration.effective_state`, `chat_node.py:477-481`) — ne pas la
+dupliquer : c'est elle qui porte la péremption qui évite de rester sourd pour
+toujours si `animations_node` meurt.
+
+⚠️ **`CHAT_ANIMATION` ("parle") est EXCLUE de C4.** C'est l'animation que le
+chat lance lui-même ; son audio est déjà couvert par C1+C2. L'inclure créerait
+un blocage circulaire (chat sourd tant que son propre « parle » n'est pas
+retombé). Donc : `show_audio = state not in ("", CHAT_ANIMATION)`.
+
+**Config** (`vision_config.py`) : `"chat_live_audio_gate": LiveAudioGateConfig()`
+— un objet complet, même patron que `"chat_vad": VadConfig()`, pour rester
+source unique de vérité si la dataclass gagne un champ.
+
+### 10.6 Sens de la dégradation — la règle qui tranche tous les cas limites
+
+**Bloquer à tort coûte une réplique manquée. Ne pas bloquer coûte une boucle** :
+Didier s'entend, se répond, et sa réponse repart dans la sono. En cas de doute,
+le gate bloque. Toute optimisation qui inverse ce sens est refusée.
+
+### 10.7 Non-buts explicites (pour que le lot ne dérive pas)
+
+- **Pas d'AEC** — l'entrée écrête (crête −0,0 dBFS, 65 échantillons saturés) :
+  un AEC exige un chemin linéaire, il n'y a plus rien à soustraire. Mesuré,
+  pas supposé.
+- **Pas de barge-in** — physiquement hors de portée d'un robot qui EST la
+  sono. Compensation dramaturgique : des répliques COURTES (§5.4).
+- **Pas de DoA** (cf. 10.4), **pas de nouvel état ROS** : le contrat
+  `chat_state` est déjà consommé par la console et le futur `engagement_node`,
+  et un état qui bat à 33 Hz n'y a pas sa place. Les transitions du gate sont
+  **journalisées en INFO** avec le niveau et la cause — le premier test micro
+  réel s'est fait à l'aveugle faute de logs (11/07), on ne recommence pas.
+
+### 10.8 Contrat de tests (c'est la spec, pas une suggestion)
+
+`vision/tests/unit/test_live_audio_gate.py` : niveau fort bloque ; écrêtage
+bloque **même sous le seuil de niveau** ; le maintien tient puis retombe ;
+`arm_tail` bloque sur des trames silencieuses ; une séquence de spectacle
+bloque mais **« parle » ne bloque pas** ; et surtout **gate ouvert = la trame
+passe** — le test de POLARITÉ, celui qui interdit l'inversion silencieuse qui a
+déjà coûté cher deux fois à ce projet (déphasage nul des capteurs d'odométrie,
+contact NF du coup-de-poing).
+
+Côté `test_conversation.py` : les trames bloquées n'atteignent **jamais** la
+VAD (faux VAD compteur) ; un blocage en pleine phrase jette l'énoncé partiel ;
+`gate=None` laisse le comportement strictement inchangé ; après `drain()` le
+micro redémarre avec le gate amorcé. Côté `test_vad.py` : `reset()` conserve le
+seuil calibré.
+
+### 10.9 Découverte du 30/08 — la carte audio est déjà pilotée par logiciel
+
+`hardware/overview.md` §Echo dit : « la carte audio commute déjà entre les
+récepteurs HF et le Pi — **c'est cet état qu'il faut lire** ». Relevé fait :
+cet état **est déjà en mémoire**, côté robot, dans
+`robot/actions/relays.py` — un **PCF8574 à l'adresse 0x21** dont la broche 3
+(`power_hf`) alimente le récepteur HF, la 1 (`effect`) l'octaver et la 0
+(`voice_out`) la sortie voix. Il est basculé depuis la télécommande
+(`relays.json`, touches D5/D6) et **n'est publié sur aucun topic**.
+
+⚠️ **Mais il ne remplace PAS C3, et c'est pour ça qu'il n'est pas dans ce
+lot** : il dit « David *peut* parler », jamais « David parle ». Bloquer le
+micro sur le seul fait que le HF est alimenté rendrait Didier sourd pendant
+tout le spectacle. Sa vraie valeur est ailleurs — un verrouillage
+d'exploitation (« ne pas activer la parole IA pendant que le HF est vivant »)
+et une ligne de boîte noire pour le télédiagnostic. À instruire quand le
+chantier 0 sera passé au réel ; ça touchera le dépôt robot, pas celui-ci.
+
 ## Sources
 
 - Hall, *The Hidden Dimension* (1966) ; Walters et al. 2005 (validation HRI).
