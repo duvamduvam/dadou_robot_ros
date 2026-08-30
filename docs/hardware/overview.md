@@ -113,6 +113,13 @@ Open points, to settle **before** any purchase or migration:
   **The part that actually fits, verified 2026-08-30:** Raspberry Pi **SC1129**, the official
   *Camera Cable Standard–Mini 300 mm* — 15-pin camera → Pi 5, shielded, and cheaper than the wrong
   one. **€2.95 at Gotronic** (`art-nappe-30-cm-csi-mipi-camera-sc1129-38455`, 34 in stock).
+  **Kubii does not stock it** — searching their catalogue for it is a dead end, their only
+  "for Pi 5" camera cable is the Mini–Mini above.
+
+  To re-pick if that listing dies: **a "Pi Zero camera cable" is the same Standard–Mini part.**
+  The Pi Zero uses the identical 22-pin 0.5 mm connector as the Pi 5, so those cables are
+  electrically and mechanically what we need — they are just usually sold **too short** (Kubii's is
+  15 cm, against the 30–40 cm torso→neck run). Search on the *connector pair*, not on the board name.
 - **Mechanics — the strongest argument for staying on USB.** An FPC ribbon is not designed for
   repeated flexing, and it would cross the *moving neck joint* (gaze pans the head). A USB cable
   with strain relief survives that; a ribbon fatigues and cracks.
