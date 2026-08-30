@@ -588,7 +588,38 @@ toujours si `animations_node` meurt.
 ⚠️ **`CHAT_ANIMATION` ("parle") est EXCLUE de C4.** C'est l'animation que le
 chat lance lui-même ; son audio est déjà couvert par C1+C2. L'inclure créerait
 un blocage circulaire (chat sourd tant que son propre « parle » n'est pas
-retombé). Donc : `show_audio = state not in ("", CHAT_ANIMATION)`.
+retombé).
+
+⚠️⚠️ **CORRIGÉ le 30/08 à la revue — `None` est EXCLU AUSSI.** La première
+rédaction de cette spec donnait `state not in ("", CHAT_ANIMATION)`. **C'était
+faux**, et d'une manière qui ne se serait vue qu'au premier essai réel :
+`effective_state` rend `None` tant qu'`animations_node` n'a **rien publié**
+(Pi robot éteint, topic absent, node pas encore démarré), et
+`None not in ("", "parle")` vaut **`True`** — le gate aurait bloqué **chaque
+trame**, rendant Didier **sourd définitivement et en silence**. C'est
+exactement la panne que la péremption deadman de `arbitration` existe pour
+empêcher, et `allow_message` avait déjà tranché ce cas dans l'autre sens
+(« jamais reçu : TOUT passe »).
+
+**Ce qui rend l'exclusion sûre, et pas seulement commode** : C4 n'est pas le
+canal porteur. Une piste audio de spectacle qui joue **vraiment** déclenche C3
+acoustiquement — elle sort par la même sono, le micro l'entend. C4 ne fait que
+l'anticiper. Ignorer une information **absente** ne coûte donc rien de réel ;
+la lire comme « une séquence joue » coûte tout.
+
+Formule juste, et elle vit dans **`arbitration.show_audio_live()`** (pas dans
+`chat_node`) : les deux exclusions sont la même doctrine que celle
+d'`allow_message`, elles se tranchent à un seul endroit.
+
+```python
+def show_audio_live(animation_state) -> bool:
+    return animation_state not in (None, "", CHAT_ANIMATION)
+```
+
+*Règle générale que ce cas illustre, et qui vaut au-delà de ce lot* :
+**ne jamais déduire un état actif de l'absence d'information.** Même
+discipline que le garde-fou d'obstacle (`chantiers.md`, fond de tiroir) :
+exiger un battement de cœur positif, jamais lire un silence comme une valeur.
 
 **Config** (`vision_config.py`) : `"chat_live_audio_gate": LiveAudioGateConfig()`
 — un objet complet, même patron que `"chat_vad": VadConfig()`, pour rester

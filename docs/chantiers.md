@@ -16,7 +16,7 @@ journal de bord illisible).*
 
 | Chantier | Statut | Prochaine action | Verrou / condition |
 |---|---|---|---|
-| **0. Conversation (chat_node V2)** | code COMPLET, validé sim ; jamais testé matériel | protocole physique complet (conversation au casque, caméra à l'appui) | rebuild image ARM vision ; Pi 5 sur alim 27 W |
+| **0. Conversation (chat_node V2)** | code COMPLET, validé sim ; jamais testé matériel ; **gate « source audio vivante » FAIT le 30/08** (dernier verrou de code levé — 198 tests vision) | protocole physique complet (conversation au casque, caméra à l'appui) + les 2 cas que seul le réel tranche : David au HF pendant l'écoute, humain à 3 m toujours entendu | rebuild image ARM vision ; Pi 5 sur alim 27 W |
 | **1. Test scénique au sol** | À FAIRE — première fois que cmd_vel roule au sol ; ⚠️ **lire d'abord « DANGER ACTIF — les 2 boutons du dos »** : le bouton « stop » ÉTEINT LE PI, donc **provoque un emballement** au lieu d'arrêter | étiqueter les 2 boutons, puis séquence de spectacle complète, télécommande en main | — (c'est LUI le verrou des autres) ; **quelqu'un à portée de la coupure générale** |
 | ⚠️ **Boutons du dos (stop/reset)** | **DANGER ACTIF découvert 30/08** — « stop » = `shutdown -h`, « reset » = `reboot` : aucun n'arrête les roues, les deux tuent le rempart logiciel | **étiqueter physiquement (coût nul)** puis réaffecter D16 → vrai `e_stop` (le verrou `twist_mux.yaml:39` n'attend qu'un publieur), D20 → extinction sur appui long | chemin roues ⇒ spec + protocole caméra + revue Opus |
 | Interface web / télé-présence | W0 + console + W3-sim FAITS ; bringup réel actif (sans drive) | W1 : source e_stop + coup-de-poing sans fil | roues web réel ⟸ test scénique (1) + protocole caméra dédié |
@@ -637,23 +637,37 @@ humain à 3 m** (−32,4). L'entrée micro **écrête** (crête −0,0 dBFS, 65
 échantillons saturés), ce qui achève l'espoir d'un AEC utile : un AEC exige un
 chemin linéaire. Et **Whisper a transcrit Didier lui-même** (7 segments) : le
 mode de panne du 11/07 n'est plus une hypothèse, il est reproductible à la
-demande. Détail : `hardware/overview.md` §Echo. **Prochaine action du chantier
-0 : implémenter le gate half-duplex** (aucun matériel requis, que du code) —
-et il doit écouter « une source audio est vivante », pas « piper joue » (le
-récepteur HF de l'interprète sort par le même châssis).
+demande. Détail : `hardware/overview.md` §Echo. Ce qui était alors la prochaine
+action — implémenter le gate half-duplex, sans matériel, en écoutant « une
+source audio est vivante » et non « piper joue » (le récepteur HF de
+l'interprète sort par le même châssis) — **est fait, cf. juste dessous**.
 
-⚠️ **Précision du 30/08 (relevé de code) : un demi-gate EXISTE DÉJÀ, ne pas le
-réécrire — il faut l'ÉLARGIR.** `ConversationEngine.run_once` coupe le micro
-avant de parler et le rouvre après (`conversation.py:243` `_mic.stop()`,
-puis `:329` `_mic.start()` après `_player.drain()`), et `MicCapture.stop()`
-purge le ring buffer pour qu'un redémarrage ne voie jamais de trame pré-arrêt
-(`mic.py:99`, verrouillé par `test_mic.py:175`). Ce qui manque est donc
-exactement le périmètre annoncé ci-dessus, et rien d'autre :
-1. **la source EXTERNE** — la voix HF de David sort par la même sono pendant
-   que le micro est ouvert en phase d'écoute : Didier transcrit son
-   interprète et lui répond. Le gate actuel ne connaît que *sa propre* voix ;
-2. **la queue acoustique** : `_mic.start()` suit `drain()` sans temporisation,
-   or la réverbération et le tampon ALSA survivent à la fin du flux.
+✅ **FAIT le 30/08** (dadou_vision_ros `9f2dd02`, spec fermée
+[`etude-declenchement-conversation.md`](etude-declenchement-conversation.md)
+§10). Le relevé de code avait d'abord corrigé le diagnostic : un demi-gate
+existait déjà (`mic.stop()` avant de parler + purge du ring buffer, verrouillés
+par `test_mic.py:175`) — le lot était donc un **élargissement**, pas une
+implémentation depuis zéro.
+
+Nouveau : `vision/audio/live_audio_gate.py` (stdlib pur, horloge injectée) qui
+bloque sur **niveau**, sur **écrêtage** (indépendamment du niveau) et sur
+**séquence de spectacle**, avec maintien de 1 s ; plus la **queue acoustique**
+armée avant chaque redémarrage du micro. Le gate est **en amont de la VAD** —
+non négociable : la calibration de la VAD est à usage unique, une sono vivante
+pendant sa fenêtre empoisonnerait son seuil à vie et rendrait Didier sourd sans
+rien signaler. 198 tests (176 avant), `gate=None` = comportement historique
+inchangé, donc lot réversible.
+
+⚠️ **Un défaut de la SPEC rattrapé à la revue, à retenir** : la formule
+prescrite pour le canal « spectacle » bloquait aussi quand le topic n'avait
+**jamais** été reçu (`None`) — Pi robot éteint = Didier sourd définitivement et
+en silence. Corrigé dans `arbitration.show_audio_live()`. Règle qui survit :
+**ne jamais déduire un état actif de l'absence d'information.**
+
+**Reste hors code**, pour le protocole physique : les deux cas que seul le réel
+tranche — David parle au HF pendant que le micro écoute (doit bloquer), et un
+humain à 3 m reste entendu (ne doit pas bloquer). Le seuil est adossé aux
+mesures du 26/08 : **à recalibrer si le gain micro change**.
 
 **Suite : la campagne D0** (robot allumé : mesure CPU en conversation,
 enregistrements rue à rejouer, calibration distance) et la **validation des
