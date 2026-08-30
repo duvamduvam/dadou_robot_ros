@@ -597,6 +597,38 @@ a prerequisite of chantier 0's physical protocol, ahead of everything else in it
    to mains is a workshop convenience, not the operating state. A proper DC-DC (5 V / 5 A, the Pi 5
    wants 27 W) removes the mains reference **by construction**, and with it the loop. This is the
    structural answer, and it is also the state every audio measurement should be taken in.
+
+   > ### ⚠️ Same battery, YES. Same 5 V rail as the Pi 4, NO — and this one reaches the wheels.
+   >
+   > David's plan (2026-08-30): *"je brancherai la RPi 5 sur le même connecteur que la RPi 4"*. The
+   > **battery** part is exactly right — one battery, one ground reference, no mains, hum gone by
+   > construction. The **shared regulator output** part is where it turns dangerous.
+   >
+   > A Pi 5 draws up to **5 A at 5 V** (27 W) and its load *steps*: whisper loading, piper
+   > synthesising, four cores going from idle to full in one tick — plus the ReSpeaker and the
+   > webcam on its USB. A Pi 4 wants up to 3 A. Together that is **~8 A / 40 W** on a rail that
+   > was, as far as this document knows, sized for a Pi 4 alone (**the power topology has never
+   > been documented — see the TODO at the top of this file**).
+   >
+   > **What a sag on that shared rail does:** it resets the **Pi 4**. The Pi 4 runs `wheels_node`.
+   > And the hardware backstop that should catch exactly this — watchdog, `OE`, category-0
+   > coup-de-poing — **does not physically exist yet** (the main-carrier board is not built; the
+   > robot runs on DIY stripboard). So the PCA9685 keeps its last setpoint and **the wheels keep
+   > turning with nothing left to stop them**. A brown-out caused by a speech-to-text model loading
+   > would become a runaway. That is not a theoretical chain: every link of it is already
+   > documented in `chantiers.md`.
+   >
+   > **The arrangement that gets both properties** — and it costs one part:
+   > **two separate DC-DC converters, both fed from the same battery.**
+   > Common ground upstream ⇒ no loop, the hum stays fixed. Independent regulation ⇒ the vision
+   > Pi's load steps cannot drag the control Pi down. Do not trade the second converter for a
+   > splitter on one rail; the splitter is precisely the failure mode above.
+   >
+   > Then, before trusting it: bulk capacitance close to the Pi 5, and a **load test** — run
+   > whisper + piper while the wheels are powered, and read `vcgencmd get_throttled` on **both**
+   > Pis (`0x0` expected; any `0x1____` means under-voltage occurred). And **document the topology
+   > in this file** the day it is wired — the TODO at the top has been open long enough that it
+   > cost us a diagnosis today.
 2. **For bench work that must stay on mains: a 1:1 audio isolation transformer** (ground-loop
    isolator / DI) on the Pi → mixing-desk line. Cheap, passive, and it is the piece the "next robot"
    lesson below already prescribes — it turns out to be needed on *this* robot too.
