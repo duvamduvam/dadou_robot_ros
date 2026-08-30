@@ -116,6 +116,18 @@ Open points, to settle **before** any purchase or migration:
   **Kubii does not stock it** — searching their catalogue for it is a dead end, their only
   "for Pi 5" camera cable is the Mini–Mini above.
 
+  **Why the photos are useless for telling the two apart** (this caused a real doubt on 08-30, and
+  it is a good doubt): **both variants are 16 mm wide, at both ends.** The ribbon width is identical
+  — what differs is the *pitch inside* it. 15 contacts at 1 mm span ~15 mm; 22 contacts at 0.5 mm
+  span only ~11 mm. The denser connector is the *narrower* footprint, which is the opposite of the
+  intuition. So never judge by the picture: read the silkscreen printed on the ribbon
+  (`Camera Cable Standard - Mini | 300mm`) or the pin spec, and on arrival just **count the golden
+  contacts — 15 one end, 22 the other**.
+
+  Note the vocabulary is about *boards*, not about age: "Standard" describes the **camera** (15-pin,
+  1 mm, unchanged since 2013 — Pi 1 through 4), "Mini" describes the **Pi 5**, which is the board
+  that changed. A 15-pin camera is not obsolete; it is on the far side of a connector change.
+
   To re-pick if that listing dies: **a "Pi Zero camera cable" is the same Standard–Mini part.**
   The Pi Zero uses the identical 22-pin 0.5 mm connector as the Pi 5, so those cables are
   electrically and mechanically what we need — they are just usually sold **too short** (Kubii's is
