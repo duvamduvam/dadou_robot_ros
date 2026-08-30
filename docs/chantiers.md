@@ -642,6 +642,19 @@ demande. Détail : `hardware/overview.md` §Echo. **Prochaine action du chantier
 et il doit écouter « une source audio est vivante », pas « piper joue » (le
 récepteur HF de l'interprète sort par le même châssis).
 
+⚠️ **Précision du 30/08 (relevé de code) : un demi-gate EXISTE DÉJÀ, ne pas le
+réécrire — il faut l'ÉLARGIR.** `ConversationEngine.run_once` coupe le micro
+avant de parler et le rouvre après (`conversation.py:243` `_mic.stop()`,
+puis `:329` `_mic.start()` après `_player.drain()`), et `MicCapture.stop()`
+purge le ring buffer pour qu'un redémarrage ne voie jamais de trame pré-arrêt
+(`mic.py:99`, verrouillé par `test_mic.py:175`). Ce qui manque est donc
+exactement le périmètre annoncé ci-dessus, et rien d'autre :
+1. **la source EXTERNE** — la voix HF de David sort par la même sono pendant
+   que le micro est ouvert en phase d'écoute : Didier transcrit son
+   interprète et lui répond. Le gate actuel ne connaît que *sa propre* voix ;
+2. **la queue acoustique** : `_mic.start()` suit `drain()` sans temporisation,
+   or la réverbération et le tampon ALSA survivent à la fin du flux.
+
 **Suite : la campagne D0** (robot allumé : mesure CPU en conversation,
 enregistrements rue à rejouer, calibration distance) et la **validation des
 textes par David** ;
