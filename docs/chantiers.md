@@ -17,7 +17,8 @@ journal de bord illisible).*
 | Chantier | Statut | Prochaine action | Verrou / condition |
 |---|---|---|---|
 | **0. Conversation (chat_node V2)** | code COMPLET, validé sim ; jamais testé matériel | protocole physique complet (conversation au casque, caméra à l'appui) | rebuild image ARM vision ; Pi 5 sur alim 27 W |
-| **1. Test scénique au sol** | À FAIRE — première fois que cmd_vel roule au sol | séquence de spectacle complète, télécommande en main | — (c'est LUI le verrou des autres) |
+| **1. Test scénique au sol** | À FAIRE — première fois que cmd_vel roule au sol ; ⚠️ **lire d'abord « DANGER ACTIF — les 2 boutons du dos »** : le bouton « stop » ÉTEINT LE PI, donc **provoque un emballement** au lieu d'arrêter | étiqueter les 2 boutons, puis séquence de spectacle complète, télécommande en main | — (c'est LUI le verrou des autres) ; **quelqu'un à portée de la coupure générale** |
+| ⚠️ **Boutons du dos (stop/reset)** | **DANGER ACTIF découvert 30/08** — « stop » = `shutdown -h`, « reset » = `reboot` : aucun n'arrête les roues, les deux tuent le rempart logiciel | **étiqueter physiquement (coût nul)** puis réaffecter D16 → vrai `e_stop` (le verrou `twist_mux.yaml:39` n'attend qu'un publieur), D20 → extinction sur appui long | chemin roues ⇒ spec + protocole caméra + revue Opus |
 | Interface web / télé-présence | W0 + console + W3-sim FAITS ; bringup réel actif (sans drive) | W1 : source e_stop + coup-de-poing sans fil | roues web réel ⟸ test scénique (1) + protocole caméra dédié |
 | Télédiagnostic par agent IA | plan décidé ; étape 1 « trousse d'atelier » FAITE | étape 2 : boîte noire rosbag + bouton START | étape 3 ⟸ RAM du Pi 4 à relever (`ssh r 'cat /proc/meminfo'`) |
 | Conversation en déambulation (intention + contenu) | plan DÉCIDÉ (grillé 12/07) ; D0 outillage + personas commutables FAITS 13/07 | campagne D0 (robot allumé) ; textes personas à valider avec David | D1+ ⟸ protocole physique chat_node V2 (0) ; D6 ⟸ verrous roues |
@@ -177,6 +178,54 @@ les GPIO libres sur la carte principale restent à vérifier.
 **Aval** : `ros2_control` / `diff_drive_controller`, EKF (encodeurs + IMU pour
 le yaw), nav2. Le BNO055 existe déjà dans le code (`robot/move/bno_055_extended.py`)
 mais n'est appelé nulle part en prod — vérifier s'il est encore sur le robot.
+
+## ⚠️ DANGER ACTIF — les 2 boutons du dos font l'INVERSE de ce qu'on croit (30/08)
+
+**Découvert le 30/08 sur une remarque de David** (« j'ai deux boutons derrière, un
+stop et un reset de Pi, il faudrait peut-être réaffecter les fonctions » — son
+intuition était juste, la réalité est pire).
+
+Ce que font vraiment les deux boutons (`dadou_utils_ros/utils/status.py`,
+`Status.check_button` → `os.system`) :
+
+| Bouton | GPIO | Commande réelle | Effet sur les roues |
+|---|---|---|---|
+| « **stop** » | `D16` (`SHUTDOWN_PIN`) | `sudo shutdown now -h` | **AUCUN — et pire** |
+| « reset » | `D20` (`RESTART_PIN`) | `sudo reboot` | **AUCUN — et pire** |
+
+`system_node` est bien lancé (`robot_app.launch.py:61-64`) : les deux boutons sont
+**actifs sur le robot**. Appui maintenu 1 s (double lecture anti-rebond).
+
+> ### ⚠️ Le bouton « stop » est un DÉCLENCHEUR D'EMBALLEMENT
+> Il éteint le Pi → `wheels_node` meurt → le PCA9685 **garde sa dernière consigne**
+> → **les roues continuent, et il ne reste plus aucun logiciel pour les arrêter.**
+> Le bouton fait l'inverse de ce que son nom promet, et c'est le geste réflexe de
+> quiconque panique. Idem pour « reset ».
+
+**Règle d'exploitation, applicable TOUT DE SUITE, avant tout essai roues au sol
+(donc avant le chantier 1)** :
+
+- ❌ **NE JAMAIS appuyer sur « stop » ni « reset » pendant que les roues tournent.**
+- ✅ Le seul arrêt réel aujourd'hui est la **coupure générale d'alimentation**.
+- ✅ **Étiqueter physiquement les deux boutons** (« ARRÊT PI — PAS un arrêt d'urgence »)
+  tant que la réaffectation n'est pas faite. Coût nul, supprime le piège immédiatement.
+
+**Réaffectation proposée** (non tranchée — voir l'étude, chemin roues donc spec +
+protocole caméra + revue Opus obligatoires) :
+
+- **D16 (« stop ») → VRAI arrêt d'urgence** : coupure PWM roues immédiate **et**
+  publication du verrou `e_stop` — qui est déclaré dans `twist_mux.yaml:39` et
+  **n'attend qu'un publieur depuis le 11/07**. Ce bouton comblerait donc d'un coup
+  le trou `e_stop` documenté, et supprimerait le piège. ⚠️ Un organe d'arrêt
+  d'urgence ne doit JAMAIS être ambigu : pas d'appui court/long sur celui-là.
+- **D20 (« reset ») → extinction propre du Pi sur appui LONG (3 s)** — il faut
+  garder un moyen d'éteindre proprement (corruption de carte SD sinon). Le *reboot*
+  disparaît : c'est le moins utile des trois, et il se fait en `ssh`.
+
+⚠️ **Ça reste du logiciel** : si `system_node` meurt, le bouton ne répond plus. Ce
+n'est donc PAS un substitut au coup-de-poing catégorie 0 de la carte main-carrier
+ci-dessous — c'est une **mesure intérimaire**, qui a le mérite de transformer un
+piège actif en garde-fou utile en attendant la carte.
 
 ## Chaîne de sécurité matérielle (carte main-carrier)
 
