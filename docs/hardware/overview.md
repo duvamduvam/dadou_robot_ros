@@ -26,6 +26,29 @@ Three properties are load-bearing and must be known before anyone swaps it out:
 - **Its auto-exposure converges slowly** (hence the 15 warm-up frames in `photo-camera.sh`);
   it already falsified the LED face calibration once.
 
+### On the shelf since 2026-08-30, to be trialled: an OV5647 board with an M12 lens
+
+A spare CSI board turned up in the workshop, so the trial costs nothing but a cable. Silkscreen
+**"Raspberry Pi Camera (C) Rev 2.2"** — the widespread clone of the v1 Camera Module: **OV5647,
+5 MP, 36×36 mm, four mounting holes, 15-pin 1 mm "Standard" FFC**, and a **screw-in M12 lens**.
+
+What it changes, and what it does not:
+
+- **It does not settle the purchase decision below.** OV5647 is the sensor that section explicitly
+  ruled out on low light, and Didier plays under stage light. This board answers the *unknowns*
+  (does libcamera come up in the container, what does the box→heading gain become, what latency)
+  at zero cost — it is not the answer to "what do we buy".
+- **The lens looks strongly domed — likely a 160–200° fisheye, i.e. the case the FOV row rejects.**
+  Do not assume, **measure**: lay a tape measure perpendicular to the optical axis at a known
+  distance *D*, read the width *L* visible edge to edge, FOV ≈ 2·atan(L / 2D).
+- **The M12 mount is the redeeming feature**: unlike a glued-lens module, a wrong FOV is a ~€5 lens
+  swap, not a new sensor. Only this board's *sensor* is second-rate, not its optics path.
+- **Cable needed — and it is the Standard–Mini variant**, per the ⚠️ warning below: 15-pin board →
+  22-pin Pi 5. Official Raspberry Pi **SC1129, 300 mm** (shielded; 300 mm also happens to be the
+  final torso→neck run, so one purchase covers bench trial and installation).
+- **Keep the USB webcam plugged in throughout** — it is the microphone `chat_node` V2 depends on.
+  The Pi 5 has two CSI connectors; this is an addition, not a swap.
+
 ### Evaluated 2026-07-13, not purchased: CSI camera (IMX219 130°)
 
 Candidate module: **IMX219 8 MP, 130° FOV, MINI CSI (22-pin), 15 cm FFC — €9.39**
