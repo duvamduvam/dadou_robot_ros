@@ -50,16 +50,34 @@ Et la course n'oppose pas deux processus mais **six** : le launch instancie **ci
 `servo_node` séparés** (tête, bras G/D, yeux G/D — `robot_app.launch.py` lignes 75/87/99/111/123)
 plus `wheels_node`, tous clients de la même puce.
 
-⚠️ **Conséquence opérationnelle à connaître** : si un `servo_node` redémarre en cours de
-spectacle (crash, respawn), son `ServoKit` **repose silencieusement la fréquence PWM des
-moteurs à 50 Hz**. Le comportement des roues change, et aucun log ne le signale. C'est le
-genre de dérive qu'on passerait des soirées à chercher côté mécanique.
+**Conséquence opérationnelle : BÉNIGNE — et une première rédaction disait le contraire.**
 
-Or 50-60 Hz est une fréquence de *servo*. Le SmartDrive40 accepte beaucoup plus (annoncé
-jusqu'à 20 kHz — **à confirmer sur sa fiche avant de régler quoi que ce soit**). On hache
-donc 250 W de moteur à balais à 60 Hz : couple pulsé, sifflement, granularité temporelle de
-16,7 ms. Sur une machine qui joue au ralenti sur un plateau, la douceur à basse vitesse
-n'est pas un luxe.
+Cette section affirmait le 30/08 qu'un `servo_node` qui redémarre « change le comportement
+des roues », et qu'il fallait « le soupçonner en premier devant une dérive des roues
+inexpliquée ». ⚠️ **C'est FAUX, et c'était une fausse piste de diagnostic** — le genre
+d'erreur qui coûte une soirée d'atelier à chasser un fantôme. Corrigé le 30/08 après lecture
+du code de la lib (`venv/.../adafruit_pca9685.py`), qui tranche sur trois points :
+
+| Ce qui se passe vraiment | Preuve |
+|---|---|
+| `reset()` n'écrit que `MODE1 = 0x00` — il **n'efface PAS** les registres de rapport cyclique | l. 157-159 |
+| Le setter de fréquence **endort la puce ~5 ms** (`mode1_reg \| 0x10` → prescale → restore → `sleep(0.005)`) : micro-coupure du PWM moteur, puis reprise à la même consigne | l. 171-182 |
+| **À rapport cyclique égal, la tension moyenne est identique à 50 ou 60 Hz** — la vitesse des roues ne change pas ; seule l'ondulation de courant bouge | électronique de base |
+
+Donc : une micro-coupure de ~5 ms sur une machine de 50 kg est **imperceptible**, et la
+vitesse ne dérive pas. La course existe, elle est réelle, mais son effet est négligeable.
+Elle mérite d'être corrigée par **propreté** (personne n'a choisi cette fréquence), pas par
+urgence. ⚠️ **Ne pas la re-promouvoir en incident** : c'est déjà arrivé une fois.
+
+Reste un point de *qualité*, lui bien réel mais non mesuré : 50-60 Hz est une fréquence de
+*servo*. Le SmartDrive40 accepte beaucoup plus (annoncé jusqu'à 20 kHz — **à confirmer sur sa
+fiche**). Un moteur à balais haché à 60 Hz a une ondulation de courant marquée, donc un couple
+pulsé et un **ronflement audible à 60 Hz** — ce qui, sur un robot de théâtre, est un sujet
+artistique autant que technique. ⚠️ Mais **ce n'est PAS un problème de gigue ou de « vrai
+timing »** : la PCA9685 est un générateur PWM matériel (oscillateur 25 MHz, compteur 12 bits)
+et la forme d'onde est propre quoi que fasse Linux ; l'I²C ne fait que porter les *changements
+de consigne*, à 20 Hz, ce qui suffit très largement. Personne n'a jamais signalé ce ronflement
+sur Didier : **à écouter une fois, roues hors sol**, avant d'en faire quoi que ce soit.
 
 ⚠️ **Et on ne peut pas monter la fréquence sans détruire les servos.** C'est un verrou dur,
 pas un réglage — voir §4, il tombe tout seul.
@@ -104,6 +122,31 @@ dans un microcontrôleur.
 
 **Verrou** : la bande sécurité du PCB est **placée mais pas routée** (122 chevelus,
 volontaire). *C'est ce routage qui rend Didier sûr — pas un microcontrôleur de plus.*
+
+### ⚠️ 3 bis. Et aujourd'hui, sur le robot réel : RIEN de tout ça n'existe
+
+Précision de David (30/08), à ne surtout pas perdre entre les lignes : **le robot ne tourne
+PAS sur le design KiCad main-carrier. Il tourne sur une carte stripboard DIY.** Le watchdog
+74HC123, la bascule 74HC74, le `OE` piloté, le coup-de-poing 40 A : tout cela est **conçu,
+testé en modèle, et physiquement inexistant.**
+
+Conséquence à écrire noir sur blanc, parce que le reste de cette étude pourrait faussement
+rassurer :
+
+> **Sur le Didier d'aujourd'hui, si `wheels_node` meurt, rien n'arrête les roues.**
+> Le deadman 400 ms est *dans* le processus qui meurt, `e_stop` n'a toujours aucune source,
+> et il n'existe aucune coupure matérielle. Le seul arrêt disponible est la coupure
+> générale d'alimentation, à la main.
+
+C'est le vrai état de la sécurité roues, et il est **sans rapport avec la fréquence PWM ou
+avec l'endroit où l'on branche un RP2040**. Toute discussion sur le chemin de commande qui
+ne commence pas par ce constat se trompe de sujet.
+
+⚠️ **Priorité qui en découle** : router la bande sécurité et fabriquer la carte est le
+**seul** travail qui change quelque chose à la sécurité de Didier. En attendant, la règle
+d'exploitation reste celle du projet : roues hors sol pour tout essai, et **quelqu'un à
+portée de l'interrupteur général** dès que les roues sont au sol (dont le test scénique,
+chantier 1).
 
 ## 4. Le bénéfice non répertorié de la séparation 0x40 / 0x41
 

@@ -25,7 +25,7 @@ journal de bord illisible).*
 | Suivi de personne (roues) | validé sim 5/5, déployé, **SIM-ONLY** | — (attend ses verrous) | test scénique (1) PUIS protocole caméra (`direction_sign` inconnu) |
 | Gaze V1 + arbitrage actionneurs | validé RÉEL 12/07 ; arbitrage déployé sur les 2 Pi | vérif visuelle : gaze ON pendant une séquence (la tête ne doit plus trembler) | — |
 | Odométrie des roues (encodeurs) | **disque IMPRIMÉ et monté le 19/08** (plaqué contre la couronne, rondelles — vigilances fluage/faux-rond au README plans) ; support capteurs : **v4 MORTE AU MONTAGE 19/08** (le palier occupe le volume), **direction v5 = pince sur la vis de suspension du palier** (double écrou, hors chemin d'effort) ; capteurs LJ12A3 reçus | **berceau v5 DESSINÉ 20/08** (palier KP004, bloc E rempli) + **firmware Pico ÉCRIT et testé 20/08** (`firmware/pico_odometry/`, 35 tests) → valider `E4_VIS_DISQUE` (hyp. 25 mm, réglet) + vue de montage, **imprimer x2** ; côté élec : refondre la carte (en bas, USB, sans J6/D13) puis banc d'établi | E4 hypothèse ; `PAL_BOSS_R` (21) non coté ; **12 V dispo en bas ?** ; sens de comptage à MESURER (protocole caméra) ; restent `ROUE_D` (hyp. 250) et entraxe roues (C2) |
-| Chaîne de sécurité matérielle (main-carrier) | schéma révisé 14/07 ; **contrat figé en tests sur la branche `chaine-securite`** | router la bande sécurité (122 chevelus) + note de sécurité docs/ | carte non fabriquée ; encombrement 195×150 à confirmer |
+| Chaîne de sécurité matérielle (main-carrier) | schéma révisé 14/07 ; **contrat figé en tests sur la branche `chaine-securite`** ; ⚠️ **le robot tourne sur STRIPBOARD DIY — watchdog, `OE` et coup-de-poing PHYSIQUEMENT INEXISTANTS** : aujourd'hui, si `wheels_node` meurt, **rien n'arrête les roues** (seul arrêt = coupure générale à la main) | router la bande sécurité (122 chevelus) + note de sécurité docs/ | carte non fabriquée ; encombrement 195×150 à confirmer |
 | Chemin de commande roues (PWM moteur) | **INSTRUIT et TRANCHÉ 30/08** — le Pico ne commandera pas ; le gain visé est déjà couvert par la chaîne de sécurité | réserver + documenter 4 GPIO sur la carte odométrie (gratuit) ; adresses I²C explicites | ⟸ routage de la bande sécurité (le vrai verrou) |
 | Fond de tiroir | — | voir §Fond de tiroir | — |
 
@@ -224,7 +224,7 @@ Pico que la boucle de vitesse locale — sujet de l'étape 5 (nav2), pas
 d'aujourd'hui. Le GPIO du Pi est exclu séparément : il percerait l'**ISO1540**,
 la seule barrière galvanique protégeant le SoC du domaine actionneurs.
 
-**Deux constats neufs, relevés dans le code le 30/08** :
+**Ce que le relevé de code du 30/08 a établi** :
 
 - ⚠️ **Roues et servos sont sur la MÊME puce PCA9685** (canaux 0-3 / 4-15 ;
   `PCA9685(i2c)` et `ServoKit(channels=16)` sans adresse → 0x40 tous les deux).
@@ -233,11 +233,20 @@ la seule barrière galvanique protégeant le SoC du domaine actionneurs.
   du launch (50 Hz chacun). Personne ne l'a décidée, et on ne peut pas la monter
   sans dégrader les servos. `FREQUENCY = 500` (`wheels.py:34`) n'est branché
   nulle part — c'est une trace, pas du code mort.
-- ⚠️ **Danger opérationnel qui en découle** : si un `servo_node` redémarre en
-  cours de spectacle (crash, respawn), son `ServoKit` **repose silencieusement
-  la fréquence PWM des moteurs à 50 Hz**. Le comportement des roues change,
-  aucun log ne le dit. À soupçonner en premier devant une dérive des roues
-  inexpliquée — avant de démonter quoi que ce soit côté mécanique.
+- ✅ **Effet de cette course : BÉNIGNE.** Une première rédaction du 30/08 en
+  faisait un « danger opérationnel » à soupçonner devant une dérive des roues :
+  ⚠️ **c'était faux et c'était une fausse piste de diagnostic**, corrigée le
+  jour même après lecture du code de la lib. `reset()` n'efface pas les
+  registres de consigne ; le setter de fréquence endort la puce ~5 ms
+  (imperceptible sur 50 kg) ; et surtout **à rapport cyclique égal la tension
+  moyenne est la même à 50 ou 60 Hz**, donc la vitesse ne change pas. À
+  corriger par propreté, pas par urgence — détail et preuves dans l'étude §2.1.
+- ⚠️ **Il n'y a PAS de problème de « timing I²C »** (la question d'origine) : la
+  PCA9685 est un générateur PWM **matériel**, la forme d'onde est propre quoi
+  que fasse Linux ; l'I²C ne porte que les changements de consigne, à 20 Hz, ce
+  qui suffit. Le seul vrai point de qualité est la **fréquence porteuse**
+  (60 Hz = ronflement et couple pulsé sur un moteur à balais) — **jamais
+  constaté ni écouté sur Didier : à vérifier à l'oreille, roues hors sol.**
 - ✅ **La séparation 0x40/0x41 prévue par la chaîne de sécurité règle ça
   gratuitement** (chaque puce retrouve sa fréquence). Bénéfice non répertorié :
   à exploiter délibérément au câblage — lire la fiche du SmartDrive40, puis
