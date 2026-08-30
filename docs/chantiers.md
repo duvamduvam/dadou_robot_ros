@@ -227,6 +227,47 @@ n'est donc PAS un substitut au coup-de-poing catégorie 0 de la carte main-carri
 ci-dessous — c'est une **mesure intérimaire**, qui a le mérite de transformer un
 piège actif en garde-fou utile en attendant la carte.
 
+### ✅ VÉRIFIÉ SUR LE ROBOT RÉEL le 30/08 — le diagnostic est confirmé
+
+Fait sur Didier allumé, à la demande de David. **Le code déployé est identique au
+dépôt** (`install/robot/lib/python3.12/site-packages/dadou_utils_ros/utils/status.py`) :
+`SHUTDOWN_CMD = 'sudo shutdown now -h'`, `RESTART_CMD = 'sudo reboot'`,
+`check_button` avec son `time.sleep(1)`. Le diagnostic ne vaut donc pas seulement
+« dans le dépôt », il vaut sur la machine qui tourne.
+
+**Câblage confirmé — la config dit vrai** (`pinctrl`, lecture des registres) :
+
+| Bouton physique | Broche mesurée | Repos | Config |
+|---|---|---|---|
+| « stop » | **GPIO16** ✅ | `ip pu hi` | `robot_config.py:85` |
+| « reset » | **GPIO20** ✅ | `ip pu hi` | `robot_config.py:86` |
+| (LED d'état) | GPIO12 | `op`, alterne 2 Hz | `robot_config.py:87` |
+
+Rappel vers le haut actif, l'appui tire à la masse — conforme à `Pull.UP` +
+`if not button.value`.
+
+⚠️ **Ce que la mesure a démontré, chiffres à l'appui.** Durées d'appui relevées :
+**~3 s** et **~2 s** sur GPIO16, **~7 s** sur GPIO20 — toutes **au-dessus du seuil
+de 1 s** de `check_button`. Autrement dit, ce seul test aurait **éteint le Pi deux
+fois et l'aurait redémarré une fois** si `system_node` n'avait pas été arrêté au
+préalable. Roues tournantes, chacun de ces appuis aurait produit l'emballement
+décrit plus haut. Ce n'est plus une déduction : c'est mesuré.
+
+**Recette de test SANS RISQUE, réutilisable** (l'improvisation ici coûte un Pi
+éteint, voire pire) :
+
+1. `pkill -f system_node` **dans le conteneur** → les 2 boutons deviennent inertes
+   (aucun `respawn` au launch, `robot_app.launch.py:61-65`). ⚠️ `pkill -f` matche
+   sa propre ligne de commande et se tue lui-même : vérifier la mort du nœud
+   séparément, avec `ps aux | grep "[s]ystem_node"`.
+2. Observer avec **`sudo pinctrl get 16,20`** *sur l'hôte* : Blinka attaque les
+   registres en direct, la ligne n'est donc pas réclamée côté noyau et une lecture
+   extérieure n'entre en conflit avec rien. (Format piégeux : `$5` porte la valeur
+   pour une **entrée**, mais `$6` pour une **sortie** — un champ de plus.)
+3. Relancer ensuite : `ros2 run robot system_node --ros-args -r __node:=system_node`
+   en `docker exec -d`, puis **confirmer par la LED GPIO12 qui doit ré-alterner** —
+   sans quoi on croit avoir remis le nœud alors qu'il a échoué au démarrage.
+
 ### Spec de réaffectation — FERMÉE le 30/08 (choix de David)
 
 Boutons **atteignables à la main sans se pencher** (confirmé par David) : D16 est donc
