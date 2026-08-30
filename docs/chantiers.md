@@ -68,6 +68,48 @@ d'isolement 1:1 pour les séances d'établi qui restent sur secteur ; et **jamai
 supprimer la terre de l'ampli pour tuer le ronflement. Détail, chiffres et
 étage de gain à corriger ensuite : `hardware/overview.md` §Audio chain noise.
 
+### 30/08, 23h25 — PREMIÈRE exécution du gate sur matériel : écourtée par l'alim
+
+Déploiement complet fait (rsync Ansible groupe `vision`, sentinelle
+`vision/CHANGE`, rebuild colcon vérifié pièce par pièce dans l'install space),
+`chat_node` lancé à la main, ampli au niveau de jeu. **Le gate tourne.**
+
+Ce qu'on a appris, et qui est acquis :
+
+- **il fonctionne et il est LISIBLE** — les transitions journalisées donnent
+  niveau, crête et cause à chaque bascule. L'exigence d'observabilité du §10.7
+  a payé dès la première minute : sans elle, ce test ne disait rien ;
+- il bloque sur la cause `niveau`, avec des valeurs **2963 à 4067** pour un
+  seuil à 2800 : il *frôle*, il ne dépasse pas franchement ;
+- les crêtes (8 000 à 16 000) restent **loin** de l'écrêtage (32 000) : la sono
+  ne sature pas, contrairement à l'état sur secteur ;
+- les tours finissent en `STT inexploitable : ''`.
+
+⚠️ **INCONCLUSIF sur la seule question qui comptait**, et il faut le dire :
+impossible de trancher entre « le gate bloque la voix de David » (le prix
+documenté du seuil, §10.4) et « le plancher ampli allumé est trop haut ». La
+mesure de silence qui aurait départagé les deux n'a pas pu être prise — **le
+Pi 5 s'est éteint avant**.
+
+### ⚠️ Les deux contraintes d'alimentation se CONTREDISENT — c'est ça, le vrai verrou
+
+- **sur secteur** : ronflement à −21,5 dBFS, entrée qui écrête → le micro est
+  inutilisable, la conversation est impossible ;
+- **sur la batterie utilisée le 30/08** : ronflement réglé (−45,8 dBFS, 24 dB
+  gagnés), mais le Pi 5 **tombe sous la charge** whisper + piper. Le drapeau
+  `throttled=0x50000` (sous-tension déjà survenue) avait été relevé **avant**
+  le test : l'avertissement était là, la chute l'a confirmé.
+
+Il faut donc une source qui satisfasse les deux à la fois : **27 W tenus en
+charge ET aucune référence secteur**. Deux pistes, dans cet ordre —
+**DC-DC 5 V/5 A depuis la batterie du robot** (c'est l'état d'exploitation
+normal d'un robot mobile, et ça règle le sujet définitivement), ou à défaut une
+**batterie USB-C PD annoncée ≥ 30 W** pour les essais d'établi.
+
+⚠️ Corollaire de méthode : **toute mesure audio doit être refaite dans l'état
+d'alimentation définitif.** Les seuils du gate sont absolus ; ils ne veulent
+rien dire tant que la source d'alimentation bouge.
+
 **À faire sur le vrai matériel** : rebuild image ARM vision (voix piper +
 whisper préchargés), Pi 5 avec ALIM 27 W (crash constaté sur USB-C PC),
 sentinelles robot/change + vision/CHANGE, dérouler une conversation complète
