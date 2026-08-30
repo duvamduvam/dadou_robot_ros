@@ -227,6 +227,62 @@ n'est donc PAS un substitut au coup-de-poing catégorie 0 de la carte main-carri
 ci-dessous — c'est une **mesure intérimaire**, qui a le mérite de transformer un
 piège actif en garde-fou utile en attendant la carte.
 
+### SPEC FERMÉE — arbitrée par David le 30/08 (accessibilité confirmée)
+
+David a tranché : **D16 → vrai `e_stop`, D20 → extinction sur appui long, reboot
+supprimé**. Et il confirme que les deux boutons sont **atteignables à la main sans se
+pencher** — donc D16 est un arrêt d'urgence *réellement utilisable*, pas un simple
+garde-fou de maintenance.
+
+**Faits établis qui contraignent la conception** (vérifiés le 30/08) :
+
+- `Status` n'est utilisé **nulle part ailleurs** (ni dans `dadou_control_ros`) :
+  modifier la lib partagée ne casse rien d'autre. *Vérifier à nouveau avant de
+  toucher — la lib n'a pas de versionnage.*
+- `Status.process()` est appelé au tick global **20 Hz** (`TICK_PERIOD_S = 0.05`) :
+  latence de détection 50 ms, acceptable pour un e-stop.
+- ⚠️ `Status.check_button` contient **`time.sleep(1)` bloquant** (double lecture
+  anti-rebond). **Interdit sur le chemin e-stop** : 1 s = ~1 m parcouru à 1 m/s, et
+  ça gèle `system_node` pendant ce temps. D16 doit déclencher sur **2 ticks
+  consécutifs (~100 ms)**, sans `sleep`.
+- `twist_mux.yaml:38-42` : verrou `e_stop`, **`timeout: 0.0`** (n'expire jamais) et
+  `priority: 255`. Sémantique déjà latchée côté mux — le publieur doit s'y conformer.
+
+**Contrat à respecter — repris tel quel de la branche `chaine-securite`** (c'est le
+même danger, donc la même règle ; les tests existants en sont la spec) :
+
+1. `test_relacher_le_coup_de_poing_ne_rearme_pas` → **relâcher D16 ne réarme JAMAIS.**
+   Le réarmement est un **geste explicite et distinct**.
+2. `test_rearmement_sans_remise_a_zero_rejoue_l_ancien_pwm` → ⚠️ **le piège mortel** :
+   réarmer sans remettre les registres à zéro fait **rejouer l'ancien PWM** — le robot
+   repart d'un coup, tout seul. Donc **remise à zéro AVANT tout réarmement.**
+
+**Affectation retenue** :
+
+| Geste | Effet |
+|---|---|
+| **D16 appui court** | `e_stop` **LATCHÉ** : `wheels.stop()` immédiat (registres à zéro) **+** publication `e_stop=True`. Jamais d'appui court/long sur cet organe. |
+| **D16 relâché** | **rien** (contrat 1) |
+| **D20 appui court** | **réarmement explicite** : registres à zéro d'abord (contrat 2), puis `e_stop=False` |
+| **D20 appui long 3 s** | extinction propre du Pi (`shutdown -h`) |
+| ~~reboot~~ | **supprimé** — se fait en `ssh` |
+
+*Pourquoi le réarmement va sur D20 et pas sur D16* : un arrêt d'urgence ne doit jamais
+être ambigu. On met donc la distinction court/long sur le bouton **non** urgent. Et un
+réarmement accidentel seul ne produit **aucun mouvement** (registres à zéro + deadman :
+sans nouvelle consigne, rien ne bouge).
+
+**Chemin de coupure — deux voies, volontairement redondantes** :
+`wheels_node` s'abonne à `e_stop` **directement** (`stop()` + refus des `cmd_vel` tant
+que latché), *en plus* du verrou `twist_mux`. La voie directe ne dépend pas du mux ;
+le mux protège les autres sources. ⚠️ **`TRANSIENT_LOCAL` des deux côtés** — leçon déjà
+payée sur `animation_state` : sans ça, un nœud qui démarre après l'appui ne voit pas
+l'e-stop et croit la voie libre.
+
+**Validation obligatoire avant le sol** : tests unitaires (dont les 2 contrats
+ci-dessus), puis **simulation**, puis **protocole caméra roues hors sol** — c'est le
+chemin roues. Revue Opus minimum. Instantané commité avant de commencer.
+
 ## Chaîne de sécurité matérielle (carte main-carrier)
 
 **Le trou (découvert 14/07)** : l'arrêt d'urgence de Didier est 100 % logiciel.
