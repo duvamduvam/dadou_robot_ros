@@ -46,14 +46,44 @@ MARGE_MM = 8.0
 PALETTES = {
     "bleu": ((0.80, 0.87, 0.95), (0.50, 0.66, 0.86), (0.13, 0.35, 0.66)),
     "gris": ((0.85, 0.85, 0.85), (0.60, 0.60, 0.60), (0.25, 0.25, 0.25)),
+    # Noir pur, pour une imprimante monochrome : tout aplat non noir y passerait
+    # au tramage (demi-teintes), qui hache les traits fins en pointillé sale.
+    # La hiérarchie 1/5/10 mm ne repose alors QUE sur l'épaisseur.
+    "noir": ((0.0, 0.0, 0.0), (0.0, 0.0, 0.0), (0.0, 0.0, 0.0)),
 }
 
-# Épaisseurs de trait en points. En dessous de ~0.15 pt, un jet d'encre laisse
-# des traits fantômes : 0.18 est le plancher pratique pour le pas de 1 mm.
-EP_1MM, EP_5MM, EP_10MM = 0.18, 0.4, 0.7
+# Un point d'imprimante thermique 203 dpi, en points PDF. En dessous de cette
+# largeur, un trait n'est pas rendu de façon fiable : la thermique ne sait pas
+# chauffer un demi-point.
+PT_203DPI = 72.0 / 203.0
+
+# Profils d'impression. Chacun fixe palette, épaisseurs de trait (en points PDF)
+# et corps de texte, car ces trois réglages dépendent ensemble de la machine.
+#   bureau    : laser/jet d'encre >= 600 dpi, couleur.
+#   thermique : thermique directe 203 dpi monochrome (Xprinter P83 & co.).
+#               Épaisseurs = multiples EXACTS du point machine, sinon le pilote
+#               arrondit et le pas de 1 mm devient irrégulier à l'œil.
+PROFILS = {
+    "bureau": {
+        "couleur": "bleu",
+        "epaisseurs": (0.18, 0.4, 0.7),
+        "corps_graduation": 5.0,
+        "corps_texte": 6.0,
+    },
+    "thermique": {
+        "couleur": "noir",
+        "epaisseurs": (PT_203DPI, 2 * PT_203DPI, 3 * PT_203DPI),
+        "corps_graduation": 7.0,   # 5 pt à 203 dpi = 14 px de haut : illisible
+        "corps_texte": 7.5,
+    },
+}
 
 # Côté des mires de coin, en mm.
 MIRE_MM = 4.0
+
+# Largeur d'un chiffre et hauteur des capitales en Helvetica, en em : sert à
+# centrer les graduations sans table de métriques.
+EM_CHIFFRE, EM_HAUTEUR = 0.556, 0.72
 
 
 def flottant(valeur: float) -> str:
@@ -66,28 +96,62 @@ def echappe(texte: str) -> str:
     return texte.replace("\\", r"\\").replace("(", r"\(").replace(")", r"\)")
 
 
-def construit_page(largeur_mm: float, hauteur_mm: float, palette: str) -> str:
+def construit_page(largeur_mm: float, hauteur_mm: float, profil: dict) -> str:
     """Retourne le flux de contenu PDF d'une page millimétrée.
 
     Repère PDF : origine en bas à gauche, y vers le haut — c'est aussi le repère
     utilisé ici, donc les graduations verticales se lisent de bas en haut.
     """
-    c_1mm, c_5mm, c_10mm = PALETTES[palette]
+    c_1mm, c_5mm, c_10mm = PALETTES[profil["couleur"]]
+    ep_1mm, ep_5mm, ep_10mm = profil["epaisseurs"]
+    corps_grad = profil["corps_graduation"]
+    corps_texte = profil["corps_texte"]
     ops: list[str] = []
 
-    # Zone quadrillée : on part des marges, puis on arrondit vers l'intérieur au
-    # multiple de 10 mm le plus proche. Ainsi la grille commence et finit sur une
-    # graduation entière — indispensable pour lire une cote sur la photo.
-    x0 = MARGE_MM + (-MARGE_MM % 10)
-    y0 = MARGE_MM + (-MARGE_MM % 10)
-    x1 = x0 + int((largeur_mm - MARGE_MM - x0) // 10) * 10
-    y1 = y0 + int((hauteur_mm - MARGE_MM - y0) // 10) * 10
+    # Zone quadrillée. Les graduations chiffrées vivent DANS les marges, autour
+    # de la grille : il faut leur réserver leur encombrement, sinon elles sortent
+    # de la zone imprimable et se font rogner au tirage (au plus 2 chiffres :
+    # une grille de plus de 99 cm ne tient sur aucun format visé).
+    # Autour de la grille vivent les graduations chiffrées et les mires : la
+    # bordure doit loger le plus encombrant des deux, sinon l'un des deux sort de
+    # la zone imprimable et se fait rogner au tirage (au plus 2 chiffres — une
+    # grille de plus de 99 cm ne tient sur aucun format visé).
+    bord_lat = max(1.4 + 2 * EM_CHIFFRE * corps_grad / MM, MIRE_MM)
+    bord_haut = max(1.4 + EM_HAUTEUR * corps_grad / MM, MIRE_MM)
+
+    # La grille n'a pas à commencer à un multiple de 10 mm du bord de page : ce
+    # qui compte est qu'elle couvre un nombre ENTIER de centimètres, pour que ses
+    # quatre bords tombent sur une graduation.
+    # Arrondir la largeur au centimètre laisse un reliquat (jusqu'à 9 mm) : on le
+    # partage entre les deux bords pour que la feuille soit centrée, plutôt que
+    # de le laisser s'accumuler à droite.
+    dispo = largeur_mm - 2 * (MARGE_MM + bord_lat)
+    largeur_grille = int(dispo // 10) * 10
+    x0 = MARGE_MM + bord_lat + (dispo - largeur_grille) / 2
+    x1 = x0 + largeur_grille
+
     # Cartouche du bas (barre témoin + consignes). Les consignes tiennent à
     # droite de la barre sur A4/A3 ; sur un format étroit elles passent dessous,
     # ce qui demande une réserve plus haute — sinon elles sortiraient de la
     # feuille sans qu'on le voie au moment du tirage.
     a_droite = (x1 - (x0 + 104)) >= 72.0
-    y0 += 12 if a_droite else 18
+
+    # Hauteur du cartouche, DÉDUITE des corps de texte : en la fixant en dur, le
+    # profil thermique (qui écrit plus gros) débordait sous la marge basse sans
+    # que rien ne le signale.
+    h_grad = EM_HAUTEUR * corps_grad / MM       # hauteur des chiffres d'axe
+    h_cart = EM_HAUTEUR * corps_texte / MM      # hauteur du texte de cartouche
+    interligne = 1.5 * corps_texte / MM
+    pile = h_cart + 2 * interligne              # 3 lignes empilées
+    reserve = (2.2 + h_grad + pile + 0.5) if a_droite else (
+        9.2 + h_grad + 2 * interligne + 0.5
+    )
+
+    # y0 doit être arrêté AVANT d'en déduire y1, sans quoi la hauteur de grille
+    # perd son compte rond de centimètres et le bord haut ne tombe plus sur une
+    # graduation (défaut corrigé après lecture du premier rendu).
+    y0 = MARGE_MM + reserve
+    y1 = y0 + int((hauteur_mm - MARGE_MM - bord_haut - y0) // 10) * 10
 
     def trace(groupes: list[tuple[float, float, float, float]],
               couleur: tuple[float, float, float], epaisseur: float) -> None:
@@ -106,9 +170,9 @@ def construit_page(largeur_mm: float, hauteur_mm: float, palette: str) -> str:
     # Trois passes, du plus clair au plus foncé : le trait fort doit être tracé
     # PAR-DESSUS le trait fin, sinon les fins bavent sur les décimétriques.
     for pas, couleur, epaisseur in (
-        (1, c_1mm, EP_1MM),
-        (5, c_5mm, EP_5MM),
-        (10, c_10mm, EP_10MM),
+        (1, c_1mm, ep_1mm),
+        (5, c_5mm, ep_5mm),
+        (10, c_10mm, ep_10mm),
     ):
         verticales = [
             (x0 + i, y0, x0 + i, y1)
@@ -128,7 +192,7 @@ def construit_page(largeur_mm: float, hauteur_mm: float, palette: str) -> str:
     # Numéroter tous les cm rend la lecture directe sur la photo, sans compter
     # les carreaux. Origine (0,0) = coin bas-gauche de la grille.
     ops.append("BT")
-    ops.append("/F1 5 Tf")
+    ops.append(f"/F1 {flottant(corps_grad)} Tf")
     r, v, b = c_10mm
     ops.append(f"{flottant(r)} {flottant(v)} {flottant(b)} rg")
 
@@ -136,18 +200,39 @@ def construit_page(largeur_mm: float, hauteur_mm: float, palette: str) -> str:
         ops.append(f"1 0 0 1 {flottant(x_mm * MM)} {flottant(y_mm * MM)} Tm")
         ops.append(f"({echappe(texte)}) Tj")
 
-    # Aux quatre extrémités, l'étiquette tomberait sous une mire de coin : on la
-    # décale VERS L'INTÉRIEUR de la grille. Sans ça, le « 0 » — l'origine, donc
-    # la graduation la plus utile — disparaît sous le carré noir.
+    # Encombrement d'une étiquette, en mm : déduit du corps de texte pour que
+    # les centrages suivent automatiquement le profil (le thermique écrit gros).
+    def largeur(texte: str) -> float:
+        return len(texte) * EM_CHIFFRE * corps_grad / MM
+
+    hauteur_txt = EM_HAUTEUR * corps_grad / MM
+    marge_mire = 0.8  # jeu entre une étiquette d'extrémité et la mire de coin
+
+    # Chaque étiquette est centrée sur sa graduation — SAUF aux extrémités, où
+    # elle tomberait sous une mire de coin : là elle est poussée vers l'intérieur
+    # de la grille. Sans ça, le « 0 » (l'origine, la graduation la plus utile)
+    # disparaît sous le carré noir.
     largeur_cm, hauteur_cm = int(x1 - x0) // 10, int(y1 - y0) // 10
     for i in range(0, largeur_cm + 1):
-        decalage = 0.8 if i == 0 else (-3.2 if i == largeur_cm else -1.2)
-        for y_txt in (y0 - 3.6, y1 + 1.4):
-            etiquette(x0 + i * 10 + decalage, y_txt, str(i))
+        gx, lg = x0 + i * 10, largeur(str(i))
+        if i == 0:
+            x_txt = gx + marge_mire
+        elif i == largeur_cm:
+            x_txt = gx - marge_mire - lg
+        else:
+            x_txt = gx - lg / 2
+        for y_txt in (y0 - 1.4 - hauteur_txt, y1 + 1.4):
+            etiquette(x_txt, y_txt, str(i))
     for i in range(0, hauteur_cm + 1):
-        decalage = 0.8 if i == 0 else (-2.6 if i == hauteur_cm else -0.8)
-        etiquette(x0 - 5.0, y0 + i * 10 + decalage, str(i))
-        etiquette(x1 + 1.4, y0 + i * 10 + decalage, str(i))
+        gy = y0 + i * 10
+        if i == 0:
+            y_txt = gy + marge_mire
+        elif i == hauteur_cm:
+            y_txt = gy - marge_mire - hauteur_txt
+        else:
+            y_txt = gy - hauteur_txt / 2
+        etiquette(x0 - 1.4 - largeur(str(i)), y_txt, str(i))
+        etiquette(x1 + 1.4, y_txt, str(i))
     ops.append("ET")
 
     # --- Mires de coin -------------------------------------------------------
@@ -165,7 +250,17 @@ def construit_page(largeur_mm: float, hauteur_mm: float, palette: str) -> str:
             )
 
     # --- Cartouche bas de page : témoin d'échelle + consigne ----------------
-    ty = MARGE_MM + (6.0 if a_droite else 12.0)  # ligne de la barre témoin
+    # Le texte tient à droite de la barre quand la largeur le permet, sinon
+    # dessous. Dans les deux cas il reste sous la ligne de base des chiffres de
+    # l'axe X (y0 - 1.4 - h_grad) et au-dessus de la marge basse.
+    if a_droite:
+        base = y0 - 2.2 - h_grad - h_cart
+        ty = base - interligne + 0.5            # barre alignée sur la 2e ligne
+    else:
+        ty = y0 - 2.2 - h_grad - 3.0            # barre juste sous les chiffres
+        base = ty - 4.0
+    tx = (x0 + 104) if a_droite else x0
+
     ops.append("0 0 0 RG")
     ops.append("0.8 w")
     # Barre de 100 mm avec ses embouts : à mesurer au réglet après impression.
@@ -178,31 +273,26 @@ def construit_page(largeur_mm: float, hauteur_mm: float, palette: str) -> str:
             f"{flottant(x_emb * MM)} {flottant((ty - 1.5) * MM)} m "
             f"{flottant(x_emb * MM)} {flottant((ty + 1.5) * MM)} l S"
         )
-    # Trois lignes empilées : à droite de la barre si la largeur le permet,
-    # sinon dessous. Tout doit rester entre la marge basse et la première
-    # graduation, faute de quoi le texte chevaucherait les chiffres de l'axe.
-    tx = (x0 + 104) if a_droite else x0
-    # Ancré sur le BAS DE GRILLE (et non sur la barre) : à droite, le texte
-    # partage sa bande horizontale avec les chiffres de l'axe X, il doit donc
-    # rester sous leur ligne de base — 5.8 mm suffisent pour du 6 pt.
-    base = (y0 - 6.6) if a_droite else (ty - 4.0)
-
     ops.append("BT")
-    ops.append("/F1 6 Tf")
+    ops.append(f"/F1 {flottant(corps_texte)} Tf")
     ops.append("0 0 0 rg")
     ops.append(f"1 0 0 1 {flottant(tx * MM)} {flottant(base * MM)} Tm")
     ops.append(
         f"({echappe('Témoin : cette barre doit mesurer 100 mm au réglet.')}) Tj"
     )
-    ops.append(f"1 0 0 1 {flottant(tx * MM)} {flottant((base - 3.2) * MM)} Tm")
+    ops.append(
+        f"1 0 0 1 {flottant(tx * MM)} {flottant((base - interligne) * MM)} Tm"
+    )
     ops.append(
         f"({echappe('Sinon : imprimer à 100 % (taille réelle), pas « ajuster à la page ».')}) Tj"
     )
     # Dimensions hors-tout de la grille : utile pour recaler une photo dont les
     # bords sont coupés, ou pour contrôler une correction de perspective.
-    ops.append("/F1 5 Tf")
-    ops.append("0.45 0.45 0.45 rg")
-    ops.append(f"1 0 0 1 {flottant(tx * MM)} {flottant((base - 6.4) * MM)} Tm")
+    # En monochrome, le gris passerait au tramage : on reste en noir.
+    ops.append("0 0 0 rg" if profil["couleur"] == "noir" else "0.45 0.45 0.45 rg")
+    ops.append(
+        f"1 0 0 1 {flottant(tx * MM)} {flottant((base - 2 * interligne) * MM)} Tm"
+    )
     ops.append(
         f"({echappe(f'Grille {int(x1 - x0)} × {int(y1 - y0)} mm entre mires, pas de 1 mm.')}) Tj"
     )
@@ -284,12 +374,24 @@ def main() -> None:
         "--orientation", default="les-deux",
         choices=("portrait", "paysage", "les-deux"),
     )
-    parseur.add_argument("--couleur", default="bleu", choices=sorted(PALETTES))
+    parseur.add_argument(
+        "--profil", default="bureau", choices=sorted(PROFILS),
+        help="machine visée : bureau (>= 600 dpi couleur) ou thermique "
+             "(203 dpi monochrome)",
+    )
+    parseur.add_argument(
+        "--couleur", default=None, choices=sorted(PALETTES),
+        help="force la palette (par défaut : celle du profil)",
+    )
     parseur.add_argument(
         "--sortie", type=Path, default=None,
         help="chemin du PDF (défaut : à côté du script)",
     )
     args = parseur.parse_args()
+
+    profil = dict(PROFILS[args.profil])
+    if args.couleur:
+        profil["couleur"] = args.couleur
 
     largeur, hauteur = FORMATS[args.format]
     orientations = (
@@ -297,17 +399,21 @@ def main() -> None:
         else [args.orientation]
     )
     pages = [
-        (largeur, hauteur, construit_page(largeur, hauteur, args.couleur))
+        (largeur, hauteur, construit_page(largeur, hauteur, profil))
         if sens == "portrait"
-        else (hauteur, largeur, construit_page(hauteur, largeur, args.couleur))
+        else (hauteur, largeur, construit_page(hauteur, largeur, profil))
         for sens in orientations
     ]
 
+    suffixe = "" if args.profil == "bureau" else f"-{args.profil}"
     sortie = args.sortie or (
-        Path(__file__).parent / f"feuille-millimetree-{args.format}.pdf"
+        Path(__file__).parent / f"feuille-millimetree-{args.format}{suffixe}.pdf"
     )
     ecrit_pdf(sortie, pages)
-    print(f"{sortie} — {len(pages)} page(s), {args.format} {args.couleur}")
+    print(
+        f"{sortie} — {len(pages)} page(s), {args.format}, "
+        f"profil {args.profil}, palette {profil['couleur']}"
+    )
 
 
 if __name__ == "__main__":
