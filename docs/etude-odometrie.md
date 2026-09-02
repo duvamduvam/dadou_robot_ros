@@ -1060,8 +1060,19 @@ le piège NPN/PNP du capteur :
 
 ### Reste à acheter — état au 2026-09-02
 
-Ce qui est **déjà là** : capteurs LJ12A3 (×6), **PC817 DIP-4 en stock** (voir l'encadré
-ci-dessus), plaque à bandes (entamée), disques phoniques imprimés et garnis.
+> 📋 **Avant de commander, passer par `docs/hardware/inventaire-stock.md` §1.1** : la liste
+> ci-dessous y est confrontée au stock ligne à ligne (inventaire du 03/09). Quatre lignes y
+> deviennent des *vérifications d'atelier* au lieu d'achats — en particulier les **trois
+> lignes JST-XH** (boîtiers et contacts), qui sont probablement couvertes par la boîte à
+> connecteurs de David. Chaque ligne évitée, c'est potentiellement 3,60 € de droits de
+> catégorie, soit l'ordre de grandeur du composant lui-même.
+>
+> ⚠️ L'inventaire relève aussi un **écart de comptage sur les capteurs** : 3 sachets scellés
+> visibles en vidéo contre 6 annoncés ici. À compter avant de se fier à la marge de rechange.
+
+Ce qui est **déjà là** : capteurs LJ12A3 (×6 — *à recompter, cf. ci-dessus*), **PC817 DIP-4
+en stock** (voir l'encadré ci-dessus), plaque à bandes (entamée), disques phoniques imprimés
+et garnis.
 
 Ce qui **manque** pour souder la carte. Tout est standard → **une seule commande chez un
 distributeur UE** (port unique, zéro douane — cf. la règle ci-dessous) :

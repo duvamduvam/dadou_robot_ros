@@ -22,3 +22,9 @@ essais/voix/sorties/
 *.mp3
 *.flac
 *.ogg
+
+# Inventaire du stock : les médias sources ne sont PAS versionnés.
+# La vidéo de dépouillement pèse 1,6 Go et le dépôt est public ; les 130 images
+# extraites (best/) pèsent 54 Mo. Tout cela vit dans Nextcloud, donc sauvegardé.
+# Le livrable versionné, c'est docs/hardware/inventaire-stock.md — pas les images.
+docs/pictures/stock/

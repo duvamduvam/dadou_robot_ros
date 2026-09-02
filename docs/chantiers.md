@@ -844,17 +844,27 @@ en conversation réelle (avec le chantier 0).
 
 ## Fond de tiroir (pas urgents, pas oubliés)
 
-- **INVENTAIRE DU STOCK DE COMPOSANTS** (demandé par David le 02/09). Motif : en
-  deux heures, le stock a démenti deux fois la liste de courses — les 74AHCT125
-  (achetés pour les rubans LED, ils règlent la piste *level shifter* laissée
-  ouverte par l'incident visage du 13/07) puis les **PC817 DIP-4**, trouvés en
-  quantité alors que l'étude s'apprêtait à les faire racheter. Acheter ce qu'on
-  possède déjà coûte de l'argent, du délai, et **3,60 € de droits par catégorie**
-  depuis juillet 2026. Forme visée : un inventaire consultable par l'IA (une
-  table Markdown dans le dépôt suffit — réf, quantité, boîtier, emplacement),
-  à confronter à toute nomenclature AVANT de commander. Le boîtier est la
-  colonne qui compte : c'est lui qui décide, pas la référence (DIP-4 vs SOP-4,
-  DO-41 vs SMA, AHCT vs AHC).
+- **INVENTAIRE DU STOCK DE COMPOSANTS** — *premier jet FAIT le 03/09* :
+  `docs/hardware/inventaire-stock.md`. Motif du chantier : en deux heures, le
+  stock avait démenti deux fois la liste de courses — les 74AHCT125 (achetés
+  pour les rubans LED, ils règlent la piste *level shifter* laissée ouverte par
+  l'incident visage du 13/07) puis les **PC817 DIP-4**, trouvés en quantité
+  alors que l'étude s'apprêtait à les faire racheter. Acheter ce qu'on possède
+  déjà coûte de l'argent, du délai, et **3,60 € de droits par catégorie** depuis
+  juillet 2026.
+  **Ce qui est fait** : dépouillement d'une vidéo d'atelier de 10 min 50 s
+  (muette) + une photo, en table Markdown par famille (désignation, référence
+  *lue*, boîtier, quantité minorante, repère, confiance). Le boîtier est bien la
+  colonne qui décide (DIP-4 vs SOP-4, DO-41 vs SMA, AHCT vs AHC). La
+  nomenclature de l'odométrie y est confrontée ligne à ligne (§1.1).
+  **Suite** : les 5 vérifications de la priorité 1 (§3), que seul David peut
+  faire — d'abord les **boîtiers/contacts JST-XH** (3 lignes de commande en
+  dépendent), puis le comptage des capteurs, le filetage des entretoises, le pas
+  des borniers verts, la référence du 2ᵉ Cytron.
+  **Deux verrous structurels** : (1) aucun bac n'est étiqueté — l'inventaire dit
+  *quoi*, pas *où* ; numéroter les façades avant le prochain passage ; (2) les
+  bacs de **résistances et de céramiques n'ont pas été filmés**, donc leurs
+  lignes sont « à acheter » par absence de preuve, pas par preuve d'absence.
 - Calibrer `max_wheel_speed` réel (m/s à consigne 1.0) — mesurable à la
   caméra, distance/temps. Débloque le plafond de vitesse distant (web §2.3).
 - Action ROS 2 `PlayAnimation` (les pistes roues des séquences passeront par
