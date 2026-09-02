@@ -720,10 +720,18 @@ décisions prises ce soir, qui amendent le plan `DESIGN.md` du 14/07 :
 **Plan de plaque REDESSINÉ et REVÉRIFIÉ le soir même** :
 `docs/pictures/odometrie/2026-09-02-implantation-stripboard-rp2040-zero.png` (copie
 d'atelier à imprimer ; la source est `gen-stripboard.py` dans le dépôt pcb, et le
-document de référence reste son `DESIGN.md`). Plaque **27 × 39 trous (~69 × 99 mm)**,
-86 coupures, 10 straps. Affectation : **roue G → GP2/GP3, roue D → GP4/GP5** (le PIO
+document de référence reste son `DESIGN.md`). Plaque **27 × 31 trous (~69 × 79 mm)**,
+70 coupures, 10 straps. Affectation : **roue G → GP2/GP3, roue D → GP4/GP5** (le PIO
 exige des broches contiguës) ; GP0/GP1 réservés UART de secours ; GP6/GP7/GP26/GP27
 réservés au chantier PWM roues.
+
+**Optimisé dans la foulée, à la demande de David** : le module est passé sous les blocs
+roues, **sur les mêmes rangées que le bloc 12 V mais de l'autre côté de la barrière** —
+une rangée peut porter deux nets sans risque puisque la barrière coupe entre eux. Plaque
+raccourcie de 8 rangées (99 → 79 mm) et fils d'odométrie ramenés de 94 à 62 rangées
+cumulées. La variante « module au CENTRE » a été écartée : elle raccourcit encore les
+fils (44 rangées) mais met l'USB-C au milieu de la carte, donc un câble coudé dans la
+boîte sur le connecteur le plus fragile du montage.
 
 ⚠️ Le brouillon photographié le 02/09 (module au centre, connecteurs de part et
 d'autre) **ne doit pas être poursuivi tel quel** : des connecteurs capteurs à droite du
@@ -739,7 +747,30 @@ Trois trouvailles du redessin, qui ne se voyaient pas sur le papier :
   débord à profit en le posant en bas de plaque, **USB-C affleurant le bord**.
 - **Le vérificateur a été éprouvé par mutation** (strap retiré, coupures supprimées,
   opto déplacé) : il refuse les trois. Un contrôle qui répond toujours « vert » ne
-  prouve rien.
+  prouve rien. **Une quatrième mutation est passée** — module décalé d'une colonne :
+  électriquement juste, mais son corps (18 mm de large pour 6 pas de pastilles)
+  surplombait le bus +3,3 V, qui devenait insoudable. D'où un **contrôle
+  d'encombrement des corps** ajouté le jour même : une faute trouvée à la main est
+  une faute que le script doit trouver à notre place la fois suivante.
+
+### ⚠️ Les 74AHCT125 de David ne remplacent PAS les PC817 (question du 02/09)
+
+David a un lot de **`SN74AHCT125N` / `SN74AHC125N`** (DIP-16, Texas Instruments)
+acheté pour les rubans LED, et a proposé de les employer ici. **Non** — et la raison
+est la règle d'or de cette carte, pas une préférence : un 74AHCT125 est un **buffer
+logique alimenté, à masse commune**. Il n'isole **rien**. Le monter à la place des
+optocoupleurs reviendrait à souder `GNDPWR` et `GND` ensemble, au milieu de deux
+moteurs à balais de 250 W — exactement ce que la barrière (§5) existe pour empêcher.
+La confusion est facile et vaut d'être écrite : le boîtier ressemble à un opto, le rôle
+n'a rien à voir.
+
+En revanche ces puces **servent ailleurs, et sur un problème connu** : le post-mortem
+`docs/incidents/2026-07-13-glitch-visage-driver-led.md` laisse en suspens des « ratés
+épars » du visage, avec pour piste matérielle explicite un *level shifter 3,3 → 5 V*.
+Le 74AHCT125 est précisément le remède canonique du WS2812 attaqué en 3,3 V.
+⚠️ **Seuls les AHC`T` conviennent** (seuils TTL, `Vih` = 2,0 V) ; les **AHC** sans T
+demandent 0,7 × VCC = 3,5 V et ne garantissent pas la lecture d'un niveau 3,3 V — or
+le lot contient les deux. Trier avant usage.
 
 ### ~~Lien Pico ↔ Pi : UART~~ — DÉCIDÉ le 2026-07-14, RENVERSÉ le 2026-08-20 (cf. ci-dessus)
 

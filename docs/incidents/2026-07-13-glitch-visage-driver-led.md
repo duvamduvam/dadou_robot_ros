@@ -52,6 +52,13 @@
   ~1 rendu/s — interférences électriques sur le fil de données selon David
   (« ça a toujours fait ça »). Piste matérielle (level shifter 3,3→5 V,
   longueur/blindage du fil) à traiter un jour côté hardware.
+  **MàJ 2026-09-02 : le composant est déjà à l'atelier.** David a un lot de
+  `SN74AHCT125N` (DIP-16, quadruple buffer 3 états) — c'est LE level shifter
+  canonique du WS2812 attaqué en 3,3 V. Photo :
+  `docs/pictures/odometrie/2026-09-02-lot-74ahct125-pas-des-optos.jpg`.
+  ⚠️ **Trier AHC`T` / AHC** : seuls les AHC**T** ont des seuils TTL
+  (`Vih` = 2,0 V) et lisent donc un 3,3 V à coup sûr ; les AHC sans T exigent
+  0,7 × VCC = 3,5 V. Le lot contient les deux.
 - **Pièges relevés en passant** : `ros2 topic pub --once` part dès la PREMIÈRE
   souscription matchée (souvent `web_bridge`) — le message peut rater
   `lights_node` ; publier deux fois ou vérifier robot.log. Après un boot du Pi
