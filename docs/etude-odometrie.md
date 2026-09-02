@@ -720,15 +720,15 @@ décisions prises ce soir, qui amendent le plan `DESIGN.md` du 14/07 :
 **Plan de plaque REDESSINÉ et REVÉRIFIÉ le soir même** :
 `docs/pictures/odometrie/2026-09-02-implantation-stripboard-rp2040-zero.png` (copie
 d'atelier à imprimer ; la source est `gen-stripboard.py` dans le dépôt pcb, et le
-document de référence reste son `DESIGN.md`). Plaque **27 × 31 trous (~69 × 79 mm)**,
-70 coupures, 10 straps. Affectation : **roue G → GP2/GP3, roue D → GP4/GP5** (le PIO
+document de référence reste son `DESIGN.md`). Plaque **27 × 32 trous (~69 × 81 mm)**,
+73 coupures, 10 straps. Affectation : **roue G → GP2/GP3, roue D → GP4/GP5** (le PIO
 exige des broches contiguës) ; GP0/GP1 réservés UART de secours ; GP6/GP7/GP26/GP27
 réservés au chantier PWM roues.
 
 **Optimisé dans la foulée, à la demande de David** : le module est passé sous les blocs
 roues, **sur les mêmes rangées que le bloc 12 V mais de l'autre côté de la barrière** —
 une rangée peut porter deux nets sans risque puisque la barrière coupe entre eux. Plaque
-raccourcie de 8 rangées (99 → 79 mm) et fils d'odométrie ramenés de 94 à 62 rangées
+raccourcie de 7 rangées (99 → 81 mm) et fils d'odométrie ramenés de 94 à 62 rangées
 cumulées. La variante « module au CENTRE » a été écartée : elle raccourcit encore les
 fils (44 rangées) mais met l'USB-C au milieu de la carte, donc un câble coudé dans la
 boîte sur le connecteur le plus fragile du montage.
@@ -745,6 +745,14 @@ Trois trouvailles du redessin, qui ne se voyaient pas sur le papier :
   libre au-dessus. D'où cet ordre, et d'où le seul strap qui reste par roue.
 - **Le corps du Zero déborde d'une rangée de chaque côté de ses pastilles** : on met ce
   débord à profit en le posant en bas de plaque, **USB-C affleurant le bord**.
+- ⚠️ **Le module a NEUF pastilles par colonne, pas huit** (tulipes 1×9). Le premier jet en
+  avait compté huit, d'après la photo d'atelier — `GP14` et `GP8` manquaient. La géométrie
+  est désormais tirée du **footprint constructeur**
+  (<https://github.com/CountParadox/RP2040-Zero-Kicad>), qui confirme au passage l'entraxe
+  de **15,24 mm = 6 pas** — que la même photo faisait lire à 7 pas. **Une photo en
+  perspective ne se mesure pas** ; c'est la leçon de `feedback-cao-verifier-le-reel`
+  appliquée à l'électronique, avec sa réciproque : le réel se vérifie sur la pièce ou sur
+  le fichier du fabricant, jamais sur une image.
 - **Le vérificateur a été éprouvé par mutation** (strap retiré, coupures supprimées,
   opto déplacé) : il refuse les trois. Un contrôle qui répond toujours « vert » ne
   prouve rien. **Une quatrième mutation est passée** — module décalé d'une colonne :
@@ -1006,8 +1014,12 @@ physiquement sur le robot.
 | Capteur inductif `LJ12A3-4-Z/BX` **NPN** (TENSTAR ROBOT) | 6 (4 + 2 rechange) | 2,35 € |
 | **PC817C DIP-4**, lot de 20 (TriArk) — sert au prototype ET au PCB | 1 lot | 1,33 € |
 | Supports tulipe DIP-4 | 4+ | qques centimes |
-| Raspberry Pi Pico | 2 | ~5 € |
-| Plaque à trous, borniers à vis 3 pôles, résistances 10 kΩ | — | qques € |
+| ~~Raspberry Pi Pico~~ → **RP2040-Zero** (décision du 02/09) | 2 | ~5 € |
+| Plaque à BANDES, ~~borniers à vis~~ → **JST-XH**, résistances 10 kΩ | — | qques € |
+
+> ✅ **Les capteurs ET les PC817 sont ARRIVÉS** — c'est la commande du 14/07, celle qui a
+> coûté 10,81 € de droits (3 catégories). **Ne pas les racheter** : il reste 16 PC817C de
+> rechange sur les 20. Ce qui manque encore est listé ci-dessous, § « Reste à acheter ».
 
 **Lien — celui-ci, et pas un autre** (vendeur **TriArk Electronic**, 4,8/5, 2000+ vendus) :
 
@@ -1056,13 +1068,18 @@ groupent). Sinon le port coûte plus cher que les composants.
 | Pièce | Qté |
 |---|---|
 | **PC817C** (DIP-4) + support tulipe | 4 (+ rechanges) |
-| Résistances 2,2 kΩ (série LED, calibrées 12 V) | 4 |
+| Résistances **1,5 kΩ** (série LED, calibrées 12 V) | 4 |
 | Résistances 10 kΩ (rappel vers 3,3 V) | 4 |
-| Raspberry Pi Pico + supports tulipe | 1 |
-| Bornier à vis 3 pôles (capteurs) | 4 |
-| Bornier 2 pôles + fusible réarmable + TVS (entrée 12 V) | 1 |
+| **RP2040-Zero** + supports tulipe 1×8 | 1 |
+| **JST-XH 4 points** vertical (capteurs, un par ROUE) | 2 |
+| **JST-XH 2 points** + fusible réarmable + TVS (entrée 12 V) | 1 |
 | LED + résistance (diagnostic) | 4 |
 | Disque phonique acier 3 mm, découpe laser — *même géométrie que le disque imprimé validé* | 2 |
+
+⚠️ **Cette table annonçait 2,2 kΩ jusqu'au 2026-09-02** — corrigé : le schéma KiCad et
+`DESIGN.md` disent **1,5 kΩ**, avec le calcul (`(12 − 2,0 − 1,2 − 1,5) / 1500 ≈ 4,9 mA`).
+Les deux valeurs fonctionneraient, mais une seule doit être écrite. La liste de courses
+est la table ci-dessus ; **la valeur qui fait foi est celle du schéma**.
 
 ~~Bague de serrage fendue Ø 20 mm~~ — **supprimée** : il n'y a pas d'axe Ø 20 lisse (§2). Le
 disque **coiffe l'écrou M20 existant** (§3 bis) et un seul contre-écrou serre l'empilement.
