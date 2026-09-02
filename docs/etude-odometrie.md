@@ -720,12 +720,21 @@ décisions prises ce soir, qui amendent le plan `DESIGN.md` du 14/07 :
 **Plan de plaque REDESSINÉ et REVÉRIFIÉ le soir même** :
 `docs/pictures/odometrie/2026-09-02-implantation-stripboard-rp2040-zero.png` (copie
 d'atelier à imprimer ; la source est `gen-stripboard.py` dans le dépôt pcb, et le
-document de référence reste son `DESIGN.md`). Plaque **27 × 32 trous (~69 × 81 mm)**,
-73 coupures, 10 straps. Affectation : **roue G → GP2/GP3, roue D → GP4/GP5** (le PIO
+document de référence reste son `DESIGN.md`). Plaque **26 × 29 trous (~66 × 74 mm)**,
+67 coupures, 10 straps. Affectation : **roue G → GP2/GP3, roue D → GP4/GP5** (le PIO
 exige des broches contiguës) ; GP0/GP1 réservés UART de secours ; GP6/GP7/GP26/GP27
 réservés au chantier PWM roues.
 
-**Optimisé dans la foulée, à la demande de David** : le module est passé sous les blocs
+**Compacté une seconde fois le 02/09** (« pourquoi un plan avec tant d'espace ? ») :
+rangées 1, 11 et 12 supprimées — les deux blocs roues se touchent — et colonne 14
+supprimée. **27 × 32 → 26 × 29**, soit 69 × 81 → **66 × 74 mm**. On ne peut pas aller
+plus loin : le reste du « vide » est soit la barrière, soit le dessous du corps du
+module, soit — et c'est le contre-intuitif — **la piste elle-même**. Sur une plaque à
+bandes un trou libre n'est pas perdu : le cuivre entre deux composants EST la liaison,
+le supprimer coûterait un strap. Mesure faite avant de répondre : 13 % des trous
+occupés, un chiffre qui ne veut rien dire ici.
+
+**Optimisé une première fois, à la demande de David** : le module est passé sous les blocs
 roues, **sur les mêmes rangées que le bloc 12 V mais de l'autre côté de la barrière** —
 une rangée peut porter deux nets sans risque puisque la barrière coupe entre eux. Plaque
 raccourcie de 7 rangées (99 → 81 mm) et fils d'odométrie ramenés de 94 à 62 rangées
