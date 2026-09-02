@@ -691,9 +691,39 @@ fermée obligatoire**.
 câble capteur est court : non. La barrière d'isolation vaut *encore plus* en bas, au
 milieu des moteurs à balais. Les deux masses ne se rejoignent nulle part.
 
-⚠️ **Inconnue** : le 12 V est-il disponible en bas, là où ira la carte ? (Sinon on
-descend une paire 12 V — alimentation robuste, aucun souci, mais il faut le prévoir.)
-Question posée à David le 20/08, sans réponse à ce jour.
+~~⚠️ **Inconnue** : le 12 V est-il disponible en bas, là où ira la carte ?~~ —
+**LEVÉE le 2026-09-02 : OUI.** Mieux : la carte se fixera **sur le coffre de départ
+des alimentations 5 V / 12 V / 24 V** (décision de David, cf. ci-dessous) — la paire
+12 V se pique à la source, quelques centimètres.
+
+### Décisions du 2026-09-02 — connectique et implantation (la carte passe à l'atelier)
+
+David commence la plaque à bandes (photos dans `docs/pictures/odometrie/`). Quatre
+décisions prises ce soir, qui amendent le plan `DESIGN.md` du 14/07 :
+
+1. **RP2040-Zero au lieu du Pico 40 broches.** Rien ne s'y oppose : GPIO2-5 présents et
+   contigus (le PIO lit des broches contiguës), numéro de série unique en flash (la règle
+   udev tient), et son **USB-C** est plus robuste que le micro-USB que craignait l'étude —
+   le bridage du câble à < 5 cm reste obligatoire. Deux barrettes tulipe 1×9, jamais soudé.
+2. **Un JST-XH 4 points par ROUE** (`+12V` · `GNDPWR` · `SENS_A` · `SENS_B`), pas un
+   bornier par capteur : les deux câbles 3 fils d'un palier sont épissés en un seul câble
+   4 fils **à la bride** (gaine thermo), et il ne court que **2 câbles** sous la caisse au
+   lieu de 4. Les capteurs arrivent avec ~1,2 m de câble surmoulé : **couper court**,
+   l'antenne côté sale doit rester minimale.
+3. **Entrée 12 V sur JST-XH 2 points rouge** (remplace le bornier à vis J5). F1, D11,
+   D12, C11 restent — la carte vit à côté des départs de puissance, l'écrêtage se justifie
+   d'autant plus.
+4. **La carte (dans sa boîte imprimée fermée) se fixe sur le coffre des alimentations**,
+   pas sur la tôle du fond : le 12 V est à demeure, le coffre est déjà un volume protégé
+   des chocs, et les deux câbles capteurs remontent des paliers vers un point unique.
+
+⚠️ Conséquence : le plan de plaque vérifié (`gen-stripboard.py`) est celui du Pico +
+borniers + J6/UART. **Il est à régénérer et à revérifier par programme avant de souder
+la suite** — les coupures sous le module et l'implantation des connecteurs changent.
+Le brouillon photographié le 02/09 (module au centre, connecteurs de part et d'autre)
+ne doit pas être poursuivi tel quel : des connecteurs capteurs à droite du module
+mettraient du 12 V dans le domaine propre, la barrière (§5) ne serait plus sciable
+d'un trait.
 
 ### ~~Lien Pico ↔ Pi : UART~~ — DÉCIDÉ le 2026-07-14, RENVERSÉ le 2026-08-20 (cf. ci-dessus)
 
