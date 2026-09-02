@@ -904,3 +904,12 @@ en conversation réelle (avec le chantier 0).
   est le micro. À noter : le coût « micro perdu » s'allège, le ReSpeaker XVF3800
   est reçu et testé au banc (voir plus haut) — mais son montage et l'écho
   restent entiers, donc ce n'est pas encore une porte ouverte.
+  **02/09 : emplacement choisi + module mesuré, le support CAO est recoté.**
+  L'emplacement voulu : le bout de la plaque blanche imprimée sous la tête
+  (2 trous libres). Module photographié sur la feuille millimétrée : carte
+  ~36 × 36, entraxe des 4 trous **29,0 × 28,7 mm** — le `.scad` de
+  `plans/supports/support-camera-csi/` (conçu pour l'IMX219 25 × 24 jamais
+  acheté) est recoté, STL régénérés (commit plans f1fe038). Découverte
+  bloquante : le **connecteur FFC est côté objectif** (bord haut), cas non
+  couvert par la conception — le capot doit être échancré avant impression.
+  Débloquant : 6 cotes au pied à coulisse, listées dans le README du support.

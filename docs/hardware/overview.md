@@ -48,6 +48,12 @@ What it changes, and what it does not:
   final torso→neck run, so one purchase covers bench trial and installation).
 - **Keep the USB webcam plugged in throughout** — it is the microphone `chat_node` V2 depends on.
   The Pi 5 has two CSI connectors; this is an addition, not a swap.
+- **Mounting spot picked and board measured (2026-09-02)**: the tip of the white printed plate
+  under the head (two free holes). Measured on the mm grid sheet: board ~36×36 mm, mounting holes
+  at **29.0 × 28.7 mm** centres — and the **FFC connector sits on the lens side** (top edge), which
+  the printed mount's cover did not anticipate. The parametric mount lives in
+  `plans/supports/support-camera-csi/` (re-dimensioned; its README lists the six caliper
+  measurements that still gate the print).
 
 ### Evaluated 2026-07-13, not purchased: CSI camera (IMX219 130°)
 
