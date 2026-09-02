@@ -844,6 +844,17 @@ en conversation réelle (avec le chantier 0).
 
 ## Fond de tiroir (pas urgents, pas oubliés)
 
+- **INVENTAIRE DU STOCK DE COMPOSANTS** (demandé par David le 02/09). Motif : en
+  deux heures, le stock a démenti deux fois la liste de courses — les 74AHCT125
+  (achetés pour les rubans LED, ils règlent la piste *level shifter* laissée
+  ouverte par l'incident visage du 13/07) puis les **PC817 DIP-4**, trouvés en
+  quantité alors que l'étude s'apprêtait à les faire racheter. Acheter ce qu'on
+  possède déjà coûte de l'argent, du délai, et **3,60 € de droits par catégorie**
+  depuis juillet 2026. Forme visée : un inventaire consultable par l'IA (une
+  table Markdown dans le dépôt suffit — réf, quantité, boîtier, emplacement),
+  à confronter à toute nomenclature AVANT de commander. Le boîtier est la
+  colonne qui compte : c'est lui qui décide, pas la référence (DIP-4 vs SOP-4,
+  DO-41 vs SMA, AHCT vs AHC).
 - Calibrer `max_wheel_speed` réel (m/s à consigne 1.0) — mesurable à la
   caméra, distance/temps. Débloque le plafond de vitesse distant (web §2.3).
 - Action ROS 2 `PlayAnimation` (les pistes roues des séquences passeront par
