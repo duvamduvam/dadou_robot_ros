@@ -717,13 +717,29 @@ décisions prises ce soir, qui amendent le plan `DESIGN.md` du 14/07 :
    pas sur la tôle du fond : le 12 V est à demeure, le coffre est déjà un volume protégé
    des chocs, et les deux câbles capteurs remontent des paliers vers un point unique.
 
-⚠️ Conséquence : le plan de plaque vérifié (`gen-stripboard.py`) est celui du Pico +
-borniers + J6/UART. **Il est à régénérer et à revérifier par programme avant de souder
-la suite** — les coupures sous le module et l'implantation des connecteurs changent.
-Le brouillon photographié le 02/09 (module au centre, connecteurs de part et d'autre)
-ne doit pas être poursuivi tel quel : des connecteurs capteurs à droite du module
-mettraient du 12 V dans le domaine propre, la barrière (§5) ne serait plus sciable
-d'un trait.
+**Plan de plaque REDESSINÉ et REVÉRIFIÉ le soir même** :
+`docs/pictures/odometrie/2026-09-02-implantation-stripboard-rp2040-zero.png` (copie
+d'atelier à imprimer ; la source est `gen-stripboard.py` dans le dépôt pcb, et le
+document de référence reste son `DESIGN.md`). Plaque **27 × 39 trous (~69 × 99 mm)**,
+86 coupures, 10 straps. Affectation : **roue G → GP2/GP3, roue D → GP4/GP5** (le PIO
+exige des broches contiguës) ; GP0/GP1 réservés UART de secours ; GP6/GP7/GP26/GP27
+réservés au chantier PWM roues.
+
+⚠️ Le brouillon photographié le 02/09 (module au centre, connecteurs de part et
+d'autre) **ne doit pas être poursuivi tel quel** : des connecteurs capteurs à droite du
+module mettraient du 12 V dans le domaine propre, et la barrière (§5) ne serait plus
+sciable d'un trait. Le plan la garde d'un seul trait, colonnes 11-12.
+
+Trois trouvailles du redessin, qui ne se voyaient pas sur le papier :
+- **L'ordre des fils dans le XH n'est pas libre** — `noir A · brun · bleu · noir B`. Le
+  PC817 veut son anode sur la rangée juste au-dessus de sa cathode ; dans 4 rangées
+  consécutives occupées par un connecteur, seule la **première** broche a une rangée
+  libre au-dessus. D'où cet ordre, et d'où le seul strap qui reste par roue.
+- **Le corps du Zero déborde d'une rangée de chaque côté de ses pastilles** : on met ce
+  débord à profit en le posant en bas de plaque, **USB-C affleurant le bord**.
+- **Le vérificateur a été éprouvé par mutation** (strap retiré, coupures supprimées,
+  opto déplacé) : il refuse les trois. Un contrôle qui répond toujours « vert » ne
+  prouve rien.
 
 ### ~~Lien Pico ↔ Pi : UART~~ — DÉCIDÉ le 2026-07-14, RENVERSÉ le 2026-08-20 (cf. ci-dessus)
 
