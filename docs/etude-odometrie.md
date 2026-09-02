@@ -1017,9 +1017,19 @@ physiquement sur le robot.
 | ~~Raspberry Pi Pico~~ → **RP2040-Zero** (décision du 02/09) | 2 | ~5 € |
 | Plaque à BANDES, ~~borniers à vis~~ → **JST-XH**, résistances 10 kΩ | — | qques € |
 
-> ✅ **Les capteurs ET les PC817 sont ARRIVÉS** — c'est la commande du 14/07, celle qui a
-> coûté 10,81 € de droits (3 catégories). **Ne pas les racheter** : il reste 16 PC817C de
-> rechange sur les 20. Ce qui manque encore est listé ci-dessous, § « Reste à acheter ».
+> ✅ **Capteurs et optocoupleurs : RIEN À ACHETER.** Les capteurs sont arrivés avec la
+> commande du 14/07 (celle des 10,81 € de droits, 3 catégories). Et le 02/09, David a
+> trouvé dans son stock un **PC817 DIP-4 traversant** — pattes ressortant bien au dos de
+> la plaque, essai fait — **en quantité largement suffisante**, indépendamment du lot
+> de 20 de juillet.
+>
+> ⚠️ **La LETTRE (A/B/C/D) est INDIFFÉRENTE pour cette carte**, contrairement à ce que
+> demandait le sélecteur d'achat ci-dessous. La voie injecte 4,9 mA dans la LED de l'opto
+> et ne réclame que 0,33 mA en sortie : même un **PC817A** (CTR minimum 80 %) fournit
+> 3,9 mA, soit **12 fois trop**, et il resterait de la marge après la perte de CTR du
+> vieillissement (~ −50 % sur dix ans). L'exigence « C » était une prudence générale, pas
+> un besoin de ce montage. **Ce qui n'est PAS négociable reste le boîtier : DIP-4**, pour
+> le support tulipe et le remplacement sans fer à souder dans une loge.
 
 **Lien — celui-ci, et pas un autre** (vendeur **TriArk Electronic**, 4,8/5, 2000+ vendus) :
 
@@ -1038,6 +1048,33 @@ le piège NPN/PNP du capteur :
 - **DIP-4, jamais SOP-4.** Le SOP-4 est du CMS : impossible à monter sur un support tulipe, donc
   impossible à remplacer dans une loge sans fer à souder. C'était tout l'argument du choix.
 - **PC817C**, pas A/B/D : la lettre est le gain de transfert (CTR).
+
+### Reste à acheter — état au 2026-09-02
+
+Ce qui est **déjà là** : capteurs LJ12A3 (×6), **PC817 DIP-4 en stock** (voir l'encadré
+ci-dessus), plaque à bandes (entamée), disques phoniques imprimés et garnis.
+
+Ce qui **manque** pour souder la carte. Tout est standard → **une seule commande chez un
+distributeur UE** (port unique, zéro douane — cf. la règle ci-dessous) :
+
+| Qté | Pièce | Piège |
+|---|---|---|
+| 2 | **RP2040-Zero** (Waveshare) | dispo en UE : BerryBase (DE), Botland (PL), Gotronic (FR). **Version SANS header soudé** |
+| 2 | Barrette **tulipe 1×9** (sécable) | support du module — c'est ce qui permet de le changer sans fer |
+| 2 | Barrette **mâle 1×9** | à souder dans les castellations du Zero |
+| 4 | Support **tulipe DIP-4** | idem pour les optos |
+| 2 | **JST-XH 4 pts** vertical THT + boîtiers + contacts | pas 2,5 mm — un kit XH couvre tout |
+| 1 | **JST-XH 2 pts** vertical THT + boîtier + contacts | entrée 12 V |
+| 4 + 4 | R **1,5 kΩ** et R **10 kΩ** 1/4 W | ⚠️ 1,5 k, pas 2,2 k (cf. plus bas) |
+| 4 | LED 3 mm | diagnostic, visibles hors boîte |
+| 4 + 1 | C **10 nF** céramique + C **100 µF/25 V** radial | |
+| 1 | **1N5819** (Schottky DO-41) | ⚠️ le schéma dit `SS14`, qui est un boîtier CMS — acheter du **traversant** |
+| 1 | **P6KE15A** ou SA15A (TVS 15 V, DO-41) | ⚠️ idem, `SMAJ15A` au schéma = CMS |
+| 1 | **PTC 500 mA** (RXEF050 / MF-R050) | |
+| — | Gaine thermo | épissures des capteurs à la bride |
+
+⚠️ **Ne PAS commander ça sur AliExpress** : une dizaine de catégories tarifaires ×
+3,60 € de droits chacune coûterait plus cher que les composants (voir juste en dessous).
 
 ### ⚠️ DOUANE — la règle a changé le 1er juillet 2026, et elle change la façon d'acheter
 
