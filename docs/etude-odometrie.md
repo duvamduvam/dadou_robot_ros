@@ -414,6 +414,42 @@ entrefer de 2,5 mm serait **hors de portée**, et le capteur ne verrait rien. Or
 précisément ce qu'on trouve le plus facilement en visserie du commerce. Le piège est parfait —
 la panne est incompréhensible pour qui ignore la règle.
 
+#### 🔴 LE PIÈGE S'EST REFERMÉ — cibles montées en A2-70 le 2026-09-02
+
+Les 2 disques ont été garnis de leurs 10 cibles (photos
+`plans/odometrie/photos/2026-09-02-disques-cibles-*.jpg`). Tout le reste du montage est
+conforme — sens correct (écrous noyés côté couronne, têtes en saillie côté capteur),
+10 cibles, écrous normaux et non nylstop, rien ne dépasse côté couronne. **Mais le
+marquage lu sur les têtes est `A2-70` (fabricant `GD`) : c'est de l'INOX AUSTÉNITIQUE**,
+exactement ce que cette section interdit. La visserie inox est ce qu'on a sous la main —
+c'est là toute la force du piège : rien dans l'aspect ne la distingue de l'acier zingué.
+
+Deux points s'ajoutent, vus sur les mêmes photos :
+
+1. **La tête porte une empreinte 6 pans CREUSE** (avec téton central), là où la
+   nomenclature dit « tête H ». Le capteur lit une couronne de métal percée en son centre —
+   c'est-à-dire précisément là où le champ est le plus dense. La perte se cumule à celle
+   du matériau. Au remplacement : **tête hexagonale PLEINE** (DIN 933 / ISO 4017).
+2. Les écrous, eux, peuvent rester inox : **ils ne sont jamais lus** (ils sont noyés côté
+   couronne, dos au capteur). Seule la tête est une cible.
+
+**Ne pas racheter à l'aveugle : mesurer d'abord.** Les capteurs LJ12A3 sont reçus depuis
+le 16/08, donc la question se tranche en cinq minutes sur l'établi, et la mesure vaut mieux
+que la table ci-dessus (qui donne des ordres de grandeur, pas notre exemplaire) :
+
+- **Test de l'aimant, 30 s** — l'A2 est amagnétique, l'acier zingué colle franchement.
+  Confirme le marquage, et sert à qualifier les vis de remplacement *au magasin*.
+- **Test de commutation, 5 min** — capteur alimenté en 12 V, approché d'une tête montée sur
+  le disque, distance de bascule de la LED relevée au réglet ou à la cale. C'est la seule
+  mesure qui compte : elle porte sur NOTRE capteur et NOTRE cible.
+  - **≥ 3,5 mm** → l'entrefer de 2,5 mm garde sa marge de 60 % : on garde les vis inox.
+  - **2,5 à 3,5 mm** → ça bascule, mais sans le gras qui pardonne le voile du disque et le
+    jeu de roulement. Vis zinguées.
+  - **< 2,5 mm** → la table avait raison, remplacement obligatoire.
+
+Refaire la même mesure sur une vis zinguée avant de rééquiper : c'est le comparatif qui
+gravera enfin un chiffre mesuré à la place des ~2,8 mm de catalogue.
+
 ### L'entrefer : 2,5 mm, mesuré depuis l'ACIER
 
 Pas depuis la surface du disque : depuis la **tête de vis**. Le capteur ne voit que le métal (le
