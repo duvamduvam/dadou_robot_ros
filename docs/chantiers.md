@@ -852,19 +852,29 @@ en conversation réelle (avec le chantier 0).
   alors que l'étude s'apprêtait à les faire racheter. Acheter ce qu'on possède
   déjà coûte de l'argent, du délai, et **3,60 € de droits par catégorie** depuis
   juillet 2026.
-  **Ce qui est fait** : dépouillement d'une vidéo d'atelier de 10 min 50 s
-  (muette) + une photo, en table Markdown par famille (désignation, référence
-  *lue*, boîtier, quantité minorante, repère, confiance). Le boîtier est bien la
-  colonne qui décide (DIP-4 vs SOP-4, DO-41 vs SMA, AHCT vs AHC). La
-  nomenclature de l'odométrie y est confrontée ligne à ligne (§1.1).
-  **Suite** : les 5 vérifications de la priorité 1 (§3), que seul David peut
-  faire — d'abord les **boîtiers/contacts JST-XH** (3 lignes de commande en
-  dépendent), puis le comptage des capteurs, le filetage des entretoises, le pas
-  des borniers verts, la référence du 2ᵉ Cytron.
-  **Deux verrous structurels** : (1) aucun bac n'est étiqueté — l'inventaire dit
-  *quoi*, pas *où* ; numéroter les façades avant le prochain passage ; (2) les
-  bacs de **résistances et de céramiques n'ont pas été filmés**, donc leurs
-  lignes sont « à acheter » par absence de preuve, pas par preuve d'absence.
+  **Ce qui est fait — PASSE COMPLÈTE (03/09)** : dépouillement de **427 des 650
+  images** d'une vidéo d'atelier de 10 min 50 s (muette) + une photo, en deux
+  passes (130 images les plus nettes, puis les 297 restantes en lots temporels
+  contigus — une sérigraphie illisible sur une image l'est parfois sur sa
+  voisine). Table Markdown par famille : désignation, référence *lue*, boîtier,
+  quantité minorante, repère, confiance. Le boîtier est bien la colonne qui
+  décide. La nomenclature de l'odométrie y est confrontée ligne à ligne (§1.1) :
+  4 lignes sur 12 deviennent des vérifications d'atelier, et le **RP2040-Zero**
+  mérite un examen (des RP2040 en stock, mais aucun n'est un remplacement direct
+  du plan de plaque). Deux pièces touchent d'autres chantiers : un **isolateur
+  audio à transformateurs** (ronflement secteur) et un **BNO055 neuf**.
+  **Plan de marquage et de rangement** : `docs/hardware/rangement-atelier.md`
+  (établi 03/09, étiqueteuse Marklife P15).
+  **Suite, dans l'ordre** : (0) **ouvrir ce qui n'a jamais été ouvert** — 4-6
+  colis scellés, 3 boîtes Cytron, sachets ESD : c'est le seul travail qui
+  *augmente* l'inventaire ; (1) les 5 vérifications de la priorité 1 (§3), que
+  seul David peut faire, à commencer par les **boîtiers/contacts JST-XH**.
+  **Bonne surprise structurelle** : tous les bacs ont un **porte-étiquette moulé
+  d'origine, tous vides** — rien à acheter. Et le tri par famille existe déjà à
+  la maille du bac : il n'y a quasiment pas de retri à faire, seulement à
+  adresser. **Verrou restant** : les bacs de **résistances et de céramiques
+  n'ont pas été filmés**, donc leurs lignes sont « à acheter » par absence de
+  preuve, pas par preuve d'absence.
 - Calibrer `max_wheel_speed` réel (m/s à consigne 1.0) — mesurable à la
   caméra, distance/temps. Débloque le plafond de vitesse distant (web §2.3).
 - Action ROS 2 `PlayAnimation` (les pistes roues des séquences passeront par

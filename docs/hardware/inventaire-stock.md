@@ -1,4 +1,10 @@
-# Inventaire du stock de composants — premier jet (2026-09-03)
+# Inventaire du stock de composants (2026-09-03)
+
+> **État : passe complète du dépouillement vidéo faite.** 427 des 650 images de la vidéo
+> d'atelier ont été lues (les 223 écartées sont les plus floues). Ce qui reste à lever ne
+> l'est plus par l'image : ça demande d'ouvrir un sachet, retourner une carte ou sortir un
+> pied à coulisse — voir §3. Le plan de marquage et de rangement qui en découle est dans
+> **`docs/hardware/rangement-atelier.md`**.
 
 **À quoi sert ce fichier.** À être lu par l'IA **avant toute commande**. Le chantier
 « inventaire du stock » (`docs/chantiers.md`) est né d'un constat : en deux heures, le stock
@@ -9,7 +15,8 @@ juillet 2026. Toute nomenclature d'achat doit être confrontée à ce fichier d'
 **Ce que ce fichier N'EST PAS.** Un inventaire vérifié. C'est un **dépouillement visuel**
 d'une vidéo de 10 min 50 s filmée à main levée le 2026-09-02 (+ une photo). David a prévenu
 en la tournant : *« tu ne pourras sans doute pas tout voir, il y a des boîtes avec plusieurs
-éléments, on fait un premier jet, il faudra sûrement revenir dessus »*. Donc :
+éléments »*. L'image a maintenant été exploitée jusqu'au bout (§4) ; ce qui reste flou ne se
+lèvera qu'en atelier. Donc :
 
 - **Aucune quantité n'est comptée.** Ce sont des ordres de grandeur vus du dessus, sans
   vider un seul bac : **toutes les quantités sont des minorants**.
@@ -48,12 +55,23 @@ faire en atelier*, ce qui n'est pas la même chose.
 | 1 × **1N5819** (Schottky DO-41) | ~50-100 diodes DO-41 en stock, **références illisibles** (`t0014`) | À vérifier à la loupe — voir §3 priorité 2 |
 | 1 × **P6KE15A** / SA15A (TVS) | Rien d'identifié | À acheter |
 | 1 × **PTC 500 mA** | Rien d'identifié | À acheter |
-| 2 × **RP2040-Zero** | Rien d'identifié (des Pico et Teensy, pas de Zero) | À acheter |
+| 2 × **RP2040-Zero** (Waveshare) | ⚠️ **Pas de Zero, mais beaucoup de RP2040** : `Seeed XIAO-RP2040`, `Waveshare RP2040-One` (le grand frère du Zero, même famille castellée), et **~5-10 cartes format Pico** (`c0301`-`c0306`) | **À examiner avant d'acheter** — voir ci-dessous |
 
-**Ce que ça change concrètement** : la commande reste nécessaire (RP2040-Zero, résistances,
-TVS, PTC, céramiques). Mais elle peut se réduire de plusieurs lignes — et surtout, chaque
-ligne évitée est potentiellement **3,60 € de droits de catégorie** économisés, ce qui est
-l'ordre de grandeur du composant lui-même.
+**⚠️ Le point RP2040 mérite un examen, pas une conclusion.** Le plan de plaque à bandes de
+l'odométrie (`26 × 29 trous`, commit `99db4d8`) a été dessiné **pour le RP2040-Zero
+précisément** : module sur barrette tulipe 1×9 par côté, bus 3,3 V/GND devant toucher ses
+pastilles, coupures placées en conséquence. Les cartes RP2040 en stock ont des **brochages et
+des encombrements différents** — le `RP2040-One` est plus long, le `XIAO` a 7 broches par
+côté, une carte format Pico fait 2×20. **Aucune n'est un remplacement direct.**
+
+L'arbitrage appartient à l'étude, pas à l'inventaire : soit on redessine la plaque autour
+d'une carte qu'on possède déjà, soit on achète les deux Zero. Mais commander sans avoir
+regardé serait la quatrième fois que le stock dément cette liste de courses.
+
+**Ce que ça change concrètement** : la commande reste nécessaire (résistances, TVS, PTC,
+céramiques, et peut-être les Zero). Mais elle peut se réduire de plusieurs lignes — et
+surtout, chaque ligne évitée est potentiellement **3,60 € de droits de catégorie**
+économisés, ce qui est l'ordre de grandeur du composant lui-même.
 
 > ℹ️ **Les capteurs `LJ12A3-4-Z/BX` ne sont PAS une découverte** — l'étude le sait déjà
 > (§9 : « capteurs et optocoupleurs : rien à acheter », ×6 reçus le 14/07). L'inventaire
@@ -100,6 +118,21 @@ capteur venait à manquer, il existe une réponse en stock avant d'ouvrir un pan
 | **Entretoises laiton hex + visserie** — 200+ | `t0630`, `t0635` | Fixation des cartes. **Filetage non déterminé (M2.5 ou M3)** : à mesurer. |
 | **Embouts de câblage VE, coffret 1800 pcs** | `t0642` | Câblage propre des borniers de puissance. Sections lues : 0,5 mm² (500 pcs) et 0,75 mm² (400 pcs). |
 
+### 1.5 Un isolateur audio à transformateurs, pour le chantier « ronflement »
+
+Repère `c0331` : une petite carte rouge portant **deux transformateurs audio**, **deux jacks
+3,5 mm** (un droit, un coudé) et deux connecteurs blancs 3 points, sérigraphiée `HIFI` d'un
+côté et `Car Audio` de l'autre, avec les repères `R` et `L`. C'est un **isolateur de masse
+audio par transformateur** — le composant fait exactement pour couper une boucle de masse
+entre deux appareils.
+
+Le chantier voix (`docs/etude-voix-didier.md`, et le ronflement secteur confirmé le 30/08
+comme venant de l'alimentation du Pi 5) est aujourd'hui bloqué par un bruit qui couvre la
+voix humaine à 3 m. **Ça ne garantit rien** : un isolateur coupe le bruit qui passe par la
+masse audio, pas celui qui est rayonné ou conduit par l'alimentation elle-même. Mais c'est
+un essai de dix minutes, avec une pièce déjà là, avant d'acheter une DI ou une alimentation
+linéaire.
+
 ---
 
 ## 2. Table de stock
@@ -112,10 +145,11 @@ Confiance : **H** = référence lue ou forme sans ambiguïté · **M** = famille
 | Désignation | Référence lue | Boîtier / format | Qté (minorant) | Repère | Conf. |
 |---|---|---|---|---|---|
 | Tampon/level shifter Texas Instruments | `SN74AHCT125N` (lot 2380758) | DIP-14 traversant | ~6-8 | t0006 | H |
-| Optocoupleurs | *(vus lors d'une session antérieure)* | DIP-4 traversant | voir étude odométrie | — | — |
+| **Optocoupleurs** | `PC817` + `C202F` (**lu**, logo Sharp) | **DIP-4 traversant** | **plein compartiment, ~60-100** | c0022-c0028 | H |
 | Diodes de redressement | — | DO-41 axial, sur bande | ~50-100 | t0014 | M |
 | Diodes signal/Zener (verre, bagues) | — | DO-35 axial, sur bande | ~30-50 | t0014 | M |
-| Transistors, sur bande | `BC 547` (suffixe illisible) | TO-92 | ~30-50 | t0031 | M |
+| Transistors, sur bande | `BC547B` (**suffixe lu**, 2 images) | TO-92 | ~10-50 | c0032, c0033 | H |
+| Fusibles verre, triés par taille | — (**calibres non lus**) | cartouche 5×20 **et** 6×30 | **~150-250** | c0639, c0640 | H |
 | Transistors en vrac, **lot hétérogène** | — | TO-92 | ~50-80 | t0014 | M |
 | Transistors / régulateurs CMS | — | SOT-23, qq SOT-89 | ~30-40 | t0014 | B |
 | Circuits intégrés CMS large corps | — | SOIC/SOP ~300 mil | 2-3 | t0014 | B |
@@ -151,7 +185,18 @@ Confiance : **H** = référence lue ou forme sans ambiguïté · **M** = famille
 | Convertisseurs abaisseurs | `LM2596 DC-DC` | module ~22×43 mm | ~5-10 | t0263, t0266 | H |
 | Modules RTC | `DS3231` + `MH` | carte + support CR2032 | 2-3 | t0099 | H |
 | Centrale inertielle | `9 DOF` (sérigraphie) | breakout à picots | 1 | t0089 | H |
-| Capteur d'orientation Adafruit | logo Adafruit + `BNO…` **incomplet** | breakout | 1 | t0090 | M |
+| **IMU 9 axes Adafruit — NEUVE, barrette non soudée** | `Adafruit BNO055` + « 9-Dof Accel+Gyro+Mag w/ Quaternion, Euler Heading. I2Caddr 0x28 0x29 » | breakout, sachet d'origine | 1 | c0258 | H |
+| Accéléromètre analogique 3 axes | `HW` + `X-OUT / Y-OUT / Z-OUT` | breakout | 1 | c0091 | M |
+| **HAT ventilateur Raspberry Pi — NEUF sous sachet** | `Argon Controllable FAN HAT` + `www.argon40.com` | HAT 40 br. + ventilo 30 mm | 1 | c0474 | H |
+| Cartes RP2040 miniatures | `Seeed XIAO-RP2040` ; `RP2040-One` + `Waveshare` | castellé, USB-C | 1 + 1 | c0306 | H |
+| Modules Bluetooth série (HC-05/06, réf non lue) | `STATE/RXD/TXD/GND/VCC/EN`, `LEVEL:3.3V`, `Power:3.6V—6V` | 1×6 | ~4 | c0317, c0318 | M |
+| Lecteurs de carte microSD | `HW-125` (lu sur les 2) | carte + barrette 6 br. | **2** | c0329, c0330 | H |
+| Cartes rondes type LilyPad | `HW-001` + `ATMEL` + `MEGA328P` | Ø50 mm, pastilles couture | 4-6 | c0321-c0325 | H |
+| Capteur temp./humidité (réf non lue) | `DFROBOT` + `www.dfrobot.com` | Gravity 3 fils | 1 | c0329 | M |
+| **Isolateur audio à 2 transformateurs** — *voir §1.5* | `HIFI` / `Car Audio` / `R` / `L` | carte ~45×30 + 2 jacks 3,5 | 1 | c0331, c0332 | H |
+| Carte de charge lithium (nom non lu) | `B+` / `B-` / `TP2`, USB en bord de carte | carte CMS | 1 | c0113 | M |
+| Carte de dev à chargeur LiPo (nom non lu) | `3.7/4.2V Batt`, `USB/BAT/EN/3.3V` | — | 1-2 | c0291, c0296 | M |
+| Modules relais 1 canal, **en sachets ESD** | `NO … NC` (bobine non lue) | relais + bornier 3 pts | 2-4 | c0372-c0376 | M |
 | Cartes Arduino Mega | `MEGA 2560` | format Mega | 1-2 | t0469 | H |
 | Cartes format Mega / Uno / Leonardo | *(aucun nom lu)* | formats Arduino | 4-5 | t0442 | M |
 | Clones Arduino Nano | boîte `ELEGOO NANO` | format Nano, USB mini-B | 5-7 | t0309 | H |
@@ -210,6 +255,11 @@ Confiance : **H** = référence lue ou forme sans ambiguïté · **M** = famille
 | Connecteurs IDC + nappes arc-en-ciel | — | 2,54 mm / nappe 1,27 mm | ~50 + plusieurs m | t0363, t0420 | H |
 | Nappes GPIO 40 c. Raspberry Pi | — | IDC 40 | 2-3 | t0047 | H |
 | Fils Dupont (M/M, M/F, F/F) | — | 2,54 mm | 100+ | t0367 | H |
+| **Bornes de connexion rapide à leviers** | `WAGO 221` (**lu**) — 2, 3 et 5 pôles | à levier, sans vis | ~30-45 | c0425 | H |
+| **Jacks DC triés par cote** — *le seul contenant du stock correctement étiqueté* | étiquettes manuscrites `2.1*5.5` et `2.5*5.5` | barrel DC, embases + fiches | 20-30 | c0637 | H |
+| Cosses faston **laiton nues** + isolants nylon | — (**largeur non mesurée : 4,8 ou 6,35 ?**) | à sertir | ~100 + 100-200 isolants | c0511, c0512, c0514 | H |
+| Coques métalliques de connecteurs + inserts 4 contacts (USB-A ?) | — | traversant | **100-200, bac saturé** | c0364, c0365 | M |
+| Bobines de fil de câblage, 8 couleurs | `Haerkn` + `XDH Tech, Lyon` (**section non lue**) | bobines à flasques | 8 | c0551, c0554 | H |
 | Cosses préisolées rouges (0,5-1,5 mm²) | — | faston / fourche / œillet | 100+ | t0370 | H |
 | Cosses préisolées bleues (1,5-2,5 mm²) | — | œillet / faston | 100+ | t0370 | H |
 | **Coffret d'embouts de câblage isolés** | `1800PCS VE TERMINALS` — `E0508` 0,5 mm² ×500, `E7508` 0,75 mm² ×400 | ferrules fût 8 mm | 1800 | t0642 | H |
@@ -230,6 +280,9 @@ Confiance : **H** = référence lue ou forme sans ambiguïté · **M** = famille
 | **Capteurs inductifs M12** (odométrie) — *voir §1.1* | `187-LJ12A3-4-Z/BX` | M12 fileté, 3 fils, LED | **3 vus** (l'étude en compte 6) | t0495 | H |
 | Interrupteur-sectionneur à bouton rouge | `YH02-A`, `AC-3 16A AC250V`, `IEC60947-3`, `IP55` | montage panneau | ~2 | t0164 | H |
 | Interrupteurs à bascule grand format | `ON-OFF-ON ZENGTAI 15A 250VAC` | panneau, cosses à vis | 3-4 | t0166 | H |
+| Interrupteurs à bascule (rockers) panneau | — (**calibre non lu**) | encastrable, cosses faston | ~25-35 | c0423 | H |
+| Bloc marche/arrêt de machine, touches `I` vert / `O` rouge | — (`CE` seul lisible) | encastrable panneau | ~5-10 | c0161, c0171 | H |
+| Coupe-circuit / sectionneur à poignée rouge, bornes à goujon | `BLAN…` (marque tronquée) | panneau, goujons laiton | 1-2 | c0163, c0165 | M |
 | Boutons-poussoirs tactiles | étiquette `INTER À P… OFF-(ON) 12VDC`, `5 mm`, `0.05A` | 4 broches, 6×6 et 12×12 | ~40-60 | t0017, t0506 | H |
 | Micro-interrupteurs à glissière | — | traversant, SPDT + multipos. | **100+** | t0173 | H |
 | Interrupteurs DIP | — | traversant, 4 à 8 positions | ~10-20 | t0124 | H |
@@ -256,6 +309,22 @@ Confiance : **H** = référence lue ou forme sans ambiguïté · **M** = famille
 ## 3. Zones d'ombre — par ordre de rentabilité
 
 Ce que **David seul** peut lever, et qui rapporte le plus par minute passée.
+
+### Priorité 0 — le stock invisible
+
+Ces contenants n'ont **jamais été ouverts**. Tant qu'ils ne le sont pas, l'inventaire
+ci-dessus est un **minorant**, et le risque de racheter ce qu'on possède reste entier.
+C'est le seul travail qui *augmente* réellement l'inventaire.
+
+0a. **4 à 6 colis d'expédition scellés** posés au sol (`c0550`-`c0558`). Contenu totalement
+   inconnu.
+0b. **3 boîtes bleues Cytron** au sol (`c0647`, `c0648`), plus une quatrième manipulée
+   (`c0609`) dont le modèle n'est pas lisible. Cytron fabrique des drivers de moteurs :
+   c'est **le chemin roues**. À ouvrir en premier.
+0c. **Sachets ESD opaques** — plusieurs bacs entiers plus un cageot (`c0478`, `c0480`,
+   `c0548`). Un sachet ESD signale un composant qu'on a jugé utile de protéger.
+0d. **Le sachet d'alimentations** du bac `c0452`-`c0454`, jamais ouvert (3 cartes identiques
+   au moins).
 
 ### Priorité 1 — bloque une décision en cours
 
@@ -306,10 +375,15 @@ il ne dit **pas où le retrouver** — la colonne « repère » renvoie à une s
 pas à un emplacement.
 
 C'est la limite qui plafonne toute la suite : un inventaire non adressé se re-périme au
-premier rangement. **Recommandation** : numéroter les façades (`A1`…`A10`, `B1`…) au marqueur
-ou à l'étiqueteuse, puis refilmer colonne par colonne en annonçant le numéro. Le prochain
-passage remplacerait alors la colonne « repère » par une vraie adresse, et l'inventaire
-deviendrait durable.
+premier rangement.
+
+**La passe complète a montré que c'est plus facile que prévu** : **tous** les bacs et tous
+les tiroirs portent déjà un **porte-étiquette moulé d'origine**, et **tous sont vides**. Le
+support existe, il n'y a rien à acheter. Le plan de marquage complet — quoi écrire, dans
+quel ordre, et pourquoi le précédent étiquetage n'a pas tenu — est dans
+**`docs/hardware/rangement-atelier.md`**. Dès qu'une étiquette est posée, la colonne
+« repère » de ce fichier devient une **adresse**, et l'inventaire cesse d'être un
+dépouillement pour devenir un vrai inventaire.
 
 ### Limite n° 2 : le passif de base n'a pas été filmé
 
@@ -337,12 +411,27 @@ sans avoir vu l'intérieur.
 **Source** : `docs/pictures/stock/VID_20260902_235700.mp4` (10 min 50 s, 1080p60, muette —
 David ne commente pas) et `IMG_20260903_000903.jpg` (boîte de connecteurs à sertir).
 
-**Dépouillement** : extraction à 1 image/s (650 images), puis sélection automatique de
-**l'image la plus nette par tranche de 5 s** (variance du laplacien) → 130 images dans
-`best/`, nommées par horodatage. Lecture par 13 agents en parallèle, 10 images chacun, avec
-consigne stricte de ne citer une référence que si elle est réellement lue. Vérification
-directe des lectures qui engagent une décision (le `LJ12A3-4-Z/BX` a été recadré, redressé
-et relu).
+**Dépouillement, en deux passes** :
+- *Passe 1* — extraction à 1 image/s (650 images), puis sélection automatique de **l'image la
+  plus nette par tranche de 5 s** (variance du laplacien) → 130 images dans `best/`, nommées
+  `tXXXX` par horodatage. Lues par 13 agents en parallèle.
+- *Passe 2 (complète)* — les **297 images nettes restantes** que la passe 1 n'avait pas
+  regardées (dossier `complement/`, nommées `cXXXX`), en 30 lots temporels **contigus** :
+  une même scène étant vue sous plusieurs angles, une sérigraphie illisible sur une image
+  l'est parfois sur sa voisine. C'est ce qui a permis de lire `PC817 C202F`, `BC547B`,
+  `WAGO 221` ou l'étiquette `DIANQI D-30A`.
+- Au total **427 des 650 images** ont été lues ; les 223 écartées sont sous le seuil de
+  netteté (35ᵉ percentile) et n'auraient rien apporté.
+
+Consigne unique et stricte à tous les agents : **ne citer une référence que si elle est
+réellement lue**. Vérification directe des lectures qui engagent une décision (le
+`LJ12A3-4-Z/BX` a été recadré, redressé et relu à la loupe).
+
+**Une fausse alerte corrigée** : un agent a conclu que la vidéo était **en miroir** (logo
+Arduino inversé) et a invalidé toutes ses indications gauche/droite. C'est faux —
+l'étiquette `187-LJ12A3-4-Z/BX` de `t0495` se lit de gauche à droite dans le bon sens. Les
+textes « inversés » sont des objets posés à l'envers ou vus par transparence. **Les
+indications gauche/droite du dépouillement restent valides.**
 
 **Les médias ne sont pas versionnés** (la vidéo pèse 1,6 Go ; le dépôt est public). Ils
 vivent dans Nextcloud, donc sauvegardés, et sont exclus par `.gitignore`. Pour re-dépouiller
