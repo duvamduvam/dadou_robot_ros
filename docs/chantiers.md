@@ -890,9 +890,15 @@ en conversation réelle (avec le chantier 0).
   ⚠️ **La vidéo montre le robot EN PIÈCES** : disque d'odométrie **déposé au
   sol**, pignons/jantes/chaîne démontés, panneaux de torse retirés → le test
   scénique au sol suppose d'abord un remontage et une revérification.
-  **Restes, par ordre** : ① lever l'étiquette `CHARGES LEAD ACID` vue près du
-  pack (le pack lithium est confirmé par David, au fond de la caisse — reste à
-  savoir ce qu'est cet appareil) ; ② demander pourquoi le disque d'odométrie est
+  **Restes, par ordre** : ① ~~étiquette `CHARGES LEAD ACID`~~ **RÉSOLU le soir
+  même** — David a sorti l'appareil et l'a photographié : **Victron Blue Smart
+  24 V/5 A**, `CHARGES LEAD ACID **OR LI-ION**`, il l'a basculé de `normal` en
+  `li-ion` (`docs/pictures/charger-victron.jpg`). L'alerte tombe ; il reste une
+  question de **justesse de charge** et une **incohérence dans `overview.md`**
+  (« 18650, 8×5 » : un 8S NMC monte à 33,6 V, incompatible avec un chargeur
+  24 V) → relever la tension réelle dans VictronConnect (Bluetooth, rien à
+  démonter), compter les cellules en série, lire la chimie, vérifier le BMS ;
+  ② demander pourquoi le disque d'odométrie est
   déposé ; ③ **compter les dents des pignons** (transmission par CHAÎNE, jamais
   documentée — sans le rapport de réduction l'odométrie sortira des distances
   fausses) ; ④ **refilmer la tête**, quasi absente des plans (donc ReSpeaker non

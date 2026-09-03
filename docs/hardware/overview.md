@@ -960,6 +960,23 @@ The eyes use a JX Servo CLS-12V7346 (46 kg·cm, 12 V).
 *JX CLS-12V7346 servo dedicated to the eyes.*
 
 ### Power supply
+
+> ⚠️ **La configuration « 8×5 » ci-dessous est à RE-VÉRIFIER — elle est peut-être
+> incompatible avec le chargeur du bord.** Le robot embarque un **Victron Blue Smart
+> 24 V / 5 A** (photo `../pictures/charger-victron.jpg`, détail dans `robot-embarque.md`
+> §1.6). Or un pack **8S** en Li-ion NMC monte à **33,6 V** pleine charge : **un chargeur
+> 24 V ne peut pas le charger**. Donc soit la configuration n'est pas 8S (7S ?), soit la
+> chimie n'est pas NMC (LiFePO4 ?). À trancher en comptant les cellules en série et en
+> lisant la chimie.
+>
+> Point de **justesse de charge** qui en découle : le mode `li-ion` du Victron absorbe à
+> ~28,3-28,4 V, valeur calibrée **LiFePO4**. Sur un 7S NMC cela ne ferait que
+> 4,05 V/cellule (sous-charge, sans danger) — c'est le mode `high [29,4 V]` qui donnerait
+> 4,2 V/cellule. **Le chargeur est Bluetooth : VictronConnect donne la tension réellement
+> atteinte sans rien démonter**, c'est la mesure qui tranche.
+>
+> Le pack lui-même est **au fond de la caisse** (confirmé par David le 2026-09-03), ce qui
+> explique qu'il n'apparaisse sur aucune image du relevé filmé.
 The battery pack is built from 18650 cells rated at 40 C (8×5 configuration, capacity to be confirmed).
 
 A Daly Smart BMS (Li-ion, 7S/8S/16S capable) manages charging and 24 V output for the high-power domain.

@@ -100,23 +100,53 @@ robot** mais **absent d'`overview.md`**. Il y est maintenant, avec sa gamme.
 par son antenne dans un robot de 50 kg qui roule, c'est un point de fiabilité, pas un
 détail — c'est le lien réseau de la télé-présence et du télédiagnostic.
 
-### 1.6 Une étiquette « CHARGES LEAD ACID » à bord — alors que le pack est du lithium
+### 1.6 Le chargeur : ✅ RÉSOLU le soir même — c'est un Victron multi-chimie
 
-`t0131` — **relu directement par moi** : sous la carte `…rtDrive4`, une étiquette noire
-porte `WARNING`, `…re charging read the instru…`, `battery !`, et **`CHARGES LEAD ACID`**.
-Le texte voisin (`MODE button`, `LED will blink`, `…RENT mode`) est celui d'un **chargeur
-multi-mode**.
+**Le déroulé complet, parce qu'il illustre la méthode.** `t0131` — relu directement par
+moi : sous la carte `…rtDrive4`, une étiquette porte `WARNING`, `battery !`, et
+**`CHARGES LEAD ACID`**. Alerte levée : un profil de charge plomb sur du lithium, c'est un
+feu. **David est allé sortir l'appareil et l'a photographié** (`../pictures/charger-victron.jpg`, versionnée).
 
-**Le pack lithium existe bien** — David l'a confirmé le 2026-09-03 : il est **au fond de la
-caisse**, ce qui explique qu'il n'apparaisse sur aucune des 139 images (la caméra ne
-descend jamais là). Donc l'absence de pack 18650 et de BMS Daly dans ce relevé est un
-**angle mort de cadrage, pas un écart** — et `overview.md` reste juste sur ce point.
+**Ce que la photo montre — tout est lu :**
 
-Ce qui reste à lever, en revanche : **quel appareil porte cette étiquette, et à quoi
-est-il relié ?** Un chargeur multi-chimie qui annonce le plomb parmi d'autres profils est
-banal ; un chargeur plomb appliqué à un pack lithium est un feu. Les deux se ressemblent
-sur une photo. **Trente secondes en atelier tranchent** : lire l'appareil en entier et
-suivre ses deux fils. Tant que ce n'est pas fait, ne pas lancer de charge sans surveillance.
+| | |
+|---|---|
+| Appareil | **Victron Energy Blue Smart Charger, 24 V / 5 A**, `IP65 waterproof`, Bluetooth |
+| Étiquette dessous | `220-240V~ 1.4A`, `50-60Hz 150W`, `24V 5A`, `IP65`, `CE` |
+| Phrase complète | **`CHARGES LEAD ACID OR LI-ION BATTERIES ONLY`** |
+| Modes (4 LED) | `li-ion` · `recondition` · `high [29,4 V]` · `normal [28,8 V]` |
+| État | LED verte sur **`li-ion`** — David était en `normal`, **il a basculé en li-ion** |
+
+**Donc l'alerte tombe** : la mention « lead acid » n'était que la moitié d'une phrase. Le
+chargeur est explicitement multi-chimie, il ne pouvait pas appliquer un profil plomb « par
+erreur de conception ». **La leçon de méthode tient quand même** : une étiquette lue à
+moitié dans un gros plan flou disait littéralement le contraire de la vérité. C'est
+exactement pourquoi ce fichier n'autorise aucune déduction — et pourquoi une alerte se
+lève en allant voir, pas en raisonnant.
+
+**Ce qui reste ouvert, et qui est plus fin qu'un danger — une question de JUSTESSE.**
+D'après Victron, l'absorption du mode `li-ion` en 24 V vaut ~**28,3-28,4 V**, valeur
+calibrée pour du **LiFePO4** (8 × ~3,55 V). Or `overview.md` décrit le pack comme des
+**18650**, typiquement du Li-ion **NMC** à 4,2 V/cellule. Selon la configuration réelle :
+
+- **7S NMC** → 28,4 V ne fait que **4,05 V/cellule** : *sous-charge* (autonomie réduite),
+  sans danger. C'est `high [29,4 V]` qui donnerait pile 4,2 V/cellule ;
+- **8S LiFePO4** → le mode `li-ion` est exactement le bon.
+
+⚠️ **Et une incohérence de doc à lever** : `overview.md` écrit « 18650, 8×5 ». Si c'est
+**8S** en NMC, le pack monte à **33,6 V** pleine charge — **un chargeur 24 V ne peut pas le
+charger**. Donc la doc se trompe sur la configuration, ou sur la chimie.
+
+**Trois vérifications gratuites, dans l'ordre :**
+1. **Le chargeur est Bluetooth** : VictronConnect donne l'historique et la tension
+   réellement atteinte. C'est la mesure qui tranche tout, sans rien démonter.
+2. Compter les **cellules en série** et lire la **chimie** marquée sur les cellules.
+3. Vérifier le réglage du **BMS Daly** — le garde-fou de dernier ressort, quel que soit le
+   mode du chargeur.
+
+**Au passage, le pack lui-même** : il existe bien (David, 03/09) et il est **au fond de la
+caisse**, ce qui explique qu'il n'apparaisse sur aucune des 139 images. Son absence de ce
+relevé était un **angle mort de cadrage, pas un écart**.
 
 ### 1.7 La transmission est par CHAÎNE (et il y a peut-être aussi une courroie)
 
@@ -193,7 +223,7 @@ Confiance : **H** = référence lue ou forme sans ambiguïté · **M** = famille
 
 | Élément | Référence lue | Montage observé | Repère | Conf. |
 |---|---|---|---|---|
-| Appareil étiqueté **chargeur** | `WARNING`, `CHARGES LEAD ACID`, `battery !`, `MODE button`, `…RENT mode` | sous la carte SmartDrive, câblage rouge/noir | t0131 | H |
+| **Chargeur de batterie** — *voir §1.6* | `Victron Energy Blue Smart Charger 24V/5A`, `IP65`, Bluetooth, `220-240V~ 1.4A 150W`, **`CHARGES LEAD ACID OR LI-ION BATTERIES ONLY`** ; modes `li-ion`/`recondition`/`high [29,4 V]`/`normal [28,8 V]` | à bord, sous la carte SmartDrive ; **basculé de `normal` à `li-ion` le 03/09** | t0131 + photo | H |
 | Boîtiers métalliques perforés (silhouette alim à découpage), **LED verte allumée** | *(aucune référence lue)* | 2 exemplaires empilés, dans le torse | t0123, t0129, t0138 | M |
 | Porte-fusibles cylindriques | *(calibres non lus)* | 2, au-dessus d'un bornier vert 3 pts | t0084, t0085 | M |
 | Fusible verre sur porte-fusible | *(calibre non lu)* | sur véroboard, près du `HW-170` | t0046 | M |
@@ -236,7 +266,7 @@ classés par ce qu'ils coûteraient s'ils étaient réels.
 
 | # | Constat | Repère | Pourquoi ça compte |
 |---|---|---|---|
-| 1 | **Étiquette `CHARGES LEAD ACID`** à bord, alors que le pack (confirmé par David) est du **lithium** | t0131 | Chargeur multi-chimie ou profil plomb appliqué à du lithium ? Les deux se ressemblent en photo, et le second est un feu. **À lever d'abord.** |
+| 1 | ~~Étiquette `CHARGES LEAD ACID`~~ → **✅ RÉSOLU le 03/09** : Victron Blue Smart 24V/5A, `LEAD ACID **OR LI-ION**`, basculé en mode `li-ion` | t0131 | Reste une question de **justesse** de tension de charge, plus de danger — §1.6 |
 | 2 | **Conducteur cuivre nu, sans gaine**, apparent | t0040 | Court-circuit possible dans une caisse qui vibre et qui contient de la puissance |
 | 3 | **Ligne sombre nette traversant une équerre métallique** de fixation | t0166 | *J'ai relu l'image :* **on ne peut pas trancher entre fissure et rayure.** Si c'est une fissure, c'est une fixation structurelle sur 50 kg mobiles |
 | 4 | **Réparations improvisées** : ruban adhésif sur mousse déchirée, ruban alu enroulé à la main, épissure sous gaine thermo | t0043, t0044, t0124, t0177 | Montages provisoires devenus permanents — à recenser et reprendre |
@@ -254,10 +284,11 @@ classés par ce qu'ils coûteraient s'ils étaient réels.
 
 **Priorité 0 — sécurité et intégrité**
 
-0a. **L'appareil `CHARGES LEAD ACID` (`t0131`)** : le lire en entier et suivre ses deux
-    fils. Le pack lithium est confirmé (David, 03/09) — la question est donc uniquement de
-    savoir si cet appareil peut, dans une manœuvre courante, lui appliquer un profil de
-    charge plomb. Tout le reste peut attendre, pas ça.
+0a. ~~L'appareil `CHARGES LEAD ACID`~~ — **FAIT le 03/09** (§1.6). Ce qu'il en reste, sans
+    urgence : **relever la tension de charge réelle dans VictronConnect** (Bluetooth, rien
+    à démonter), compter les cellules en série, lire la chimie, vérifier le BMS — et
+    **corriger `overview.md`**, dont le « 18650, 8×5 » est incompatible avec un chargeur
+    24 V si c'est du 8S NMC.
 0b. **L'équerre de `t0166`** : passer un doigt / une loupe. Fissure ou rayure ?
 0c. **Le conducteur nu de `t0040`** : gainer.
 
