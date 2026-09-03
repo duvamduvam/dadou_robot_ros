@@ -30,6 +30,28 @@ lèvera qu'en atelier. Donc :
 **Colonne « repère »** : l'horodatage dans la vidéo (`t0495` = 8 min 15 s). C'est aujourd'hui
 la seule adresse dont on dispose — voir « Limite n° 1 » plus bas.
 
+> ## ⚠️ PÉRIMÈTRE — à lire avant de conclure qu'une pièce manque
+>
+> **Ce fichier ne couvre QUE le stock d'atelier** (bacs, tiroirs, colis). Le matériel
+> **déjà monté sur le robot n'y est pas**, par construction : il n'a jamais été filmé.
+>
+> Le projet a **trois** gisements de matériel :
+>
+> | Gisement | Où c'est écrit |
+> |---|---|
+> | Stock d'atelier | **ce fichier** |
+> | Matériel embarqué sur le robot | `docs/hardware/overview.md` (incomplet — voir ci-dessous) |
+> | Pièces ayant une CAO dédiée (donc possédées et intégrées) | `~/Nextcloud/dev/didier/plans/` |
+>
+> **« Absent de ce fichier » ne veut PAS dire « à acheter ».** L'erreur a déjà été commise
+> le 03/09 : le croisement avec les études a déclaré le **ReSpeaker XVF3800** et un
+> **routeur 4G** « à acheter » alors que les deux sont **sur le robot** — le ReSpeaker étant
+> même documenté sur 140 lignes dans `overview.md` et pourvu d'un support imprimé en 3D.
+> Post-mortem : `docs/hardware/croisement-etudes.md` §2.
+>
+> Et `overview.md` a lui-même des trous : le routeur 4G n'y figure pas. **Le robot reste
+> à filmer.**
+
 ---
 
 ## 1. Ce que cet inventaire change, tout de suite

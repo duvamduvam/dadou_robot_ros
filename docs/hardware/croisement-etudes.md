@@ -5,6 +5,10 @@ confronté aux études du dépôt, pour chercher d'autres cas de **« on s'appr�
 qu'on possède déjà »**. Le chantier est né de deux cas avérés (74AHCT125, PC817), un
 troisième a été trouvé au dépouillement (RP2040).
 
+> ⚠️ **Lire d'abord la §2** : cette passe a commis une erreur de cadrage (deux pièces
+> déclarées « à acheter » alors qu'elles sont **sur le robot**). Elle est corrigée et
+> expliquée, mais elle change la façon de lire tout le reste du document.
+
 **Résultat global, dit franchement : aucun nouveau démenti de liste de courses.**
 Sur les quatre études croisées, **zéro remplacement direct**. Ce n'est pas un échec — c'est
 une information : les gros gisements d'économie étaient sur l'odométrie (seule étude à avoir
@@ -56,14 +60,46 @@ lu), le bloc `I`/`O` `c0161`.
 
 ---
 
-## 2. Une pièce à chercher avant tout achat : le ReSpeaker
+## 2. ⚠️ ERREUR DE CADRAGE DE CETTE PASSE — corrigée le 2026-09-03
 
-L'étude déclenchement de conversation (§10.4) parle de la **DoA du ReSpeaker** comme d'une
-chose possédée mais « pas fixée ». **Le ReSpeaker n'apparaît nulle part dans l'inventaire.**
+**La première version de ce document affirmait que « le ReSpeaker n'apparaît nulle part dans
+l'inventaire » et le donnait à chercher dans les colis scellés. C'était faux, et l'erreur
+était de méthode.**
 
-Deux lectures : soit il n'est pas là, soit il dort dans un des contenants **jamais ouverts**
-de la priorité 0 (colis scellés `c0550`-`c0558`, sachets ESD `c0478`/`c0480`/`c0548`).
-C'est le cas d'école qui justifie la priorité 0 : **le chercher là avant toute décision DoA.**
+Le ReSpeaker XVF3800 est **documenté sur 140 lignes** dans `docs/hardware/overview.md`
+(§ « Ordered 2026-08-12 »), il est **en service** (UAC 2.0 sans pilote, DoA via
+`host_control`), et il a même **une pièce CAO dédiée** :
+`~/Nextcloud/dev/didier/plans/supports/support-respeaker-xvf3800/`.
+
+De même, ce document listait le **routeur 4G** comme « à acheter en entier ». David :
+*« il y en a un dans le robot »*.
+
+**La cause : le périmètre de l'inventaire n'avait pas été posé.** Les agents ont croisé le
+stock avec les *études*, sans jamais ouvrir `overview.md` — qui est précisément l'inventaire
+du matériel embarqué. Conclure « absent de l'inventaire du stock » donc « à acheter » est un
+raisonnement faux, et c'est exactement le genre d'erreur que ce chantier existe pour éviter :
+**il aurait fait racheter du matériel possédé.**
+
+### Le projet a TROIS gisements de matériel, pas un
+
+| Gisement | Où c'est écrit | État |
+|---|---|---|
+| **Le stock d'atelier** (bacs, tiroirs, colis) | `docs/hardware/inventaire-stock.md` | Dépouillé au 03/09, minorant |
+| **Le matériel monté sur le robot** | `docs/hardware/overview.md` (961 l.) | Riche, mais **incomplet** — voir ci-dessous |
+| **Ce qui a une pièce CAO** (donc possédé et intégré) | `~/…/didier/plans/` | Jamais croisé avec le reste |
+
+**Règle à appliquer désormais — avant de conclure qu'une pièce manque, vérifier les TROIS.**
+Une pièce absente du stock peut être simplement… déjà montée sur le robot.
+
+### Conséquence : `overview.md` a des trous, et le robot n'a jamais été filmé
+
+Le routeur 4G le prouve : il est **dans le robot** et **dans aucun document**. Ce n'est
+donc pas seulement l'inventaire du stock qui est un minorant — `overview.md` aussi.
+
+**Action ouverte** : filmer le robot comme l'atelier l'a été (David l'a lui-même proposé),
+et compléter `overview.md`. Le même dépouillement s'applique, avec un avantage : le robot
+est un objet fini, pas 200 bacs. Cadrage utile : baie électronique, cheminements, tout ce
+qui porte une étiquette ou une LED, et **le dessous**.
 
 ---
 
@@ -88,12 +124,16 @@ un connecteur ventilateur PWM dédié, géométrie différente).
 
 Dit explicitement pour que personne ne cherche deux fois :
 
+⚠️ **Cette liste est à reprendre après le tournage du robot** (§2) : elle a été établie contre
+le seul inventaire du stock, et elle a déjà produit deux faux « à acheter » (ReSpeaker,
+routeur 4G). Ce qui suit ne vaut que **sauf présence sur le robot**.
+
 | Besoin | Étude | Pourquoi rien en stock |
 |---|---|---|
-| **Routeur 4G/5G** (~50-100 € + forfait) | interface web §4 | Aucun modem cellulaire. Les radios en stock (nRF24, LoRa 868, BT série) ne transportent pas d'IP |
+| ~~**Routeur 4G/5G**~~ | interface web §4 | ❌ **FAUX — David : « il y en a un dans le robot »**. Non documenté dans `overview.md` : à relever au tournage (modèle, bande, SIM/forfait, alimentation) |
 | **Carte SD d'endurance** | télédiagnostic §6 | Aucune carte SD nue. Le `HW-125` est un **lecteur SPI pour microcontrôleur**, il ne stocke rien et ne remplace pas la carte de boot d'un Pi |
 | **SBC / RAM Pi 4** | télédiagnostic §8 | Aucun Raspberry Pi 4/5 ni équivalent. Que des MCU (Pico, RP2040, Teensy, Arduino, ESP32). La RAM du Pi 4 est soudée de toute façon |
-| **Micro / préampli / array** | conversation §5.5 | **Rien** : aucun micro, aucune capsule électret, aucun préampli, aucune carte son d'entrée |
+| ~~**Micro / array**~~ | conversation §5.5 | ❌ **FAUX** — le **ReSpeaker XVF3800** est en service et documenté (`overview.md`, + support CAO). Rien à acheter. *(Reste vrai : aucune capsule ni préampli en pièces détachées dans le stock, mais l'étude n'en demande pas.)* |
 | **Accélérateur Hailo / Coral** | conversation §5.6 | Rien |
 | **Fiches jack 3,5 mm à souder** | voix §6 | Les seuls 3,5 mm du stock sont **montés sur** l'isolateur `c0331` — pas des pièces détachées |
 | **Coup-de-poing d'arrêt d'urgence** | interface web §2.2 | Voir §1 ci-dessus |
@@ -142,7 +182,8 @@ Dit explicitement pour que personne ne cherche deux fois :
 
 À faire pendant l'étiquetage, le bac en main (s'ajoute à `inventaire-stock.md` §3) :
 
-1. **Ouvrir les colis scellés en cherchant un ReSpeaker** (§2).
+1. **Filmer le robot** (§2) — c'est devenu le point n° 1 : `overview.md` a des trous
+   prouvés (le routeur 4G), et deux fausses lignes d'achat en sont déjà sorties.
 2. **Lire sur le `YH02-A`** : accrochage ? contacts NO/NF ? **calibre DC** ? Trois questions
    qui décident s'il a une place quelconque dans un schéma (§1).
 3. **Lire sur les modules relais** : calibre des contacts et tension de bobine (§1).

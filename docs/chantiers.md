@@ -875,6 +875,18 @@ en conversation réelle (avec le chantier 0).
   adresser. **Verrou restant** : les bacs de **résistances et de céramiques
   n'ont pas été filmés**, donc leurs lignes sont « à acheter » par absence de
   preuve, pas par preuve d'absence.
+- **INVENTAIRE DU ROBOT (le filmer)** — ouvert le 03/09. Motif : le croisement
+  de l'inventaire du stock avec les études a déclaré « à acheter » deux pièces
+  qui sont **sur le robot** — le ReSpeaker XVF3800 (pourtant documenté sur 140
+  lignes dans `docs/hardware/overview.md`, avec un support CAO) et un routeur
+  4G, que David a signalés. Cause : les trois gisements de matériel (stock /
+  robot monté / pièces CAO) n'avaient jamais été posés comme tels, et le
+  raisonnement « absent du stock donc à acheter » est faux. Le routeur 4G prouve
+  en plus que **`overview.md` est incomplet** : le robot porte du matériel que
+  le dépôt ne connaît pas. Même méthode que l'atelier (vidéo → images nettes →
+  dépouillement), mais bien plus court : le robot est un objet fini. Cadrage à
+  soigner : baie électronique, cheminements, étiquettes, LED, **et le dessous**.
+  Post-mortem de l'erreur : `docs/hardware/croisement-etudes.md` §2.
 - Calibrer `max_wheel_speed` réel (m/s à consigne 1.0) — mesurable à la
   caméra, distance/temps. Débloque le plafond de vitesse distant (web §2.3).
 - Action ROS 2 `PlayAnimation` (les pistes roues des séquences passeront par
