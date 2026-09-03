@@ -433,9 +433,16 @@ l'étiquette `187-LJ12A3-4-Z/BX` de `t0495` se lit de gauche à droite dans le b
 textes « inversés » sont des objets posés à l'envers ou vus par transparence. **Les
 indications gauche/droite du dépouillement restent valides.**
 
-**Les médias ne sont pas versionnés** (la vidéo pèse 1,6 Go ; le dépôt est public). Ils
-vivent dans Nextcloud, donc sauvegardés, et sont exclus par `.gitignore`. Pour re-dépouiller
-sans la vidéo, les 130 images de `best/` suffisent.
+**Où sont les médias.** La vidéo (1,6 Go) a été **sortie de Nextcloud** — elle est dans
+`~/Vidéos/didier-atelier/` — pour ne pas faire synchroniser 1,6 Go à chaque poste. Restent
+sous `docs/pictures/stock/` (gitignoré, le dépôt est public) les **427 images lues**
+(`best/` + `complement/`, 162 Mo) et la photo. Les images sources brutes ont été supprimées :
+elles se régénèrent en une commande depuis la vidéo —
+
+```bash
+ffmpeg -v error -i ~/Vidéos/didier-atelier/VID_20260902_235700.mp4 \
+       -vf "fps=1,scale=1600:-1" -q:v 2 frames_all/a_%04d.jpg -y
+```
 
 **Pour compléter** : refilmer les points de la section 3 **en gros plan, à plat, sans
 flash** (lumière rasante), un objet par plan, et relancer le même dépouillement. Un plan
