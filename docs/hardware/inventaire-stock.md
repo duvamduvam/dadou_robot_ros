@@ -1,10 +1,11 @@
 # Inventaire du stock de composants (2026-09-03)
 
-> **État : passe complète du dépouillement vidéo faite.** 427 des 650 images de la vidéo
-> d'atelier ont été lues (les 223 écartées sont les plus floues). Ce qui reste à lever ne
-> l'est plus par l'image : ça demande d'ouvrir un sachet, retourner une carte ou sortir un
-> pied à coulisse — voir §3. Le plan de marquage et de rangement qui en découle est dans
-> **`docs/hardware/rangement-atelier.md`**.
+> **État : trois vidéos dépouillées.** (1) La vidéo d'atelier du 02/09 — 427 des 650 images
+> lues. (2) Une **passe de rattrapage** du 03/09 (7 min 39) filmée exprès pour combler les
+> trous — 161 images sur 918. (3) Une **vidéo ciblée JST** du 03/09 (39 s) — 31 images.
+> Ce qui reste à lever ne l'est plus par l'image : ça demande d'ouvrir un sachet, retourner
+> une carte ou sortir un pied à coulisse — voir §3. Le plan de marquage et de rangement qui
+> en découle est dans **`docs/hardware/rangement-atelier.md`**.
 
 **À quoi sert ce fichier.** À être lu par l'IA **avant toute commande**. Le chantier
 « inventaire du stock » (`docs/chantiers.md`) est né d'un constat : en deux heures, le stock
@@ -27,8 +28,15 @@ lèvera qu'en atelier. Donc :
   AHCT vs AHC). Quand il n'est pas mesurable à l'image (pas d'un JST, d'un bornier), c'est
   écrit, et **c'est un préalable bloquant** à toute commande de contrepartie.
 
-**Colonne « repère »** : l'horodatage dans la vidéo (`t0495` = 8 min 15 s). C'est aujourd'hui
-la seule adresse dont on dispose — voir « Limite n° 1 » plus bas.
+**Colonne « repère »** : l'horodatage dans la vidéo. C'est aujourd'hui la seule adresse dont
+on dispose — voir « Limite n° 1 » plus bas. Comme il y a maintenant **trois vidéos**, chaque
+repère est préfixé par la sienne — sans quoi `t0035` désigne trois scènes différentes :
+
+| Préfixe | Vidéo | Exemple |
+|---|---|---|
+| *(aucun)* | atelier du 02/09, 10 min 50 | `t0495` = 8 min 15 s |
+| `v2:` | rattrapage du 03/09, 7 min 39 | `v2:t0241` |
+| `jst:` | boîte à connecteurs du 03/09, 39 s | `jst:t0035` |
 
 > ## ⚠️ PÉRIMÈTRE — à lire avant de conclure qu'une pièce manque
 >
@@ -70,18 +78,18 @@ faire en atelier*, ce qui n'est pas la même chose.
 | Ligne de la nomenclature | Ce que dit le stock | Verdict |
 |---|---|---|
 | 2 × Barrette **mâle 1×9** | Barrettes sécables mâles 2,54 mm en masse (`t0378`, 30-50 barrettes) | **Probablement inutile d'acheter** — sécable, donc la longueur ne pose pas de problème |
-| 2 × **JST-XH 4 pts** + boîtiers + contacts | Boîtiers JST blancs 2 à 6 points **et** deux compartiments pleins de contacts à sertir (*photo*) | **À vérifier en priorité** — voir §1.2 |
-| 1 × **JST-XH 2 pts** + boîtier + contacts | idem | **À vérifier** — voir §1.2 |
+| 2 × **JST-XH 4 pts** + boîtiers + contacts | ✅ Boîtiers **4 points : ~25-35** + embases mâles 4 broches (~40), contacts à sertir par centaines (`jst:`) | **Quantité largement couverte. Reste LE PAS** — voir §1.2 |
+| 1 × **JST-XH 2 pts** + boîtier + contacts | ✅ Boîtiers **2 points : ~40-55** + embases mâles 2 broches (~45) | idem — voir §1.2 |
 | 1 × C **100 µF / 25 V** radial | Kit BOJACK : la valeur `100 µF 25 V 5×11` figure au tableau, 20 pcs (`t0625`) | **Probablement en stock** |
 | 4 × **LED 3 mm** | Plusieurs centaines de LED, mais identifiées **5 mm** (`t0134`). Un sachet paraît plus petit, non confirmé | À vérifier — sinon acheter |
 | 4 × Support **tulipe DIP-4** | Supports DIP tulipe vus (`t0004`) mais **le nombre de points n'est pas lisible** | À vérifier — le DIP-4 est rare, ne pas parier dessus |
 | 2 × Barrette **tulipe 1×9** sécable | Non identifiée distinctement | À acheter, sauf découverte |
-| 8 × R **1,5 kΩ** et **10 kΩ** 1/4 W | **Aucun bac de résistances n'a été identifié dans toute la vidéo** | À acheter — et voir §3, limite |
+| 8 × R **1,5 kΩ** et **10 kΩ** 1/4 W | ⚠️ **Le bac EXISTE** (filmé le 03/09) : ~20 sachets, **plusieurs centaines** de résistances 1/4 W. Mais **7 valeurs lisibles sur 20 sachets** (47R, 5K, 100K, 220K, 470K, 330?, 220R?) — ni 1,5k ni 10k parmi elles | **NE PAS ACHETER SANS REGARDER** — le passage de « aucun bac connu » à « plusieurs centaines de résistances » change tout. Fouiller le bac : 2 minutes |
 | 4 × C **10 nF** céramique | Le kit BOJACK est un kit d'**électrolytiques** : il ne couvre pas le 10 nF | À acheter |
-| 1 × **1N5819** (Schottky DO-41) | ~50-100 diodes DO-41 en stock, **références illisibles** (`t0014`) | À vérifier à la loupe — voir §3 priorité 2 |
+| 1 × **1N5819** (Schottky DO-41) | ✅ **Bande étiquetée `1N5819`**, ~20-25 pièces (`v2:t0309`, `v2:t0311`) | **RIEN À ACHETER** — étiquette de bande lue, c'est exactement la référence demandée |
 | 1 × **P6KE15A** / SA15A (TVS) | Rien d'identifié | À acheter |
 | 1 × **PTC 500 mA** | Rien d'identifié | À acheter |
-| 2 × **RP2040-Zero** (Waveshare) | ⚠️ **Pas de Zero, mais beaucoup de RP2040** : `Seeed XIAO-RP2040`, `Waveshare RP2040-One` (le grand frère du Zero, même famille castellée), et **~5-10 cartes format Pico** (`c0301`-`c0306`) | **À examiner avant d'acheter** — voir ci-dessous |
+| 2 × **RP2040-Zero** (Waveshare) | ⚠️ **Pas de Zero, mais beaucoup de RP2040** : `Seeed XIAO-RP2040`, `Waveshare RP2040-One` (le grand frère du Zero, même famille castellée), et **~5-10 cartes format Pico** (`c0301`-`c0306`). **Re-confirmé le 03/09** : le tiroir des « petites cartes bleues », jusque-là non identifié, contient bien 5 cartes MCU dont `RP2040-One` lue au zoom (`v2:t0249`, `v2:t0250`) — ce ne sont pas des modules d'alimentation | **À examiner avant d'acheter** — voir ci-dessous |
 
 **⚠️ Le point RP2040 mérite un examen, pas une conclusion.** Le plan de plaque à bandes de
 l'odométrie (`26 × 29 trous`, commit `99db4d8`) a été dessiné **pour le RP2040-Zero
@@ -107,20 +115,46 @@ surtout, chaque ligne évitée est potentiellement **3,60 € de droits de caté
 > cadre) alors que l'étude en compte **6 (4 + 2 rechange)**. Soit les autres sont ailleurs,
 > soit la marge de rechange n'existe pas. À compter avant de s'y fier.
 
-### 1.2 La boîte de connecteurs (photo) mérite un contrôle dédié
+### 1.2 La boîte de connecteurs — filmée le 03/09, deux questions sur trois réglées
 
-La photo prise juste après la vidéo montre une boîte à ~20 compartiments **pleine** de
-connectique à sertir : deux compartiments entiers de **contacts métalliques nus** (plusieurs
-milliers), des boîtiers noirs (Dupont/IDC) et une majorité de **boîtiers blancs JST de 2 à
-6 points**.
+Une vidéo de 39 s a été tournée exprès pour cette boîte (préfixe `jst:`). **Deux agents ont
+lu les images indépendamment et leurs comptages concordent** — c'est la lecture la mieux
+étayée de tout le dépouillement.
 
-Le commit `99db4d8` a établi que « les petits JST de David sont bien des **XH** (pas 2,5 mm) »
-— vérification faite parce qu'un PH (2,0 mm) aurait cassé le plan de plaque. Si ce sont bien
-ces connecteurs-là, alors les trois lignes JST-XH de la nomenclature (boîtiers **et**
-contacts) sont couvertes. **C'est le contrôle le plus rentable de tout ce fichier** : il
-porte sur trois lignes de commande et demande de vérifier deux choses en atelier —
-qu'il existe des boîtiers **4 points** et **2 points**, et que les contacts nus sont bien
-des contacts **XH** (et non des Dupont, qui leur ressemblent).
+**Ce qui est établi.** La boîte est rangée **par nombre de points, puis par genre** :
+un compartiment par (2, 3, 4 points) × (boîtier femelle, embase mâle). Le comptage
+d'alvéoles ne dépend d'aucune mesure — c'est pour ça qu'il est fiable :
+
+| Ce qu'on cherchait | Verdict | Quantité (surface, minorant) | Preuve |
+|---|---|---|---|
+| Boîtiers **4 points** | ✅ **OUI** | ~25 à 35 | 4 alvéoles comptées une à une sur ≥8 pièces distinctes (`jst:t0033`, `jst:t0035`, `jst:t0037`) |
+| Boîtiers **2 points** | ✅ **OUI** | ~40 à 55 | 2 alvéoles comptées, 3 pièces vues de face (`jst:t0027`, `jst:t0028`) |
+| Boîtiers 3 points | ✅ OUI (non demandé) | ~40 à 55 | `jst:t0029`, `jst:t0030` |
+| **Embases mâles** 2 / 3 / 4 broches | ✅ OUI, un compartiment chacune | ~35 à 45 par compartiment | broches comptables directement |
+| Contacts nus **XH ?** | ⛔ **INDÉTERMINABLE** | plusieurs centaines, ≥3 casiers | voir ci-dessous |
+
+**Ce qui n'est PAS établi, et pourquoi ça compte.** Le commit `99db4d8` avait retenu que
+« les petits JST de David sont bien des **XH** (pas 2,5 mm) ». Cette vidéo **ne le confirme
+pas**, et soulève même un doute nouveau : dans le compartiment des 4 points, **deux tailles
+de corps cohabitent** (`jst:t0037` : une grosse embase blanche à gauche, des petites à
+droite). Le rangement est fait par nombre de points, **pas par série** — donc au moins deux
+pas sont mélangés dans un même compartiment.
+
+Or **XH (2,5 mm) et Dupont/KF2510 (2,54 mm) sont indiscernables à l'œil**, et il n'y a
+**aucun repère dimensionnel dans toute la vidéo** : pas de règle, pas de pied à coulisse, pas
+de sachet d'origine, aucun marquage moulé lisible. Les contacts nus, eux, sont dans un tiroir
+**mitoyen des boîtiers noirs type Dupont** — présomption plutôt défavorable, et il y a **au
+moins deux géométries de contacts** mélangées.
+
+> **Le test qui règle tout en dix secondes, sans rien mesurer** : prendre un contact de
+> chaque casier et **l'enfoncer dans un boîtier 4 points**. S'il clipse et se verrouille,
+> les trois lignes JST de la nomenclature tombent. Sinon on sait quoi acheter.
+> À défaut : un boîtier 2 points et un 4 points **posés sur un réglet**, lecture du pas.
+
+**Donc la conclusion utile est celle-ci** : on sait maintenant qu'il existe des boîtiers
+4 points et 2 points en quantité largement suffisante (la nomenclature en demande 2 et 1).
+Ce qui reste à trancher n'est plus « en ai-je ? » mais « sont-ils du bon pas ? » — et ça,
+seul l'atelier le dira.
 
 ### 1.3 Un plan B optique existe pour l'odométrie
 
@@ -172,7 +206,8 @@ Confiance : **H** = référence lue ou forme sans ambiguïté · **M** = famille
 |---|---|---|---|---|---|
 | Tampon/level shifter Texas Instruments | `SN74AHCT125N` (lot 2380758) | DIP-14 traversant | ~6-8 | t0006 | H |
 | **Optocoupleurs** | `PC817` + `C202F` (**lu**, logo Sharp) | **DIP-4 traversant** | **plein compartiment, ~60-100** | c0022-c0028 | H |
-| Diodes de redressement | — | DO-41 axial, sur bande | ~50-100 | t0014 | M |
+| **Diodes Schottky `1N5819`** — *étiquette de bande lue le 03/09* | `1N5819` (étiquette manuscrite de bande) | DO-41 axial, encore sur bande | ~20-25 | `v2:t0309`, `v2:t0311` | H |
+| Diodes de redressement (autres bandes) | — ; une 2ᵉ bande n'est lisible qu'en « `007` » — **ne PAS compléter en 1N4007** | DO-41 axial, sur bande | ~50-100 | t0014, `v2:t0309` | M |
 | Diodes signal/Zener (verre, bagues) | — | DO-35 axial, sur bande | ~30-50 | t0014 | M |
 | Transistors, sur bande | `BC547B` (**suffixe lu**, 2 images) | TO-92 | ~10-50 | c0032, c0033 | H |
 | Fusibles verre, triés par taille | — (**calibres non lus**) | cartouche 5×20 **et** 6×30 | **~150-250** | c0639, c0640 | H |
@@ -187,6 +222,7 @@ Confiance : **H** = référence lue ou forme sans ambiguïté · **M** = famille
 
 | Désignation | Référence lue | Boîtier / format | Qté (minorant) | Repère | Conf. |
 |---|---|---|---|---|---|
+| **RÉSISTANCES 1/4 W** — *le bac existe, filmé le 03/09* | Valeurs **lues sur ruban manuscrit** : `47R` (≥2 sachets), `5K`, `100K`, `220K`, `470K` ; `330` probable ; `220R` douteux | axial, ~20 sachets zip, bandes de 20-50 pièces. **2 familles** : couche métallique (corps bleu, majoritaire) et carbone (corps beige/vert) | **plusieurs centaines** | `v2:t0366`-`v2:t0394`, `v2:t0396`-`v2:t0428`, `v2:t0430`-`v2:t0456` | H (présence) / B (valeurs) |
 | **Kit condensateurs électrolytiques, 24 valeurs** | `BOJACK 630 PIECES` | radial 4×7 à 10×16 mm, 105 °C | ~500-630 | t0623 | H |
 | Condensateurs électrolytiques de puissance | `220 µF 250 V`, marque `cheng`, série `CD11X` | radial gros Ø | 3 | t0439 | H |
 | Condensateur d'antiparasitage secteur | `R.46 MKP X2 SH 0,22 µF 310 Vac` | film boîté radial | 1 | t0014 | H |
@@ -227,7 +263,7 @@ Confiance : **H** = référence lue ou forme sans ambiguïté · **M** = famille
 | Cartes format Mega / Uno / Leonardo | *(aucun nom lu)* | formats Arduino | 4-5 | t0442 | M |
 | Clones Arduino Nano | boîte `ELEGOO NANO` | format Nano, USB mini-B | 5-7 | t0309 | H |
 | Raspberry Pi Pico | brochage `GP16…GP28` lu | DIP-40 | 2-3 | t0303 | H |
-| Cartes Teensy — **version non lue** | `Teensy` | 2×14 + pastilles arrière | 3-4 | t0303 | M |
+| Cartes **Teensy 3.2** — *version enfin lue le 03/09* | `Teensy 3.2` (sérigraphie nette : RST, AREF, A10-A12, AGND, VUSB, D+, D−) | 2×14 + pastilles arrière | **2 lues** `3.2` + 1-2 autres non sérigraphiées | t0303, `v2:t0241`, `v2:t0242` | H |
 | Cartes ESP32 LoRa | `HELTEC HTIT-WB32LA` | carte à barrettes | ≥1 | t0294 | H |
 | Carte format Feather | `feather` | format Feather | ≥1 | t0295 | H |
 | Modules radio 2,4 GHz | `NRF24L01` (versions SMA et antenne PCB) | header 2×4 | 3-5 | t0312, t0315 | H |
@@ -243,7 +279,7 @@ Confiance : **H** = référence lue ou forme sans ambiguïté · **M** = famille
 | Adaptateur GPIO Raspberry Pi | `SINTRON ST-009 GPIO Plus` | HAT 40 br. | 1 | t0047 | H |
 | Carte d'alimentation Raspberry Pi | `clean Power`, `GPIO-04` | HAT | 1 | t0047 | H |
 | Adaptateur T-cobbler + nappe 40 c. | — | breadboard | 1 | t0356 | H |
-| Petites cartes bleues **non identifiées** | — | ~2×4 cm, CI central | 20-30 | t0251 | B |
+| Petites cartes bleues — *partiellement identifiées le 03/09* | Un tiroir en contient **5 cartes MCU**, dont `RP2040-One` (Waveshare) et 2 `seeed studio` (famille XIAO probable, **non lue**). **Ce sont des cartes à microcontrôleur, pas des modules d'alimentation** | ~2×4 cm, CI central | 20-30 (le tiroir lu n'en contient que 5 : le reste du lot n'est toujours pas identifié) | t0251, `v2:t0249`, `v2:t0250` | M |
 
 ### 2.4 Alimentation et énergie
 
@@ -274,8 +310,14 @@ Confiance : **H** = référence lue ou forme sans ambiguïté · **M** = famille
 
 | Désignation | Référence lue | Boîtier / format | Qté | Repère | Conf. |
 |---|---|---|---|---|---|
-| **Boîte à 20 compartiments de connecteurs à sertir** | — | JST/Dupont blancs et noirs + **contacts nus** | plusieurs milliers | *photo* | H |
-| Borniers débrochables verts (fiches + embases) | — | **pas non mesuré** (5,08 / 3,81 / 3,5 ?) | **300+**, 4 contenants | t0351, t0370, t0427, t0431 | H |
+| **Boîtiers blancs (femelles) à sertir** — *comptés le 03/09, voir §1.2* | — (aucun marquage lisible) | **2 pts**, rangés par compartiment | **~40-55** | `jst:t0027`, `jst:t0028` | H |
+| ⋯ | — | **3 pts** | ~40-55 | `jst:t0029`, `jst:t0030` | H |
+| ⋯ | — | **4 pts** — ⚠️ deux tailles de corps cohabitent dans le compartiment | **~25-35** | `jst:t0033`, `jst:t0035`, `jst:t0037` | H |
+| **Embases mâles à souder** correspondantes | logo moulé 2 lettres, illisible | 2, 3 et 4 broches, un compartiment chacune | ~35-45 par compartiment | `jst:t0027`-`jst:t0037` | H |
+| Grands boîtiers / embases blancs | — | 5 à 10 points, corps nettement plus massif (pas supérieur, **VH 3,96 ? non vérifié**) | ~30-40 | `jst:t0019`-`jst:t0025` | M |
+| **Contacts nus à sertir** | — | 2 casiers **sur bande** + 1 en **vrac** ; ⚠️ **au moins 2 géométries/tailles mélangées** ; famille **INDÉTERMINABLE** (voir §1.2) | plusieurs centaines | `jst:t0003`-`jst:t0013` | H (présence) / ⛔ (famille) |
+| Boîtiers noirs, **famille distincte** (Dupont/auto) | marquages moulés `BY 30`, `BY 18` | 2, 3 et 4 alvéoles | plusieurs centaines, 4-6 casiers | `jst:t0016`, `jst:t0017` | M |
+| Borniers débrochables verts (fiches + embases) | — ; famille précisée le 03/09 : **débrochables** type Phoenix MSTB / Degson 2EDG, en **2, 3, 4 et 5 pôles**, certaines embases à **oreilles de vissage** (oriente vers 5,08 mm, **non confirmé**) | **pas non mesuré** (5,08 / 3,81 / 3,5 ?) | **300+**, 4 contenants | t0351, t0370, t0427, t0431, `v2:t0193`, `v2:t0203` | H |
 | Borniers à vis fixes pour CI, 2-3 pôles | — | traversant, pas ~5,08 | ~100 | t0431 | H |
 | Barrettes sécables mâles/femelles, droites et coudées | — | 2,54 mm, 1 et 2 rangées | 30-50 barrettes | t0378 | H |
 | Connecteurs IDC + nappes arc-en-ciel | — | 2,54 mm / nappe 1,27 mm | ~50 + plusieurs m | t0363, t0420 | H |
@@ -342,6 +384,10 @@ Ces contenants n'ont **jamais été ouverts**. Tant qu'ils ne le sont pas, l'inv
 ci-dessus est un **minorant**, et le risque de racheter ce qu'on possède reste entier.
 C'est le seul travail qui *augmente* réellement l'inventaire.
 
+> 🔁 **La passe du 03/09 les a tous refilmés, tous encore fermés.** Cinq agents les ont vus
+> passer et aucun n'a pu en dire un mot de plus. **Cette priorité ne bougera pas d'un
+> millimètre par la vidéo** : c'est le seul poste de la liste où filmer ne sert à rien.
+
 0a. **4 à 6 colis d'expédition scellés** posés au sol (`c0550`-`c0558`). Contenu totalement
    inconnu.
 0b. **3 boîtes bleues Cytron** au sol (`c0647`, `c0648`), plus une quatrième manipulée
@@ -354,9 +400,12 @@ C'est le seul travail qui *augmente* réellement l'inventaire.
 
 ### Priorité 1 — bloque une décision en cours
 
-1. **La boîte à connecteurs JST** (*photo*) : y a-t-il des boîtiers **XH 4 points** et
-   **2 points**, et les contacts nus sont-ils bien des **XH** ? Trois lignes de la commande
-   d'odométrie en dépendent (§1.2). Le contrôle le plus rentable du fichier.
+1. ✅🔸 **La boîte à connecteurs JST** — **filmée le 03/09, deux tiers réglés.** Il existe
+   bien des boîtiers **4 points** (~25-35) et **2 points** (~40-55), plus les embases mâles :
+   la quantité est largement couverte. **Ce qui reste est le PAS**, et il ne se lèvera pas
+   par l'image (XH 2,5 vs Dupont 2,54 sont indiscernables, et deux tailles cohabitent dans le
+   même compartiment). **Le geste** : enfoncer un contact de chaque casier dans un boîtier
+   4 points — s'il verrouille, trois lignes de commande tombent. Détail en §1.2.
 2. **Compter les capteurs `LJ12A3-4-Z/BX`** (`t0495`) : 3 vus, 6 annoncés par l'étude.
    L'écart porte sur la **marge de rechange**, pas sur la faisabilité. Trente secondes.
 3. **Filetage des entretoises laiton** (`t0630`) : M2.5 ou M3 ? Un pied à coulisse, ou une
@@ -364,6 +413,10 @@ C'est le seul travail qui *augmente* réellement l'inventaire.
 4. **Pas des borniers verts** (`t0351`, `t0427`, `t0431`) : c'est le plus gros stock de
    connectique du lot (300+ pièces réparties sur 4 contenants) et il est **inexploitable**
    tant que le pas n'est pas mesuré. Une mesure par contenant.
+   *Refilmé le 03/09 sans résultat* : la famille est précisée (débrochables 2/3/4/5 pôles,
+   type Phoenix MSTB / Degson 2EDG, embases à oreilles → 5,08 mm plausible) mais **aucune
+   des trois vidéos n'a jamais montré une règle dans le cadre**. C'est le pied à coulisse
+   ou rien.
 5. **Référence du 2ᵉ driver Cytron** (`t0599`), noyée dans un reflet. La gamme Cytron va de
    quelques ampères à 30 A : la ligne est sans valeur tant qu'elle n'est pas lue.
 
@@ -384,8 +437,10 @@ C'est le seul travail qui *augmente* réellement l'inventaire.
 
 ### Priorité 3 — précisions utiles
 
-9. Version des **Teensy** (`t0303`) — 3.x ou 4.x change la tolérance 5 V des E/S. À traiter
-   comme un point de sécurité si une Teensy devait un jour approcher le chemin roues.
+9. ✅ **Version des Teensy — LEVÉE le 03/09** : ce sont des **`Teensy 3.2`** (2 exemplaires
+   sérigraphiés ; 1-2 autres cartes de la même famille sans version visible). Conséquence
+   retenue telle quelle : la 3.2 est en **3,3 V avec E/S tolérantes 5 V**, contrairement aux
+   4.x. Le point de sécurité reste valable pour les cartes non sérigraphiées.
 10. Pas des **connecteurs JST blancs** (`t0073`, `t0363`, `t0327`) : PH 2,0 vs XH 2,5. Le
     stock existe en masse mais reste incommandable sans cette mesure.
 11. Référence du **TO-220 isolé** (`t0039`), du **module ampli** (`t0241`, puce sous capot),
@@ -411,17 +466,33 @@ quel ordre, et pourquoi le précédent étiquetage n'a pas tenu — est dans
 « repère » de ce fichier devient une **adresse**, et l'inventaire cesse d'être un
 dépouillement pour devenir un vrai inventaire.
 
-### Limite n° 2 : le passif de base n'a pas été filmé
+### Limite n° 2 : le passif de base — résistances TROUVÉES, céramiques toujours absentes
 
-**Aucun bac de résistances n'apparaît dans les 130 images.** Aucun bac de condensateurs
-céramiques non plus (hors le kit BOJACK, qui est un kit d'électrolytiques). C'est
-invraisemblable pour un atelier de ce volume : ces bacs existent forcément, la caméra ne
-les a simplement pas croisés.
+*(Rédigé après la passe de rattrapage du 03/09, qui visait précisément cette limite.)*
 
-Conséquence directe : les lignes « R 1,5 kΩ / 10 kΩ » et « C 10 nF » de la nomenclature
-odométrie sont marquées « à acheter » **par absence de preuve, pas par preuve d'absence**.
-Un plan de 30 s sur le rangement des résistances et des céramiques réglerait probablement
-plusieurs lignes de commande d'un coup — c'est le complément le plus rentable à filmer.
+**Résistances : le bac existe, et il est riche.** Il occupe ~40 % de la vidéo de rattrapage
+(trois segments). Une boîte compartimentée, **~20 sachets zip**, chacun une bande de 20 à 50
+résistances 1/4 W, deux familles (couche métallique bleue, carbone beige). **Plusieurs
+centaines de pièces.** La ligne « à acheter par absence de preuve » n'a donc plus lieu d'être.
+
+**Mais seulement 7 valeurs sont lisibles sur ~20 sachets** — et l'échec est purement un
+**problème de prise de vue**, identifié à l'identique par les trois agents qui ont lu les
+trois segments sans se connaître :
+
+- les sachets sont filmés **empilés à plat, ruban manuscrit tourné vers le fond** ;
+- quand le ruban est visible, il est **coupé par le bord du cadre** (`v2:t0417`), **masqué
+  par le pouce** (`v2:t0426`), ou **vierge de ce côté-là** (`v2:t0441`, `v2:t0449`).
+
+C'est la leçon de tournage la plus utile du chantier : **la netteté ne suffit pas, c'est
+l'orientation de l'étiquette qui décide.** Un plan fixe de 2 s par sachet, ruban face
+caméra, vaut mieux qu'un panoramique de 30 s sur le bac entier.
+
+**Céramiques : toujours rien, deux passes de suite.** Aucun condensateur céramique
+(pastille) sur les 161 images. Les seuls condensateurs vus sont électrolytiques, film bleus
+MKT, et un X2 secteur. Le seul candidat est le kit **BOJACK 630**, mais la passe 1 avait déjà
+lu son tableau de valeurs (`100 µF 25 V 5×11`, `t0625`) : **c'est un kit d'électrolytiques**,
+il ne couvre pas le 10 nF. La ligne « C 10 nF céramique » reste donc à acheter — sauf si un
+bac de céramiques existe quelque part et n'a jamais croisé la caméra.
 
 ### Piège documenté : les sachets sont réemployés
 
@@ -434,8 +505,16 @@ sans avoir vu l'intérieur.
 
 ## 4. Méthode, et comment compléter
 
-**Source** : `docs/pictures/stock/VID_20260902_235700.mp4` (10 min 50 s, 1080p60, muette —
-David ne commente pas) et `IMG_20260903_000903.jpg` (boîte de connecteurs à sertir).
+**Sources** (toutes muettes — David ne commente pas ; toutes hors dépôt, voir « Où sont les
+médias ») :
+
+| Vidéo | Durée | Objet | Images lues | Préfixe |
+|---|---|---|---|---|
+| `VID_20260902_235700.mp4` | 10 min 50 | balayage général de l'atelier | 427 / 650 | *(aucun)* |
+| `VID_20260903_195647.mp4` | 7 min 39 | **rattrapage** des trous de la §3 | 161 / 918 | `v2:` |
+| `VID_20260903_212321.mp4` | 39 s | **boîte à connecteurs JST**, ciblée | 31 / 119 | `jst:` |
+
+Plus `IMG_20260903_000903.jpg` (photo de la boîte de connecteurs, antérieure à la vidéo JST).
 
 **Dépouillement, en deux passes** :
 - *Passe 1* — extraction à 1 image/s (650 images), puis sélection automatique de **l'image la
@@ -459,18 +538,49 @@ l'étiquette `187-LJ12A3-4-Z/BX` de `t0495` se lit de gauche à droite dans le b
 textes « inversés » sont des objets posés à l'envers ou vus par transparence. **Les
 indications gauche/droite du dépouillement restent valides.**
 
-**Où sont les médias.** La vidéo (1,6 Go) a été **sortie de Nextcloud** — elle est dans
-`~/Vidéos/didier-atelier/` — pour ne pas faire synchroniser 1,6 Go à chaque poste. Restent
-sous `docs/pictures/stock/` (gitignoré, le dépôt est public) les **427 images lues**
-(`best/` + `complement/`, 162 Mo) et la photo. Les images sources brutes ont été supprimées :
-elles se régénèrent en une commande depuis la vidéo —
+**Où sont les médias.** Les **trois vidéos** (1,6 Go + 1,17 Go + 97 Mo) sont **hors
+Nextcloud**, dans `~/Vidéos/didier-atelier/`, pour ne pas faire synchroniser 3 Go à chaque
+poste. Restent sous `docs/pictures/stock/` (gitignoré, le dépôt est public) les images lues
+et la photo. Les images sources brutes se régénèrent en une commande —
 
 ```bash
 ffmpeg -v error -i ~/Vidéos/didier-atelier/VID_20260902_235700.mp4 \
        -vf "fps=1,scale=1600:-1" -q:v 2 frames_all/a_%04d.jpg -y
 ```
 
-**Pour compléter** : refilmer les points de la section 3 **en gros plan, à plat, sans
-flash** (lumière rasante), un objet par plan, et relancer le même dépouillement. Un plan
-fixe de 3 s vaut mieux qu'un panoramique de 30 s : c'est la netteté qui décide, pas la
-durée.
+**Passes du 03/09** — même chaîne, deux réglages : extraction à **2 img/s** (rattrapage) et
+**3 img/s** (JST, plus court donc plus dense), sélection de la plus nette par fenêtre de 2 s
+puis de 1 s, **et un filtre de nouveauté par dHash** ajouté cette fois — un panoramique lent
+repasse plusieurs secondes sur la même scène, sans quoi on paie plusieurs fois la lecture de
+la même étagère. Script : `docs/pictures/stock/v2/select.py`. Rapports bruts des agents :
+`docs/pictures/stock/v2/notes-passe-v2.md` (gitignoré).
+
+Sur la vidéo JST, **deux agents ont lu des lots qui se recouvrent partiellement** : leurs
+comptages d'alvéoles concordent, ce qui est la validation croisée la plus forte du fichier.
+
+> ### ⚠️ Règle de synthèse : une lecture d'agent n'est pas une découverte
+>
+> Les agents de lecture d'images sont tenus **aveugles** à ce fichier — sinon ils « voient »
+> ce qu'on leur suggère. En contrepartie, **la synthèse doit confronter chaque rapport aux
+> tables §2 avant d'écrire quoi que ce soit.** Le 03/09, ce test a évité de présenter comme
+> neuf ce qui était déjà acquis (module d'alim USB `SKU:705106991534`, `DS3231`, `PCA9685`,
+> `MH-Sensor-Series`, Nano ELEGOO) — et surtout d'écrire deux **régressions** : les agents v2
+> ont déclaré la référence Cytron et le PCA9685 « illisibles » alors que la passe 1 les avait
+> **lus** (`Cytron MDDS30`, `t0600`). Une passe plus récente n'est pas une passe mieux
+> informée.
+
+### Leçon de tournage (la plus utile du chantier)
+
+La netteté ne suffit pas : **c'est l'orientation de l'étiquette qui décide.** Le bac de
+résistances a été filmé longuement, nettement — et n'a livré que 7 valeurs sur 20 sachets,
+parce que les rubans étaient tournés vers le fond, coupés par le cadre ou sous un doigt.
+De même, aucune des trois vidéos n'a jamais montré **une règle dans le champ**, ce qui laisse
+le pas des borniers et des JST indéterminé malgré des centaines d'images.
+
+Donc, pour la prochaine passe :
+
+1. **Un plan fixe de 2-3 s par contenant**, pas de panoramique.
+2. **L'étiquette face caméra**, à plat, retournée si besoin. Doigts hors du texte.
+3. **Une règle ou un pied à coulisse dans le cadre** dès qu'un pas ou un filetage compte.
+4. Lumière rasante, pas de flash.
+5. Et surtout : **ce qui est dans une boîte fermée ne se filme pas — ça s'ouvre.** Voir §3.

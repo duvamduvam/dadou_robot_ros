@@ -172,9 +172,14 @@ routeur 4G). Ce qui suit ne vaut que **sauf présence sur le robot**.
    réemployé — `rangement-atelier.md` §3.1e.)
 2. **Les valeurs manquent partout.** Trimmers sans valeur, fusibles sans calibre, relais sans
    tension de bobine, cosses sans largeur, borniers sans pas. C'est le même angle mort que la
-   « limite n° 2 » de l'inventaire (résistances et céramiques jamais filmées). **Une pièce
-   dont on ne connaît pas la valeur ne dispense pas d'acheter** — elle oblige juste à
-   mesurer avant.
+   « limite n° 2 » de l'inventaire. **Une pièce dont on ne connaît pas la valeur ne dispense
+   pas d'acheter** — elle oblige juste à mesurer avant.
+
+   > **Les trois vidéos du 03/09 ont confirmé que cet angle mort ne se ferme pas par
+   > l'image.** On a filmé le bac de résistances sous trois angles pendant 40 % d'une vidéo :
+   > la présence est acquise, les valeurs non. On a filmé les borniers verts dans cinq lots
+   > différents : le pas reste inconnu. **Ce qui manque n'est pas de la pellicule, c'est un
+   > pied à coulisse et des étiquettes retournées face caméra.**
 
 ---
 
@@ -182,13 +187,21 @@ routeur 4G). Ce qui suit ne vaut que **sauf présence sur le robot**.
 
 À faire pendant l'étiquetage, le bac en main (s'ajoute à `inventaire-stock.md` §3) :
 
-1. **Filmer le robot** (§2) — c'est devenu le point n° 1 : `overview.md` a des trous
-   prouvés (le routeur 4G), et deux fausses lignes d'achat en sont déjà sorties.
+1. ✅ **Filmer le robot** (§2) — **FAIT le 03/09** : `docs/hardware/robot-embarque.md`.
 2. **Lire sur le `YH02-A`** : accrochage ? contacts NO/NF ? **calibre DC** ? Trois questions
    qui décident s'il a une place quelconque dans un schéma (§1).
 3. **Lire sur les modules relais** : calibre des contacts et tension de bobine (§1).
 4. **Lire le calibre du coupe-circuit à goujons** `c0163`/`c0165` — c'est potentiellement le
    sectionneur de consignation du robot, gratuitement.
 5. **Lire les valeurs des trimmers** `t0147` (~50) — débloque le pad du banc voix.
-6. **Filmer le bac de résistances et de céramiques** — débloque à la fois l'odométrie et le
-   pad voix. Trente secondes, le meilleur rapport de toute la liste.
+6. 🔸 **Le bac de résistances — filmé le 03/09, à moitié seulement.** Le bac **existe**
+   (~20 sachets, plusieurs centaines de pièces) mais **7 valeurs seulement sont lisibles** :
+   les rubans manuscrits étaient tournés vers le fond. À refilmer **sachet par sachet, ruban
+   face caméra, 2 s par sachet**. Les **céramiques**, elles, n'ont toujours jamais été
+   filmées. Reste le meilleur rapport effort/gain de la liste.
+7. **Le test JST à dix secondes** (`inventaire-stock.md` §1.2) : enfoncer un contact de
+   chaque casier dans un boîtier 4 points. S'il verrouille, **trois lignes** de la
+   nomenclature d'odométrie tombent. C'est le geste le plus rentable de tout le chantier.
+8. **Le pied à coulisse**, une fois sorti, règle d'un coup : le pas des **borniers verts**
+   (300+ pièces inexploitables sans lui), celui des **boîtiers JST**, et le filetage des
+   **entretoises laiton** (M2.5 vs M3). Trois angles morts, un seul outil.

@@ -844,7 +844,7 @@ en conversation réelle (avec le chantier 0).
 
 ## Fond de tiroir (pas urgents, pas oubliés)
 
-- **INVENTAIRE DU STOCK DE COMPOSANTS** — *premier jet FAIT le 03/09* :
+- **INVENTAIRE DU STOCK DE COMPOSANTS** — *3 vidéos dépouillées le 03/09* :
   `docs/hardware/inventaire-stock.md`. Motif du chantier : en deux heures, le
   stock avait démenti deux fois la liste de courses — les 74AHCT125 (achetés
   pour les rubans LED, ils règlent la piste *level shifter* laissée ouverte par
@@ -865,16 +865,47 @@ en conversation réelle (avec le chantier 0).
   audio à transformateurs** (ronflement secteur) et un **BNO055 neuf**.
   **Plan de marquage et de rangement** : `docs/hardware/rangement-atelier.md`
   (établi 03/09, étiqueteuse Marklife P15).
-  **Suite, dans l'ordre** : (0) **ouvrir ce qui n'a jamais été ouvert** — 4-6
-  colis scellés, 3 boîtes Cytron, sachets ESD : c'est le seul travail qui
-  *augmente* l'inventaire ; (1) les 5 vérifications de la priorité 1 (§3), que
-  seul David peut faire, à commencer par les **boîtiers/contacts JST-XH**.
+  **DEUXIÈME ET TROISIÈME PASSES — le soir du 03/09**, David a refilmé les zones
+  manquantes : une vidéo de **rattrapage** (7 min 39 → 161 images, préfixe `v2:`)
+  et une vidéo **ciblée sur la boîte JST** (39 s → 31 images, préfixe `jst:`).
+  Ajout méthode : filtre de **nouveauté par dHash** (un panoramique lent repasse
+  sur la même scène pendant plusieurs secondes — sans ça on paie plusieurs fois
+  la même étagère). Sur les JST, **deux agents aux lots recouvrants concordent**.
+  **Ce que ça a levé** : ① la **boîte JST** — il existe bien des boîtiers
+  **4 points (~25-35)** et **2 points (~40-55)** plus les embases mâles, donc la
+  quantité des 3 lignes d'odométrie est couverte ; ② **`1N5819`** lu sur bande
+  → rien à acheter ; ③ **`Teensy 3.2`** (version enfin lue) ; ④ le **bac de
+  résistances existe** — ~20 sachets, **plusieurs centaines** de pièces ; ⑤ les
+  « petites cartes bleues » sont des **cartes MCU/RP2040**, pas des alims.
+  **Ce que ça n'a PAS levé, et pourquoi c'est instructif** : ⓐ **le PAS** — ni
+  celui des JST (XH 2,5 vs Dupont 2,54 : indiscernables, et deux tailles
+  cohabitent dans le même compartiment) ni celui des **borniers verts**, parce
+  qu'**aucune des trois vidéos n'a jamais montré une règle dans le cadre** ;
+  ⓑ les **valeurs** des résistances — 7 lisibles sur ~20 sachets, rubans tournés
+  vers le fond, coupés par le cadre ou sous un doigt ; ⓒ les **céramiques**,
+  toujours jamais filmées ; ⓓ tous les **contenants scellés**, refilmés fermés.
+  **Leçon de tournage consignée** (§4) : la netteté ne suffit pas, c'est
+  l'**orientation de l'étiquette** qui décide — plan fixe de 2 s, étiquette face
+  caméra, règle dans le cadre dès qu'un pas compte. **Et ce qui est dans une
+  boîte fermée ne se filme pas, ça s'ouvre.**
+  ⚠️ **Garde-fou de synthèse ajouté** : les agents sont tenus aveugles au fichier
+  (sinon ils « voient » ce qu'on leur suggère), donc **la synthèse doit
+  confronter leurs rapports aux tables avant d'écrire**. Ça a évité de présenter
+  comme neuf ce qui était acquis (alim USB, `DS3231`, `PCA9685`, Nano ELEGOO) et
+  surtout deux **régressions** : les agents v2 ont dit « Cytron illisible » et
+  « PCA9685 non lu » alors que la passe 1 les avait **lus** (`Cytron MDDS30`).
+  Une passe plus récente n'est pas une passe mieux informée.
+  **Suite, dans l'ordre** : (0) **ouvrir ce qui n'a jamais été ouvert** — colis
+  scellés, boîtes Cytron, sachets ESD : c'est le seul travail qui *augmente*
+  l'inventaire, et la vidéo n'y peut plus rien ; (1) **le test JST à 10 s** —
+  enfoncer un contact de chaque casier dans un boîtier 4 points : s'il verrouille,
+  trois lignes de commande tombent ; (2) **le pied à coulisse** sur les borniers
+  verts ; (3) **refilmer le bac de résistances sachet par sachet**, ruban face
+  caméra, pour chercher les 1,5 kΩ et 10 kΩ.
   **Bonne surprise structurelle** : tous les bacs ont un **porte-étiquette moulé
   d'origine, tous vides** — rien à acheter. Et le tri par famille existe déjà à
   la maille du bac : il n'y a quasiment pas de retri à faire, seulement à
-  adresser. **Verrou restant** : les bacs de **résistances et de céramiques
-  n'ont pas été filmés**, donc leurs lignes sont « à acheter » par absence de
-  preuve, pas par preuve d'absence.
+  adresser.
 - **INVENTAIRE DU ROBOT (le filmer)** — ouvert le 03/09, **PREMIÈRE PASSE FAITE
   le soir même** : `docs/hardware/robot-embarque.md` (vidéo de 3 min 05 s, 139
   images lues sur 185, 14 agents). Motif d'origine : le croisement de
