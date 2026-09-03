@@ -1,5 +1,14 @@
 # Hardware Overview
 
+> **Ce fichier décrit l'architecture PRÉVUE et les choix de conception.** Ce qui est
+> réellement vissé dans le robot, relevé en le filmant, est dans
+> **`robot-embarque.md`** (première passe le 2026-09-03). Les deux ne coïncident pas
+> partout — quand ils divergent, c'est le relevé filmé qui décrit le robot, et l'écart
+> vaut la peine d'être compris avant d'être « corrigé » dans un sens ou dans l'autre.
+> Écarts déjà connus : le routeur 4G manquait ici (ajouté ci-dessous), l'« octaver » est
+> un TC Helicon à molette `GENDER`, et la transmission des roues se fait **par chaîne**,
+> ce qui n'est décrit nulle part.
+
 ## Physical Specification
 - Weight: ~50 kg wood & metal frame
 - Mobility: two driven wheels, stabilised by the controller commands
@@ -796,6 +805,23 @@ The cased array is a ~13 × 14 × 5 cm puck, 300 g. How it is fixed decides whet
 - Its **12-LED ring shows the DoA** — potentially a listening signal for the public, but the LED
   face already plays that role; do not let it contradict the face.
 
+## Network
+
+### 4G router — Teltonika RUT9xx (ON BOARD, référence lue le 2026-09-03)
+
+Le robot embarque un **routeur 4G Teltonika de la gamme RUT9xx** (étiquette constructeur
+lue au repère `t0108` de la vidéo du 03/09 ; le dernier chiffre du modèle est coupé).
+C'est lui qui porte le lien de la télé-présence (chantier interface web) et du
+télédiagnostic.
+
+Cette entrée corrige un trou qui a coûté cher : le routeur était **sur le robot depuis
+toujours mais absent de ce fichier**, ce qui a conduit le croisement du 03/09 à le classer
+« à acheter » (post-mortem : `croisement-etudes.md` §2).
+
+⚠️ **Sur les images, il est suspendu par ses propres câbles, sans fixation visible.** Dans
+un robot de 50 kg qui roule et vibre, c'est un point de fiabilité à reprendre — et le
+modèle exact reste à lire.
+
 ## Devices
 All motors are driven by an I2C PCA9685 PWM board attached to the Raspberry Pi 4, reducing wiring complexity and electrical load on the Pi.
 ![PCA9685 PWM driver](../../docs/pictures/consumable-parts/PCA9685.png)
@@ -808,6 +834,16 @@ The I2C signal from the Pi is isolated with an ISO1540 STEMMA bidirectional isol
 ### Wheels differential drive
 ![Wheel system](../../docs/pictures/wheel-motor.jpg)
 *Wheel assemblies and mounting hardware.*
+
+> ⚠️ **La transmission se fait PAR CHAÎNE, pas en prise directe** (constaté le 2026-09-03,
+> repères `t0000`, `t0173`, `t0174` : chaîne à rouleaux sur un pignon solidaire du moyeu,
+> descendant vers le bloc moteur-réducteur ; une courroie crantée est vue par ailleurs en
+> `t0081`). Ce fait n'était décrit nulle part.
+>
+> **Conséquence pour l'odométrie** : le firmware Pico compte des cibles sur un disque, mais
+> la conversion en mètres dépend de **toute** la chaîne cinématique. Tant que le nombre de
+> dents du pignon moteur et du pignon roue n'est pas relevé, l'odométrie sortira des
+> distances fausses — d'un facteur constant, donc silencieusement crédible.
 
 The PWM signal feeds a Cytron SmartDrive 40 A motor driver (10–45 V) that powers the wheel motors.
 ![Cytron SmartDrive motor driver](../../docs/pictures/consumable-parts/smartdrive.png)

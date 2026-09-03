@@ -33,14 +33,14 @@ la seule adresse dont on dispose — voir « Limite n° 1 » plus bas.
 > ## ⚠️ PÉRIMÈTRE — à lire avant de conclure qu'une pièce manque
 >
 > **Ce fichier ne couvre QUE le stock d'atelier** (bacs, tiroirs, colis). Le matériel
-> **déjà monté sur le robot n'y est pas**, par construction : il n'a jamais été filmé.
+> **déjà monté sur le robot n'y est pas**, par construction.
 >
 > Le projet a **trois** gisements de matériel :
 >
 > | Gisement | Où c'est écrit |
 > |---|---|
 > | Stock d'atelier | **ce fichier** |
-> | Matériel embarqué sur le robot | `docs/hardware/overview.md` (incomplet — voir ci-dessous) |
+> | Matériel embarqué sur le robot | `docs/hardware/robot-embarque.md` (relevé filmé du 03/09) + `docs/hardware/overview.md` (l'architecture prévue) |
 > | Pièces ayant une CAO dédiée (donc possédées et intégrées) | `~/Nextcloud/dev/didier/plans/` |
 >
 > **« Absent de ce fichier » ne veut PAS dire « à acheter ».** L'erreur a déjà été commise
@@ -49,8 +49,12 @@ la seule adresse dont on dispose — voir « Limite n° 1 » plus bas.
 > même documenté sur 140 lignes dans `overview.md` et pourvu d'un support imprimé en 3D.
 > Post-mortem : `docs/hardware/croisement-etudes.md` §2.
 >
-> Et `overview.md` a lui-même des trous : le routeur 4G n'y figure pas. **Le robot reste
-> à filmer.**
+> ✅ **Le robot a été filmé le 2026-09-03** — le troisième gisement existe enfin :
+> `robot-embarque.md`. Il a immédiatement donné la référence du routeur 4G
+> (`TELTONIKA RUT9…`), qui manquait à `overview.md`. **Mais la symétrie tient : « absent de
+> `robot-embarque.md` » ne veut pas dire « pas sur le robot »** — la vidéo est un gros plan
+> flou pris pendant un démontage, et le pack batterie, par exemple, n'y apparaît nulle part
+> alors qu'il est bien là, au fond de la caisse.
 
 ---
 
