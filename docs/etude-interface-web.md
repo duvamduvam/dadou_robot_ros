@@ -232,6 +232,18 @@ le backend et le VPN s'ajoutent.
    le télé-pilotage l'intéresse mais restera **ponctuel** — le §4 parlait de
    « ≥ 50 Go » par prudence, c'est un plafond, pas un besoin. Un « mode économe »
    (320×240, 5 i/s) reste à mesurer comme repli en salle mal couverte.
+   *(e)* **DÉCIDÉ ET COMMANDÉ le 2026-09-05** (commande Sosh `X040972152`) :
+   **Sosh 200 Go 5G à 15,99 € + option Multi-SIM « extra » à 5 €**, soit
+   ~20,99 €/mois, **avec portabilité du numéro Free** (RIO fourni) — donc la
+   ligne Free disparaît. Écart assumé avec *(b)* : l'enveloppe partagée cessait
+   d'être un piège à 200 Go, et David voulait aussi une SIM data autonome au
+   bureau. **Conséquence pour le robot : la 2ᵉ SIM part au travail, le robot
+   n'en a donc PAS encore.** Deux issues, à trancher quand le compte MySosh sera
+   actif : soit une 2ᵉ option Multi-SIM se cumule (l'option « Internet + 1Go »
+   par-dessus l'« extra » — cumul NON vérifié, les sources tierces se
+   contredisent et la page Sosh est derrière l'authentification), soit il faut
+   une ligne data séparée pour le flight case. À noter : tout sur un seul
+   opérateur fait perdre l'assurance « deux réseaux » du routeur dual-SIM (§4).
 8. **Arbitrage `neck`** (animations ↔ gaze ↔ panneau technique web) — problème
    existant, aggravé par chaque nouvelle source ; à traiter au plus tard en W3.
 9. **Risque résiduel assumé** : en V1, aucune détection d'obstacles embarquée — la
