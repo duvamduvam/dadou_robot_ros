@@ -76,6 +76,11 @@ mouvement au-delà d'un seuil** (à fixer à la mesure, ordre de grandeur 250 ms
   ≥ 50 Go/mois). Le robot, le Pi vision et le téléphone du référent s'y accrochent :
   même réseau partout, répétable chez soi à l'identique, zéro dépendance au wifi du
   lieu. Point de vigilance par lieu : la couverture 4G (checklist d'installation, §7).
+  **Le routeur existe déjà et il est DUAL-SIM** : `TELTONIKA RUT9…` relevé sur le
+  robot (`hardware/robot-embarque.md` §1.5) ; toute la famille RUT950/955/956 a
+  deux emplacements SIM avec bascule automatique (failover). Deux SIM de
+  **réseaux différents** (ex. Orange + SFR) sont donc la parade matérielle au
+  risque « salle mal couverte » — à activer si une salle le justifie, pas d'office.
 - **VPN : Headscale auto-hébergé** (protocole Tailscale, serveur de coordination à
   nous) sur un **serveur existant de David** — lequel : à préciser (prérequis : IP
   publique fixe, capacité à héberger le relais DERP intégré — indispensable pour
@@ -210,6 +215,23 @@ le backend et le VPN s'ajoutent.
 6. **Charge machines** — backend sur le Pi 4 (à côté du tick 20 Hz) et MJPEG sur le
    Pi 5 : à mesurer, logs de boucle chaude déjà en place.
 7. **Forfait data** — dimensionner après mesure du débit MJPEG retenu.
+   **Défriché le 2026-09-05** (sources lues ce jour, prix à revérifier avant de
+   souscrire) : *(a)* **Free ne propose AUCUNE option multi-SIM** — position
+   assumée de l'opérateur, pas une limite du forfait de David : impossible d'y
+   rattacher une SIM data pour le routeur. *(b)* **Sosh la propose** (5 €/mois
+   + 10 € de mise en service, forfait ≥ 20 Go requis), mais l'enveloppe est
+   **PARTAGÉE avec le forfait téléphone** : 2 h de télé-présence = 2-4 Go pris
+   sur la ligne perso, et le robot devient dépendant de l'abonnement personnel.
+   **Piste retenue : ligne data DÉDIÉE au robot**, sans engagement (~7-12 €/mois
+   pour 100-200 Go chez les MVNO) — même budget, sans le couplage.
+   *(c)* **Seul le flux MJPEG dimensionne le forfait.** Les éventuelles photos de
+   contexte envoyées à un LLM pèsent des dizaines de Ko : négligeables en data
+   (leur coût est en tokens, borné côté conversation — voir
+   `etude-declenchement-conversation.md` §8.6).
+   *(d)* **Cible chiffrée : 20 à 50 Go/mois.** David a précisé le 2026-09-05 que
+   le télé-pilotage l'intéresse mais restera **ponctuel** — le §4 parlait de
+   « ≥ 50 Go » par prudence, c'est un plafond, pas un besoin. Un « mode économe »
+   (320×240, 5 i/s) reste à mesurer comme repli en salle mal couverte.
 8. **Arbitrage `neck`** (animations ↔ gaze ↔ panneau technique web) — problème
    existant, aggravé par chaque nouvelle source ; à traiter au plus tard en W3.
 9. **Risque résiduel assumé** : en V1, aucune détection d'obstacles embarquée — la

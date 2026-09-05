@@ -422,6 +422,27 @@ chat_node V2 (chantier 0) doit passer d'abord.**
    modération).
 5. **Sortie son en rue** (puissance, intelligibilité) : mesurée en D0,
    matériel à trancher seulement si insuffisant.
+6. **Contexte VISUEL de la conversation** — question soulevée le 2026-09-05,
+   NON tranchée. Aujourd'hui la conversation est **100 % audio** : vérifié dans
+   `conversation.py`, aucune image n'est jamais envoyée au LLM. Donner à Didier
+   « ce qu'il voit » (un homme seul, une casquette rouge, un groupe d'enfants)
+   suppose d'envoyer des images à un modèle de vision — et c'est là que le coût
+   dérape si on le fait mal. **Garde-fous à respecter le jour où on l'ouvre** :
+   - **Le local décide QUAND, le cloud ne voit QU'UNE image.** MediaPipe tourne
+     déjà en permanence sur le Pi 5 (~24 % CPU, coût nul) et fournit présence,
+     azimut, distance, persistance : c'est l'essentiel du contexte, gratuitement.
+     Une image ne part QU'au basculement ENGAGED (§2), jamais en flux.
+   - **Plafonds DANS LE CODE, pas dans l'intention** : jamais hors ENGAGED,
+     délai minimal entre deux images, maximum par session. Même logique que le
+     deadman roues — une limite qu'on espère n'est pas une limite.
+   - **Compteur d'images par session, loggué** (boîte noire du télédiagnostic) :
+     le coût réel se LIT après une déambulation, il ne se devine pas.
+   - La fluidité perçue ne vient PAS de la fréquence des images : elle vient du
+     gaze, déjà validé en réel — Didier suit du regard en local, donc il a l'air
+     de regarder en continu. L'image n'a besoin d'exister qu'au moment où il
+     ouvre la bouche.
+   - En data 4G, ces images sont négligeables (quelques dizaines de Ko) : elles
+     ne dimensionnent PAS le forfait (`etude-interface-web.md` §9.7).
 
 ## 9. Journal des mesures et décisions
 
