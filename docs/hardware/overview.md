@@ -810,20 +810,24 @@ The cased array is a ~13 × 14 × 5 cm puck, 300 g. How it is fixed decides whet
 
 ## Network
 
-### 4G router — Teltonika RUT9xx (ON BOARD, référence lue le 2026-09-03)
+### 4G router — Teltonika **RUT955** (ON BOARD, modèle confirmé le 2026-09-13)
 
-Le robot embarque un **routeur 4G Teltonika de la gamme RUT9xx** (étiquette constructeur
-lue au repère `t0108` de la vidéo du 03/09 ; le dernier chiffre du modèle est coupé).
-C'est lui qui porte le lien de la télé-présence (chantier interface web) et du
-télédiagnostic.
+Le robot embarque un **routeur 4G Teltonika RUT955**. L'étiquette lue au repère `t0108` de
+la vidéo du 03/09 ne donnait que `TELTONIKA` + `RUT9…` (dernier chiffre coupé) ; **David a
+relu l'étiquette sur pièce le 13/09 : c'est un RUT955**. C'est lui qui porte le lien de la
+télé-présence (chantier interface web) et du télédiagnostic.
 
 Cette entrée corrige un trou qui a coûté cher : le routeur était **sur le robot depuis
 toujours mais absent de ce fichier**, ce qui a conduit le croisement du 03/09 à le classer
 « à acheter » (post-mortem : `croisement-etudes.md` §2).
 
-⚠️ **Sur les images, il est suspendu par ses propres câbles, sans fixation visible.** Dans
-un robot de 50 kg qui roule et vibre, c'est un point de fiabilité à reprendre — et le
-modèle exact reste à lire.
+**Montage** : le routeur est **fixé sur un support existant, à droite**. ⚠️ Ce paragraphe
+a longtemps affirmé l'inverse (« suspendu par ses propres câbles, sans fixation
+visible ») — **c'était une erreur de lecture d'image**, démentie sur pièce le 13/09 : le
+gros plan de démontage cadrait hors du support. Même piège que le ReSpeaker (§
+`croisement-etudes.md` §2) : *une absence à l'image n'est pas une absence sur le robot*.
+Le support existant est néanmoins jugé perfectible ; un support imprimé de remplacement
+est en conception (dossier CAO hors dépôt : ~/Nextcloud/dev/didier/plans/).
 
 ## Devices
 All motors are driven by an I2C PCA9685 PWM board attached to the Raspberry Pi 4, reducing wiring complexity and electrical load on the Pi.

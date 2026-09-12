@@ -76,8 +76,9 @@ mouvement au-delà d'un seuil** (à fixer à la mesure, ordre de grandeur 250 ms
   ≥ 50 Go/mois). Le robot, le Pi vision et le téléphone du référent s'y accrochent :
   même réseau partout, répétable chez soi à l'identique, zéro dépendance au wifi du
   lieu. Point de vigilance par lieu : la couverture 4G (checklist d'installation, §7).
-  **Le routeur existe déjà et il est DUAL-SIM** : `TELTONIKA RUT9…` relevé sur le
-  robot (`hardware/robot-embarque.md` §1.5) ; toute la famille RUT950/955/956 a
+  **Le routeur existe déjà et il est DUAL-SIM** : c'est un **`TELTONIKA RUT955`**
+  (modèle confirmé sur pièce le 2026-09-13 ; le relevé filmé du 03/09 ne donnait que
+  `RUT9…`, dernier chiffre coupé — `hardware/robot-embarque.md` §1.5). Le RUT955 a
   deux emplacements SIM avec bascule automatique (failover). Deux SIM de
   **réseaux différents** (ex. Orange + SFR) sont donc la parade matérielle au
   risque « salle mal couverte » — à activer si une salle le justifie, pas d'office.

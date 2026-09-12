@@ -37,7 +37,7 @@ journal de bord illisible).*
 | **0. Conversation (chat_node V2)** | code COMPLET, validé sim ; jamais testé matériel ; **gate « source audio vivante » FAIT le 30/08** (dernier verrou de code levé — 198 tests vision) ; ⚠️ **NOUVEAU VERROU, ÉLECTRIQUE : ronflement secteur du Pi 5** (plancher −21,5 dBFS, l'entrée écrête ; un humain à 3 m est 11 dB SOUS le bruit) | **1) alimenter le Pi 5 sur batterie** (source confirmée le 30/08) — **EN COURS depuis le 12/09 : 2× Mean Well SD-50B-5 commandés** (24 V batterie → 5 V 10 A), support imprimé à dessiner, cotes et pièges dans `docs/hardware/alim-5v-pi.md` ; **les 2 sont affectés (1 par Pi) → prévoir un 3e en rechange APRÈS le test, mais lire d'abord l'étiquette du `SD-50B-5` du stock (`t0532`)** — §8 ; ⚠️ le bénéfice n'existe que **chargeur secteur débranché** — puis **2)** protocole physique complet + les 2 cas que seul le réel tranche : David au HF pendant l'écoute, humain à 3 m toujours entendu | **ronflement d'abord — rien d'audio n'est mesurable avant** ; rebuild image ARM vision ; Pi 5 sur alim 27 W |
 | **1. Test scénique au sol** | À FAIRE — première fois que cmd_vel roule au sol ; ⚠️ **lire d'abord « DANGER ACTIF — les 2 boutons du dos »** : le bouton « stop » ÉTEINT LE PI, donc **provoque un emballement** au lieu d'arrêter ; ⚠️ **03/09 : le robot est EN PIÈCES** (disque d'odométrie déposé, pignons/jantes/chaîne démontés, panneaux de torse retirés — `robot-embarque.md` §1.1) | **remonter et revérifier d'abord**, puis étiqueter les 2 boutons, puis séquence de spectacle complète, télécommande en main | — (c'est LUI le verrou des autres) ; **quelqu'un à portée de la coupure générale** |
 | ⚠️ **Boutons du dos (stop/reset)** | **DANGER ACTIF découvert 30/08** — « stop » = `shutdown -h`, « reset » = `reboot` : aucun n'arrête les roues, les deux tuent le rempart logiciel | **étiqueter physiquement (coût nul)** puis réaffecter D16 → vrai `e_stop` (le verrou `twist_mux.yaml:39` n'attend qu'un publieur), D20 → extinction sur appui long | chemin roues ⇒ spec + protocole caméra + revue Opus |
-| Interface web / télé-présence | W0 + console + W3-sim FAITS ; bringup réel actif (sans drive) | W1 : source e_stop + coup-de-poing sans fil | roues web réel ⟸ test scénique (1) + protocole caméra dédié |
+| Interface web / télé-présence | W0 + console + W3-sim FAITS ; bringup réel actif (sans drive) ; ⚠️ **13/09 : un seul RJ45 branchable sur le RUT955** (support trop serré) → la 2ᵉ Pi n'est pas câblable, contrairement à ce qu'affirme `overview.md` | W1 : source e_stop + coup-de-poing sans fil | roues web réel ⟸ test scénique (1) + protocole caméra dédié ; **2 Pi en RJ45 ⟸ nouveau support routeur** (mesures d'atelier) |
 | Télédiagnostic par agent IA | plan décidé ; étape 1 « trousse d'atelier » FAITE | étape 2 : boîte noire rosbag + bouton START | étape 3 ⟸ RAM du Pi 4 à relever (`ssh r 'cat /proc/meminfo'`) |
 | Conversation en déambulation (intention + contenu) | plan DÉCIDÉ (grillé 12/07) ; D0 outillage + personas commutables FAITS 13/07 | campagne D0 (robot allumé) ; textes personas à valider avec David | D1+ ⟸ protocole physique chat_node V2 (0) ; D6 ⟸ verrous roues |
 | Voix de Didier (ventriloquie ↔ synthèse) | OUVERT 26/08 ; cadre + état de l'art posés, **arbitrage artistique suspendu** ; **26/08 : « l'effet robot » de prod est un ÉCRÊTEUR DUR à ±3000 (−20,8 dBFS) — facteur de crête 13,5 dB → 3,1 dB, confirmé à l'oreille** (étude §2) **V3 palier minimal FAIT 26/08** (5,2 min en personnage au SM58, pupitre `essais/voix/enregistre.py`) ; **CLONAGE FAIT le jour même** (accès HF gated OK, 3 états de voix bancés : réf 15 s int8 = RTF 0,43 et 6/6 au contrôle ASR ; réf 60 s moins stable ; ⚠️ le clonage coûte ×1,6 en RTF → Pi probablement > temps réel, à mesurer) ; **montage alternance David-réel/machine-clonée PRÊT** (`sorties/alternance-david-machine.wav`) | ✅ **VERDICT DAVID 26/08 : « oui, c'est bien ma voix »** (prouvé sur un texte INÉDIT de 99 s) → branche synthèse clonée VIABLE. **Mais : c'est sa voix NORMALE, pas la ventriloquie** — F0 clone 136,8 Hz vs référence 134,5 Hz, le clone est FIDÈLE, c'est la PRISE qui n'était pas en ventriloquie → **V3 bis : réenregistrer la référence en voix de personnage** (la ventriloquie est une technique vocale, donc elle appartient au corpus — pas un filtre à mettre en aval : §3 corrigé). Volume inégal = dynamique naturelle reproduite (clone 13,8 dB d'écart, l'humain 16,2) → remède AVAL `nivelle.py` (13,8 → 1,4 dB), à intégrer à la diffusion vision | **V3 bis (référence en ventriloquie, 60 s)**, puis **V0** banc octaver et V0b-Pi (avec état CLONÉ, pas Estelle). ⚠️ **03/09 : l'« octaver » est en fait un `TC HELICON` à molette `GENDER`** (référence lue, modèle exact non lisible — `robot-embarque.md` §1.3) : un processeur de FORMANTS, pas un doubleur d'octave, ce que le §3 de l'étude suppose. Préalables gratuits au banc V0 : lire le modèle et **photographier la position de toutes les molettes AVANT d'y toucher** (l'appareil est posé en vrac, non fixé) | V0/V0b en atelier ; **Kyutai sur ARM = inconnue qui décide de la forme du chantier** ; ne pas lancer l'enregistrement long avant V0b ; ⚠️ **le seuil d'écrêtage est ABSOLU : changer de TTS change la voix en silence** — relever le niveau d'entrée de l'effet à chaque bascule |
@@ -606,6 +606,28 @@ que `gaze`).
 **Suite : W1** (source e_stop + coup-de-poing sans fil). Le passage des roues
 web au ROBOT RÉEL reste conditionné au test scénique au sol (chantier 1) et à
 un protocole caméra dédié.
+
+### ⚠️ Verrou matériel découvert le 2026-09-13 : un seul RJ45 branchable
+
+Le routeur embarqué est un **Teltonika RUT955** (modèle confirmé sur pièce ce
+jour-là ; le relevé filmé du 03/09 n'avait lu que `RUT9…`). Son support actuel
+est si serré qu'**un seul câble RJ45 peut être branché** — le câble jaune sort
+du port en coude forcé, et David signale qu'il lui en faut **deux, pour la
+deuxième Pi**.
+
+Ça contredit une prémisse écrite : `hardware/overview.md` affirme que « les
+deux Pi sont en RJ45 sur le routeur embarqué une fois correctement câblées » —
+argument qui a servi à écarter l'objection « la vision est derrière le Wi-Fi »
+pour le lidar 3D et la caméra de profondeur. **Le raisonnement reste valable,
+mais sa prémisse n'est pas encore vraie sur le robot.**
+
+Traitement : support imprimé de remplacement, étude et cotes dans
+~/Nextcloud/dev/didier/plans/supports/support-teltonika-rut955/ (hors dépôt).
+Plan constructeur officiel archivé, orientation retenue « comme aujourd'hui
+mais mieux dégagé ». **Bloqué sur des mesures d'atelier** : enveloppe
+disponible, support de fixation, dégagement devant la face avant — et
+l'identification d'un boîtier noir `9-30 VDC` à bornier vert, vu à côté du
+routeur et rattaché à aucun document.
 
 ## Télédiagnostic par agent IA
 

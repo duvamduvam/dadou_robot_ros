@@ -90,15 +90,30 @@ boucles libres. À confirmer : est-ce son montage habituel, ou est-il déposé c
 « HF receiver » sans plus. La bande compte pour l'exploitation (662-686 MHz est une bande
 UHF dont la disponibilité dépend du lieu de représentation) — à noter avant une tournée.
 
-### 1.5 Le routeur 4G est confirmé ET référencé : Teltonika RUT9xx
+### 1.5 Le routeur 4G est confirmé ET référencé : Teltonika **RUT955**
 
 `t0108`, étiquette constructeur lue : `TELTONIKA` + `RUT9…` (dernier chiffre coupé).
 C'est exactement le trou signalé par `croisement-etudes.md` : le routeur 4G **est sur le
 robot** mais **absent d'`overview.md`**. Il y est maintenant, avec sa gamme.
 
-⚠️ Il est **suspendu par ses propres câbles**, sans fixation visible. Un routeur qui pend
-par son antenne dans un robot de 50 kg qui roule, c'est un point de fiabilité, pas un
-détail — c'est le lien réseau de la télé-présence et du télédiagnostic.
+✅ **Modèle tranché le 2026-09-13 : c'est un RUT955**, David ayant relu l'étiquette sur
+pièce. Le chiffre manquant n'est plus une inconnue.
+
+> ⚠️ **DÉMENTI du 2026-09-13 — ce paragraphe disait le contraire.** Il affirmait que le
+> routeur était « suspendu par ses propres câbles, sans fixation visible », et le
+> classait au §3 comme écart de fiabilité n° 5. **C'est faux : le routeur est monté sur
+> un support, à droite** (David, sur pièce). L'image `t0108` est un gros plan pris
+> pendant un démontage : le support était hors cadre.
+>
+> **C'est la deuxième fois que le même piège se referme** (le premier : le ReSpeaker et
+> le routeur déclarés « à acheter » alors qu'ils étaient montés — `croisement-etudes.md`
+> §2). La règle qui en découle vaut pour tout ce fichier : **une absence à l'image n'est
+> pas une absence sur le robot**, et un cadrage serré pendant un démontage ne prouve
+> rien sur le montage.
+>
+> Ce qui reste vrai et utile : le support existant **est jugé perfectible par David**, et
+> son amélioration est le point de départ du support imprimé en cours de conception
+> (voir `~/Nextcloud/dev/didier/plans/` — hors de ce dépôt).
 
 ### 1.6 Le chargeur : ✅ RÉSOLU le soir même — c'est un Victron multi-chimie
 
@@ -210,7 +225,7 @@ Confiance : **H** = référence lue ou forme sans ambiguïté · **M** = famille
 
 | Élément | Référence lue | Montage observé | Repère | Conf. |
 |---|---|---|---|---|
-| **Routeur 4G** | `TELTONIKA` `RUT9…` | **suspendu par ses câbles**, 2 antennes, aucune fixation vue | t0108 | H |
+| **Routeur 4G** | `TELTONIKA` **`RUT955`** (chiffre confirmé sur pièce le 13/09) | ~~suspendu par ses câbles~~ → **monté sur un support, à droite** (démenti du 13/09 : le support était hors cadre) ; 2 antennes | t0108 | H |
 | Driver PWM 16 voies | `HW-170` (+ `PWM`, `GND +`, `I2C ADD…`) | au-dessus d'un véroboard, JST bleu 4 pts | t0046, t0047 | H |
 | Module **4 relais** | `GND IN1 IN2 IN3 IN4 VCC`, `IN1`/`IN2`/`IN3` | vissé sur carte perforée, sur panneau noir | t0099-t0101 | H |
 | Composant à bornes jaunes | `…gx Zhong` + `-40~85 °C` (**partiel**) | vissé sur la carte perforée | t0043 | M |
@@ -270,7 +285,7 @@ classés par ce qu'ils coûteraient s'ils étaient réels.
 | 2 | **Conducteur cuivre nu, sans gaine**, apparent | t0040 | Court-circuit possible dans une caisse qui vibre et qui contient de la puissance |
 | 3 | **Ligne sombre nette traversant une équerre métallique** de fixation | t0166 | *J'ai relu l'image :* **on ne peut pas trancher entre fissure et rayure.** Si c'est une fissure, c'est une fixation structurelle sur 50 kg mobiles |
 | 4 | **Réparations improvisées** : ruban adhésif sur mousse déchirée, ruban alu enroulé à la main, épissure sous gaine thermo | t0043, t0044, t0124, t0177 | Montages provisoires devenus permanents — à recenser et reprendre |
-| 5 | **Routeur 4G suspendu par ses câbles**, sans fixation | t0108 | C'est le lien de la télé-présence et du télédiagnostic |
+| 5 | ~~Routeur 4G suspendu par ses câbles, sans fixation~~ → **❌ DÉMENTI le 13/09** : il est **sur un support**, le cadrage le masquait (§1.5). Reste un vrai sujet, mais moindre : **le support existant est perfectible** (avis de David), un support imprimé le remplacera | t0108 | C'est le lien de la télé-présence et du télédiagnostic — et c'est le 2ᵉ « absent de l'image » pris à tort pour un « absent du robot » |
 | 6 | **TC Helicon posé en vrac**, non fixé | t0113-t0122 | Idem : organe de la voix, en vrac dans une caisse qui roule |
 | 7 | **Gaine tressée effilochée** à la base d'une pièce mécanique | t0019 | À regarder de près (usure ou échauffement — indécidable à l'image) |
 | 8 | **Tige filetée longue pendant librement** sous le châssis | t0168 | Fonction non identifiée ; si c'est un tirant, il ne tire rien |
