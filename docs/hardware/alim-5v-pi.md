@@ -109,22 +109,43 @@ Conséquences retenues pour le dessin :
 | Entrefer paroi | bossages, jamais à plat | convection + vibrations |
 | Emplacement | **au plus court du Pi** | 5 V/10 A : la chute en ligne n'est pas anecdotique |
 
-## 6. Ce qui bloque encore le dessin
+## 6. Le logement — mesuré le 2026-09-12
 
-**Mesures à relever sur le robot** (le plan Mean Well ne les donnera jamais) :
+| Cote | Valeur | Conséquence |
+|---|---|---|
+| Largeur utile du pan (X) | **130 mm** | 159 ne passe PAS en travers → montage **debout** imposé |
+| Hauteur libre (Y) | **175 mm** | 163 occupés, 12 mm de marge : tenable, mais sans joues qui débordent |
+| Panneau | **sapin massif 18 mm** | cas favorable : la vis à bois tient bien, pas d'insert nécessaire |
+| Dégagement bornier | sans objet | David : « pas de problème pour le dégagement à visser » |
 
-1. **Largeur utile du pan** entre montants — il faut ≥ 159 mm **plus** le dégagement pour
-   visser le bornier — et **hauteur libre**.
-2. **Épaisseur et nature du panneau** (CP, MDF, aggloméré) : fixe la vis à bois. Du MDF ne
-   tient pas une vis dans le chant.
-3. **Dégagement devant** l'alim, pour accéder au bornier une fois montée.
+L'orientation imposée par la largeur est **celle que le constructeur favorise** (§4) : le
+boîtier debout gagne 5 °C au derating. La contrainte d'encombrement et l'optimum thermique
+tombent du même côté, ce qui est rare — c'est noté pour qu'on ne « redresse » pas l'alim un
+jour par commodité de câblage.
+
+**Position retenue** : bornier **en haut** (accès, et les fils descendent naturellement),
+semelle contre le bois, capot vers l'intérieur du robot, **entrefer de 10 mm** contre le
+panneau.
+
+**Support** : deux **joues latérales miroir**, prenant l'alim par les 3 M3 de chaque flanc,
+vissées au bois par une aile qui déborde **vers l'intérieur** (sous l'alim) et non vers
+l'extérieur — les 130 mm ne permettent pas de pattes extérieures. Conséquence directe :
+**l'ordre de montage n'est pas réversible**, on visse les joues au panneau d'abord, l'alim
+ensuite. Une lèvre d'appui en bas de chaque joue permet de la poser pendant qu'on visse,
+plutôt que de la tenir d'une main sous un robot.
+
+Dessin paramétrique : `support-sd50b5.py` dans le dépôt des plans (dossier plans/elec).
 
 **À confirmer la pièce en main, à réception** (10 secondes chacun) :
 
 4. Que les `2-M3` sont bien dans la **semelle** et non dans le capot (la vue de dessus
    montre le capot en pointillé, l'interprétation est probable mais pas certaine).
-5. La **profondeur de vissage** admissible (§3).
+5. La **profondeur de vissage** admissible (§3) — une vis M3 trop longue touche
+   l'électronique. Les joues font 4 mm : prévoir du M3×10, à valider au réel.
 6. Le hors-tout réel, tolérance ± 1 mm oblige.
+7. ⚠️ **Que les DEUX flancs soient bien percés des 3 M3.** La datasheet ne montre qu'une
+   seule vue de flanc ; la symétrie est probable, pas certaine. Le support la suppose : si un
+   seul flanc est taraudé, le berceau ne tient que d'un côté et il faut revoir le dessin.
 
 **Règle du projet applicable** (`feedback-cao-verifier-le-reel`) : vue de montage validée par
 David **avant** impression. Les trois erreurs CAO du 16/08 — carter jamais mesuré, trou
@@ -197,3 +218,57 @@ Voir §3 : la broche 3 est la masse de **châssis**, pas le 0 V. Son raccordemen
 avec le chantier ronflement en tête, pas par réflexe — c'est précisément un chemin de boucle
 de masse. (Un isolateur audio à transformateurs est par ailleurs en stock, repère `c0331` de
 `inventaire-stock.md`, si le problème se déplaçait vers la liaison audio.)
+
+## 8. Pièce détachée — un SD-50B-5 de rechange, mais APRÈS le test
+
+**Décidé le 2026-09-12 : prévoir 1 × Mean Well `SD-50B-5` de plus, en pièce détachée.**
+
+Les deux exemplaires en commande sont **tous les deux affectés** — un par domaine
+d'alimentation (Pi 5 vision/parole, Pi 4 contrôle ; topologie décidée le 12/09 dans
+`overview.md`). Aucun des deux n'est donc un rechange : le rechange, c'est un troisième.
+
+### 8.1 ⚠️ Regarder le stock d'atelier AVANT de commander
+
+**Il y a peut-être déjà la pièce à l'atelier.** `inventaire-stock.md` (§2.4, repère `t0532`)
+liste **un `MEAN WELL SD-50B-5`** — référence **lue sur l'étiquette**, `DC24V(19-36V)` →
+`+5 V 10 A`, confiance H — **plus 1 à 2 boîtiers de même forme dont la référence n'a pas été
+lue**. Si ce dépouillement dit vrai, le rechange est déjà là et la commande est inutile.
+
+Rappel de la règle du projet : c'est exactement le motif qui a fait naître le chantier
+inventaire (le stock avait démenti deux fois la liste de courses de l'odométrie), et
+**3,60 € de droits par catégorie** s'ajoutent à toute ligne d'achat évitable.
+
+Mais l'inventaire est un **dépouillement vidéo, pas un comptage** : il ne vaut pas
+autorisation de ne pas acheter. Deux minutes en atelier tranchent :
+
+1. **Lire l'étiquette** du boîtier `t0532` — confirmer `SD-50B-5` (et pas `-12`, `-24`).
+2. **Lire les 1-2 boîtiers voisins** non identifiés : ce sont peut-être les mêmes.
+3. ⚠️ **Vérifier qu'il n'est pas destiné au robot.** `overview.md` signale que les deux
+   convertisseurs **déjà montés** (rails 12 V et 5 V) sont documentés `SD-50B-24`, une
+   référence **incohérente** pour sortir du 5 V, et que `robot-embarque.md` §2 note que
+   **leur étiquette n'a jamais été lue**. Il n'est pas exclu que la pièce du stock soit le
+   rechange de *ces* rails-là, ou qu'un des rails du robot soit en fait un `SD-50B-5`.
+   Tant que ces étiquettes ne sont pas lues, on ne sait pas combien on en a ni où ils vont.
+
+### 8.2 Pourquoi après le test, et pas tout de suite
+
+- Tant que rien n'est monté, **la liste « à confirmer la pièce en main » du §6 reste
+  entière** (les `2-M3` dans la semelle ou dans le capot, profondeur de vissage, hors-tout
+  réel à ± 1 mm, et surtout : **les deux flancs sont-ils bien percés des 3 M3** ?), et le
+  §7.2 en pose un autre : l'alim porte-t-elle réellement un ajustement de sortie ?
+  Si l'un d'eux disqualifiait le modèle ou le montage, un troisième exemplaire acheté
+  d'avance serait **trois fois la même erreur** au lieu de deux.
+- Un rechange sert à remplacer une pièce **dont on sait qu'elle convient**. Avant le test,
+  on ne le sait pas.
+
+Ce qu'il protège une fois le test passé : le Pi 5 alimenté depuis la batterie devient un
+**point unique de panne du chantier 0** (pas de conversation sans lui). Un convertisseur mort
+en pleine saison, c'est l'attente d'une livraison — les deux exemplaires en cours ont été
+annoncés pour le **21-26/09**, soit ~10 jours depuis la commande.
+
+### 8.3 Référence exacte, à ne pas abréger : `SD-50B-5`
+
+Relire le tableau du §2 avant de cliquer. Le suffixe de plage d'entrée (**A** = 9,2-18 V,
+**B** = 19-36 V, **C** = 36-72 V) et la tension de sortie sont **deux axes distincts**, et la
+fiche produit AliExpress s'ouvre sur une variante par défaut qui n'est pas la nôtre (elle
+affichait `SD-50C-24` le 12/09). Un `SD-50A-5` **ne démarrerait pas** sur la batterie 24 V.
