@@ -12,6 +12,24 @@ journal de bord illisible).*
 - Un chantier clos passe dans sa section avec la mention CLOS + date, et sort
   du tableau au bout d'un moment.
 
+> ## 🔥 BLOCAGE ACTIF — le Pi 4 a fumé le 2026-09-12, cause NON identifiée
+>
+> David a vu fumer le **Pi 4 du robot** vers 22h45. La carte a été sortie du robot et
+> réalimentée sur secteur indépendant ; **le reste du robot est hors tension**.
+>
+> **La carte passe tous les tests** (`throttled=0x0` y compris après 60 s à 4 cœurs
+> pleins, 1800 MHz tenus, aucune erreur kernel, 29 min stables) — ce qui **innocente le
+> chemin d'alimentation du SoC** mais n'explique pas la fumée. Suspects restants :
+> périphérie (USB, Ethernet, **connecteur GPIO / 5 V**, donc l'interface robot).
+>
+> **Tant que la brûlure n'est pas localisée et le rail 5 V du robot mesuré
+> (`firmware/pico_test_5v`), ne rien réalimenter et ne recoupler aucun Pi.** Cela gèle de
+> fait tout travail sur le robot réel (chantiers 0 et 1).
+>
+> Post-mortem complet, relevés et pièges de diagnostic : **`incidents/2026-09-12-fumee-rpi4.md`**
+> (⚠️ y lire le piège `fake-hwclock` : sans RTC, `uptime`, `who -b` et `docker ps` se
+> contredisent après une coupure — seul `/proc/uptime` dit vrai).
+
 ## Vue d'ensemble
 
 | Chantier | Statut | Prochaine action | Verrou / condition |
