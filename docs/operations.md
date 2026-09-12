@@ -108,6 +108,12 @@ CHAT=true docker compose -f docker-compose-x86.yml up -d
   `systemctl --user stop wireplumber pipewire` le temps de la séance.
 - ⚠️ Clé requise : `openrouter_key` dans `conf/secret` du dépôt vision
   (déjà en place sur le PC de dev).
+- ⚠️ Bug REPO_ROOT (le même que sur le Pi, cf. CLAUDE.md vision) : en install
+  colcon, la config cherche conf/ et medias/ dans site-packages. Contournement
+  appliqué au banc le 13/09 — mêmes symlinks que sur le Pi, dans l'install
+  space (persistant, c'est le workspace monté ; à REFAIRE si un colcon build
+  les efface — symptôme : chat meurt sur « Secret LLM manquant ») :
+  `docker exec dadou-vision-x86-container bash -c 'sp=/home/ros2_ws/install/vision/lib/python3.12/site-packages; ln -sfn /home/ros2_ws/src/vision/conf $sp/conf; ln -sfn /home/ros2_ws/src/vision/medias $sp/medias'`
 
 **Ce qu'on voit alors** : on se place devant la webcam → le Didier de Gazebo
 tourne la tête (gaze) et pivote/avance (suivi, si activé) ; on parle dans le
