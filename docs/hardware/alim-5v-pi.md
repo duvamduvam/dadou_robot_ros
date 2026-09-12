@@ -146,6 +146,21 @@ Encombrement obtenu **107 × 163 mm**, **35,9 g de PETG par joue**, âme ajouré
 > un booléen d'intersection entre la joue et le fantôme de l'alim — il est désormais dans le
 > script, et mérite d'être systématique dès qu'une pièce en enveloppe une autre.
 
+**Vue de montage OpenSCAD** : `support-sd50b5-montage.scad` (même dossier), avec un curseur
+« éclaté » 0→1 dans le Customizer. Elle **importe les STL** produits par FreeCAD au lieu de
+redessiner les pièces : elle ne peut donc pas diverger du modèle imprimé. Seuls l'alim, le
+bois et la visserie y sont des primitives — ce sont des objets du commerce.
+
+> ⚠️ **Deuxième défaut trouvé, par la maquette cette fois : la longueur des vis à bois.**
+> Le pan est une **paroi extérieure du corps**. Avec des vis de 30 mm dans 18 mm de sapin,
+> la pointe **ressort dehors**, à hauteur de main du public. Contrainte inscrite dans le
+> script et dans la nomenclature : **vis à bois Ø4 × 20 mm MAXIMUM** (4 d'aile + 18 de bois
+> − 2 de bois intact). Une 4×20 tient 16 mm dans le sapin, largement assez pour 36 g de joue
+> et 430 g d'alim.
+>
+> Deux erreurs, deux filets différents : l'interpénétration n'a été vue que par le calcul,
+> la vis traversante n'a été vue que par l'image. **Aucun des deux ne remplace l'autre.**
+
 **À confirmer la pièce en main, à réception** (10 secondes chacun) :
 
 1. Que les `2-M3` sont bien dans la **semelle** et non dans le capot (la vue de dessus
