@@ -59,6 +59,61 @@
   et réessaie toutes les 5 s). Relance : `docker compose ... up -d
   --force-recreate` avec les mêmes variables.
 
+## Banc PC — parole et caméra RÉELLES, corps simulé (créé 2026-09-13)
+
+Créé pendant l'immobilisation du robot (Pi 4 fumé le 12/09, convertisseurs
+24V→5V en commande) : la perception et la conversation tournent avec le VRAI
+code du Pi 5 sur le PC (webcam USB + Scarlett 4i4), le corps est le Didier de
+Gazebo. Tout est sur `ROS_DOMAIN_ID=43` : rien ne peut atteindre le vrai robot.
+
+⚠️ Ce banc ne REMPLACE pas le protocole physique chat_node V2 (chantier 0) :
+les seuils audio sont absolus et dépendent de la machine (le gate calibré ici
+ne vaut pas sur le Pi 5), et le ronflement secteur du Pi reste à régler par
+l'alim batterie. Le banc sert à travailler CONTENU et COMPORTEMENT
+(conversation, personas, didascalies, suivi) en attendant le matériel.
+
+**1. La sim (corps)** — depuis `conf/docker/sim/` de ce dépôt :
+```bash
+ANIMATIONS=true FACE=true WEB=true docker compose -f docker-compose-sim.yml up -d
+```
+- `FACE=true` : aperçu web du visage LED sur `http://localhost:8766` — c'est le
+  rendu des didascalies de la conversation, invisible dans Gazebo (les matrices
+  n'y sont pas modélisées). Exécute le vrai pipeline `Face`/`ImageMapping`.
+- `WEB=true` : console de régie `http://localhost:8765` (fenêtre sur la sim en
+  HEADLESS, boutons animations/face/gaze).
+- Suivi de personne et gaze, à lancer À LA MAIN dans le conteneur (prudence
+  habituelle : pas de mouvement automatique) :
+```bash
+docker exec -d dadou-sim-container bash -c 'source /opt/ros/$ROS_DISTRO/setup.sh && source /home/ros2_ws/install/setup.bash && ros2 launch robot_drive drive.launch.py use_sim_time:=true'
+docker exec -d dadou-sim-container bash -c 'source /opt/ros/$ROS_DISTRO/setup.sh && source /home/ros2_ws/install/setup.bash && ros2 run robot person_follower'
+docker exec -d dadou-sim-container bash -c 'source /opt/ros/$ROS_DISTRO/setup.sh && source /home/ros2_ws/install/setup.bash && ros2 run robot gaze_follower'
+```
+  (puis activer le suivi roues : topic `follow` « on » — il démarre OFF.)
+
+**2. La perception + la parole (tête)** — depuis
+`../dadou_vision_ros/conf/docker/x86/` :
+```bash
+./build-x86.sh                                        # 1re fois seulement (long)
+CHAT=true docker compose -f docker-compose-x86.yml up -d
+```
+- MÊME image que le Pi 5 (Dockerfile-arm réutilisé tel quel, base multi-arch) ;
+  `person_tracker` lit la webcam `/dev/video0`, publie `/vision/person` (gaze)
+  et `/vision/person_box` (suivi roues) ; `CHAT=true` lance `chat_node`
+  (micro → whisper → OpenRouter → piper → sortie audio).
+- Les alias ALSA `casque_mic`/`mixette` sont fournis par `asound-pc.conf`
+  (monté dans le conteneur, pointé sur la Scarlett) : AUCUN paramètre du code
+  ne change entre le Pi et le banc.
+- ⚠️ « Device or resource busy » sur le micro/la sortie : PipeWire tient la
+  Scarlett côté hôte — fermer les applis audio, ou
+  `systemctl --user stop wireplumber pipewire` le temps de la séance.
+- ⚠️ Clé requise : `openrouter_key` dans `conf/secret` du dépôt vision
+  (déjà en place sur le PC de dev).
+
+**Ce qu'on voit alors** : on se place devant la webcam → le Didier de Gazebo
+tourne la tête (gaze) et pivote/avance (suivi, si activé) ; on parle dans le
+micro → réponse dans les enceintes, gestes « parle » dans Gazebo
+(`ANIMATIONS=true` requis), didascalies sur l'aperçu visage 8766.
+
 ## Web interface on the REAL robot (sim → réel)
 
 **Une seule console, un sélecteur de cible** : la page (ouverte depuis

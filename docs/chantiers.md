@@ -58,6 +58,21 @@ topics face+animation. Côté robot : fix MODE (dadou_utils_ros 5aefdf1 — le
 mode random servo était mort depuis sept. 2025), expression « parle »,
 séquence didier/parle.json.
 
+### Banc PC mis en place le 2026-09-13 (Didier immobilisé, en attendant les SD-50B-5)
+
+Perception + conversation avec le VRAI code du Pi 5 sur le PC (webcam +
+Scarlett, conteneur vision x86 : `dadou_vision_ros/conf/docker/x86/`, le
+Dockerfile-arm réutilisé tel quel), corps = Didier de Gazebo (domaine 43),
+aperçu web du visage LED sur :8766 (nouveau `face_sim_node`, FACE=true —
+les didascalies deviennent enfin visibles en sim). Mode d'emploi complet :
+`docs/operations.md` §Banc PC. **Ce banc ne remplace PAS le protocole
+physique** (seuils audio absolus, propres à chaque machine) : il sert à
+travailler contenu et comportement (personas, didascalies, suivi) pendant
+l'immobilisation. Découverte au passage : le build compose x86 de vision
+casse sur le symlink `dadou_utils_ros` (« too many links ») → script
+`build-x86.sh` (tar -h déréférencé), le Pi n'est pas concerné (rsync
+matérialise le dossier).
+
 ### ⚠️ VERROU ÉLECTRIQUE découvert le 30/08 — le ronflement vient de l'alim du Pi 5
 
 Constaté par David (« il y a un souffle super fort »), mesuré dans la foulée avec

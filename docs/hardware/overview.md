@@ -11,6 +11,17 @@
 
 ## Physical Specification
 - Weight: ~50 kg wood & metal frame
+- **Corps : un prisme HEXAGONAL en sapin massif 18 mm** (confirmé par David le
+  2026-09-13). Les six faces s'appellent des **pans** ; chaque pan est une **paroi
+  extérieure**, accessible au public. Une **porte** donne accès à l'intérieur.
+  Conséquences pratiques pour toute pièce qui se visse au corps :
+  - la vis à bois tient directement dans le sapin, **pas besoin d'insert** ;
+  - mais elle ne doit **jamais traverser** : 18 mm de bois, donc **Ø4 × 20 mm
+    maximum**, sinon la pointe ressort dehors à hauteur de main (défaut trouvé sur
+    la maquette du support d'alim 5 V — `alim-5v-pi.md`) ;
+  - gabarit de référence d'un pan, mesuré le 12/09 : **130 mm utiles en largeur,
+    175 mm de hauteur libre**. David confirme le 13/09 que l'emplacement du routeur
+    offre la même enveloppe.
 - Mobility: two driven wheels, stabilised by the controller commands
 - Upper body: two arms (no hands) with servo actuation
 - Head: LED strips for eyes and a removable LED mouth
