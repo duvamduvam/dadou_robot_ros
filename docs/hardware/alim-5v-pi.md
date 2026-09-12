@@ -132,10 +132,68 @@ bouché, signe du référentiel — ont toutes été vues par l'œil humain, auc
 
 ## 7. Câblage — pièges connus
 
-- **Chute de tension** : le Pi 5 passe en sous-tension bien avant 5 V. Câble **court et de
-  forte section**, et réglage de la sortie **mesuré au connecteur du Pi**, pas au bornier de
-  l'alim. (Présence d'un ajustement de sortie sur le SD-50 : à vérifier sur la pièce.)
-- **Alimenter un Pi 5 hors USB-C PD** a des conséquences documentées par la fondation
-  (bridage des ports USB, protections contournées si on passe par le GPIO) — *section à
-  compléter, vérification en cours.*
-- **FG** : voir §3, à trancher avec le chantier ronflement en tête.
+### 7.1 ⚠️ Sans négociation USB-C PD, le Pi 5 se bride tout seul
+
+Vérifié le 2026-09-12 sur le **white paper officiel** Raspberry Pi *« USB Power Delivery on
+Raspberry Pi 5 »* (Release 1, 17/03/2026) et la page de documentation matérielle.
+
+Quelle que soit la voie retenue (broches 5 V du GPIO, ou USB-C alimenté par une source sans
+PD), **le Pi 5 ne peut pas savoir de quoi l'alimentation est capable**. Comportement
+documenté, par défaut :
+
+> « If USB PD is not present on the supply, the Raspberry Pi SBC will assume a 5V 3A supply
+> by default. »
+
+> « If a 5V 5A supply is not detected, Raspberry Pi SBCs automatically limit the total power
+> available to the USB ports to 600mA (instead of 1.6A). USB booting is also disabled unless
+> the power switch is deliberately pressed, and the desktop will show a warning message
+> saying power is limited. »
+
+**Ça nous concerne directement** : l'audio de Didier est en USB (carte C-Media vers la
+mixette, micro). **600 mA pour l'ensemble des ports**, c'est le genre de plafond sous lequel
+un périphérique décroche par intermittence — un symptôme qu'on mettrait des heures à
+attribuer à l'alimentation plutôt qu'au logiciel.
+
+**Remède officiel**, à appliquer le jour de la bascule (deux voies, l'une suffit) :
+
+| Réglage | Où | Effet documenté |
+|---|---|---|
+| `PSU_MAX_CURRENT=5000` | EEPROM du bootloader (`rpi-eeprom-config`) | saute la négociation PD et assume une source 5 A |
+| `usb_max_current_enable=1` | `config.txt` | autorise les ports USB à tirer 1,6 A au lieu de 600 mA |
+
+Ici l'affirmation est **honnête** : le SD-50B-5 sort réellement 10 A. Le réglage ne ment pas
+au firmware, il lui dit ce qu'il ne peut pas négocier. À la condition expresse que **le
+câblage supporte ces 5 A** — c'est le câble qui devient le maillon faible, pas l'alim.
+
+### 7.2 Tension : viser 5,1 V, mesurée au Pi
+
+La documentation officielle donne **5,1 V** comme tension nominale (pas 5,0), et une
+détection de sous-tension qui se déclenche **sous 4,63 V (± 5 %)**. Autrement dit, toute la
+marge est consommée par la chute en ligne.
+
+- Câble **court et de forte section** entre l'alim et le Pi.
+- Régler la sortie du SD-50 (s'il porte bien un ajustement — **à vérifier sur la pièce**)
+  pour lire **~5,1 V au connecteur du Pi, en charge**, jamais au bornier de l'alim.
+- Contrôle après coup : `vcgencmd get_throttled` — bit 0 = sous-tension présente,
+  bit 16 = sous-tension survenue depuis le démarrage. À relever **après** une séance, pas
+  seulement au repos.
+
+### 7.3 Ce qui n'est PAS documenté — à traiter comme un risque, pas comme un fait
+
+La présence d'un **fusible réarmable sur les broches 5 V du GPIO du Pi 5** n'est
+**documentée nulle part officiellement**. Les seules affirmations trouvées viennent des
+forums Raspberry Pi, au conditionnel (« likely does not have a polyfuse » ; le Pi 4 aurait
+supprimé le fusible du header). Le white paper mentionne bien l'alimentation par le GPIO
+comme une option envisagée par des utilisateurs, mais **sans aucune consigne de protection**.
+
+Conclusion pratique : entrer par le GPIO, c'est **se passer des protections d'entrée** sans
+savoir précisément lesquelles. Puisque rien ne l'interdit ni ne le garantit, la prudence est
+de **prévoir nous-mêmes la protection** (fusible et/ou TVS côté 5 V) plutôt que de parier sur
+une protection interne dont personne ne peut citer la datasheet.
+
+### 7.4 FG
+
+Voir §3 : la broche 3 est la masse de **châssis**, pas le 0 V. Son raccordement se décide
+avec le chantier ronflement en tête, pas par réflexe — c'est précisément un chemin de boucle
+de masse. (Un isolateur audio à transformateurs est par ailleurs en stock, repère `c0331` de
+`inventaire-stock.md`, si le problème se déplaçait vers la liaison audio.)
