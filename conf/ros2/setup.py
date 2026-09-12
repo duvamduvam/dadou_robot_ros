@@ -24,6 +24,10 @@ setup(
             "animations_node = robot.nodes.animations_node:main",
             "audio_node = robot.nodes.audio_node:main",
             #face_node = robot.nodes.face_node:main",
+            # Aperçu web du visage LED en SIMULATION (SIM-ONLY : lancé par
+            # sim.launch.py derrière l'argument face:=true, jamais dans le
+            # bringup du vrai robot -- cf. robot/nodes/face_sim_node.py).
+            "face_sim = robot.nodes.face_sim_node:main",
             # Suivi du regard (cou seulement, jamais les roues). Lancé À LA MAIN
             # tant que le sens du cou n'est pas validé caméra (pas dans le bringup).
             "gaze_follower = robot.nodes.gaze_follower_node:main",

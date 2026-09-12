@@ -34,6 +34,11 @@ services:
       # (drive.launch.py) dans le conteneur pour que cmd_vel_web bouge Gazebo
       # (voir operations.md). Rien de ce lot ne s'active sur le vrai robot.
       - WEB_DRIVE=${WEB_DRIVE:-false}
+      # face_sim (paquet "robot", aperçu web du visage LED -- les matrices LED
+      # n'ont aucun rendu dans Gazebo) : même prudence qu'ANIMATIONS/WEB, OFF
+      # par défaut. http://localhost:8766 une fois lancé (FACE=true).
+      - FACE=${FACE:-false}
+      - FACE_PORT=${FACE_PORT:-8766}
     network_mode: "host"
     volumes:
       - /tmp/.X11-unix:/tmp/.X11-unix:rw
@@ -65,3 +70,9 @@ services:
       - ../../../robot:/home/ros2_ws/src/robot/robot
       - ../../../../dadou_utils_ros:/home/ros2_ws/src/robot/dadou_utils_ros
       - ../../../json:/home/ros2_ws/src/robot/json
+      # medias/ : PNG bouche/yeux lus par Face.load_visuals() (config[MOUTH_VISUALS_PATH]/
+      # [EYE_VISUALS_PATH] = <PROJECT_DIRECTORY>/medias/visuals/{mouth,eye}, cf.
+      # robot_config.py) -- requis par face_sim (param face:=true) : sans ce
+      # volume, Face.load_visuals() lève FileNotFoundError au démarrage du node
+      # (voir le log actionnable dans face_sim_node.py).
+      - ../../../medias:/home/ros2_ws/src/robot/medias

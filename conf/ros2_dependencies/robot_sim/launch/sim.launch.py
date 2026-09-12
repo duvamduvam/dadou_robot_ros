@@ -12,6 +12,11 @@ robot_description, robot_state_publisher et le bridge ros_gz.
     # puis, dans un autre terminal (même domaine ROS que la sim, 43) :
     #   ros2 topic pub -1 animation robot_interfaces/msg/StringTime '{msg: "\\"parle\\""}'
 
+    # Aperçu web du visage LED (face_sim, package "robot" -- les matrices LED
+    # n'ont aucun rendu dans Gazebo) -- OFF par défaut, même prudence :
+    ros2 launch robot_sim sim.launch.py face:=true
+    # puis http://localhost:8766 (face_port pour changer le port).
+
 Tout tourne en use_sim_time (horloge /clock bridgée depuis gz).
 """
 from launch import LaunchDescription
@@ -32,9 +37,11 @@ def generate_launch_description():
     headless = LaunchConfiguration("headless")
     animations = LaunchConfiguration("animations")
     web = LaunchConfiguration("web")
+    face = LaunchConfiguration("face")
     # ParameterValue(value_type=int) obligatoire : une LaunchConfiguration est
     # une chaîne, or le node déclare web_port comme entier.
     web_port = ParameterValue(LaunchConfiguration("web_port"), value_type=int)
+    face_port = ParameterValue(LaunchConfiguration("face_port"), value_type=int)
     # Idem en bool : "false"/"true" -> False/True (coercition launch). SÉCURITÉ :
     # ce drapeau active le PILOTAGE ROUES du pont web (publisher cmd_vel_web),
     # défaut false. La chaîne roues (drive.launch.py) n'est PAS lancée ici : la
@@ -81,6 +88,14 @@ def generate_launch_description():
                                            " false. La chaîne roues (drive.launch.py) doit être"
                                            " lancée À LA MAIN pour conduire en sim (voir operations.md)."
                                            " Rien ici ne s'active sur le vrai robot (protocole caméra)."),
+        DeclareLaunchArgument("face", default_value="false",
+                              description="true = lance face_sim (paquet robot, aperçu web du visage"
+                                           " LED -- les matrices LED n'ont aucun rendu dans Gazebo)."
+                                           " OFF par défaut, même prudence que animations/web :"
+                                           " activation explicite requise."),
+        DeclareLaunchArgument("face_port", default_value="8766",
+                              description="Port HTTP du flux MJPEG de l'aperçu visage (8765 déjà pris"
+                                           " par le pont web, cf. web_port)."),
 
         IncludeLaunchDescription(
             PythonLaunchDescriptionSource(
@@ -149,6 +164,21 @@ def generate_launch_description():
             executable="animations_node",
             output="screen",
             condition=IfCondition(animations),
+        ),
+
+        # Aperçu web du visage LED (paquet "robot", le VRAI code du visage --
+        # robot.actions.face.Face + ImageMapping, réutilisés tels quels sur un
+        # strip factice, cf. robot/nodes/face_sim_node.py). Aucune libs
+        # matérielle requise (contrairement à animations_node dont le rejeu
+        # des séquences peut piloter des actions qui, elles, en dépendraient
+        # si jamais activées) -- mais OFF par défaut quand même (face:=false),
+        # même prudence que animations/web : lancement explicite requis.
+        Node(
+            package="robot",
+            executable="face_sim",
+            output="screen",
+            parameters=[{"face_port": face_port}],
+            condition=IfCondition(face),
         ),
 
         # Pont web W0 (paquet robot_web, autonome façon robot_drive). Pas de

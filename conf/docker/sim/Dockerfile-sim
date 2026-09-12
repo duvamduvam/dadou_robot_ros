@@ -16,6 +16,12 @@ RUN apt-get update && apt-get install -y \
     python3-pip \
     python3-aiohttp \
     python3-pil \
+    # imageio : lu par robot/visual/visual.py (Visual, chargement des PNG
+    # bouche/yeux) -- chaîne d'imports de face_sim (paquet "robot", nouveau
+    # node d'aperçu web du visage). Paquet apt dispo sur Noble (universe,
+    # vérifié packages.ubuntu.com/noble/python3-imageio) : cohérent avec
+    # python3-pil/python3-aiohttp ci-dessus, pas de pip pour cette lib-là.
+    python3-imageio \
     && rm -rf /var/lib/apt/lists/*
 
 RUN mkdir -p /home/ros2_ws/src
@@ -53,8 +59,18 @@ COPY json/ /home/ros2_ws/json/
 # ici). Seules 3 libs pures manquent à l'image ROS de base : filetype (utilisé
 # par dadou_utils_ros.misc au niveau module) et colorlog/psutil (utilisés par
 # logging_conf / d'autres modules dadou_utils_ros importés transitivement).
-# medias/ et db/ ne sont PAS nécessaires : RobotJsonManager/AnimationManager ne
-# lisent que du JSON sous json/ (pas d'accès fichier audio/DB dans ce chemin).
+# medias/ et db/ ne sont PAS nécessaires À CE NODE : RobotJsonManager/
+# AnimationManager ne lisent que du JSON sous json/ (pas d'accès fichier
+# audio/DB dans ce chemin).
+#
+# EXCEPTION face_sim (param face:=true, robot/nodes/face_sim_node.py) : ce
+# SECOND point d'entrée du même paquet "robot" charge Face -> Visual, qui LUI
+# importe imageio (les PNG de medias/visuals/{mouth,eye}) -- d'où
+# python3-imageio ci-dessus -- et sert un flux MJPEG en aiohttp/PIL (déjà
+# installés pour robot_web). medias/ N'EST PAS copié dans l'image (seulement
+# monté en volume par docker-compose-sim.yml) : sans ce volume,
+# Face.load_visuals() échoue au démarrage avec un log actionnable (voir
+# face_sim_node.py) plutôt qu'un plantage silencieux.
 #
 # dadou_utils_ros/ n'est PAS copié ici (contrairement à robot/) : à la racine
 # du repo c'est un SYMLINK vers ../dadou_utils_ros (dépôt frère), qui sort du
