@@ -134,16 +134,26 @@ l'extérieur — les 130 mm ne permettent pas de pattes extérieures. Conséquen
 ensuite. Une lèvre d'appui en bas de chaque joue permet de la poser pendant qu'on visse,
 plutôt que de la tenir d'une main sous un robot.
 
-Dessin paramétrique : `support-sd50b5.py` dans le dépôt des plans (dossier plans/elec).
+**Dessin paramétrique fait le 2026-09-12** : `support-sd50b5.py` dans le dépôt des plans
+(dossier plans/elec), avec son FCStd, sa nomenclature et trois rendus de contrôle.
+Encombrement obtenu **107 × 163 mm**, **35,9 g de PETG par joue**, âme ajourée à 73 %.
+
+> ⚠️ **Erreur rattrapée avant impression — à retenir pour les prochaines pièces.** La
+> première version des goussets montait jusqu'au sommet de l'âme et **traversait le boîtier**
+> (2809 mm³ d'interpénétration mesurés). **Aucun assert ne la voyait** : encombrement,
+> épaisseurs de paroi et positions de trous étaient tous conformes. *Une pièce peut être
+> juste dans toutes ses cotes et rester impossible à monter.* Le contrôle qui l'a trouvée est
+> un booléen d'intersection entre la joue et le fantôme de l'alim — il est désormais dans le
+> script, et mérite d'être systématique dès qu'une pièce en enveloppe une autre.
 
 **À confirmer la pièce en main, à réception** (10 secondes chacun) :
 
-4. Que les `2-M3` sont bien dans la **semelle** et non dans le capot (la vue de dessus
+1. Que les `2-M3` sont bien dans la **semelle** et non dans le capot (la vue de dessus
    montre le capot en pointillé, l'interprétation est probable mais pas certaine).
-5. La **profondeur de vissage** admissible (§3) — une vis M3 trop longue touche
+2. La **profondeur de vissage** admissible (§3) — une vis M3 trop longue touche
    l'électronique. Les joues font 4 mm : prévoir du M3×10, à valider au réel.
-6. Le hors-tout réel, tolérance ± 1 mm oblige.
-7. ⚠️ **Que les DEUX flancs soient bien percés des 3 M3.** La datasheet ne montre qu'une
+3. Le hors-tout réel, tolérance ± 1 mm oblige.
+4. ⚠️ **Que les DEUX flancs soient bien percés des 3 M3.** La datasheet ne montre qu'une
    seule vue de flanc ; la symétrie est probable, pas certaine. Le support la suppose : si un
    seul flanc est taraudé, le berceau ne tient que d'un côté et il faut revoir le dessin.
 
