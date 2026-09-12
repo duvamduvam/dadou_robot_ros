@@ -40,6 +40,14 @@ services:
       - FACE=${FACE:-false}
       - FACE_PORT=${FACE_PORT:-8766}
     network_mode: "host"
+    # ipc host OBLIGATOIRE pour le banc PC (conteneur vision x86 sur la même
+    # machine, 2026-09-13) : FastDDS fait la DÉCOUVERTE en UDP mais passe les
+    # DONNÉES en mémoire partagée entre participants du même hôte — chaque
+    # conteneur ayant son /dev/shm privé, les topics se voyaient (ros2 topic
+    # list) mais aucun message ne traversait. Piège silencieux : sur le vrai
+    # robot les deux Pi sont des machines distinctes, le cas ne s'y présente
+    # jamais.
+    ipc: "host"
     volumes:
       - /tmp/.X11-unix:/tmp/.X11-unix:rw
       - ${XAUTHORITY:-/tmp/.docker.xauth}:${XAUTHORITY:-/tmp/.docker.xauth}:rw
