@@ -39,7 +39,7 @@ journal de bord illisible).*
 | ⚠️ **Boutons du dos (stop/reset)** | **DANGER ACTIF découvert 30/08** — « stop » = `shutdown -h`, « reset » = `reboot` : aucun n'arrête les roues, les deux tuent le rempart logiciel | **étiqueter physiquement (coût nul)** puis réaffecter D16 → vrai `e_stop` (le verrou `twist_mux.yaml:39` n'attend qu'un publieur), D20 → extinction sur appui long | chemin roues ⇒ spec + protocole caméra + revue Opus |
 | Interface web / télé-présence | W0 + console + W3-sim FAITS ; bringup réel actif (sans drive) ; ⚠️ **13/09 : un seul RJ45 branchable sur le RUT955** (support trop serré) → la 2ᵉ Pi n'est pas câblable, contrairement à ce qu'affirme `overview.md` | W1 : source e_stop + coup-de-poing sans fil | roues web réel ⟸ test scénique (1) + protocole caméra dédié ; **2 Pi en RJ45 ⟸ nouveau support routeur** (mesures d'atelier) |
 | Télédiagnostic par agent IA | plan décidé ; étape 1 « trousse d'atelier » FAITE | étape 2 : boîte noire rosbag + bouton START | étape 3 ⟸ RAM du Pi 4 à relever (`ssh r 'cat /proc/meminfo'`) |
-| Conversation en déambulation (intention + contenu) | plan DÉCIDÉ (grillé 12/07) ; D0 outillage + personas commutables FAITS 13/07 | campagne D0 (robot allumé) ; textes personas à valider avec David | D1+ ⟸ protocole physique chat_node V2 (0) ; D6 ⟸ verrous roues |
+| Conversation en déambulation (intention + contenu) | plan DÉCIDÉ (grillé 12/07) ; D0 outillage + personas commutables FAITS 13/07 ; **13/09 : PREMIÈRE VRAIE CONVERSATION D'ATELIER** (banc PC, ReSpeaker du robot) — 4 défauts corrigés le jour même (redites = répliques stockées en `role=system` donc rejouées comme consignes ; bouche qui continuait après la réplique ; bips à −7 dBFS ; aucune observabilité → vumètre web `diag_port`) | ⚠️ **écrire `docs/etude-interaction.md`** (demandé par David) — le plan de juillet ne parle QUE du passant, **David n'y existe pas** alors qu'il est déjà une source de parole (ventriloquie HF) ; en attente de ses réponses dramaturgie | D1+ ⟸ protocole physique chat_node V2 (0) ; D6 ⟸ verrous roues ; ⚠️ 3 manques de fond relevés le 13/09 : sessions par rencontre §5.2 JAMAIS implémentées (une seule session par démarrage de node), `{"name"}` demandé au LLM mais jamais consommé, `EnergyVad` intenable en rue |
 | Voix de Didier (ventriloquie ↔ synthèse) | OUVERT 26/08 ; cadre + état de l'art posés, **arbitrage artistique suspendu** ; **26/08 : « l'effet robot » de prod est un ÉCRÊTEUR DUR à ±3000 (−20,8 dBFS) — facteur de crête 13,5 dB → 3,1 dB, confirmé à l'oreille** (étude §2) **V3 palier minimal FAIT 26/08** (5,2 min en personnage au SM58, pupitre `essais/voix/enregistre.py`) ; **CLONAGE FAIT le jour même** (accès HF gated OK, 3 états de voix bancés : réf 15 s int8 = RTF 0,43 et 6/6 au contrôle ASR ; réf 60 s moins stable ; ⚠️ le clonage coûte ×1,6 en RTF → Pi probablement > temps réel, à mesurer) ; **montage alternance David-réel/machine-clonée PRÊT** (`sorties/alternance-david-machine.wav`) | ✅ **VERDICT DAVID 26/08 : « oui, c'est bien ma voix »** (prouvé sur un texte INÉDIT de 99 s) → branche synthèse clonée VIABLE. **Mais : c'est sa voix NORMALE, pas la ventriloquie** — F0 clone 136,8 Hz vs référence 134,5 Hz, le clone est FIDÈLE, c'est la PRISE qui n'était pas en ventriloquie → **V3 bis : réenregistrer la référence en voix de personnage** (la ventriloquie est une technique vocale, donc elle appartient au corpus — pas un filtre à mettre en aval : §3 corrigé). Volume inégal = dynamique naturelle reproduite (clone 13,8 dB d'écart, l'humain 16,2) → remède AVAL `nivelle.py` (13,8 → 1,4 dB), à intégrer à la diffusion vision | **V3 bis (référence en ventriloquie, 60 s)**, puis **V0** banc octaver et V0b-Pi (avec état CLONÉ, pas Estelle). ⚠️ **03/09 : l'« octaver » est en fait un `TC HELICON` à molette `GENDER`** (référence lue, modèle exact non lisible — `robot-embarque.md` §1.3) : un processeur de FORMANTS, pas un doubleur d'octave, ce que le §3 de l'étude suppose. Préalables gratuits au banc V0 : lire le modèle et **photographier la position de toutes les molettes AVANT d'y toucher** (l'appareil est posé en vrac, non fixé) | V0/V0b en atelier ; **Kyutai sur ARM = inconnue qui décide de la forme du chantier** ; ne pas lancer l'enregistrement long avant V0b ; ⚠️ **le seuil d'écrêtage est ABSOLU : changer de TTS change la voix en silence** — relever le niveau d'entrée de l'effet à chaque bascule |
 | Suivi de personne (roues) | validé sim 5/5, déployé, **SIM-ONLY** | — (attend ses verrous) | test scénique (1) PUIS protocole caméra (`direction_sign` inconnu) |
 | Gaze V1 + arbitrage actionneurs | validé RÉEL 12/07 ; arbitrage déployé sur les 2 Pi | vérif visuelle : gaze ON pendant une séquence (la tête ne doit plus trembler) | — |
@@ -698,6 +698,64 @@ commutation) : 3 personnalités commutables à tester — « bougon » (défaut)
 « naif » / « vantard » — socle + textes dans `vision/ai/personas.py` (repo
 public, tranché §8), commutation à chaud topic `persona` (nouvelle session de
 conversation à chaque bascule), sélecteur sur la console web.
+
+### 2026-09-13 — première vraie conversation d'atelier, et ce qu'elle a révélé
+
+Séance sur le banc PC (ReSpeaker du robot branché sur le PC, corps en sim).
+David a conversé pour de bon avec Didier. Quatre défauts corrigés le jour
+même (dépôt vision : 0b5e41f, 386d585) :
+
+- **les redites** — `add_system_text()` stockait les répliques de Didier avec
+  `role="system"` : elles arrivaient au LLM comme des CONSIGNES, qu'il
+  ré-exécutait mot pour mot. Corrigé (`assistant` + requalification des
+  entrées héritées à la lecture) ;
+- **la bouche continuait après la réplique** — `speaking_stop()` coupe
+  l'animation mais pas le visage, et l'expression « parle » est en
+  `loop: true` ; rattrapage `idle()` ajouté (même trou que celui corrigé le
+  12/07 sur les tours abandonnés) ;
+- **bips trop forts** (14000 ≈ −7 dBFS) → 5000, et rendus réglables ;
+- **aucune observabilité en direct** → vumètre web (`diag_port`, OFF par
+  défaut) : niveau en dBFS, seuils VAD et gate tracés, témoin d'écrêtage,
+  latences par étape du dernier tour.
+
+**Découvertes à traiter — deux contrats MORTS et un manque de fond :**
+
+1. ⚠️ **La synchronisation labiale n'existe pas.** Pendant la parole, le
+   visage joue l'expression `parle` : une boucle fermée de 800 ms, sans
+   aucun lien avec l'audio. Quatre expressions portent encore
+   `"follow audio": true` (`speak`, `speak red`, `speak loop`, `sexy`) mais
+   **aucun code ne lit ce drapeau** — vestige de l'ancienne base. Piste si
+   on l'ouvre : piper rend le PCM AVANT lecture, on peut piloter l'ouverture
+   de bouche sur son enveloppe. David a choisi le 13/09 de ne recaler que la
+   FIN, pas d'ouvrir ce chantier.
+2. ⚠️ **Le nom de l'interlocuteur est demandé mais jamais retenu.** Le prompt
+   ordonne d'émettre `{"name": …}`, `NAME_KEY` existe dans le parseur, mais
+   **rien ne le consomme** en V2. Le prénom ne survit que dans la fenêtre
+   glissante.
+3. ⚠️ **`history_limit = 12` messages (6 échanges)** — valeur par défaut du
+   constructeur de `StreamingBrain`, jamais exposée en config. D'où « il
+   repart du début » (constaté par David). Mais le vrai manque n'est pas ce
+   nombre : **les sessions par rencontre décidées au §5.2 ne sont pas
+   implémentées** — `chat_node` ouvre UNE session au démarrage du node. En
+   déambulation, une mémoire continue unique mélangerait les passants.
+4. ⚠️ **La fin de phrase ne tiendra pas en rue** (soulevé par David, et il a
+   raison) : `EnergyVad` calibre son seuil UNE fois sur la médiane des
+   1000 premières ms. Ça peine déjà en atelier calme. Leviers, dont deux
+   déjà payés : la **DoA du ReSpeaker** croisée avec l'azimut caméra
+   (inexploitée), une **VAD neuronale** type Silero, et **l'opérateur**.
+
+**⇒ Chantier ouvert : PLAN D'INTERACTION** (`docs/etude-interaction.md`, à
+écrire). Demandé par David le 13/09 : « on doit faire un plan d'interaction,
+c'est important ». L'angle mort des deux études existantes est que le plan de
+juillet ne parle QUE du passant — **David n'y existe pas**, alors qu'il est
+déjà une source de parole (ventriloquie au micro HF, cf.
+`etude-voix-didier.md` §1 : le spectacle alterne deux sources). La question
+« qui parle, quand, et ce que le public en sait » commande à la fois la
+dramaturgie ET le tour de parole en rue. Étude à placer AU-DESSUS des deux
+autres (elle arbitre entre elles), sans re-trancher ce qui l'est déjà.
+En attente des réponses de David : son statut de personnage pour le public,
+qui porte la parole principale, s'il veut pouvoir donner la parole
+explicitement, et la frontière jeu / régie.
 
 **MICRO CHANGÉ le 26/08** : le ReSpeaker XVF3800 est reçu et **testé au banc
 sur le Pi 5** — driverless, 16 kHz natif, 21 dB de SNR à 3 m sur le robot au
