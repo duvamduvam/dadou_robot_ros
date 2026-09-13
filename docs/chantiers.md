@@ -744,18 +744,41 @@ même (dépôt vision : 0b5e41f, 386d585) :
    déjà payés : la **DoA du ReSpeaker** croisée avec l'azimut caméra
    (inexploitée), une **VAD neuronale** type Silero, et **l'opérateur**.
 
-**⇒ Chantier ouvert : PLAN D'INTERACTION** (`docs/etude-interaction.md`, à
-écrire). Demandé par David le 13/09 : « on doit faire un plan d'interaction,
-c'est important ». L'angle mort des deux études existantes est que le plan de
-juillet ne parle QUE du passant — **David n'y existe pas**, alors qu'il est
-déjà une source de parole (ventriloquie au micro HF, cf.
-`etude-voix-didier.md` §1 : le spectacle alterne deux sources). La question
-« qui parle, quand, et ce que le public en sait » commande à la fois la
-dramaturgie ET le tour de parole en rue. Étude à placer AU-DESSUS des deux
-autres (elle arbitre entre elles), sans re-trancher ce qui l'est déjà.
-En attente des réponses de David : son statut de personnage pour le public,
-qui porte la parole principale, s'il veut pouvoir donner la parole
-explicitement, et la frontière jeu / régie.
+**⇒ Chantier ouvert : PLAN D'INTERACTION** — [`etude-interaction.md`](etude-interaction.md),
+**écrite le 13/09, en attente de la démolition de David** (rien n'y est
+tranché sauf ses réponses de séance). Elle se place AU-DESSUS des deux études
+existantes et part du **dossier de création du spectacle** (hors dépôt,
+Nextcloud `créa/théâtre/spectacles/paradise-quest/`), pas du code : le
+spectacle précède le robot conversationnel.
+
+Le renversement qu'elle acte : **Didier n'est pas un robot autonome, c'est
+l'instrument de jeu de David** (« tout ce projet est un prétexte pour que je
+joue, moi »). Le cahier des charges de l'IA RÉTRÉCIT — détecter qu'on a
+répondu plutôt que comprendre finement, faire avancer une mission écrite
+plutôt que décider, être pilotable en jeu plutôt qu'autonome, tenir cinq
+cases plutôt que deux heures de conversation.
+
+Trois trouvailles qui viennent du dossier de création et changent la
+faisabilité :
+- la règle du **« oui, et »** (toute réponse d'un passant devient une avancée)
+  est une **tolérance aux erreurs de compréhension** : un robot qui entend de
+  travers est le numéro, pas la panne. La barre technique baisse d'un cran ;
+- les **cinq critères** donnent les raisons concrètes d'avancer — la
+  perception visuelle n'est PAS structurante, c'est un bonus ;
+- les **cinq séquences écrites** sont l'interface de pilotage : reprendre la
+  main = faire avancer la mission, en jeu, sans sortir du personnage.
+
+⚠️ **Convergence à ne pas manquer** : le §7.2 du dossier de création (27/08)
+exige un coup-de-poing physique atteignable par David comme condition
+d'assurabilité d'une date — exactement le trou que le tableau de bord a
+établi le 30/08 de son côté (`e_stop` sans publieur, boutons du dos
+dangereux, carte non fabriquée). **Aucune déambulation publique avant que ce
+point soit fermé**, et c'est antérieur à tout le chantier interaction.
+
+Lots proposés I0→I5 (§9 de l'étude) : I0 état de mission + jauge LED,
+I1 déclenchement en jeu, I2 mémoire des guides, I3 deuxième oreille,
+I4 garde-fous, I5 détection de parole en rue. **I0 à I2 se font entièrement
+sur le banc PC**, donc pendant l'immobilisation du robot.
 
 **MICRO CHANGÉ le 26/08** : le ReSpeaker XVF3800 est reçu et **testé au banc
 sur le Pi 5** — driverless, 16 kHz natif, 21 dB de SNR à 3 m sur le robot au
