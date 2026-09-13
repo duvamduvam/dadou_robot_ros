@@ -295,10 +295,144 @@ les séparer (canal, coupure de l'octaver, ou David ne parle jamais « en
 David » dans ce micro).
 
 **Côté public.** Rien ne rendra la captation facile. Deux leviers déjà payés
-et inexploités : la **direction d'arrivée du son** du ReSpeaker, croisée avec
-l'azimut de la caméra, pour distinguer « ça vient de la personne en face » ;
-et une **VAD neuronale** à la place du seuil d'énergie actuel, calibré une
-seule fois au démarrage et intenable en rue.
+et inexploités : une **VAD neuronale** à la place du seuil d'énergie actuel
+(§6 bis), et la **direction d'arrivée du son** du ReSpeaker.
+
+⚠️ **La direction est un BONUS DE CONFIANCE, jamais un VETO** — correction
+apportée par David le 13/09, et elle est juste. Le faisceau du XVF3800 se
+verrouille sur la source **dominante**, pas sur la parole : un scooter plus
+fort qu'un passant, et l'angle part sur le scooter. S'en servir comme filtre
+(« je rejette ce qui ne vient pas de la bonne direction ») fabriquerait une
+nouvelle façon de rater des phrases valides — donc **une régression déguisée
+en amélioration**. La règle : la direction peut RENFORCER une détection
+(parole + ça vient de la personne regardée → on y va franchement), elle ne
+doit jamais en ANNULER une.
+
+⚠️ **Le socle plastique est suspect, et c'est mesurable** (objection de David,
+13/09) : un réseau de micros a besoin d'un champ libre : un support fermé crée
+des réflexions qui dégradent d'abord la **discrimination spatiale**, donc
+précisément la direction. La fiche matériel note déjà la fixation comme
+question ouverte (découplage, garde d'air, décalage d'azimut fixe). Le corpus
+de rue (§6 ter) est ce qui tranchera, au lieu d'en débattre.
+
+---
+
+## 6 bis. Remplacer la détection de NIVEAU par une détection de VOIX
+
+**L'état actuel, sans ménagement.** `EnergyVad` ne mesure qu'une énergie. Son
+seuil est le plancher de bruit **calibré une seule fois au démarrage × 1,3**,
+et la fin de phrase est déclarée après **600 ms de silence continu**. Aucune
+notion de voix : un klaxon franchit le seuil comme une phrase. En rue, deux
+modes de défaillance certains — un seuil figé au démarrage devient faux dès
+qu'on change de rue, et « 600 ms de silence » n'arrive jamais, donc **la fin
+de phrase n'arrive jamais**.
+
+**Ce qu'on remplace, et ce qu'on garde.** Le module fait DEUX choses collées :
+le *verdict par trame* (faux) et la *machine à états* IDLE↔SPEECH avec ses
+trois trames de confirmation, ses 600 ms de fin et son pré-roll de 450 ms
+(bonne, testée, et elle encode des leçons réelles — le pré-roll existe parce
+que les débuts de phrase se perdaient). **Seul le verdict change.**
+
+Découpage à respecter pour ne pas perdre la testabilité en CI (patron du
+dépôt : la logique pure d'un côté, l'I/O de l'autre) :
+
+- un **détecteur** `is_speech(frame) -> probabilité` — impur, fait tourner le
+  modèle, isolé ;
+- une **machine à états** qui ne reçoit qu'une probabilité — pure, testable
+  sans aucun modèle, et c'est l'actuelle, à peine retouchée.
+
+`EnergyVad` devient alors *une* implémentation du détecteur parmi deux, ce qui
+rend le A/B trivial sur le même corpus.
+
+**Trois gains concrets, dont un inattendu :**
+
+1. **La calibration disparaît.** Plus de « médiane des 1000 premières ms »,
+   donc plus le robot calibré près d'un carrefour qui reste sourd.
+2. **Le seuil devient absolu et transférable.** Un seuil de probabilité vaut
+   dans toutes les villes ; le seuil de niveau, lui, est attaché à une chaîne
+   d'acquisition ET à un lieu — piège payé le 13/09 avec un casque Bluetooth
+   qui mettait le bruit de pièce à RMS 3000-9000 pour un seuil à 2800.
+3. **La fluidité s'améliore aussi** (plainte de David le matin même) : « fin
+   de phrase » ne veut plus dire « niveau bas » mais « pas de voix », ce qui
+   existe même dans le bruit. Le délai de fin peut donc descendre sans risque.
+
+**⚠️ Le gate anti-larsen, lui, RESTE sur le niveau — et c'est correct.** Il
+pose une question de *volume* (« ma sono est-elle vivante ? »), pas de
+*nature*. Et il le doit : la voix de Didier EST de la parole — une VAD
+neuronale dirait « parole ! » sur sa propre voix. Les deux questions se
+séparent proprement ; les confondre est précisément le défaut qu'on corrige.
+
+### Candidats — faits sourcés le 2026-09-13
+
+| | Silero VAD | TEN VAD | WebRTC VAD |
+|---|---|---|---|
+| Licence | **MIT** | Apache 2.0 « avec conditions additionnelles » (à lire mot pour mot) | non vérifiée |
+| Neuronal | oui | oui | **non** (algorithme classique) |
+| Modèle | ~2 Mo, ONNX + torch JIT | lib 306 Ko (Linux x64), modèle ONNX ouvert | extension C |
+| Fréquence | 8 et 16 kHz | 16 kHz seulement | 8/16/32/48 kHz |
+| **Bloc d'entrée** | **512 éch. @16 kHz, FIXE depuis la V5** | 160 ou 256 éch. (10 / 16 ms) | 10/20/30 ms |
+| Sortie | probabilité par bloc | score 0–1 (seuil 0,5) | booléen |
+| ARM / Pi | ONNX documenté comme le chemin hors x86 | **aucun binaire Linux ARM trouvé** (x64, Android, iOS, macOS) | compilable, non confirmé sur Pi 5 |
+
+Détection annoncée à 5 % de fausses alertes : **WebRTC 50 %, Silero 87,7 %**.
+⚠️ **Ce chiffre vient du blog d'un éditeur concurrent qui vend son propre VAD**
+— cité parce que c'est la seule mesure tierce chiffrée trouvée, pas parce
+qu'il fait autorité. La même source donne ~43 % de CPU pour Silero sur un Pi
+Zero ; un Pi 5 est d'un autre ordre, mais **c'est à mesurer chez nous**, le
+Pi 5 faisant déjà tourner whisper et piper (`mesure-cpu-conversation.sh`).
+
+**Observation d'intégration.** Nos trames font **480 échantillons** (30 ms à
+16 kHz, `MicCapture(frame_ms=30)`). Silero en veut **512** → ré-assembleur à
+cheval sur les trames, et c'est un **piège silencieux** : mal découpé,
+certains modèles ne protestent pas et rendent des résultats dégradés. TEN
+accepte un pas de **160** → notre trame en contient exactement trois, le
+découpage tombe juste. Ce n'est pas décisif seul, mais ça se paie en bugs.
+
+**Proposition** : **Silero par défaut** (licence la plus propre, chemin ARM
+documenté, onnxruntime **déjà présent dans l'image en 1.30.0** — apporté par
+piper, donc zéro dépendance nouvelle), **TEN en challenger**, départagés sur
+NOTRE corpus — pas sur des comparatifs où chacun mesure son propre produit.
+
+**Deux précautions à graver** : **figer la version** (Silero a changé sa
+taille de fenêtre entre versions et rendu onnxruntime optionnel en cours de
+route — deux ruptures qui casseraient en silence), et **tester le
+ré-assemblage des blocs comme une unité à part entière**.
+
+---
+
+## 6 ter. Comment mesurer sans public — le corpus de rue
+
+L'objection de David : *« je ne vois pas bien comment tester petit à petit,
+surtout sans public et pas avec les mêmes conditions sonores »*. Elle se
+dénoue en séparant ce qui a besoin du **public** de ce qui a besoin du
+**bruit** : le problème de détection n'a besoin que du second.
+
+L'outillage existe et n'a **jamais servi** : script d'enregistrement en rue et
+rejeu d'un fichier dans la VAD **de production** (lot D0, 13/07). Il lui
+manque de **compter**.
+
+⚠️ **Cadre légal — on n'enregistre pas les conversations des passants.** Le
+§5.7 de l'étude déclenchement impose un dispositif type tournage (affichage
+visible, accord demandé après l'échange, effacement par défaut) : hors
+spectacle, on ne l'a pas. Et c'est heureux, car pour **mesurer** une détection
+il faut connaître la vérité terrain — donc de la parole qu'on a provoquée.
+Ce qu'on enregistre : l'**ambiance** (c'est elle qu'on vient chercher) et de
+la **parole volontaire**, la sienne ou celle d'un complice.
+
+**Protocole (première campagne : festival, 13/09 après-midi).** ReSpeaker
+dans son support imprimé, à la hauteur qu'il aura sur Didier. Quatre ambiances
+(coin calme / foule / près d'une sono / en marchant), et pour chacune :
+annonce à voix haute du contexte (l'enregistrement se documente lui-même),
+30 s de silence (le plancher décide de tout), puis de la parole à 1, 2, 3 et
+4 m en annonçant la distance, et enfin des **réponses courtes du type que
+Didier recevra** (« par là », « c'est fermé », un refus, une blague).
+**Prises longues et continues** : le seuil actuel se calibrant au démarrage,
+une prise longue montre *à quel moment* il devient sourd — une prise courte le
+cacherait. Dire aussi l'orientation du micro (c'est ce qui permettra de juger
+le socle).
+
+⚠️ Le corpus doit être enregistré avec le **montage définitif** : micro tenu à
+la main, on mesurerait une autre machine que celle qui jouera.
 
 **Et un troisième levier, qui est du jeu.** Si Didier entend mal les
 étrangers, le montrer plutôt que le cacher : **David relaie.** Il répète, il
@@ -347,19 +481,63 @@ antérieur à tout ce que cette étude propose.
 
 ---
 
-## 9. Lots proposés
+## 9. Plan d'implémentation
 
-Ordre choisi pour que chaque lot soit jouable seul, et vérifiable en
-simulation avant le réel.
+Quatre phases, chacune avec un **verrou de sortie** : on ne passe à la suivante
+qu'une fois qu'il est franchi. Le principe qui les ordonne : **mesurer avant
+de construire**, parce qu'aujourd'hui tout le monde argumente à l'intuition.
 
-| Lot | Contenu | Vérifiable sans robot |
-|---|---|---|
-| **I0** | État de mission (module pur + topic latché) et jauge sur le visage LED | oui (sim + aperçu visage) |
-| **I1** | Déclenchement de parole en jeu + transitions de mission par réplique | oui (banc PC) |
-| **I2** | Mémoire des guides (`{"name"}` consommé) + sessions par rencontre | oui |
-| **I3** | Deuxième oreille (canal David) et arbitrage entre les deux entrées | banc PC, puis réel |
-| **I4** | Contrat « oui, et » dans l'écriture du personnage + garde-fous §5 | oui |
-| **I5** | Détection de parole en rue (DoA, VAD neuronale) | non — mesures réelles |
+### Phase A — mesurer (rien à construire, ou presque)
 
-I0 à I2 se font entièrement sur le banc PC, donc **pendant l'immobilisation du
-robot**. I5 demande la rue.
+1. **Corpus de rue** (§6 ter) — première campagne au festival du 13/09.
+2. **Rejeu chiffré** : l'outil existe (rejeu d'un wav dans la VAD de prod, lot
+   D0 du 13/07, jamais servi) ; il lui manque de **compter** — phrases
+   détectées, fausses alertes, fins de phrase ratées, latence de fin, par prise.
+
+> **Verrou de sortie : on sait de combien c'est mauvais, en nombres.**
+
+### Phase B — la détection (banc + corpus, aucun robot)
+
+1. Découpage détecteur / machine à états (§6 bis), `EnergyVad` devenant une
+   implémentation parmi deux.
+2. **Silero et TEN comparés sur le MÊME corpus.** On garde celui qui gagne à
+   la mesure, jamais celui qui gagne au comparatif de son propre éditeur.
+   Ré-assemblage des blocs testé à part (480 → 512).
+3. Direction en **bonus de confiance, jamais en veto** (§6).
+4. **Questions fermées** dans l'écriture du personnage : gain de robustesse
+   qui ne coûte pas une ligne de code — « c'est par là ? » appelle un mot
+   fort et un geste, « vous êtes heureux ? » appelle trois phrases hésitantes.
+5. Coût CPU mesuré sur le Pi 5, qui fait déjà tourner whisper et piper
+   (`mesure-cpu-conversation.sh`).
+
+> **Verrou de sortie : une amélioration MESURÉE sur le corpus, pas une
+> impression.**
+
+### Phase C — l'interaction (banc PC, pendant l'immobilisation de Didier)
+
+| Lot | Contenu |
+|---|---|
+| **I0** | État de mission (module pur + topic latché) et **jauge sur le visage LED** — colonne vertébrale, et visible tout de suite |
+| **I1** | Déclenchement de parole en jeu + transitions de mission par réplique (§3.1) |
+| **I2** | Mémoire des guides (`{"name"}` enfin consommé) + sessions par rencontre |
+| **I4** | Contrat « oui, et » dans l'écriture (§3.3) + garde-fous (§5) |
+
+> **Verrou de sortie : une déambulation se joue de bout en bout en
+> simulation, avec David.**
+
+### Phase D — le réel (bloquée par le retour de Didier)
+
+Montage définitif du ReSpeaker puis **re-mesure du corpus** (le socle, §6) ;
+**I3** deuxième oreille et arbitrage des deux entrées ; répétition à froid
+dans la rue, sans public ; puis petit public.
+
+### ⚠️ Le verrou qui domine tout
+
+**Aucune sortie publique avant que le coup-de-poing existe** (§8). Il ne dépend
+d'aucune des quatre phases et il est antérieur à toutes.
+
+### Ce qui se fait pendant l'immobilisation du robot
+
+Phases **A**, **B** et **C** entièrement — corpus, détection, interaction. Seule
+la phase D attend le matériel. Autrement dit : l'immobilisation ne bloque rien
+de ce qui reste à décider.

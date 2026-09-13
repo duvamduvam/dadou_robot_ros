@@ -775,10 +775,37 @@ d'assurabilité d'une date — exactement le trou que le tableau de bord a
 dangereux, carte non fabriquée). **Aucune déambulation publique avant que ce
 point soit fermé**, et c'est antérieur à tout le chantier interaction.
 
-Lots proposés I0→I5 (§9 de l'étude) : I0 état de mission + jauge LED,
-I1 déclenchement en jeu, I2 mémoire des guides, I3 deuxième oreille,
-I4 garde-fous, I5 détection de parole en rue. **I0 à I2 se font entièrement
-sur le banc PC**, donc pendant l'immobilisation du robot.
+**Plan d'implémentation en 4 phases** (§9 de l'étude), chacune avec son verrou
+de sortie, sur le principe **mesurer avant de construire** :
+**A** corpus de rue + rejeu chiffré (verrou : on sait de combien c'est mauvais,
+en nombres) → **B** détection de VOIX au lieu de niveau (verrou : amélioration
+mesurée sur le corpus) → **C** interaction I0 état de mission + jauge LED,
+I1 déclenchement en jeu, I2 mémoire des guides, I4 garde-fous (verrou : une
+déambulation jouée de bout en bout en sim) → **D** le réel.
+**A, B et C se font entièrement sur le banc PC** : l'immobilisation du robot
+ne bloque rien de ce qui reste à décider.
+
+### Détection de parole — le point dur, instruit le 13/09
+
+⚠️ **`EnergyVad` ne mesure QUE du volume** : seuil = plancher calibré UNE fois
+au démarrage × 1,3, fin de phrase = 600 ms de silence continu. Deux
+défaillances certaines en rue : un seuil figé devient faux dès qu'on change de
+rue, et « 600 ms de silence » n'arrive jamais — donc la fin de phrase n'arrive
+jamais. Ça peine déjà en atelier calme.
+
+Remplacement par une **VAD neuronale** (§6 bis de l'étude, candidats sourcés
+le 13/09) : **Silero par défaut** (MIT, ONNX, chemin ARM documenté) contre
+**TEN** en challenger, départagés sur NOTRE corpus. Découverte qui rend ça
+quasi gratuit : **onnxruntime 1.30.0 est DÉJÀ dans l'image vision** (apporté
+par piper) — aucune dépendance nouvelle. Pièges notés : bloc d'entrée fixe
+(512 éch. pour Silero contre nos trames de 480 → ré-assembleur à tester à
+part, erreur silencieuse sinon) et versions à figer.
+
+⚠️ **Correction de David** : la direction d'arrivée du son est un **bonus de
+confiance, JAMAIS un veto** — le faisceau se verrouille sur la source
+dominante, pas sur la parole. En filtre, elle fabriquerait une régression
+déguisée en amélioration. Et le **socle plastique** dégrade probablement la
+discrimination spatiale : à mesurer par le corpus, pas à débattre.
 
 **MICRO CHANGÉ le 26/08** : le ReSpeaker XVF3800 est reçu et **testé au banc
 sur le Pi 5** — driverless, 16 kHz natif, 21 dB de SNR à 3 m sur le robot au
