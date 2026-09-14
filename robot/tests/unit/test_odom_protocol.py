@@ -226,6 +226,22 @@ def test_crc8_est_deterministe_et_tient_sur_un_octet():
         assert 0 <= crc8(texte) <= 0xFF
 
 
+def test_crc8_grave_le_vecteur_canonique_du_CRC8_SMBUS():
+    # Le test ci-dessus est tautologique (`crc8(t) == crc8(t)`) : il vérifie le
+    # déterminisme, pas l'ALGORITHME. Changer le polynôme 0x07 en 0x31, ou
+    # l'init 0x00 en 0xFF, le laisserait vert — comme tous les autres tests du
+    # CRC, qui recalculent l'attendu avec `crc8()` lui-même.
+    #
+    # « 123456789 » est le vecteur d'essai canonique des CRC : pour
+    # CRC-8/SMBUS (polynôme 0x07, init 0x00, sans réflexion ni XOR final), il
+    # vaut 0xf4. C'est cette valeur qui permet à un décodeur écrit ailleurs —
+    # ou au firmware du Pico, qui ne partage pas ce fichier de tests — de
+    # prouver qu'il calcule bien le MÊME CRC. Même vecteur que le protocole de
+    # la télécommande (`firmware/remote_usb/remote_protocol.py`) : les deux
+    # CRC sont le même algorithme, et doivent le rester.
+    assert crc8("123456789") == 0xF4
+
+
 def test_seq_boucle_sur_16_bits_dans_la_trame():
     assert parse_frame(build_frame(65536, 0, 0))[0] == 0
     assert parse_frame(build_frame(65537, 0, 0))[0] == 1

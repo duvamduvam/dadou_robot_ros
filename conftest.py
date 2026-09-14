@@ -25,3 +25,10 @@ sys.path.insert(0, os.path.join(ROOT, "conf", "ros2_dependencies", "robot_web"))
 # noeud ROS et les tests. main.py, lui, n'est JAMAIS importé sur l'hôte -- il
 # a besoin de machine/rp2, qui n'existent que sur le microcontrôleur.
 sys.path.insert(0, os.path.join(ROOT, "firmware", "pico_odometry"))
+
+# Idem pour le firmware de la telecommande USB (remote_protocol.py) : logique
+# PURE de la trame montante, de la zone morte et de la regle « menu inerte tant
+# que l'homme-mort est tenu », partagee entre le RP2040 (CircuitPython), le
+# decodeur hote et les tests. code.py / boot.py ne sont JAMAIS importes sur
+# l'hote -- ils ont besoin de board/digitalio/usb_cdc.
+sys.path.insert(0, os.path.join(ROOT, "firmware", "remote_usb"))
