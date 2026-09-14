@@ -28,8 +28,10 @@ au sol (priorité 1) au lieu de l'attendre.
 ## 2. Le matériel constaté sur les photos
 
 Photos : [`hardware/photos/2026-09-14-module-joystick/`](hardware/photos/2026-09-14-module-joystick/)
-(4 images, copiées du Xiaomi le 14/09 ; c'est le seul relevé dont on dispose — rien n'a
-été mesuré à l'établi).
+(**6 images**, copiées du Xiaomi le 14/09 : 4 du joystick à 22:11, **2 de l'OLED à 22:36**
+— celles-ci dépouillées au §4.6. C'est le seul relevé dont on dispose : **rien n'a été mesuré
+à l'établi**, aucune règle n'est apparue dans le cadre, et aucune dimension ci-dessous n'est
+une cote.)
 
 | Fait | Comment il est établi | Confiance |
 |---|---|---|
@@ -123,29 +125,28 @@ entrée analogique se lit très bien en numérique). C'est possible, mais ça co
 dernière réserve d'extension. **Si David veut le `SW` ET une extension future, c'est le
 RP2040-One (20 broches) qu'il faut prendre**, en acceptant sa mécanique USB.
 
-### 4.2 Deux interfaces USB dans un seul firmware — DÉCIDÉ, à valider sur matériel
+### 4.2 Une seule interface : la série USB CDC — DÉCIDÉ (révisé le 14/09 au soir)
 
-C'est la décision structurante, et elle vient directement du « télécommande **et**
-simulation ». Les deux destinations ne parlent pas la même langue :
+> **Cette décision a été prise, puis renversée le soir même.** La première version proposait
+> que le boîtier se présente AUSSI comme une manette de jeu USB (classe HID), pour que la
+> simulation le lise avec `joy_node` sans écrire une ligne de code. **David a écarté le HID.**
+> La trace est gardée ici parce que l'argument du renversement est bon et qu'il resservira.
 
-- la **télécommande Pi 4** attend une **série USB CDC** avec une trame maison ;
-- la **simulation** n'a besoin de rien de spécifique si le boîtier se présente comme une
-  **manette de jeu HID standard** : `ros2 run joy joy_node` la lit, `teleop_twist_joy` la
-  convertit en `/cmd_vel_remote`. **Zéro ligne de code à écrire côté ROS**, et le paramètre
-  `enable_button` de `teleop_twist_joy` est *exactement* un homme-mort.
+**Pourquoi le HID est écarté.** Il n'aurait servi qu'**un seul** des deux usages (la conduite
+en simulation), et **aucunement le menu**, qui est le cœur du besoin : le profil manette ne
+transporte que des axes et des boutons, pas des lignes de texte ni des sélections. Il
+apportait en revanche la seule inconnue capable de bloquer le chantier — aucun exemple
+officiel ne montre HID et CDC-data cohabitant sur RP2040, et le nombre d'endpoints USB du
+RP2040 n'est chiffré nulle part ; en cas de manque, CircuitPython part en mode sans échec.
+**Une inconnue bloquante au service d'un demi-usage : mauvais marché.**
 
-Écrire un nœud ROS maison pour lire la série en simulation serait du code à maintenir pour
-refaire ce que `joy_node` fait déjà. **Donc : les deux à la fois.** CircuitPython l'autorise
-en principe — `usb_cdc.enable(console=…, data=True)` et `usb_hid.enable(…)` dans `boot.py`,
-avec la bibliothèque `hid_gamepad.Gamepad` d'Adafruit qui fournit un descripteur tout fait.
+Donc : **tout passe par la série USB CDC**, dans les deux sens (§4.6). Pour la simulation, on
+écrit un petit nœud qui lit cette série et publie `/cmd_vel_remote`. C'est du code en plus par
+rapport à `joy_node`, mais il est modeste et il réutilise le décodeur déjà écrit et testé du
+§4.5 — alors que le HID aurait imposé de maintenir deux représentations des mêmes entrées.
 
-> ⚠️ **Ceci n'est pas vérifié sur matériel.** La recherche du 14/09 n'a trouvé **aucun
-> exemple officiel Adafruit combinant HID et CDC-data**, et la documentation prévient qu'on
-> peut « manquer d'endpoints USB », sans jamais chiffrer combien le RP2040 en offre. Si les
-> endpoints manquent, CircuitPython passe en **mode sans échec** après `boot.py`.
-> **C'est pour ça que le lot T0 (§6) ne fait que ça, et passe avant tout le reste.**
-> Repli si ça ne passe pas : deux firmwares, un interrupteur de mode au démarrage (bouton
-> tenu au branchement), ou on renonce au HID et on écrit un petit nœud `joy` maison.
+*Si le besoin « brancher le boîtier sur une machine qui n'a pas notre logiciel » apparaît un
+jour, c'est ici qu'il faudra rouvrir le HID — et commencer par la vérification d'endpoints.*
 
 ### 4.3 Homme-mort : bouton séparé sous l'index — DÉCIDÉ (choix de David)
 
@@ -164,28 +165,39 @@ un bouton d'arrêt franc (§4.4), donneraient enfin au projet ces deux sources m
 coup-de-poing sans fil du chantier web (W1), ni la coupure générale. Et il ne répare pas le
 danger actif des deux boutons du dos (« stop » = `shutdown`, donc emballement).
 
-### 4.4 Les 4 boutons — **OUVERT**
+### 4.4 Les 4 boutons = la navigation du menu — DÉCIDÉ (choix de David)
 
-David a répondu par une question : « sélection menu OLED ? ». Les deux schémas possibles :
+Intention de David, mot pour mot : « je préférerais un petit menu, comme ça je peux contrôler
+**tous les éléments** via la télécommande ». Les 4 boutons sont donc les touches du menu
+(haut, bas, valider, retour), et non 4 actions directes comme je le proposais.
 
-| | **A — 4 actions directes** (recommandé) | **B — 4 touches de menu** |
-|---|---|---|
-| Rôle des boutons | e-stop franc, cran de vitesse, `follow` on/off, animation | haut, bas, valider, retour |
-| Navigation du menu | **au joystick** (haut/bas + `SW` pour valider) | aux boutons |
-| Actions scéniques | les 4 principales sont à un geste | toutes au menu, ≥ 2 gestes |
-| Extension | limitée à 4 | illimitée (le menu grandit) |
+**L'argument que j'avais opposé, et ce qu'il en reste.** Un menu fabrique des **modes** : le
+même bouton ne fait plus la même chose selon l'écran affiché, et l'étude du robot suiveur du
+14/09 vient d'identifier le mode implicite comme *le* mode dangereux du projet. Mais cet
+argument vise le **pilotage**, pas le **catalogue** : « tous les éléments » (animations,
+visages, lumières, bascules) ne tiendra jamais sur quatre boutons, et un menu est la seule
+forme qui grandit sans redessiner l'objet. La réponse au risque de mode n'est donc pas de
+refuser le menu, c'est la règle ci-dessous — plus le fait que **la conduite ne passe jamais
+par lui** (§4.7).
 
-**Je recommande A**, pour une raison qui n'est pas ergonomique : **un menu fabrique des
-modes**, et le même bouton ne fait plus la même chose selon l'écran affiché. L'étude du robot
-suiveur du 14/09 vient d'identifier le mode implicite comme *le* mode dangereux du projet.
-Le joystick, lui, sait déjà naviguer un menu — c'est un organe à quatre directions avec un
-bouton de validation intégré. Le prendre pour le menu **libère** les quatre boutons, et
-laisse chaque bouton signifier une seule chose pour toujours.
+> **Règle de sécurité NON négociable : le menu est inerte tant que l'homme-mort est tenu.**
+> Naviguer un écran à deux mains pendant que 50 kg roulent, c'est l'accident. Homme-mort
+> tenu ⇒ l'écran n'affiche que la conduite et les 4 touches ne produisent rien. Cette règle
+> vit dans le module partagé, donc elle se teste sur l'hôte (§6).
 
-> **Règle de sécurité, elle, NON négociable quel que soit le schéma retenu :**
-> **le menu est inerte tant que l'homme-mort est tenu.** Naviguer un écran à deux mains
-> pendant que 50 kg roulent, c'est l'accident. Homme-mort tenu ⇒ l'OLED n'affiche que la
-> conduite, les boutons de menu ne font rien. Cette règle se teste sur l'hôte (§6, T2).
+Le `SW` du joystick reste **OUVERT** (§7) : il pourrait doubler « valider », mais il coûte la
+dernière voie analogique libre du XIAO.
+
+### 4.7 Ce qui ne passe JAMAIS par le menu ni par l'hôte — DÉCIDÉ
+
+La conduite est **entièrement locale au RP2040** : lecture des axes, homme-mort, émission
+50 Hz. Elle ne dépend ni de l'écran, ni de l'état du menu, ni de la santé de l'hôte.
+
+C'est ce qui rend le §4.6 acceptable : si le logiciel hôte plante ou se fige, le menu gèle et
+l'écran ment — mais le boîtier continue d'émettre la vérité des axes et de l'homme-mort, et
+s'il ne l'émet plus, le deadman 400 ms en aval arrête le robot. **Une panne d'affichage ne
+peut produire qu'un menu mort, jamais un mouvement.** C'est la même discipline que le
+firmware d'odométrie, qui lit et rapporte mais ne commande rien.
 
 ### 4.5 Protocole série : un **nouveau** type de périphérique — DÉCIDÉ
 
@@ -222,14 +234,43 @@ Tout ce qui peut être *faux* — le signe des axes, la zone morte, le masque de
 CRC — vit dans le fichier partagé, exercé par les tests du dépôt. C'est ce qui évite
 d'écrire deux fois une convention de signe et d'inverser un axe sans s'en apercevoir.
 
-### 4.6 L'OLED : **local seul** — DÉCIDÉ (choix de David)
+### 4.6 L'OLED : le menu vit **côté hôte**, pas dans le firmware — DÉCIDÉ (révisé)
 
-L'écran n'affiche que ce que le boîtier sait de lui-même : axes, homme-mort tenu ou relâché,
-cran de vitesse, bouton actif, état de la liaison vue de son côté. **Aucun flux descendant**
-(robot → télécommande) n'est à écrire, et le boîtier reste utile branché sur une machine qui
-ne connaît pas le protocole. Conséquence assumée : **la batterie et l'état du robot ne
-s'afficheront pas.** Si ce besoin revient, il rouvrira cette décision — et imposera un
-canal descendant plus un nœud qui l'alimente.
+> **Deuxième décision renversée le 14/09 au soir.** J'avais acté « OLED local seul » (l'écran
+> n'affiche que ce que le boîtier sait de lui-même). Ça tenait tant que l'écran servait à
+> afficher de l'état. **« Contrôler tous les éléments » le fait tomber** : le catalogue des
+> animations, visages et lumières vit côté robot, pas dans le boîtier.
+
+Deux façons de faire un menu, et elles ne se valent pas :
+
+| | Menu **dans le firmware** | Menu **côté hôte** (retenu) |
+|---|---|---|
+| Où vit la liste | figée dans le RP2040 | dans le logiciel qui connaît déjà les séquences |
+| Ajouter une animation | reflasher le boîtier | rien à faire, elle apparaît |
+| Ce que le firmware sait du métier | tout | **rien** |
+| Flux descendant à écrire | non | oui (mais la série est bidirectionnelle par nature) |
+
+**Retenu : le menu côté hôte.** Le RP2040 devient un **terminal générique** — il affiche les
+lignes qu'on lui envoie, il remonte les appuis et le curseur. Il ne connaît aucun nom
+d'animation, donc **son firmware ne change plus jamais** quand le spectacle change. Un
+catalogue figé dans le firmware serait une copie de la vérité, et une copie périme : c'est
+exactement l'erreur que l'inventaire de stock documente sur trois pages.
+
+Le coût est faible et il était déjà payé : la liaison série est bidirectionnelle, et il
+fallait de toute façon du code hôte pour interpréter les sélections. Ce qui s'ajoute, c'est
+un protocole descendant simple (effacer, écrire ligne N, surligner la ligne du curseur).
+
+**Réserve, et c'est le §4.7 qui la lève** : l'écran dépend maintenant de l'hôte. S'il plante,
+le menu gèle. Acceptable uniquement parce que la conduite, elle, ne passe jamais par là.
+
+**Matériel identifié le 14/09 au soir** (photos `oled-ou-carte-2236*`, réf. lues au dos) :
+module OLED I²C 4 broches `GND · VCC · SCL · SDA`, avec un sélecteur d'adresse sérigraphié
+`IIC ADRESS SELECT` marqué **`0x78` / `0x7A`** — soit **0x3C / 0x3D** en adressage 7 bits,
+la forme qu'attendent les bibliothèques. ⚠️ Le contrôleur n'est **pas lisible** (il est sous
+la dalle) : `SSD1306` et `SH1106` sont indiscernables à l'œil et le SH1106 **décale l'image
+de 2 pixels en colonne** — un affichage tronqué au premier essai désigne le SH1106, ce n'est
+pas une panne. ⚠️ La dalle paraît **légèrement soulevée d'un côté** sur la photo : à vérifier
+à la main, une nappe qui se décolle tue le module.
 
 Le potentiomètre-limiteur de vitesse proposé le 14/09 a été **écarté par David** au profit
 des boutons. Les voies A2/A3 restent libres : la décision est réversible sans redessiner.
@@ -254,18 +295,21 @@ sécurité matérielle (watchdog, `OE`, coup-de-poing) reste physiquement inexis
 
 ## 6. Lots
 
+*Révisé le 14/09 au soir : l'ancien T0 (cohabitation HID + CDC) disparaît avec le HID (§4.2).
+Le chantier n'a plus d'inconnue capable de le bloquer — il commence par du code testable.*
+
 | Lot | Contenu | Où ça se vérifie | Verrou |
 |---|---|---|---|
-| **T0** | **Lever l'inconnue USB** : `boot.py` minimal, CDC-data + HID gamepad ensemble sur le XIAO. Le seul but est de savoir si CircuitPython tient les deux. | carte nue sur le PC : `lsusb`, `/dev/ttyACM*`, `evtest` | — |
-| **T1** | `remote_protocol.py` + ses tests hôte (CRC, zone morte, signes, masque, trame tronquée) | `.venv/bin/pytest` | — |
-| **T2** | `code.py` : lecture ADC, pull-up du `SW`, 4 boutons, homme-mort, émission 50 Hz. Règle « menu inerte si homme-mort tenu » testée en T1. | banc, joystick câblé à l'air | T0 |
-| **T3** | **Simulation** : le boîtier pilote Gazebo via `joy_node` + `teleop_twist_joy` (`enable_button` = homme-mort) | sim headless + console web | T0, T2 |
-| **T4** | Intégration `dadou_control_ros` : type `remote_usb`, `SERIAL_ID`, décodeur | dépôt télécommande | T1-T3 |
-| **T5** | OLED : référence à identifier, menu local | banc | OLED en main |
-| **T6** | Boîtier imprimé 3D (PETG), après que l'électronique marche à l'air | CR-10 | T2 |
+| **T1** | `remote_protocol.py` + ses tests hôte : CRC, zone morte, signes, masque de boutons, trame tronquée, **et la règle « menu inerte si homme-mort tenu »** | `.venv/bin/pytest` | — |
+| **T2** | `code.py` : lecture ADC, pull-up du `SW`, 4 boutons, homme-mort, émission 50 Hz inconditionnelle | banc, joystick câblé à l'air | T1 |
+| **T3** | OLED : trancher SSD1306/SH1106 au premier affichage, adresse 0x3C/0x3D, puis le **protocole descendant** (effacer / écrire ligne / curseur) | banc | T2 |
+| **T4** | **Simulation** : nœud qui lit la série et publie `/cmd_vel_remote` ; conduite dans Gazebo, homme-mort compris | sim headless + console web | T1-T2 |
+| **T5** | Intégration `dadou_control_ros` : type `remote_usb`, `SERIAL_ID`, décodeur, **et le menu qui expose les éléments réels** (animations, visages, lumières) | dépôt télécommande | T3-T4 |
+| **T6** | Boîtier imprimé 3D (PETG), une fois que l'électronique marche à l'air | CR-10 | T2 |
 
-L'ordre compte : **T0 peut invalider le §4.2 à lui seul**, et il coûte une soirée. Rien ne
-doit être soudé ni imprimé avant qu'il ait répondu.
+L'ordre compte toujours, mais pour une autre raison : **T1 n'a besoin d'aucun matériel** (ni
+carte, ni robot, ni simulation) et il contient tout ce qui peut être *faux*. C'est le lot à
+faire en premier, et il est faisable ce soir.
 
 ---
 
@@ -273,13 +317,15 @@ doit être soudé ni imprimé avant qu'il ait répondu.
 
 | # | Inconnue | Comment la lever | Bloque |
 |---|---|---|---|
-| 1 | CircuitPython tient-il **HID + CDC-data** sur RP2040 ? | T0, 1 soirée | §4.2, donc T3 |
-| 2 | Référence exacte de l'OLED (SSD1306 ? SH1106 ? 128×64 ? adresse 0x3C ?) | David : lire la carte ou une photo | T5 |
-| 3 | Schéma **A ou B** pour les 4 boutons (§4.4) | arbitrage de David | T2 |
-| 4 | Le `SW` du joystick est-il câblé ? (il coûte la dernière voie libre, §4.1) | arbitrage de David | T2 |
-| 5 | Valeur des potentiomètres du `HW-504` | ohmmètre, 1 min | rien (informatif) |
-| 6 | Dimensions du RP2040-One / Zero (jamais publiées en texte) | pied à coulisse, si on change de carte | §4.1 si repli |
-| 7 | Combien de XIAO exactement ? (l'inventaire dit 1 sûr + 2 cartes Seeed non identifiées) | ouvrir le tiroir | T2 |
+| ~~1~~ | ~~CircuitPython tient-il HID + CDC-data ?~~ | **sans objet** — le HID est écarté (§4.2) | — |
+| ~~2~~ | ~~Référence de l'OLED~~ | **LEVÉE le 14/09** : module I²C 4 broches, adresse 0x78/0x7A ⇒ **0x3C/0x3D** (§4.6) | — |
+| ~~3~~ | ~~4 actions directes ou menu ?~~ | **TRANCHÉ par David : menu** (§4.4) | — |
+| 4 | Le contrôleur est-il un **SSD1306 ou un SH1106** ? (décalage de 2 px) | premier affichage, T3 | rien (se corrige en une ligne) |
+| 5 | La dalle de l'OLED est-elle **décollée** ? (vu sur photo, à confirmer) | à la main, 10 s | T3 si elle l'est |
+| 6 | Le `SW` du joystick est-il câblé ? Il coûte la dernière voie analogique libre (§4.1) | arbitrage de David | T2 |
+| 7 | Valeur des potentiomètres du `HW-504` | ohmmètre, 1 min | rien (informatif) |
+| 8 | Combien de XIAO exactement ? (l'inventaire dit 1 sûr + 2 cartes Seeed non identifiées) | ouvrir le tiroir | T2 |
+| 9 | Dimensions du RP2040-One / Zero (jamais publiées en texte) | pied à coulisse, si on change de carte | §4.1 si repli |
 
 ---
 
@@ -297,6 +343,8 @@ CircuitPython), avec les réserves suivantes, à ne pas effacer :
   paragraphe du modèle *Plus* (où GP29 est multiplexé avec la mesure batterie), pas par une
   phrase affirmative. À confirmer à la première lecture analogique.
 - Le nombre d'endpoints USB du RP2040 n'est chiffré **nulle part** dans la doc consultée.
+  *Sans objet depuis l'abandon du HID (§4.2) — conservé parce que c'est précisément ce trou
+  documentaire qui rendait l'option coûteuse, et il faudra le rouvrir si le HID revient.*
 
 Conformément à la règle du projet, aucun de ces chiffres n'a été écrit de mémoire ; ceux qui
 manquent sont déclarés manquants plutôt que comblés.
