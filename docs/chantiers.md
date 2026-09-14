@@ -161,6 +161,49 @@ hors sol ne l'a validé qu'en marche avant symétrique).
 C'est le verrou de : roues web au réel (chantier web), suivi de personne au
 réel.
 
+### À TESTER — les deux boutons ajoutés le 2026-09-14
+
+Code écrit et testé au banc (`designate` côté vision, `follow` côté
+télécommande). **Rien n'a jamais été pressé sur le vrai gant.** Trois étages,
+dans cet ordre — le premier ne touche aucun actionneur et peut se faire dès le
+retour du robot.
+
+**Étage 1 — « c'est moi » (IHR), roues à l'arrêt, zéro risque**
+
+1. **La trame passe-t-elle ?** `ros2 topic echo designate` pendant que David
+   appuie. ⚠️ C'est LE point à vérifier en premier : `PUBLISHER_LIST` est un
+   filtre **silencieux** — un bouton mal câblé ne fait rien, sans erreur.
+   Vérifier aussi que le gant physique envoie bien la touche `m` (IHR).
+2. **IHR ne fait rien d'autre.** Le libellé "Inclino" était mort, mais
+   c'est à confirmer sur le gant 9DOF réel : aucun effet parasite à l'appui.
+3. **Le cas qui motive tout** : quelqu'un se met **plus près** que David.
+   Sans appui, Didier doit regarder l'intrus (comportement actuel) ; David
+   appuie, le regard passe sur lui **et y reste**. C'est la contre-preuve.
+4. **Sortie et retour au même endroit** → ré-acquisition sans rien toucher.
+5. **Retour par un autre côté** → PAS de ré-acquisition (regard au centre),
+   David ré-appuie. C'est le comportement voulu, pas une panne.
+6. **Pendant une séquence d'animation** : l'arbitrage doit toujours primer
+   (le gaze se tait), l'appui ne doit pas le contourner.
+
+**Étage 2 — « suis-moi » (START/SELECT), roues HORS SOL, protocole caméra**
+
+7. START → le suivi s'active (log `follow ON`) ; SELECT → **arrêt franc**,
+   quel que soit l'état précédent. Tester SELECT alors que le suivi est déjà
+   off (doit être inoffensif).
+8. **`direction_sign` du suiveur** : jamais tranché en réel — même dette que
+   le gaze avant le 12/07. David à droite ⇒ le robot doit tourner **vers** lui.
+9. La télécommande écrase le suivi en plein mouvement (priorité 100 > 20),
+   et le suivi ne reprend qu'au relâchement.
+10. Kill de la chaîne en plein suivi → arrêt local (deadman 400 ms).
+
+**Étage 3 — au sol, avec le reste de cette section**
+
+11. Suivi réel, David marchant, **personne d'autre dans la pièce**.
+12. **Le mode dangereux de [`etude-suivi-personne.md`](etude-suivi-personne.md)
+    §3** : un complice masque les jambes de David. Aujourd'hui Didier doit
+    **avancer** (c'est le défaut à constater, roues hors sol d'abord). C'est la
+    mesure qui justifiera le correctif S0.
+
 ## Odométrie des roues
 
 Plan : [`etude-odometrie.md`](etude-odometrie.md) (décidé 2026-07-14 — ne pas
