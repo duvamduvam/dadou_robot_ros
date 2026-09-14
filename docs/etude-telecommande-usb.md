@@ -266,14 +266,113 @@ le menu gèle. Acceptable uniquement parce que la conduite, elle, ne passe jamai
 **Matériel identifié le 14/09 au soir** (photos `oled-ou-carte-2236*`, réf. lues au dos) :
 module OLED I²C 4 broches `GND · VCC · SCL · SDA`, avec un sélecteur d'adresse sérigraphié
 `IIC ADRESS SELECT` marqué **`0x78` / `0x7A`** — soit **0x3C / 0x3D** en adressage 7 bits,
-la forme qu'attendent les bibliothèques. ⚠️ Le contrôleur n'est **pas lisible** (il est sous
-la dalle) : `SSD1306` et `SH1106` sont indiscernables à l'œil et le SH1106 **décale l'image
-de 2 pixels en colonne** — un affichage tronqué au premier essai désigne le SH1106, ce n'est
-pas une panne. ⚠️ La dalle paraît **légèrement soulevée d'un côté** sur la photo : à vérifier
-à la main, une nappe qui se décolle tue le module.
+la forme qu'attendent les bibliothèques. ~~⚠️ La dalle paraît soulevée d'un côté~~ →
+**vérifié par David le 14/09 : la nappe n'est pas décollée, c'était un reflet.**
+
+⚠️ **Le contrôleur reste inconnu** (il est sous la dalle ; David ne sait pas non plus) :
+`SSD1306` et `SH1106` sont indiscernables à l'œil. **Ce n'est pas un problème, à condition de
+ne pas le traiter comme une panne** : le SH1106 a 132 colonnes pour 128 affichées, donc son
+image sort **décalée de 2 pixels** et rognée sur un bord. Conduite à tenir : écrire le code
+avec le pilote en **paramètre** (une constante en tête de fichier, pas une supposition
+enfouie), essayer SSD1306 d'abord — c'est le plus répandu — et si l'image est décalée,
+basculer. **Coût du doute : une ligne.** Coût de ne pas l'avoir écrit : une soirée à chercher
+une panne d'affichage qui n'existe pas.
 
 Le potentiomètre-limiteur de vitesse proposé le 14/09 a été **écarté par David** au profit
 des boutons. Les voies A2/A3 restent libres : la décision est réversible sans redessiner.
+
+### 4.8 Le menu — PROPOSÉ le 14/09, à valider par David
+
+Demande de David, mot pour mot : « propose un menu simple, **qu'est-ce qui est en train d'être
+actionné avec quelle valeur** ». Ce n'est pas seulement une liste de commandes : c'est un
+**moniteur**. Chaque ligne doit dire trois choses — quel élément, **qui le commande en ce
+moment**, et **à quelle valeur**.
+
+**Contrainte d'affichage**, qui décide de tout le reste : 128 × 64 pixels en police 6×8 font
+**21 colonnes sur 8 lignes**. Tout ce qui suit tient dans ce cadre, sans défilement horizontal.
+
+#### Écran A — CONDUITE (affiché dès que l'homme-mort est tenu, et lui seul)
+
+```
+CONDUITE       LIEN ok
+----------------------
+  avance     + 42 %
+  rotation   - 07 %
+----------------------
+
+  HOMME-MORT  TENU
+```
+
+Pas de menu, pas de curseur, rien à lire de complexe : on roule. C'est l'application directe
+de la règle du §4.4 — l'écran bascule ici tout seul, et les 4 touches ne produisent rien.
+
+#### Écran B — LISTE (homme-mort relâché) : *le* moniteur demandé
+
+```
+DIDIER            anim
+----------------------
+> cou      A    + 15°
+  bras G   A      0°
+  bras D   -    - 30°
+  yeux     S     suit
+  visage   A    parle
+  lumieres -     60 %
+```
+
+La colonne du milieu est la réponse à « qu'est-ce qui est en train d'être actionné » :
+
+| Marque | Qui tient cet actionneur en ce moment |
+|---|---|
+| `A` | une **animation** le pilote (séquence en cours) |
+| `S` | le **suivi** (gaze) le pilote |
+| `M` | **moi**, depuis ce menu |
+| `-` | personne — valeur au repos |
+
+**Pourquoi cette colonne vaut plus qu'elle n'en a l'air.** Le projet a un chantier
+« arbitrage des actionneurs » (`animation_state` latché, péremption du deadman) dont la
+vérification restante est *visuelle* : voir que le gaze ne tremble pas pendant une séquence.
+Cet écran affiche l'arbitrage **en direct, dans la main**. Ce n'est plus seulement une
+télécommande : c'est le premier afficheur de diagnostic embarqué du projet — et il coûte une
+colonne de six caractères.
+
+#### Écran C — ÉDITION (après « valider » sur une ligne)
+
+```
+cou                  M
+----------------------
+
+       + 15°
+   [======    ]
+
+ valider=ok  retour=x
+```
+
+Entrer ici **prend la main** sur l'élément : sa marque passe à `M` sur l'écran B, et le reste
+du système sait qu'il est tenu manuellement. « retour » rend la main.
+
+#### Les 4 touches, et rien d'autre à retenir
+
+| Touche | Écran B (liste) | Écran C (édition) |
+|---|---|---|
+| haut / bas | déplace le curseur | change la valeur |
+| valider | entre en édition, **ou déclenche** si la ligne est une action | confirme |
+| retour | — | annule et rend la main |
+
+Les lignes ne sont pas toutes des valeurs : `visage` et les animations sont des **choix dans
+une liste**, `follow` est une **bascule**. Le firmware n'a pas à le savoir — c'est l'hôte qui
+envoie le libellé et le type, conformément au §4.6.
+
+#### Ce que le protocole descendant doit transporter (minimum)
+
+Une ligne = `<marque> <libellé> <valeur>`. Donc, dans le sens hôte → boîtier : effacer,
+écrire la ligne N, positionner le curseur, basculer d'écran. **Rien de plus** : pas de
+graphisme, pas de police, pas de coordonnées. Un écran entier tient en 8 messages courts, et
+à 20 Hz de rafraîchissement c'est indolore sur une liaison série.
+
+> **OUVERT** : la liste des éléments ci-dessus est une **proposition** tirée de ce que la
+> chaîne sait déjà commander (cou, bras, yeux, visage, lumières, animations, `follow`). C'est
+> à David de dire lesquels il veut voir, et dans quel ordre — l'ordre d'une liste qu'on
+> parcourt à l'aveugle en scène n'est pas un détail.
 
 ---
 
