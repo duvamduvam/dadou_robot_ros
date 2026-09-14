@@ -359,8 +359,9 @@ Confiance : **H** = référence lue ou forme sans ambiguïté · **M** = famille
 | Matrices LED RGB adressables 8×8 | `WS2812B-64`, « Only ONE Pin / 24 bit color / 64 RGB LEDs » | PCB 8×8, LED 5050 | 3-5 | t0054 | H |
 | Cartes rondes à LED RGB + pastilles de couture | *(aucune marque lue)* | Ø ~50 mm | 2 | t0323 | B |
 | Claviers matriciels 4×4 | — | à touches, sur carte | 2 | t0209, t0479 | H |
-| Joysticks analogiques (thumbsticks) | — | modules 2,54 mm | 5-8 | t0180 | M |
+| **Joysticks analogiques (thumbsticks)** — *référence enfin LUE le 14/09, hors vidéo* | **`HW-504`** (famille KY-023) — sérigraphie lue au dos et sur le flanc. Brochage lu : `GND · +5V · VRx · VRy · SW`. ⚠️ **`R5` NON peuplée** sur l'exemplaire photographié ⇒ le `SW` est **flottant** (pull-up interne obligatoire). ⚠️ malgré le marquage `+5V`, **à alimenter en 3,3 V** sur RP2040 (simple pont diviseur : en 5 V les sorties dépassent le max absolu 3,63 V des ADC) | modules 2,54 mm, barrette 5 broches | 5-8 (1 en main) | t0180 + `photos/2026-09-14-module-joystick/` | **H** (réf) / M (qté) |
 | Afficheur OLED/LCD à nappe FPC | — | dalle + ZIF | 1 | t0204 | M |
+| ⚠️ **Petits OLED I²C — TROU D'INVENTAIRE** | David, le 14/09 : « un petit OLED, **j'en ai plein** ». Aucune des trois vidéos ne les a filmés, aucune référence lue (SSD1306 ? SH1106 ? 128×64 ? adresse 0x3C ?). **La seule dalle inventoriée est celle du dessus, à nappe FPC — ce n'est pas la même chose.** À filmer ou à lire à la prochaine passe | non observé | « plein » (non compté) | **aucun** — déclaré par David, pas vu | ⛔ |
 | Pupitre : clavier 4×4 métallique + LCD graphique | — | carte magenta assemblée | 1 | t0649 | B |
 
 ### 2.8 Prototypage
