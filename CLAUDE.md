@@ -48,7 +48,8 @@ FAIT et validé en sim (tout est commité/poussé, CI verte, 123 tests unitaires
   JSON invalide = refus loggué, plus de perte silencieuse), classe `Track` unique pour
   les pistes de keyframes (fix au passage : les frames du visage étaient décalées d'un
   cran), contrat `Action` (ABC), contrats de données testés (chaque visuel/audio/brique
-  référencé doit exister). **443 tests** (`.venv/bin/pytest -q`), CI verte.
+  référencé doit exister). **601 tests** (`.venv/bin/pytest`, chiffre relevé le
+  2026-09-14 ; il en disait 443, figés au 11/07), CI verte.
 - **Temps réel fait** : tick global 20 Hz (`TICK_PERIOD_S`, chaîne roues non touchée),
   servos en rampe linéaire (`RAMP_SPEED=160`, à caler sur scène) + anti-spam I2C +
   deadman façon roues + fix `random_duration` (le réel suit enfin la sim).

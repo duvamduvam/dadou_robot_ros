@@ -326,8 +326,14 @@ classés par ce qu'ils coûteraient s'ils étaient réels.
 5. **Références des deux boîtiers perforés** (`t0123`, `t0138`) : Mean Well ou pas ?
 6. **Où sont les Raspberry Pi ?** Jamais vus. Probablement dans un boîtier fermé — mais
    c'est le cœur du robot et il n'a pas d'adresse dans ce relevé.
-7. **Combien de webcams, et où ?** La doc dit « sur la tête » ; les images en montrent une
-   **dans le torse**, près de la mixette. Une seule ou deux ?
+7. ~~**Combien de webcams, et où ?**~~ **RÉGLÉ le 2026-09-14 par David** : la caméra de
+   perception est **FIXE SUR LE BUSTE**, sur un support **devant la bouche**. Elle ne tourne
+   PAS avec le cou. C'est bien l'image qui avait raison contre la doc — `overview.md` disait
+   « head-mounted » depuis le début, et deux commentaires de code en tiraient une
+   justification fausse (corrigés le même jour : `gaze_follower_node.py`, `gaze_control.py`).
+   Reste ouvert : **une seule caméra ou deux ?** Les images montrent aussi une webcam clipsée
+   sur le bord supérieur du panneau bois (`t0002`, `t0004`) — même objet vu deux fois, ou
+   second boîtier ?
 8. **Calibres des fusibles** (`t0046`, `t0084`, `t0085`) et fonction de l'interrupteur du
    panneau rouge (`t0173`).
 

@@ -60,8 +60,25 @@ class GazeControl:
                  enabled=False):
         # center=50 : position de repos du cou (regard droit devant).
         self.center = center
-        # gain=20 : amplitude MAX de balayage (±20 autour du centre -> [30,70]).
-        # Conservateur pour une première : ~±0.64 rad (~±37°) via le mapping ci-dessus.
+        # gain=20 : amplitude MAX de balayage (±20 autour du centre -> [30,70]),
+        # soit ~±0.64 rad (~±37°) via le mapping ci-dessus.
+        #
+        # ⚠️ NE PAS AUGMENTER CE GAIN (constat du 2026-09-14). Le commentaire
+        # d'origine le disait « conservateur pour une première », ce qui invitait
+        # à le monter. C'était écrit en croyant la caméra montée sur la tête :
+        # en boucle FERMÉE, le gain n'est qu'une vitesse de convergence, la
+        # boucle corrige. Or la caméra est FIXE SUR LE BUSTE (établi par David) :
+        # le gaze est en boucle OUVERTE, donc ce gain EST L'ÉTALONNAGE qui
+        # convertit un azimut d'image en angle réel de cou.
+        # Et il tombe juste, par chance : azimut ±1 = bord d'image = ±38,5°
+        # (champ webcam ≈77°, cf. docs/hardware/overview.md) ; gain=20 = ±37°.
+        # Les deux coïncident à ~1,5° près. Monter le gain ferait pointer la
+        # tête À CÔTÉ de la personne, systématiquement et sans rien pour le
+        # rattraper. Si la webcam est un jour remplacée, ce gain doit être
+        # RECALCULÉ sur le nouveau champ : gain ≈ 99 × (demi-FOV_deg / 180).
+        # (Reste une non-linéarité de second ordre : un objectif sténopé donne
+        # x_normalisé ∝ tan(θ), pas θ — le mapping linéaire sous-estime d'environ
+        # 3° à mi-champ. Négligeable ici, à revoir si on passe en grand angle.)
         self.gain = gain
         # direction_sign=+1 : sens azimut -> cou. INCONNU MÉCANIQUEMENT tant que le
         # protocole caméra ne l'a pas tranché (même dette que le sens gauche/droite

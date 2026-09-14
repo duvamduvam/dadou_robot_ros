@@ -37,9 +37,20 @@
 ## Vision & camera
 
 ### In service: USB webcam
-A USB UVC webcam (Jieli chipset) is head-mounted and driven from the **vision Raspberry Pi 5**
+A USB UVC webcam (Jieli chipset), driven from the **vision Raspberry Pi 5**
 (see `../dadou_vision_ros`), captured by OpenCV at 640×480 MJPG in `person_tracker_node.py`.
-Three properties are load-bearing and must be known before anyone swaps it out:
+
+> ⚠️ **It is FIXED ON THE BUST, on a bracket in front of the mouth — NOT on the head.**
+> Established by David on 2026-09-14, correcting the "head-mounted" claim this file carried
+> since the start and answering the open question of `robot-embarque.md` §"Combien de webcams".
+> **It does NOT rotate with the `neck` servo.** Two consequences, both load-bearing:
+> - the azimuth published on `/vision/person*` is already in the **chassis frame** — which is
+>   why `person_follower` can consume it raw, with no frame transform. Anything that later
+>   puts the camera on a moving mount breaks that, and puts a calibration in the wheels path;
+> - the **gaze is therefore OPEN-loop**: nothing corrects a wrong neck gain. See the warning
+>   on `gain` in `robot/move/gaze_control.py` — there, the gain *is* the calibration.
+
+Four properties are load-bearing and must be known before anyone swaps it out:
 
 - **It caps at 16.7 fps** while MediaPipe only burns 24 % of the CPU. The camera — not the
   compute — is the bottleneck of the perception loop.
@@ -48,6 +59,11 @@ Three properties are load-bearing and must be known before anyone swaps it out:
   module therefore *requires* buying a separate USB microphone — this is not a like-for-like swap.
 - **Its auto-exposure converges slowly** (hence the 15 warm-up frames in `photo-camera.sh`);
   it already falsified the LED face calibration once.
+- **Its ≈77° FOV is now a hard perception cone**, because the mount is fixed: Didier sees
+  nothing beyond **≈±38° off the chassis axis**, whatever the neck does. Adequate for
+  *following* (at 2 m, the 0.6 rad/s cap tracks ≈1.2 m/s of lateral motion — walking pace),
+  but it means **someone standing beside the robot is simply invisible**. That limit belongs
+  to the interaction chantier, not the wheels one.
 
 ### On the shelf since 2026-08-30, to be trialled: an OV5647 board with an M12 lens
 

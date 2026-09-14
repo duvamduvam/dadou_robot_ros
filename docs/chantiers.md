@@ -975,10 +975,23 @@ inconnu, comme l'était celui du gaze).
 
 ## Gaze V1 (cou + yeux) + arbitrage actionneurs
 
+> ⚠️ **RECTIFICATIF 2026-09-14 — l'argument ci-dessous est FAUX.** David a établi que la
+> caméra est **fixe sur le buste** (support devant la bouche) : elle ne tourne pas avec le
+> cou. Il n'y a donc **aucune boucle fermée** et rien d'auto-validant. Ce que le protocole du
+> 12/07 a réellement validé, c'est ce que David a **vu** en scène — ce qui suffit pour le
+> signe, mais pas pour le gain. Conséquences consignées dans le code le même jour :
+> `gaze_control.py` (le `gain=20` n'est pas « conservateur », c'est **l'étalonnage** azimut→
+> angle réel, et il tombe juste : ±37° pour un champ caméra de ±38,5° — **ne pas le monter**)
+> et `gaze_follower_node.py` (justification de `direction_sign` réécrite).
+> **Bonne nouvelle en contrepartie** : l'azimut est déjà dans le repère du châssis, donc
+> `person_follower` le consomme brut, sans transformation — le suivi roues est géométriquement
+> sain. C'est un acquis à ne pas casser en motorisant un jour le support caméra.
+
 **Gaze : PROTOCOLE CAMÉRA FAIT ET VALIDÉ le 12/07** sur le vrai robot, David
 en scène. Résultats gravés en défauts du node : cou `direction_sign=+1`
-(boucle fermée AUTO-VALIDANTE : la caméra est sur la tête, l'azimut converge
-vers 0 — un mauvais signe aurait divergé en butée), amorti `ema_alpha=0.15` /
+(~~boucle fermée AUTO-VALIDANTE : la caméra est sur la tête, l'azimut converge
+vers 0 — un mauvais signe aurait divergé en butée~~ — voir rectificatif ci-dessus),
+amorti `ema_alpha=0.15` /
 `slew_max=1.5` (les valeurs initiales 0.4/3.0 oscillaient : retard de phase
 EMA×2 + slew + rampe servo), YEUX ajoutés (2e instance de GazeControl,
 gain 49 = plein débattement 1-99 comme les séquences, `eye_direction_sign=-1`

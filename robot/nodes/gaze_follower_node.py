@@ -77,9 +77,17 @@ class GazeFollowerNode(Node):
         self.declare_parameter("enabled", False)          # DÉSACTIVÉ par défaut
         self.declare_parameter("output_mode", "robot")    # 'robot' | 'sim'
         self.declare_parameter("gain", 20.0)
-        # direction_sign=+1 VALIDÉ au protocole caméra réel du 2026-07-12 :
-        # boucle fermée stable (la caméra est montée sur la tête — l'azimut
-        # converge vers 0 quand le cou tourne vers la personne).
+        # direction_sign=+1 VALIDÉ au protocole caméra réel du 2026-07-12.
+        # ⚠️ CORRECTION 2026-09-14 : la justification écrite ici était FAUSSE.
+        # Elle invoquait une « boucle fermée auto-validante, la caméra est sur
+        # la tête ». David a établi que la caméra est FIXE SUR LE BUSTE (support
+        # devant la bouche) et ne tourne PAS avec le cou. Donc le gaze est en
+        # BOUCLE OUVERTE : rien ne rattrape une erreur de signe ou de gain.
+        # Le signe +1 reste bon — mais il est validé par ce que David a VU en
+        # scène le 12/07, pas par une convergence. Ne pas le retoucher sans
+        # repasser un protocole visuel. Voir aussi l'avertissement sur `gain`
+        # dans robot/move/gaze_control.py : en boucle ouverte, le gain est un
+        # ÉTALONNAGE, pas un réglage de confort.
         self.declare_parameter("direction_sign", 1)
         self.declare_parameter("center", 50)
         self.declare_parameter("confidence_min", 0.4)
