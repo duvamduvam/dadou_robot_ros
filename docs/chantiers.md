@@ -184,22 +184,27 @@ retour du robot.
    David ré-appuie. C'est le comportement voulu, pas une panne.
 6. **Pendant une séquence d'animation** : l'arbitrage doit toujours primer
    (le gaze se tait), l'appui ne doit pas le contourner.
+7. **« Regard libre » (MODE, gamepad)** : relâche la désignation, Didier
+   revient au regard libre (la personne la plus proche). ⚠️ **Ergonomie à
+   arbitrer** : on arme au GANT et on relâche à la MANETTE, faute de second
+   bouton libre sur le gant. À juger en jeu — si c'est bancal, il faudra
+   libérer une touche du gant en déplaçant une autre fonction.
 
 **Étage 2 — « suis-moi » (START/SELECT), roues HORS SOL, protocole caméra**
 
-7. START → le suivi s'active (log `follow ON`) ; SELECT → **arrêt franc**,
+8. START → le suivi s'active (log `follow ON`) ; SELECT → **arrêt franc**,
    quel que soit l'état précédent. Tester SELECT alors que le suivi est déjà
    off (doit être inoffensif).
-8. **`direction_sign` du suiveur** : jamais tranché en réel — même dette que
+9. **`direction_sign` du suiveur** : jamais tranché en réel — même dette que
    le gaze avant le 12/07. David à droite ⇒ le robot doit tourner **vers** lui.
-9. La télécommande écrase le suivi en plein mouvement (priorité 100 > 20),
-   et le suivi ne reprend qu'au relâchement.
-10. Kill de la chaîne en plein suivi → arrêt local (deadman 400 ms).
+10. La télécommande écrase le suivi en plein mouvement (priorité 100 > 20),
+    et le suivi ne reprend qu'au relâchement.
+11. Kill de la chaîne en plein suivi → arrêt local (deadman 400 ms).
 
 **Étage 3 — au sol, avec le reste de cette section**
 
-11. Suivi réel, David marchant, **personne d'autre dans la pièce**.
-12. **Le mode dangereux de [`etude-suivi-personne.md`](etude-suivi-personne.md)
+12. Suivi réel, David marchant, **personne d'autre dans la pièce**.
+13. **Le mode dangereux de [`etude-suivi-personne.md`](etude-suivi-personne.md)
     §3** : un complice masque les jambes de David. Aujourd'hui Didier doit
     **avancer** (c'est le défaut à constater, roues hors sol d'abord). C'est la
     mesure qui justifiera le correctif S0.
